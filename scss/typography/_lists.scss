@@ -1,0 +1,44 @@
+/* Definitions
+========================================================================== */
+
+dl {
+  // @style DEFAULT DEFINITIONS HERE
+}
+
+dt {
+  font-weight: bold;
+  &:after {
+    content: ":";
+  }
+}
+
+dd {
+  position: relative;
+  padding-left: 1.8em;
+  &:before {
+    display: inline-block;
+    content: "—";
+    position: absolute;
+    left: 0.4em;
+  }
+}
+
+// @style CUSTOM DEFINITIONS HERE
+
+/* Unordered and Ordered lists
+========================================================================== */
+
+ul, ol {
+  padding-left: 1.4em;
+  // @style CUSTOM DEFAULT HERE
+  ol, ul {
+    margin: 0;
+  }
+}
+
+ol ol {
+  list-style-type: upper-alpha;
+}
+
+// @style CUSTOM LISTS HERE
+//

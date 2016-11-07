@@ -1,0 +1,20 @@
+/* Fielsets
+========================================================================== */
+fieldset {
+  border: 1px solid lighten($c-main, 40%);
+  margin: 0;
+  padding: 0.35em 0.625em 0.75em;
+  // @style GENERIC FIELD HERE
+  legend {
+    padding: 0;
+    margin-bottom: 0.75em;
+    float: left;
+    width: 100%;
+    font-size: inherit;
+    @if support-legacy-browser(ie, "11") {
+      border: 0;
+    }
+  }
+}
+
+// @style CUSTOM FIELDSETS HERE

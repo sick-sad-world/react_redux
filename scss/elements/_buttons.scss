@@ -1,0 +1,31 @@
+/* Buttons
+========================================================================== */
+
+%form-base-button {
+  cursor: pointer;
+  // @style STYLES FOR ALL BUTTONS
+  &:hover,
+  &:focus {}
+  &:active {}
+}
+
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+button {
+  @extend %form-base-button;
+  // @style FOR REAL BUTTON ELEMENTS
+}
+
+a.is-button,
+span.is-button {
+  @extend %form-base-button;
+  text-decoration: none;
+  // @style FOR BUTTON-LIKE ELEMENTS
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+}
+
+// @style FOR CUSTOM BUTTON ELEMENTS

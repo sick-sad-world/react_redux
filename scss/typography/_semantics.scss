@@ -1,0 +1,63 @@
+/* Text-level semantics
+========================================================================== */
+
+abbr[title] {
+  cursor: help;
+}
+
+i, em {
+  font-style: italic;
+}
+
+b,
+strong {
+  font-weight: bold;
+}
+
+dfn {
+  font-style: italic;
+}
+
+mark {
+  padding: 0 0.25em;
+  background: #ffc;
+}
+
+small {
+  font-size: 80%;
+}
+
+sub,
+sup {
+  position: relative;
+  vertical-align: baseline;
+  font-size: 80%;
+  line-height: 0;
+}
+
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+// @style different kinds of elements, like badges or icons, or iconed links or
+// counters and other text-level stuff
+
+/* Adresses
+========================================================================== */
+
+address {}
+
+// @style adress here
+
+/* Blockquotes
+========================================================================== */
+
+q {}
+
+blockquote {}
+
+// @style blockquotes here

@@ -1,0 +1,51 @@
+/* Embedded content like images iframes
+========================================================================== */
+
+img {
+  max-width: 100%;
+  height: auto;
+  @if $is-10 {
+    a & {
+      border: 0;
+    }
+  }
+}
+
+svg:not(:root) {
+  overflow: hidden;
+}
+
+// @style DEFAULT IGURES AND OBJECTS HERE
+
+figure {}
+
+figcaption {}
+
+iframe {}
+
+// @style: CUSTOM FIGURES AND OBJECTS HERE
+
+
+/* Grouping content
+========================================================================== */
+
+hr {
+  height: 0;
+}
+
+code, kbd, pre, samp {
+  font-family: $monospace-font-family;
+  font-size: 1em;
+  // @style: DEFAULT CODE ELEMENTS HERE
+}
+
+code, samp, kbd {
+  display: inline-block;
+  padding: 0 0.5em;
+}
+
+pre {
+  overflow: auto;
+}
+
+// @style: CUSTOM CODE ELEMENTS HERE

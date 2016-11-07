@@ -1,0 +1,15 @@
+// Hide all text in element
+// ===================================================================================
+
+@mixin hide-text($h: true) {
+  @if $h {
+    font: #{0/0} a;
+    text-decoration: none;
+    text-shadow: none;
+    color: transparent;
+  }
+  @else {
+    font-size: 0;
+    line-height: 0;
+  }
+}

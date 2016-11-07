@@ -1,0 +1,27 @@
+/* Textlike inputs
+========================================================================== */
+
+%textlike-base {
+  // @style GENERIC TEXTLIKE INPUTS HERE
+  @include placeholder () {
+    // @style PLACEHOLDER TEXT HERE
+  }
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="search"],
+input[type="url"],
+input[type="tel"] {
+  @extend %textlike-base;
+  // @style ONLY ONELINE INPUTS HERE
+}
+
+textarea {
+  @extend %textlike-base;
+  resize: none;
+  // @style ONLY TEXTAREAS HERE
+}
+
+// @style CUSTOM INPUTS HERE

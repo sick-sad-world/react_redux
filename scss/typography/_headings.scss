@@ -1,0 +1,47 @@
+/* Headings
+========================================================================== */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: 700;
+  font-family: $heading-font-family;
+  line-height: 1;
+  // @style: GENERIC HEADERS HERE
+  small {
+    color: lighten($c-main, 40%);
+    vertical-align: top;
+    font-weight: 400;
+  }
+  // @style: links INSIDE headings
+  // ======================================================================
+  a {
+    color: inherit;
+  }
+}
+
+// Custom heading here
+// ======================================================================
+h1, .t-display2 {
+  font-size: $display2-font-size;
+}
+
+h2, .t-display1 {
+  font-size: $display1-font-size;
+}
+
+h3, .t-heading {
+  font-size: $heading-font-size;
+}
+
+h4, .t-subhead1 {
+  font-size: $subhead1-font-size;
+}
+
+h5, .t-subhead2 {
+  font-size: $subhead2-font-size;
+}
+
+h6, .t-caption {
+  font-size: $caption-font-size;
+}
+
+// @style: CUSTOM HEADERS HERE

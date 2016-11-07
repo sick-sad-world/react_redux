@@ -1,0 +1,59 @@
+/* Helper classes
+========================================================================== */
+// All helper classes going here
+// I use "t-" prefix wich means - "typography"
+// We may use any other.
+
+.t-left {
+  text-align: left;
+}
+
+.t-right {
+  text-align: right;
+}
+
+.t-center {
+  text-align: center;
+}
+
+.t-justify {
+  text-align: justify;
+}
+
+.t-nowrap {
+  white-space: nowrap;
+}
+
+.t-lowercase {
+  text-transform: lowercase;
+}
+
+.t-uppercase {
+  text-transform: uppercase;
+}
+
+.t-capitalize {
+  text-transform: capitalize;
+}
+
+.t-ellipsis {
+  @include ellipsis;
+}
+
+.t-textless {
+  @include hide-text();
+}
+
+.t-rhythm {
+  margin: rhythm(1) auto;
+}
+
+.t-scrollable-x {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.t-scrollable-y {
+  overflow-x: auto;
+  overflow-y: hidden;
+}

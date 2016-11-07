@@ -1,0 +1,19 @@
+/* Links
+========================================================================== */
+
+a {
+  @if $is-10 {
+    background-color: transparent;
+  }
+  color: $c-accent;
+  text-decoration: none;
+  // @style: GENERIC LINKS HERE
+  &:hover,
+  &:focus {
+    color: darken($c-accent, 10%), 10%;
+    text-decoration: underline;
+    outline: 0;
+  }
+}
+
+// @style: CUSTOM LINKS HERE

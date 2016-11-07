@@ -1,0 +1,37 @@
+/* Table styling
+========================================================================== */
+
+table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  // @style DEFAULT TABLES HERE
+  caption {
+    text-align: left;
+    font-weight: 700;
+    font-family: $heading-font-family;
+    @include adjust-font-size-to($subhead1-font-size);
+  }
+  td {
+    // Selector for generic cells ========================================
+    // ===================================================================
+  }
+  td, th {
+    // Selector for all cells ============================================
+    // ===================================================================
+    padding: 0.5em 0.75em;
+  }
+  >tr:last-child td, tr:last-child th {
+    // Selector to match last cell in each row ===========================
+    // ===================================================================
+  }
+  thead td, th {
+    // Selector to match heading cells ===================================
+    // ===================================================================
+    text-align: left;
+  }
+  tfoot {
+
+  }
+}

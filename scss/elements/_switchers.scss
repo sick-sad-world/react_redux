@@ -1,0 +1,11 @@
+/* Switchers
+========================================================================== */
+input[type="checkbox"],
+input[type="radio"] {
+  // @style GENERIC SWITCHERS HERE
+  label & {
+    vertical-align: -1px;
+  }
+}
+
+// @style CUSTOM SWITCHERS HERE

@@ -1,0 +1,21 @@
+/* Selects
+========================================================================== */
+select {
+  text-transform: none;
+  color: inherit;
+  // @style GENERIC DROPDOWNS HERE
+  option {
+    display: block;
+  }
+  optgroup {
+    font-weight: bold;
+    font-style: normal;
+    display: block;
+  }
+}
+
+select[multiple] {
+  height: auto;
+}
+
+// @style CUSTOM DROPDOWNS HERE
