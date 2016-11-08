@@ -11,6 +11,7 @@ import { defaultUser, user } from './reducers/user';
 import * as authActions from './actions/auth';
 import * as userActions from './actions/user';
 import * as alertActions from './actions/alerts';
+import * as reportsActions from './actions/reportss';
 
 let initialState = {
   user: defaultUser,
@@ -27,7 +28,8 @@ let TrendolizerStore = window.TrendolizerStore = createStore(
 TrendolizerStore.dispatch(userActions.getUser()).then(() => {
   if (TrendolizerStore.getState().user.id) {
     Promise.all([
-      TrendolizerStore.dispatch(alertActions.getAlerts())
+      TrendolizerStore.dispatch(alertActions.getAlerts()),
+      TrendolizerStore.dispatch(reportsActions.getReports())
     ]).then(() => {
       console.log('Done');
     });
@@ -41,5 +43,6 @@ TrendolizerStore.dispatch(userActions.getUser()).then(() => {
 window.TrendolizerActions = {
   authActions,
   userActions,
-  alertActions
+  alertActions,
+  reportsActions
 };
