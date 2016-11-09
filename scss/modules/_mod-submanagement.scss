@@ -1,0 +1,39 @@
+/* Submanagement section - like sources in sets, columns in alerts and
+reports and feeds in columns
+========================================================================== */
+.mod-submanagement {
+	border-top: $border;
+	position: relative;
+	display: flex;
+	justify-content: stretch;
+	.header {
+		padding: 0 baseUnit();
+		min-height: baseUnit()*2 + $form-unit;
+		border-bottom: $border;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		input[type="text"], .chosen-single {
+			flex: 0 0 40%;
+		}
+	}
+	.selected {
+		flex: 0 0 45%;
+		max-width: 45%;
+		border-right: $border;
+		overflow-y: auto;
+	}
+	.list {
+		flex: 0 0 55%;
+		max-width: 55%;
+		overflow-y: auto;
+		> ul > li:first-child {
+			border-top: 0;
+		}
+	}
+	.mod-entity {
+		.mod-entity > div:first-child {
+			background-color: $c-element;
+		}
+	}
+}

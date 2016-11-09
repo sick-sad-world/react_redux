@@ -1,0 +1,23 @@
+/* Some customising for most complex form - Edit column
+========================================================================== */
+.mod-column-edit {
+	.row-sorting {
+		select[name="sort_prefix"],
+		select[name="sort_prefix"]+.chosen-container {
+			flex: 0 0 30%;
+		}
+		select[name="sort_param"],
+		select[name="sort_param"]+.chosen-container {
+			flex: 1 1 auto;
+			margin: 0 rhythm(0.5);
+		}
+	}
+	.row-time-gap {
+		div {
+			flex: 0 0 50%;
+		}
+		div + div {
+			padding-left: rhythm(0.5);
+		}
+	}
+}

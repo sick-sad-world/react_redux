@@ -1,0 +1,58 @@
+/* Styling for common popup items such as container header nav
+========================================================================== */
+.mod-popup {
+	display: flex;
+	flex-direction: column;
+	margin: auto;
+	background-color: $c-alt;
+	background-clip: padding-box;
+	border: 10px solid rgba(0,0,0,.1);
+	box-shadow: 0 0 100px #fff;
+	z-index: -1;
+	visibility: hidden;
+	//transition: transform $dur, opacity $dur;
+	//transform: translate3d(0,-100%,0);
+	//opacity: 0;
+	&.is-visible {
+		//opacity: 1;
+		//transform: translate3d(0,0,0);
+		visibility: visible;
+		z-index: map-get($layers, overlay) + 1;
+	}
+	header {
+		flex: 0 0 auto;
+		display: flex;
+		background-color: $c-main;
+		h1 {
+			flex: 0 1 100%;
+			color: $c-alt;
+			margin: 0 baseUnit();
+			line-height: $entity-unit;
+		}
+		svg {
+			fill: $c-alt;
+			width: round($icon-unit*1.5);
+			height: round($icon-unit*1.5);
+		}
+		a {
+			display: flex;
+			flex: 0 0 ($entity-unit - baseUnit());
+			align-self: stretch;
+			margin: baseUnit(0.5) 0;
+			border-left: 1px solid rgba($c-alt, 0.75);
+			&:hover, &:focus {
+				svg {
+					fill: darken($c-alt, 10%);
+				}
+			}
+			&:active {
+				svg {
+					fill: $c-accent-alt;
+				}
+			}
+		}
+	}
+	.popup-content {
+		flex: 0 0 auto;
+	}
+}

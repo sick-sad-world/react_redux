@@ -40,5 +40,127 @@ ol ol {
   list-style-type: upper-alpha;
 }
 
+.tag-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	li {
+		$size: $pointer-unit + 4px;
+		display: inline-block;
+		vertical-align: top;
+		height: $size;
+		line-height: $size - 2px;
+		&:not(.is-default) {
+			background-color: $c-element;
+			border-radius: $bdrs;
+			padding: 0 baseUnit();
+			border: $border;
+			font-size: 0.875em;
+			margin: 0 baseUnit(0.5) baseUnit(0.5) 0;
+			box-shadow: 0;
+			transition: box-shadow $dur;
+			cursor: pointer;
+			&:hover {
+				@include style-hover();
+			}
+		}
+		svg {
+			cursor: pointer;
+			display: inline-block;
+			margin-right: -(baseUnit());
+			vertical-align: top;
+			width: $size - 2px;
+			height: $size - 2px;
+			padding: baseUnit(0.5);
+			fill: $c-border;
+			&:hover {
+				fill: darken($c-border, 10%);
+			}
+		}
+		&.is-default {
+			width: 100%;
+			@include form-pholder(1.125em);
+		}
+		&.is-selected:not(.is-default) {
+			@include gradient($c-accent);
+			border: 1px solid rgba(0,0,0,.2);
+			color: $c-alt;
+			text-shadow: $shadow-text;
+			svg {
+				display: inline-block;
+			}
+		}
+	}
+}
+
+.entity-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	position: relative;
+	> li {
+		&.is-hidden {
+			display: none !important;
+		}
+		&.mod-entity {
+			border-bottom: $border;
+		}
+		&[class*="state-"] {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			@include pos();
+			width: 90%;
+			margin: auto;
+			text-align: center;
+			line-height: 1.25;
+			font-size: 1.5em;
+			font-style: italic;
+			img, svg {
+				display: block;
+				margin: 0 auto baseUnit(2);
+				width: 100px;
+				height: 100px;
+			}
+		}
+		&.state-empty {
+			$c: map-get($states, info);
+			color: $c;
+			svg {
+				fill: $c;
+			}
+		}
+		&.state-error {
+			$c: map-get($states, error);
+			color: $c;
+			svg {
+				fill: $c;
+			}
+		}
+		&.state-loading {
+			$c: darken($c-border, 18%);
+			color: $c;
+			svg {
+				fill: $c;
+			}
+		}
+	}
+}
+
+.column-list {
+	list-style: none;
+	&:after{
+		display: table;
+		clear: both;
+	}
+	li:before {
+		content: '>';
+		margin-left: baseUnit(-2);
+		margin-right: baseUnit();
+	}
+	a:hover, a:focus {
+		text-decoration: none;
+	}
+}
 // @style CUSTOM LISTS HERE
 //

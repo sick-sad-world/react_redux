@@ -1,0 +1,18 @@
+@mixin overlay($c: rgba(0,0,0,.5)) {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: $c;
+	opacity: 0;
+	cursor: pointer;
+	visibility: hidden;
+	transition: opacity $dur;
+	z-index: -1;
+	.mod-popup.is-visible ~ & {
+		opacity: 1;
+		visibility: visible;
+		z-index: map-get($layers, overlay);
+	}
+}

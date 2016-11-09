@@ -1,0 +1,149 @@
+/* Main screen layout
+========================================================================== */
+.mod-screen-main {
+	background-color: $c-alt;
+	overflow-x: auto;
+	overflow-y: hidden;
+
+	.sidebar {
+		flex: 0 0 $entity-unit;
+		transition: flex $dur;
+		@include gradient($c-main, right);
+		color: $c-alt;
+		text-shadow: $shadow-text;
+		overflow-x: hidden;
+		a {
+			color: $c-alt;
+		}
+		.mod-user-block {
+			margin: baseUnit() baseUnit() baseUnit(2);
+			div {
+				opacity: 0;
+			}
+		}
+		&.is-expanded {
+			flex-basis: map-get($layout, nav);
+			.mod-user-block {
+				div {
+					opacity: 1;
+				}
+			}
+		}
+	}
+
+	.screen-content {
+		flex: 1 1 auto;
+		overflow: hidden;
+		position: relative;
+		> section {
+			display: none;
+			&.#{$app-active} {
+				display: flex;
+			}
+		}
+	}
+
+	// Common styles of ALL subsections on screen
+	section[class*="mod-subsection-"] {
+		align-items: stretch;
+		flex-direction: column;
+		overflow: hidden;
+		border: $border;
+		.subsection-header {
+			flex: 0 0 auto;
+			position: relative;
+			z-index: 1;
+		}
+		.subsection-content {
+			flex: 0 1 100%;
+			overflow-x: hidden;
+			overflow-y: auto;
+		}
+	}
+
+	.mod-page {
+		@include pos();
+		width: 100%;
+		height: 100%;
+		align-items: stretch;
+
+		section[class*="mod-subsection-"] {
+			display: flex;
+			margin: baseUnit() 0;
+			&:first-child {
+				margin-left: baseUnit();
+				margin-right: baseUnit();
+			}
+			&:last-child {
+				margin-right: baseUnit();
+			}
+		}
+
+		// Unique styles for list section
+		.mod-subsection-list {
+			flex: 0 0 30%;
+			min-width: map-get($layout, buffer);
+			z-index: 1;
+			.subsection-header {
+				form {
+					margin-top: baseUnit();
+					display: flex;
+				}
+				button {
+					margin-left: baseUnit();
+				}
+			}
+		}
+
+		// Poisition submanagement block in edit screen
+		.mod-subsection-edit {
+			.subsection-content {
+				.mod-submanagement {
+					margin: 0 baseUnit(-1) baseUnit(-1);
+					flex: 1 0 100%;
+				}
+			}
+		}
+
+		// Make submanagement screen fit all height available
+		.mod-subsection-management {
+			.mod-submanagement {
+				height: 100%;
+			}
+		}
+
+		// Make optional subsections "invisible"
+		.mod-subsection-edit, .mod-subsection-management, .mod-subsection-preview {
+			flex: 0 1 0;
+			opacity: 0;
+			transition: flex $dur, opacity $dur, width $dur;
+			width: 0;
+			border-width: 0px;
+		}
+
+		// Show Edit form or Submanagement subsection if needed
+		&.is-edit .mod-subsection-edit,
+		&.is-detail .mod-subsection-management {
+			flex-basis: 70%;
+			opacity: 1;
+			border-width: 1px;
+		}
+
+		// Show quick preview subsection
+		&.is-edit .mod-subsection-preview.is-active {
+			margin-left: baseUnit();
+			flex-basis: 20%;
+			opacity: 1;
+			border-width: 1px;
+		}
+	}
+
+	.mod-dashboard {
+		@include pos();
+		align-items: stretch;
+	}
+
+	.mod-subsection-edit.mod-profile-edit {
+		@include pos(baseUnit() baseUnit() baseUnit() baseUnit());
+	}
+}

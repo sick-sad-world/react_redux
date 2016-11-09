@@ -1,2 +1,12 @@
-/* Dashboard module
+/* Dashboard module - main screen of an app
 ========================================================================== */
+.mod-dashboard {
+	padding: baseUnit();
+	overflow-x: auto;
+	.mod-column, .sortable-placeholder {
+		display: flex;
+		flex: 0 0 auto;
+		width: map-get($layout, dashboard);
+		margin-right: baseUnit();
+	}
+}

@@ -11,7 +11,8 @@ table {
     text-align: left;
     font-weight: 700;
     font-family: $heading-font-family;
-    @include adjust-font-size-to($subhead1-font-size);
+    font-size: $subhead1-font-size;
+    line-height: 1;
   }
   td {
     // Selector for generic cells ========================================
@@ -20,7 +21,7 @@ table {
   td, th {
     // Selector for all cells ============================================
     // ===================================================================
-    padding: 0.5em 0.75em;
+    padding: 0.25em 0.5em;
   }
   >tr:last-child td, tr:last-child th {
     // Selector to match last cell in each row ===========================

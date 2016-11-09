@@ -1,5 +1,102 @@
 /* Layout
 ========================================================================== */
+html, body, body>section[class^="screen"] {
+	@include pos();
+	width: 100%;
+	height: 100%;
+	min-width: map-get($layout, min-width);
+}
 
+body {
+	display: flex;
+	background: url(../img/bg.png) no-repeat center center;
+	background-size: cover;
+	&:before {
+		$c: darken($c-accent,15%);
+		content: '';
+		display: block;
+		@include pos();
+		@include background-image(linear-gradient(left, rgba($c,1) 0%,rgba($c,0.75) 12%,rgba($c,0.5) 75%,rgba($c,0.15) 100%));
+	}
+}
+
+section[class^="screen"] {
+	display: none;
+	body.#{$app-init}>&.#{$app-active} {
+		display: flex;
+		z-index: 2;
+	}
+}
+
+.loading-bar {
+	@include pos(false 0 10% 0);
+}
+
+.overlay {
+	@include overlay();
+}
+/* Form layout
+========================================================================== */
+form {
+	.row {
+		margin: rhythm() 0;
+	}
+	.row-flex, .row-flex-wrap {
+		margin: rhythm() 0;
+		display: flex;
+		justify-content: space-between;
+		.form-subtitle {
+			flex: 0 0 100%;
+			border-bottom: 0;
+			padding-bottom: 0;
+		}
+		.form-description {
+			flex: 0 0 100%;
+		}
+	}
+	.row-flex {
+		> *:not(:last-child) {
+			margin-right: rhythm(0.5);
+		}
+	}
+	.row-flex-wrap {
+		flex-wrap: wrap;
+	}
+	.size-half {
+		width: 50%;
+	}
+	.size-full {
+		width: 100%;
+	}
+	@each $s in $sizes {
+		.size-#{$s} {
+			width: $s+px;
+		}
+	}
+	&.columned {
+		padding: baseUnit();
+		@include media (map-get($layout, bp)) {
+			display: flex;
+			flex-wrap: wrap;
+			align-content: flex-start;
+			.form-column {
+				flex: 0 0 50%;
+				max-width: 50%;
+				padding-right: rhythm(0.5);
+				+ .form-column {
+					padding-right: 0;
+					padding-left: rhythm(0.5);
+				}
+			}
+			.form-block {
+				flex: 0 0 100%;
+				width: 100%;
+			}
+		}
+		// @include media (map-get($layout, bp), false) {
+
+		// }
+	}
+}
 // End
 // ==========================================================================

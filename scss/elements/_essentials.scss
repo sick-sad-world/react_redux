@@ -72,7 +72,12 @@ input[type="search"] {
 
 /* Labels
 ========================================================================== */
-label {
+label, .form-label {
   display: inline-block;
   vertical-align: middle;
+	.row-flex & {
+		margin-top: auto;
+		margin-bottom: auto;
+		flex: 0 0 auto;
+	}
 }

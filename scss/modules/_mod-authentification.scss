@@ -1,0 +1,37 @@
+/* Authentification forms and welcome screen
+========================================================================== */
+.mod-authentification {
+	$logo: 90px;
+	padding: baseUnit(5) 0 0 0;
+	color: $c-alt;
+	overflow-x: hidden;
+	overflow-y: auto;
+	a {
+		color: $c-alt;
+	}
+	form + form {
+		margin-top: rhythm();
+	}
+	.row, .row-flex {
+		margin: rhythm(0.5) 0;
+	}
+	.auth-forms {
+		flex: 0 0 map-get($layout, auth);
+		margin: 0 rhythm();
+		order: 1;
+		padding-top: $logo + rhythm();
+	}
+	.welcome-text {
+		flex: 0 1 55%;
+		margin: 0 rhythm();
+		order: 2;
+	}
+	.logotype {
+		margin: 0 0 rhythm() 0;
+		height: $logo;
+	}
+	.copyright {
+		display: block;
+		text-align: center;
+	}
+}

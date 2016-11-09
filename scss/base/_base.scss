@@ -1,41 +1,98 @@
+/* Template Base styles compass file generated upon:
+	 normalize-scss 4.2.0 | MIT/GPLv2 License | bit.ly/normalize-scss
+========================================================================== */
+
 // Base variables ========================================================
 // =======================================================================
 $strict-normalize: false;
-$base-font-family: Helvetica, sans-serif;
+$base-font-family: 'PTSans', Tahoma, sans-serif;
 $monospace-font-family: monospace, monospace;
-$heading-font-family: $base-font-family;
+$heading-font-family: 'PTSansNarrow', Tahoma, sans-serif;
 $rhythm-unit: "px"; //rem
 $rem-with-px-fallback: false;
 // Typographic sizes variables ===========================================
 // =======================================================================
 $base-font-size: baseUnit(2); //16px;
 $base-line-height: baseUnit(3); //24px;
-$display2-font-size: 3.157 * $base-font-size;
-$display1-font-size: 2.369 * $base-font-size;
+$display2-font-size: 2.5 * $base-font-size;
+$display1-font-size: 2 * $base-font-size;
 $heading-font-size: 1.777 * $base-font-size;
 $subhead1-font-size: 1.333 * $base-font-size;
 $subhead2-font-size: 1 * $base-font-size;
 $caption-font-size: 0.75 * $base-font-size;
+
+// Layout sizes and variables ============================================
+// =======================================================================
+$dur: 0.25s;
+$bdrs: 2px;
+$layout: (
+	min-width: 980px,
+	bp: 1200px,
+	nav: 180px,
+	auth: 320px,
+	buffer: 320px,
+	dashboard: 370px,
+	popup: 480px
+);
+$sizes: 40 60 90 120 180 240 320 380;
+$icon-unit: baseUnit(2.25);
+$pointer-unit: baseUnit(3);
+$form-unit: baseUnit(4);
+$entity-unit: baseUnit(6);
+
 // Colors ================================================================
 // =======================================================================
-$c-main: #333;
-$c-alt: #f0f0f0;
-$c-accent: #0086b3;
+$c-main: #4F4E53;
+$c-alt: #f9f9f9;
+$c-element: #fff;
+$c-accent: #3C66AD;
+$c-accent-alt: #e89c33;
+$c-border: #cdcfd2;
+$c-icon: darken($c-border, 30%);
+
+$c-scale: #6E8EC9 #f0b363 #FF4500;
+$states: (
+	info: #54B5DF,
+	warning: #F9A94A,
+	error: #E45857,
+	success: #8FC556
+);
+
+$app-init: 'app-initialized';
+$app-active: 'is-current';
+
+$shadow-text: 0 1px 0px rgba(#000,.7);
+$shadow-text-alt: 0 1px 0px rgba(#fff,.7);
+$shadow-base: 0 0 baseUnit() rgba(#000,.35);
+
+
+$border: 1px solid $c-border;
+
+$layers: (
+	message: 10,
+	dropdown: 15,
+	overlay: 20
+);
 
 /* Base element styling
 ========================================================================== */
 
 *, *:after, *:before {
-  @include box-sizing(border-box);
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-* {
-  @include selection($c-accent, $c-alt);
-}
+*::-moz-selection {
+  color: $c-alt;
+  background-color: $c-accent; }
+*::selection {
+  color: $c-alt;
+  background-color: $c-accent; }
 
-@include baseline {
+html {
+  font-size: $base-font-size;
+  line-height: $base-line-height;
   background-color: $c-alt;
   font-family: $base-font-family;
   color: $c-main;
@@ -56,9 +113,6 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 }
 
 audio, canvas, progress, video {
-  @if support-legacy-browser(ie, "9") {
-    display: inline-block;
-  }
   vertical-align: baseline;
 }
 

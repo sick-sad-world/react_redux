@@ -1,0 +1,174 @@
+/* Result - main item on main dashboard result
+========================================================================== */
+.mod-result {
+	line-height: 1;
+	font-size: 14px;
+	clear: both;
+	width: 100%;
+	$aside: baseUnit(6);
+	aside + .content {
+		margin-left: $aside + baseUnit();
+	}
+	header, h1 {
+		margin-bottom: baseUnit(0.5);
+	}
+	header, .descr > div {
+		padding-right: baseUnit(0.5);
+	}
+	h1, small {
+		line-height: 1;
+	}
+	h1 {
+		font-size: 1.25em;
+	}
+	small {
+		display: inline-block;
+		width: 100%;
+	}
+	img {
+		display: block !important;
+		float: left;
+		width: 45%;
+		margin-right: baseUnit();
+		&[src^="data:image"] { height: 0; }
+		&.is-wide {
+			float: none;
+			width: 100%;
+		}
+	}
+	aside {
+		float: left;
+		width: $aside;
+		margin: 0 baseUnit(0.5) baseUnit(0.5);
+		position: relative;
+		>a {
+			display: flex;
+			width: 100%;
+			height: $entity-unit;
+			&:hover, &:focus {
+				svg {
+					fill: $c-accent;
+				}
+			}
+		}
+	}
+	&:hover aside, aside.is-expanded {
+		a {
+			transform: translate3d(0, 0, 0);
+		}
+	}
+	.comparator {
+		display: block;
+		padding: baseUnit(0.5) round(baseUnit(0.5)/2);
+		border-radius: $bdrs;
+		font: 0.875em / 1 $heading-font-family;
+		text-align: center;
+		text-shadow: $shadow-text;
+		cursor: pointer;
+		b {
+			display: block;
+			font-size: 1.125em;
+		}
+	}
+	.descr {
+		line-height: 1.25;
+		.btn-toggle-text {
+			display: block;
+			text-align: center;
+			&:before {
+				color: inherit;
+			}
+		}
+		.full {
+			display: none;
+		}
+		&.is-expanded .full {
+			display: block;
+		}
+	}
+	table {
+		font-size: 0.75em;
+		line-height: 1;
+		a {
+			font-weight: bold;
+		}
+		th, td {
+			padding: baseUnit(0.5);
+			border-bottom: $border;
+		}
+		tr td:last-child {
+			padding: 0;
+			div {
+				position: relative;
+				padding: baseUnit(0.5) baseUnit(0.5) baseUnit();
+			}
+		}
+		.color-bar {
+			display: block;
+			height: baseUnit() - 4px;
+			@include pos(false 0 0 0);
+			background-clip: content-box;
+			background-image: linear-gradient(to right, nth($c-scale, 1), nth($c-scale, 2), nth($c-scale, 3));
+			&.is-new {
+				background: $c-accent;
+			}
+		}
+	}
+	.graph-container {
+		margin: auto;
+	}
+	.graph-selection {
+		$p: 112px;
+		@include pos(0 false false 100%);
+		list-style: none;
+		padding: baseUnit();
+		z-index: 10;
+		background-color: $c-alt;
+		border: $border;
+		box-shadow: $shadow-base;
+		width: round(map-get($layout, dashboard) *0.783);
+		margin-left: baseUnit(0.5);
+		visibility: collapse;
+		&:before, &:after {
+			display: block;
+			position: absolute;
+			right: 100%;
+			content: '';
+			width: 0;
+			height: 0;
+			border-style: solid;
+			border-color: transparent;
+		}
+		&:before {
+			border-width: baseUnit()  + 2px;
+			border-right-color: $c-border;
+			top: $p - 2px;
+		}
+		&:after {
+			top: $p;
+			border-width: baseUnit();
+			border-right-color: $c-alt;
+		}
+		a.btn-left {
+			display: block;
+			margin-right: baseUnit(0.5);
+		}
+		a.bth-right {
+			display: block;
+			margin-left: baseUnit(0.5);
+		}
+		li {
+			margin: baseUnit() 0 !important;
+			float: left;
+			width: 50%;
+		}
+	}
+	&.is-clumped {
+		small, .descr, footer, figure, aside a {
+			display: none;
+		}
+	}
+	.is-expanded .graph-selection {
+		visibility: visible;
+	}
+}

@@ -25,6 +25,7 @@ mark {
 
 small {
   font-size: 80%;
+	line-height: 1.125;
 }
 
 sub,
@@ -60,4 +61,73 @@ q {}
 
 blockquote {}
 
-// @style blockquotes here
+/* Small elements
+========================================================================== */
+%base-text-pointer {
+	display: inline-block;
+	text-align: center;
+	font-style: normal;
+	border-radius: $bdrs;
+	font: $base-font-size/#{1} $heading-font-family;
+	@include gradient($c-accent);
+	border: 1px solid rgba(0,0,0,.2);
+	color: $c-alt;
+}
+
+.badge {
+	@extend %base-text-pointer;
+	padding: baseUnit();
+	border-radius: $bdrs;
+	font-size: 0.875em;
+	> * {
+		font-size: 1.125em;
+	}
+	&.is-alt {
+		border-color: rgba(0,0,0,.4);
+		@include gradient($c-accent-alt);
+	}
+}
+
+.counter {
+	@extend %base-text-pointer;
+	font-size: 0.75em;
+	font-weight: bold;
+	border-radius: baseUnit();
+	padding: 2px baseUnit();
+	// Colorize types
+	//===============================================================
+	&[data-type="HTML"] { @include gradient(map-get($states, success)); }
+	&[data-type="RSS"] { @include gradient($c-accent-alt); }
+	&[data-type="Twitter"] { @include gradient(map-get($states, info)); }
+	&[data-type="Reddit"] { @include gradient(nth($c-scale, 3)); }
+	&[data-type="Facebook"] { @include gradient(nth($c-scale, 1)); }
+}
+
+.loading-bar {
+	display: block;
+	margin: auto;
+	min-width: map-get($layout, min-width);
+	width: map-get($layout, auth);
+	height: baseUnit(0.5);
+	background-color: rgba($c-alt, 0.1);
+	.#{$app-init} & {
+		display: none;
+	}
+	&:before {
+		display: block;
+		content: attr(data-text);
+		width: 100%;
+		position: absolute;
+		bottom: 100%;
+		text-align: center;
+		font-size: 0.875em;
+		color: $c-alt;
+	}
+	span {
+		display: block;
+		width: 0%;
+		height: 100%;
+		transition: width $dur;
+		background-color: $c-alt;
+	}
+}

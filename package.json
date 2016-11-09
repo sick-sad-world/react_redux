@@ -39,7 +39,7 @@
     "gulp-concat": "latest",
     "gulp-imagemin": "latest",
     "gulp-requirejs-optimize": "latest",
-    "gulp-ruby-sass": "latest",
+    "gulp-sass": "latest",
     "gulp-sourcemaps": "latest",
     "gulp-svg-sprite": "latest",
     "gulp-uglify": "latest",

@@ -1,0 +1,12 @@
+@mixin form-element() {
+	background-color: $c-element;
+	color: $c-main;
+	border: $border;
+	border-radius: $bdrs;
+	transition: box-shadow $dur;
+}
+@mixin form-pholder($s: 0.875em) {
+	font-style: italic;
+	font-size: $s;
+	color: lighten($c-main, 26%);
+}

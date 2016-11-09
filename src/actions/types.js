@@ -12,6 +12,8 @@ export const ADD_REPORT = "ADD_REPORT";
 export const EDIT_REPORT = "EDIT_REPORT";
 export const DELETE_REPORT = "DELETE_REPORT";
 
+export const GET_COLUMNS = "GET_COLUMNS";
+export const SORT_COLUMNS = "SORT_COLUMNS";
 export const ADD_COLUMN = "ADD_COLUMN";
 export const EDIT_COLUMN = "EDIT_COLUMN";
 export const DELETE_COLUMN = "DELETE_COLUMN";

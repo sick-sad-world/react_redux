@@ -1,0 +1,46 @@
+/* Main navigation
+========================================================================== */
+.mod-main-nav {
+	display: flex;
+	align-items: stretch;
+	flex-direction: column;
+	.separator {
+		@include hide-text;
+		display: block;
+		background-color: rgba($c-alt, 0.2);
+		height: 1px;
+	}
+	a {
+		display: block;
+		color: inherit;
+		line-height: $entity-unit;
+		border-right: 0 solid $c-accent;
+		text-decoration: none;
+		transition: border-width 0.15s ease 0.15s, background-color 0.15s;
+		&:hover, &:focus, &.#{$app-active} {
+			background-color: rgba(0, 0, 0, 0.15);
+		}
+		span {
+			display: block;
+			padding-left: baseUnit();
+		}
+		svg {
+			float: left;
+			width: $entity-unit;
+			height: $entity-unit;
+			padding: baseUnit(2);
+			fill: $c-alt;
+			+ span {
+				padding-left: 0;
+			}
+		}
+		&.#{$app-active} {
+			border-right-width: 6px;
+		}
+	}
+	.nav-toggler  {
+		svg {
+			@include svg-rotate('.sidebar.is-expanded');
+		}
+	}
+}

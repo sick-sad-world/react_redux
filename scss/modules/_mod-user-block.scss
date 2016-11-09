@@ -1,0 +1,17 @@
+/* Header user block
+========================================================================== */
+.mod-user-block {
+	font-size: 1em;
+	div {
+		margin: rhythm() 0;
+		line-height: 1;
+		transition: opacity $dur;
+	}
+	img {
+		margin: 0 auto;
+	}
+	h2 {
+		font-size: 1.2em;
+		line-height: 1.2;
+	}
+}

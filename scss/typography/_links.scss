@@ -2,9 +2,6 @@
 ========================================================================== */
 
 a {
-  @if $is-10 {
-    background-color: transparent;
-  }
   color: $c-accent;
   text-decoration: none;
   // @style: GENERIC LINKS HERE
@@ -14,6 +11,25 @@ a {
     text-decoration: underline;
     outline: 0;
   }
+}
+
+.nav-links {
+	display: flex;
+	a {
+		@include hide-text();
+		display: flex;
+		&:hover, &:focus {
+			text-decoration: none;
+			svg {
+				fill: darken($c-icon, 10);
+			}
+		}
+		&:active {
+			svg {
+				fill: $c-accent-alt;
+			}
+		}
+	}
 }
 
 // @style: CUSTOM LINKS HERE

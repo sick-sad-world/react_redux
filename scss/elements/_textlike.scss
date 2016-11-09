@@ -2,18 +2,26 @@
 ========================================================================== */
 
 %textlike-base {
-  // @style GENERIC TEXTLIKE INPUTS HERE
+	width: 100%;
+	height: $form-unit;
+	padding: 0 baseUnit();
+  @include form-element();
   @include placeholder () {
-    // @style PLACEHOLDER TEXT HERE
+    @include form-pholder();
   }
+	&:hover {
+		@include style-hover();
+	}
+	&:focus {
+		@include style-focus();
+	}
 }
 
 input[type="text"],
 input[type="password"],
 input[type="email"],
 input[type="search"],
-input[type="url"],
-input[type="tel"] {
+input[type="number"] {
   @extend %textlike-base;
   // @style ONLY ONELINE INPUTS HERE
 }

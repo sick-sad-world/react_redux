@@ -1,0 +1,11 @@
+@mixin style-disabled() {
+	opacity: 0.25;
+	cursor: default;
+}
+@mixin style-hover () {
+	border-color: darken($c-border, 10%);
+}
+@mixin style-focus () {
+	border-color: map-get($states, warning);
+	box-shadow: 0 0 baseUnit() rgba(map-get($states, warning), .5);
+}

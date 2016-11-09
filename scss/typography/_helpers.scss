@@ -4,6 +4,14 @@
 // I use "t-" prefix wich means - "typography"
 // We may use any other.
 
+.t-clear {
+	&:before, &:after {
+		display: table;
+		clear: both;
+		content: '';
+	}
+}
+
 .t-left {
   text-align: left;
 }
@@ -45,7 +53,11 @@
 }
 
 .t-rhythm {
-  margin: rhythm(1) auto;
+  margin: rhythm(0.5) auto;
+}
+
+.t-gutter {
+	margin: baseUnit() auto;
 }
 
 .t-scrollable-x {

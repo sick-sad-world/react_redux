@@ -2,19 +2,12 @@
 ========================================================================== */
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
-  font-weight: 700;
+	line-height: 1;
+  font-weight: 400;
   font-family: $heading-font-family;
-  line-height: 1;
   // @style: GENERIC HEADERS HERE
   small {
-    color: lighten($c-main, 40%);
-    vertical-align: top;
     font-weight: 400;
-  }
-  // @style: links INSIDE headings
-  // ======================================================================
-  a {
-    color: inherit;
   }
 }
 
@@ -42,6 +35,68 @@ h5, .t-subhead2 {
 
 h6, .t-caption {
   font-size: $caption-font-size;
+}
+
+/* Entity list subheaders
+========================================================================== */
+.list-title {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: baseUnit();
+	border-bottom: $border;
+	height: $entity-unit + 1px;
+	span {
+		$s: $entity-unit - baseUnit();
+		flex: 0 0 ($s + 1);
+		margin-right: baseUnit(-1);
+		text-align: center;
+		font-size: baseUnit(2.5);
+		line-height: $s - baseUnit();
+		border-left: $border;
+	}
+}
+
+/* Form headers
+========================================================================== */
+.form-subtitle {
+	display: block;
+	line-height: 1;
+	margin-bottom: rhythm(0.5);
+	padding-bottom: baseUnit();
+	border-bottom: $border;
+	font-size: $subhead1-font-size;
+}
+
+/* Subsection header
+========================================================================== */
+.subsection-header {
+	border-bottom: $border;
+	display: flex;
+	justify-content: space-between;
+	align-items: stretch;
+	box-shadow: $shadow-base;
+	h1 {
+		line-height: 1;
+		font-size: $display1-font-size;
+	}
+	p {
+
+	}
+	svg {
+		margin: auto;
+		fill: $c-icon;
+		width: round($icon-unit*1.5);
+		height: round($icon-unit*1.5);
+	}
+	.nav {
+		flex: 0 0 $form-unit;
+		display: flex;
+	}
+	.text {
+		flex: 0 1 100%;
+		padding: baseUnit();
+	}
 }
 
 // @style: CUSTOM HEADERS HERE

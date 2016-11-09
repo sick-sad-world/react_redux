@@ -1,0 +1,91 @@
+/* Column - main item on main dashboard
+========================================================================== */
+.mod-column {
+	display: inline-flex;
+	flex-direction: column;
+	border: $border;
+	.column-header {
+		display: flex;
+		align-items: stretch;
+		flex: 0 0 $entity-unit;
+		border-bottom: $border;
+		position: relative;
+		.drag-handle {
+			cursor: move;
+			flex: 0 0 $pointer-unit;
+			fill: $c-icon;
+		}
+		h1 {
+			font-size: 1.25em;
+			line-height: 1;
+			flex: 1 1 100%;
+			align-self: center;
+		}
+		nav {
+			border-left: $border;
+			margin: baseUnit(0.5) 0;
+		}
+		a {
+			width: $entity-unit - baseUnit();
+		}
+	}
+	.column-settings {
+		border-bottom: $border;
+		display: block;
+		max-height: 0;
+		visibility: collapse;
+		flex: 0 1 auto;
+		background-color: $c-element;
+		padding: 0 baseUnit();
+		select, .chosen-single, .toggler span, .switcher-mirrored span {
+			background-color: $c-alt;
+		}
+	}
+	.column-subnav {
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 0;
+		border-top: $border;
+		padding: baseUnit(0.5) 0;
+		a, button {
+			flex: 1 1 33%;
+			background: none;
+			border-radius: 0;
+			padding: 0;
+			border: 0;
+			color: $c-icon;
+			text-shadow: none;
+			transition: color $dur;
+			&:not(:last-child) {
+				border-right: $border;
+			}
+			&:hover, &:focus {
+				color: darken($c-icon, 10%);
+			}
+		}
+	}
+	> ul {
+		flex: 1 1 auto;
+		padding: baseUnit() 0;
+		list-style-type: none;
+		overflow-x: hidden;
+		overflow-y: auto;
+		li:not(:first-child) {
+			margin-top: 1rem;
+		}
+	}
+	&.is-expanded {
+		.column-header nav a.btn-settings {
+			color: $c-accent;
+		}
+		.column-settings {
+			max-height: none;
+			visibility: visible;
+		}
+	}
+	&.is-loading {
+		animation: shadow-pulse 1.5s linear 0s infinite;
+	}
+}

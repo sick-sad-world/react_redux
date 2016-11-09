@@ -1,0 +1,62 @@
+/* Create new feed module
+========================================================================== */
+.mod-create-source {
+	.create-form-body {
+		display: flex;
+		flex-direction: row;
+		overflow: hidden;
+		align-items: stretch;
+	}
+	.input-area {
+		flex: 0 1 40%;
+		padding: baseUnit() baseUnit(2);
+		border-right: $border;
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+	.result-area {
+		flex: 0 1 60%;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		h5 {
+			display: block;
+			flex: 0 0 $entity-unit;
+			line-height: $entity-unit;
+			margin: 0;
+			padding: 0 baseUnit();
+			border-bottom: $border;
+			box-shadow: $shadow-base;
+		}
+	}
+	.result {
+		display: none;
+		flex: 0 1 100%;
+		overflow-y: auto;
+		&.is-current {
+			display: block;
+		}
+		&[type="autodetect"] {
+			li[type], .mod-entity {
+				border-bottom: $border;
+			}
+			li[class*="state-"] + li {
+				border-top: $border;
+			}
+			.state-loading, .state-error {
+				height: 180px;
+				position: static;
+				padding: 1em 0;
+			}
+		}
+		li:not(.mod-entity) {
+			padding: 0 baseUnit();
+		}
+	}
+	.mod-entity {
+		border-top: 0;
+	}
+	form:not(.is-current), .e_result:not(.is-current), .result-area h5 span:not(.is-current) {
+		display: none;
+	}
+}

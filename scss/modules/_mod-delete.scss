@@ -1,0 +1,17 @@
+/* Styling for removal popup
+========================================================================== */
+.mod-delete {
+	$s: map-get($layout, popup);
+	width: $s;
+	height: round($s*0.3);
+	&.in-progress {
+		animation: shadow-popup-pulse 1.5s linear 0s infinite;
+	}
+	.popup-content {
+		display: flex;
+		justify-content: center;
+	}
+	button {
+		margin: 0 rhythm(0.5);
+	}
+}
