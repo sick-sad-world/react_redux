@@ -48,7 +48,7 @@ let TrendolizerStore = createStore(
   applyMiddleware(thunk, logger, messager, processIds)
 );
 
-let history = syncHistoryWithStore(browserHistory, store);
+let history = syncHistoryWithStore(browserHistory, TrendolizerStore);
 
 // Fetch data -> May be rewritten
 TrendolizerStore.dispatch(getUser()).then(() => {
