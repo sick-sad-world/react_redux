@@ -5,7 +5,6 @@
   "version": "0.0.1",
   "scripts": {},
   "dependencies": {
-    "fetch-jsonp": "latest",
     "jsonp-es6": "latest",
     "lodash": "latest",
     "push.js": "latest",
