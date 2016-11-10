@@ -12,6 +12,7 @@
     "react": "latest",
     "react-redux": "latest",
     "react-router": "latest",
+    "react-router-redux": "latest",
     "redux": "latest",
     "redux-thunk": "latest"
   },

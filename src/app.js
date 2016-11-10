@@ -8,10 +8,7 @@ import logger from './middlewares/logger';
 import messager from './middlewares/messager';
 import processIds from './middlewares/processIds';
 
-import alerts from './reducers/alerts';
-import reports from './reducers/reports';
-import columns from './reducers/columns';
-import user from './reducers/user';
+import reducers from './reducers';
 
 import getUser from './actions/user';
 import getAlerts from './actions/alerts';
@@ -23,6 +20,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { Router, Route, browserHistory } from 'react-router';
+import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 
 import App from './components/app.js';
 
@@ -44,11 +42,13 @@ let initialState = {
   columns: {}
 };
 
-let TrendolizerStore = window.TrendolizerStore = createStore(
-  combineReducers({ alerts, reports, columns, user }),
+let TrendolizerStore = createStore(
+  combineReducers({ ...reducers, routing: routerReducer }),
   initialState,
   applyMiddleware(thunk, logger, messager, processIds)
 );
+
+let history = syncHistoryWithStore(browserHistory, store);
 
 // Fetch data -> May be rewritten
 TrendolizerStore.dispatch(getUser()).then(() => {
@@ -63,11 +63,11 @@ TrendolizerStore.dispatch(getUser()).then(() => {
   } else {
 
   }
-})
+});
 
 render(
   <Provider store={TrendolizerStore}>
-    <Router history={browserHistory}>
+    <Router history={history}>
       <Route path="/" component={App} />
     </Router>
   </Provider>,
