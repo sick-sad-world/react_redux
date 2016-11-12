@@ -108,7 +108,7 @@
 			height: baseUnit() - 4px;
 			@include pos(false 0 0 0);
 			background-clip: content-box;
-			background-image: linear-gradient(to right, nth($c-scale, 1), nth($c-scale, 2), nth($c-scale, 3));
+			background-image: linear-gradient(to left, nth($c-scale, 1), nth($c-scale, 2), nth($c-scale, 3));
 			&.is-new {
 				background: $c-accent;
 			}

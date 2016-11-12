@@ -1,5 +1,5 @@
-import { GET_ALERTS, ADD_ALERT, EDIT_ALERT, DELETE_ALERT } from '../actions/types';
-import _ from 'lodash';
+import { GET_ALERTS, ADD_ALERT, EDIT_ALERT, DELETE_ALERT } from "../actions/types";
+import _ from "lodash";
 
 export default function alerts (state = {}, action) {
   switch (action.type) {

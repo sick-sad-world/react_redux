@@ -1,5 +1,5 @@
-import { GET_COLUMNS, ADD_COLUMN, EDIT_COLUMN, DELETE_COLUMN } from '../actions/types';
-import _ from 'lodash';
+import { GET_COLUMNS, ADD_COLUMN, EDIT_COLUMN, DELETE_COLUMN } from "../actions/types";
+import _ from "lodash";
 
 export default function columns (state = {}, action) {
   switch (action.type) {

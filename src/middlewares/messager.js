@@ -1,9 +1,9 @@
-import { SERVER_ERROR } from '../actions/types';
-import Push from 'push.js';
-import config from '../app-config';
+import { SERVER_ERROR } from "../actions/types";
+import Push from "push.js";
+import config from "../app-config";
 
 export default store => next => action => {
-  let messageType = (action.type === SERVER_ERROR) ? 'error' : false;
+  let messageType = (action.type === SERVER_ERROR) ? "error" : false;
 
   config.messageTypes.forEach(type => {
     if (action.payload.hasOwnProperty(type)) {
@@ -23,7 +23,7 @@ export default store => next => action => {
     });
   }
 
-  if (messageType !== 'error') {
+  if (messageType !== "error") {
     return next(action);
   }
 }

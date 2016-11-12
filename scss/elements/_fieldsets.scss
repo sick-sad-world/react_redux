@@ -6,7 +6,7 @@ fieldset {
 	border-radius: $bdrs;
 	background-color: $c-element;
 	legend {
-		@include box-sizing(content-box);
+		box-sizing: content-box;
 		float: left;
 		margin: -(baseUnit()) (-(baseUnit()) - 2px) baseUnit(2);
 		width: 100%;

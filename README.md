@@ -1,6 +1,6 @@
-# New project title
+# React-Redux build of Trendolizer client
 
-> Some simple description
+> Just in tutorial purposes, but who knows
 
 Matching usual front-end project or require.js single-page-app. This is branch for gulp-based ES6 version.
 

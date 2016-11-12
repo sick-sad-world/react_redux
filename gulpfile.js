@@ -30,7 +30,7 @@ const CONFIG = {
   icons: "img/icons",
   icons_sprite: "img",
   icons_name: "icons.svg",
-  filesToCopy: ["index.html", "README.md", "LICENSE", "package.json", "fonts/**/*.{eot,svg,ttf,woff,woff2}"],
+  filesToCopy: ["index.html", "README.md", "LICENSE", "package.json", "font/**/*.{eot,svg,ttf,woff,woff2}"],
   fileName: `build[${packageJSON.version}][$d].zip`,
   preamble: `
   /* ${packageJSON.name} app v${packageJSON.version}.
@@ -335,7 +335,7 @@ gulp.task("default", ((deps)=>{
     statics["/templates"] = p(CONFIG.templates);
   }
   if (CONFIG.es6) {
-    statics["/src"] = p(CONFIG.es6);
+    statics[CONFIG.es6] = p(CONFIG.es6);
   }
 
   if (SERVER) {

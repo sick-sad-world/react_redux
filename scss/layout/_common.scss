@@ -16,7 +16,7 @@ body {
 		content: '';
 		display: block;
 		@include pos();
-		@include background-image(linear-gradient(left, rgba($c,1) 0%,rgba($c,0.75) 12%,rgba($c,0.5) 75%,rgba($c,0.15) 100%));
+		background-image: linear-gradient(to left, rgba($c,1) 0%,rgba($c,0.75) 12%,rgba($c,0.5) 75%,rgba($c,0.15) 100%);
 	}
 }
 

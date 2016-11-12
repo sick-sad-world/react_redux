@@ -1,5 +1,5 @@
-import { GET_USER, CREATE_USER, EDIT_USER } from '../actions/types';
-import _ from 'lodash';
+import { GET_USER, CREATE_USER, EDIT_USER } from "../actions/types";
+import _ from "lodash";
 
 export default function user (state = {}, action) {
   switch (action.type) {

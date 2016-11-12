@@ -5,10 +5,8 @@ img {
 	display: block;
   max-width: 100%;
   height: auto;
-  @if $is-10 {
-    a & {
-      border: 0;
-    }
+  a & {
+    border: 0;
   }
 }
 
