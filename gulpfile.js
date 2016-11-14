@@ -10,7 +10,8 @@ const SERVER = {
   open: false, // "local", "external", "ui", "ui-external", "tunnel" or false
   level: "info", // "info", "debug", "warn", or "silent"
   browser: "google chrome",
-  port: 3001
+  port: 3001,
+  SPAmode: true
 };
 
 // * You should choose only one build system for JS: Browserify(CommonJS) or RequireJS(AMD) or none of them
@@ -42,6 +43,7 @@ const CONFIG = {
 // Essential packages
 // ==================================================================
 const browserSync = require("browser-sync");
+const historyApiFallback = require("connect-history-api-fallback");
 const reload = browserSync.reload;
 const gulp = require("gulp");
 
@@ -94,15 +96,13 @@ gulp.task("build:clean", () => {
  */
 gulp.task("build:copy", ["build:clean"], function() {
   let filesToCopy = CONFIG.filesToCopy.map(item => p(item));
-	if (CONFIG.requirejs) {
-		filesToCopy.push(p("node_modules/requirejs/require.js"));
-	}
+  if (CONFIG.requirejs) {
+    filesToCopy.push(p("node_modules/requirejs/require.js"));
+  }
   if (CONFIG.templates) {
     filesToCopy.push(p(CONFIG.templates, "**/*.html"));
   }
-	return gulp.src(filesToCopy, {
-			base: "."
-		})
+  return gulp.src(filesToCopy, { base: "." })
 		.pipe(gulp.dest(p(CONFIG.build)));
 });
 
@@ -128,7 +128,7 @@ gulp.task("build:compass", ["build:copy"], () => {
  * Optimize and minify all required images and place them in target location
  */
 gulp.task("build:images", ["build:compass"], function() {
-	return gulp.src("img/**/*.{ico,png,jpg,jpeg,gif,webp}")
+  return gulp.src("img/**/*.{ico,png,jpg,jpeg,gif,webp}")
 		.pipe(imagemin())
 		.pipe(gulp.dest(p(CONFIG.build, CONFIG.img)));
 });
@@ -140,12 +140,12 @@ gulp.task("build:icons", ["build:images"], () => {
   if (!CONFIG.icons) return console.log("To run icons task - define their location first in CONFIG line 26");
   return gulp.src(p(CONFIG.icons, "**/*.svg"))
     .pipe(cheerio({
-			run ($) {
-				$("[fill]").removeAttr("fill");
-				$("[style]").removeAttr("style");
-			},
-			parserOptions: { xmlMode: true }
-		}))
+      run ($) {
+        $("[fill]").removeAttr("fill");
+        $("[style]").removeAttr("style");
+      },
+      parserOptions: { xmlMode: true }
+    }))
     .pipe(svgSprite({
       transform: [],
       mode: {
@@ -166,18 +166,19 @@ gulp.task("build:icons", ["build:images"], () => {
 gulp.task("build:babel", [(CONFIG.icons) ? "build:icons" : "build:images"], () => {
   if (!CONFIG.es6) return console.log("To enable ES6 translation define source folder first in CONFIG line 18");
   return browserify({
-      entries: p(CONFIG.es6, CONFIG.jsRoot),
-      debug: true
-    })
-    .transform("babelify", {
-        presets: ["react", "es2015", "stage-0", "stage-1"],
-        plugins: ["babel-plugin-transform-es2015-modules-umd"]
-    })
-    .bundle()
-    .pipe(source(p(CONFIG.jsRoot)))
-    .pipe(buffer())
-    .pipe(uglify())
-    .pipe(gulp.dest(p(CONFIG.build, CONFIG.js)));
+    entries: p(CONFIG.es6, CONFIG.jsRoot),
+    debug: true,
+    extensions: [".js", ".jsx"]
+  })
+  .transform("babelify", {
+    presets: ["react", "es2015", "stage-0", "stage-1"],
+    plugins: ["babel-plugin-transform-es2015-modules-umd"]
+  })
+  .bundle()
+  .pipe(source(p(CONFIG.jsRoot)))
+  .pipe(buffer())
+  .pipe(uglify())
+  .pipe(gulp.dest(p(CONFIG.build, CONFIG.js)));
 });
 
 /**
@@ -230,7 +231,7 @@ gulp.task("build", ((deps)=>{
  * Build your project and put it into archive
  */
 gulp.task("zipbuild", ["build"], function() {
-	return gulp.src(p(CONFIG.build, "/**/*"))
+  return gulp.src(p(CONFIG.build, "/**/*"))
 		.pipe(zip(CONFIG.fileName.replace("$d", (new Date()).getTime())))
 		.pipe(gulp.dest(BASE));
 });
@@ -263,12 +264,12 @@ gulp.task("icons:dev", () => {
   if (!CONFIG.icons) return console.log("To run icons task - define their location first in CONFIG line 26");
   return gulp.src(p(CONFIG.icons, "**/*.svg"))
     .pipe(cheerio({
-			run ($) {
-				$("[fill]").removeAttr("fill");
-				$("[style]").removeAttr("style");
-			},
-			parserOptions: { xmlMode: true }
-		}))
+      run ($) {
+        $("[fill]").removeAttr("fill");
+        $("[style]").removeAttr("style");
+      },
+      parserOptions: { xmlMode: true }
+    }))
     .pipe(svgSprite({
       transform: [],
       mode: {
@@ -289,17 +290,18 @@ gulp.task("icons:dev", () => {
 gulp.task("babel:dev", () => {
   if (!CONFIG.es6) return console.log("To enable ES6 translation define source folder first in CONFIG line 18");
   return browserify({
-      entries: p(CONFIG.es6, CONFIG.jsRoot),
-      debug: true
-    })
-    .transform("babelify", {
-        presets: ["react", "es2015", "stage-0", "stage-1"],
-        plugins: ["babel-plugin-transform-es2015-modules-umd"]
-    })
-    .bundle()
-    .pipe(source(p(CONFIG.jsRoot)))
-    .pipe(buffer())
-    .pipe(gulp.dest(p(CONFIG.js)));
+    entries: p(CONFIG.es6, CONFIG.jsRoot),
+    debug: true,
+    extensions: [".js", ".jsx"]
+  })
+  .transform("babelify", {
+    presets: ["react", "es2015", "stage-0", "stage-1"],
+    plugins: ["babel-plugin-transform-es2015-modules-umd"]
+  })
+  .bundle()
+  .pipe(source(p(CONFIG.jsRoot)))
+  .pipe(buffer())
+  .pipe(gulp.dest(p(CONFIG.js)));
 });
 
 /**
@@ -348,6 +350,7 @@ gulp.task("default", ((deps)=>{
         baseDir: BASE,
         routes: statics
       },
+      middleware: [ (SERVER.SPAmode) ? historyApiFallback() : null ],
       notify: false,
       logLevel: SERVER.level,
       logPrefix: packageJSON.name,
@@ -357,7 +360,7 @@ gulp.task("default", ((deps)=>{
   }
 
   if (CONFIG.es6) {
-   gulp.watch([p(CONFIG.es6), p(CONFIG.es6, "**/*.js")], ["babel:dev"]);
+    gulp.watch([p(CONFIG.es6), p(CONFIG.es6, "**/*.{js,jsx}")], ["babel:dev"]);
   }
   if (CONFIG.icons) {
     gulp.watch([p(CONFIG.icons), p(CONFIG.icons, "**/*.svg")], ["icons:dev"]);

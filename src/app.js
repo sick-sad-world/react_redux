@@ -8,7 +8,7 @@ import logger from "./middlewares/logger";
 import messager from "./middlewares/messager";
 import processIds from "./middlewares/processIds";
 
-import reducers from "./reducers";
+import * as reducers from "./reducers";
 
 import getUser from "./actions/user";
 import getAlerts from "./actions/alerts";
@@ -19,10 +19,13 @@ import getColumns from "./actions/columns";
 import React from "react";
 import { render } from "react-dom";
 import { Provider } from "react-redux";
-import { Router, Route, browserHistory } from "react-router";
+import { Router, Route, IndexRoute, browserHistory } from "react-router";
 import { syncHistoryWithStore, routerReducer } from "react-router-redux";
 
-import App from "./components/app.js";
+import App from "./containers/app";
+import Auth from "./components/auth";
+import Dashboard from "./components/dashboard";
+import Profile from "./components/profile";
 
 let initialState = {
   user: {
@@ -58,18 +61,21 @@ TrendolizerStore.dispatch(getUser()).then(() => {
       TrendolizerStore.dispatch(getReports()),
       TrendolizerStore.dispatch(getColumns())
     ]).then(() => {
-      console.log("Done");
+      // Render whole app
+      render(
+        <Provider store={TrendolizerStore}>
+          <Router history={history}>
+            <Route path="/auth" component={Auth}/>
+            <Route path="/" component={App}>
+              <IndexRoute component={Dashboard} />
+              <Route path="/settings" component={Profile}/>
+            </Route>
+          </Router>
+        </Provider>,
+        document.getElementById("appRoot")
+      )
     });
   } else {
 
   }
 });
-
-render(
-  <Provider store={TrendolizerStore}>
-    <Router history={history}>
-      <Route path="/" component={App} />
-    </Router>
-  </Provider>,
-  document.getElementById("appRoot")
-)

@@ -1,7 +1,7 @@
 import { GET_REPORTS, ADD_REPORT, EDIT_REPORT, DELETE_REPORT } from "../actions/types";
 import _ from "lodash";
 
-export default function reports (state = {}, action) {
+export function reports (state = {}, action) {
   switch (action.type) {
     case GET_REPORTS:
       return _.assign({}, state, action.payload);

@@ -9,7 +9,7 @@
 		select[name="sort_param"],
 		select[name="sort_param"]+.chosen-container {
 			flex: 1 1 auto;
-			margin: 0 rhythm(0.5);
+			margin: 0 baseUnit(0.5);
 		}
 	}
 	.row-time-gap {
@@ -17,7 +17,7 @@
 			flex: 0 0 50%;
 		}
 		div + div {
-			padding-left: rhythm(0.5);
+			padding-left: baseUnit(0.5);
 		}
 	}
 }

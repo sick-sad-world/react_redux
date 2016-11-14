@@ -1,7 +1,7 @@
 import { GET_COLUMNS, ADD_COLUMN, EDIT_COLUMN, DELETE_COLUMN } from "../actions/types";
 import _ from "lodash";
 
-export default function columns (state = {}, action) {
+export function columns (state = {}, action) {
   switch (action.type) {
     case GET_COLUMNS:
       return _.assign({}, state, action.payload);

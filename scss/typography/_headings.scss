@@ -62,7 +62,7 @@ h6, .t-caption {
 .form-subtitle {
 	display: block;
 	line-height: 1;
-	margin-bottom: rhythm(0.5);
+	margin-bottom: baseUnit(0.5);
 	padding-bottom: baseUnit();
 	border-bottom: $border;
 	font-size: $subhead1-font-size;

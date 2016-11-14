@@ -8,7 +8,7 @@ input[type="button"],
 button {
   cursor: pointer;
 	height: $form-unit;
-	padding: 0 rhythm();
+	padding: 0 baseUnit();
 	border-radius: $bdrs;
 	font: $base-font-size $heading-font-family;
 	color: $c-alt;

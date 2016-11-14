@@ -1,6 +1,6 @@
 /* Layout
 ========================================================================== */
-html, body, body>section[class^="screen"] {
+html, body, body section[class^="screen"] {
 	@include pos();
 	width: 100%;
 	height: 100%;
@@ -16,16 +16,13 @@ body {
 		content: '';
 		display: block;
 		@include pos();
-		background-image: linear-gradient(to left, rgba($c,1) 0%,rgba($c,0.75) 12%,rgba($c,0.5) 75%,rgba($c,0.15) 100%);
+		background-image: linear-gradient(to right, rgba($c,1) 0%,rgba($c,0.75) 12%,rgba($c,0.5) 75%,rgba($c,0.15) 100%);
 	}
 }
 
 section[class^="screen"] {
-	display: none;
-	body.#{$app-init}>&.#{$app-active} {
-		display: flex;
-		z-index: 2;
-	}
+	display: flex;
+	z-index: 2;
 }
 
 .loading-bar {
@@ -39,10 +36,10 @@ section[class^="screen"] {
 ========================================================================== */
 form {
 	.row {
-		margin: rhythm() 0;
+		margin: baseUnit(2) 0;
 	}
 	.row-flex, .row-flex-wrap {
-		margin: rhythm() 0;
+		margin: baseUnit(2) 0;
 		display: flex;
 		justify-content: space-between;
 		.form-subtitle {
@@ -56,7 +53,7 @@ form {
 	}
 	.row-flex {
 		> *:not(:last-child) {
-			margin-right: rhythm(0.5);
+			margin-right: baseUnit(2);
 		}
 	}
 	.row-flex-wrap {
@@ -82,10 +79,10 @@ form {
 			.form-column {
 				flex: 0 0 50%;
 				max-width: 50%;
-				padding-right: rhythm(0.5);
+				padding-right: baseUnit();
 				+ .form-column {
 					padding-right: 0;
-					padding-left: rhythm(0.5);
+					padding-left: baseUnit();
 				}
 			}
 			.form-block {

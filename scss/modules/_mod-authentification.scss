@@ -10,24 +10,21 @@
 		color: $c-alt;
 	}
 	form + form {
-		margin-top: rhythm();
-	}
-	.row, .row-flex {
-		margin: rhythm(0.5) 0;
+		margin-top: baseUnit(2);
 	}
 	.auth-forms {
 		flex: 0 0 map-get($layout, auth);
-		margin: 0 rhythm();
+		margin: 0 baseUnit(2);
 		order: 1;
-		padding-top: $logo + rhythm();
+		padding-top: $logo + baseUnit();
 	}
 	.welcome-text {
 		flex: 0 1 55%;
-		margin: 0 rhythm();
+		margin: 0 baseUnit(2);
 		order: 2;
 	}
 	.logotype {
-		margin: 0 0 rhythm() 0;
+		margin: 0 0 baseUnit(2) 0;
 		height: $logo;
 	}
 	.copyright {

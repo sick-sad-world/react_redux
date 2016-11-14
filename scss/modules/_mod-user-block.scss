@@ -3,7 +3,7 @@
 .mod-user-block {
 	font-size: 1em;
 	div {
-		margin: rhythm() 0;
+		margin: baseUnit() 0;
 		line-height: 1;
 		transition: opacity $dur;
 	}
