@@ -4,10 +4,12 @@ import { connect } from "react-redux";
 class Profile extends React.Component {
   render() {
     return (
-      <section className="mod-page" id="funUserProfile">
-      </section>
+      <div className="mod-page" id="funUserProfile">
+      User profile and settings page
+      </div>
     );
   }
 };
 
-export default connect()(Profile);
+
+export default Profile;

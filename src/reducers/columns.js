@@ -2,6 +2,7 @@ import { GET_COLUMNS, ADD_COLUMN, EDIT_COLUMN, DELETE_COLUMN } from "../actions/
 import _ from "lodash";
 
 export function columns (state = {}, action) {
+  console.log("columns", state);
   switch (action.type) {
     case GET_COLUMNS:
       return _.assign({}, state, action.payload);

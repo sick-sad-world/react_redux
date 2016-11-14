@@ -25,6 +25,10 @@ import { syncHistoryWithStore, routerReducer } from "react-router-redux";
 import App from "./containers/app";
 import Auth from "./components/auth";
 import Dashboard from "./components/dashboard";
+import * as Alerts from "./containers/alerts";
+import * as Reports from "./containers/reports";
+import * as Columns from "./containers/columns";
+import * as Sourcesets from "./containers/sourcesets";
 import Profile from "./components/profile";
 
 let initialState = {
@@ -53,6 +57,25 @@ let TrendolizerStore = createStore(
 
 let history = syncHistoryWithStore(browserHistory, TrendolizerStore);
 
+let renderApp = () => {
+  render(
+    <Provider store={TrendolizerStore}>
+      <Router history={history}>
+        <Route path="/auth" component={Auth}/>
+        <Route path="/" component={App}>
+          <IndexRoute components={{main: Dashboard}} />
+          <Route path="/alerts" components={Alerts}/>
+          <Route path="/reports" components={Reports}/>
+          <Route path="/columns" components={Columns}/>
+          <Route path="/sourcesets" components={Sourcesets}/>
+          <Route path="/settings" components={{main: Profile}}/>
+        </Route>
+      </Router>
+    </Provider>,
+    document.getElementById("appRoot")
+  )
+}
+
 // Fetch data -> May be rewritten
 TrendolizerStore.dispatch(getUser()).then(() => {
   if (TrendolizerStore.getState().user.id) {
@@ -60,22 +83,9 @@ TrendolizerStore.dispatch(getUser()).then(() => {
       TrendolizerStore.dispatch(getAlerts()),
       TrendolizerStore.dispatch(getReports()),
       TrendolizerStore.dispatch(getColumns())
-    ]).then(() => {
-      // Render whole app
-      render(
-        <Provider store={TrendolizerStore}>
-          <Router history={history}>
-            <Route path="/auth" component={Auth}/>
-            <Route path="/" component={App}>
-              <IndexRoute component={Dashboard} />
-              <Route path="/settings" component={Profile}/>
-            </Route>
-          </Router>
-        </Provider>,
-        document.getElementById("appRoot")
-      )
-    });
+    ]).then(() => renderApp());
   } else {
-
+    renderApp();
   }
 });
+

@@ -1,23 +1,47 @@
 import React from "React";
 import { connect } from "react-redux";
-import { browserHistory } from "react-router";
+import { logout } from "../actions/auth";
+import MainNav from "../components/mainNav";
+import UserBlock from "../components/userBlock";
 
-class CheckAuth extends React.Component {
-  componentDidMount() {
+class App extends React.Component {
+  constructor(props) {
+    super(props);
     if (!this.props.isLoggedIn) {
-      browserHistory.replace("/auth");
+      this.props.router.replace("/auth");
     }
+
+    this.state = {
+      sidebar: this.props.sidebar || true
+    };
+
+    this.toggleSidebar = this.toggleSidebar.bind(this);
+    this.logoutHandler = this.logoutHandler.bind(this);
+  }
+
+  toggleSidebar(e) {
+    e.preventDefault();
+    this.setState({sidebar: !this.state.sidebar});
+  }
+
+  logoutHandler(e) {
+    e.preventDefault();
+    this.props.dispatch(logout());
   }
 
   render() {
+    let { list, main, additional } = this.props;
+    let sidebarStateClass = (this.state.sidebar) ? "is-expanded" : "";
     return (this.props.isLoggedIn) ? (
       <section className="screen-main mod-screen-main" id="funMainScreen">
-        <aside className="sidebar is-expanded">
-          /* User block */
-          /* Main Nav */
+        <aside className={ "sidebar " + sidebarStateClass }>
+          <UserBlock />
+          <MainNav toggle={this.toggleSidebar} logout={this.logoutHandler} />
         </aside>
         <div className="screen-content">
-          {this.props.children}
+          { list }
+          { main }
+          { additional }
         </div>
       </section>
     ) : null;
@@ -25,9 +49,12 @@ class CheckAuth extends React.Component {
 }
 
 function mapStateToProps(state) {
+  let user = state.user || {};
+  //user.workspace.sidebar
   return {
-    isLoggedIn: state.user && state.user.id,
+    sidebar: true,
+    isLoggedIn: user.id
   };
 }
 
-export default connect(mapStateToProps)(CheckAuth);
+export default connect(mapStateToProps)(App);

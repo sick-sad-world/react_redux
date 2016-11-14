@@ -4,10 +4,11 @@ import { connect } from "react-redux";
 class Dashboard extends React.Component {
   render() {
     return (
-      <section className="mod-page" id="funDashboard">
-      </section>
+      <div className="mod-page" id="funDashboard">
+        Dashboard
+      </div>
     );
   }
 };
 
-export default connect()(Dashboard);
+export default Dashboard;
