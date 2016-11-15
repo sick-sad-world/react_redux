@@ -6,6 +6,9 @@ import { browserHistory } from "react-router";
 import { login, register, getAppData } from "../actions/auth";
 import getUser from "../actions/user";
 
+import FormLogin from "../components/formLogin";
+import FormRegister from "../components/formRegister";
+
 class Auth extends React.Component {
   constructor(props) {
     super(props);
@@ -59,6 +62,7 @@ class Auth extends React.Component {
   }
 
   render() {
+    console.log(this);
     let texts = this.props.texts;
     let pendingClass = (this.state.pending) ? "is-pending" : "";
     return (!this.props.isLoggedIn) ? (
@@ -73,32 +77,8 @@ class Auth extends React.Component {
           <small className="copyright">{ texts.copy }</small>
         </article>
         <div className="auth-forms">
-          <form action="login" onSubmit={this.handleAuth}>
-            <h3>Log in</h3>
-            <div className="row">
-              <input type="text" name="login" placeholder="Your login" disabled={this.state.pending} value={this.state.login} onChange={this.handleChange} />
-            </div>
-            <div className="row-flex">
-              <input type="password" name="pass" placeholder="Your password" disabled={this.state.pending} value={this.state.pass} onChange={this.handleChange} />
-              <input type="submit" disabled={this.state.pending} className="is-alt" value="Log in" />
-            </div>
-          </form>
-          <form action="create" onSubmit={this.handleReg}>
-            <h3>New to Trendolizer?</h3>
-            <div className="message"></div>
-            <div className="row">
-              <input type="text" name="username" placeholder="Your login" disabled={this.state.pending} value={this.state.username} onChange={this.handleChange} />
-            </div>
-            <div className="row">
-              <input type="email" name="email" placeholder="Your email" disabled={this.state.pending} value={this.state.email} onChange={this.handleChange} />
-            </div>
-            <div className="row">
-              <input type="password" name="password" placeholder="Your password" disabled={this.state.pending} value={this.state.password} onChange={this.handleChange} />
-            </div>
-            <div className="row">
-              <input type="submit" disabled={this.state.pending} className="is-alt" value="Create account" />
-            </div>
-          </form>
+          <FormLogin handler={this.handleAuth} />
+          <FormReg handler={this.handleReg} />
         </div>
       </section>
     ) : null;

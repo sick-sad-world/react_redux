@@ -21,7 +21,7 @@ import { Router, Route, IndexRoute, browserHistory } from "react-router";
 import { syncHistoryWithStore, routerReducer } from "react-router-redux";
 
 import App from "./containers/app";
-import Auth from "./components/auth";
+import Auth from "./containers/auth";
 import Dashboard from "./components/dashboard";
 import * as Alerts from "./containers/alerts";
 import * as Reports from "./containers/reports";
