@@ -11,9 +11,7 @@ import processIds from "./middlewares/processIds";
 import * as reducers from "./reducers";
 
 import getUser from "./actions/user";
-import getAlerts from "./actions/alerts";
-import getReports from "./actions/reports";
-import getColumns from "./actions/columns";
+import { getAppData } from "./actions/auth";
 
 // View part imports
 import React from "react";
@@ -32,18 +30,7 @@ import * as Sourcesets from "./containers/sourcesets";
 import Profile from "./components/profile";
 
 let initialState = {
-  user: {
-    id: null,
-    hash: "",
-    email: "",
-    email_bcc: [],
-    name: "",
-    fullname: "Name Surname",
-    position: "user position",
-    status: null,
-    is_admin: "0",
-    image: "img/ph_user.png"
-  },
+  user: {},
   alerts: {},
   reports: {},
   columns: {}
@@ -57,8 +44,9 @@ let TrendolizerStore = createStore(
 
 let history = syncHistoryWithStore(browserHistory, TrendolizerStore);
 
-let renderApp = () => {
-  render(
+TrendolizerStore.dispatch(getUser())
+  .then(() => TrendolizerStore.dispatch(getAppData()))
+  .then(() => render(
     <Provider store={TrendolizerStore}>
       <Router history={history}>
         <Route path="/auth" component={Auth}/>
@@ -73,19 +61,4 @@ let renderApp = () => {
       </Router>
     </Provider>,
     document.getElementById("appRoot")
-  )
-}
-
-// Fetch data -> May be rewritten
-TrendolizerStore.dispatch(getUser()).then(() => {
-  if (TrendolizerStore.getState().user.id) {
-    Promise.all([
-      TrendolizerStore.dispatch(getAlerts()),
-      TrendolizerStore.dispatch(getReports()),
-      TrendolizerStore.dispatch(getColumns())
-    ]).then(() => renderApp());
-  } else {
-    renderApp();
-  }
-});
-
+  ));

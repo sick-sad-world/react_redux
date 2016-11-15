@@ -1,27 +1,38 @@
+import _ from "lodash";
 import React from "react";
-import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { login, register } from "../actions/auth";
+import { browserHistory } from "react-router";
+
+import { login, register, getAppData } from "../actions/auth";
+import getUser from "../actions/user";
 
 class Auth extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      pending: false,
       login: '',
       pass: '',
       username: '',
       password: '',
       email: ''
     };
+  }
 
-    if (this.props.isLoggedIn) {
-      this.props.router.replace("/");
+  checkAuthState(auth) {
+    if (auth) {
+      browserHistory.push("/");
     }
+  }
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleAuth = this.handleAuth.bind(this);
-    this.handleReg = this.handleReg.bind(this);
+  componentWillMount() {
+    _.bindAll(this, ['handleChange', 'handleAuth', 'handleReg']);
+    this.checkAuthState(this.props.isLoggedIn);
+  }
+
+  componentWillUpdate(newProps) {
+    this.checkAuthState(newProps.isLoggedIn);
   }
 
   handleChange(e) {
@@ -30,10 +41,16 @@ class Auth extends React.Component {
 
   handleAuth(e) {
     e.preventDefault();
-    this.props.dispatch(login({
-      username: this.state.login,
-      password: this.state.pass
-    }));
+    let dispatch = this.props.dispatch;
+    this.setState({pending: true}, () => {
+      dispatch(login({
+          username: this.state.login,
+          password: this.state.pass
+        }))
+        .then(() => dispatch(getUser()))
+        .then(() => dispatch(getAppData()))
+        .then(() => this.setState({pending: false}));
+    })
   }
 
   handleReg(e) {
@@ -43,8 +60,9 @@ class Auth extends React.Component {
 
   render() {
     let texts = this.props.texts;
-    return (
-      <section className="screen-auth mod-authentification" id="funAuthScreen">
+    let pendingClass = (this.state.pending) ? "is-pending" : "";
+    return (!this.props.isLoggedIn) ? (
+      <section className={"screen-auth mod-authentification " + pendingClass} id="funAuthScreen">
         <article className="welcome-text">
           <img className="logotype" src="img/logo.svg" title="Trendolier pro" alt="Trendolizer pro" />
           <hgroup className="t-rhythm">
@@ -58,38 +76,38 @@ class Auth extends React.Component {
           <form action="login" onSubmit={this.handleAuth}>
             <h3>Log in</h3>
             <div className="row">
-              <input type="text" name="login" placeholder="Your login" value={this.state.login} onChange={this.handleChange} />
+              <input type="text" name="login" placeholder="Your login" disabled={this.state.pending} value={this.state.login} onChange={this.handleChange} />
             </div>
             <div className="row-flex">
-              <input type="password" name="pass" placeholder="Your password" value={this.state.pass} onChange={this.handleChange} />
-              <input type="submit" className="is-alt" value="Log in" />
+              <input type="password" name="pass" placeholder="Your password" disabled={this.state.pending} value={this.state.pass} onChange={this.handleChange} />
+              <input type="submit" disabled={this.state.pending} className="is-alt" value="Log in" />
             </div>
           </form>
           <form action="create" onSubmit={this.handleReg}>
             <h3>New to Trendolizer?</h3>
             <div className="message"></div>
             <div className="row">
-              <input type="text" name="username" placeholder="Your login" value={this.state.username} onChange={this.handleChange} />
+              <input type="text" name="username" placeholder="Your login" disabled={this.state.pending} value={this.state.username} onChange={this.handleChange} />
             </div>
             <div className="row">
-              <input type="email" name="email" placeholder="Your email" value={this.state.email} onChange={this.handleChange} />
+              <input type="email" name="email" placeholder="Your email" disabled={this.state.pending} value={this.state.email} onChange={this.handleChange} />
             </div>
             <div className="row">
-              <input type="password" name="password" placeholder="Your password" value={this.state.password} onChange={this.handleChange} />
+              <input type="password" name="password" placeholder="Your password" disabled={this.state.pending} value={this.state.password} onChange={this.handleChange} />
             </div>
             <div className="row">
-              <input type="submit" className="is-alt" value="Create account" />
+              <input type="submit" disabled={this.state.pending} className="is-alt" value="Create account" />
             </div>
           </form>
         </div>
       </section>
-    );
+    ) : null;
   }
-};
+}
 
 function mapStateToProps(state) {
   return {
-    isLoggedIn: state.user && state.user.id,
+    isLoggedIn: state.user.id,
     texts: {
       title: "Welcome to Trendolizer pro.",
       subTitle: "Best engine for searching viral content.",

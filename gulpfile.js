@@ -43,7 +43,6 @@ const CONFIG = {
 // Essential packages
 // ==================================================================
 const browserSync = require("browser-sync");
-const historyApiFallback = require("connect-history-api-fallback");
 const reload = browserSync.reload;
 const gulp = require("gulp");
 
@@ -317,7 +316,7 @@ gulp.task("default", ((deps)=>{
   // Really want to replace this ugly array with one unique selector
   // "**/*.{js,html,css}" this dosen"t work but should
   // "*.{js,html,css}" this works but only on base folder, no affect on inner ones
-  var watch = [
+  let watch = [
     p(CONFIG.img, "**/*.*"),
     p(CONFIG.fonts, "**/*.*"),
     p(CONFIG.css, "**/*.css"),
@@ -325,10 +324,18 @@ gulp.task("default", ((deps)=>{
     p("*.html"),
     "!node_modules"
   ];
-  var statics = {
+
+  let statics = {
     "/css": p(CONFIG.css),
     "/img": p(CONFIG.img),
     "/js": p(CONFIG.js)
+  };
+
+  let spaModeMiddleware = (req, res, next) => {
+    if (req.url.indexOf(".") < 0) {
+      req.url = "/index.html";
+    }
+    return next();
   };
 
   // If templates enabled add them to static resources and to watch pool
@@ -350,7 +357,7 @@ gulp.task("default", ((deps)=>{
         baseDir: BASE,
         routes: statics
       },
-      middleware: [ (SERVER.SPAmode) ? historyApiFallback() : null ],
+      middleware: [ (SERVER.SPAmode) ? spaModeMiddleware : null ],
       notify: false,
       logLevel: SERVER.level,
       logPrefix: packageJSON.name,

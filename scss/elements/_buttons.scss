@@ -15,6 +15,7 @@ button {
   @include gradient($c-accent);
 	border: 0;
 	border-bottom: 2px solid rgba(0,0,0,.2);
+  transition: background $dur, opacity $dur;
   &:hover, &:focus {
 		@include gradient(lighten($c-accent, 1.5%), top);
 	}

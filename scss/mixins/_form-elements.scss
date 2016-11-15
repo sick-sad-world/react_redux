@@ -3,7 +3,7 @@
 	color: $c-main;
 	border: $border;
 	border-radius: $bdrs;
-	transition: box-shadow $dur;
+	transition: box-shadow $dur, opacity $dur;
 }
 @mixin form-pholder($s: 0.875em) {
 	font-style: italic;

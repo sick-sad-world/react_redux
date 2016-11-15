@@ -15,14 +15,14 @@ button,
 input,
 select,
 textarea,
-a.is_button,
-span.is_button {
+a.is-button,
+span.is-button {
   @extend %base-form-element;
   &:focus {
     outline: 0;
   }
   &[disabled] {
-    opacity: 0.5;
+    opacity: 0.75;
     cursor: default;
   }
 }

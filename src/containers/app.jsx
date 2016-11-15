@@ -1,27 +1,40 @@
+import _ from "lodash";
 import React from "React";
 import { connect } from "react-redux";
+import { browserHistory } from "react-router";
 import { logout } from "../actions/auth";
 import MainNav from "../components/mainNav";
 import UserBlock from "../components/userBlock";
 
+
+
 class App extends React.Component {
   constructor(props) {
     super(props);
-    if (!this.props.isLoggedIn) {
-      this.props.router.replace("/auth");
-    }
 
     this.state = {
       sidebar: this.props.sidebar || true
     };
+  }
 
-    this.toggleSidebar = this.toggleSidebar.bind(this);
-    this.logoutHandler = this.logoutHandler.bind(this);
+  checkAuthState(auth) {
+    if (!auth) {
+      browserHistory.push("/auth");
+    }
+  }
+
+  componentWillMount() {
+    _.bindAll(this, ['toggleSidebar', 'logoutHandler']);
+    this.checkAuthState(this.props.isLoggedIn);
+  }
+
+  componentWillUpdate(newProps) {
+    this.checkAuthState(newProps.isLoggedIn);
   }
 
   toggleSidebar(e) {
     e.preventDefault();
-    this.setState({sidebar: !this.state.sidebar});
+    this.setState({ sidebar: !this.state.sidebar });
   }
 
   logoutHandler(e) {
@@ -34,14 +47,14 @@ class App extends React.Component {
     let sidebarStateClass = (this.state.sidebar) ? "is-expanded" : "";
     return (this.props.isLoggedIn) ? (
       <section className="screen-main mod-screen-main" id="funMainScreen">
-        <aside className={ "sidebar " + sidebarStateClass }>
+        <aside className={"sidebar " + sidebarStateClass}>
           <UserBlock />
           <MainNav toggle={this.toggleSidebar} logout={this.logoutHandler} />
         </aside>
         <div className="screen-content">
-          { list }
-          { main }
-          { additional }
+          {list}
+          {main}
+          {additional}
         </div>
       </section>
     ) : null;
@@ -49,11 +62,9 @@ class App extends React.Component {
 }
 
 function mapStateToProps(state) {
-  let user = state.user || {};
-  //user.workspace.sidebar
   return {
-    sidebar: true,
-    isLoggedIn: user.id
+    isLoggedIn: state.user.id,
+    sidebar: true
   };
 }
 
