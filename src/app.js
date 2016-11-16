@@ -31,15 +31,15 @@ import Profile from "./components/profile";
 
 let initialState = {
   user: {},
-  alerts: {},
-  reports: {},
-  columns: {}
+  alerts: [],
+  reports: [],
+  columns: []
 };
 
 let TrendolizerStore = createStore(
   combineReducers({ ...reducers, routing: routerReducer }),
   initialState,
-  applyMiddleware(thunk, logger, messager, processIds)
+  applyMiddleware(thunk, logger, messager)
 );
 
 let history = syncHistoryWithStore(browserHistory, TrendolizerStore);

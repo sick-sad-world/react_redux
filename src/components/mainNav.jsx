@@ -8,8 +8,7 @@ export default class MainNav extends React.Component {
     return (
       <nav className="mod-main-nav" id="funMainNav">
         <a href="" onClick={this.props.toggle} title="Toggle sidebar">
-          <Icon icon="chevron-left" />
-          <span className="t-ellipsis">Toggle sidebar</span>
+          <Icon icon="menu" />
         </a>
         <span className="separator"></span>
         <IndexLink to="/" activeClassName="is-current" title="Dashboard">

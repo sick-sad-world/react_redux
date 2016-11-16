@@ -5,15 +5,17 @@ export function reports (state = {}, action) {
   switch (action.type) {
     case LOGOUT:
     case LOGIN:
-      return {};
+      return [];
     case GET_REPORTS:
-      return _.assign({}, state, action.payload);
+      return action.payload;
     case ADD_REPORT:
-      return {...state, [action.id]: action.payload};
+      return _.concat(state, action.payload);
     case EDIT_REPORT:
-      return {...state, [action.id]: _.assign({}, state[action.id], action.payload)};
+      return _.map(state, (item) => {
+        return (item.id === action.payload.id) ? action.payload : item;
+      });
     case DELETE_REPORT:
-      return _.omit(state, action.id);
+      return _.reject(state, {id: action.payload.id});
     default:
       return state;
   }

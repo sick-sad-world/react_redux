@@ -14,23 +14,16 @@ class Auth extends React.Component {
     super(props);
 
     this.state = {
-      pending: false,
-      login: '',
-      pass: '',
-      username: '',
-      password: '',
-      email: ''
+      pending: false
     };
   }
 
   checkAuthState(auth) {
-    if (auth) {
-      browserHistory.push("/");
-    }
+    auth && browserHistory.push("/")
   }
 
   componentWillMount() {
-    _.bindAll(this, ['handleChange', 'handleAuth', 'handleReg']);
+    _.bindAll(this, ["handleAuth", "handleReg"]);
     this.checkAuthState(this.props.isLoggedIn);
   }
 
@@ -38,22 +31,20 @@ class Auth extends React.Component {
     this.checkAuthState(newProps.isLoggedIn);
   }
 
-  handleChange(e) {
-    this.setState({[e.target.name]: e.target.value});
-  }
-
   handleAuth(e) {
     e.preventDefault();
     let dispatch = this.props.dispatch;
+    let { username, password } = e.target.elements;
+
     this.setState({pending: true}, () => {
       dispatch(login({
-          username: this.state.login,
-          password: this.state.pass
+          username: username.value,
+          password: password.value
         }))
         .then(() => dispatch(getUser()))
         .then(() => dispatch(getAppData()))
         .then(() => this.setState({pending: false}));
-    })
+    });
   }
 
   handleReg(e) {
@@ -62,7 +53,6 @@ class Auth extends React.Component {
   }
 
   render() {
-    console.log(this);
     let texts = this.props.texts;
     let pendingClass = (this.state.pending) ? "is-pending" : "";
     return (!this.props.isLoggedIn) ? (
@@ -77,8 +67,8 @@ class Auth extends React.Component {
           <small className="copyright">{ texts.copy }</small>
         </article>
         <div className="auth-forms">
-          <FormLogin handler={this.handleAuth} />
-          <FormReg handler={this.handleReg} />
+          <FormLogin handler={this.handleAuth} pending={this.state.pending} />
+          <FormRegister handler={this.handleReg} pending={this.state.pending} />
         </div>
       </section>
     ) : null;

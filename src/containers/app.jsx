@@ -1,8 +1,10 @@
 import _ from "lodash";
+import classNames from "classnames";
 import React from "React";
 import { connect } from "react-redux";
 import { browserHistory } from "react-router";
 import { logout } from "../actions/auth";
+import getUser from "../selectors/user";
 import MainNav from "../components/mainNav";
 import UserBlock from "../components/userBlock";
 
@@ -35,6 +37,8 @@ class App extends React.Component {
   toggleSidebar(e) {
     e.preventDefault();
     this.setState({ sidebar: !this.state.sidebar });
+    e.target.blur();
+    e.target.parentNode.blur();
   }
 
   logoutHandler(e) {
@@ -44,10 +48,13 @@ class App extends React.Component {
 
   render() {
     let { list, main, additional } = this.props;
-    let sidebarStateClass = (this.state.sidebar) ? "is-expanded" : "";
+    let sidebarClass = classNames({
+      "sidebar": true,
+      "is-expanded": this.state.sidebar
+    });
     return (this.props.isLoggedIn) ? (
       <section className="screen-main mod-screen-main" id="funMainScreen">
-        <aside className={"sidebar " + sidebarStateClass}>
+        <aside className={sidebarClass}>
           <UserBlock />
           <MainNav toggle={this.toggleSidebar} logout={this.logoutHandler} />
         </aside>
@@ -62,8 +69,9 @@ class App extends React.Component {
 }
 
 function mapStateToProps(state) {
+  let user = getUser(state);
   return {
-    isLoggedIn: state.user.id,
+    isLoggedIn: user.id,
     sidebar: true
   };
 }

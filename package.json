@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "scripts": {},
   "dependencies": {
+    "classnames": "^2.2.5",
     "jsonp-es6": "^1.0.0",
     "lodash": "^4.16.6",
     "push.js": "0.0.11",
@@ -14,7 +15,8 @@
     "react-router": "^3.0.0",
     "react-router-redux": "^4.0.7",
     "redux": "^3.6.0",
-    "redux-thunk": "^2.1.0"
+    "redux-thunk": "^2.1.0",
+    "reselect": "^2.5.4"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

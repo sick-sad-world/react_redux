@@ -9,20 +9,19 @@ export default class FormReg extends React.Component {
   }
   render () {
     return (
-      <form action="create" onSubmit={this.handler}>
+      <form action="create" onSubmit={this.props.handler}>
         <h3>New to Trendolizer?</h3>
-        <div className="message"></div>
         <div className="row">
-          <input type="text" name="username" placeholder="Your login" disabled={this.state.pending} value={this.state.username} onChange={this.handleChange} />
+          <input type="text" name="username" placeholder="Your login" required pattern="^[a-zA-Z_-]+$" disabled={this.props.pending} />
         </div>
         <div className="row">
-          <input type="email" name="email" placeholder="Your email" disabled={this.state.pending} value={this.state.email} onChange={this.handleChange} />
+          <input type="email" name="email" placeholder="Your email" required disabled={this.props.pending} />
         </div>
         <div className="row">
-          <input type="password" name="password" placeholder="Your password" disabled={this.state.pending} value={this.state.password} onChange={this.handleChange} />
+          <input type="password" name="password" placeholder="Your password" required pattern="^[0-9a-zA-Z_-]{3,12}$" disabled={this.props.pending} />
         </div>
         <div className="row">
-          <input type="submit" disabled={this.state.pending} className="is-alt" value="Create account" />
+          <input type="submit" className="is-alt" value="Create account" required disabled={this.props.pending} />
         </div>
       </form>
     );
