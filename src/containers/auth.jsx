@@ -1,7 +1,6 @@
 import _ from "lodash";
 import React from "react";
 import { connect } from "react-redux";
-import { browserHistory } from "react-router";
 
 import { login, register, getAppData } from "../actions/auth";
 import getUser from "../actions/user";
@@ -16,14 +15,15 @@ class Auth extends React.Component {
     this.state = {
       pending: false
     };
+
+    _.bindAll(this, ["handleAuth", "handleReg"]);
   }
 
   checkAuthState(auth) {
-    auth && browserHistory.push("/")
+    auth && this.props.router.push("/")
   }
 
   componentWillMount() {
-    _.bindAll(this, ["handleAuth", "handleReg"]);
     this.checkAuthState(this.props.isLoggedIn);
   }
 

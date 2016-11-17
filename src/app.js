@@ -33,7 +33,9 @@ let initialState = {
   user: {},
   alerts: [],
   reports: [],
-  columns: []
+  columns: [],
+  sources: [],
+  sourcesets: []
 };
 
 let TrendolizerStore = createStore(

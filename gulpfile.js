@@ -17,6 +17,9 @@ const SERVER = {
 // * You should choose only one build system for JS: Browserify(CommonJS) or RequireJS(AMD) or none of them
 const BASE = ""; // Root of your project. May be different due to environment such as Expressjs or Cordova
 const CONFIG = {
+  gzip: {
+    gzipOptions: { level: 9 }
+  },
   build: "build", // BASE = "" -> build = "../outside" : BASE => "foo" -> build = "../../outside" : BASE => "foo/bar" -> build = "../../../outside"
   js: "js",
   jsRoot: "app.js",
@@ -43,7 +46,6 @@ const CONFIG = {
 // Essential packages
 // ==================================================================
 const browserSync = require("browser-sync");
-const reload = browserSync.reload;
 const gulp = require("gulp");
 
 // Style plugins
@@ -72,6 +74,7 @@ const svgSprite = require("gulp-svg-sprite");
 const sourcemaps = require("gulp-sourcemaps");
 const clean = require("gulp-clean");
 const zip = require("gulp-zip");
+const gzip = require("gulp-gzip");
 const path = require("path");
 
 const p = (...args) => {
@@ -120,6 +123,7 @@ gulp.task("build:compass", ["build:copy"], () => {
     .pipe(autoprefixer({
       cascade: false
     }))
+    .pipe(gzip(CONFIG.gzip))
     .pipe(gulp.dest(p(CONFIG.build, CONFIG.css)));
 });
 
@@ -156,7 +160,9 @@ gulp.task("build:icons", ["build:images"], () => {
         }
       },
       svg: { xmlDeclaration: false, doctypeDeclaration: false }
-    })).pipe(gulp.dest(p(CONFIG.build)));
+    }))
+    .pipe(gzip(CONFIG.gzip))
+    .pipe(gulp.dest(p(CONFIG.build)));
 });
 
 /**
@@ -177,6 +183,7 @@ gulp.task("build:babel", [(CONFIG.icons) ? "build:icons" : "build:images"], () =
   .pipe(source(p(CONFIG.jsRoot)))
   .pipe(buffer())
   .pipe(uglify())
+  .pipe(gzip(CONFIG.gzip))
   .pipe(gulp.dest(p(CONFIG.build, CONFIG.js)));
 });
 
@@ -185,12 +192,13 @@ gulp.task("build:babel", [(CONFIG.icons) ? "build:icons" : "build:images"], () =
  */
 gulp.task("build:minify", [(CONFIG.icons) ? "build:icons" : "build:images"], () => {
   return gulp.src(p(CONFIG.js))
+    .pipe(concat("app.js"))
     .pipe(uglify({
       output: {
         preamble: CONFIG.preamble.replace("$d", (new Date().toUTCString()))
       }
     }))
-    .pipe(concat("app.js"))
+    .pipe(gzip(CONFIG.gzip))
     .pipe(gulp.dest(p(CONFIG.build, CONFIG.js)));
 });
 
@@ -211,13 +219,14 @@ gulp.task("build:requirejs", [(CONFIG.icons) ? "build:icons" : "build:images"], 
         preamble: CONFIG.preamble.replace("$d", (new Date().toUTCString()))
       }
     }))
+    .pipe(gzip(CONFIG.gzip))
     .pipe(gulp.dest(p(CONFIG.build, CONFIG.js)));
 });
 
 /**
  * Build your project
  */
-gulp.task("build", ((deps)=>{
+gulp.task("build", (()=>{
   if (CONFIG.es6) return ["build:babel"];
   if (CONFIG.requirejs) return ["build:requirejs"];
   if (CONFIG.minify) return ["build:minify"];
@@ -318,13 +327,11 @@ gulp.task("default", ((deps)=>{
   // "*.{js,html,css}" this works but only on base folder, no affect on inner ones
   let watch = [
     p(CONFIG.img, "**/*.*"),
-    p(CONFIG.fonts, "**/*.*"),
+    p(CONFIG.fonts, "**/*.{eot,svg,ttf,woff,woff2}"),
     p(CONFIG.css, "**/*.css"),
     p(CONFIG.js, "**/*.js"),
-    p("*.html"),
-    "!node_modules"
+    p("/*.html"),
   ];
-
   let statics = {
     "/css": p(CONFIG.css),
     "/img": p(CONFIG.img),
@@ -334,8 +341,8 @@ gulp.task("default", ((deps)=>{
   let spaModeMiddleware = (req, res, next) => {
     if (req.url.indexOf(".") < 0) {
       req.url = "/index.html";
-    }
-    return next();
+    } 
+    next();
   };
 
   // If templates enabled add them to static resources and to watch pool
@@ -357,7 +364,13 @@ gulp.task("default", ((deps)=>{
         baseDir: BASE,
         routes: statics
       },
-      middleware: [ (SERVER.SPAmode) ? spaModeMiddleware : null ],
+      middleware: [
+        (SERVER.SPAmode) ? spaModeMiddleware : null
+      ],
+      files: watch,
+      watchOptions: {
+        ignored: /node_modules/
+      },
       notify: false,
       logLevel: SERVER.level,
       logPrefix: packageJSON.name,
@@ -372,6 +385,7 @@ gulp.task("default", ((deps)=>{
   if (CONFIG.icons) {
     gulp.watch([p(CONFIG.icons), p(CONFIG.icons, "**/*.svg")], ["icons:dev"]);
   }
-  gulp.watch([p(CONFIG.sass), p(CONFIG.sass, "**/*.scss")], ["compass:dev"]);
-  gulp.watch(watch).on("change", reload);
+  if (CONFIG.sass) {
+    gulp.watch([p(CONFIG.sass), p(CONFIG.sass, "**/*.scss")], ["compass:dev"]);
+  }
 });

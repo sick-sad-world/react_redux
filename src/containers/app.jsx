@@ -2,7 +2,6 @@ import _ from "lodash";
 import classNames from "classnames";
 import React from "React";
 import { connect } from "react-redux";
-import { browserHistory } from "react-router";
 import { logout } from "../actions/auth";
 import getUser from "../selectors/user";
 import MainNav from "../components/mainNav";
@@ -17,16 +16,15 @@ class App extends React.Component {
     this.state = {
       sidebar: this.props.sidebar || true
     };
+
+    _.bindAll(this, ["toggleSidebar", "logoutHandler"]);
   }
 
   checkAuthState(auth) {
-    if (!auth) {
-      browserHistory.push("/auth");
-    }
+    !auth && this.props.router.push("/auth")
   }
 
   componentWillMount() {
-    _.bindAll(this, ['toggleSidebar', 'logoutHandler']);
     this.checkAuthState(this.props.isLoggedIn);
   }
 
@@ -52,6 +50,7 @@ class App extends React.Component {
       "sidebar": true,
       "is-expanded": this.state.sidebar
     });
+    
     return (this.props.isLoggedIn) ? (
       <section className="screen-main mod-screen-main" id="funMainScreen">
         <aside className={sidebarClass}>

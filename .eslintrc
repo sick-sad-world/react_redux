@@ -15,7 +15,8 @@
   },
   "plugins": ["react", "babel"],
   "rules": {
-    "react/prop-types": 0,
-    "quotes": [2, "double"]
+    "no-unused-vars": 1,
+    "quotes": [1, "double"],
+    "react/prop-types": 0
   }
 }
