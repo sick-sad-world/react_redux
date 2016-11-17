@@ -17,5 +17,7 @@ class UserBlock extends React.Component {
   }
 }
 
-export default connect((state) => _.pick(state.user, ["fullname", "image", "position"]))(UserBlock);
+let mapStateToProps = ({user}) => _.pick(user, ["fullname", "image", "position"]);
+
+export default connect(mapStateToProps)(UserBlock);
 

@@ -3,9 +3,6 @@ import React from "react";
 export default class FormReg extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {
-      pending: false
-    };
   }
   render () {
     return (

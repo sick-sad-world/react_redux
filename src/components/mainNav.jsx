@@ -1,6 +1,6 @@
 import React from "React";
 import { IndexLink } from "react-router";
-import Icon from "../helpers/icon";
+import Icon from "./icon";
 
 export default class MainNav extends React.Component {
 

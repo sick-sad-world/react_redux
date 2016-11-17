@@ -18,6 +18,16 @@ export const ADD_COLUMN = "ADD_COLUMN";
 export const EDIT_COLUMN = "EDIT_COLUMN";
 export const DELETE_COLUMN = "DELETE_COLUMN";
 
+export const GET_SOURCESETS = "GET_SOURCESETS";
+export const SORT_SOURCESETS = "SORT_SOURCESETS";
+export const ADD_SOURCESET = "ADD_SOURCESET";
+export const EDIT_SOURCESET = "EDIT_SOURCESET";
+export const DELETE_SOURCESET = "DELETE_SOURCESET";
+
+export const GET_SOURCES = "GET_SOURCES";
+export const ADD_SOURCE = "ADD_SOURCE";
+export const DELETE_SOURCE = "DELETE_SOURCE";
+
 export const GET_USER = "GET_USER";
 export const CREATE_USER = "CREATE_USER";
 export const EDIT_USER = "EDIT_USER";

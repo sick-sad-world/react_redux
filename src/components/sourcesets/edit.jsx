@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 class Edit extends React.Component {
 
   render() {
+    console.log("Sourceset edit update");
     return (
       <div>Sourceset edit form</div>
     );
@@ -13,8 +14,10 @@ class Edit extends React.Component {
 
 let mapStateToProps = ({ sourcesets, sources }, ownProps) => {
   let item = _.filter(sourcesets, {id: ownProps.location.query.id});
-  let sources = _.filter(sources, (source) => _.contains(item.source_ids, source.id));
-  return {item, sources};
-}
+  return {
+    item,
+    sources: _.filter(sources, (source) => _.contains(item.source_ids, source.id))
+  };
+};
 
-export default connect( )(Edit);
+export default connect(mapStateToProps)(Edit);

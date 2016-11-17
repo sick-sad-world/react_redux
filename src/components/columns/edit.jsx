@@ -5,10 +5,15 @@ import { connect } from "react-redux";
 class Edit extends React.Component {
 
   render() {
+    console.log("Column edit update");
     return (
       <div>Columns edit form</div>
     );
   }
 }
 
-export default connect(({ columns }, ownProps) => {item: _.filter(columns, {id: ownProps.location.query.id})} )(Edit);
+let mapStateToProps = ({ columns }, ownProps) => ({
+  item: _.filter(columns, {id: ownProps.location.query.id})
+});
+
+export default connect(mapStateToProps)(Edit);

@@ -50,7 +50,7 @@ class App extends React.Component {
       "sidebar": true,
       "is-expanded": this.state.sidebar
     });
-    
+    console.log("main view updated");
     return (this.props.isLoggedIn) ? (
       <section className="screen-main mod-screen-main" id="funMainScreen">
         <aside className={sidebarClass}>
@@ -58,17 +58,18 @@ class App extends React.Component {
           <MainNav toggle={this.toggleSidebar} logout={this.logoutHandler} />
         </aside>
         <div className="screen-content">
-          {list}
-          {main}
-          {additional}
+          <div className="mod-page">
+            {list}
+            {main}
+            {additional}
+          </div>
         </div>
       </section>
     ) : null;
   }
 }
 
-function mapStateToProps(state) {
-  let user = getUser(state);
+function mapStateToProps({user}) {
   return {
     isLoggedIn: user.id,
     sidebar: true

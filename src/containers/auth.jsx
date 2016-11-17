@@ -55,6 +55,7 @@ class Auth extends React.Component {
   render() {
     let texts = this.props.texts;
     let pendingClass = (this.state.pending) ? "is-pending" : "";
+    console.log("Auth view updated");
     return (!this.props.isLoggedIn) ? (
       <section className={"screen-auth mod-authentification " + pendingClass} id="funAuthScreen">
         <article className="welcome-text">
@@ -75,9 +76,9 @@ class Auth extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({user}) {
   return {
-    isLoggedIn: state.user.id,
+    isLoggedIn: user.id,
     texts: {
       title: "Welcome to Trendolizer pro.",
       subTitle: "Best engine for searching viral content.",

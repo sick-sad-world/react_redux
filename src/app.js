@@ -6,7 +6,6 @@ import thunk from "redux-thunk";
 
 import logger from "./middlewares/logger";
 import messager from "./middlewares/messager";
-import processIds from "./middlewares/processIds";
 
 import * as reducers from "./reducers";
 
@@ -23,10 +22,10 @@ import { syncHistoryWithStore, routerReducer } from "react-router-redux";
 import App from "./containers/app";
 import Auth from "./containers/auth";
 import Dashboard from "./components/dashboard";
-import * as Alerts from "./containers/alerts";
-import * as Reports from "./containers/reports";
-import * as Columns from "./containers/columns";
-import * as Sourcesets from "./containers/sourcesets";
+import * as Alerts from "./components/alerts";
+import * as Reports from "./components/reports";
+import * as Columns from "./components/columns";
+import * as Sourcesets from "./components/sourcesets";
 import Profile from "./components/profile";
 
 let initialState = {
@@ -41,7 +40,7 @@ let initialState = {
 let TrendolizerStore = createStore(
   combineReducers({ ...reducers, routing: routerReducer }),
   initialState,
-  applyMiddleware(thunk, logger, messager)
+  applyMiddleware(thunk, messager)
 );
 
 let history = syncHistoryWithStore(browserHistory, TrendolizerStore);
