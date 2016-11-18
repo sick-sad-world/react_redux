@@ -1,5 +1,7 @@
 import React from "react";
 
+import ListItem from "./listItem";
+
 export default class PageList extends React.Component {
   createHandler(e) {
     e.preventDefault();
@@ -28,7 +30,10 @@ export default class PageList extends React.Component {
             </form>
           </div>
         </header>
-        <ul className="subsection-content entity-list funItemsList"><li className="state-empty">{texts.empty}</li></ul>
+        <ul className="subsection-content entity-list funItemsList">
+          {this.props.items.map((item)=>(<ListItem key={item.id} name={item.name} id={item.id} />))}
+          
+        </ul>
       </section>
     );
   }
