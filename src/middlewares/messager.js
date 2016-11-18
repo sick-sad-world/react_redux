@@ -4,10 +4,9 @@ import config from "../app-config";
 
 export default store => next => action => {
   let messageType;
-
   if (action.type === SERVER_ERROR) {
     messageType = "error";
-  } else {
+  } else if (action.payload) {
     config.messageTypes.forEach(type => {
       if (action.payload.hasOwnProperty(type)) {
         messageType = type;

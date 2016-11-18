@@ -1,4 +1,7 @@
 export const SERVER_ERROR = "SERVER_ERROR";
+export const LOGIN = "LOGIN";
+export const LOGOUT = "LOGOUT";
+export const SET_APP_STATE = "SET_APP_STATE";
 
 export const GET_ALERTS = "GET_ALERTS";
 export const SORT_ALERTS = "SORT_ALERTS";
@@ -31,6 +34,3 @@ export const DELETE_SOURCE = "DELETE_SOURCE";
 export const GET_USER = "GET_USER";
 export const CREATE_USER = "CREATE_USER";
 export const EDIT_USER = "EDIT_USER";
-
-export const LOGIN = "LOGIN";
-export const LOGOUT = "LOGOUT";
