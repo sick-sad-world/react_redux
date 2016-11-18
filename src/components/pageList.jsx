@@ -18,6 +18,8 @@ export default class PageList extends React.Component {
       empty: "List is empty."
     }, this.props.texts);
 
+    let empty = <li className="state-emtpy">{texts.empty}</li>;
+
     return (
       <section className="mod-subsection-list">
         <header className="subsection-header">
@@ -31,7 +33,7 @@ export default class PageList extends React.Component {
           </div>
         </header>
         <ul className="subsection-content entity-list funItemsList">
-          {this.props.items.map((item)=>(<ListItem key={item.id} name={item.name} id={item.id} />))}
+          {(this.props.items.length) ? this.props.items.map((item)=>(<ListItem key={item.id} name={item.name} id={item.id} />)) : empty }
           
         </ul>
       </section>
