@@ -9,7 +9,7 @@ import messager from "./middlewares/messager";
 
 import * as reducers from "./reducers";
 
-import { getUser } from "./actions/user";
+import getUser from "./actions/user";
 import { getAppData, setAppState } from "./actions/app";
 
 // View part imports
@@ -19,7 +19,6 @@ import { Provider } from "react-redux";
 import { Router, Route, IndexRoute, browserHistory } from "react-router";
 import { syncHistoryWithStore, routerReducer } from "react-router-redux";
 
-import App from "./containers/app";
 import Workspace from "./containers/workspace";
 import Auth from "./containers/auth";
 import Dashboard from "./components/dashboard";
@@ -30,6 +29,10 @@ import * as Sourcesets from "./components/sourcesets";
 import Profile from "./components/profile";
 
 let initialState = {
+  app: {
+    appState: 0, // 0 -init, 1 -fetching, 2 -ready, 3 -loading, 4 -error 
+    userState: false
+  },
   user: {},
   alerts: [],
   reports: [],
@@ -65,11 +68,15 @@ let renderApp = () => {
     document.getElementById("appRoot")
   );
 }
+renderApp();
 
-TrendolizerStore.dispatch(getUser()).then(function (action) {
+TrendolizerStore.dispatch(setAppState(1));
+TrendolizerStore.dispatch(getUser(true)).then(function (action) {
   if (action && action.payload.id) {
-    TrendolizerStore.dispatch(getAppData()).then(renderApp);
+    TrendolizerStore.dispatch(getAppData(true)).then(() => {
+      TrendolizerStore.dispatch(setAppState(2));
+    });
   } else {
-    renderApp();
+    TrendolizerStore.dispatch(setAppState(2));
   }
 });

@@ -49,8 +49,10 @@ class Workspace extends React.Component {
       "sidebar": true,
       "is-expanded": this.state.sidebar
     });
+
     console.log("Workspace updated");
-    return (this.props.userState) ? (
+
+    return (this.props.userState && this.props.appState >= 2) ? (
       <section className="screen-main mod-screen-main" id="funMainScreen">
         <aside className={sidebarClass}>
           <UserBlock />
@@ -68,9 +70,10 @@ class Workspace extends React.Component {
   }
 }
 
-function mapStateToProps({user}) {
+function mapStateToProps({app}) {
   return {
-    userState: user.id,
+    userState: app.userState,
+    appState: app.appState,
     sidebar: true
   };
 }

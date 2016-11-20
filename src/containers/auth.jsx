@@ -2,8 +2,8 @@ import { bindAll } from "lodash";
 import React from "react";
 import { connect } from "react-redux";
 
-import { login, register, getAppData } from "../actions/app";
-import { getUser } from "../actions/user";
+import { login, register, getAppData, setAppState } from "../actions/app";
+import getUser from "../actions/user";
 
 import FormLogin from "../components/formLogin";
 import FormRegister from "../components/formRegister";
@@ -11,33 +11,7 @@ import FormRegister from "../components/formRegister";
 class Auth extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      pending: false
-    };
-
     bindAll(this, ["handleAuth", "handleReg"]);
-  }
-
-  handleAuth(e) {
-    e.preventDefault();
-    let dispatch = this.props.dispatch;
-    let { username, password } = e.target.elements;
-
-    this.setState({pending: true}, () => {
-      dispatch(login({
-          username: username.value,
-          password: password.value
-        }))
-        .then(function (action) {
-          console.log(this, arguments);
-          if (!action.payload.error) {
-            dispatch(getUser())
-            dispatch(getAppData()).then(() => this.setState({pending: false}));
-          }
-        }.bind(this))
-        
-    });
   }
 
   checkAuthState(auth) {
@@ -50,6 +24,26 @@ class Auth extends React.Component {
 
   componentWillUpdate(newProps) {
     this.checkAuthState(newProps.userState);
+  }
+
+  handleAuth(e) {
+    e.preventDefault();
+    let dispatch = this.props.dispatch;
+    let { username, password } = e.target.elements;
+    dispatch(login({
+        username: username.value,
+        password: password.value
+      }))
+      .then(function (action) {
+        if (action && !action.payload.error) {
+          dispatch(getUser())
+          dispatch(getAppData())
+            .then(() => dispatch(setAppState(2)))
+            .catch(() => dispatch(setAppState(2)));
+        } else {
+          dispatch(setAppState(2));
+        }
+      }.bind(this));
   }
 
   handleReg(e) {
@@ -65,7 +59,8 @@ class Auth extends React.Component {
     };
 
     console.log("Auth component updated");
-    return (!this.props.userState) ? (
+
+    return (!this.props.userState && this.props.appState >= 2) ? (
       <section className="screen-auth mod-authentification" id="funAuthScreen">
         <article className="welcome-text">
           <img className="logotype" src="img/logo.svg" title="Trendolier pro" alt="Trendolizer pro" />
@@ -77,17 +72,19 @@ class Auth extends React.Component {
           <small className="copyright">{ texts.copy }</small>
         </article>
         <div className="auth-forms">
-          <FormLogin handler={this.handleAuth} pending={this.state.pending} />
-          <FormRegister handler={this.handleReg} pending={this.state.pending} />
+          <FormLogin handler={this.handleAuth} />
+          <FormRegister handler={this.handleReg} />
         </div>
       </section>
     ) : null;
   }
 }
 
-function mapStateToProps({user}) {
+function mapStateToProps({app}) {
   return {
-    userState: user.id
+    userState: app.userState,
+    appState: app.appState,
+    sidebar: true
   };
 }
 

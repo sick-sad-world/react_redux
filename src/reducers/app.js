@@ -4,7 +4,7 @@ export function app (state = {}, action) {
   switch (action.type) {
     case LOGIN:
     case GET_USER:
-      return Object.assign({}, state, {userState: (action.type === LOGIN) ? true : action.payload.id > 0});
+      return Object.assign({}, state, {userState: action.type === LOGIN || action.payload.id > 0});
     case LOGOUT:
       return Object.assign({}, state, {userState: false});
     case SET_APP_STATE:

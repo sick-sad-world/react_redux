@@ -1,43 +1,11 @@
-import { SERVER_ERROR, GET_ALERTS, SORT_ALERTS, ADD_ALERT, EDIT_ALERT, DELETE_ALERT } from "./types";
-import config from "../app-config";
-import fetch from "jsonp-es6";
+import { GET_ALERTS, SORT_ALERTS, ADD_ALERT, EDIT_ALERT, DELETE_ALERT } from "./types";
+import basicAction from "./actionFactory";
 
-export default function getAlerts () {
-  return (dispatch) => {
-    return fetch(config.getUrl("alerts"))
-      .then(payload => dispatch({type: GET_ALERTS, payload}))
-      .catch(payload => dispatch({type: SERVER_ERROR, payload}));
-  }
-}
+const getAlerts = basicAction("alerts", GET_ALERTS);
+const sortAlerts = basicAction("sort_alerts", SORT_ALERTS);
+const addAlert = basicAction("add_alert", ADD_ALERT);
+const editAlert = basicAction("alert", EDIT_ALERT);
+const deleteAlert = basicAction("remove_alert", DELETE_ALERT);
 
-export function sortAlerts (payload) {
-  return (dispatch) => {
-    return fetch(config.getUrl("sort_alerts"), payload)
-      .then(payload => dispatch({type: SORT_ALERTS, payload}))
-      .catch(payload => dispatch({type: SERVER_ERROR, payload}));
-  }
-}
-
-export function addAlert (payload) {
-  return (dispatch) => {
-    return fetch(config.getUrl("add_alert"), payload)
-      .then(payload => dispatch({type: ADD_ALERT, payload}))
-      .catch(payload => dispatch({type: SERVER_ERROR, payload}));
-  }
-}
-
-export function editAlert (payload) {
-  return (dispatch) => {
-    return fetch(config.getUrl("alert"), payload)
-      .then(payload => dispatch({type: EDIT_ALERT, payload}))
-      .catch(payload => dispatch({type: SERVER_ERROR, payload}));
-  }
-}
-
-export function deleteAlert (payload) {
-  return (dispatch) => {
-    return fetch(config.getUrl("remove_alert"), payload)
-      .then(payload => dispatch({type: EDIT_ALERT, payload}))
-      .catch(payload => dispatch({type: SERVER_ERROR, payload}));
-  }
-}
+export default getAlerts;
+export { sortAlerts, addAlert, editAlert, deleteAlert };

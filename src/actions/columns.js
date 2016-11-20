@@ -1,43 +1,11 @@
-import { SERVER_ERROR, GET_COLUMNS, SORT_COLUMNS, ADD_COLUMN, EDIT_COLUMN, DELETE_COLUMN } from "./types";
-import config from "../app-config";
-import fetch from "jsonp-es6";
+import { GET_COLUMNS, SORT_COLUMNS, ADD_COLUMN, EDIT_COLUMN, DELETE_COLUMN } from "./types";
+import basicAction from "./actionFactory";
 
-export default function getColumns () {
-  return (dispatch) => {
-    return fetch(config.getUrl("columns"))
-      .then(payload => dispatch({type: GET_COLUMNS, payload}))
-      .catch(payload => dispatch({type: SERVER_ERROR, payload}));
-  }
-}
+const getColumns = basicAction("columns", GET_COLUMNS);
+const sortColumns = basicAction("sort_columns", SORT_COLUMNS);
+const addColumn = basicAction("add_column", ADD_COLUMN);
+const editColumn = basicAction("column", EDIT_COLUMN);
+const deleteColumn = basicAction("remove_column", DELETE_COLUMN);
 
-export function sortColumns (payload) {
-  return (dispatch) => {
-    return fetch(config.getUrl("sort_columns"), payload)
-      .then(payload => dispatch({type: SORT_COLUMNS, payload}))
-      .catch(payload => dispatch({type: SERVER_ERROR, payload}));
-  }
-}
-
-export function addColumn (payload) {
-  return (dispatch) => {
-    return fetch(config.getUrl("add_column"), payload)
-      .then(payload => dispatch({type: ADD_COLUMN, payload}))
-      .catch(payload => dispatch({type: SERVER_ERROR, payload}));
-  }
-}
-
-export function editColumn (payload) {
-  return (dispatch) => {
-    return fetch(config.getUrl("column"), payload)
-      .then(payload => dispatch({type: EDIT_COLUMN, payload}))
-      .catch(payload => dispatch({type: SERVER_ERROR, payload}));
-  }
-}
-
-export function deleteColumn (payload) {
-  return (dispatch) => {
-    return fetch(config.getUrl("remove_column"), payload)
-      .then(payload => dispatch({type: DELETE_COLUMN, payload}))
-      .catch(payload => dispatch({type: SERVER_ERROR, payload}));
-  }
-}
+export default getColumns;
+export { sortColumns, addColumn, editColumn, deleteColumn };

@@ -1,6 +1,7 @@
 import React from "react";
 
 import ListItem from "./listItem";
+import Icon from "./icon";
 
 export default class PageList extends React.Component {
   createHandler(e) {
@@ -18,7 +19,7 @@ export default class PageList extends React.Component {
       empty: "List is empty."
     }, this.props.texts);
 
-    let empty = <li className="state-emtpy">{texts.empty}</li>;
+    let empty = <li className="state-empty"><Icon icon="emoji-sad" />{texts.empty}</li>;
 
     return (
       <section className="mod-subsection-list">
@@ -33,8 +34,7 @@ export default class PageList extends React.Component {
           </div>
         </header>
         <ul className="subsection-content entity-list funItemsList">
-          {(this.props.items.length) ? this.props.items.map((item)=>(<ListItem key={item.id} name={item.name} id={item.id} />)) : empty }
-          
+          {(this.props.items.length) ? this.props.items.map((item) => <ListItem key={item.id} type={this.props.type} name={item.name} id={item.id} />) : empty }
         </ul>
       </section>
     );

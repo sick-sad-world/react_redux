@@ -7,7 +7,7 @@ class List extends React.Component {
   render() {
     console.log("Alert list update");
     return (
-      <PageList texts={this.props.texts} items={this.props.items} />
+      <PageList type="alerts" texts={this.props.texts} items={this.props.items} />
     );
   }
 }

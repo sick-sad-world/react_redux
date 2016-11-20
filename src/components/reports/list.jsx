@@ -8,7 +8,7 @@ class List extends React.Component {
   render() {
     console.log("Report list update");
     return (
-      <PageList texts={this.props.texts} items={this.props.items} />
+      <PageList type="reports" texts={this.props.texts} items={this.props.items} />
     );
   }
 }

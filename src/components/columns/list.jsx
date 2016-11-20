@@ -4,11 +4,10 @@ import { connect } from "react-redux";
 import PageList from "../pageList";
 
 class List extends React.Component {
-
   render() {
     console.log("Column list update");
     return (
-      <PageList texts={this.props.texts} items={this.props.items} />
+      <PageList type="columns" texts={this.props.texts} items={this.props.items} />
     );
   }
 }

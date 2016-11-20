@@ -8,7 +8,7 @@ class List extends React.Component {
   render() {
     console.log("Sourceset list update");
     return (
-      <PageList texts={this.props.texts} items={this.props.items} />
+      <PageList type="sourcesets" texts={this.props.texts} items={this.props.items} />
     );
   }
 }
