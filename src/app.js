@@ -9,8 +9,8 @@ import messager from "./middlewares/messager";
 
 import * as reducers from "./reducers";
 
-import getUser from "./actions/user";
 import { getAppData, setAppState } from "./actions/app";
+import getUser from "./actions/user";
 
 // View part imports
 import React from "react";
@@ -69,7 +69,6 @@ let renderApp = () => {
   );
 }
 renderApp();
-
 TrendolizerStore.dispatch(setAppState(1));
 TrendolizerStore.dispatch(getUser(true)).then(function (action) {
   if (action && action.payload.id) {
