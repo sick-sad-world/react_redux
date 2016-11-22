@@ -1,11 +1,11 @@
-import _ from "lodash";
-import React from "React";
-import { connect } from "react-redux";
+import { filter, contains } from 'lodash';
+import React from 'React';
+import { connect } from 'react-redux';
 
 class Edit extends React.Component {
 
   render() {
-    console.log("Sourceset edit update");
+    console.log('Sourceset edit update');
     return (
       <div>Sourceset edit form</div>
     );
@@ -13,10 +13,10 @@ class Edit extends React.Component {
 }
 
 let mapStateToProps = ({ sourcesets, sources }, ownProps) => {
-  let item = _.filter(sourcesets, {id: ownProps.location.query.id});
+  let item = filter(sourcesets, {id: ownProps.location.query.id});
   return {
     item,
-    sources: _.filter(sources, (source) => _.contains(item.source_ids, source.id))
+    sources: (item.length) ? filter(sources, (source) => item.source_ids.indexOf(source.id) > -1) : false
   };
 };
 

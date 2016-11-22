@@ -1,11 +1,11 @@
-import _ from "lodash";
-import React from "React";
-import { connect } from "react-redux";
+import _ from 'lodash';
+import React from 'React';
+import { connect } from 'react-redux';
 
 class Edit extends React.Component {
 
   render() {
-    console.log("Report edit update");
+    console.log('Report edit update');
     return (
       <div>Reports edit form</div>
     );

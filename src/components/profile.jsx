@@ -1,10 +1,10 @@
-import React from "react";
-import { connect } from "react-redux";
+import React from 'react';
+import { connect } from 'react-redux';
 
 class Profile extends React.Component {
   render() {
     return (
-      <div className="mod-page" id="funUserProfile">
+      <div className='mod-page' id='funUserProfile'>
       User profile and settings page
       </div>
     );

@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, GET_USER, CREATE_USER, EDIT_USER } from "../actions/types";
+import { LOGIN, LOGOUT, GET_USER, CREATE_USER, EDIT_USER } from '../actions/types';
 
 export function user (state = {}, action) {
   switch (action.type) {
@@ -6,15 +6,15 @@ export function user (state = {}, action) {
     case LOGIN:
       return {
         id: null,
-        hash: "",
-        email: "",
+        hash: '',
+        email: '',
         email_bcc: [],
-        name: "",
-        fullname: "Name Surname",
-        position: "user position",
+        name: '',
+        fullname: 'Name Surname',
+        position: 'user position',
         status: null,
-        is_admin: "0",
-        image: "img/ph_user.png"
+        is_admin: '0',
+        image: 'img/ph_user.png'
       };
     case GET_USER:
       return state = Object.assign(state, {id: action.id}, action.payload);

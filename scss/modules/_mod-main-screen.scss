@@ -76,7 +76,7 @@
 
 		// Unique styles for list section
 		.mod-subsection-list {
-			flex: 0 0 30%;
+			flex: 0 0 35%;
 			min-width: map-get($layout, buffer);
 			z-index: 1;
 			.subsection-header {
@@ -119,7 +119,7 @@
 		// Show Edit form or Submanagement subsection if needed
 		&.is-edit .mod-subsection-edit,
 		&.is-detail .mod-subsection-management {
-			flex-basis: 70%;
+			flex-basis: 65%;
 			opacity: 1;
 			border-width: 1px;
 		}

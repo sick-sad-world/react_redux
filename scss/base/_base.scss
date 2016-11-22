@@ -30,12 +30,12 @@ $layout: (
 	bp: 1200px,
 	nav: 180px,
 	auth: 320px,
-	buffer: 320px,
+	buffer: 360px,
 	dashboard: 370px,
 	popup: 480px
 );
 $sizes: 40 60 90 120 180 240 320 380;
-$icon-unit: baseUnit(2.25);
+$icon-unit: baseUnit(2);
 $pointer-unit: baseUnit(3);
 $form-unit: baseUnit(4);
 $entity-unit: baseUnit(6);

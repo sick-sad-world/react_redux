@@ -1,5 +1,5 @@
-import { LOGIN, LOGOUT } from "../actions/types";
-import { map, reject, concat } from "lodash";
+import { LOGIN, LOGOUT } from '../actions/types';
+import { map, reject, concat } from 'lodash';
 
 export default function basicReducer (actions) {
   return function (state = {}, action) {

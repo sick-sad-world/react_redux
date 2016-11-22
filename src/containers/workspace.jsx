@@ -1,10 +1,10 @@
-import { bindAll } from "lodash";
-import classNames from "classnames";
-import React from "React";
-import { connect } from "react-redux";
-import { logout } from "../actions/app";
-import MainNav from "../components/mainNav";
-import UserBlock from "../components/userBlock";
+import { bindAll } from 'lodash';
+import classNames from 'classnames';
+import React from 'React';
+import { connect } from 'react-redux';
+import { logout } from '../actions/app';
+import MainNav from '../components/mainNav';
+import UserBlock from '../components/userBlock';
 
 
 
@@ -16,7 +16,7 @@ class Workspace extends React.Component {
       sidebar: this.props.sidebar || true
     };
 
-    bindAll(this, ["toggleSidebar", "logoutHandler"]);
+    bindAll(this, ['toggleSidebar', 'logoutHandler']);
   }
 
   toggleSidebar(e) {
@@ -32,7 +32,7 @@ class Workspace extends React.Component {
   }
 
   checkAuthState(auth) {
-    !auth && this.props.router.push("/auth")
+    !auth && this.props.router.push('/auth')
   }
 
   componentWillMount() {
@@ -46,20 +46,20 @@ class Workspace extends React.Component {
   render() {
     let { list, main, additional } = this.props;
     let sidebarClass = classNames({
-      "sidebar": true,
-      "is-expanded": this.state.sidebar
+      'sidebar': true,
+      'is-expanded': this.state.sidebar
     });
 
-    console.log("Workspace updated");
+    console.log('Workspace updated');
 
     return (this.props.userState && this.props.appState >= 2) ? (
-      <section className="screen-main mod-screen-main" id="funMainScreen">
+      <section className='screen-main mod-screen-main' id='funMainScreen'>
         <aside className={sidebarClass}>
           <UserBlock />
           <MainNav toggle={this.toggleSidebar} logout={this.logoutHandler} />
         </aside>
-        <div className="screen-content">
-          <div className="mod-page">
+        <div className='screen-content'>
+          <div className='mod-page'>
             {list}
             {main}
             {additional}

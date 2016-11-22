@@ -1,5 +1,5 @@
-import { LOGIN, LOGOUT, GET_SOURCES, ADD_SOURCE, EDIT_SOURCE, DELETE_SOURCE } from "../actions/types";
-import _ from "lodash";
+import { LOGIN, LOGOUT, GET_SOURCES, ADD_SOURCE, EDIT_SOURCE, DELETE_SOURCE } from '../actions/types';
+import _ from 'lodash';
 
 export function sources (state = [], action) {
   switch (action.type) {

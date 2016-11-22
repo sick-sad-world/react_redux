@@ -1,7 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import ListItem from "./listItem";
-import Icon from "./icon";
+import Icon from './icon';
 
 export default class PageList extends React.Component {
   createHandler(e) {
@@ -11,30 +10,29 @@ export default class PageList extends React.Component {
 
   render () {
     let texts = Object.assign({
-      title: "List title",
-      description: "List description.",
-      placehodler: "New item name",
-      btn: "Create new item",
-      deleting: "Are you sure want to delete this?",
-      empty: "List is empty."
+      title: 'List title',
+      description: 'List description.',
+      placehodler: 'New item name',
+      btn: 'Create new item',
+      deleting: 'Are you sure want to delete this?',
+      empty: 'List is empty.'
     }, this.props.texts);
 
-    let empty = <li className="state-empty"><Icon icon="emoji-sad" />{texts.empty}</li>;
-
+    let empty = <li className='state-empty'><Icon icon='emoji-sad' />{texts.empty}</li>;
     return (
-      <section className="mod-subsection-list">
-        <header className="subsection-header">
-          <div className="text">
+      <section className='mod-subsection-list'>
+        <header className='subsection-header'>
+          <div className='text'>
             <h1>{texts.title}</h1>
             <p>{texts.description}</p>
             <form onSubmit={this.createHandler}>
-              <input type="text" name="name" pattern="^[a-zA-Z_-]+$" placeholder={texts.placehodler} />
-              <button name="funCreate" className="size-90" title={texts.btn}>Add</button>
+              <input type='text' name='name' pattern='^[a-zA-Z_-]+$' placeholder={texts.placehodler} />
+              <button name='funCreate' className='size-90' title={texts.btn}>Add</button>
             </form>
           </div>
         </header>
-        <ul className="subsection-content entity-list funItemsList">
-          {(this.props.items.length) ? this.props.items.map((item) => <ListItem key={item.id} type={this.props.type} name={item.name} id={item.id} />) : empty }
+        <ul className='subsection-content entity-list funItemsList'>
+          {(this.props.items.length) ? this.props.items.map((item) => this.props.composeListItem(item)) : empty }
         </ul>
       </section>
     );

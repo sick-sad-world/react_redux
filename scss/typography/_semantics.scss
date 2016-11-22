@@ -91,6 +91,7 @@ blockquote {}
 .counter {
 	@extend %base-text-pointer;
 	font-size: 0.75em;
+  line-height: 1;
 	font-weight: bold;
 	border-radius: baseUnit();
 	padding: 2px baseUnit();

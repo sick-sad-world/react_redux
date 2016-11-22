@@ -1,21 +1,21 @@
-import { bindAll } from "lodash";
-import React from "react";
-import { connect } from "react-redux";
+import { bindAll } from 'lodash';
+import React from 'react';
+import { connect } from 'react-redux';
 
-import { login, register, getAppData, setAppState } from "../actions/app";
-import getUser from "../actions/user";
+import { login, register, getAppData, setAppState } from '../actions/app';
+import getUser from '../actions/user';
 
-import FormLogin from "../components/formLogin";
-import FormRegister from "../components/formRegister";
+import FormLogin from '../components/formLogin';
+import FormRegister from '../components/formRegister';
 
 class Auth extends React.Component {
   constructor(props) {
     super(props);
-    bindAll(this, ["handleAuth", "handleReg"]);
+    bindAll(this, ['handleAuth', 'handleReg']);
   }
 
   checkAuthState(auth) {
-    auth && this.props.router.push("/")
+    auth && this.props.router.push('/')
   }
 
   componentWillMount() {
@@ -30,6 +30,7 @@ class Auth extends React.Component {
     e.preventDefault();
     let dispatch = this.props.dispatch;
     let { username, password } = e.target.elements;
+    dispatch(setAppState(1));
     dispatch(login({
         username: username.value,
         password: password.value
@@ -52,26 +53,26 @@ class Auth extends React.Component {
 
   render() {
     let texts = {
-      title: "Welcome to Trendolizer pro.",
-      subTitle: "Best engine for searching viral content.",
-      descr: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis obcaecati, modi nesciunt voluptas distinctio amet doloribus dignissimos. Aut quod atque, dolor facere eum pariatur laboriosam iusto magnam quaerat, dolores quisquam eius animi possimus, minima, accusantium delectus non. Ipsum placeat optio, dignissimos nulla laboriosam labore doloremque commodi dolorem odit dolores, voluptatem.",
-      copy: "© 2015 - Trendolizer pro. All rights reserved."
+      title: 'Welcome to Trendolizer pro.',
+      subTitle: 'Best engine for searching viral content.',
+      descr: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis obcaecati, modi nesciunt voluptas distinctio amet doloribus dignissimos. Aut quod atque, dolor facere eum pariatur laboriosam iusto magnam quaerat, dolores quisquam eius animi possimus, minima, accusantium delectus non. Ipsum placeat optio, dignissimos nulla laboriosam labore doloremque commodi dolorem odit dolores, voluptatem.',
+      copy: '© 2015 - Trendolizer pro. All rights reserved.'
     };
 
-    console.log("Auth component updated");
+    console.log('Auth component updated');
 
     return (!this.props.userState && this.props.appState >= 2) ? (
-      <section className="screen-auth mod-authentification" id="funAuthScreen">
-        <article className="welcome-text">
-          <img className="logotype" src="img/logo.svg" title="Trendolier pro" alt="Trendolizer pro" />
-          <hgroup className="t-rhythm">
-            <h1 className="t-gutter">{ texts.title }</h1>
-            <h2 className="t-gutter">{ texts.subtitle }</h2>
+      <section className='screen-auth mod-authentification' id='funAuthScreen'>
+        <article className='welcome-text'>
+          <img className='logotype' src='img/logo.svg' title='Trendolier pro' alt='Trendolizer pro' />
+          <hgroup className='t-rhythm'>
+            <h1 className='t-gutter'>{ texts.title }</h1>
+            <h2 className='t-gutter'>{ texts.subtitle }</h2>
           </hgroup>
-          <p className="t-rhythm">{ texts.descr }</p>
-          <small className="copyright">{ texts.copy }</small>
+          <p className='t-rhythm'>{ texts.descr }</p>
+          <small className='copyright'>{ texts.copy }</small>
         </article>
-        <div className="auth-forms">
+        <div className='auth-forms'>
           <FormLogin handler={this.handleAuth} />
           <FormRegister handler={this.handleReg} />
         </div>
@@ -83,8 +84,7 @@ class Auth extends React.Component {
 function mapStateToProps({app}) {
   return {
     userState: app.userState,
-    appState: app.appState,
-    sidebar: true
+    appState: app.appState
   };
 }
 

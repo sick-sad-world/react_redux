@@ -27,6 +27,7 @@ in sub-managent like sources in set, sources/sets in column or column within ale
 				max-width: 100%;
 				margin: baseUnit(0.5);
 				@include ellipsis;
+        color: $c-main;
 				+ .url {
 					margin-top: 0;
 					font-size: 0.875em;
