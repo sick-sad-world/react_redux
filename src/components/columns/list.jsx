@@ -40,6 +40,7 @@ function mapStateToProps ({ columns }) {
   });
   return {
     items: items,
+    type: 'columns',
     texts: {
       title: 'Columns Management',
       description: 'Create, edit or delete dashboard columns. Drag to reorder, use the eye icon to hide/unhide them (tip: hidden columns can still be used for alerts/reports).',

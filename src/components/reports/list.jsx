@@ -28,6 +28,7 @@ function mapStateToProps ({ reports }) {
   });
   return {
     items: items,
+    type: 'reports',
     texts: {
       title: 'Reports Management',
       description: 'Create, edit and delete reports that will be sent to you when specific columns get new items.',

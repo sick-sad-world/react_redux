@@ -28,6 +28,7 @@ function mapStateToProps ({ sourcesets }) {
   });
   return {
     items: items,
+    type: 'sourcesets',
     texts: {
       title: 'Sources Management',
       description: 'Create, edit and delete sets of sources. Drag to reorder list. Open set to edit the sources in it.',

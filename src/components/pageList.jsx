@@ -1,11 +1,14 @@
 import React from 'react';
-
 import Icon from './icon';
 
 export default class PageList extends React.Component {
   createHandler(e) {
     e.preventDefault();
-    // e.target.elements.name.value
+    //<Link to={`/${this.props.type}/new`} className='is-button size-wide'>{texts.btn}</Link>
+    this.props.createAction({
+      order: this.props.items.length,
+      name: e.target.elements.name.value
+    });
   }
 
   render () {
@@ -25,9 +28,9 @@ export default class PageList extends React.Component {
           <div className='text'>
             <h1>{texts.title}</h1>
             <p>{texts.description}</p>
-            <form onSubmit={this.createHandler}>
+            <form onSubmit={this.createHandler.bind(this)}>
               <input type='text' name='name' placeholder={texts.placehodler} />
-              <button name='funCreate' className='size-90' title={texts.btn}>Add</button>
+              <button name='funCreate' className='size-90' title='{texts.btn}'>Add</button>
             </form>
           </div>
         </header>
