@@ -55,10 +55,10 @@ let renderApp = () => {
         <Route path='/auth' component={Auth} />
         <Route path='/' component={Workspace}>
           <IndexRoute components={{main: Dashboard}} />
-          <Route path='/alerts' components={Alerts}/>
-          <Route path='/reports' components={Reports}/>
-          <Route path='/columns' components={Columns}/>
-          <Route path='/sourcesets' components={Sourcesets}/>
+          <Route path='/alerts(/:id)(/:assigment)' components={Alerts}/>
+          <Route path='/reports(/:id)(/:assigment)' components={Reports}/>
+          <Route path='/columns(/:id)(/:assigment)' components={Columns}/>
+          <Route path='/sourcesets(/:id)(/:create)' components={Sourcesets}/>
           <Route path='/settings' components={{main: Profile}}/>
         </Route>
       </Router>

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 class Edit extends React.Component {
 
   render() {
+    if (!this.props.item.length) return null;
     console.log('Column edit update');
     return (
       <div>Columns edit form</div>
@@ -13,7 +14,7 @@ class Edit extends React.Component {
 }
 
 let mapStateToProps = ({ columns }, ownProps) => ({
-  item: _.filter(columns, {id: ownProps.location.query.id})
+  item: _.filter(columns, {id: parseInt(ownProps.params.id)})
 });
 
 export default connect(mapStateToProps)(Edit);

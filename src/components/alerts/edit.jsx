@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 class Edit extends React.Component {
 
   render() {
+    if (!this.props.item.length) return null;
     console.log('Alert edit update');
     return (
       <div>Alerts edit form</div>
@@ -13,7 +14,7 @@ class Edit extends React.Component {
 }
 
 let mapStateToProps = ({ alerts }, ownProps) => ({
-  item: _.filter(alerts, {id: ownProps.location.query.id})
+  item: _.filter(alerts, {id: parseInt(ownProps.params.id)})
 });
 
 export default connect(mapStateToProps)(Edit);
