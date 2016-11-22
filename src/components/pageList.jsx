@@ -5,7 +5,7 @@ import Icon from './icon';
 export default class PageList extends React.Component {
   createHandler(e) {
     e.preventDefault();
-    this.props.createAction(e.target.elements.name.value);
+    // e.target.elements.name.value
   }
 
   render () {
@@ -26,13 +26,13 @@ export default class PageList extends React.Component {
             <h1>{texts.title}</h1>
             <p>{texts.description}</p>
             <form onSubmit={this.createHandler}>
-              <input type='text' name='name' pattern='^[a-zA-Z_-]+$' placeholder={texts.placehodler} />
+              <input type='text' name='name' placeholder={texts.placehodler} />
               <button name='funCreate' className='size-90' title={texts.btn}>Add</button>
             </form>
           </div>
         </header>
         <ul className='subsection-content entity-list funItemsList'>
-          {(this.props.items.length) ? this.props.items.map((item) => this.props.composeListItem(item)) : empty }
+          {(this.props.items.length) ? this.props.items.map((item) => React.cloneElement(this.props.children, Object.assign({key: item.id}, item))) : empty }
         </ul>
       </section>
     );

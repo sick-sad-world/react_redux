@@ -50,8 +50,6 @@ class Workspace extends React.Component {
       'is-expanded': this.state.sidebar
     });
 
-    console.log('Workspace updated');
-
     return (this.props.userState && this.props.appState >= 2) ? (
       <section className='screen-main mod-screen-main' id='funMainScreen'>
         <aside className={sidebarClass}>

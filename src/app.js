@@ -3,10 +3,7 @@ import 'babel-polyfill';
 // Data part imports
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-
-import logger from './middlewares/logger';
 import messager from './middlewares/messager';
-
 import * as reducers from './reducers';
 
 import { getAppData, setAppState } from './actions/app';
@@ -21,6 +18,7 @@ import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 
 import Workspace from './containers/workspace';
 import Auth from './containers/auth';
+
 import Dashboard from './components/dashboard';
 import * as Alerts from './components/alerts';
 import * as Reports from './components/reports';
@@ -73,7 +71,6 @@ TrendolizerStore.dispatch(setAppState(1));
 TrendolizerStore.dispatch(getUser(true)).then(function (action) {
   if (action && action.payload.id) {
     TrendolizerStore.dispatch(getAppData(true)).then(() => {
-      console.log('done');
       TrendolizerStore.dispatch(setAppState(2));
     });
   } else {

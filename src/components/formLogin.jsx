@@ -1,9 +1,6 @@
 import React from 'react';
 
 export default class FormLogin extends React.Component {
-  constructor (props) {
-    super(props);
-  }
   render () {
     return (
       <form action='login' onSubmit={this.props.handler}>

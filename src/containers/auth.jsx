@@ -59,8 +59,6 @@ class Auth extends React.Component {
       copy: '© 2015 - Trendolizer pro. All rights reserved.'
     };
 
-    console.log('Auth component updated');
-
     return (!this.props.userState && this.props.appState >= 2) ? (
       <section className='screen-auth mod-authentification' id='funAuthScreen'>
         <article className='welcome-text'>

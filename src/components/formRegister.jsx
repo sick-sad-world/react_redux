@@ -1,9 +1,6 @@
 import React from 'react';
 
 export default class FormReg extends React.Component {
-  constructor (props) {
-    super(props);
-  }
   render () {
     return (
       <form action='create' onSubmit={this.props.handler}>

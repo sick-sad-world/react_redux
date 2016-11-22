@@ -1,28 +1,41 @@
-import _ from 'lodash';
+import { map } from 'lodash';
 import React from 'React';
 import { connect } from 'react-redux';
 import PageList from '../pageList';
-import Item from './item';
+import ListItem from '../listItem';
 
 class List extends React.Component {
 
   render() {
     console.log('Report list update');
     return (
-      <PageList type='reports' texts={this.props.texts} items={this.props.items} composeListItem={Item} />
+      <PageList { ...this.props }>
+        <ListItem/>
+      </PageList>
     );
   }
 }
 
-let mapStateToProps = ({ reports }) => ({
-  items: _.map(reports, (item) => _.pick(item, ['id', 'name', 'columns'])),
-  texts: {
-    title: 'Reports Management',
-    description: 'Create, edit and delete reports that will be sent to you when specific columns get new items.',
-    btn: 'Create new report',
-    deleting: 'Are you sure want to delete this Report?',
-    empty: 'No reports created yet. Use form above to create one.'
-  }
-});
+function mapStateToProps ({ reports }) {
+  let items = map(reports, (item) => {
+     return {
+       id: item.id,
+       name: item.name,
+       counter: item.columns.length,
+       draggable: true,
+       type: 'reports'
+     }
+  });
+  return {
+    items: items,
+    texts: {
+      title: 'Reports Management',
+      description: 'Create, edit and delete reports that will be sent to you when specific columns get new items.',
+      btn: 'Create new report',
+      deleting: 'Are you sure want to delete this Report?',
+      empty: 'No reports created yet. Use form above to create one.'
+    }
+  };
+}
 
 export default connect(mapStateToProps)(List);
