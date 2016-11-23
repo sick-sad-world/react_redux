@@ -5,9 +5,7 @@ import PageList from '../pageList';
 import ListItem from '../listItem';
 
 class List extends React.Component {
-
   render() {
-    console.log('Sourceset list update');
     return (
       <PageList { ...this.props }>
         <ListItem/>

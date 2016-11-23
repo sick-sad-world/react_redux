@@ -1,16 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router';
 import Icon from './icon';
 
 export default class PageList extends React.Component {
-  createHandler(e) {
-    e.preventDefault();
-    //<Link to={`/${this.props.type}/new`} className='is-button size-wide'>{texts.btn}</Link>
-    this.props.createAction({
-      order: this.props.items.length,
-      name: e.target.elements.name.value
-    });
-  }
-
   render () {
     let texts = Object.assign({
       title: 'List title',
@@ -28,13 +20,10 @@ export default class PageList extends React.Component {
           <div className='text'>
             <h1>{texts.title}</h1>
             <p>{texts.description}</p>
-            <form onSubmit={this.createHandler.bind(this)}>
-              <input type='text' name='name' placeholder={texts.placehodler} />
-              <button name='funCreate' className='size-90' title={texts.btn}>Add</button>
-            </form>
+            <Link to={`/${this.props.type}/new`} className='is-button size-wide'>{texts.btn}</Link>
           </div>
         </header>
-        <ul className='subsection-content entity-list funItemsList'>
+        <ul className='subsection-content entity-list'>
           {(this.props.items.length) ? this.props.items.map((item) => React.cloneElement(this.props.children, Object.assign({key: item.id}, item))) : empty }
         </ul>
       </section>

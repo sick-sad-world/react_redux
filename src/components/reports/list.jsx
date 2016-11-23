@@ -5,9 +5,7 @@ import PageList from '../pageList';
 import ListItem from '../listItem';
 
 class List extends React.Component {
-
   render() {
-    console.log('Report list update');
     return (
       <PageList { ...this.props }>
         <ListItem/>

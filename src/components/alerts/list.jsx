@@ -1,18 +1,13 @@
 import { map } from 'lodash';
 import React from 'React';
 import { connect } from 'react-redux';
-import { addAlert } from '../../actions/alerts';
 import PageList from '../pageList';
 import ListItem from '../listItem';
 
 class List extends React.Component {
-  createAlert (data) {
-    this.props.dispatch(addAlert(data))
-  }
   render() {
-    console.log('Alert list update');
     return (
-      <PageList createAction={this.createAlert.bind(this)} { ...this.props }>
+      <PageList { ...this.props }>
         <ListItem />
       </PageList>
     );

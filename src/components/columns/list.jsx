@@ -19,7 +19,6 @@ class List extends React.Component {
   }
 
   render() {
-    console.log('Column list update');
     return (
       <PageList type='columns' texts={this.props.texts} items={this.props.items}>
         <ListItem customIcon={this.getItemIcon.bind(this)}/>
