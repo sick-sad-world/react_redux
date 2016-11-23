@@ -1,27 +1,26 @@
-import { SERVER_ERROR } from './types';
-import config from '../app-config';
 import fetch from '../fetch';
-import { setAppState } from './app';
+import { setAppState } from './util';
 
-export default function basicAction (url, ACTION) {
-  return function (payload, silent) {
-    if (typeof payload === 'boolean') {
-      silent = payload;
-      payload = undefined;
+export default function createAction (url, ACTION) {
+
+  if (typeof url !== 'string' && !url && !url.length) {
+    throw new Error('Please provide url for backend endpoint.');
+  }
+
+  return (data, silent) => (dispatch) => {
+
+    if (typeof data === 'boolean') {
+      silent = data;
+      data = undefined;
     }
-    return (dispatch) => {
-      !silent && dispatch(setAppState(3));
-      return fetch(config.getUrl(url), payload)
-        .then(payload => {
-          let result = dispatch({type: ACTION, payload});
-          !silent && dispatch(setAppState(2));
-          return result;
-        })
-        .catch(payload => {
-          let result = dispatch({type: SERVER_ERROR, payload});
-          !silent && dispatch(setAppState(2));
-          return result;
-        });
-    }
+
+    !silent && dispatch(setAppState(3));
+    return fetch(url, data).then(payload => {
+      let action = {type: ACTION, payload, silent};
+      !silent && dispatch(setAppState(2));
+      dispatch(action);
+      return action;
+    });
+
   }
 }

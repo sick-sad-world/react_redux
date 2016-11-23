@@ -6,8 +6,8 @@ import thunk from 'redux-thunk';
 import messager from './middlewares/messager';
 import * as reducers from './reducers';
 
-import { getAppData, setAppState } from './actions/app';
-import getUser from './actions/user';
+import { throwError, setAppState } from './actions/util';
+import { getUser, getAppData } from './actions/read';
 
 // View part imports
 import React from 'react';
@@ -45,35 +45,32 @@ let TrendolizerStore = createStore(
   initialState,
   composeEnhancers(applyMiddleware(thunk, messager))
 );
-
 let history = syncHistoryWithStore(browserHistory, TrendolizerStore);
 
-let renderApp = () => {
-  render(
-    <Provider store={TrendolizerStore}>
-      <Router history={history}>
-        <Route path='/auth' component={Auth} />
-        <Route path='/' component={Workspace}>
-          <IndexRoute components={{main: Dashboard}} />
-          <Route path='/alerts(/:id)(/:assigment)' components={Alerts}/>
-          <Route path='/reports(/:id)(/:assigment)' components={Reports}/>
-          <Route path='/columns(/:id)(/:assigment)' components={Columns}/>
-          <Route path='/sourcesets(/:id)(/:create)' components={Sourcesets}/>
-          <Route path='/settings' components={{main: Profile}}/>
-        </Route>
-      </Router>
-    </Provider>,
-    document.getElementById('appRoot')
-  );
-}
-renderApp();
+render(
+  <Provider store={TrendolizerStore}>
+    <Router history={history}>
+      <Route path='/auth' component={Auth} />
+      <Route path='/' component={Workspace}>
+        <IndexRoute components={{main: Dashboard}} />
+        <Route path='/alerts(/:id)(/:assigment)' components={Alerts}/>
+        <Route path='/reports(/:id)(/:assigment)' components={Reports}/>
+        <Route path='/columns(/:id)(/:assigment)' components={Columns}/>
+        <Route path='/sourcesets(/:id)(/:create)' components={Sourcesets}/>
+        <Route path='/settings' components={{main: Profile}}/>
+      </Route>
+    </Router>
+  </Provider>,
+  document.getElementById('appRoot')
+);
+
 TrendolizerStore.dispatch(setAppState(1));
-TrendolizerStore.dispatch(getUser(true)).then(function (action) {
-  if (action && action.payload.id) {
-    TrendolizerStore.dispatch(getAppData(true)).then(() => {
-      TrendolizerStore.dispatch(setAppState(2));
-    });
-  } else {
-    TrendolizerStore.dispatch(setAppState(2));
-  }
-});
+TrendolizerStore.dispatch(getUser(true))
+  .then((action) => {
+    if (action && !action.payload.id) {
+      throw '';
+    }
+  })
+  .then(() => TrendolizerStore.dispatch(getAppData(true)))
+  .catch(error => TrendolizerStore.dispatch(throwError(error)))
+  .then(() => TrendolizerStore.dispatch(setAppState(2)));

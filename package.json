@@ -7,7 +7,6 @@
   "dependencies": {
     "browser-jsonp": "^1.1.5",
     "classnames": "^2.2.5",
-    "jsonp": "^0.2.0",
     "lodash": "^4.16.6",
     "lodash-es": "^4.17.2",
     "push.js": "0.0.11",
