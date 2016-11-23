@@ -3,7 +3,11 @@ import { Link } from 'react-router';
 import Icon from './icon';
 
 export default class PageList extends React.Component {
+  createListItem (item) {
+    return React.cloneElement(this.props.children, Object.assign({key: item.id}, item))
+  }
   render () {
+    let items = this.props.items;
     let texts = Object.assign({
       title: 'List title',
       description: 'List description.',
@@ -24,7 +28,7 @@ export default class PageList extends React.Component {
           </div>
         </header>
         <ul className='subsection-content entity-list'>
-          {(this.props.items.length) ? this.props.items.map((item) => React.cloneElement(this.props.children, Object.assign({key: item.id}, item))) : empty }
+          {(items.length) ? items.map(this.createListItem.bind(this)) : empty }
         </ul>
       </section>
     );
