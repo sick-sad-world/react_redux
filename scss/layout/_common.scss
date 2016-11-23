@@ -32,6 +32,18 @@ section[class^="screen"] {
 .overlay {
 	@include overlay();
 }
+
+.size-half {
+  width: 50%;
+}
+.size-full {
+  width: 100%;
+}
+@each $s in $sizes {
+  .size-#{$s} {
+    width: $s+px;
+  }
+}
 /* Form layout
 ========================================================================== */
 form {
@@ -58,17 +70,6 @@ form {
 	}
 	.row-flex-wrap {
 		flex-wrap: wrap;
-	}
-	.size-half {
-		width: 50%;
-	}
-	.size-full {
-		width: 100%;
-	}
-	@each $s in $sizes {
-		.size-#{$s} {
-			width: $s+px;
-		}
 	}
 	&.columned {
 		padding: baseUnit();

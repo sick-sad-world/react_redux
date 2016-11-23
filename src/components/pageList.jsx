@@ -20,7 +20,7 @@ export default class PageList extends React.Component {
           <div className='text'>
             <h1>{texts.title}</h1>
             <p>{texts.description}</p>
-            <Link to={`/${this.props.type}/new`} className='is-button size-wide'>{texts.btn}</Link>
+            <Link to={`/${this.props.type}/new`} className='is-button size-full'>{texts.btn}</Link>
           </div>
         </header>
         <ul className='subsection-content entity-list'>
