@@ -30,7 +30,7 @@ export default class PageList extends React.Component {
             <p>{texts.description}</p>
             <form onSubmit={this.createHandler.bind(this)}>
               <input type='text' name='name' placeholder={texts.placehodler} />
-              <button name='funCreate' className='size-90' title='{texts.btn}'>Add</button>
+              <button name='funCreate' className='size-90' title={texts.btn}>Add</button>
             </form>
           </div>
         </header>
