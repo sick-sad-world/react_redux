@@ -1,3 +1,4 @@
+import * as ACTIONS from './types';
 import fetch from '../fetch';
 import { setAppState } from './util';
 
@@ -24,3 +25,8 @@ export default function createAction (url, ACTION) {
 
   }
 }
+
+export const readData = (type) => createAction(type, ACTIONS[`GET_${type.toUpperCase()}`]);
+export const createData = (type) => createAction(`add_${type}`, ACTIONS[`CREATE_${type.toUpperCase()}`]);
+export const updateData = (type) => createAction(type, ACTIONS[`UPDATE_${type.toUpperCase()}`]);
+export const deleteData = (type) => createAction(`remove_${type}`, ACTIONS[`DELETE_${type.toUpperCase()}`]);

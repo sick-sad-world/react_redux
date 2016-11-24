@@ -51,7 +51,7 @@ class Workspace extends React.Component {
     });
 
     return (this.props.userState && this.props.appState >= 2) ? (
-      <section className='screen-main mod-screen-main' id='funMainScreen'>
+      <section className='screen-main mod-screen-main'>
         <aside className={sidebarClass}>
           <UserBlock />
           <MainNav toggle={this.toggleSidebar} logout={this.logoutHandler} />

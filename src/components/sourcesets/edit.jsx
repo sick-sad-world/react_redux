@@ -1,14 +1,16 @@
-import { filter, contains } from 'lodash';
+import { filter } from 'lodash';
 import React from 'React';
+import PageEdit from '../pageEdit';
 import { connect } from 'react-redux';
 
 class Edit extends React.Component {
-
-  render() {
+  constructor (props) {
+    super(props);
     if (!this.props.item.length) return null;
-    console.log('Sourceset edit update');
+  }
+  render() {
     return (
-      <div>Sourceset edit form</div>
+      <PageEdit item={this.props.item}>Sourceset edit form</PageEdit>
     );
   }
 }

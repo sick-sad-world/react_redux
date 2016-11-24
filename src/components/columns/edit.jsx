@@ -1,20 +1,22 @@
-import _ from 'lodash';
+import { filter } from 'lodash';
 import React from 'React';
+import PageEdit from '../pageEdit';
 import { connect } from 'react-redux';
 
 class Edit extends React.Component {
-
-  render() {
+  constructor (props) {
+    super(props);
     if (!this.props.item.length) return null;
-    console.log('Column edit update');
+  }
+  render() {
     return (
-      <div>Columns edit form</div>
+      <PageEdit item={this.props.item}></PageEdit>
     );
   }
 }
 
 let mapStateToProps = ({ columns }, ownProps) => ({
-  item: _.filter(columns, {id: parseInt(ownProps.params.id)})
+  item: filter(columns, {id: parseInt(ownProps.params.id)})
 });
 
 export default connect(mapStateToProps)(Edit);
