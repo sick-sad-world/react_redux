@@ -14,7 +14,7 @@ export default store => next => action => {
       }
     });
   }
-console.log(action);
+  
   if (messageType && !action.silent && action.payload[messageType].length) {
     Push.create(messageType, {
       body: action.payload[messageType],
