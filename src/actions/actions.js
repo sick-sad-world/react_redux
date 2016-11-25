@@ -58,5 +58,6 @@ export const login = (data) => (dispatch) => fetch('login', data).then(payload =
   } else {
     return dispatch({type: ACTIONS['LOGIN']})
   }
-})
+});
+
 export const logout = () => (dispatch) => fetch('logout').then(payload => dispatch({type: ACTIONS['LOGOUT']}));
