@@ -6,8 +6,7 @@ import thunk from 'redux-thunk';
 import messager from './middlewares/messager';
 import * as reducers from './reducers';
 
-import { throwError, setAppState } from './actions/util';
-import { getUser, getAppData } from './actions/read';
+import { throwError, setAppState, readData, fetchData } from './actions/actions';
 
 // View part imports
 import React from 'react';
@@ -36,7 +35,7 @@ let initialState = {
   reports: [],
   columns: [],
   sources: [],
-  sourcesets: []
+  sets: []
 };
 
 let composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -65,12 +64,7 @@ render(
 );
 
 TrendolizerStore.dispatch(setAppState(1));
-TrendolizerStore.dispatch(getUser(true))
-  .then((action) => {
-    if (action && !action.payload.id) {
-      throw '';
-    }
-  })
-  .then(() => TrendolizerStore.dispatch(getAppData(true)))
-  .catch(error => TrendolizerStore.dispatch(throwError(error)))
+TrendolizerStore.dispatch(readData('user')())
+  .then((action) => TrendolizerStore.dispatch(fetchData(true)))
+  .catch((error) => TrendolizerStore.dispatch(throwError(error)))
   .then(() => TrendolizerStore.dispatch(setAppState(2)));

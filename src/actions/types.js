@@ -1,4 +1,7 @@
 export const SERVER_ERROR = 'SERVER_ERROR';
+export const HTML_ERROR = 'HTML_ERROR';
+export const MESSAGE = 'MESSAGE';
+
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 export const SET_APP_STATE = 'SET_APP_STATE';

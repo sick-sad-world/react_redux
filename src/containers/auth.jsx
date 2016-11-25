@@ -2,8 +2,7 @@ import { bindAll } from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { login, setAppState, throwError } from '../actions/util';
-import { getUser, getAppData } from '../actions/read';
+import { login, setAppState, throwError, fetchData } from '../actions/actions';
 
 import FormLogin from '../components/formLogin';
 import FormRegister from '../components/formRegister';
@@ -35,15 +34,9 @@ class Auth extends React.Component {
         username: username.value,
         password: password.value
       }))
-      .then((action) => {
-        if (action && action.payload.error) {
-          throw action.payload.error
-        }
-      })
-      .then(() => dispatch(getUser(true)))
-      .then(() => dispatch(getAppData(true)))
-      .then(() => dispatch(setAppState(2)))
-      .catch((error) => dispatch(throwError(error)));
+      .then(() => dispatch(fetchData(true, true)))
+      .catch((error) => dispatch(throwError(error)))
+      .then(() => dispatch(setAppState(2)));
   }
 
   handleReg(e) {

@@ -2,7 +2,7 @@ import { bindAll } from 'lodash';
 import classNames from 'classnames';
 import React from 'React';
 import { connect } from 'react-redux';
-import { logout } from '../actions/util';
+import { logout } from '../actions/actions';
 import MainNav from '../components/mainNav';
 import UserBlock from '../components/userBlock';
 
