@@ -64,7 +64,7 @@ render(
 );
 
 TrendolizerStore.dispatch(setAppState(1));
-TrendolizerStore.dispatch(readData('user')())
-  .then((action) => TrendolizerStore.dispatch(fetchData(true)))
+TrendolizerStore.dispatch(readData('user')(true))
+  .then((action) => action.payload.id && TrendolizerStore.dispatch(fetchData(true)))
   .catch((error) => TrendolizerStore.dispatch(throwError(error)))
   .then(() => TrendolizerStore.dispatch(setAppState(2)));
