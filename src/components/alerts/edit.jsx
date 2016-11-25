@@ -4,10 +4,6 @@ import PageEdit from '../pageEdit';
 import { connect } from 'react-redux';
 
 class Edit extends React.Component {
-  constructor (props) {
-    super(props);
-    if (!this.props.item.length) return null;
-  }
   render() {
     return (
       <PageEdit item={this.props.item}></PageEdit>

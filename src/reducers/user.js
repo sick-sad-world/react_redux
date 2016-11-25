@@ -1,6 +1,6 @@
 import { LOGIN, LOGOUT, GET_USER, CREATE_USER, EDIT_USER } from '../actions/types';
 
-export function user (state = {}, action) {
+export const user = (state = {}, action) => {
   switch (action.type) {
     case LOGOUT:
     case LOGIN:
@@ -17,9 +17,9 @@ export function user (state = {}, action) {
         image: 'img/ph_user.png'
       };
     case GET_USER:
-      return state = Object.assign(state, {id: action.id}, action.payload);
+      return state = Object.assign(state, action.payload);
     case EDIT_USER:
-      return state = Object.assign(state, {id: action.id}, action.payload);
+      return state = Object.assign(state, action.payload);
     default:
       return state;
   }

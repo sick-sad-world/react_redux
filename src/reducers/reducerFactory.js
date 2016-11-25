@@ -2,7 +2,7 @@ import { LOGIN, LOGOUT } from '../actions/types';
 import { map, reject, concat } from 'lodash';
 
 export default function basicReducer (actions) {
-  return function (state = {}, action) {
+  return function (state = [], action) {
     switch (action.type) {
       case LOGOUT:
       case LOGIN:
