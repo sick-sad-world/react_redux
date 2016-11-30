@@ -29,7 +29,7 @@ const CONFIG = {
   sass: "scss",
   css: "css",
   fonts: "font",
-  templates: "templates", // set to false to turn it off
+  templates: false, // set to false to turn it off
   img: "img",
   icons: "img/icons",
   icons_sprite: "img",

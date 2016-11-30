@@ -42,10 +42,13 @@ in sub-managent like sources in set, sources/sets in column or column within ale
 				margin-left: 0;
 			}
 		}
-		.nav-links {
-			flex: 0 0 auto;
+    .nav-links,
+    .confirmation {
+      flex: 0 0 auto;
 			border-left: $border;
 			margin: baseUnit(0.5) 0;
+    } 
+		.nav-links {
 			a {
 				width: $entity-unit - baseUnit();
 			}
@@ -53,6 +56,28 @@ in sub-managent like sources in set, sources/sets in column or column within ale
 				transition: fill $dur, transform $dur;
 			}
 		}
+    .confirmation {
+      position: relative;
+      line-height: $entity-unit - baseUnit();
+      color: $c-main;
+      padding: 0 baseUnit() 0 baseUnit(2);
+      &:before, &:after {
+        display: block;
+        content: '';
+        margin: auto;
+        @include pos(0 false 0 -1px);
+        width: 0;
+        height: 0;
+      }
+      &:before {
+        border: (baseUnit() +1) solid transparent;
+        border-left-color: $c-border;
+      }
+      &:after {
+        border: baseUnit() solid transparent;
+        border-left-color: $c-alt;
+      }
+    }
 	}
 	ul:last-child {
 		display: none;

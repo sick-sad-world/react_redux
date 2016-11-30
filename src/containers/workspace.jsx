@@ -1,60 +1,89 @@
 import { bindAll } from 'lodash';
 import classNames from 'classnames';
+
 import React from 'React';
 import { connect } from 'react-redux';
-import { logout } from '../actions/actions';
+
+import { logout, throwError } from '../actions/actions';
+
 import MainNav from '../components/mainNav';
 import UserBlock from '../components/userBlock';
 
 
-
+// Main app screen - where all fun is taking place
+// ===========================================================================
 class Workspace extends React.Component {
+  // Constructor overriding
+  // ===========================================================================
   constructor(props) {
     super(props);
 
+    // Set initial state
+    // ===========================================================================
     this.state = {
       sidebar: this.props.sidebar || true
     };
 
-    bindAll(this, ['toggleSidebar', 'logoutHandler']);
+    // Bind handlers to our component
+    // ===========================================================================
+    bindAll(this, ['handlerSidebar', 'handlerLogout']);
   }
 
-  toggleSidebar(e) {
+  // Handler for toggling sidebar state
+  // ===========================================================================
+  handlerSidebar(e) {
     e.preventDefault();
     this.setState({ sidebar: !this.state.sidebar });
     e.target.blur();
     e.target.parentNode.blur();
   }
 
-  logoutHandler(e) {
+  // Handler for logout operation
+  // ===========================================================================
+  handlerLogout(e) {
     e.preventDefault();
-    this.props.dispatch(logout());
+    this.props.dispatch(logout()).catch((error) => this.props.dispatch(throwError(error)));
   }
 
+  // Redirect us to [Auth] if user is unauthentificated
+  // ===========================================================================
   checkAuthState(auth) {
     !auth && this.props.router.push('/auth')
   }
 
+  // Check authentification on component mount
+  // ===========================================================================
   componentWillMount() {
     this.checkAuthState(this.props.userState);
   }
 
+  // Check it also on component update
+  // ===========================================================================
   componentWillUpdate(newProps) {
     this.checkAuthState(newProps.userState);
   }
 
+  // Render our screen
+  // ===========================================================================
   render() {
+    // Get our display components
+    // ===========================================================================
     let { list, main, additional } = this.props;
+
+    // Create classList for sidebar
+    // ===========================================================================
     let sidebarClass = classNames({
       'sidebar': true,
       'is-expanded': this.state.sidebar
     });
 
+    // Return JSX layout of a component
+    // ===========================================================================
     return (this.props.userState && this.props.appState >= 2) ? (
       <section className='screen-main mod-screen-main'>
         <aside className={sidebarClass}>
           <UserBlock />
-          <MainNav toggle={this.toggleSidebar} logout={this.logoutHandler} />
+          <MainNav toggle={this.handlerSidebar} logout={this.handlerLogout} />
         </aside>
         <div className='screen-content'>
           <div className='mod-page'>
@@ -68,6 +97,9 @@ class Workspace extends React.Component {
   }
 }
 
+// Transform app state to component props
+// @ deps -> App, (User in future)
+// ===========================================================================
 function mapStateToProps({app}) {
   return {
     userState: app.userState,
@@ -76,4 +108,6 @@ function mapStateToProps({app}) {
   };
 }
 
+// Connect our Container to State
+// ===========================================================================
 export default connect(mapStateToProps)(Workspace);

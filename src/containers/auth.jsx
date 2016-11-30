@@ -1,4 +1,3 @@
-import { bindAll } from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -7,24 +6,29 @@ import { login, setAppState, throwError, fetchData } from '../actions/actions';
 import FormLogin from '../components/formLogin';
 import FormRegister from '../components/formRegister';
 
+// Authentification screen containing both of auth forms
+// ===========================================================================
 class Auth extends React.Component {
-  constructor(props) {
-    super(props);
-    bindAll(this, ['handleAuth', 'handleReg']);
-  }
-
+  // Redirect us to [Index] if user is authentificated
+  // ===========================================================================
   checkAuthState(auth) {
-    auth && this.props.router.push('/')
+    auth && this.props.router.push('/');
   }
 
+  // Check authentification on component mount
+  // ===========================================================================
   componentWillMount() {
     this.checkAuthState(this.props.userState);
   }
 
+  // Check it also on component update
+  // ===========================================================================
   componentWillUpdate(newProps) {
     this.checkAuthState(newProps.userState);
   }
 
+  // Handle authentification with provided credentials
+  // ===========================================================================
   handleAuth(e) {
     e.preventDefault();
     let dispatch = this.props.dispatch;
@@ -39,11 +43,18 @@ class Auth extends React.Component {
       .then(() => dispatch(setAppState(2)));
   }
 
+  // Handle reaction of a new user
+  // ===========================================================================
   handleReg(e) {
     e.preventDefault();
   }
 
+  // Render our screen
+  // ===========================================================================
   render() {
+
+    // Set default texts for a page
+    // ===========================================================================
     let texts = {
       title: 'Welcome to Trendolizer pro.',
       subTitle: 'Best engine for searching viral content.',
@@ -51,6 +62,8 @@ class Auth extends React.Component {
       copy: '© 2015 - Trendolizer pro. All rights reserved.'
     };
 
+    // Return JSX layout of a component
+    // ===========================================================================
     return (!this.props.userState && this.props.appState >= 2) ? (
       <section className='screen-auth mod-authentification' id='funAuthScreen'>
         <article className='welcome-text'>
@@ -63,14 +76,17 @@ class Auth extends React.Component {
           <small className='copyright'>{ texts.copy }</small>
         </article>
         <div className='auth-forms'>
-          <FormLogin handler={this.handleAuth} />
-          <FormRegister handler={this.handleReg} />
+          <FormLogin handler={this.handleAuth.bind(this)} />
+          <FormRegister handler={this.handleReg.bind(this)} />
         </div>
       </section>
     ) : null;
   }
 }
 
+// Transform app state to component props
+// @ deps -> App
+// ===========================================================================
 function mapStateToProps({app}) {
   return {
     userState: app.userState,
@@ -78,4 +94,6 @@ function mapStateToProps({app}) {
   };
 }
 
+// Connect our Container to State
+// ===========================================================================
 export default connect(mapStateToProps)(Auth);

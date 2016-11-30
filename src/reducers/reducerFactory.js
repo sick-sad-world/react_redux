@@ -13,12 +13,16 @@ export default function basicReducer (actions) {
         return concat(state, action.payload);
       case actions.EDIT:
         return map(state, (item) => {
-          return (item.id === action.payload.id) ? action.payload : item;
+          return (item.id === action.payload.id) ? Object.assign({}, item, action.payload) : item;
         });
       case actions.DELETE:
         return reject(state, {id: action.payload.id});
       default:
-        return state;
+        if (actions.hasOwnProperty(action.type) && typeof actions[action.type] === 'function') {
+          return actions[action.type](state, action);
+        } else {
+          return state;
+        }
     }
   }
 }

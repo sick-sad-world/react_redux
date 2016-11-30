@@ -17,11 +17,11 @@ export default class PageEdit extends React.Component {
       <section className='mod-subsection-edit'>
         <header className='subsection-header'>
           <div className='text'>
-            <h1>{texts.title} "{ item.name }"</h1>
+            <h1>{texts.title} '{ item.name }'</h1>
             <p>{texts.description}</p>
           </div>
         </header>
-        <form className="subsection-content ">{this.props.children}</form>
+        <form className='subsection-content '>{this.props.children}</form>
       </section>
     );
   }

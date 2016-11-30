@@ -1,11 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router';
 import Icon from './icon';
 
 export default class PageList extends React.Component {
+  
   createListItem (item) {
     return React.cloneElement(this.props.children, Object.assign({key: item.id}, item))
   }
+
   render () {
     let items = this.props.items;
     let texts = Object.assign({
@@ -18,13 +19,17 @@ export default class PageList extends React.Component {
     }, this.props.texts);
 
     let empty = <li className='state-empty'><Icon icon='emoji-sad' />{texts.empty}</li>;
+
     return (
       <section className='mod-subsection-list'>
         <header className='subsection-header'>
           <div className='text'>
             <h1>{texts.title}</h1>
             <p>{texts.description}</p>
-            <Link to={`/${this.props.type}/new`} className='is-button size-full'>{texts.btn}</Link>
+            <form onSubmit={this.props.handlerSubmit}>
+              <input type='text' name='name' required placeholder={texts.placeholder} />
+              <button className='size-90' title={texts.btn}>Add</button>
+            </form>
           </div>
         </header>
         <ul className='subsection-content entity-list'>

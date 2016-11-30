@@ -41,8 +41,8 @@
 	section[class*="mod-subsection-"] {
 		align-items: stretch;
 		flex-direction: column;
-		overflow: hidden;
 		border: $border;
+    overflow: hidden;
 		.subsection-header {
 			flex: 0 0 auto;
 			position: relative;
@@ -50,8 +50,8 @@
 		}
 		.subsection-content {
 			flex: 0 1 100%;
-			overflow-x: hidden;
-			overflow-y: auto;
+      overflow-x: hidden;
+      overflow-y: auto;
 		}
 	}
 

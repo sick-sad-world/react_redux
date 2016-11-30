@@ -5,5 +5,5 @@ export const columns = basicReducer({
   GET: GET_COLUMNS,
   ADD: ADD_COLUMN,
   EDIT: EDIT_COLUMN,
-  DELETE: DELETE_COLUMN
+  DELETE: DELETE_COLUMN,
 });

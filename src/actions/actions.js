@@ -1,48 +1,103 @@
 import * as ACTIONS from './types';
 import fetch from '../fetch';
 
-export const setAppState = (state) => ({ type: ACTIONS['SET_APP_STATE'], appState: state });
-
-export const throwError = (error) => (dispatch) => dispatch({
-  type: (error.event) ? ACTIONS['HTML_ERROR'] : error.type || ACTIONS['SERVER_ERROR'],
-  text: (error.event) ? error.url : error.text || ''
-});
-
+// Action constructor (for default AJAX comunnication)
+// Since most of our actions are the same - i create this
+// ===========================================================================
 export default function createAction (url, ACTION) {
 
+  // Check whatever we provided an URL (otherwise no point doing something)
+  // ===========================================================================
   if (typeof url !== 'string' && !url && !url.length) {
     throw new Error('Please provide url for backend endpoint.');
   }
 
+  // Default wrapper for [redux-thunk] actions
+  // ===========================================================================
   return (data, silent) => (dispatch) => {
 
+    // Set parameters, data and [silent] mode
+    // ===========================================================================
     if (typeof data === 'boolean') {
       silent = data;
       data = undefined;
     }
 
+    // Set app state to [loading]
+    // ===========================================================================
     if (!silent) {
       dispatch(setAppState(3));
     }
+
+    // Fire a call to server
+    // ===========================================================================
     return fetch(url, data).then(payload => {
+      
       if (!silent) {
+        
+        // Set app state to idle
+        // ===========================================================================
         dispatch(setAppState(2));
+
         if (payload.error) {
+          
+          // Fire [error] action if error found
+          // ===========================================================================
           throw { type: ACTIONS['SERVER_ERROR'], text: payload.error };
+
         } else if (payload.message || payload.success) {
-          throw { type: ACTIONS['MESSAGE'], text: (payload.message || payload.success) };
+
+          // Fire message to display proper message if responce contains only it
+          // ===========================================================================
+          dispatch({ type: ACTIONS['MESSAGE'], text: (payload.message || payload.success) });
+
+          // Ensure we have proper payload for reducer
+          // ===========================================================================
+          if (payload.id) {
+            // If we have ID -> provide it (for example DELETE action)
+            // ===========================================================================
+            payload = {id: payload.id};
+
+          } else {
+            // Esle data -> we sent to server (for example COLUMN edit actions)
+            // ===========================================================================
+            delete data.callback;
+            payload = data || {};
+
+          }
+
         }
       }
+
+      // Dispatch proper action
+      // ===========================================================================
       return dispatch({type: ACTION, payload, silent});
     });
 
   }
 }
 
+// Set app state (simple and SYNC)
+// ===========================================================================
+export const setAppState = (state) => ({ type: ACTIONS['SET_APP_STATE'], appState: state });
+
+// Throw action related to error (SYNC)
+// ===========================================================================
+export const throwError = (error) => (dispatch) => dispatch({
+  type: (error.event) ? ACTIONS['HTML_ERROR'] : error.type || ACTIONS['SERVER_ERROR'],
+  text: (error.event) ? error.url : error.text || ''
+});
+
+// Create all default actions for all default entities
+// ===========================================================================
 export const readData = (type) => createAction(type, ACTIONS[`GET_${type.toUpperCase()}`]);
-export const createData = (type) => createAction(`add_${type}`, ACTIONS[`CREATE_${type.toUpperCase()}`]);
-export const updateData = (type) => createAction(type, ACTIONS[`UPDATE_${type.toUpperCase()}`]);
+export const createData = (type) => createAction(`add_${type}`, ACTIONS[`ADD_${type.toUpperCase()}`]);
+export const updateData = (type) => createAction(type, ACTIONS[`EDIT_${type.toUpperCase()}`]);
 export const deleteData = (type) => createAction(`remove_${type}`, ACTIONS[`DELETE_${type.toUpperCase()}`]);
+
+// Create specific action to fetch All data from a server:
+// On app init - for example (utilizing Promise.all)
+// ===========================================================================
 export const fetchData = (silent, getUser) => (dispatch) => Promise.all([
   (getUser) ? dispatch(readData('user')(silent)) : null,
   dispatch(readData('alerts')(silent)),
@@ -52,6 +107,8 @@ export const fetchData = (silent, getUser) => (dispatch) => Promise.all([
   dispatch(readData('sources')(silent))
 ]);
 
+// Create auth actions
+// ===========================================================================
 export const login = (data) => (dispatch) => fetch('login', data).then(payload => {
   if (payload.error) {
     throw { type: ACTIONS['SERVER_ERROR'], text: payload.error };
@@ -59,5 +116,10 @@ export const login = (data) => (dispatch) => fetch('login', data).then(payload =
     return dispatch({type: ACTIONS['LOGIN']})
   }
 });
-
-export const logout = () => (dispatch) => fetch('logout').then(payload => dispatch({type: ACTIONS['LOGOUT']}));
+export const logout = (data) => (dispatch) => fetch('logout', data).then(payload => {
+  if (payload.error) {
+    throw { type: ACTIONS['SERVER_ERROR'], text: payload.error };
+  } else {
+    return dispatch({type: ACTIONS['LOGOUT']})
+  }
+});

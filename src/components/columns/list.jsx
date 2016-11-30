@@ -1,45 +1,83 @@
 import { map } from 'lodash';
 import React from 'React';
 import { connect } from 'react-redux';
+
+import { createData, deleteData, updateData, throwError } from '../../actions/actions';
+
 import PageList from '../pageList';
 import ListItem from '../listItem';
 import Icon from '../icon';
 
 class List extends React.Component {
-  changeVis (e) {
+
+  handlerSubmit (e) {
     e.preventDefault();
+    let dispatch = this.props.dispatch;
+    let input = e.target.elements.name;
+    dispatch(createData(this.props.type)({
+        name: input.value,
+        order: this.props.items.length
+      }))
+      .then(() => { input.value = ''; })
+      .catch((error) => dispatch(throwError(error)));
+  }
+
+  handlerDelete (id, e) {
+    e.preventDefault();
+    let dispatch = this.props.dispatch;
+    dispatch(deleteData(this.props.type)({
+      id: id
+    })).catch((error) => dispatch(throwError(error)));
+  }
+
+  changeVis (data, e) {
+    e.preventDefault();
+    let dispatch = this.props.dispatch;
+    dispatch(updateData(this.props.type)(data)).catch((error) => dispatch(throwError(error)));
   }
 
   getItemIcon (props) {
+    let title, params, icon;
+    
     if (props.open) {
-      return <a href='#toggleVis' onClick={this.changeVis.bind(this)} title='Hide this Column'><Icon icon='eye-with-line' /></a>;
+      title = 'Hide this Column';
+      icon = 'eye-with-line';
+      params = {id: props.id, open: 0};
     } else {
-      return <a href='#toggleVis' onClick={this.changeVis.bind(this)} title='Show this Column'><Icon icon='eye' /></a>;
+      title = 'Show this Column';
+      icon = 'eye';
+      params = {id: props.id, open: 1};
     }
+
+    return <a href='' onClick={this.changeVis.bind(this, params)} title={title}><Icon icon={icon} /></a>;
   }
 
   render() {
+    let { items, texts } = this.props;
     return (
-      <PageList type='columns' texts={this.props.texts} items={this.props.items}>
-        <ListItem customIcon={this.getItemIcon.bind(this)}/>
+      <PageList items={items} texts={texts} handlerSubmit={this.handlerSubmit.bind(this)} >
+        <ListItem handlerDelete={this.handlerDelete.bind(this)} customIcon={this.getItemIcon.bind(this)}/>
       </PageList>
     );
   }
+
 }
 
-function mapStateToProps ({ columns }) {
+const mapStateToProps = ({ columns }) => {
   let items = map(columns, (item) => {
      return {
        id: item.id,
        name: item.name,
        open: item.open,
        draggable: true,
-       type: 'columns'
+       deletable: true,
+       type: 'column'
      }
   });
+
   return {
     items: items,
-    type: 'columns',
+    type: 'column',
     texts: {
       title: 'Columns Management',
       description: 'Create, edit or delete dashboard columns. Drag to reorder, use the eye icon to hide/unhide them (tip: hidden columns can still be used for alerts/reports).',
