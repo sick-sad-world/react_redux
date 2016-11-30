@@ -1,25 +1,36 @@
 import { filter } from 'lodash';
 import React from 'React';
-import PageEdit from '../pageEdit';
 import { connect } from 'react-redux';
 
 class Edit extends React.Component {
-  constructor (props) {
-    super(props);
-    if (!this.props.item.length) return null;
-  }
   render() {
-    return (
-      <PageEdit item={this.props.item}>Sourceset edit form</PageEdit>
-    );
+    let item = this.props.item;
+    let texts = Object.assign({
+      title: 'Edit form',
+      description: 'Simple edit form to manipulate entity props'
+    }, this.props.texts);
+    
+    return (this.props.item) ? (
+      <section className='mod-subsection-edit'>
+        <header className='subsection-header'>
+          <div className='text'>
+            <h1>{texts.title} '{ item.name }'</h1>
+            <p>{texts.description}</p>
+          </div>
+        </header>
+        <form className='subsection-content'>
+        
+        </form>
+      </section>
+    ) : null;
   }
 }
 
 let mapStateToProps = ({ sourcesets, sources }, ownProps) => {
-  let item = filter(sourcesets, {id: parseInt(ownProps.params.id)});
+  let item = filter(sourcesets, {id: parseInt(ownProps.params.id)})[0];
   return {
     item: item,
-    sources: (item.length) ? filter(sources, (source) => item.source_ids.indexOf(source.id) > -1) : false
+    sources: (item) ? filter(sources, (source) => item.source_ids.indexOf(source.id) > -1) : false
   };
 };
 

@@ -73,24 +73,22 @@ form {
 	}
 	&.columned {
 		padding: baseUnit();
-		@include media (map-get($layout, bp)) {
-			display: flex;
-			flex-wrap: wrap;
-			align-content: flex-start;
-			.form-column {
-				flex: 0 0 50%;
-				max-width: 50%;
-				padding-right: baseUnit();
-				+ .form-column {
-					padding-right: 0;
-					padding-left: baseUnit();
-				}
-			}
-			.form-block {
-				flex: 0 0 100%;
-				width: 100%;
-			}
-		}
+		display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    .form-column {
+      flex: 0 0 50%;
+      max-width: 50%;
+      padding-right: baseUnit();
+      + .form-column {
+        padding-right: 0;
+        padding-left: baseUnit();
+      }
+    }
+    .form-block {
+      flex: 0 0 100%;
+      width: 100%;
+    }
 	}
 }
 // End

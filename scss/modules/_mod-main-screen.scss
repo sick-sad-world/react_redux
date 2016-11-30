@@ -76,7 +76,7 @@
 
 		// Unique styles for list section
 		.mod-subsection-list {
-			flex: 0 0 35%;
+			flex: 0 0 30%;
 			min-width: map-get($layout, buffer);
 			z-index: 1;
 			.subsection-header {
@@ -109,28 +109,28 @@
 
 		// Make optional subsections "invisible"
 		.mod-subsection-edit, .mod-subsection-management, .mod-subsection-preview {
-			flex: 0 1 0;
-			opacity: 0;
-			transition: flex $dur, opacity $dur, width $dur;
-			width: 0;
-			border-width: 0px;
+			flex: 0 1 70%;
+			// opacity: 0;
+			// transition: flex $dur, opacity $dur, width $dur;
+			// width: 0;
+			// border-width: 0px;
 		}
 
 		// Show Edit form or Submanagement subsection if needed
-		&.is-edit .mod-subsection-edit,
-		&.is-detail .mod-subsection-management {
-			flex-basis: 65%;
-			opacity: 1;
-			border-width: 1px;
-		}
+		// &.is-edit .mod-subsection-edit,
+		// &.is-detail .mod-subsection-management {
+		// 	flex-basis: 70%;
+		// 	opacity: 1;
+		// 	border-width: 1px;
+		// }
 
 		// Show quick preview subsection
-		&.is-edit .mod-subsection-preview.is-active {
-			margin-left: baseUnit();
-			flex-basis: 20%;
-			opacity: 1;
-			border-width: 1px;
-		}
+		// &.is-edit .mod-subsection-preview.is-active {
+		// 	margin-left: baseUnit();
+		// 	flex-basis: 20%;
+		// 	opacity: 1;
+		// 	border-width: 1px;
+		// }
 	}
 
 	.mod-dashboard {

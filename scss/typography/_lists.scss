@@ -60,10 +60,10 @@ ol ol {
 			box-shadow: 0;
 			transition: box-shadow $dur;
 			cursor: pointer;
-			&:hover {
-				@include style-hover();
-			}
 		}
+    &:not([class*="is-"]):hover {
+      @include style-hover();
+    }
 		svg {
 			cursor: pointer;
 			display: inline-block;
@@ -81,7 +81,11 @@ ol ol {
 			width: 100%;
 			@include form-pholder(1.125em);
 		}
-		&.is-selected:not(.is-default) {
+    &.is-disabled {
+      opacity: 0.65;
+      cursor: default;
+    }
+		&.is-selected {
 			@include gradient($c-accent);
 			border: 1px solid rgba(0,0,0,.2);
 			color: $c-alt;

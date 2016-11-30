@@ -36,7 +36,7 @@ import * as Alerts from './components/alerts';
 import * as Reports from './components/reports';
 import * as Columns from './components/columns';
 import * as Sourcesets from './components/sourcesets';
-import Profile from './components/profile';
+import Profile from './components/user/profile';
 
 // Set App itinial state
 // ===========================================================================

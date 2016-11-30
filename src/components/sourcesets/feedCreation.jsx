@@ -5,11 +5,9 @@ import { connect } from 'react-redux';
 class FeedCreation extends React.Component {
 
   render() {
-    if (!this.props.set_id && !this.props.params.create) return null;
-    console.log('Feed creation update');
-    return (
+    return (this.props.set_id && this.props.params.create) ? (
       <div>Create new feed screen</div>
-    );
+    ) : null;
   }
 }
 
