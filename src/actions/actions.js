@@ -1,3 +1,5 @@
+// Import action types and our communication helper
+// ===========================================================================
 import * as ACTIONS from './types';
 import fetch from '../fetch';
 
