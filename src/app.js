@@ -28,6 +28,7 @@ import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 // ===========================================================================
 import Workspace from './containers/workspace';
 import Auth from './containers/auth';
+import App from './containers/app'
 
 // Import components wich represents each of App sections
 // ===========================================================================
@@ -74,14 +75,16 @@ let history = syncHistoryWithStore(browserHistory, TrendolizerStore);
 render(
   <Provider store={TrendolizerStore}>
     <Router history={history}>
-      <Route path='/auth' component={Auth} />
-      <Route path='/' component={Workspace}>
-        <IndexRoute components={{main: Dashboard}} />
-        <Route path='/alerts(/:id)(/:assigment)' components={Alerts}/>
-        <Route path='/reports(/:id)(/:assigment)' components={Reports}/>
-        <Route path='/columns(/:id)(/:assigment)' components={Columns}/>
-        <Route path='/sourcesets(/:id)(/:create)' components={Sourcesets}/>
-        <Route path='/settings' components={{main: Profile}}/>
+      <Route path='/' component={App}>
+        <Route path='/auth' component={Auth} />
+        <Route component={Workspace}>
+          <Route path='/dashboard(/:id)' components={{main: Dashboard}} />
+          <Route path='/alerts(/:id)(/:assigment)' components={Alerts}/>
+          <Route path='/reports(/:id)(/:assigment)' components={Reports}/>
+          <Route path='/columns(/:id)(/:assigment)' components={Columns}/>
+          <Route path='/sourcesets(/:id)(/:create)' components={Sourcesets}/>
+          <Route path='/settings' components={{main: Profile}}/>
+        </Route>
       </Route>
     </Router>
   </Provider>,

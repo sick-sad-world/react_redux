@@ -1,11 +1,19 @@
+// Import utility stuff
+// ===========================================================================
 import { bindAll } from 'lodash';
 import classNames from 'classnames';
 
+// Import React related stuff
+// ===========================================================================
 import React from 'React';
 import { connect } from 'react-redux';
 
+// Import actions
+// ===========================================================================
 import { logout, throwError } from '../actions/actions';
 
+// Import Child components
+// ===========================================================================
 import MainNav from '../components/mainNav';
 import UserBlock from '../components/userBlock';
 
@@ -79,7 +87,7 @@ class Workspace extends React.Component {
 
     // Return JSX layout of a component
     // ===========================================================================
-    return (this.props.userState && this.props.appState >= 2) ? (
+    return (this.props.userState) ? (
       <section className='screen-main mod-screen-main'>
         <aside className={sidebarClass}>
           <UserBlock />

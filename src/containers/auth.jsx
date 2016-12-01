@@ -1,8 +1,14 @@
+// Import React related stuff
+// ===========================================================================
 import React from 'react';
 import { connect } from 'react-redux';
 
+// Import actions
+// ===========================================================================
 import { login, setAppState, throwError, fetchData } from '../actions/actions';
 
+// Import Child components
+// ===========================================================================
 import FormLogin from '../components/formLogin';
 import FormRegister from '../components/formRegister';
 
@@ -12,7 +18,7 @@ class Auth extends React.Component {
   // Redirect us to [Index] if user is authentificated
   // ===========================================================================
   checkAuthState(auth) {
-    auth && this.props.router.push('/');
+    auth && this.props.router.push('/dashboard');
   }
 
   // Check authentification on component mount
@@ -64,7 +70,7 @@ class Auth extends React.Component {
 
     // Return JSX layout of a component
     // ===========================================================================
-    return (!this.props.userState && this.props.appState >= 2) ? (
+    return (!this.props.userState) ? (
       <section className='screen-auth mod-authentification' id='funAuthScreen'>
         <article className='welcome-text'>
           <img className='logotype' src='img/logo.svg' title='Trendolier pro' alt='Trendolizer pro' />

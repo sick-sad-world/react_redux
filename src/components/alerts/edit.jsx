@@ -11,18 +11,18 @@ class Edit extends React.Component {
   }
 
   changeHandler (e) {
-    e.preventDefault();
     console.log(e.target.name, e.target.value);
   }
 
   render() {
+    if (this.props.item) return false;
     let item = this.props.item;
     let texts = Object.assign({
       title: 'Edit form',
       description: 'Simple edit form to manipulate entity props'
     }, this.props.texts);
 
-    return (this.props.item) ? (
+    return (
       <section className='mod-subsection-edit'>
         <header className='subsection-header'>
           <div className='text'>
@@ -76,7 +76,7 @@ class Edit extends React.Component {
           </div>
         </form>
       </section>
-    ) : null;
+    );
   }
 }
 
