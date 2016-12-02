@@ -11,6 +11,19 @@ import ProgressTracker from '../components/progressTracker';
 // It renders app if state > 1 or Progressbar if not
 // ===========================================================================
 class App extends React.Component {  
+  componentWillUpdate(nextProps) {
+    let isRoot = this.props.location.pathname === '/';
+    let logOut = this.props.userState && !nextProps.userState;
+    let logIn = !this.props.userState && nextProps.userState;
+
+    console.log('Will Update', this.props.userState, nextProps.userState);
+
+    if ((isRoot && !nextProps.userState) || logOut) {
+      this.props.router.push('/auth');
+    } else if ((isRoot && nextProps.userState) || logIn) {
+      this.props.router.push('/dashboard');
+    }
+  }
   render () {
     return (this.props.appState < 2) ? <ProgressTracker /> : this.props.children;
   }

@@ -15,24 +15,6 @@ import FormRegister from '../components/formRegister';
 // Authentification screen containing both of auth forms
 // ===========================================================================
 class Auth extends React.Component {
-  // Redirect us to [Index] if user is authentificated
-  // ===========================================================================
-  checkAuthState(auth) {
-    auth && this.props.router.push('/dashboard');
-  }
-
-  // Check authentification on component mount
-  // ===========================================================================
-  componentWillMount() {
-    this.checkAuthState(this.props.userState);
-  }
-
-  // Check it also on component update
-  // ===========================================================================
-  componentWillUpdate(newProps) {
-    this.checkAuthState(newProps.userState);
-  }
-
   // Handle authentification with provided credentials
   // ===========================================================================
   handleAuth(e) {
@@ -90,16 +72,7 @@ class Auth extends React.Component {
   }
 }
 
-// Transform app state to component props
+// Connect our Container to State
 // @ deps -> App
 // ===========================================================================
-function mapStateToProps({app}) {
-  return {
-    userState: app.userState,
-    appState: app.appState
-  };
-}
-
-// Connect our Container to State
-// ===========================================================================
-export default connect(mapStateToProps)(Auth);
+export default connect(({app}) =>({userState: app.userState, appState: app.appState}))(Auth);

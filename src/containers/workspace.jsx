@@ -37,6 +37,14 @@ class Workspace extends React.Component {
     bindAll(this, ['handlerSidebar', 'handlerLogout']);
   }
 
+  componentWillMount() {
+    !this.props.userState && this.props.router.push('/auth');
+  }
+
+  componentWillUpdate() {
+    !this.props.userState && this.props.router.push('/auth');
+  }
+
   // Handler for toggling sidebar state
   // ===========================================================================
   handlerSidebar(e) {
@@ -51,24 +59,6 @@ class Workspace extends React.Component {
   handlerLogout(e) {
     e.preventDefault();
     this.props.dispatch(logout()).catch((error) => this.props.dispatch(throwError(error)));
-  }
-
-  // Redirect us to [Auth] if user is unauthentificated
-  // ===========================================================================
-  checkAuthState(auth) {
-    !auth && this.props.router.push('/auth')
-  }
-
-  // Check authentification on component mount
-  // ===========================================================================
-  componentWillMount() {
-    this.checkAuthState(this.props.userState);
-  }
-
-  // Check it also on component update
-  // ===========================================================================
-  componentWillUpdate(newProps) {
-    this.checkAuthState(newProps.userState);
   }
 
   // Render our screen
@@ -105,17 +95,7 @@ class Workspace extends React.Component {
   }
 }
 
-// Transform app state to component props
+// Connect our Container to State
 // @ deps -> App, (User in future)
 // ===========================================================================
-function mapStateToProps({app}) {
-  return {
-    userState: app.userState,
-    appState: app.appState,
-    sidebar: true
-  };
-}
-
-// Connect our Container to State
-// ===========================================================================
-export default connect(mapStateToProps)(Workspace);
+export default connect(({app}) =>({userState: app.userState, appState: app.appState, sidebar: true}))(Workspace);
