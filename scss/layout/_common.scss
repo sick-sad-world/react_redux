@@ -47,13 +47,14 @@ section[class^="screen"] {
 /* Form layout
 ========================================================================== */
 form {
-	.row {
+	.row, .row-flex, .row-flex-wrap {
 		margin: baseUnit(2) 0;
+    width: 100%;
 	}
 	.row-flex, .row-flex-wrap {
-		margin: baseUnit(2) 0;
 		display: flex;
 		justify-content: space-between;
+    align-items: center;
 		.form-subtitle {
 			flex: 0 0 100%;
 			border-bottom: 0;
@@ -61,6 +62,7 @@ form {
 		}
 		.form-description {
 			flex: 0 0 100%;
+      margin: baseUnit(0.5) 0;
 		}
 	}
 	.row-flex {

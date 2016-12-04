@@ -22,6 +22,9 @@ in sub-managent like sources in set, sources/sets in column or column within ale
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
+      > a {
+        line-height: $entity-unit - baseUnit();
+      }
 			> * {
 				display: inline-block;
 				max-width: 100%;

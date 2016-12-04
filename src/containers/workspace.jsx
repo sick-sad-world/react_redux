@@ -37,10 +37,14 @@ class Workspace extends React.Component {
     bindAll(this, ['handlerSidebar', 'handlerLogout']);
   }
 
+  // Redirect to auth if user is unauthentificated
+  // ===========================================================================
   componentWillMount() {
     !this.props.userState && this.props.router.push('/auth');
   }
 
+  // Redirect to auth if user is unauthentificated
+  // ===========================================================================
   componentWillUpdate() {
     !this.props.userState && this.props.router.push('/auth');
   }
