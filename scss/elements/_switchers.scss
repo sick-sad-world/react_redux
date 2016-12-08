@@ -96,11 +96,9 @@ span.switcher-direction {
 	position: relative;
 	height: $pointer-unit;
 	line-height: $pointer-unit;
-	span, em {
-		@include pos(0 false false 0);
-		height: 100%;
-	}
 	span {
+    @include pos(0 false false 0);
+		height: 100%;
 		width: 100%;
 		@include form-element();
 	}
@@ -112,6 +110,7 @@ span.switcher-direction {
 		visibility: collapse;
 	}
 	em {
+    @include pos((-2px) false (-2px) 0);
 		width: 50%;
 		z-index: 1;
 		border-radius: $bdrs;

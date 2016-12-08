@@ -23,14 +23,6 @@ select[multiple] {
 .Select {
   position: relative;
 }
-.Select,
-.Select div,
-.Select input,
-.Select span {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
 .Select.is-disabled > .Select-control {
   background-color: #f9f9f9;
 }
@@ -43,11 +35,11 @@ select[multiple] {
   opacity: 0.35;
 }
 .Select-control {
-  background-color: #fff;
-  border-color: #d9d9d9 #ccc #b3b3b3;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  color: #333;
+  background-color: $c-element;
+  //border-color: #d9d9d9 #ccc #b3b3b3;
+  border-radius: $bdrs;
+  border: $border;
+  color: $c-main;
   cursor: default;
   display: table;
   border-spacing: 0;
@@ -57,9 +49,10 @@ select[multiple] {
   overflow: hidden;
   position: relative;
   width: 100%;
+  transition: box-shadow $dur, opacity $dur;
 }
 .Select-control:hover {
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+  @include style-hover();
 }
 .Select-control .Select-input:focus {
   outline: none;
@@ -70,8 +63,8 @@ select[multiple] {
 .is-open > .Select-control {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
-  background: #fff;
-  border-color: #b3b3b3 #ccc #d9d9d9;
+  background: $c-element;
+  //border-color: #b3b3b3 #ccc #d9d9d9;
 }
 .is-open > .Select-control > .Select-arrow {
   border-color: transparent transparent #999;
@@ -80,9 +73,10 @@ select[multiple] {
 .is-searchable.is-focused:not(.is-open) > .Select-control {
   cursor: text;
 }
+.is-focused.is-open > .Select-control,
 .is-focused:not(.is-open) > .Select-control {
-  border-color: #007eff;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px rgba(0, 126, 255, 0.1);
+  @include style-focus();
+  //box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px rgba(0, 126, 255, 0.1);
 }
 .Select-placeholder,
 .Select--single > .Select-control .Select-value {
@@ -113,7 +107,7 @@ select[multiple] {
 .has-value.is-pseudo-focused.Select--single > .Select-control .Select-value a.Select-value-label:hover,
 .has-value.Select--single > .Select-control .Select-value a.Select-value-label:focus,
 .has-value.is-pseudo-focused.Select--single > .Select-control .Select-value a.Select-value-label:focus {
-  color: #007eff;
+  color: $c-accent;
   outline: none;
   text-decoration: underline;
 }
@@ -175,7 +169,7 @@ select[multiple] {
   -webkit-animation: Select-animation-fadeIn 200ms;
   -o-animation: Select-animation-fadeIn 200ms;
   animation: Select-animation-fadeIn 200ms;
-  color: #999;
+  color: $c-icon;
   cursor: pointer;
   display: table-cell;
   position: relative;
@@ -184,7 +178,7 @@ select[multiple] {
   width: 17px;
 }
 .Select-clear-zone:hover {
-  color: #D0021B;
+  color: map-get($states, error);
 }
 .Select-clear {
   display: inline-block;
@@ -204,7 +198,7 @@ select[multiple] {
   padding-right: 5px;
 }
 .Select-arrow {
-  border-color: #999 transparent transparent;
+  border-color: $c-icon transparent transparent;
   border-style: solid;
   border-width: 5px 5px 2.5px;
   display: inline-block;
@@ -213,10 +207,10 @@ select[multiple] {
 }
 .is-open .Select-arrow,
 .Select-arrow-zone:hover > .Select-arrow {
-  border-top-color: #666;
+  border-top-color: darken($c-icon, 10);
 }
 .Select--multi .Select-multi-value-wrapper {
-  display: inline-block;
+  display: table-cell;
 }
 .Select .Select-aria-only {
   display: inline-block;
@@ -245,7 +239,7 @@ select[multiple] {
 .Select-menu-outer {
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
-  background-color: #fff;
+  background-color: $c-element;
   border: 1px solid #ccc;
   border-top-color: #e6e6e6;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
@@ -261,34 +255,28 @@ select[multiple] {
 .Select-menu {
   max-height: 198px;
   overflow-y: auto;
+  padding: 4px;
 }
 .Select-option {
   box-sizing: border-box;
-  background-color: #fff;
+  background-color: $c-element;
   color: #666666;
   cursor: pointer;
   display: block;
   padding: 8px 10px;
 }
 .Select-option:last-child {
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: $bdrs;
+  border-bottom-left-radius: $bdrs;
 }
 .Select-option.is-selected {
-  background-color: #f5faff;
-  /* Fallback color for IE 8 */
-  background-color: rgba(0, 126, 255, 0.04);
-  color: #333;
+  background-color: rgba($c-accent, 0.08);
 }
 .Select-option.is-focused {
-  background-color: #ebf5ff;
-  /* Fallback color for IE 8 */
-  background-color: rgba(0, 126, 255, 0.08);
-  color: #333;
+  background-color: rgba($c-accent, 0.16);
 }
 .Select-option.is-disabled {
-  color: #cccccc;
-  cursor: default;
+  @include style-disabled();
 }
 .Select-noresults {
   box-sizing: border-box;
@@ -297,7 +285,18 @@ select[multiple] {
   display: block;
   padding: 8px 10px;
 }
+.Select--multi .Select-option {
+  float: left;
+  width: 50%;
+  &:not(:last-child):not(:nth-last-child(1)):not(odd) {
+    border-bottom: $border;
+  }
+  &:nth-child(odd) {
+    border-right: $border;
+  }
+}
 .Select--multi .Select-input {
+  display: inline-block;
   vertical-align: middle;
   margin-left: 10px;
   padding: 0;
@@ -306,19 +305,15 @@ select[multiple] {
   margin-left: 5px;
 }
 .Select--multi .Select-value {
-  background-color: #ebf5ff;
-  /* Fallback color for IE 8 */
-  background-color: rgba(0, 126, 255, 0.08);
-  border-radius: 2px;
-  border: 1px solid #c2e0ff;
-  /* Fallback color for IE 8 */
-  border: 1px solid rgba(0, 126, 255, 0.24);
-  color: #007eff;
+  background-color: rgba($c-accent, 0.08);
+  border-radius: $bdrs;
+  border: 1px solid rgba($c-accent, .5);
+  color: $c-accent;
   display: inline-block;
   font-size: 0.9em;
   line-height: 1.4;
   margin-left: 5px;
-  margin-top: 5px;
+  margin-top: 4px;
   vertical-align: top;
 }
 .Select--multi .Select-value-icon,
@@ -333,7 +328,7 @@ select[multiple] {
   padding: 2px 5px;
 }
 .Select--multi a.Select-value-label {
-  color: #007eff;
+  color: $c-accent;
   cursor: pointer;
   text-decoration: none;
 }
@@ -344,22 +339,16 @@ select[multiple] {
   cursor: pointer;
   border-bottom-left-radius: 2px;
   border-top-left-radius: 2px;
-  border-right: 1px solid #c2e0ff;
-  /* Fallback color for IE 8 */
-  border-right: 1px solid rgba(0, 126, 255, 0.24);
+  border-right: 1px solid rgba($c-accent, .5);
   padding: 1px 5px 3px;
 }
 .Select--multi .Select-value-icon:hover,
 .Select--multi .Select-value-icon:focus {
-  background-color: #d8eafd;
-  /* Fallback color for IE 8 */
-  background-color: rgba(0, 113, 230, 0.08);
-  color: #0071e6;
+  background-color: rgba($c-accent, 0.16);
+  color: $c-accent;
 }
 .Select--multi .Select-value-icon:active {
-  background-color: #c2e0ff;
-  /* Fallback color for IE 8 */
-  background-color: rgba(0, 126, 255, 0.24);
+  background-color: rgba($c-accent, 0.24);
 }
 .Select--multi.is-disabled .Select-value {
   background-color: #fcfcfc;

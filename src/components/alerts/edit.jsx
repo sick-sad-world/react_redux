@@ -1,6 +1,7 @@
 // Import utility stuff
 // ===========================================================================
-import { filter, bindAll, pick } from 'lodash';
+import { find, bindAll, pick, assign, isArray } from 'lodash';
+import classNames from 'classnames';
 
 // Import React related stuff
 // ===========================================================================
@@ -12,38 +13,46 @@ import { connect } from 'react-redux';
 // ===========================================================================
 import { Link } from 'react-router';
 import EmailList from '../user/injectable';
+import Toggler from '../toggler';
+
+// Import actions
+// ===========================================================================
+import { updateData, throwError } from '../../actions/actions';
 
 class Edit extends React.Component {
   // Bind [changeHandler] to Component 
   // ===========================================================================
   constructor (props) {
     super(props);
-    bindAll(this, ['changeHandler', 'changeFrequencyHandler', 'changeColumnsHandler']);
+    this.state = {
+      frequency: null,
+      columns: []
+    }
+    bindAll(this, ['changeHandler', 'createSelectHandler']);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.state = this.setState(assign(this.state, pick(nextProps.item, ['frequency', 'columns'])));
   }
 
   // Send request to server with new props 
   // ===========================================================================
   changeHandler (e) {
-    console.log(e.target.name, e.target.value);
-  }
-  
-  // Map [frequency] values to [changeHandler]
-  // ===========================================================================
-  changeFrequencyHandler (newVal) {
-    this.changeHandler({target: {
-      value: newVal.value,
-      name: 'frequency'
-    }});
+    let value = e.target.value;
+    let dispatch = this.props.dispatch;
+    dispatch(updateData('alert')({
+      id: this.props.item.id,
+      [e.target.name]: (value.hasOwnProperty(length)) ? value.map(v => v.id) : value
+    })).catch((err) => dispatch(throwError(err)))
   }
 
-  // Map [columns] values to [changeHandler]
+  // Select handler creator
+  // -> Function which handles both action and state change
   // ===========================================================================
-  changeColumnsHandler (newVal) {
-    console.log(newVal);
-    this.changeHandler({target: {
-      value: newVal.map(item => item.id),
-      name: 'columns'
-    }});
+  createSelectHandler (name) {
+    return (value) => 
+                this.setState(Object.assign({}, this.state, {[name]: value}), 
+                      () => this.changeHandler({target: {value: (value.hasOwnProperty(length)) ? value : value.value, name}}));
   }
 
   render() {
@@ -70,10 +79,15 @@ class Edit extends React.Component {
       description: 'Simple edit form to manipulate entity props'
     }, this.props.texts);
 
+    let componentRootClass = classNames({
+      'mod-subsection-edit': true,
+      'state-loading': this.props.appState === 3
+    });
+
     // Return DOM layout
     // ===========================================================================
     return (
-      <section className='mod-subsection-edit'>
+      <section className={componentRootClass}>
         <header className='subsection-header'>
           <div className='text'>
             <h1>{texts.title} '{ item.name }'</h1>
@@ -83,18 +97,19 @@ class Edit extends React.Component {
         <form className='subsection-content columned'>
           <div className='row'>
             <label htmlFor='funAlertName'>Alert name:</label>
-            <input defaultValue={item.name} onChange={this.changeHandler} id='funAlertName' type='text' name='name' className='size-320' />
+            <input defaultValue={item.name} onBlur={this.changeHandler} id='funAlertName' type='text' name='name' className='size-320' />
           </div>
           <div className='row-flex'>
             <span className='form-label'>Status:</span>
-            <div className='toggler size-120'>
-              <input defaultChecked={item.active === 0} onChange={this.changeHandler} type='radio' id='funAlertAvailablityNo' name='active' value='0' />
-              <label htmlFor='funAlertAvailablityNo'>Inactive</label>
-              <input defaultChecked={item.active === 1} onChange={this.changeHandler} type='radio' id='funAlertAvailablityYes' name='active' value='1' />
-              <label htmlFor='funAlertAvailablityYes'>Active</label>
-              <em></em>
-              <span></span>
-            </div>
+            <Toggler 
+              className='size-120'
+              name='active'
+              options={{
+                'Active': 1,
+                'Inactive': 0
+              }}
+              onChange={this.changeHandler}
+              value={item.active} />
           </div>
           <div className='row-flex-wrap'>
             <label htmlFor='funAlertFrequency'>Frequency:</label>
@@ -102,10 +117,10 @@ class Edit extends React.Component {
               className='size-120'
               name='frequency'
               options={frequencyOptions}
-              onChange={this.changeFrequencyHandler}
+              onChange={this.createSelectHandler('frequency')}
               autosize={false}
               clearable={false}
-              value={item.frequency}
+              value={this.state.frequency}
             />
             <small className='form-description'>Check column(s) for new items every <i>x</i> minutes</small>
           </div>
@@ -114,11 +129,11 @@ class Edit extends React.Component {
             <Select
               name='columns'
               options={this.props.columns}
-              onChange={this.changeColumnsHandler}
-              autosize={false}
+              onChange={this.createSelectHandler('columns')}
               multi
               valueKey='id'
               labelKey='name'
+              value={this.state.columns}
             />
           </div>
           <EmailList className='row' />
@@ -131,8 +146,9 @@ class Edit extends React.Component {
 // Transform app state to component props
 // @ deps -> Alert, Columns
 // ===========================================================================
-let mapStateToProps = ({ alerts, columns }, ownProps) => ({
-  item: filter(alerts, {id: parseInt(ownProps.params.id)})[0],
+let mapStateToProps = ({ alerts, columns, app }, ownProps) => ({
+  appState: app.appState,
+  item: find(alerts, {id: parseInt(ownProps.params.id)}),
   columns: columns.map((item) => {
     return {
       id: item.id,
