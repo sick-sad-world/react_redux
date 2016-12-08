@@ -13,3 +13,10 @@
 	50% { box-shadow: 0 0 30px #fff; }
 	100% { box-shadow: 0 0 100px #fff; }
 }
+
+@keyframes spin { 
+  100% { transform: rotate(360deg); }
+}
+@keyframes spin-rev { 
+  100% { transform: rotate(-360deg); }
+}

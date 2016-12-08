@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { forOwn } from 'lodash';
 
 export default function Toggler (props) {
@@ -14,6 +15,7 @@ export default function Toggler (props) {
   forOwn(props.options, (val, label) => {
     let id = `fun-${label}-${val}`;
     options.push(<input
+                    disabled={props.disabled}
                     type='radio'
                     id={id}
                     key={val}
@@ -26,8 +28,14 @@ export default function Toggler (props) {
     options.push(<label htmlFor={id} key={label}>{label}</label>);
   });
 
+  let className = classNames({
+    [props.className]: true,
+    'toggler': true,
+    'is-disabled': props.disabled
+  })
+
   return (
-    <div className={`toggler ${props.className}`}>
+    <div className={className}>
       {options}
       <em></em>
       <span></span>

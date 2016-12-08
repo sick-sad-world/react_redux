@@ -22,18 +22,17 @@ select[multiple] {
 ========================================================================== */
 .Select {
   position: relative;
+  &.is-disabled {
+    .Select-control {
+      @include style-disabled;
+    }
+    .Select-arrow-zone {
+      cursor: default;
+      pointer-events: none;
+    }
+  }
 }
-.Select.is-disabled > .Select-control {
-  background-color: #f9f9f9;
-}
-.Select.is-disabled > .Select-control:hover {
-  box-shadow: none;
-}
-.Select.is-disabled .Select-arrow-zone {
-  cursor: default;
-  pointer-events: none;
-  opacity: 0.35;
-}
+
 .Select-control {
   background-color: $c-element;
   //border-color: #d9d9d9 #ccc #b3b3b3;
@@ -50,13 +49,14 @@ select[multiple] {
   position: relative;
   width: 100%;
   transition: box-shadow $dur, opacity $dur;
+  .Select:not(.is-disabled) &:hover {
+    @include style-hover();
+  }
+  .Select-input:focus {
+    outline: none;
+  }
 }
-.Select-control:hover {
-  @include style-hover();
-}
-.Select-control .Select-input:focus {
-  outline: none;
-}
+
 .is-searchable.is-open > .Select-control {
   cursor: text;
 }

@@ -21,10 +21,6 @@ span.is-button {
   &:focus {
     outline: 0;
   }
-  &[disabled] {
-    opacity: 0.75;
-    cursor: default;
-  }
 }
 
 button[disabled],

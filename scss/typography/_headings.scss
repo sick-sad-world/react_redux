@@ -76,6 +76,8 @@ h6, .t-caption {
 	justify-content: space-between;
 	align-items: stretch;
 	box-shadow: $shadow-base;
+  overflow: hidden;
+  background-color: $c-element;
 	h1 {
 		line-height: 1;
 		font-size: $display1-font-size;
@@ -83,7 +85,7 @@ h6, .t-caption {
 	p {
 
 	}
-	svg {
+	> svg {
 		margin: auto;
 		fill: $c-icon;
 		width: round($icon-unit*1.5);
@@ -97,6 +99,12 @@ h6, .t-caption {
 		flex: 0 1 100%;
 		padding: baseUnit();
 	}
+  .loading-cogs {
+    @include pos(false 0 0 false);
+    height: 100px;
+    width: 100px;
+    opacity: 0.5;
+  }
 }
 
 // @style: CUSTOM HEADERS HERE

@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import EmailList from '../user/injectable';
 import Toggler from '../toggler';
+import Loading from '../loading';
 
 // Import actions
 // ===========================================================================
@@ -42,7 +43,7 @@ class Edit extends React.Component {
     let dispatch = this.props.dispatch;
     dispatch(updateData('alert')({
       id: this.props.item.id,
-      [e.target.name]: (value.hasOwnProperty(length)) ? value.map(v => v.id) : value
+      [e.target.name]: (typeof value === 'object' && value.hasOwnProperty(length)) ? value.map(v => v.id) : value
     })).catch((err) => dispatch(throwError(err)))
   }
 
@@ -60,6 +61,7 @@ class Edit extends React.Component {
     // ===========================================================================
     if (!this.props.item) return null;
     let item = this.props.item;
+    let running = this.props.appState === 3
 
     // Frequency options array
     // ===========================================================================
@@ -81,7 +83,7 @@ class Edit extends React.Component {
 
     let componentRootClass = classNames({
       'mod-subsection-edit': true,
-      'state-loading': this.props.appState === 3
+      'state-loading': running
     });
 
     // Return DOM layout
@@ -93,15 +95,25 @@ class Edit extends React.Component {
             <h1>{texts.title} '{ item.name }'</h1>
             <p>{texts.description}</p>
           </div>
+          <Loading run={running} />
         </header>
         <form className='subsection-content columned'>
           <div className='row'>
             <label htmlFor='funAlertName'>Alert name:</label>
-            <input defaultValue={item.name} onBlur={this.changeHandler} id='funAlertName' type='text' name='name' className='size-320' />
+            <input 
+              disabled={running}
+              defaultValue={item.name}
+              onBlur={this.changeHandler}
+              id='funAlertName'
+              type='text'
+              name='name'
+              className='size-320'
+            />
           </div>
           <div className='row-flex'>
             <span className='form-label'>Status:</span>
             <Toggler 
+              disabled={running}
               className='size-120'
               name='active'
               options={{
@@ -114,6 +126,7 @@ class Edit extends React.Component {
           <div className='row-flex-wrap'>
             <label htmlFor='funAlertFrequency'>Frequency:</label>
             <Select
+              disabled={running}
               className='size-120'
               name='frequency'
               options={frequencyOptions}
@@ -127,6 +140,7 @@ class Edit extends React.Component {
           <div className='row'>
             <label htmlFor='funAlertColumns'>Columns assigment:</label>
             <Select
+              disabled={running}
               name='columns'
               options={this.props.columns}
               onChange={this.createSelectHandler('columns')}
@@ -136,7 +150,7 @@ class Edit extends React.Component {
               value={this.state.columns}
             />
           </div>
-          <EmailList className='row' />
+          <EmailList disabled={running} className='row' />
         </form>
       </section>
     );

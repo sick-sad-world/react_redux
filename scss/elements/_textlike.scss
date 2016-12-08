@@ -9,12 +9,15 @@
   @include placeholder () {
     @include form-pholder();
   }
-	&:hover {
+	&:not([disabled]):hover {
 		@include style-hover();
 	}
-	&:focus {
+	&:not([disabled]):focus {
 		@include style-focus();
 	}
+  &[disabled] {
+    @include style-disabled();
+  }
 }
 
 input[type="text"],

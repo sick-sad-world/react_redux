@@ -16,28 +16,31 @@ button {
 	border: 0;
 	border-bottom: 2px solid rgba(0,0,0,.4);
   transition: background $dur, opacity $dur;
-  &:hover, &:focus {
+  &:not([disabled]):hover, &:not([disabled]):focus {
 		@include gradient(lighten($c-accent, 1.5%), top);
 	}
-  &:active {
+  &:not([disabled]):active {
 		border-bottom-width: 0px;
 	}
 	&.is-alt {
 		@include gradient($c-accent-alt);
-		&:hover, &:focus {
+		&:not([disabled]):hover, &:not([disabled]):focus {
 			@include gradient(darken($c-accent-alt, 1.5%), top);
 		}
 	}
   &.is-neutral {
     color: $c-main;
 		@include gradient($c-border);
-		&:hover, &:focus {
+		&:not([disabled]):hover, &:not([disabled]):focus {
 			@include gradient(darken($c-border, 1.5%), top);
 		}
 	}
 	&[class*="size-"] {
 		padding: 0;
 	}
+  &[disabled] {
+    @include style-disabled();
+  }
 }
 
 a.is-button {
