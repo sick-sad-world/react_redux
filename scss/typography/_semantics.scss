@@ -67,7 +67,7 @@ blockquote {}
 	display: inline-block;
 	text-align: center;
 	font-style: normal;
-	border-radius: $bdrs;
+	border-radius: $bdrs*2;
 	font: $base-font-size/#{1} $heading-font-family;
 	@include gradient($c-accent);
 	border: 1px solid rgba(0,0,0,.2);
@@ -93,8 +93,7 @@ blockquote {}
 	font-size: 0.75em;
   line-height: 1;
 	font-weight: bold;
-	border-radius: baseUnit();
-	padding: 2px baseUnit();
+	padding: 2px baseUnit(0.5);
 	// Colorize types
 	//===============================================================
 	&[data-type="HTML"] { @include gradient(map-get($states, success)); }

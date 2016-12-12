@@ -15,5 +15,5 @@ export const defaultUser = {
   position: 'user position',
   status: null,
   is_admin: '0',
-  image: 'img/ph_user.png'
+  image: '/img/ph_user.png'
 };

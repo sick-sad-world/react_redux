@@ -1,6 +1,13 @@
+// Import React related stuff
+// ===========================================================================
 import React from 'react';
 import Icon from './icon';
 import { Link } from 'react-router';
+
+// Import utility stuff
+// ===========================================================================
+import classNames from 'classnames';
+import { bindAll } from 'lodash';
 
 export default class ListItem extends React.PureComponent {
   constructor (props) {
@@ -8,6 +15,7 @@ export default class ListItem extends React.PureComponent {
     this.state = {
       deleting: false
     }
+    bindAll(this, ['stateDelete', 'handlerDelete']);
   }
 
   stateDelete (e) {
@@ -17,17 +25,27 @@ export default class ListItem extends React.PureComponent {
     });
   }
 
+  handlerDelete (e) {
+    e.preventDefault();
+    this.props.actionDelete(this.props.type, this.props.id);
+  }
+
   render() {
-    let { type, id, name, counter, draggable, deletable, handlerDelete } = this.props;
+    let { current, type, id, name, counter, draggable, deletable } = this.props;
+
+    let rootClasses = classNames({
+      'mod-entity': true,
+      'is-selected': current
+    })
 
     let dragHandler = (draggable) ? <Icon className='drag-handle' icon='dots-three-vertical' /> : null;
     let badge = (counter) ? <em className='counter'>{counter}</em> : null;
     let customIcon = (this.props.customIcon) ? this.props.customIcon(this.props) : null;
-    let deleteBtn = (deletable) ? <a href='' onClick={this.stateDelete.bind(this)} title={`Delete this ${type}`}><Icon icon='trash' /></a> : null;
-    let confimation = (deletable && this.state.deleting) ? <a href='' onClick={(e) => handlerDelete(id, e)} className='confirmation'>Delete</a> : null;
+    let deleteBtn = (deletable) ? <a href='' onClick={this.stateDelete} title={`Delete this ${type}`}><Icon icon='trash' /></a> : null;
+    let confimation = (deletable && this.state.deleting) ? <a href='' onClick={this.handlerDelete} className='confirmation'>Delete</a> : null;
     
     return (
-      <li className='mod-entity'>
+      <li className={rootClasses}>
         <div>
           { dragHandler }
           <div className='text'>

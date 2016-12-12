@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { find, bindAll, pick, assign, isArray } from 'lodash';
+import { find, bindAll, pick, assign } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
@@ -11,10 +11,9 @@ import { connect } from 'react-redux';
 
 // Import Child components
 // ===========================================================================
-import { Link } from 'react-router';
 import EmailList from '../user/injectable';
 import Toggler from '../toggler';
-import Loading from '../loading';
+import EditFormHeader from '../editHeader';
 
 // Import actions
 // ===========================================================================
@@ -74,12 +73,14 @@ class Edit extends React.Component {
       {value: 60, label: '60 min'}
     ];
 
-    // Default texts
+    // Data for form heading
     // ===========================================================================
-    let texts = Object.assign({
+    let headingData = {
       title: 'Edit form',
-      description: 'Simple edit form to manipulate entity props'
-    }, this.props.texts);
+      description: 'Simple edit form to manipulate entity props',
+      name: item.name,
+      running: running
+    };
 
     let componentRootClass = classNames({
       'mod-subsection-edit': true,
@@ -90,13 +91,7 @@ class Edit extends React.Component {
     // ===========================================================================
     return (
       <section className={componentRootClass}>
-        <header className='subsection-header'>
-          <div className='text'>
-            <h1>{texts.title} '{ item.name }'</h1>
-            <p>{texts.description}</p>
-          </div>
-          <Loading run={running} />
-        </header>
+        <EditFormHeader {...headingData} />
         <form className='subsection-content columned'>
           <div className='row'>
             <label htmlFor='funAlertName'>Alert name:</label>

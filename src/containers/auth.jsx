@@ -87,4 +87,4 @@ class Auth extends React.Component {
 // Connect our Container to State
 // @ deps -> App
 // ===========================================================================
-export default connect(({app}) =>({userState: app.userState, appState: app.appState}))(Auth);
+export default connect(({app}) => ({userState: app.userState}))(Auth);
