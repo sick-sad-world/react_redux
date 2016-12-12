@@ -1,4 +1,4 @@
-import { SERVER_ERROR, MESSAGE, HTML_ERROR } from '../actions/types';
+import { SERVER_ERROR, MESSAGE, HTML_ERROR, CLIENT_ERROR } from '../actions/types';
 import Push from 'push.js';
 
 
@@ -17,6 +17,10 @@ export default store => next => action => {
   switch (action.type) {
     case MESSAGE:
       push('Message:', 'success.png', action.text);
+      break;
+    case CLIENT_ERROR:
+      console.error(action.text);
+      push('Client Error:', 'error.png', action.text);
       break;
     case SERVER_ERROR:
       push('Error:', 'error.png', action.text);

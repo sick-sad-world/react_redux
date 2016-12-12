@@ -1,10 +1,14 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
-export default class ProgressTracker extends React.Component {
-  render () {
-    return <div className='progress-tracker'><img src='img/loading.svg' alt='Loading' /></div>;
-  }
+// Global app progress tracker unit
+// Works only on app initialization
+// ===========================================================================
+export default function ProgressTracker (props) {
+  // Calculate width of bar
+  // ===========================================================================
+  let width = (props.step) ? Math.round((100 / 6) * props.step) : 0;
+
+  // Render bar with provided data
+  // ===========================================================================
+  return <div className='loading-bar' data-text={`${props.text || 'App initializing'}...`}><span style={{width: `${width}%`}}></span></div>;
 }
-
-//export default connect(({app})=>({app}))(ProgressTracker);

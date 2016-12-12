@@ -16,7 +16,10 @@
 		flex: 0 0 map-get($layout, auth);
 		margin: 0 baseUnit(2);
 		order: 1;
-		padding-top: $logo + baseUnit();
+		padding-top: $logo + baseUnit() + ($display2-font-size - $heading-font-size);
+    h3 {
+      line-height: $display2-font-size;
+    }
 	}
 	.welcome-text {
 		flex: 0 1 55%;

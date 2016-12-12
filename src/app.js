@@ -8,6 +8,7 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import messager from './middlewares/messager';
 import * as reducers from './reducers';
+import * as defaults from './reducers/defaults';
 
 // Import all required actions
 // ===========================================================================
@@ -21,7 +22,7 @@ import { Provider } from 'react-redux';
 
 // React routing and connection to store
 // ===========================================================================
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { Router, Route, browserHistory } from 'react-router';
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 
 // Import two main screens fo an App
@@ -42,11 +43,8 @@ import Profile from './components/user/profile';
 // Set App itinial state
 // ===========================================================================
 let initialState = {
-  app: {
-    appState: 0, // 0 -init, 1 -fetching, 2 -ready, 3 -loading, 4 -error 
-    userState: false
-  },
-  user: {},
+  app: defaults.defaultAppState,
+  user: defaults.defaultUser,
   alerts: [],
   reports: [],
   columns: [],

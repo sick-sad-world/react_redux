@@ -111,9 +111,6 @@ blockquote {}
 	width: map-get($layout, auth);
 	height: baseUnit(0.5);
 	background-color: rgba($c-alt, 0.1);
-	.#{$app-init} & {
-		display: none;
-	}
 	&:before {
 		display: block;
 		content: attr(data-text);

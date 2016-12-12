@@ -2,6 +2,7 @@
 // ===========================================================================
 export const SERVER_ERROR = 'SERVER_ERROR';
 export const HTML_ERROR = 'HTML_ERROR';
+export const CLIENT_ERROR = 'CLIENT_ERROR';
 export const MESSAGE = 'MESSAGE';
 
 // App state actions

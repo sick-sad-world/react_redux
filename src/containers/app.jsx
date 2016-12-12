@@ -1,6 +1,7 @@
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
+import { clone } from 'lodash';
 import { connect } from 'react-redux';
 
 // Import Child components
@@ -22,15 +23,16 @@ class App extends React.Component {
 
     // Set proper redirects
     // ===========================================================================
-    if ((isRoot && !nextProps.userState) || logOut) {
+    if ((isRoot && !nextProps.userState) || this.props.appState >= 2 && logOut) {
       this.props.router.push('/auth');
-    } else if ((isRoot && nextProps.userState) || logIn) {
+    } else if ((isRoot && nextProps.userState) || this.props.appState >= 2 && logIn) {
       this.props.router.push('/dashboard');
     }
   }
 
   render () {
-    return (this.props.appState < 2) ? <ProgressTracker /> : this.props.children;
+    let { loadingState, loadingStep } = this.props;
+    return (this.props.appState < 2) ? <ProgressTracker text={loadingState} step={loadingStep} /> : this.props.children;
   }
 
 }
@@ -38,4 +40,4 @@ class App extends React.Component {
 // Transform app state to component props
 // @ deps -> App
 // ===========================================================================
-export default connect(({app}) =>({userState: app.userState, appState: app.appState}))(App);
+export default connect(({app}) => clone(app))(App);

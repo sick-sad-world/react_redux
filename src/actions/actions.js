@@ -85,10 +85,25 @@ export const setAppState = (state) => ({ type: ACTIONS['SET_APP_STATE'], appStat
 
 // Throw action related to error (SYNC)
 // ===========================================================================
-export const throwError = (error) => (dispatch) => dispatch({
-  type: (error.event) ? ACTIONS['HTML_ERROR'] : error.type || ACTIONS['SERVER_ERROR'],
-  text: (error.event) ? error.url : error.text || ''
-});
+export const throwError = (error) => (dispatch) => {
+  if (error instanceof Error) {
+    error = {
+      type: ACTIONS['CLIENT_ERROR'],
+      text: error.stack
+    }
+  } else if (error.event) {
+    error = {
+      type: ACTIONS['HTML_ERROR'],
+      text: error.url
+    }
+  } else {
+    error = {
+      type: error.type || ACTIONS['SERVER_ERROR'],
+      text: error.text || error
+    }
+  }
+  return dispatch(error);
+};
 
 // Create all default actions for all default entities
 // ===========================================================================
