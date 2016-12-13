@@ -92,7 +92,6 @@ blockquote {}
 	@extend %base-text-pointer;
 	font-size: 0.75em;
   line-height: 1;
-	font-weight: bold;
 	padding: 2px baseUnit(0.5);
 	// Colorize types
 	//===============================================================
@@ -101,6 +100,48 @@ blockquote {}
 	&[data-type="Twitter"] { @include gradient(map-get($states, info)); }
 	&[data-type="Reddit"] { @include gradient(nth($c-scale, 3)); }
 	&[data-type="Facebook"] { @include gradient(nth($c-scale, 1)); }
+}
+
+.small-popup {
+  padding: baseUnit();
+  border: $border;
+  background-color: $c-element;
+  box-shadow: 0 5px 10px rgba(0,0,0,.45);
+  border-radius: $bdrs * 2;
+}
+
+.delete-confirmation {
+  position: relative;
+  &:before, &:after {
+    content: '';
+    display: block;
+    margin: auto;
+    width: 0;
+    height: 0;
+    @include pos(100% 0 false 0);
+    border: baseUnit() solid transparent;
+  }
+  &:before {
+    border-top-color: $c-border;
+    border-width: baseUnit() + 1;
+  }
+  &:after {
+    border-top-color: $c-element;
+  }
+  span {
+    display: block;
+    margin-bottom: baseUnit();
+  }
+  p {
+    display: flex;
+    justify-content: space-between;
+  }
+  a {
+    flex: 0 1 50%;
+    + a {
+      margin-left: baseUnit();
+    }
+  }
 }
 
 .loading-bar {

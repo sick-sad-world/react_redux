@@ -40,7 +40,7 @@ class Edit extends React.Component {
   changeHandler (e) {
     let value = e.target.value;
     let dispatch = this.props.dispatch;
-    dispatch(updateData('alert')({
+    dispatch(updateData(this.props.type)({
       id: this.props.item.id,
       [e.target.name]: (typeof value === 'object' && value.hasOwnProperty(length)) ? value.map(v => v.id) : value
     })).catch((err) => dispatch(throwError(err)))
@@ -50,9 +50,17 @@ class Edit extends React.Component {
   // -> Function which handles both action and state change
   // ===========================================================================
   createSelectHandler (name) {
-    return (value) => 
-                this.setState(Object.assign({}, this.state, {[name]: value}), 
-                      () => this.changeHandler({target: {value: (value.hasOwnProperty(length)) ? value : value.value, name}}));
+    return (value) => {
+      // Set state to update selects
+      // then run change handler to send chnages to server
+      // ===========================================================================
+      this.setState(Object.assign({}, this.state, {[name]: value}), () => this.changeHandler({
+        target: {
+          name: name,
+          value: (value.hasOwnProperty(length)) ? value : value.value
+        } 
+      }));
+    }
   }
 
   render() {
@@ -102,7 +110,6 @@ class Edit extends React.Component {
               id='funAlertName'
               type='text'
               name='name'
-              className='size-320'
             />
           </div>
           <div className='row-flex'>
@@ -145,7 +152,10 @@ class Edit extends React.Component {
               value={this.state.columns}
             />
           </div>
-          <EmailList disabled={running} className='row' />
+          <div className='row'>
+            <h3 className='form-subtitle'>Email assigment:</h3>
+            <EmailList className='row' disabled={running} />
+          </div>
         </form>
       </section>
     );
@@ -157,6 +167,7 @@ class Edit extends React.Component {
 // ===========================================================================
 let mapStateToProps = ({ alerts, columns, app }, ownProps) => ({
   appState: app.appState,
+  type: 'alert',
   item: find(alerts, {id: parseInt(ownProps.params.id)}),
   columns: columns.map((item) => {
     return {

@@ -55,7 +55,6 @@ class Workspace extends React.Component {
     e.preventDefault();
     this.setState({ sidebar: !this.state.sidebar });
     e.target.blur();
-    e.target.parentNode.blur();
   }
 
   // Handler for logout operation

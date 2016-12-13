@@ -22,7 +22,7 @@ import { Provider } from 'react-redux';
 
 // React routing and connection to store
 // ===========================================================================
-import { Router, Route, browserHistory } from 'react-router';
+import { Router, Route, Redirect, browserHistory } from 'react-router';
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 
 // Import two main screens fo an App
@@ -83,6 +83,7 @@ render(
           <Route path='/sourcesets(/:id)(/:create)' components={Sourcesets}/>
           <Route path='/settings' components={{main: Profile}}/>
         </Route>
+        <Redirect from='*' to='/' />
       </Route>
     </Router>
   </Provider>,

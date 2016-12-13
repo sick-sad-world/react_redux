@@ -20,6 +20,10 @@ svg {
 	width: $icon-unit;
 	height: $icon-unit;
 	transition: fill $dur*0.5;
+  pointer-events: none;
+  use {
+    pointer-events: none;
+  }
 }
 
 svg.is-rotating {

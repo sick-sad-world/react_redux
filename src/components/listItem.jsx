@@ -7,47 +7,52 @@ import { Link } from 'react-router';
 // Import utility stuff
 // ===========================================================================
 import classNames from 'classnames';
-import { bindAll } from 'lodash';
 
+// Agnostinc list item component
+// @using by: ListView and Management views
+// ===========================================================================
 export default class ListItem extends React.PureComponent {
-  constructor (props) {
-    super(props);
-    this.state = {
-      deleting: false
-    }
-    bindAll(this, ['stateDelete', 'handlerDelete']);
-  }
-
-  stateDelete (e) {
-    e.preventDefault();
-    this.setState({
-      deleting: !this.state.deleting
-    });
-  }
-
-  handlerDelete (e) {
-    e.preventDefault();
-    this.props.actionDelete(this.props.type, this.props.id);
-  }
 
   render() {
-    let { current, type, id, name, counter, draggable, deletable } = this.props;
+    let { current, type, id, name, counter, sortable, deletable } = this.props;
 
+    // Root element classes
+    // ===========================================================================
     let rootClasses = classNames({
       'mod-entity': true,
       'is-selected': current
     })
 
-    let dragHandler = (draggable) ? <Icon className='drag-handle' icon='dots-three-vertical' /> : null;
+    // Drag handle 
+    // ===========================================================================
+    let dragHandle = (sortable) ? <Icon className='drag-handle' icon='dots-three-vertical' /> : null;
+
+    // Make сounter
+    // ===========================================================================
     let badge = (counter) ? <em className='counter'>{counter}</em> : null;
+
+    // Make custom icon
+    // @show/hide column for example
+    // ===========================================================================
     let customIcon = (this.props.customIcon) ? this.props.customIcon(this.props) : null;
-    let deleteBtn = (deletable) ? <a href='' onClick={this.stateDelete} title={`Delete this ${type}`}><Icon icon='trash' /></a> : null;
-    let confimation = (deletable && this.state.deleting) ? <a href='' onClick={this.handlerDelete} className='confirmation'>Delete</a> : null;
+
+    // Make delete button if item deletable
+    // ===========================================================================
+    let deleteBtn = (deletable) ? (
+      <a href='' onClick={e => {
+        e.preventDefault();
+        console.log(window.outerHeight, e.target.getBoundingClientRect().bottom, e.target.parentNode.clientHeight);
+        let coord = window.outerHeight - e.target.getBoundingClientRect().bottom - e.target.parentNode.clientHeight * 1.5;
+        this.props.stateDelete(this.props.id, coord);
+      }} title={`Delete this ${type}`}>
+        <Icon icon='trash' />
+      </a>
+    ) : null;
     
     return (
       <li className={rootClasses}>
         <div>
-          { dragHandler }
+          { dragHandle }
           <div className='text'>
             <Link to={`/${type}s/${id}`}>{ badge } { name }</Link>
           </div>
@@ -55,7 +60,6 @@ export default class ListItem extends React.PureComponent {
             { customIcon }
             { deleteBtn }
           </nav>
-          { confimation }
         </div>
       </li>
     );

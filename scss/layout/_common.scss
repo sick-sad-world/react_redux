@@ -34,14 +34,14 @@ section[class^="screen"] {
 }
 
 .size-half {
-  width: 50%;
+  width: 50% !important;
 }
 .size-full {
-  width: 100%;
+  width: 100% !important;
 }
 @each $s in $sizes {
   .size-#{$s} {
-    width: $s+px;
+    width: $s+px !important;
   }
 }
 /* Form layout
