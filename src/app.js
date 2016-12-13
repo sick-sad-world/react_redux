@@ -80,7 +80,7 @@ render(
           <Route path='/alerts(/:id)(/:assigment)' components={Alerts}/>
           <Route path='/reports(/:id)(/:assigment)' components={Reports}/>
           <Route path='/columns(/:id)(/:assigment)' components={Columns}/>
-          <Route path='/sourcesets(/:id)(/:create)' components={Sourcesets}/>
+          <Route path='/sets(/:id)(/:create)' components={Sourcesets}/>
           <Route path='/settings' components={{main: Profile}}/>
         </Route>
         <Redirect from='*' to='/' />

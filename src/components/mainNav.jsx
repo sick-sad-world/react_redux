@@ -19,7 +19,7 @@ export default class MainNav extends React.Component {
           <Icon icon='archive' />
           <span className='t-ellipsis'>Columns list</span>
         </IndexLink>
-        <IndexLink to='/sourcesets' activeClassName='is-current' title='Sourcesets list'>
+        <IndexLink to='/sets' activeClassName='is-current' title='Sourcesets list'>
           <Icon icon='globe' />
           <span className='t-ellipsis'>Sourcesets list</span>
         </IndexLink>

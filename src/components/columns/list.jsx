@@ -1,35 +1,21 @@
-import { map } from 'lodash';
+// Import react related stuff
+// ===========================================================================
 import React from 'React';
 import { connect } from 'react-redux';
+import { map } from 'lodash';
 
-import { createData, deleteData, updateData, throwError } from '../../actions/actions';
+// Import actions
+// ===========================================================================
+import createListActions from '../../helpers/listActions';
+import { updateData, throwError } from '../../actions/actions';
 
+// Import child components
+// ===========================================================================
 import PageList from '../pageList';
 import ListItem from '../listItem';
 import Icon from '../icon';
 
 class List extends React.Component {
-
-  handlerSubmit (e) {
-    e.preventDefault();
-    let dispatch = this.props.dispatch;
-    let input = e.target.elements.name;
-    dispatch(createData(this.props.type)({
-        name: input.value,
-        order: this.props.items.length
-      }))
-      .then(() => { input.value = ''; })
-      .catch((error) => dispatch(throwError(error)));
-  }
-
-  handlerDelete (id, e) {
-    e.preventDefault();
-    let dispatch = this.props.dispatch;
-    dispatch(deleteData(this.props.type)({
-      id: id
-    })).catch((error) => dispatch(throwError(error)));
-  }
-
   changeVis (data, e) {
     e.preventDefault();
     let dispatch = this.props.dispatch;
@@ -53,39 +39,42 @@ class List extends React.Component {
   }
 
   render() {
-    let { items, texts } = this.props;
     return (
-      <PageList items={items} texts={texts} handlerSubmit={this.handlerSubmit.bind(this)} >
-        <ListItem handlerDelete={this.handlerDelete.bind(this)} customIcon={this.getItemIcon.bind(this)}/>
+      <PageList {...this.props} >
+        <ListItem customIcon={this.getItemIcon.bind(this)} />
       </PageList>
     );
   }
-
 }
 
-const mapStateToProps = ({ columns }) => {
-  let items = map(columns, (item) => {
-     return {
-       id: item.id,
-       name: item.name,
-       open: item.open,
-       draggable: true,
-       deletable: true,
-       type: 'column'
-     }
-  });
-
+const mapStateToProps = ({ columns }, ownProps) => {
+  // Provide default parameters for list
+  // ===========================================================================
   return {
-    items: items,
+    curId: parseInt(ownProps.params.id),
     type: 'column',
+    sortable: false,
+    deletable: true,
     texts: {
       title: 'Columns Management',
       description: 'Create, edit or delete dashboard columns. Drag to reorder, use the eye icon to hide/unhide them (tip: hidden columns can still be used for alerts/reports).',
       btn: 'Create new column',
       deleting: 'Are you sure want to delete this Column?',
       empty: 'No columns created yet. Use form above to create one.'
-    }
-  };
+    },
+    items: map(columns, (item) => {
+      // Map items for list
+      // ===========================================================================
+      return {
+        id: item.id,
+        name: item.name
+      }
+    })
+  }
 }
 
-export default connect(mapStateToProps)(List);
+// Map actions for list and item
+// ===========================================================================
+const mapDispatchToProps = createListActions();
+
+export default connect(mapStateToProps, mapDispatchToProps)(List);

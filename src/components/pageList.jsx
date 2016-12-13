@@ -18,6 +18,10 @@ export default class PageList extends React.Component {
     this.handlerDelete = this.handlerDelete.bind(this);
   }
 
+  componentWillReceiveProps () {
+    this.stateDelete(0, 0);
+  }
+
   // Set [delete] state, to show confirmation dialog
   // ===========================================================================
   stateDelete (id, dialogPos) {
@@ -48,6 +52,7 @@ export default class PageList extends React.Component {
     e.preventDefault();
     let input = e.target.elements.name;
     let { type, items } = this.props;
+    this.stateDelete(0, 0);
     this.props.actionCreate(type, input.value, items.length).then(() => {input.value = ''})
   }
 
@@ -56,6 +61,7 @@ export default class PageList extends React.Component {
   // ===========================================================================
   handlerDelete (e) {
     e.preventDefault();
+    this.stateDelete(0, 0);
     this.props.actionDelete(this.props.type, this.state.deleting);
   }
 
