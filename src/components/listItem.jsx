@@ -41,7 +41,6 @@ export default class ListItem extends React.PureComponent {
     let deleteBtn = (deletable) ? (
       <a href='' onClick={e => {
         e.preventDefault();
-        console.log(window.outerHeight, e.target.getBoundingClientRect().bottom, e.target.parentNode.clientHeight);
         let coord = window.outerHeight - e.target.getBoundingClientRect().bottom - e.target.parentNode.clientHeight * 1.5;
         this.props.stateDelete(this.props.id, coord);
       }} title={`Delete this ${type}`}>

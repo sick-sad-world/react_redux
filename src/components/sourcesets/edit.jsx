@@ -1,37 +1,97 @@
-import { filter } from 'lodash';
+// Import utility stuff
+// ===========================================================================
+import { find, pick, assign } from 'lodash';
+import classNames from 'classnames';
+
+// Import React related stuff
+// ===========================================================================
 import React from 'React';
+import Select from 'react-select';
+import Datetime from 'react-datetime';
 import { connect } from 'react-redux';
 
+// Import Child components
+// ===========================================================================
+import FeedsList from './injectable';
+import Toggler from '../toggler';
+import EditFormHeader from '../editHeader';
+
+// Import actions
+// ===========================================================================
+import createEditActions from '../../helpers/editActions';
+
 class Edit extends React.Component {
+  // Bind [changeHandler] to Component 
+  // ===========================================================================
+  constructor (props) {
+    super(props);
+    this.state = {
+      loading: false
+    }
+    this.changeHandler = this.props.changeHandler.bind(this);
+  }
+
   render() {
+    // Do not render at all if [ITEM] is not provided
+    // ===========================================================================
+    if (!this.props.item) return null;
     let item = this.props.item;
-    let texts = Object.assign({
+    let running = this.props.appState === 3
+
+    // Data for form heading
+    // ===========================================================================
+    let headingData = {
       title: 'Edit form',
-      description: 'Simple edit form to manipulate entity props'
-    }, this.props.texts);
-    
-    return (this.props.item) ? (
-      <section className='mod-subsection-edit'>
-        <header className='subsection-header'>
-          <div className='text'>
-            <h1>{texts.title} '{ item.name }'</h1>
-            <p>{texts.description}</p>
+      description: 'Simple edit form to manipulate entity props',
+      name: item.name,
+      running: running
+    };
+
+    let componentRootClass = classNames({
+      'mod-subsection-edit': true,
+      'state-loading': running
+    });
+
+    // Return DOM layout
+    // ===========================================================================
+    return (
+      <section className={componentRootClass}>
+        <EditFormHeader {...headingData} />
+        <form className='subsection-content columned'>
+          <div className='row'>
+            <label htmlFor='funSetName'>Sourceset name:</label>
+            <input 
+              disabled={running}
+              defaultValue={item.name}
+              onBlur={this.changeHandler}
+              id='funSetName'
+              type='text'
+              name='name'
+            />
           </div>
-        </header>
-        <form className='subsection-content'>
-        
+          <h4 className='row'>Feeds management</h4>
+          <section className="form-block mod-submanagement" data-prop="column">
+            <div className="selected">
+              <div className="header">
+                <span>Sourceset has {item.source_ids.length} sources total.</span>
+              </div>
+              <ul className="entity-list funSelectedItems"></ul>
+            </div>
+            <FeedsList omit={{sets: [item.id]}} />
+          </section>
         </form>
       </section>
-    ) : null;
+    );
   }
 }
 
-let mapStateToProps = ({ sourcesets, sources }, ownProps) => {
-  let item = filter(sourcesets, {id: parseInt(ownProps.params.id)})[0];
-  return {
-    item: item,
-    sources: (item) ? filter(sources, (source) => item.source_ids.indexOf(source.id) > -1) : false
-  };
-};
+// Transform app state to component props
+// @ deps -> Alert, Columns
+// ===========================================================================
+let mapStateToProps = ({ sets, sources, app }, ownProps) => ({
+  appState: app.appState,
+  type: 'set',
+  item: find(sets, {id: parseInt(ownProps.params.id)})
+});
 
-export default connect(mapStateToProps)(Edit);
+export default connect(mapStateToProps, createEditActions())(Edit);

@@ -93,6 +93,7 @@ blockquote {}
 	font-size: 0.75em;
   line-height: 1;
 	padding: 2px baseUnit(0.5);
+  width: baseUnit(3);
 	// Colorize types
 	//===============================================================
 	&[data-type="HTML"] { @include gradient(map-get($states, success)); }

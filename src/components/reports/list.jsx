@@ -44,8 +44,7 @@ const mapStateToProps = ({ reports }, ownProps) => {
       // ===========================================================================
       return {
         id: item.id,
-        name: item.name,
-        //counter: item.columns.length
+        name: item.name
       }
     })
   }

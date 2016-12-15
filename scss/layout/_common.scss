@@ -48,6 +48,7 @@ section[class^="screen"] {
 ========================================================================== */
 form {
 	.row, .row-flex, .row-flex-wrap {
+    display: block;
 		margin: baseUnit(2) 0;
     width: 100%;
 	}

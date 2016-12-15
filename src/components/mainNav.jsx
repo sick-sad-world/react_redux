@@ -1,5 +1,5 @@
 import React from 'React';
-import { IndexLink } from 'react-router';
+import { Link } from 'react-router';
 import Icon from './icon';
 
 export default class MainNav extends React.Component {
@@ -11,30 +11,30 @@ export default class MainNav extends React.Component {
           <Icon icon='menu' />
         </a>
         <span className='separator'></span>
-        <IndexLink to='/' activeClassName='is-current' title='Dashboard'>
+        <Link to='/dashboard' activeClassName='is-current' title='Dashboard'>
           <Icon icon='home' />
           <span className='t-ellipsis'>Dashboard</span>
-        </IndexLink>
-        <IndexLink to='/columns' activeClassName='is-current' title='Columns list'>
+        </Link>
+        <Link to='/columns' activeClassName='is-current' title='Columns list'>
           <Icon icon='archive' />
           <span className='t-ellipsis'>Columns list</span>
-        </IndexLink>
-        <IndexLink to='/sets' activeClassName='is-current' title='Sourcesets list'>
+        </Link>
+        <Link to='/sets' activeClassName='is-current' title='Sourcesets list'>
           <Icon icon='globe' />
           <span className='t-ellipsis'>Sourcesets list</span>
-        </IndexLink>
-        <IndexLink to='/alerts' activeClassName='is-current' title='Alerts list'>
+        </Link>
+        <Link to='/alerts' activeClassName='is-current' title='Alerts list'>
           <Icon icon='paper-plane' />
           <span className='t-ellipsis'>Alerts list</span>
-        </IndexLink>
-        <IndexLink to='/reports' activeClassName='is-current' title='Reports list'>
+        </Link>
+        <Link to='/reports' activeClassName='is-current' title='Reports list'>
           <Icon icon='news' />
           <span className='t-ellipsis'>Reports list</span>
-        </IndexLink>
-        <IndexLink to='/settings' activeClassName='is-current' title='Settings'>
+        </Link>
+        <Link to='/settings' activeClassName='is-current' title='Settings'>
           <Icon icon='cog' />
           <span className='t-ellipsis'>Settings</span>
-        </IndexLink>
+        </Link>
         <span className='separator'></span>
         <a href='' onClick={this.props.logout} title='Logout'>
           <Icon icon='log-out' />

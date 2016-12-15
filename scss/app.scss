@@ -34,6 +34,7 @@ $MAIN-UNIT: 8px;
 @import "elements/_textlike.scss"; // Inputs with text and textareas
 @import "elements/_dropdowns.scss"; // Selects and custom dropdowns like Chosen.js e.t.c
 @import "elements/_buttons.scss"; // Buttons and button-like elements here. Buttons with dropdowns here also
+@import "elements/_datetime.scss"; // Datetimepicker
 
 // In general i use "mod-" prefix for a defined markup module. Nikolay suggested to use separate file for each module wich is named as core class in it ".mod-authform" for example in mod-authform.scss/ Actually for most cases your page is one module this files may be renamed or removed - this is just an a example.
 // NOTE: don't forget about incapsulation

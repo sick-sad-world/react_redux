@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { find, bindAll, pick, assign } from 'lodash';
+import { find, pick } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
@@ -17,7 +17,7 @@ import EditFormHeader from '../editHeader';
 
 // Import actions
 // ===========================================================================
-import { updateData, throwError } from '../../actions/actions';
+import createEditActions from '../../helpers/editActions';
 
 class Edit extends React.Component {
   // Bind [changeHandler] to Component 
@@ -25,42 +25,15 @@ class Edit extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      frequency: null,
-      columns: []
+      loading: false,
+      frequency: props.frequency || 15,
+      columns: props.columns || []
     }
-    bindAll(this, ['changeHandler', 'createSelectHandler']);
+    this.changeHandler = this.props.changeHandler.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.state = this.setState(assign(this.state, pick(nextProps.item, ['frequency', 'columns'])));
-  }
-
-  // Send request to server with new props 
-  // ===========================================================================
-  changeHandler (e) {
-    let value = e.target.value;
-    let dispatch = this.props.dispatch;
-    dispatch(updateData(this.props.type)({
-      id: this.props.item.id,
-      [e.target.name]: (typeof value === 'object' && value.hasOwnProperty(length)) ? value.map(v => v.id) : value
-    })).catch((err) => dispatch(throwError(err)))
-  }
-
-  // Select handler creator
-  // -> Function which handles both action and state change
-  // ===========================================================================
-  createSelectHandler (name) {
-    return (value) => {
-      // Set state to update selects
-      // then run change handler to send chnages to server
-      // ===========================================================================
-      this.setState(Object.assign({}, this.state, {[name]: value}), () => this.changeHandler({
-        target: {
-          name: name,
-          value: (value.hasOwnProperty(length)) ? value : value.value
-        } 
-      }));
-    }
+    this.state = this.setState(pick(nextProps.item, ['frequency', 'columns']));
   }
 
   render() {
@@ -132,7 +105,7 @@ class Edit extends React.Component {
               className='size-120'
               name='frequency'
               options={frequencyOptions}
-              onChange={this.createSelectHandler('frequency')}
+              onChange={this.props.createSelectHandler('frequency')}
               autosize={false}
               clearable={false}
               value={this.state.frequency}
@@ -145,7 +118,7 @@ class Edit extends React.Component {
               disabled={running}
               name='columns'
               options={this.props.columns}
-              onChange={this.createSelectHandler('columns')}
+              onChange={this.props.createSelectHandler('columns')}
               multi
               valueKey='id'
               labelKey='name'
@@ -178,4 +151,4 @@ let mapStateToProps = ({ alerts, columns, app }, ownProps) => ({
   })
 });
 
-export default connect(mapStateToProps)(Edit);
+export default connect(mapStateToProps, createEditActions())(Edit);
