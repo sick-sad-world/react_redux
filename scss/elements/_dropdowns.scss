@@ -37,7 +37,7 @@ select[multiple] {
   background-color: $c-element;
   //border-color: #d9d9d9 #ccc #b3b3b3;
   border-radius: $bdrs;
-  border: $border;
+  border: $bd;
   color: $c-main;
   cursor: default;
   display: table;
@@ -289,10 +289,10 @@ select[multiple] {
   float: left;
   width: 50%;
   &:not(:last-child):not(:nth-last-child(1)):not(odd) {
-    border-bottom: $border;
+    border-bottom: $bd;
   }
   &:nth-child(odd) {
-    border-right: $border;
+    border-right: $bd;
   }
 }
 .Select--multi .Select-input {

@@ -63,37 +63,16 @@ blockquote {}
 
 /* Small elements
 ========================================================================== */
-%base-text-pointer {
-	display: inline-block;
-	text-align: center;
-	font-style: normal;
-	border-radius: $bdrs*2;
-	font: $base-font-size/#{1} $heading-font-family;
-	@include gradient($c-accent);
-	border: 1px solid rgba(0,0,0,.2);
-	color: $c-alt;
-}
-
-.badge {
-	@extend %base-text-pointer;
-	padding: baseUnit();
-	border-radius: $bdrs;
-	font-size: 0.875em;
-	> * {
-		font-size: 1.125em;
-	}
-	&.is-alt {
-		border-color: rgba(0,0,0,.4);
-		@include gradient($c-accent-alt);
-	}
-}
 
 .counter {
-	@extend %base-text-pointer;
+	display: inline-block;
+	border-radius: $bdrs;
+	@include style-accent-element();
 	font-size: 0.75em;
   line-height: 1;
 	padding: 2px baseUnit(0.5);
   width: baseUnit(3);
+
 	// Colorize types
 	//===============================================================
 	&[data-type="HTML"] { @include gradient(map-get($states, success)); }
@@ -105,7 +84,7 @@ blockquote {}
 
 .small-popup {
   padding: baseUnit();
-  border: $border;
+  border: $bd;
   background-color: $c-element;
   box-shadow: 0 5px 10px rgba(0,0,0,.45);
   border-radius: $bdrs * 2;

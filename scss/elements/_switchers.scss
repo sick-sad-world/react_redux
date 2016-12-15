@@ -51,7 +51,7 @@ span.switcher-checkbox {
 	input:checked + svg {
 		fill: $c-alt;
 		@include gradient($c-accent);
-		border: 1px solid rgba(0,0,0,.2);
+		border: $bd-darken;
 	}
 }
 
@@ -62,7 +62,7 @@ span.switcher-radio {
 		width: 50%;
 		height: 50%;
 		@include gradient($c-accent);
-		border: 1px solid rgba(0,0,0,.2);
+		border: $bd-darken;
 		opacity: 0;
 	}
 	input:checked + span {
@@ -115,7 +115,7 @@ span.switcher-direction {
 		z-index: 1;
 		border-radius: $bdrs;
 		@include gradient($c-accent);
-		border: 1px solid rgba(0,0,0,.2);
+		border: $bd-darken;
 		transition: left $dur linear;
 	}
 	label {

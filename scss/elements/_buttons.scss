@@ -15,9 +15,9 @@ button {
   @include gradient($c-accent);
 	border: 0;
 	border-bottom: 2px solid rgba(0,0,0,.8);
-  transition: background $dur, opacity $dur;
+  transition: background $dur;
   &:not([disabled]):hover, &:not([disabled]):focus {
-		@include gradient(lighten($c-accent, 1.5%), top);
+		@include gradient(lighten($c-accent, 2%), top);
 	}
   &:not([disabled]):active {
 		border-bottom-width: 0px;
@@ -26,7 +26,7 @@ button {
 		@include gradient($c-accent-alt);
     border-bottom: 2px solid rgba(0,0,0,.4);
 		&:not([disabled]):hover, &:not([disabled]):focus {
-			@include gradient(darken($c-accent-alt, 1.5%), top);
+			@include gradient(darken($c-accent-alt, 2%), top);
 		}
 	}
   &.is-neutral {
@@ -34,7 +34,7 @@ button {
 		@include gradient($c-border);
     border-bottom: 2px solid rgba(0,0,0,.4);
 		&:not([disabled]):hover, &:not([disabled]):focus {
-			@include gradient(darken($c-border, 1.5%), top);
+			@include gradient(darken($c-border, 2%), top);
 		}
 	}
 	&[class*="size-"] {

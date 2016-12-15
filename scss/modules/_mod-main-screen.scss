@@ -10,7 +10,7 @@
 		transition: flex $dur;
 		@include gradient($c-main, right);
 		color: $c-alt;
-		text-shadow: $shadow-text;
+		text-shadow: $sh-text;
 		overflow-x: hidden;
 		a {
 			color: $c-alt;
@@ -41,7 +41,7 @@
 	section[class*="mod-subsection-"] {
 		align-items: stretch;
 		flex-direction: column;
-		border: $border;
+		border: $bd;
 		.subsection-header {
 			flex: 0 0 auto;
 			position: relative;

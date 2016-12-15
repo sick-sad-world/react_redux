@@ -1,7 +1,7 @@
 @mixin form-element() {
 	background-color: $c-element;
 	color: $c-main;
-	border: $border;
+	border: $bd;
 	border-radius: $bdrs;
 	transition: box-shadow $dur, opacity $dur;
 }

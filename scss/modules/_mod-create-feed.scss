@@ -10,7 +10,7 @@
 	.input-area {
 		flex: 0 1 40%;
 		padding: baseUnit() baseUnit(2);
-		border-right: $border;
+		border-right: $bd;
 		overflow-y: auto;
 		overflow-x: hidden;
 	}
@@ -25,8 +25,8 @@
 			line-height: $entity-unit;
 			margin: 0;
 			padding: 0 baseUnit();
-			border-bottom: $border;
-			box-shadow: $shadow-base;
+			border-bottom: $bd;
+			box-shadow: $sh-base;
 		}
 	}
 	.result {
@@ -38,10 +38,10 @@
 		}
 		&[type="autodetect"] {
 			li[type], .mod-entity {
-				border-bottom: $border;
+				border-bottom: $bd;
 			}
 			li[class*="state-"] + li {
-				border-top: $border;
+				border-top: $bd;
 			}
 			.state-loading, .state-error {
 				height: 180px;

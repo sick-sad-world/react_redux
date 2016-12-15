@@ -61,12 +61,14 @@ $states: (
 $app-init: 'app-initialized';
 $app-active: 'is-current';
 
-$shadow-text: 0 1px 0px rgba(#000,.7);
-$shadow-text-alt: 0 1px 0px rgba(#fff,.7);
-$shadow-base: 0 0 baseUnit() rgba(#000,.35);
+$sh-popup: 0 5px 10px rgba(0,0,0,.45);
+$sh-text: 0 1px 0px rgba(#000,.7);
+$sh-text-alt: 0 1px 0px rgba(#fff,.7);
+$sh-base: 0 0 baseUnit() rgba(#000,.35);
 
 
-$border: 1px solid $c-border;
+$bd: 1px solid $c-border;
+$bd-darken: 1px solid rgba(0,0,0,.2);
 
 $layers: (
 	message: 10,

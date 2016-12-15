@@ -23,17 +23,17 @@ const createEditActions = (actions) => (dispatch) => {
     // Select handler creator
     // -> Function which handles both action and state change
     // ===========================================================================
-    createSelectHandler (name) {
+    createSelectHandler (name, component) {
       return (value) => {
         // Set state to update selects
         // then run change handler to send chnages to server
         // ===========================================================================
-        this.setState({[name]: value}), () => this.changeHandler({
+        component.setState({[name]: value}, () => component.changeHandler({
           target: {
             name: name,
             value: (value.hasOwnProperty(length)) ? value : value.value
           } 
-        });
+        }));
       }
     }
   }, actions);

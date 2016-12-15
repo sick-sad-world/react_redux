@@ -105,7 +105,7 @@ class Edit extends React.Component {
               className='size-120'
               name='frequency'
               options={frequencyOptions}
-              onChange={this.props.createSelectHandler('frequency')}
+              onChange={this.props.createSelectHandler('frequency', this)}
               autosize={false}
               clearable={false}
               value={this.state.frequency}
@@ -118,7 +118,7 @@ class Edit extends React.Component {
               disabled={running}
               name='columns'
               options={this.props.columns}
-              onChange={this.props.createSelectHandler('columns')}
+              onChange={this.props.createSelectHandler('columns', this)}
               multi
               valueKey='id'
               labelKey='name'

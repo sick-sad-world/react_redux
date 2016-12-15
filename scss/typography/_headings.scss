@@ -44,7 +44,7 @@ h6, .t-caption {
 	justify-content: space-between;
 	align-items: center;
 	padding: baseUnit();
-	border-bottom: $border;
+	border-bottom: $bd;
 	height: $entity-unit + 1px;
 	span {
 		$s: $entity-unit - baseUnit();
@@ -53,7 +53,7 @@ h6, .t-caption {
 		text-align: center;
 		font-size: baseUnit(2.5);
 		line-height: $s - baseUnit();
-		border-left: $border;
+		border-left: $bd;
 	}
 }
 
@@ -64,14 +64,14 @@ h6, .t-caption {
 	line-height: 1;
 	margin-bottom: baseUnit(0.5);
 	padding-bottom: baseUnit();
-	border-bottom: $border;
+	border-bottom: $bd;
 	font-size: $subhead1-font-size;
 }
 
 /* Subsection header
 ========================================================================== */
 .subsection-header {
-	border-bottom: $border;
+	border-bottom: $bd;
 	display: flex;
 	justify-content: space-between;
 	align-items: stretch;

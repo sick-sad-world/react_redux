@@ -2,14 +2,14 @@
 reports and feeds in columns
 ========================================================================== */
 .mod-submanagement {
-	border-top: $border;
+	border-top: $bd;
 	position: relative;
 	display: flex;
 	justify-content: stretch;
 	.header {
 		padding: 0 baseUnit();
 		min-height: baseUnit()*2 + $form-unit;
-		border-bottom: $border;
+		border-bottom: $bd;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
@@ -20,7 +20,7 @@ reports and feeds in columns
 	.selected {
 		flex: 0 0 45%;
 		max-width: 45%;
-		border-right: $border;
+		border-right: $bd;
 		overflow-y: auto;
 	}
 	.list {

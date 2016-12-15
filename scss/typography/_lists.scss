@@ -54,7 +54,7 @@ ol ol {
 			background-color: $c-element;
 			border-radius: $bdrs;
 			padding: 0 baseUnit();
-			border: $border;
+			border: $bd;
 			font-size: 0.875em;
 			margin: 0 baseUnit(0.5) baseUnit(0.5) 0;
 			box-shadow: 0;
@@ -87,9 +87,9 @@ ol ol {
     }
 		&.is-selected {
 			@include gradient($c-accent);
-			border: 1px solid rgba(0,0,0,.2);
+			border: $bd-darken;
 			color: $c-alt;
-			text-shadow: $shadow-text;
+			text-shadow: $sh-text;
 			svg {
 				display: inline-block;
 			}
@@ -107,7 +107,7 @@ ol ol {
 			display: none !important;
 		}
 		&.mod-entity {
-			border-bottom: $border;
+			border-bottom: $bd;
 		}
 		&[class*="state-"] {
 			display: flex;

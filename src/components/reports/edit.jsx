@@ -106,7 +106,7 @@ class Edit extends React.Component {
               className='size-180'
               name='frequency'
               options={frequencyOptions}
-              onChange={this.props.createSelectHandler('frequency')}
+              onChange={this.props.createSelectHandler('frequency', this)}
               autosize={false}
               clearable={false}
               value={this.state.frequency}
@@ -117,7 +117,7 @@ class Edit extends React.Component {
             <label htmlFor='funReportNextSend'>Next send:</label>
             <Datetime 
               defaultValue={item.next_send}
-              onBlur={this.props.createSelectHandler('next_send')}
+              onBlur={this.props.createSelectHandler('next_send', this)}
               inputProps={{
                 className: 'size-180',
                 disabled: running,
@@ -131,7 +131,7 @@ class Edit extends React.Component {
               disabled={running}
               name='columns'
               options={this.props.columns}
-              onChange={this.props.createSelectHandler('columns')}
+              onChange={this.props.createSelectHandler('columns', this)}
               multi
               valueKey='id'
               labelKey='name'

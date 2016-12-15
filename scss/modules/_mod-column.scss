@@ -3,12 +3,12 @@
 .mod-column {
 	display: inline-flex;
 	flex-direction: column;
-	border: $border;
+	border: $bd;
 	.column-header {
 		display: flex;
 		align-items: stretch;
 		flex: 0 0 $entity-unit;
-		border-bottom: $border;
+		border-bottom: $bd;
 		position: relative;
 		.drag-handle {
 			cursor: move;
@@ -22,7 +22,7 @@
 			align-self: center;
 		}
 		nav {
-			border-left: $border;
+			border-left: $bd;
 			margin: baseUnit(0.5) 0;
 		}
 		a {
@@ -30,7 +30,7 @@
 		}
 	}
 	.column-settings {
-		border-bottom: $border;
+		border-bottom: $bd;
 		display: block;
 		max-height: 0;
 		visibility: collapse;
@@ -47,7 +47,7 @@
 		justify-content: space-between;
 		align-items: center;
 		margin-bottom: 0;
-		border-top: $border;
+		border-top: $bd;
 		padding: baseUnit(0.5) 0;
 		a, button {
 			flex: 1 1 33%;
@@ -59,7 +59,7 @@
 			text-shadow: none;
 			transition: color $dur;
 			&:not(:last-child) {
-				border-right: $border;
+				border-right: $bd;
 			}
 			&:hover, &:focus {
 				color: darken($c-icon, 10%);

@@ -1,7 +1,7 @@
 /* Fielsets
 ========================================================================== */
 fieldset {
-  border: $border;
+  border: $bd;
 	padding: baseUnit();
 	border-radius: $bdrs;
 	background-color: $c-element;
@@ -11,7 +11,7 @@ fieldset {
 		margin: -(baseUnit()) (-(baseUnit()) - 2px) baseUnit(2);
 		width: 100%;
 		padding: baseUnit() (baseUnit() + 2px) baseUnit(0.5);
-		border-bottom: $border;
+		border-bottom: $bd;
 		font-size: $subhead1-font-size;
 		font-family: $heading-font-family;
 	}

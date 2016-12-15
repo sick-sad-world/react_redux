@@ -77,7 +77,7 @@ class Edit extends React.Component {
               </div>
               <ul className="entity-list funSelectedItems"></ul>
             </div>
-            <FeedsList omit={{sets: [item.id]}} />
+            <FeedsList omit={{sets: [item.id], sources: item.source_ids}} />
           </section>
         </form>
       </section>

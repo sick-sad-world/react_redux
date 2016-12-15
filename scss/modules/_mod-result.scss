@@ -63,7 +63,7 @@
 		border-radius: $bdrs;
 		font: 0.875em / 1 $heading-font-family;
 		text-align: center;
-		text-shadow: $shadow-text;
+		text-shadow: $sh-text;
 		cursor: pointer;
 		b {
 			display: block;
@@ -94,7 +94,7 @@
 		}
 		th, td {
 			padding: baseUnit(0.5);
-			border-bottom: $border;
+			border-bottom: $bd;
 		}
 		tr td:last-child {
 			padding: 0;
@@ -124,8 +124,8 @@
 		padding: baseUnit();
 		z-index: 10;
 		background-color: $c-alt;
-		border: $border;
-		box-shadow: $shadow-base;
+		border: $bd;
+		box-shadow: $sh-base;
 		width: round(map-get($layout, dashboard) *0.783);
 		margin-left: baseUnit(0.5);
 		visibility: collapse;
