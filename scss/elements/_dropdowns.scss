@@ -43,7 +43,7 @@ select[multiple] {
   display: table;
   border-spacing: 0;
   border-collapse: separate;
-  height: 36px;
+  height: $form-unit;
   outline: none;
   overflow: hidden;
   position: relative;
@@ -83,7 +83,7 @@ select[multiple] {
   bottom: 0;
   color: #aaa;
   left: 0;
-  line-height: 34px;
+  line-height: $form-unit - 2px;
   padding-left: 10px;
   padding-right: 10px;
   position: absolute;
@@ -112,7 +112,7 @@ select[multiple] {
   text-decoration: underline;
 }
 .Select-input {
-  height: 34px;
+  height: $form-unit - 2px;
   padding-left: 10px;
   padding-right: 10px;
   vertical-align: middle;
@@ -302,7 +302,7 @@ select[multiple] {
   padding: 0;
 }
 .Select--multi.has-value .Select-input {
-  margin-left: 5px;
+  margin-left: 4px;
 }
 .Select--multi .Select-value {
   background-color: rgba($c-accent, 0.08);
@@ -312,8 +312,9 @@ select[multiple] {
   display: inline-block;
   font-size: 0.9em;
   line-height: 1.4;
-  margin-left: 5px;
-  margin-top: 4px;
+  margin-left: 4px;
+  margin-top: 2px;
+  margin-bottom: 2px;
   vertical-align: top;
 }
 .Select--multi .Select-value-icon,

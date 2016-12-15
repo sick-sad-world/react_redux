@@ -37,12 +37,27 @@
 		position: relative;
 	}
 
-	// Common styles of ALL subsections on screen
-	section[class*="mod-subsection-"] {
+  .mod-page {
+    @include pos();
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: stretch;
+  }
+
+	.mod-dashboard {
+		@include pos();
 		align-items: stretch;
+	}
+}
+
+.mod-page {
+  section[class*="mod-subsection-"] {
+    display: flex;
+    align-items: stretch;
 		flex-direction: column;
-		border: $bd;
-		.subsection-header {
+    border-right: $bd;
+    .subsection-header {
 			flex: 0 0 auto;
 			position: relative;
 			z-index: 1;
@@ -52,132 +67,43 @@
       overflow-x: hidden;
       overflow-y: auto;
 		}
-	}
+  }
 
-	.mod-page {
-		@include pos();
-		width: 100%;
-		height: 100%;
-    display: flex;
-		align-items: stretch;
-
-		section[class*="mod-subsection-"] {
-			display: flex;
-			margin: baseUnit() 0;
-			&:first-child {
-				margin-left: baseUnit();
-				margin-right: baseUnit();
-			}
-			&:last-child {
-				margin-right: baseUnit();
-			}
-		}
-
-		// Unique styles for list section
-		.mod-subsection-list {
-			flex: 0 0 30%;
-			min-width: map-get($layout, buffer);
-			z-index: 2;
-      position: relative;
-			.subsection-header {
-				form {
-					margin-top: baseUnit();
-					display: flex;
-				}
-				button {
-					margin-left: baseUnit();
-				}
-			}
-      .delete-confirmation {
-        $s: 60%;
-        position: absolute;
-        width: $s;
-        right: round($s* -0.5);
-        margin-right: round(($entity-unit - baseUnit())*0.5);
-        z-index: 2;
+  // Unique styles for list section
+  .mod-subsection-list {
+    flex: 0 0 30%;
+    max-width: 30%;
+    min-width: map-get($layout, buffer);
+    z-index: 2;
+    position: relative;
+    .subsection-header {
+      form {
+        margin-top: baseUnit();
+        display: flex;
       }
-		}
-
-		// Poisition submanagement block in edit screen
-		.mod-subsection-edit {
-			.subsection-content {
-				.mod-submanagement {
-					margin: 0 baseUnit(-1) baseUnit(-1);
-					flex: 1 0 100%;
-				}
-			}
-      .pseudo-background {
-        @include pos(false 10px 10px false);
+      button {
+        margin-left: baseUnit();
       }
-		}
-
-    #development_icon{
-      margin:80px;
-      animation: pop 0.4s ease-in;
     }
-
-    /*Animate cogs*/
-    #large-cog, #small-cog{
-      animation:spin 4s linear infinite;
-      transform-origin: 50% 50%;
-      animation-delay:0.6s;
+    .delete-confirmation {
+      $s: 60%;
+      position: absolute;
+      width: $s;
+      right: round($s* -0.5);
+      z-index: 2;
     }
-    #small-cog{
-      animation:spinback 2s linear infinite;
-      animation-delay:0.6s;
+  }
+
+  // Make submanagement screen fit all height available
+  .mod-subsection-management {
+    .mod-submanagement {
+      height: 100%;
     }
+  }
 
-    @keyframes pop{
-      0%{transform: scale(0);}
-      90%{transform: scale(1.1);}
-      100%{transform: scale(1);}
-    }
-    @keyframes spin { 
-      100% { transform: rotate(360deg); }
-    }
-    @keyframes spinback { 
-      100% { transform: rotate(-360deg); }
-    }
-
-		// Make submanagement screen fit all height available
-		.mod-subsection-management {
-			.mod-submanagement {
-				height: 100%;
-			}
-		}
-
-		// Make optional subsections "invisible"
-		.mod-subsection-edit, .mod-subsection-management, .mod-subsection-preview {
-			flex: 0 1 70%;
-			// opacity: 0;
-			// transition: flex $dur, opacity $dur, width $dur;
-			// width: 0;
-			// border-width: 0px;
-		}
-
-		// Show Edit form or Submanagement subsection if needed
-		// &.is-edit .mod-subsection-edit,
-		// &.is-detail .mod-subsection-management {
-		// 	flex-basis: 70%;
-		// 	opacity: 1;
-		// 	border-width: 1px;
-		// }
-
-		// Show quick preview subsection
-		// &.is-edit .mod-subsection-preview.is-active {
-		// 	margin-left: baseUnit();
-		// 	flex-basis: 20%;
-		// 	opacity: 1;
-		// 	border-width: 1px;
-		// }
-	}
-
-	.mod-dashboard {
-		@include pos();
-		align-items: stretch;
-	}
-
-	.mod-subsection-edit.mod-profile-edit {
-		@include pos(baseUnit() baseUnit() baseUnit() baseUnit());
-	}
+  // Make optional subsections "invisible"
+  .mod-subsection-edit, .mod-subsection-management {
+    flex: 0 1 70%;
+    max-width: 70%;
+  }
 }

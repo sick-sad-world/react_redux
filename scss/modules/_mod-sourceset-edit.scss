@@ -1,0 +1,13 @@
+/* Some customising for most complex form - Edit column
+========================================================================== */
+.mod-sourceset-edit {
+  .subsection-content {
+    align-content: space-between;
+  }
+  .mod-submanagement {
+    flex: 1 0 100%;
+    min-height: 60vh;
+    margin: 0 baseUnit(-1) baseUnit(-1);
+    border-top: $bd;
+  }
+}

@@ -39,7 +39,7 @@ class EmailList extends React.Component {
           <input disabled={disabled} type='email' placeholder='Enter some email' pattern='/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/' />
           <button disabled={disabled} className='size-90' onClick={this.createEmail.bind(this)}>Add new</button>
         </div>
-        <small className="form-description">
+        <small className='form-description'>
           E-mail list is empty. Use form below to create one. If not - your profile e-mail [{email}] will be used as default.
         </small>
       </div>

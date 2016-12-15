@@ -13,8 +13,18 @@ import classNames from 'classnames';
 // ===========================================================================
 export default class ListItem extends React.PureComponent {
 
+  textRenderer (props) {
+    // Make сounter
+    // ===========================================================================
+    let badge = (props.counter) ? <em className='counter'>{props.counter}</em> : null;
+
+    // Return text node
+    // ===========================================================================
+    return (<div className='text'><Link to={`/${props.type}s/${props.id}`}>{ badge } { props.name }</Link></div>);
+  }
+
   render() {
-    let { current, type, id, name, counter, sortable, deletable } = this.props;
+    let { current, type, sortable, deletable } = this.props;
 
     // Root element classes
     // ===========================================================================
@@ -27,9 +37,9 @@ export default class ListItem extends React.PureComponent {
     // ===========================================================================
     let dragHandle = (sortable) ? <Icon className='drag-handle' icon='dots-three-vertical' /> : null;
 
-    // Make сounter
+    // Create text node
     // ===========================================================================
-    let badge = (counter) ? <em className='counter'>{counter}</em> : null;
+    let text = (this.props.textRenderer) ? this.props.textRenderer(this.props) : this.textRenderer(this.props);
 
     // Make custom icon
     // @show/hide column for example
@@ -41,7 +51,7 @@ export default class ListItem extends React.PureComponent {
     let deleteBtn = (deletable) ? (
       <a href='' onClick={e => {
         e.preventDefault();
-        let coord = window.outerHeight - e.target.getBoundingClientRect().bottom - e.target.parentNode.clientHeight * 1.5;
+        let coord = window.outerHeight - e.target.getBoundingClientRect().bottom - e.target.parentNode.clientHeight;
         this.props.stateDelete(this.props.id, coord);
       }} title={`Delete this ${type}`}>
         <Icon icon='trash' />
@@ -52,13 +62,11 @@ export default class ListItem extends React.PureComponent {
       <li className={rootClasses}>
         <div>
           { dragHandle }
-          <div className='text'>
-            <Link to={`/${type}s/${id}`}>{ badge } { name }</Link>
-          </div>
-          <nav className='nav-links'>
+          { text }
+          {(customIcon || deleteBtn) ? (<nav className='nav-links'>
             { customIcon }
             { deleteBtn }
-          </nav>
+          </nav>) : null }
         </div>
       </li>
     );

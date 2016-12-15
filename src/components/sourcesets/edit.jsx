@@ -49,6 +49,7 @@ class Edit extends React.Component {
 
     let componentRootClass = classNames({
       'mod-subsection-edit': true,
+      'mod-sourceset-edit': true,
       'state-loading': running
     });
 
@@ -58,27 +59,31 @@ class Edit extends React.Component {
       <section className={componentRootClass}>
         <EditFormHeader {...headingData} />
         <form className='subsection-content columned'>
-          <div className='row'>
-            <label htmlFor='funSetName'>Sourceset name:</label>
-            <input 
-              disabled={running}
-              defaultValue={item.name}
-              onBlur={this.changeHandler}
-              id='funSetName'
-              type='text'
-              name='name'
-            />
-          </div>
-          <h4 className='row'>Feeds management</h4>
-          <section className="form-block mod-submanagement" data-prop="column">
-            <div className="selected">
-              <div className="header">
-                <span>Sourceset has {item.source_ids.length} sources total.</span>
-              </div>
-              <ul className="entity-list funSelectedItems"></ul>
+          <div className='form-block'>
+            <div className='row'>
+              <label htmlFor='funSetName'>Sourceset name:</label>
+              <input 
+                disabled={running}
+                defaultValue={item.name}
+                onBlur={this.changeHandler}
+                id='funSetName'
+                type='text'
+                name='name'
+              />
             </div>
-            <FeedsList omit={{sets: [item.id], sources: item.source_ids}} />
-          </section>
+          </div>
+          <div className='form-block'>
+            <h4 className='row'>Feeds management</h4>
+            <section className='mod-submanagement'>
+              <div className='selected'>
+                <div className='header'>
+                  <span>Sourceset has {item.source_ids.length} sources total.</span>
+                </div>
+                <ul className='entity-list funSelectedItems'></ul>
+              </div>
+              <FeedsList omit={{sets: [item.id], sources: item.source_ids}} selectHandler={(data) => {}} />
+            </section>
+          </div>
         </form>
       </section>
     );

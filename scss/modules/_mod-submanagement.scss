@@ -2,20 +2,21 @@
 reports and feeds in columns
 ========================================================================== */
 .mod-submanagement {
-	border-top: $bd;
-	position: relative;
 	display: flex;
 	justify-content: stretch;
 	.header {
 		padding: 0 baseUnit();
-		min-height: baseUnit()*2 + $form-unit;
+		height: baseUnit()*2 + $form-unit;
 		border-bottom: $bd;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		input[type="text"], .chosen-single {
-			flex: 0 0 40%;
-		}
+    > input {
+      margin-right: baseUnit();
+    }
+    > .Select, > select {
+      flex: 0 0 180px;
+    }
 	}
 	.selected {
 		flex: 0 0 45%;
@@ -26,7 +27,6 @@ reports and feeds in columns
 	.list {
 		flex: 0 0 55%;
 		max-width: 55%;
-		overflow-y: auto;
 		> ul > li:first-child {
 			border-top: 0;
 		}

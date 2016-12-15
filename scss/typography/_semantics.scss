@@ -63,16 +63,20 @@ blockquote {}
 
 /* Small elements
 ========================================================================== */
-
-.counter {
-	display: inline-block;
+.counter, .badge {
+  display: inline-block;
 	border-radius: $bdrs;
 	@include style-accent-element();
+  text-shadow: none;
 	font-size: 0.75em;
   line-height: 1;
 	padding: 2px baseUnit(0.5);
-  width: baseUnit(3);
+}
 
+.counter {
+  width: baseUnit(3);
+}
+.badge {
 	// Colorize types
 	//===============================================================
 	&[data-type="HTML"] { @include gradient(map-get($states, success)); }
@@ -80,7 +84,7 @@ blockquote {}
 	&[data-type="Twitter"] { @include gradient(map-get($states, info)); }
 	&[data-type="Reddit"] { @include gradient(nth($c-scale, 3)); }
 	&[data-type="Facebook"] { @include gradient(nth($c-scale, 1)); }
-}
+} 
 
 .small-popup {
   padding: baseUnit();
@@ -103,10 +107,12 @@ blockquote {}
   }
   &:before {
     border-top-color: $c-border;
+    border-left-color: $c-border;
     border-width: baseUnit() + 1;
   }
   &:after {
     border-top-color: $c-element;
+    border-left-color: $c-element;
   }
   span {
     display: block;

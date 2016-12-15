@@ -4,12 +4,15 @@ import { defaultAppState } from './defaults';
 export const app = (state = defaultAppState, action) => {
   switch (action.type) {
     case ACTIONS['LOGIN']:
-    case ACTIONS['GET_USER']:
-      let logInSuccess =  action.type === ACTIONS['LOGIN'] || action.payload.id > 0;
       return Object.assign({}, state, {
-        userState:logInSuccess,
-        loadingState: (logInSuccess) ? 'User loaded' : defaultAppState.loadingState,
-        loadingStep: 1
+        userState: true,
+        loadingState: 'User loaded'
+      });
+    case ACTIONS['GET_USER']:
+      return Object.assign({}, state, {
+        userState: action.payload.id > 0,
+        loadingState: (action.payload.id > 0) ? 'User loaded' : defaultAppState.loadingState,
+        loadingStep: (action.payload.id) ? state.loadingStep + 1 : 0
       });
     case ACTIONS['LOGOUT']:
       return Object.assign({}, state, {
