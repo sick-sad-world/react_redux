@@ -127,7 +127,7 @@ class Edit extends React.Component {
           </div>
           <div className='row'>
             <h3 className='form-subtitle'>Email assigment:</h3>
-            <EmailList className='row' disabled={running} />
+            <EmailList email={this.props.email} email_bcc={this.props.email_bcc} className='row' disabled={running} />
           </div>
         </form>
       </section>
@@ -138,9 +138,11 @@ class Edit extends React.Component {
 // Transform app state to component props
 // @ deps -> Alert, Columns
 // ===========================================================================
-let mapStateToProps = ({ alerts, columns, app }, ownProps) => ({
+let mapStateToProps = ({ alerts, columns, app, user }, ownProps) => ({
   appState: app.appState,
   type: 'alert',
+  email: user.email,
+  email_bcc: user.email_bcc,
   item: find(alerts, {id: parseInt(ownProps.params.id)}),
   columns: columns.map((item) => {
     return {

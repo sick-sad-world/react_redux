@@ -47,12 +47,10 @@ class Edit extends React.Component {
     // Frequency options array
     // ===========================================================================
     let frequencyOptions = [
-      {value: 5, label: '5 min'},
-      {value: 10, label: '10 min'},
       {value: 15, label: '15 min'},
-      {value: 20, label: '20 min'},
-      {value: 30, label: '30 min'},
-      {value: 60, label: '60 min'}
+      {value: 60, label: 'Hourly'},
+      {value: 86400, label: 'Daily'},
+      {value: 604800, label: 'Weekly'}
     ];
 
     // Data for form heading
@@ -140,7 +138,7 @@ class Edit extends React.Component {
           </div>
           <div className='row'>
             <h3 className='form-subtitle'>Email assigment:</h3>
-            <EmailList className='row' disabled={running} />
+            <EmailList email={this.props.email} email_bcc={this.props.email_bcc} className='row' disabled={running} />
           </div>
         </form>
       </section>
@@ -151,9 +149,11 @@ class Edit extends React.Component {
 // Transform app state to component props
 // @ deps -> Alert, Columns
 // ===========================================================================
-let mapStateToProps = ({ reports, columns, app }, ownProps) => ({
+let mapStateToProps = ({ reports, columns, app, user }, ownProps) => ({
   appState: app.appState,
   type: 'report',
+  email: user.email,
+  email_bcc: user.email_bcc,
   item: find(reports, {id: parseInt(ownProps.params.id)}),
   columns: columns.map((item) => {
     return {

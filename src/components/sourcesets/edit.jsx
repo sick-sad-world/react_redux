@@ -1,19 +1,17 @@
 // Import utility stuff
 // ===========================================================================
-import { find, pick, assign } from 'lodash';
+import { find, pick, assign, includes } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
-import Select from 'react-select';
-import Datetime from 'react-datetime';
 import { connect } from 'react-redux';
 
 // Import Child components
 // ===========================================================================
 import FeedsList from './injectable';
-import Toggler from '../toggler';
+import ListItem from '../listItem';
 import EditFormHeader from '../editHeader';
 
 // Import actions
@@ -36,7 +34,9 @@ class Edit extends React.Component {
     // ===========================================================================
     if (!this.props.item) return null;
     let item = this.props.item;
-    let running = this.props.appState === 3
+    let sources = this.props.sources;
+    let running = this.props.appState === 3;
+    let empty = <li className='state-empty'>This set has no sources. Please assign some or create.</li>
 
     // Data for form heading
     // ===========================================================================
@@ -79,9 +79,28 @@ class Edit extends React.Component {
                 <div className='header'>
                   <span>Sourceset has {item.source_ids.length} sources total.</span>
                 </div>
-                <ul className='entity-list funSelectedItems'></ul>
+                <ul className='entity-list funSelectedItems'>
+                  {(item.source_ids.length) ? sources.map((source) => {
+                    if (includes(item.source_ids, source.id)) {
+                      return <ListItem {...assign(source, {
+                        key: source.id,
+                        type: 'source',
+                        sortable: false,
+                        deletable: false,
+                        customIcon: this.makeSelectIcon,
+                        textRenderer: FeedsList.textRenderer,
+                        sourceType: source.type
+                      })} />
+                    }
+                  }) : empty}
+                </ul>
               </div>
-              <FeedsList omit={{sets: [item.id], sources: item.source_ids}} selectHandler={(data) => {}} />
+              <FeedsList 
+                sets={this.props.sets}
+                sources={this.props.sources}
+                omit={{sets: [item.id], sources: item.source_ids}}
+                selectHandler={(data) => {}}
+              />
             </section>
           </div>
         </form>
@@ -96,7 +115,9 @@ class Edit extends React.Component {
 let mapStateToProps = ({ sets, sources, app }, ownProps) => ({
   appState: app.appState,
   type: 'set',
-  item: find(sets, {id: parseInt(ownProps.params.id)})
+  item: find(sets, {id: parseInt(ownProps.params.id)}),
+  sources,
+  sets
 });
 
 export default connect(mapStateToProps, createEditActions())(Edit);

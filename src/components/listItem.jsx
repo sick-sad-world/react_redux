@@ -24,13 +24,14 @@ export default class ListItem extends React.PureComponent {
   }
 
   render() {
-    let { current, type, sortable, deletable } = this.props;
+    let { disabled, current, type, sortable, deletable } = this.props;
 
     // Root element classes
     // ===========================================================================
     let rootClasses = classNames({
       'mod-entity': true,
-      'is-selected': current
+      'is-selected': current && !disabled,
+      'is-disabled': disabled && !current
     })
 
     // Drag handle 
@@ -68,6 +69,7 @@ export default class ListItem extends React.PureComponent {
             { deleteBtn }
           </nav>) : null }
         </div>
+        {this.props.children}
       </li>
     );
   }

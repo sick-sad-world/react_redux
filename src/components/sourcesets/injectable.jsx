@@ -1,8 +1,7 @@
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
-import { connect } from 'react-redux';
-import { filter } from 'lodash';
+import { filter, includes, assign, groupBy } from 'lodash';
 
 // Import child components
 // ===========================================================================
@@ -10,7 +9,7 @@ import Select from 'react-select';
 import Icon from '../icon';
 import ListItem from '../listItem';
 
-class FeedsList extends React.Component {
+export default class FeedsList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -21,6 +20,20 @@ class FeedsList extends React.Component {
     this.makeSelectIcon = this.makeSelectIcon.bind(this);
   }
 
+  static textRenderer (props) {
+    return (<div className='text'>
+      <span className='title'>
+        <b>Name: </b>
+        <em className='badge' data-type={props.sourceType}>{props.sourceType}</em>
+        <span title={props.name}> {props.name}</span>
+      </span>
+      <span className='url'>
+        <b>Url: </b>
+        <a href={props.url} title={props.url} target='_blank'>{props.url}</a>
+      </span>
+    </div>);
+  }
+  
   updateState (e) {
     this.setState({
       [e.target.name]: e.target.value
@@ -50,51 +63,61 @@ class FeedsList extends React.Component {
   render () {
     // Gather required variables
     // ===========================================================================
-    let { sources } = this.props;
+    let { sources, sets, omit } = this.props;
     // Define empty template
     // ===========================================================================
     let list = <li className='state-empty'></li>;
-    let groupBy = [
+    let groupByOptions = [
       {value: 'sets', label: 'Sourcesets'},
       {value: 'alpha', label: 'Alphabetical'},
-      {value: 'type', label: 'Source type'}
+      {value: 'type', label: 'Source type'},
+      {value: 'frequency', label: 'Frequency'},
+      {resourse: 'resourse', label: 'Resourse'}
     ];
-
-    let textRenderer = (props) => {
-      return (<div className='text'>
-        <span className='title'>
-          <b>Name: </b>
-          <em className='badge' data-type={props.sourceType}>{props.sourceType}</em>
-          <span title={props.name}> {props.name}</span>
-        </span>
-        <span className='url'>
-          <b>Url: </b>
-          <a href={props.url} title={props.url} target='_blank'>{props.url}</a>
-        </span>
-      </div>);
-    }
-
-    let iteratee = (source) => {
-      let data = Object.assign({}, source, {
-        key: source.id,
-        type: 'source',
-        sortable: false,
-        deletable: false,
-        customIcon: this.makeSelectIcon,
-        textRenderer: textRenderer,
-        sourceType: source.type
-      })
-      return <ListItem {...data} />;
-    }
 
     // Build up resulting list
     // ===========================================================================
     if (sources.length) {
+      // Buil source list based on search state
+      // ===========================================================================
       if (this.state.search.length > 3) {
-        list = filter(sources, (item) => item.name.indexOf(this.state.search) > -1).map(iteratee);
-      } else {
-        list = sources.map(iteratee);
+        sources = filter(sources, (item) => item.name.indexOf(this.state.search) > -1);
       }
+      
+      list = sets.map((set) => {
+        // Map sets and create List item for each except current one
+        // ===========================================================================
+        if (!includes(omit.set, set.id)) {
+            return (<ListItem {...assign(set, {
+              type: 'set',
+              sortable: false,
+              deletable: false,
+              customIcon: this.makeSelectIcon,
+            })}>
+            <ul className='entity-list'>{sources.map((source) => {
+              // Map through sources and pick ones that set contains
+              // Create List item for each of them
+              // ===========================================================================
+              if (includes(set.source_ids, source.id)) {
+                return (<ListItem {...assign({}, source, {
+                  key: source.id,
+                  type: 'source',
+                  sortable: false,
+                  deletable: false,
+                  customIcon: this.makeSelectIcon,
+                  textRenderer: this.constructor.textRenderer,
+                  sourceType: source.type,
+                  disabled: includes(this.props.omit.source, source.id)
+                })} />);
+              } else {
+                return null;
+              }
+            })}</ul>
+            </ListItem>);
+        } else {
+          return null;
+        }
+      });
     }
 
     return (
@@ -104,7 +127,7 @@ class FeedsList extends React.Component {
           <Select
             name='grouping'
             searchable={false}
-            options={groupBy}
+            options={groupByOptions}
             onChange={(val) => this.updateState({target: {name: 'grouping', value: val.value}})}
             value={this.state.grouping}
           />
@@ -116,8 +139,3 @@ class FeedsList extends React.Component {
     );
   }
 }
-
-// Transform app state to component props
-// @ deps -> Sets, Sources
-// ===========================================================================
-export default connect(({sets, sources}) => ({sets, sources}))(FeedsList);

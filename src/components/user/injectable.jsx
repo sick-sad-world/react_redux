@@ -1,7 +1,6 @@
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
-import { connect } from 'react-redux';
 
 // Import child components
 // ===========================================================================
@@ -9,7 +8,7 @@ import { Icon } from '../icon';
 
 // Email injectable Component - provide list of user Emails whatever it need
 // ===========================================================================
-class EmailList extends React.Component {
+export default class EmailList extends React.Component {
 
   // Create new email -> to [email_bcc] list
   // ===========================================================================
@@ -46,8 +45,3 @@ class EmailList extends React.Component {
     );
   }
 }
-
-// Transform app state to component props
-// @ deps -> User: email, email_bcc
-// ===========================================================================
-export default connect(({user}) => ({email: user.email, email_bcc: user.email_bcc}))(EmailList);
