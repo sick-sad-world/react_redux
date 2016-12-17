@@ -16,12 +16,16 @@ import ListItem from '../listItem';
 import Icon from '../icon';
 
 class List extends React.Component {
+  // Change visibility filter
+  // ===========================================================================
   changeVis (data, e) {
     e.preventDefault();
     let dispatch = this.props.dispatch;
     dispatch(updateData(this.props.type)(data)).catch((error) => dispatch(throwError(error)));
   }
 
+  // Generate visibility icon
+  // ===========================================================================
   getItemIcon (props) {
     let title, params, icon;
     
@@ -39,8 +43,16 @@ class List extends React.Component {
   }
 
   render() {
+    let texts = {
+      title: 'Columns Management',
+      description: 'Create, edit or delete dashboard columns. Drag to reorder, use the eye icon to hide/unhide them (tip: hidden columns can still be used for alerts/reports).',
+      btn: 'Create new column',
+      deleting: 'Are you sure want to delete this Column?',
+      empty: 'No columns created yet. Use form above to create one.'
+    };
+
     return (
-      <PageList {...this.props} >
+      <PageList texts={texts} {...this.props} >
         <ListItem customIcon={this.getItemIcon.bind(this)} />
       </PageList>
     );
@@ -55,13 +67,6 @@ const mapStateToProps = ({ columns }, ownProps) => {
     type: 'column',
     sortable: false,
     deletable: true,
-    texts: {
-      title: 'Columns Management',
-      description: 'Create, edit or delete dashboard columns. Drag to reorder, use the eye icon to hide/unhide them (tip: hidden columns can still be used for alerts/reports).',
-      btn: 'Create new column',
-      deleting: 'Are you sure want to delete this Column?',
-      empty: 'No columns created yet. Use form above to create one.'
-    },
     items: map(columns, (item) => {
       // Map items for list
       // ===========================================================================

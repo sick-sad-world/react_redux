@@ -15,9 +15,16 @@ import ListItem from '../listItem';
 
 class List extends React.Component {
   render() {
-
+    let texts = {
+      title: 'Reports Management',
+      description: 'Create, edit and delete reports that will be sent to you when specific columns get new items.',
+      btn: 'Create new report',
+      deleting: 'Are you sure want to delete this Report?',
+      empty: 'No reports created yet. Use form above to create one.'
+    };
+    
     return (
-      <PageList {...this.props} >
+      <PageList texts={texts} {...this.props} >
         <ListItem />
       </PageList>
     );
@@ -32,13 +39,6 @@ const mapStateToProps = ({ reports }, ownProps) => {
     type: 'report',
     sortable: false,
     deletable: true,
-    texts: {
-      title: 'Reports Management',
-      description: 'Create, edit and delete reports that will be sent to you when specific columns get new items.',
-      btn: 'Create new report',
-      deleting: 'Are you sure want to delete this Report?',
-      empty: 'No reports created yet. Use form above to create one.'
-    },
     items: map(reports, (item) => {
       // Map items for list
       // ===========================================================================

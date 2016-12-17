@@ -131,8 +131,6 @@ class Edit extends React.Component {
               options={this.props.columns}
               onChange={this.props.createSelectHandler('columns', this)}
               multi
-              valueKey='id'
-              labelKey='name'
               value={this.state.columns}
             />
           </div>
@@ -157,8 +155,8 @@ let mapStateToProps = ({ reports, columns, app, user }, ownProps) => ({
   item: find(reports, {id: parseInt(ownProps.params.id)}),
   columns: columns.map((item) => {
     return {
-      id: item.id,
-      name: item.name,
+      value: item.id,
+      label: item.name,
       clearableValue: true
     }
   })

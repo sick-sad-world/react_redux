@@ -16,7 +16,7 @@ const createEditActions = (actions) => (dispatch) => {
       let value = e.target.value;
       dispatch(updateData(this.props.type)({
         id: this.props.item.id,
-        [e.target.name]: (isArray(value)) ? value.map(v => v.id) : value
+        [e.target.name]: value
       })).catch((err) => dispatch(throwError(err)))
     },
 
@@ -31,7 +31,7 @@ const createEditActions = (actions) => (dispatch) => {
         component.setState({[name]: value}, () => component.changeHandler({
           target: {
             name: name,
-            value: (value.hasOwnProperty(length)) ? value : value.value
+            value: (value.hasOwnProperty(length)) ? value.map(v => v.value) : value.value
           } 
         }));
       }

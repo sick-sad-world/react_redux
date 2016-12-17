@@ -1,136 +1,102 @@
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
-import { filter, includes, assign, groupBy } from 'lodash';
+import { includes, bindAll } from 'lodash';
 
 // Import child components
 // ===========================================================================
 import Select from 'react-select';
 import Icon from '../icon';
-import ListItem from '../listItem';
+import Sourceset from './sourceset';
+import Source from './source';
 
 export default class FeedsList extends React.Component {
   constructor(props) {
-    super(props)
+    // Preform required stuff
+    // ===========================================================================
+    super(props);
     this.state = {
       search: '',
-      grouping: ''
+      expanded: 0
     }
-    this.updateState = this.updateState.bind(this);
-    this.makeSelectIcon = this.makeSelectIcon.bind(this);
-  }
 
-  static textRenderer (props) {
-    return (<div className='text'>
-      <span className='title'>
-        <b>Name: </b>
-        <em className='badge' data-type={props.sourceType}>{props.sourceType}</em>
-        <span title={props.name}> {props.name}</span>
-      </span>
-      <span className='url'>
-        <b>Url: </b>
-        <a href={props.url} title={props.url} target='_blank'>{props.url}</a>
-      </span>
-    </div>);
+    // Bind handlers
+    // ===========================================================================
+    bindAll(this, ['updateState', 'makeSourceComponent', 'expandHandler']);
   }
   
   updateState (e) {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value || ''
     });
   }
 
-  shouldComponentUpdate (newProps, newState) {
-    let validSearch = newState.search.length > 3;
-    let searchCanceled = (this.state.search.length > 3 && newState.search.length === 0);
-    let groupingValid = newState.grouping !== this.state.grouping;
-    return validSearch || searchCanceled || groupingValid;
+  expandHandler (id) {
+    this.setState({expanded: id});
   }
 
-  makeSelectIcon(props) {
-    if (this.props.selectHandler) {
-      return (<a href='' onClick={e => {
-        e.preventDefault();
-        this.props.selectHandler({type: props.type, id: props.id})
-      }} title={`Add this ${props.type} to set`}>
-        <Icon icon={(props.type === 'source') ? 'reply' : 'reply-all'} />
-      </a>);
-    } else {
-      return null;
-    }
+  shouldComponentUpdate (newProps, newState) {
+    let validSearch = newState.search.length >= 3;
+    let searchCanceled = (this.state.search.length && !newState.search.length);
+    let expandedChanged = this.state.expanded !== newState.expanded
+    return newProps || validSearch || searchCanceled || expandedChanged;
+  }
+
+  makeSourceComponent(source, disabled) {
+
+    let button = <a href='' onClick={(e) => {
+      e.preventDefault();
+      this.props.selectHandler('source', source.id);
+    }} title='Add this source to selection'><Icon icon='reply'/></a>;
+
+    return <Source key={source.id} button={button} disabled={disabled} {...source} />;
   }
 
   render () {
-    // Gather required variables
-    // ===========================================================================
-    let { sources, sets, omit } = this.props;
+    let search;
+    let { sources, sets, omit, selectHandler } = this.props;
     // Define empty template
     // ===========================================================================
-    let list = <li className='state-empty'></li>;
-    let groupByOptions = [
-      {value: 'sets', label: 'Sourcesets'},
-      {value: 'alpha', label: 'Alphabetical'},
-      {value: 'type', label: 'Source type'},
-      {value: 'frequency', label: 'Frequency'},
-      {resourse: 'resourse', label: 'Resourse'}
-    ];
+    let list = <li className='state-empty'>No sets or sources created yet. Make some before you can assign. </li>;
 
     // Build up resulting list
     // ===========================================================================
-    if (sources.length) {
-      // Buil source list based on search state
-      // ===========================================================================
-      if (this.state.search.length > 3) {
-        sources = filter(sources, (item) => item.name.indexOf(this.state.search) > -1);
-      }
-      
-      list = sets.map((set) => {
-        // Map sets and create List item for each except current one
+    if (sets.length) {
+      if (this.state.search.length < 3) {
+        // Display default list where sources grouped by sets
         // ===========================================================================
-        if (!includes(omit.set, set.id)) {
-            return (<ListItem {...assign(set, {
-              type: 'set',
-              sortable: false,
-              deletable: false,
-              customIcon: this.makeSelectIcon,
-            })}>
-            <ul className='entity-list'>{sources.map((source) => {
-              // Map through sources and pick ones that set contains
-              // Create List item for each of them
-              // ===========================================================================
+        list = sets.map((set) => {
+          let expanded = this.state.expanded === set.id;
+          return (!includes(omit.set, set.id)) ? (
+            <Sourceset key={set.id} expanded={expanded} {...set} selectHandler={selectHandler} expandHandler={this.expandHandler}>
+            {(expanded) ? sources.map((source) => {
               if (includes(set.source_ids, source.id)) {
-                return (<ListItem {...assign({}, source, {
-                  key: source.id,
-                  type: 'source',
-                  sortable: false,
-                  deletable: false,
-                  customIcon: this.makeSelectIcon,
-                  textRenderer: this.constructor.textRenderer,
-                  sourceType: source.type,
-                  disabled: includes(this.props.omit.source, source.id)
-                })} />);
+                return this.makeSourceComponent(source, includes(omit.sources, source.id));
               } else {
                 return null;
               }
-            })}</ul>
-            </ListItem>);
-        } else {
-          return null;
-        }
-      });
+            }) : null}
+            </Sourceset>
+          ) : null;
+        });
+      } else {
+        search = new RegExp(this.state.search, 'i');
+        // Display filtered sources by search parameter
+        // ===========================================================================
+        list = sources.map((source) => {
+          if (search.test(source.name)) {
+            return this.makeSourceComponent(source, includes(omit.sources, source.id));
+          } else {
+            return null;
+          }
+        });
+      }
     }
 
     return (
       <div className='list'>
         <div className='header'>
           <input type='text' name='search' defaultValue={this.state.search} onChange={this.updateState} placeholder='Search for...' />
-          <Select
-            name='grouping'
-            searchable={false}
-            options={groupByOptions}
-            onChange={(val) => this.updateState({target: {name: 'grouping', value: val.value}})}
-            value={this.state.grouping}
-          />
         </div>
         <ul className='entity-list'>
           {list}

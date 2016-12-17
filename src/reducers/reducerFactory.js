@@ -1,5 +1,5 @@
 import { LOGIN, LOGOUT } from '../actions/types';
-import { map, reject, concat } from 'lodash';
+import { reject, concat } from 'lodash';
 
 export default function basicReducer (actions) {
   return function (state = [], action) {
@@ -12,7 +12,7 @@ export default function basicReducer (actions) {
       case actions.ADD:
         return concat(state, action.payload);
       case actions.EDIT:
-        return map(state, (item) => {
+        return state.map((item) => {
           return (item.id === action.payload.id) ? Object.assign({}, item, action.payload) : item;
         });
       case actions.DELETE:

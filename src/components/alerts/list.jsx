@@ -15,9 +15,16 @@ import ListItem from '../listItem';
 
 class List extends React.Component {
   render() {
+    let texts = {
+      title: 'Alerts Management',
+      description: 'Create, edit and delete alerts that will be sent to you when specific columns get new items.',
+      btn: 'Create new alert',
+      deleting: 'Are you sure want to delete this Alert?',
+      empty: 'No alerts created yet. Use form above to create one.'
+    };
 
     return (
-      <PageList {...this.props} >
+      <PageList texts={texts} {...this.props} >
         <ListItem />
       </PageList>
     );
@@ -32,13 +39,6 @@ const mapStateToProps = ({ alerts }, ownProps) => {
     type: 'alert',
     sortable: false,
     deletable: true,
-    texts: {
-      title: 'Alerts Management',
-      description: 'Create, edit and delete alerts that will be sent to you when specific columns get new items.',
-      btn: 'Create new alert',
-      deleting: 'Are you sure want to delete this Alert?',
-      empty: 'No alerts created yet. Use form above to create one.'
-    },
     items: map(alerts, (item) => {
       // Map items for list
       // ===========================================================================

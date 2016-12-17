@@ -13,6 +13,7 @@ reports and feeds in columns
 		align-items: center;
     > input {
       margin-right: baseUnit();
+      flex: 0 0 50%;
     }
     > .Select, > select {
       flex: 0 0 180px;

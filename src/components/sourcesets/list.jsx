@@ -15,8 +15,16 @@ import ListItem from '../listItem';
 
 class List extends React.Component {
   render() {
+    let texts = {
+      title: 'Sources Management',
+      description: 'Create, edit and delete sets of sources. Drag to reorder list. Open set to edit the sources in it.',
+      btn: 'Create new sourceset',
+      deleting: 'Are you sure want to delete this Sourceset?',
+      empty: 'No sourcesets created yet. Use form above to create one.'
+    };
+    
     return (
-      <PageList {...this.props} >
+      <PageList texts={texts} {...this.props} >
         <ListItem />
       </PageList>
     );
@@ -31,13 +39,6 @@ const mapStateToProps = ({ sets }, ownProps) => {
     type: 'set',
     sortable: false,
     deletable: true,
-    texts: {
-      title: 'Sources Management',
-      description: 'Create, edit and delete sets of sources. Drag to reorder list. Open set to edit the sources in it.',
-      btn: 'Create new sourceset',
-      deleting: 'Are you sure want to delete this Sourceset?',
-      empty: 'No sourcesets created yet. Use form above to create one.'
-    },
     items: map(sets, (item) => {
       // Map items for list
       // ===========================================================================

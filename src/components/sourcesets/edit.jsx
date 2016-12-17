@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { find, pick, assign, includes } from 'lodash';
+import { find, filter, concat, includes, bindAll, without } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
@@ -11,7 +11,8 @@ import { connect } from 'react-redux';
 // Import Child components
 // ===========================================================================
 import FeedsList from './injectable';
-import ListItem from '../listItem';
+import Icon from '../icon';
+import Source from './source';
 import EditFormHeader from '../editHeader';
 
 // Import actions
@@ -24,18 +25,50 @@ class Edit extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      loading: false
+      loading: false,
+      deleting: 0,
+      dialogPos: 0
     }
+    bindAll(this, ['makeSourceButton', 'deleteHandler', 'sourcesHandler']);
     this.changeHandler = this.props.changeHandler.bind(this);
+  }
+
+  deleteHandler (e, id) {
+    e.preventDefault();
+    let coord = window.outerHeight - e.target.getBoundingClientRect().bottom - e.target.parentNode.clientHeight;
+    //this.props.stateDelete(id, coord);
+  }
+
+  makeSourceButton (uniq_ids, id) {
+    if (includes(uniq_ids, id)) {
+      return <a href='' onClick={(e) => this.deleteHandler(e, id)} title='Delete this source'><Icon icon='trash' /></a>;
+    } else {
+      return <a href='' onClick={(e) => {
+        e.preventDefault();
+        this.sourcesHandler('source', id, true);
+      }} title='Remove this source from set'><Icon icon='forward' /></a>;
+    }
+  }
+
+  sourcesHandler (type, id, deleting) {
+    let val = (type === 'source') ? id : find(this.props.sets, {id}).source_ids;
+    if (deleting) {
+      val = without(this.props.item.source_ids, val);
+    } else {
+      val = concat(this.props.item.source_ids, val);
+    }
+    this.changeHandler({target: {
+      name: 'source_ids',
+      value: val
+    }});
   }
 
   render() {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
     if (!this.props.item) return null;
-    let item = this.props.item;
-    let sources = this.props.sources;
     let running = this.props.appState === 3;
+    let { item, own_sources } = this.props;
     let empty = <li className='state-empty'>This set has no sources. Please assign some or create.</li>
 
     // Data for form heading
@@ -80,26 +113,16 @@ class Edit extends React.Component {
                   <span>Sourceset has {item.source_ids.length} sources total.</span>
                 </div>
                 <ul className='entity-list funSelectedItems'>
-                  {(item.source_ids.length) ? sources.map((source) => {
-                    if (includes(item.source_ids, source.id)) {
-                      return <ListItem {...assign(source, {
-                        key: source.id,
-                        type: 'source',
-                        sortable: false,
-                        deletable: false,
-                        customIcon: this.makeSelectIcon,
-                        textRenderer: FeedsList.textRenderer,
-                        sourceType: source.type
-                      })} />
-                    }
+                  {(own_sources.length) ? own_sources.map((source) => {
+                    return <Source key={source.id} sortable={false} button={this.makeSourceButton(item.uniq_ids, source.id)} {...source} />
                   }) : empty}
                 </ul>
               </div>
               <FeedsList 
                 sets={this.props.sets}
                 sources={this.props.sources}
-                omit={{sets: [item.id], sources: item.source_ids}}
-                selectHandler={(data) => {}}
+                omit={{set: [item.id], sources: item.source_ids}}
+                selectHandler={this.sourcesHandler}
               />
             </section>
           </div>
@@ -112,12 +135,16 @@ class Edit extends React.Component {
 // Transform app state to component props
 // @ deps -> Alert, Columns
 // ===========================================================================
-let mapStateToProps = ({ sets, sources, app }, ownProps) => ({
-  appState: app.appState,
-  type: 'set',
-  item: find(sets, {id: parseInt(ownProps.params.id)}),
-  sources,
-  sets
-});
+let mapStateToProps = ({ sets, sources, app }, ownProps) => {
+  let item = find(sets, {id: parseInt(ownProps.params.id)})
+  return {
+    appState: app.appState,
+    type: 'set',
+    item: item,
+    own_sources: (item) ? filter(sources, (source) => includes(item.source_ids, source.id)) : [],
+    sources,
+    sets
+  }
+};
 
 export default connect(mapStateToProps, createEditActions())(Edit);
