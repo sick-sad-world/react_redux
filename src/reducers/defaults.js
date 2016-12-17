@@ -17,3 +17,25 @@ export const defaultUser = {
   is_admin: '0',
   image: '/img/ph_user.png'
 };
+
+export const defReport = {
+  id: 0,
+  order: 0,
+  active: 1,
+  name: '',
+  columns: [0],
+  frequency: 1440,
+  next_send: '',
+  last_sent: '',
+  recipient: ''
+}
+
+export const defAlert = {
+  id: 0,
+  order: 0,
+  active: 1,
+  name: '',
+  columns: [0],
+  frequency: 15,
+  recipient: ''
+}

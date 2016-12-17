@@ -2,6 +2,7 @@
 // ===========================================================================
 import React from 'react';
 import Icon from './icon';
+import { bindAll } from 'lodash';
 
 // Abstract Page list component
 // ===========================================================================
@@ -13,9 +14,8 @@ export default class PageList extends React.Component {
     this.state = {
       deleting: 0,
       dialogPos: 0
-    }
-    this.stateDelete = this.stateDelete.bind(this);
-    this.handlerDelete = this.handlerDelete.bind(this);
+    };
+    bindAll(this, ['stateDelete', 'handlerDelete', 'handlerCreate', 'createListItem'])
   }
 
   componentWillReceiveProps () {
@@ -53,16 +53,29 @@ export default class PageList extends React.Component {
     let input = e.target.elements.name;
     let { type, items } = this.props;
     this.stateDelete(0, 0);
-    this.props.actionCreate(type, input.value, items.length).then(() => {input.value = ''})
+
+    if (this.props.create === 'delayed') {
+      // Redirect to edit form if need
+      // ===========================================================================
+      this.props.router.push({
+        pathname: `/${this.props.type}s/new`,
+        query: {
+          name: input.value
+        }
+      });
+      input.value = '';
+    } else {
+      // Create item
+      // ===========================================================================
+      this.props.actionCreate(type, input.value, items.length).then(() => {input.value = ''})
+    }
   }
 
   // Run DELETE action itself
   // @ provide required params
   // ===========================================================================
   handlerDelete (e) {
-    e.preventDefault();
-    this.stateDelete(0, 0);
-    this.props.actionDelete(this.props.type, this.state.deleting);
+    this.props.actionDelete(this.props.type, this.state.deleting).then(() => this.stateDelete(0, 0));
   }
 
   render () {
@@ -91,10 +104,7 @@ export default class PageList extends React.Component {
         <span>Are you sure about that?</span>
         <p>
           <a href='' onClick={this.handlerDelete} className='is-button is-neutral'>Delete</a>
-          <a href='' onClick={e => {
-            e.preventDefault();
-            this.stateDelete(0, 0);
-          }} className='is-button'>Cancel</a>
+          <span onClick={e => this.stateDelete(0, 0)} className='is-button'>Cancel</span>
         </p>
       </div>
     ) : null;
@@ -107,14 +117,14 @@ export default class PageList extends React.Component {
           <div className='text'>
             <h1>{texts.title}</h1>
             <p>{texts.description}</p>
-            <form onSubmit={this.handlerCreate.bind(this)}>
+            <form onSubmit={this.handlerCreate}>
               <input type='text' name='name' required placeholder={texts.placeholder} />
               <button className='size-90' title={texts.btn}>Add</button>
             </form>
           </div>
         </header>
         <ul className='subsection-content entity-list'>
-          {(items.length) ? items.map(this.createListItem.bind(this)) : empty }
+          {(items.length) ? items.map(this.createListItem) : empty }
         </ul>
         {confimation}
       </section>

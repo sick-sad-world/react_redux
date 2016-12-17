@@ -1,7 +1,8 @@
 // Import utility stuff
 // ===========================================================================
-import { find, pick } from 'lodash';
+import { find, pick, isNaN } from 'lodash';
 import classNames from 'classnames';
+import moment from 'moment';
 
 // Import React related stuff
 // ===========================================================================
@@ -9,6 +10,7 @@ import React from 'React';
 import Select from 'react-select';
 import Datetime from 'react-datetime';
 import { connect } from 'react-redux';
+import { defReport } from '../../reducers/defaults';
 
 // Import Child components
 // ===========================================================================
@@ -49,8 +51,8 @@ class Edit extends React.Component {
     let frequencyOptions = [
       {value: 15, label: '15 min'},
       {value: 60, label: 'Hourly'},
-      {value: 86400, label: 'Daily'},
-      {value: 604800, label: 'Weekly'}
+      {value: 1440, label: 'Daily'},
+      {value: 10080, label: 'Weekly'}
     ];
 
     // Data for form heading
@@ -115,7 +117,9 @@ class Edit extends React.Component {
             <label htmlFor='funReportNextSend'>Next send:</label>
             <Datetime 
               defaultValue={item.next_send}
-              onBlur={this.props.createSelectHandler('next_send', this)}
+              onBlur={(value) => this.changeHandler({target: {name: 'next_send', value: value.format('YYYY-MM-DD HH:mm:ss')}})}
+              dateFormat='YYYY-MM-DD'
+              timeFormat=' HH:mm:ss'
               inputProps={{
                 className: 'size-180',
                 disabled: running,
@@ -147,19 +151,41 @@ class Edit extends React.Component {
 // Transform app state to component props
 // @ deps -> Alert, Columns
 // ===========================================================================
-let mapStateToProps = ({ reports, columns, app, user }, ownProps) => ({
-  appState: app.appState,
-  type: 'report',
-  email: user.email,
-  email_bcc: user.email_bcc,
-  item: find(reports, {id: parseInt(ownProps.params.id)}),
-  columns: columns.map((item) => {
-    return {
-      value: item.id,
-      label: item.name,
-      clearableValue: true
-    }
-  })
-});
+const mapStateToProps = ({ reports, columns, app, user }, ownProps) => {
+  let item;
+
+  if (ownProps.params.id === 'new') {
+    // Make data for a new Report out of defaults
+    // If we need to create one
+    // ===========================================================================
+    item = Object.assign({}, defReport, {
+      name: ownProps.location.query.name,
+      order: reports.length,
+      next_send: moment().format('YYYY-MM-DD HH:mm:ss'),
+      recipient: user.email
+    });
+  } else {
+    // Or find existing one
+    // ===========================================================================
+    item = find(reports, {id: parseInt(ownProps.params.id)});
+  }
+
+  // Return prepared data
+  // ===========================================================================
+  return {
+    appState: app.appState,
+    type: 'report',
+    email: user.email,
+    email_bcc: user.email_bcc,
+    item: item,
+    columns: columns.map((item) => {
+      return {
+        value: item.id,
+        label: item.name,
+        clearableValue: true
+      }
+    })
+  }
+};
 
 export default connect(mapStateToProps, createEditActions())(Edit);

@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import React from 'React';
 import Select from 'react-select';
 import { connect } from 'react-redux';
+import { defAlert } from '../../reducers/defaults';
 
 // Import Child components
 // ===========================================================================
@@ -136,19 +137,40 @@ class Edit extends React.Component {
 // Transform app state to component props
 // @ deps -> Alert, Columns
 // ===========================================================================
-let mapStateToProps = ({ alerts, columns, app, user }, ownProps) => ({
-  appState: app.appState,
-  type: 'alert',
-  email: user.email,
-  email_bcc: user.email_bcc,
-  item: find(alerts, {id: parseInt(ownProps.params.id)}),
-  columns: columns.map((item) => {
-    return {
-      value: item.id,
-      label: item.name,
-      clearableValue: true
-    }
-  })
-});
+let mapStateToProps = ({ alerts, columns, app, user }, ownProps) => {
+  let item;
+
+  if (ownProps.params.id === 'new') {
+    // Make data for a new Report out of defaults
+    // If we need to create one
+    // ===========================================================================
+    item = Object.assign({}, defAlert, {
+      name: ownProps.location.query.name,
+      order: alerts.length,
+      recipient: user.email
+    });
+  } else {
+    // Or find existing one
+    // ===========================================================================
+    item = find(alerts, {id: parseInt(ownProps.params.id)});
+  }
+
+  // Return prepared data
+  // ===========================================================================
+  return {
+    appState: app.appState,
+    type: 'alert',
+    email: user.email,
+    email_bcc: user.email_bcc,
+    item: item,
+    columns: columns.map((item) => {
+      return {
+        value: item.id,
+        label: item.name,
+        clearableValue: true
+      }
+    })
+  }
+};
 
 export default connect(mapStateToProps, createEditActions())(Edit);

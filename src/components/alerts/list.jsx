@@ -39,6 +39,7 @@ const mapStateToProps = ({ alerts }, ownProps) => {
     type: 'alert',
     sortable: false,
     deletable: true,
+    create: 'delayed',
     items: map(alerts, (item) => {
       // Map items for list
       // ===========================================================================

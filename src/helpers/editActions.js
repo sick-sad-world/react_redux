@@ -2,7 +2,7 @@ import { isArray } from 'lodash';
 
 // Import required actions
 // ===========================================================================
-import { updateData, throwError } from '../actions/actions';
+import { updateData, createData, throwError } from '../actions/actions';
 
 // Default actions for create and delete list item 
 // @used to combain in List container
@@ -14,10 +14,20 @@ const createEditActions = (actions) => (dispatch) => {
     // ===========================================================================
     changeHandler (e) {
       let value = e.target.value;
-      dispatch(updateData(this.props.type)({
-        id: this.props.item.id,
-        [e.target.name]: value
-      })).catch((err) => dispatch(throwError(err)))
+      if (this.props.item.id) {
+        // Modify if item is already existed
+        // ===========================================================================
+        dispatch(updateData(this.props.type)({
+          id: this.props.item.id,
+          [e.target.name]: value
+        })).catch((err) => dispatch(throwError(err)))
+      } else {
+        // Create item if ID == 0
+        // ===========================================================================
+        dispatch(createData(this.props.type)(Object.assign({}, this.props.item, {[e.target.name]: value}))).then(({payload}) => {
+          this.props.router.push(`/${this.props.type}s/${payload.id}`);
+        }).catch((err) => dispatch(throwError(err)));
+      }
     },
 
     // Select handler creator
@@ -31,7 +41,7 @@ const createEditActions = (actions) => (dispatch) => {
         component.setState({[name]: value}, () => component.changeHandler({
           target: {
             name: name,
-            value: (value.hasOwnProperty(length)) ? value.map(v => v.value) : value.value
+            value: (isArray(value)) ? value.map(v => v.value) : value.value
           } 
         }));
       }

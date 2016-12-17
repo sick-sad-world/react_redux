@@ -39,6 +39,7 @@ const mapStateToProps = ({ reports }, ownProps) => {
     type: 'report',
     sortable: false,
     deletable: true,
+    create: 'delayed',
     items: map(reports, (item) => {
       // Map items for list
       // ===========================================================================
