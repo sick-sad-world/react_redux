@@ -15,8 +15,7 @@ button,
 input,
 select,
 textarea,
-a.is-button,
-span.is-button {
+.is-button {
   @extend %base-form-element;
   &:focus {
     outline: 0;

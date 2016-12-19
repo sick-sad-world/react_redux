@@ -19,6 +19,8 @@ export default class PageList extends React.Component {
   }
 
   componentWillReceiveProps () {
+    // Reset delete dialog position
+    // ===========================================================================
     this.stateDelete(0, 0);
   }
 
@@ -45,29 +47,33 @@ export default class PageList extends React.Component {
     }, item))
   }
 
+  // Redirect to edit from with name for a new item
+  // ===========================================================================
+  routeToNewItemEditForm (name) {
+    this.props.router.push({
+      pathname: `/${this.props.type}s/new`,
+      query: {name: name}
+    });
+  }
+
   // Handler for new item creation
   // @ launches actionCreate property
   // ===========================================================================
   handlerCreate (e) {
     e.preventDefault();
-    let input = e.target.elements.name;
-    let { type, items } = this.props;
+    let value = e.target.elements.name.value;
+
     this.stateDelete(0, 0);
+    e.target.elements.name.value = '';
 
     if (this.props.create === 'delayed') {
       // Redirect to edit form if need
       // ===========================================================================
-      this.props.router.push({
-        pathname: `/${this.props.type}s/new`,
-        query: {
-          name: input.value
-        }
-      });
-      input.value = '';
+      this.routeToNewItemEditForm(value);
     } else {
       // Create item
       // ===========================================================================
-      this.props.actionCreate(type, input.value, items.length).then(() => {input.value = ''})
+      this.props.createData({name: value, order: this.props.items.length}).catch(this.props.throwError);
     }
   }
 
@@ -75,7 +81,8 @@ export default class PageList extends React.Component {
   // @ provide required params
   // ===========================================================================
   handlerDelete (e) {
-    this.props.actionDelete(this.props.type, this.state.deleting).then(() => this.stateDelete(0, 0));
+    e.preventDefault();
+    this.props.deleteData({id: this.state.deleting}).catch(this.props.throwError).then(() => this.stateDelete(0, 0));
   }
 
   render () {

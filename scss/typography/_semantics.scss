@@ -122,9 +122,9 @@ blockquote {}
     display: flex;
     justify-content: space-between;
   }
-  a {
+  .is-button {
     flex: 0 1 50%;
-    + a {
+    + .is-button {
       margin-left: baseUnit();
     }
   }

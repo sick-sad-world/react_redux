@@ -1,20 +1,35 @@
 // Import react related stuff
 // ===========================================================================
 import React from 'React';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { map } from 'lodash';
-
-// Import actions
-// ===========================================================================
-import createListActions from '../../helpers/listActions';
 
 // Import child components
 // ===========================================================================
 import PageList from '../pageList';
 import ListItem from '../listItem';
 
+// Import actions
+// ===========================================================================
+import { createData, deleteData, throwError } from '../../actions/actions';
+
 class List extends React.Component {
+  constructor(props) {
+    super(props);
+
+    // Create binded actions
+    // ===========================================================================
+    this.actions = bindActionCreators({
+      createData: createData('alert'),
+      deleteData: deleteData('alert'),
+      throwError: throwError
+    }, this.props.dispatch) 
+  }
+
   render() {
+    // Define common text values
+    // ===========================================================================
     let texts = {
       title: 'Alerts Management',
       description: 'Create, edit and delete alerts that will be sent to you when specific columns get new items.',
@@ -24,7 +39,7 @@ class List extends React.Component {
     };
 
     return (
-      <PageList texts={texts} {...this.props} >
+      <PageList {...this.actions} texts={texts} {...this.props} >
         <ListItem />
       </PageList>
     );
@@ -51,8 +66,4 @@ const mapStateToProps = ({ alerts }, ownProps) => {
   }
 }
 
-// Map actions for list and item
-// ===========================================================================
-const mapDispatchToProps = createListActions();
-
-export default connect(mapStateToProps, mapDispatchToProps)(List);
+export default connect(mapStateToProps)(List);

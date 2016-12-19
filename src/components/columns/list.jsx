@@ -1,13 +1,9 @@
 // Import react related stuff
 // ===========================================================================
 import React from 'React';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { map } from 'lodash';
-
-// Import actions
-// ===========================================================================
-import createListActions from '../../helpers/listActions';
-import { updateData, throwError } from '../../actions/actions';
 
 // Import child components
 // ===========================================================================
@@ -15,13 +11,32 @@ import PageList from '../pageList';
 import ListItem from '../listItem';
 import Icon from '../icon';
 
+// Import actions
+// ===========================================================================
+import { createData, updateData, deleteData, throwError } from '../../actions/actions';
+
 class List extends React.Component {
+  constructor(props) {
+    super(props);
+
+    // Create binded actions
+    // ===========================================================================
+    this.actions = bindActionCreators({
+      createData: createData('column'),
+      updateData: updateData('column'),
+      deleteData: deleteData('column'),
+      throwError: throwError
+    }, this.props.dispatch);
+
+    this.changeVis = this.changeVis.bind(this);
+    this.getItemIcon = this.getItemIcon.bind(this);
+  }
+
   // Change visibility filter
   // ===========================================================================
   changeVis (data, e) {
     e.preventDefault();
-    let dispatch = this.props.dispatch;
-    dispatch(updateData(this.props.type)(data)).catch((error) => dispatch(throwError(error)));
+    this.actions.updateData(data).catch(this.actions.throwError);
   }
 
   // Generate visibility icon
@@ -39,10 +54,12 @@ class List extends React.Component {
       params = {id: props.id, open: 1};
     }
 
-    return <a href='' onClick={this.changeVis.bind(this, params)} title={title}><Icon icon={icon} /></a>;
+    return <a href='' onClick={this.changeVis(params)} title={title}><Icon icon={icon} /></a>;
   }
 
   render() {
+    // Define common text values
+    // ===========================================================================
     let texts = {
       title: 'Columns Management',
       description: 'Create, edit or delete dashboard columns. Drag to reorder, use the eye icon to hide/unhide them (tip: hidden columns can still be used for alerts/reports).',
@@ -52,8 +69,8 @@ class List extends React.Component {
     };
 
     return (
-      <PageList texts={texts} {...this.props} >
-        <ListItem customIcon={this.getItemIcon.bind(this)} />
+      <PageList {...this.actions} texts={texts} {...this.props} >
+        <ListItem customIcon={this.getItemIcon} />
       </PageList>
     );
   }
@@ -78,8 +95,4 @@ const mapStateToProps = ({ columns }, ownProps) => {
   }
 }
 
-// Map actions for list and item
-// ===========================================================================
-const mapDispatchToProps = createListActions();
-
-export default connect(mapStateToProps, mapDispatchToProps)(List);
+export default connect(mapStateToProps)(List);
