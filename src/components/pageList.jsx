@@ -2,6 +2,7 @@
 // ===========================================================================
 import React from 'react';
 import Icon from './icon';
+import DeletingPopup from './deletingPopup'
 import { bindAll } from 'lodash';
 
 // Abstract Page list component
@@ -107,13 +108,7 @@ export default class PageList extends React.Component {
     // Make confirmation dialog if item deletable and [deleting] state active
     // ===========================================================================
     let confimation = (this.props.deletable && this.state.deleting > 0 && this.state.dialogPos > 0) ? (
-      <div style={{bottom: this.state.dialogPos+'px'}} className='small-popup delete-confirmation' ref='confirmation'>
-        <span className='text'>Are you sure about that?</span>
-        <p>
-          <a href='' onClick={this.handlerDelete} className='button'>Delete</a>
-          <span onClick={e => this.stateDelete(0, 0)} className='button is-accent'>Cancel</span>
-        </p>
-      </div>
+      <DeletingPopup dialogPos={{bottom: `${this.state.dialogPos}px`}} handlerDelete={this.handlerDelete} handlerCancel={e => this.stateDelete(0, 0)} />
     ) : null;
 
     // Return DOM components

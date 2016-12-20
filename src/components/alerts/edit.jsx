@@ -1,13 +1,14 @@
 // Import utility stuff
 // ===========================================================================
-import { find, pick } from 'lodash';
+import { find, pick, isArray, bindAll } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
-import Select from 'react-select';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { defAlert } from '../../reducers/defaults';
 
 // Import Child components
@@ -18,11 +19,9 @@ import EditFormHeader from '../editHeader';
 
 // Import actions
 // ===========================================================================
-import createEditActions from '../../helpers/editActions';
+import { createData, updateData, throwError } from '../../actions/actions';
 
 class Edit extends React.Component {
-  // Bind [changeHandler] to Component 
-  // ===========================================================================
   constructor (props) {
     super(props);
     this.state = {
@@ -30,11 +29,65 @@ class Edit extends React.Component {
       frequency: props.frequency || 15,
       columns: props.columns || []
     }
-    this.changeHandler = this.props.changeHandler.bind(this);
+
+    // Create bound actions
+    // ===========================================================================
+    this.actions = bindActionCreators({
+      createData: createData('alert'),
+      updateData: updateData('alert'),
+      throwError: throwError
+    }, this.props.dispatch);
+
+    // Bind action handlers to component
+    // ===========================================================================
+    bindAll(this, ['preformAction', 'inputHandler', 'createSelectHandler']);
   }
 
+  // Update state to hook our dropdowns
+  // ===========================================================================
   componentWillReceiveProps(nextProps) {
     this.state = this.setState(pick(nextProps.item, ['frequency', 'columns']));
+  }
+
+  // Send request to server with new props 
+  // ===========================================================================
+  preformAction (data) {
+    if (this.props.item.id) {
+      // Modify if item is already existed
+      // ===========================================================================
+      this.actions.updateData(Object.assign({id: this.props.item.id}, data)).catch(this.actions.throwError);
+    } else {
+      // Create item if ID == 0
+      // ===========================================================================
+      this.actions.createData(Object.assign({}, this.props.item, data)).then(({payload}) => {
+        this.props.router.push(`/${this.props.type}s/${payload.id}`);
+      }).catch(this.actions.throwError);
+    }
+  }
+
+  // Input handler 
+  // -> Function which handles action change
+  // ===========================================================================
+  inputHandler(e) {
+    this.preformAction({
+      [e.target.name]: e.target.value
+    });
+  }
+
+  // Select handler creator
+  // -> Function which handles both action and state change
+  // ===========================================================================
+  createSelectHandler (name) {
+    return (value) => {
+      // Set state to update selects
+      // then run change handler to send chnages to server
+      // ===========================================================================
+      this.setState({[name]: value}, () => {
+        this.preformAction({
+          [name]: (isArray(value)) ? value.map(v => v.value) : value.value
+        });
+      });
+    }
   }
 
   render() {
@@ -80,7 +133,7 @@ class Edit extends React.Component {
             <input 
               disabled={running}
               defaultValue={item.name}
-              onBlur={this.changeHandler}
+              onBlur={this.inputHandler}
               id='funAlertName'
               type='text'
               name='name'
@@ -96,7 +149,7 @@ class Edit extends React.Component {
                 'Active': 1,
                 'Inactive': 0
               }}
-              onChange={this.changeHandler}
+              onChange={this.inputHandler}
               value={item.active} />
           </div>
           <div className='row-flex-wrap'>
@@ -106,7 +159,7 @@ class Edit extends React.Component {
               className='size-120'
               name='frequency'
               options={frequencyOptions}
-              onChange={this.props.createSelectHandler('frequency', this)}
+              onChange={this.createSelectHandler('frequency')}
               autosize={false}
               clearable={false}
               value={this.state.frequency}
@@ -119,7 +172,7 @@ class Edit extends React.Component {
               disabled={running}
               name='columns'
               options={this.props.columns}
-              onChange={this.props.createSelectHandler('columns', this)}
+              onChange={this.createSelectHandler('columns')}
               multi
               value={this.state.columns}
             />
@@ -173,4 +226,4 @@ let mapStateToProps = ({ alerts, columns, app, user }, ownProps) => {
   }
 };
 
-export default connect(mapStateToProps, createEditActions())(Edit);
+export default connect(mapStateToProps)(Edit);

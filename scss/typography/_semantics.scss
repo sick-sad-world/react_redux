@@ -96,6 +96,7 @@ blockquote {}
 
 .delete-confirmation {
   position: relative;
+  width: 222px;
   &:before, &:after {
     content: '';
     display: block;

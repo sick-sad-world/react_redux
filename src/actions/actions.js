@@ -119,7 +119,7 @@ export const fetchData = (silent, getUser) => (dispatch) => Promise.all([
   (getUser) ? dispatch(readData('user')(silent)) : null,
   dispatch(readData('alerts')(silent)),
   dispatch(readData('reports')(silent)),
-  dispatch(readData('columns')(silent)),
+  dispatch(readData('columns')({data: 1}, silent)),
   dispatch(readData('sets')(silent)),
   dispatch(readData('sources')(silent))
 ]);

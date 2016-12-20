@@ -3,16 +3,15 @@
 
 %textlike-base {
 	width: 100%;
-	height: $form-unit;
 	padding: 0 baseUnit();
   @include form-element();
   @include placeholder () {
     @include form-pholder();
   }
-	&:not([disabled]):hover {
+	&:hover {
 		@include style-hover();
 	}
-	&:not([disabled]):focus {
+	&:focus {
 		@include style-focus();
 	}
   &[disabled] {
@@ -26,11 +25,13 @@ input[type="email"],
 input[type="search"],
 input[type="number"] {
   @extend %textlike-base;
+	height: $form-unit;
   // @style ONLY ONELINE INPUTS HERE
 }
 
 textarea {
   @extend %textlike-base;
+  height: $form-unit * 5;
   resize: none;
   // @style ONLY TEXTAREAS HERE
 }

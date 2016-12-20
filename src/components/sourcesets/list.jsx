@@ -3,7 +3,6 @@
 import React from 'React';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { map } from 'lodash';
 
 // Import child components
 // ===========================================================================
@@ -18,13 +17,13 @@ class List extends React.Component {
   constructor(props) {
     super(props);
 
-    // Create binded actions
+    // Create bound actions
     // ===========================================================================
     this.actions = bindActionCreators({
       createData: createData('set'),
       deleteData: deleteData('set'),
       throwError: throwError
-    }, this.props.dispatch) 
+    }, this.props.dispatch);
   }
   
   render() {
@@ -54,7 +53,7 @@ const mapStateToProps = ({ sets }, ownProps) => {
     type: 'set',
     sortable: false,
     deletable: true,
-    items: map(sets, (item) => {
+    items: sets.map((item) => {
       // Map items for list
       // ===========================================================================
       return {

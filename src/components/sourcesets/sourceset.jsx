@@ -18,6 +18,7 @@ export default class Sourceset extends React.PureComponent {
     // ===========================================================================
     let rootClasses = classNames({
       'mod-entity': true,
+      'mod-sourceset': true,
       'is-expanded': expanded
     });
     

@@ -39,10 +39,9 @@
       }
     }
     .delete-confirmation {
-      $s: 60%;
       position: absolute;
-      width: $s;
-      right: round($s* -0.5);
+      right: 0;
+      transform: translate3d(50%, 0, 0);
       z-index: 2;
     }
   }

@@ -23,7 +23,7 @@ reports and feeds in columns
 		flex: 0 0 45%;
 		max-width: 45%;
 		border-right: $bd;
-		overflow-y: auto;
+    position: relative;
 	}
 	.list {
 		flex: 0 0 55%;
@@ -32,9 +32,12 @@ reports and feeds in columns
 			border-top: 0;
 		}
 	}
-	.mod-entity {
-		.mod-entity > div:first-child {
-			background-color: $c-element;
-		}
-	}
+  .selected, .list {
+    &.state-disabled {
+      @include style-disabled();
+    }
+  }
+	.mod-sourceset > div:first-child {
+    background-color: $c-element;
+  }
 }

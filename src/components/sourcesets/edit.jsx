@@ -6,22 +6,22 @@ import classNames from 'classnames';
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 // Import Child components
 // ===========================================================================
 import FeedsList from './injectable';
+import DeletingPopup from '../deletingPopup';
 import Icon from '../icon';
 import Source from './source';
 import EditFormHeader from '../editHeader';
 
 // Import actions
 // ===========================================================================
-import createEditActions from '../../helpers/editActions';
+import { createData, updateData, deleteData, throwError } from '../../actions/actions';
 
 class Edit extends React.Component {
-  // Bind [changeHandler] to Component 
-  // ===========================================================================
   constructor (props) {
     super(props);
     this.state = {
@@ -29,14 +29,59 @@ class Edit extends React.Component {
       deleting: 0,
       dialogPos: 0
     }
-    bindAll(this, ['makeSourceButton', 'deleteHandler', 'sourcesHandler']);
-    this.changeHandler = this.props.changeHandler.bind(this);
+
+    // Create bound actions
+    // ===========================================================================
+    this.actions = bindActionCreators({
+      createData: createData('set'),
+      updateData: updateData('set'),
+      deleteData: deleteData('source'),
+      throwError: throwError
+    }, this.props.dispatch);
+
+    // Bind action handlers to component
+    // ===========================================================================
+    bindAll(this, ['preformAction', 'inputHandler', 'makeSourceButton', 'deleteHandler', 'sourcesHandler']);
+  }
+
+  // Set [delete] state, to show confirmation dialog
+  // ===========================================================================
+  stateDelete (id, dialogPos) {
+    this.setState({
+      deleting: (this.state.deleting === id) ? 0 : id,
+      dialogPos: (this.state.dialogPos === dialogPos) ? 0 : dialogPos,
+    });
+  }
+
+  // Send request to server with new props 
+  // ===========================================================================
+  preformAction (data) {
+    if (this.props.item.id) {
+      // Modify if item is already existed
+      // ===========================================================================
+      this.actions.updateData(Object.assign({id: this.props.item.id}, data)).catch(this.actions.throwError);
+    } else {
+      // Create item if ID == 0
+      // ===========================================================================
+      this.actions.createData(Object.assign({}, this.props.item, data)).then(({payload}) => {
+        this.props.router.push(`/${this.props.type}s/${payload.id}`);
+      }).catch(this.actions.throwError);
+    }
+  }
+
+  // Input handler 
+  // -> Function which handles action change
+  // ===========================================================================
+  inputHandler(e) {
+    this.preformAction({
+      [e.target.name]: e.target.value
+    });
   }
 
   deleteHandler (e, id) {
     e.preventDefault();
-    let coord = window.outerHeight - e.target.getBoundingClientRect().bottom - e.target.parentNode.clientHeight;
-    //this.props.stateDelete(id, coord);
+    let coord = window.outerHeight - e.target.getBoundingClientRect().bottom - e.target.parentNode.clientHeighе;
+    this.stateDelete(id, coord);
   }
 
   makeSourceButton (uniq_ids, id) {
@@ -57,10 +102,7 @@ class Edit extends React.Component {
     } else {
       val = concat(this.props.item.source_ids, val);
     }
-    this.changeHandler({target: {
-      name: 'source_ids',
-      value: val
-    }});
+    this.preformAction({['source_ids']: val});
   }
 
   render() {
@@ -69,6 +111,10 @@ class Edit extends React.Component {
     if (!this.props.item) return null;
     let running = this.props.appState === 3;
     let { item, own_sources } = this.props;
+
+    // Empty item template
+    // @ used when items feeds list is empty
+    // ===========================================================================
     let empty = <li className='state-empty'>This set has no sources. Please assign some or create.</li>
 
     // Data for form heading
@@ -86,6 +132,17 @@ class Edit extends React.Component {
       'state-loading': running
     });
 
+    let submanagementClass = classNames({
+      'selected': true,
+      'state-disabled': running
+    });
+
+    // Make confirmation dialog if item deletable and [deleting] state active
+    // ===========================================================================
+    let confimation = (this.state.deleting > 0 && this.state.dialogPos > 0) ? (
+      <DeletingPopup dialogPos={{top: `${this.state.dialogPos}px`}} handlerDelete={this.handlerDelete} handlerCancel={e => this.stateDelete(0, 0)} />
+    ) : null;
+
     // Return DOM layout
     // ===========================================================================
     return (
@@ -98,7 +155,7 @@ class Edit extends React.Component {
               <input 
                 disabled={running}
                 defaultValue={item.name}
-                onBlur={this.changeHandler}
+                onBlur={this.inputHandler}
                 id='funSetName'
                 type='text'
                 name='name'
@@ -108,7 +165,7 @@ class Edit extends React.Component {
           <div className='form-block'>
             <h4 className='row'>Feeds management</h4>
             <section className='mod-submanagement'>
-              <div className='selected'>
+              <div className={submanagementClass}>
                 <div className='header'>
                   <span>Sourceset has {item.source_ids.length} sources total.</span>
                 </div>
@@ -117,11 +174,13 @@ class Edit extends React.Component {
                     return <Source key={source.id} sortable={false} button={this.makeSourceButton(item.uniq_ids, source.id)} {...source} />
                   }) : empty}
                 </ul>
+                { confimation }
               </div>
               <FeedsList 
                 sets={this.props.sets}
                 sources={this.props.sources}
                 omit={{set: [item.id], sources: item.source_ids}}
+                disabled={running}
                 selectHandler={this.sourcesHandler}
               />
             </section>
@@ -133,7 +192,7 @@ class Edit extends React.Component {
 }
 
 // Transform app state to component props
-// @ deps -> Alert, Columns
+// @ deps -> Sets, Columns
 // ===========================================================================
 let mapStateToProps = ({ sets, sources, app }, ownProps) => {
   let item = find(sets, {id: parseInt(ownProps.params.id)})
@@ -147,4 +206,4 @@ let mapStateToProps = ({ sets, sources, app }, ownProps) => {
   }
 };
 
-export default connect(mapStateToProps, createEditActions())(Edit);
+export default connect(mapStateToProps)(Edit);

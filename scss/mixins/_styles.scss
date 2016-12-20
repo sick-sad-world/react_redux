@@ -1,6 +1,7 @@
 @mixin style-disabled() {
 	opacity: 0.5;
 	cursor: default;
+  pointer-events: none;
 }
 @mixin style-hover () {
 	border-color: darken($c-border, 10%);

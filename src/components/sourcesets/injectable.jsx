@@ -1,5 +1,6 @@
 // Import React related stuff
 // ===========================================================================
+import classNames from 'classnames';
 import React from 'React';
 import { includes, bindAll } from 'lodash';
 
@@ -54,10 +55,15 @@ export default class FeedsList extends React.Component {
 
   render () {
     let search;
-    let { sources, sets, omit, selectHandler } = this.props;
+    let { sources, sets, omit, selectHandler, disabled } = this.props;
     // Define empty template
     // ===========================================================================
     let list = <li className='state-empty'>No sets or sources created yet. Make some before you can assign. </li>;
+
+    let rootClass = classNames({
+      'list': true,
+      'state-disabled': disabled
+    });
 
     // Build up resulting list
     // ===========================================================================
@@ -94,7 +100,7 @@ export default class FeedsList extends React.Component {
     }
 
     return (
-      <div className='list'>
+      <div className={rootClass}>
         <div className='header'>
           <input type='text' name='search' defaultValue={this.state.search} onChange={this.updateState} placeholder='Search for...' />
         </div>

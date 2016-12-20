@@ -18,7 +18,7 @@ class List extends React.Component {
   constructor(props) {
     super(props);
 
-    // Create binded actions
+    // Create bound actions
     // ===========================================================================
     this.actions = bindActionCreators({
       createData: createData('report'),

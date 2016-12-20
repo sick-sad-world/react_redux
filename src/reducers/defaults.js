@@ -39,3 +39,37 @@ export const defAlert = {
   frequency: 15,
   recipient: ''
 }
+
+export const defColumnData = {
+  show_favorites: 0,
+  show_ignored: 0,
+  autoreload: 0,
+  infinite: 1,
+  limit: 30,
+  sort: 'rate_likes',
+  direction: 'desc',
+  author: '',
+  search: '',
+  exclude_search: '',
+  url: '',
+  since: '',
+  before: '',
+  language: 'Any',
+  source: [],
+  set: [],
+  ignore_source: [],
+  ignore_set: [],
+  is_image: 'NaN',
+  is_video: 'NaN',
+  is_facebook: 'NaN',
+  is_gallery: 'NaN'
+}
+
+export const defColumn = {
+  id: 0,
+  order: 0,
+  open: 1,
+  name: '',
+  data: defColumnData,
+  display_settings: ['title', 'found', 'url', 'image', 'description', 'likes', 'tweets', 'shares']
+}

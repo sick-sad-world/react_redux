@@ -3,7 +3,7 @@
 import React from 'React';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { map } from 'lodash';
+import { pick } from 'lodash';
 
 // Import child components
 // ===========================================================================
@@ -19,7 +19,7 @@ class List extends React.Component {
   constructor(props) {
     super(props);
 
-    // Create binded actions
+    // Create bound actions
     // ===========================================================================
     this.actions = bindActionCreators({
       createData: createData('column'),
@@ -34,8 +34,7 @@ class List extends React.Component {
 
   // Change visibility filter
   // ===========================================================================
-  changeVis (data, e) {
-    e.preventDefault();
+  changeVis (data) {
     this.actions.updateData(data).catch(this.actions.throwError);
   }
 
@@ -43,7 +42,7 @@ class List extends React.Component {
   // ===========================================================================
   getItemIcon (props) {
     let title, params, icon;
-    
+    console.log(props);
     if (props.open) {
       title = 'Hide this Column';
       icon = 'eye-with-line';
@@ -54,7 +53,7 @@ class List extends React.Component {
       params = {id: props.id, open: 1};
     }
 
-    return <a href='' onClick={this.changeVis(params)} title={title}><Icon icon={icon} /></a>;
+  return <a href='' onClick={e => {e.preventDefault(); this.changeVis(params)}} title={title}><Icon icon={icon} /></a>;
   }
 
   render() {
@@ -84,14 +83,7 @@ const mapStateToProps = ({ columns }, ownProps) => {
     type: 'column',
     sortable: false,
     deletable: true,
-    items: map(columns, (item) => {
-      // Map items for list
-      // ===========================================================================
-      return {
-        id: item.id,
-        name: item.name
-      }
-    })
+    items: columns.map((item) => pick(item, ['id', 'name', 'open']))
   }
 }
 

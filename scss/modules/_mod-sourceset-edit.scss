@@ -2,7 +2,14 @@
 ========================================================================== */
 .mod-sourceset-edit {
   .subsection-content {
+    position: relative;
     align-content: space-between;
+  }
+  .delete-confirmation {
+    position: absolute;
+      right: 0;
+      transform: translate3d(50%, 0, 0);
+      z-index: 2;
   }
   .mod-submanagement {
     flex: 1 0 100%;

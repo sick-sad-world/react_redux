@@ -31,6 +31,7 @@ export default function Toggler (props) {
   let className = classNames({
     [props.className]: true,
     'toggler': true,
+    'is-triple': options.length === 6,
     'is-disabled': props.disabled
   })
 
