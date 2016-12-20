@@ -15,7 +15,7 @@ export default class FormReg extends React.Component {
           <input type='password' name='password' placeholder='Your password' pattern='^[0-9a-zA-Z_-]{3,12}$' />
         </div>
         <div className='row'>
-          <input type='submit' className='is-alt' value='Create account' />
+          <input type='submit' className='button is-alt' value='Create account' />
         </div>
       </form>
     );

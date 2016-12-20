@@ -1,0 +1,62 @@
+/* Page subcomponents placement and styling
+ * @includes pageList, editForm, Assigment
+========================================================================== */
+.mod-page {
+  padding-left: baseUnit();
+  display: flex;
+  align-items: stretch;
+  section[class*="mod-subsection-"] {
+    display: flex;
+    align-items: stretch;
+		flex-direction: column;
+    border: $bd;
+    margin: baseUnit() baseUnit() baseUnit() 0;
+    .subsection-header {
+			flex: 0 0 auto;
+			position: relative;
+			z-index: 1;
+		}
+		.subsection-content {
+			flex: 0 1 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+		}
+  }
+
+  // Unique styles for list section
+  .mod-subsection-list {
+    flex: 0 1 30%;
+    min-width: map-get($layout, buffer);
+    z-index: 2;
+    position: relative;
+    .subsection-header {
+      form {
+        margin-top: baseUnit();
+        display: flex;
+      }
+      button {
+        margin-left: baseUnit();
+      }
+    }
+    .delete-confirmation {
+      $s: 60%;
+      position: absolute;
+      width: $s;
+      right: round($s* -0.5);
+      z-index: 2;
+    }
+  }
+
+  // Make submanagement screen fit all height available
+  .mod-subsection-management {
+    .mod-submanagement {
+      height: 100%;
+    }
+  }
+
+  // Make optional subsections "invisible"
+  .mod-subsection-edit, .mod-subsection-management {
+    flex: 0 1 70%;
+    overflow: auto;
+  }
+}

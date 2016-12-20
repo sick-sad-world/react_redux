@@ -1,77 +1,69 @@
 /* Buttons
 ========================================================================== */
 
-.is-button,
-input[type="submit"],
-input[type="reset"],
-input[type="button"],
-button {
+.button {
+  display: inline-block;
+  text-align: center;
   cursor: pointer;
-	height: $form-unit;
-	padding: 0 baseUnit();
-	border-radius: $bdrs;
-	font: $base-font-size $heading-font-family;
-	color: $c-alt;
-  @include gradient($c-accent);
-	border: 0;
-	border-bottom: 2px solid rgba(0,0,0,.8);
+  height: $form-unit;
+  padding: 0 baseUnit();
+  vertical-align: top;
+  text-decoration: none;
+  color: $c-main;
+  border-radius: $bdrs;
+  font: $base-font-size/#{$form-unit - 2px} $heading-font-family;
+  border: 0;
+  border-bottom: 2px solid rgba(0, 0, 0, .2);
+  @include gradient($c-border);
   transition: background $dur;
-  &:not([disabled]):hover, &:not([disabled]):focus {
-		@include gradient(lighten($c-accent, 2%), top);
-	}
-  &:not([disabled]):active {
-		border-bottom-width: 0px;
-	}
-	&.is-alt {
-		@include gradient($c-accent-alt);
-    border-bottom: 2px solid rgba(0,0,0,.4);
-		&:not([disabled]):hover, &:not([disabled]):focus {
-			@include gradient(darken($c-accent-alt, 2%), top);
-		}
-	}
-  &.is-neutral {
-    color: $c-main;
-		@include gradient($c-border);
-    border-bottom: 2px solid rgba(0,0,0,.4);
-		&:not([disabled]):hover, &:not([disabled]):focus {
-			@include gradient(darken($c-border, 2%), top);
-		}
-	}
-	&[class*="size-"] {
-		padding: 0;
-	}
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    @include gradient(darken($c-border, 2%), top);
+  }
+  &:active {
+    border-bottom-width: 0px;
+  }
+  &.is-accent {
+    color: $c-alt;
+    @include gradient($c-accent);
+    border-color: rgba(0, 0, 0, .4);
+    &:hover,
+    &:focus {
+      @include gradient(lighten($c-accent, 2%), top);
+    }
+  }
+  &.is-alt {
+    @include gradient($c-accent-alt);
+    border-color: rgba(0, 0, 0, .4);
+    &:hover,
+    &:focus {
+      @include gradient(darken($c-accent-alt, 2%), top);
+    }
+  }
+  &[class*="size-"] {
+    padding: 0;
+  }
   &[disabled] {
     @include style-disabled();
   }
 }
 
-.is-button {
-	display: inline-block;
-	vertical-align: top;
-	text-align: center;
-	text-decoration: none;
-	line-height: $form-unit - 2px;
-}
-
 .button-group {
-	display: flex;
-	> a.is-button,
-	> input[type="submit"],
-	> input[type="reset"],
-	> input[type="button"],
-	> button {
-		border-radius: 0;
-		border-left: 1px solid rgba(#fff,.25);
-		border-right: 1px solid rgba(#000,.25);
-		&:first-child {
-			border-left: 0;
-			border-radius: $bdrs 0 0 $bdrs;
-		}
-		&:last-child {
-			border-right: 0;
-			border-radius: 0 $bdrs $bdrs 0;
-		}
-	}
+  display: flex;
+  >.button {
+    border-radius: 0;
+    border-left: $bd-lighten;
+    border-right: $bd-darken;
+    &:first-child {
+      border-left: 0;
+      border-radius: $bdrs 0 0 $bdrs;
+    }
+    &:last-child {
+      border-right: 0;
+      border-radius: 0 $bdrs $bdrs 0;
+    }
+  }
 }
 
 // @style FOR CUSTOM BUTTON ELEMENTS

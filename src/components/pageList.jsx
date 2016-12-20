@@ -108,10 +108,10 @@ export default class PageList extends React.Component {
     // ===========================================================================
     let confimation = (this.props.deletable && this.state.deleting > 0 && this.state.dialogPos > 0) ? (
       <div style={{bottom: this.state.dialogPos+'px'}} className='small-popup delete-confirmation' ref='confirmation'>
-        <span>Are you sure about that?</span>
+        <span className='text'>Are you sure about that?</span>
         <p>
-          <a href='' onClick={this.handlerDelete} className='is-button is-neutral'>Delete</a>
-          <span onClick={e => this.stateDelete(0, 0)} className='is-button'>Cancel</span>
+          <a href='' onClick={this.handlerDelete} className='button'>Delete</a>
+          <span onClick={e => this.stateDelete(0, 0)} className='button is-accent'>Cancel</span>
         </p>
       </div>
     ) : null;
@@ -126,7 +126,7 @@ export default class PageList extends React.Component {
             <p>{texts.description}</p>
             <form onSubmit={this.handlerCreate}>
               <input type='text' name='name' required placeholder={texts.placeholder} />
-              <button className='size-90' title={texts.btn}>Add</button>
+              <button className='button is-accent size-90' title={texts.btn}>Add</button>
             </form>
           </div>
         </header>

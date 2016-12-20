@@ -69,6 +69,7 @@ $sh-base: 0 0 baseUnit() rgba(#000,.35);
 
 $bd: 1px solid $c-border;
 $bd-darken: 1px solid rgba(0,0,0,.2);
+$bd-lighten: 1px solid rgba(255,255,255,.2);
 
 $layers: (
 	message: 10,

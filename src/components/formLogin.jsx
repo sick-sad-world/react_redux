@@ -10,7 +10,7 @@ export default class FormLogin extends React.Component {
         </div>
         <div className='row-flex'>
           <input type='password' name='password' placeholder='Your password' pattern='^[0-9a-zA-Z_-]{3,12}$' />
-          <input type='submit' className='is-alt' value='Log in' />
+          <input type='submit' className='button is-alt' value='Log in' />
         </div>
       </form>
     );

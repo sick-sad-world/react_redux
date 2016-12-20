@@ -114,7 +114,7 @@ blockquote {}
     border-top-color: $c-element;
     border-left-color: $c-element;
   }
-  span {
+  .text {
     display: block;
     margin-bottom: baseUnit();
   }
@@ -122,9 +122,9 @@ blockquote {}
     display: flex;
     justify-content: space-between;
   }
-  .is-button {
+  .button {
     flex: 0 1 50%;
-    + .is-button {
+    + .button {
       margin-left: baseUnit();
     }
   }
