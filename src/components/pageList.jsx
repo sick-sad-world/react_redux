@@ -36,7 +36,7 @@ export default class PageList extends React.Component {
   componentWillReceiveProps () {
     // Reset delete dialog position
     // ===========================================================================
-    this.stateDelete(0, 0);
+    // this.stateDelete(0, 0);
   }
 
   // Set [delete] state, to show confirmation dialog

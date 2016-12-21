@@ -43,7 +43,6 @@ class Edit extends PageEdit {
   }
 
   stateDelete (e, id) {
-    console.log(e, id);
     e.preventDefault();
     let pos, target = e.target;
     while (!target.classList.contains('mod-entity')) {

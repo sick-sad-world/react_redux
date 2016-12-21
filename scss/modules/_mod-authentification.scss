@@ -12,6 +12,9 @@
 	form + form {
 		margin-top: baseUnit(2);
 	}
+  .row, .row-flex {
+    margin: baseUnit(2) auto;
+  }
 	.auth-forms {
 		flex: 0 0 map-get($layout, auth);
 		margin: 0 baseUnit(2);

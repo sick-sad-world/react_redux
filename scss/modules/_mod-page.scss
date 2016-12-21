@@ -55,7 +55,7 @@
 
   // Make optional subsections "invisible"
   .mod-subsection-edit, .mod-subsection-management {
-    flex: 0 1 70%;
+    flex: 1 1 70%;
     overflow: auto;
   }
 }

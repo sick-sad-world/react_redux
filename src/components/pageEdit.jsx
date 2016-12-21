@@ -21,7 +21,7 @@ export default class PageEdit extends React.Component {
     // ===========================================================================
     this.state = Object.assign({
       loading: false
-    }, this.processDropdowns());
+    }, this.processDropdowns(this.props.item));
 
     // Create bound actions
     // ===========================================================================
@@ -36,7 +36,7 @@ export default class PageEdit extends React.Component {
   // ===========================================================================
   processDropdowns (item) {
     return (item) ? mapValues(this.dropdowns, (v, k) => {
-      return v(item || this.props.item);
+      return v.call(this, item);
     }) : {};
   }
 

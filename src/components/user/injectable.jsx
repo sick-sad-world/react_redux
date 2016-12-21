@@ -30,7 +30,7 @@ export default class EmailList extends React.Component {
     return (
       <div className={`mod-email-list ${this.props.className}`}>
         <ul className='tag-list'>
-          { (email_bcc.length) ? email_bcc.map((email) => {
+          { (email_bcc && email_bcc.length) ? email_bcc.map((email) => {
             return <li className={(disabled) ? 'is-disabled': null} data-value={email}>{email} <Icon icon='cross'/></li>;
           }) : empty }
         </ul>

@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { find, bindAll } from 'lodash';
+import { find, bindAll, includes } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 // Import Child components
 // ===========================================================================
 import Select from 'react-select';
+import Icon from '../icon';
 import Toggler from '../toggler';
 import EditFormHeader from '../editHeader';
 import PageEdit from '../pageEdit';
@@ -21,7 +22,22 @@ import { defColumnData } from '../../reducers/defaults';
 
 class Edit extends PageEdit {
   constructor (props) {
-    super(props);
+    super(props, {
+      language (item) {
+        return (item.data) ? item.data.language : 'Any';
+      },
+      autoreload (item) {
+        return (item.data) ? item.data.autoreload : 0;
+      },
+      sort_pref (item) {
+        let prefix = (item.data) ? find(this.props.sortPrefix, (pref) => item.data.sort.indexOf(pref.value) > -1) : null;
+        return (prefix) ? prefix.value : '';
+      },
+      sort_prop (item) {
+        let property = (item.data) ? find(this.props.sortProperty, (prop) => item.data.sort.indexOf(prop.value) > -1) : null;
+        return (property) ? property.value : '';
+      }
+    });
 
     // Bind action handlers to component
     // ===========================================================================
@@ -44,23 +60,39 @@ class Edit extends PageEdit {
       running: running
     };
 
-    // Define autoreloading options
-    // ===========================================================================
-    let autoReloadOptions = [
-      {label: 'Disabled', value: 0},
-      {label: '15sec', value: 15},
-      {label: '30sec', value: 30},
-      {label: '1min', value: 60},
-      {label: '2min', value: 120},
-      {label: '5min', value: 300},
-      {label: '10min', value: 600}
-    ];
-
-
     let componentRootClass = classNames({
       'mod-subsection-edit': true,
       'state-loading': running
     });
+
+    // Create display settings
+    // ===========================================================================
+    let displaySettings = [];
+    let displaySettingsRow = [];
+    this.props.displaySettings.forEach((setting, i) => {
+      displaySettingsRow.push((
+        <td key={`cell${i}`}>
+          <label>
+            <span className='switcher-checkbox'>
+              <input
+                type='checkbox'
+                name='display_settings'
+                value={setting}
+                disabled={running}
+                defaultChecked={includes(item.display_settings, setting)}
+              />
+              <Icon icon='check' />
+            </span>
+            {setting}
+          </label>
+        </td>
+      ));
+      if (i % 3 === 2 && (i + 1) !== this.props.displaySettings.length) {
+        displaySettings.push(<tr key={`row${i}`}>{displaySettingsRow}</tr>);
+        displaySettingsRow = [];
+      }
+    });
+
 
     // Return DOM layout
     // ===========================================================================
@@ -122,16 +154,16 @@ class Edit extends PageEdit {
               <Select
                 disabled={running}
                 className='size-120'
-                name='frequency'
-                options={autoReloadOptions}
+                name='autoreload'
+                options={this.props.autoReloadOptions}
                 onChange={this.createSelectHandler('autoreload')}
                 autosize={false}
                 clearable={true}
                 value={this.state.autoreload}
               />
             </div>
-            <div className="row-flex">
-              <label htmlFor="funColumnLimit">Max number of items:</label>
+            <div className='row-flex'>
+              <label htmlFor='funColumnLimit'>Max number of items:</label>
               <input 
                 disabled={running}
                 className='size-120'
@@ -142,10 +174,38 @@ class Edit extends PageEdit {
                 name='limit'
               />
             </div>
+            <div className='row-flex'>
+              <span className='form-label'>Sort results by:</span>
+              <Select
+                disabled={running}
+                className='size-120'
+                name='sort_pref'
+                options={this.props.sortPrefix}
+                onChange={this.createSelectHandler('sort_pref')}
+                autosize={false}
+                clearable={true}
+                value={this.state.sort_pref}
+              />
+              <Select
+                disabled={running}
+                name='sort_prop'
+                options={this.props.sortProperty}
+                onChange={this.createSelectHandler('sort_prop')}
+                autosize={false}
+                clearable={false}
+                value={this.state.sort_prop}
+              />
+            </div>
+            <fieldset className='row'>
+              <legend>Select what to display for each item</legend>
+              <table className='is-slim'>
+                <tbody>{displaySettings}</tbody>
+              </table>
+            </fieldset>
           </div>
           <div className='form-block'>
             <h4 className='form-subtitle'>Content type(s):</h4>
-            <div className="row-flex">
+            <div className='row-flex'>
               <span className='form-label'>Images:</span>
               <Toggler
                 className='size-180'
@@ -159,7 +219,7 @@ class Edit extends PageEdit {
                 onChange={this.inputHandler}
                 value={item.data.is_image} />
             </div>
-            <div className="row-flex">
+            <div className='row-flex'>
               <span className='form-label'>Videos:</span>
               <Toggler
                 className='size-180'
@@ -173,7 +233,7 @@ class Edit extends PageEdit {
                 onChange={this.inputHandler}
                 value={item.data.is_video} />
             </div>
-            <div className="row-flex">
+            <div className='row-flex'>
               <span className='form-label'>Facebook posts:</span>
               <Toggler
                 className='size-180'
@@ -187,7 +247,7 @@ class Edit extends PageEdit {
                 onChange={this.inputHandler}
                 value={item.data.is_facebook} />
             </div>
-            <div className="row-flex">
+            <div className='row-flex'>
               <span className='form-label'>Galleries:</span>
               <Toggler
                 className='size-180'
@@ -201,8 +261,21 @@ class Edit extends PageEdit {
                 onChange={this.inputHandler}
                 value={item.data.is_gallery} />
             </div>
-            <div className="row">
-              <label htmlFor="funColumnSearch">Title/description contains:</label>
+            <div className='row-wrap'>
+              <span className='form-label'>Language:</span>
+              <Select
+                disabled={running}
+                className='size-180'
+                name='language'
+                options={this.props.language}
+                onChange={this.createSelectHandler('language')}
+                autosize={false}
+                clearable={true}
+                value={this.state.language}
+              />
+            </div>
+            <div className='row'>
+              <label htmlFor='funColumnSearch'>Title/description contains:</label>
               <input 
                 disabled={running}
                 defaultValue={item.data.search}
@@ -212,8 +285,8 @@ class Edit extends PageEdit {
                 name='search'
               />
             </div>
-            <div className="row">
-              <label htmlFor="funColumnUrl">URL contains:</label>
+            <div className='row'>
+              <label htmlFor='funColumnUrl'>URL contains:</label>
               <input 
                 disabled={running}
                 defaultValue={item.data.url}
@@ -223,8 +296,8 @@ class Edit extends PageEdit {
                 name='url'
               />
             </div>
-            <div className="row">
-              <label htmlFor="funColumnAuthor">Author contains:</label>
+            <div className='row'>
+              <label htmlFor='funColumnAuthor'>Author contains:</label>
               <input 
                 disabled={running}
                 defaultValue={item.data.author}
@@ -234,8 +307,8 @@ class Edit extends PageEdit {
                 name='author'
               />
             </div>
-            <div className="row">
-              <label htmlFor="funColumnExclude">Title/description does not contain:</label>
+            <div className='row'>
+              <label htmlFor='funColumnExclude'>Title/description does not contain:</label>
               <input 
                 disabled={running}
                 defaultValue={item.data.exclude_search}
@@ -250,6 +323,69 @@ class Edit extends PageEdit {
       </section>
     );
   }
+}
+
+Edit.defaultProps = {
+  displaySettings: [
+    'title',
+    'url',
+    'author',
+    'found',
+    'image',
+    'wide_image',
+    'description',
+    'graphs',
+    'likes',
+    'tweets',
+    'pins',
+    'shares',
+    'comments',
+    'votes_video',
+    'views_video',
+    'comments_video'
+  ], 
+  language: [
+    {label: 'Any', value: 'Any'},
+    {label: 'English', value: 'English'},
+    {label: 'French', value: 'French'},
+    {label: 'German', value: 'German'},
+    {label: 'Dutch', value: 'Dutch'},
+    {label: 'Spanish', value: 'Spanish'},
+    {label: 'Korean', value: 'Korean'},
+    {label: 'Arabic', value: 'Arabic'},
+    {label: 'Chinese', value: 'Chinese'},
+    {label: 'Hindi', value: 'Hindi'},
+    {label: 'Japanese', value: 'Japanese'},
+    {label: 'Greek', value: 'Greek'},
+    {label: 'Unknown', value: 'Unknown'},
+    {label: 'Undetected', value: 'Undetected'}
+  ],
+  autoReloadOptions: [
+    {label: 'Disabled', value: 0},
+    {label: '15sec', value: 15},
+    {label: '30sec', value: 30},
+    {label: '1min', value: 60},
+    {label: '2min', value: 120},
+    {label: '5min', value: 300},
+    {label: '10min', value: 600}
+  ],
+  sortPrefix: [
+    {label: 'rate', value: 'rate'},
+    {label: 'maxrate', value: 'maxrate'},
+    {label: 'hotness', value: 'hotness'},
+    {label: 'acc', value: 'acc'}
+  ],
+  sortProperty: [
+    {label: 'found', value: 'found'},
+    {label: 'tweets', value: 'tweets'},
+    {label: 'likes', value: 'likes'},
+    {label: 'shares', value: 'shares'},
+    {label: 'pins', value: 'pins'},
+    {label: 'comments_video', value: 'comments_video'},
+    {label: 'comments', value: 'comments'},
+    {label: 'votes_video', value: 'votes_video'},
+    {label: 'views_video', value: 'views_video'}
+  ]
 }
 
 // Transform app state to component props

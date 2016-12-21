@@ -7,7 +7,6 @@ export const defaultAppState = {
 
 export const defaultUser = {
   id: null,
-  hash: '',
   email: '',
   email_bcc: [],
   name: '',
