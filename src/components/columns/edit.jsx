@@ -128,7 +128,7 @@ class Edit extends React.Component {
       <section className={componentRootClass}>
         <EditFormHeader {...headingData} />
         <form className='subsection-content columned'>
-
+          <div className='form-block'>
             <div className='row'>
               <label htmlFor='funColumnName'>Column name:</label>
               <input 
@@ -202,8 +202,8 @@ class Edit extends React.Component {
                 name='limit'
               />
             </div>
-
-
+          </div>
+          <div className='form-block'>
             <h4 className='form-subtitle'>Content type(s):</h4>
             <div className="row-flex">
               <span className='form-label'>Images:</span>
@@ -305,6 +305,7 @@ class Edit extends React.Component {
                 name='exclude_search'
               />
             </div>
+          </div>
         </form>
       </section>
     );

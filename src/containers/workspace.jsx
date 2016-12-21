@@ -77,7 +77,6 @@ class Workspace extends React.Component {
       'sidebar': true,
       'is-expanded': this.state.sidebar
     });
-
     // Return JSX layout of a component
     // ===========================================================================
     return (this.props.userState) ? (

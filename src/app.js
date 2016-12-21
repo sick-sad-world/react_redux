@@ -77,8 +77,8 @@ render(
         <Route path='/auth' component={Auth} />
         <Route component={Workspace}>
           <Route path='/dashboard(/:id)' components={{main: Dashboard}} />
-          <Route path='/alerts(/:id)(/:assigment)' components={Alerts}/>
-          <Route path='/reports(/:id)(/:assigment)' components={Reports}/>
+          <Route path='/alerts(/:id)' components={Alerts}/>
+          <Route path='/reports(/:id)' components={Reports}/>
           <Route path='/columns(/:id)(/:assigment)' components={Columns}/>
           <Route path='/sets(/:id)(/:create)' components={Sourcesets}/>
           <Route path='/settings' components={{main: Profile}}/>
