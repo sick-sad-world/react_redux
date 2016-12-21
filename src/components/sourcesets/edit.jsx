@@ -16,12 +16,13 @@ import DeletingPopup from '../deletingPopup';
 import Icon from '../icon';
 import Source from './source';
 import EditFormHeader from '../editHeader';
+import PageEdit from '../pageEdit';
 
 // Import actions
 // ===========================================================================
-import { createData, updateData, deleteData, throwError } from '../../actions/actions';
+import { deleteData } from '../../actions/actions';
 
-class Edit extends React.Component {
+class Edit extends PageEdit {
   constructor (props) {
     super(props);
     this.state = {
@@ -29,64 +30,51 @@ class Edit extends React.Component {
       deleting: 0,
       dialogPos: 0
     }
-
+    
     // Create bound actions
     // ===========================================================================
-    this.actions = bindActionCreators({
-      createData: createData('set'),
-      updateData: updateData('set'),
-      deleteData: deleteData('source'),
-      throwError: throwError
-    }, this.props.dispatch);
+    this.actions.deleteData = bindActionCreators({
+      deleteData: deleteData('source')
+    }, this.props.dispatch).deleteData;
 
     // Bind action handlers to component
     // ===========================================================================
-    bindAll(this, ['preformAction', 'inputHandler', 'makeSourceButton', 'deleteHandler', 'sourcesHandler']);
+    bindAll(this, ['preformAction', 'inputHandler', 'makeSourceButton', 'stateDelete', 'handlerDelete', 'sourcesHandler']);
   }
 
-  // Set [delete] state, to show confirmation dialog
-  // ===========================================================================
-  stateDelete (id, dialogPos) {
+  stateDelete (e, id) {
+    console.log(e, id);
+    e.preventDefault();
+    let pos, target = e.target;
+    while (!target.classList.contains('mod-entity')) {
+      target = target.parentNode;
+    }
+    pos = target.offsetTop - e.target.clientHeight;
     this.setState({
       deleting: (this.state.deleting === id) ? 0 : id,
-      dialogPos: (this.state.dialogPos === dialogPos) ? 0 : dialogPos,
+      dialogPos: (this.state.dialogPos === pos) ? 0 : pos,
     });
   }
 
-  // Send request to server with new props 
+  // Run DELETE action itself
+  // @ provide required params
   // ===========================================================================
-  preformAction (data) {
-    if (this.props.item.id) {
-      // Modify if item is already existed
-      // ===========================================================================
-      this.actions.updateData(Object.assign({id: this.props.item.id}, data)).catch(this.actions.throwError);
-    } else {
-      // Create item if ID == 0
-      // ===========================================================================
-      this.actions.createData(Object.assign({}, this.props.item, data)).then(({payload}) => {
-        this.props.router.push(`/${this.props.type}s/${payload.id}`);
-      }).catch(this.actions.throwError);
-    }
-  }
-
-  // Input handler 
-  // -> Function which handles action change
-  // ===========================================================================
-  inputHandler(e) {
-    this.preformAction({
-      [e.target.name]: e.target.value
-    });
-  }
-
-  deleteHandler (e, id) {
+  handlerDelete (e) {
     e.preventDefault();
-    let coord = window.outerHeight - e.target.getBoundingClientRect().bottom - e.target.parentNode.clientHeighе;
-    this.stateDelete(id, coord);
+    let data = {
+      id: this.state.deleting,
+      set_id: this.props.item.id
+    };
+    this.actions.deleteData(data).catch(this.actions.throwError).then(() => this.setState({deleting: 0, dialogPos: 0}));
   }
 
+  // Make button for [own_sources] list
+  // @delete for uniq feeds
+  // @remove for common one
+  // ===========================================================================
   makeSourceButton (uniq_ids, id) {
     if (includes(uniq_ids, id)) {
-      return <a href='' onClick={(e) => this.deleteHandler(e, id)} title='Delete this source'><Icon icon='trash' /></a>;
+      return <a href='' onClick={(e) => this.stateDelete(e, id)} title='Delete this source'><Icon icon='trash' /></a>;
     } else {
       return <a href='' onClick={(e) => {
         e.preventDefault();
@@ -95,6 +83,9 @@ class Edit extends React.Component {
     }
   }
 
+  // Handle change for [source_ids] Array parameter
+  // @used: FeedsList, makeSourceButton
+  // ===========================================================================
   sourcesHandler (type, id, deleting) {
     let val = (type === 'source') ? id : find(this.props.sets, {id}).source_ids;
     if (deleting) {
@@ -108,7 +99,7 @@ class Edit extends React.Component {
   render() {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
-    if (!this.props.item) return null;
+    if (!this.props.item.id) return null;
     let running = this.props.appState === 3;
     let { item, own_sources } = this.props;
 
@@ -140,7 +131,11 @@ class Edit extends React.Component {
     // Make confirmation dialog if item deletable and [deleting] state active
     // ===========================================================================
     let confimation = (this.state.deleting > 0 && this.state.dialogPos > 0) ? (
-      <DeletingPopup dialogPos={{top: `${this.state.dialogPos}px`}} handlerDelete={this.handlerDelete} handlerCancel={e => this.stateDelete(0, 0)} />
+      <DeletingPopup
+        dialogPos={{top: `${this.state.dialogPos}px`}}
+        handlerDelete={this.handlerDelete}
+        handlerCancel={e => this.setState({deleting: 0, dialogPos: 0})}
+      />
     ) : null;
 
     // Return DOM layout
@@ -169,7 +164,7 @@ class Edit extends React.Component {
                 <div className='header'>
                   <span>Sourceset has {item.source_ids.length} sources total.</span>
                 </div>
-                <ul className='entity-list funSelectedItems'>
+                <ul className='entity-list'>
                   {(own_sources.length) ? own_sources.map((source) => {
                     return <Source key={source.id} sortable={false} button={this.makeSourceButton(item.uniq_ids, source.id)} {...source} />
                   }) : empty}
@@ -195,12 +190,12 @@ class Edit extends React.Component {
 // @ deps -> Sets, Columns
 // ===========================================================================
 let mapStateToProps = ({ sets, sources, app }, ownProps) => {
-  let item = find(sets, {id: parseInt(ownProps.params.id)})
+let item = find(sets, {id: parseInt(ownProps.params.id)}) || {};
   return {
     appState: app.appState,
     type: 'set',
     item: item,
-    own_sources: (item) ? filter(sources, (source) => includes(item.source_ids, source.id)) : [],
+    own_sources: (item.id) ? filter(sources, (source) => includes(item.source_ids, source.id)) : [],
     sources,
     sets
   }

@@ -1,97 +1,37 @@
 // Import utility stuff
 // ===========================================================================
-import { find, pick, bindAll, isArray } from 'lodash';
+import { find, bindAll } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 // Import Child components
 // ===========================================================================
 import Select from 'react-select';
-import EmailList from '../sourcesets/injectable';
 import Toggler from '../toggler';
 import EditFormHeader from '../editHeader';
+import PageEdit from '../pageEdit';
 
 // Import actions
 // ===========================================================================
-import { createData, updateData, throwError } from '../../actions/actions';
 import { defColumnData } from '../../reducers/defaults';
 
-class Edit extends React.Component {
+class Edit extends PageEdit {
   constructor (props) {
     super(props);
-    this.state = {
-      loading: false
-    }
-
-    // Create bound actions
-    // ===========================================================================
-    this.actions = bindActionCreators({
-      createData: createData('column'),
-      updateData: updateData('column'),
-      throwError: throwError
-    }, this.props.dispatch);
 
     // Bind action handlers to component
     // ===========================================================================
     bindAll(this, ['preformAction', 'inputHandler', 'createSelectHandler']);
   }
 
-  // Update state to hook our dropdowns
-  // ===========================================================================
-  componentWillReceiveProps(nextProps) {
-    this.state = this.setState(pick(nextProps.item, []));
-  }
-
-  // Send request to server with new props 
-  // ===========================================================================
-  preformAction (data) {
-    if (this.props.item.id) {
-      // Modify if item is already existed
-      // ===========================================================================
-      this.actions.updateData(Object.assign({id: this.props.item.id}, data)).catch(this.actions.throwError);
-    } else {
-      // Create item if ID == 0
-      // ===========================================================================
-      this.actions.createData(Object.assign({}, this.props.item, data)).then(({payload}) => {
-        this.props.router.push(`/${this.props.type}s/${payload.id}`);
-      }).catch(this.actions.throwError);
-    }
-  }
-
-  // Input handler 
-  // -> Function which handles action change
-  // ===========================================================================
-  inputHandler(e) {
-    this.preformAction({
-      [e.target.name]: e.target.value
-    });
-  }
-
-  // Select handler creator
-  // -> Function which handles both action and state change
-  // ===========================================================================
-  createSelectHandler (name) {
-    return (value) => {
-      // Set state to update selects
-      // then run change handler to send chnages to server
-      // ===========================================================================
-      this.setState({[name]: value}, () => {
-        this.preformAction({
-          [name]: (isArray(value)) ? value.map(v => v.value) : value.value
-        });
-      });
-    }
-  }
-
   render() {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
-    if (!this.props.item) return null;
+    if (!this.props.item.id) return null;
     let item = this.props.item;
     let running = this.props.appState === 3
 
@@ -325,7 +265,7 @@ let mapStateToProps = ({ columns, sets, sources, app }, ownProps) => {
   return {
     appState: app.appState,
     type: 'column',
-    item,
+    item: item || {},
     sets,
     sources
   };

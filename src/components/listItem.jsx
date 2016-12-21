@@ -18,8 +18,12 @@ export default class ListItem extends React.PureComponent {
   }
   deleteHandler (e) {
     e.preventDefault();
-    let coord = window.outerHeight - e.target.getBoundingClientRect().bottom - e.target.parentNode.clientHeight;
-    this.props.stateDelete(this.props.id, coord);
+    let pos, target = e.target;
+    while (!target.classList.contains('mod-entity')) {
+      target = target.parentNode;
+    }
+    pos = target.offsetTop + target.parentNode.offsetTop - e.target.clientHeight * 2;
+    this.props.stateDelete(this.props.id, pos);
   }
 
   render() {

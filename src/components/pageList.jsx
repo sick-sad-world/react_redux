@@ -122,7 +122,11 @@ export default class PageList extends React.Component {
     // Make confirmation dialog if item deletable and [deleting] state active
     // ===========================================================================
     let confimation = (this.props.deletable && this.state.deleting > 0 && this.state.dialogPos > 0) ? (
-      <DeletingPopup dialogPos={{bottom: `${this.state.dialogPos}px`}} handlerDelete={this.handlerDelete} handlerCancel={e => this.stateDelete(0, 0)} />
+      <DeletingPopup
+        dialogPos={{top: `${this.state.dialogPos}px`}}
+        handlerDelete={this.handlerDelete}
+        handlerCancel={e => this.stateDelete(0, 0)}
+      />
     ) : null;
 
     // Return DOM components

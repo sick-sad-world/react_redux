@@ -35,10 +35,9 @@ export default class PageEdit extends React.Component {
   // Pick an dropdown values to inject it into state
   // ===========================================================================
   processDropdowns (item) {
-    console.log(item, this.props.item);
-    return mapValues(this.dropdowns, (v, k) => {
+    return (item) ? mapValues(this.dropdowns, (v, k) => {
       return v(item || this.props.item);
-    });
+    }) : {};
   }
 
   // Update state to hook our dropdowns

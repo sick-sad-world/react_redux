@@ -32,7 +32,7 @@ class Edit extends PageEdit {
   render() {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
-    if (!this.props.item) return null;
+    if (!this.props.item.id) return null;
     let item = this.props.item;
     let running = this.props.appState === 3
 
@@ -134,7 +134,7 @@ class Edit extends PageEdit {
 // @ deps -> Alert, Columns
 // ===========================================================================
 let mapStateToProps = ({ alerts, columns, app, user }, ownProps) => {
-  let item = {};
+  let item;
 
   if (ownProps.params.id === 'new') {
     // Make data for a new Report out of defaults
@@ -158,7 +158,7 @@ let mapStateToProps = ({ alerts, columns, app, user }, ownProps) => {
     type: 'alert',
     email: user.email,
     email_bcc: user.email_bcc,
-    item: item,
+    item: item || {},
     columns: columns.map((item) => {
       return {
         value: item.id,
