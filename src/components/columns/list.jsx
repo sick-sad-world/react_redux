@@ -3,7 +3,7 @@
 import React from 'React';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { pick } from 'lodash';
+import { pick, bindAll } from 'lodash';
 
 // Import child components
 // ===========================================================================
@@ -13,7 +13,7 @@ import Icon from '../icon';
 
 // Import actions
 // ===========================================================================
-import { createData, updateData, deleteData, throwError } from '../../actions/actions';
+import { updateData, throwError } from '../../actions/actions';
 
 class List extends React.Component {
   constructor(props) {
@@ -22,19 +22,17 @@ class List extends React.Component {
     // Create bound actions
     // ===========================================================================
     this.actions = bindActionCreators({
-      createData: createData('column'),
       updateData: updateData('column'),
-      deleteData: deleteData('column'),
       throwError: throwError
     }, this.props.dispatch);
 
-    this.changeVis = this.changeVis.bind(this);
-    this.getItemIcon = this.getItemIcon.bind(this);
+    bindAll(this, ['changeVis', 'getItemIcon']);
   }
 
   // Change visibility filter
   // ===========================================================================
-  changeVis (data) {
+  changeVis (e, data) {
+    e.preventDefault();
     this.actions.updateData(data).catch(this.actions.throwError);
   }
 
@@ -42,7 +40,6 @@ class List extends React.Component {
   // ===========================================================================
   getItemIcon (props) {
     let title, params, icon;
-    console.log(props);
     if (props.open) {
       title = 'Hide this Column';
       icon = 'eye-with-line';
@@ -52,8 +49,7 @@ class List extends React.Component {
       icon = 'eye';
       params = {id: props.id, open: 1};
     }
-
-  return <a href='' onClick={e => {e.preventDefault(); this.changeVis(params)}} title={title}><Icon icon={icon} /></a>;
+    return <a href='' onClick={e => this.changeVis(e, params)} title={title}><Icon icon={icon} /></a>;
   }
 
   render() {
@@ -68,7 +64,7 @@ class List extends React.Component {
     };
 
     return (
-      <PageList {...this.actions} texts={texts} {...this.props} >
+      <PageList texts={texts} {...this.props} >
         <ListItem customIcon={this.getItemIcon} />
       </PageList>
     );

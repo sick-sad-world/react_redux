@@ -1,7 +1,6 @@
 // Import react related stuff
 // ===========================================================================
 import React from 'React';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 // Import child components
@@ -9,23 +8,7 @@ import { connect } from 'react-redux';
 import PageList from '../pageList';
 import ListItem from '../listItem';
 
-// Import actions
-// ===========================================================================
-import { createData, deleteData, throwError } from '../../actions/actions';
-
 class List extends React.Component {
-  constructor(props) {
-    super(props);
-
-    // Create bound actions
-    // ===========================================================================
-    this.actions = bindActionCreators({
-      createData: createData('set'),
-      deleteData: deleteData('set'),
-      throwError: throwError
-    }, this.props.dispatch);
-  }
-  
   render() {
     // Define common text values
     // ===========================================================================
@@ -38,7 +21,7 @@ class List extends React.Component {
     };
     
     return (
-      <PageList {...this.actions} texts={texts} {...this.props} >
+      <PageList texts={texts} {...this.props} >
         <ListItem />
       </PageList>
     );

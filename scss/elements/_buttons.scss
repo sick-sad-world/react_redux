@@ -34,6 +34,7 @@
     }
   }
   &.is-alt {
+    color: $c-alt;
     @include gradient($c-accent-alt);
     border-color: rgba(0, 0, 0, .4);
     &:hover,

@@ -1,9 +1,14 @@
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
+import { bindActionCreators } from 'redux';
 import Icon from './icon';
 import DeletingPopup from './deletingPopup'
 import { bindAll } from 'lodash';
+
+// Import actions
+// ===========================================================================
+import { createData, deleteData, throwError } from '../actions/actions';
 
 // Abstract Page list component
 // ===========================================================================
@@ -16,6 +21,15 @@ export default class PageList extends React.Component {
       deleting: 0,
       dialogPos: 0
     };
+
+    // Create bound actions
+    // ===========================================================================
+    this.actions = bindActionCreators({
+      createData: createData(this.props.type),
+      deleteData: deleteData(this.props.type),
+      throwError: throwError
+    }, this.props.dispatch);
+
     bindAll(this, ['stateDelete', 'handlerDelete', 'handlerCreate', 'createListItem'])
   }
 
@@ -74,7 +88,7 @@ export default class PageList extends React.Component {
     } else {
       // Create item
       // ===========================================================================
-      this.props.createData({name: value, order: this.props.items.length}).catch(this.props.throwError);
+      this.actions.createData({name: value, order: this.props.items.length}).catch(this.actions.throwError);
     }
   }
 
@@ -83,7 +97,7 @@ export default class PageList extends React.Component {
   // ===========================================================================
   handlerDelete (e) {
     e.preventDefault();
-    this.props.deleteData({id: this.state.deleting}).catch(this.props.throwError).then(() => this.stateDelete(0, 0));
+    this.actions.deleteData({id: this.state.deleting}).catch(this.actions.throwError).then(() => this.stateDelete(0, 0));
   }
 
   render () {
