@@ -47,6 +47,8 @@ span.switcher-checkbox {
 	svg {
 		fill: $c-border;
 		border-radius: $bdrs;
+    width: $pointer-unit - 4px;
+    height: $pointer-unit - 4px;
 	}
 	input:checked + svg {
 		fill: $c-alt;
@@ -78,12 +80,8 @@ span.switcher-direction {
 		height: round($form-unit*0.5);
 		fill: $c-icon;
 	}
-	input[value="asc"]:checked {
-		z-index: -1;
-	}
-	input[value="desc"]:checked {
-		z-index: -1;
-		 ~ svg {
+	input:checked {
+		 + svg {
 			transform: rotateY(180deg);
 		}
 	}

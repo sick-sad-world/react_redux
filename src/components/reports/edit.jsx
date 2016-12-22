@@ -38,15 +38,6 @@ class Edit extends PageEdit {
     let item = this.props.item;
     let running = this.props.appState === 3;
 
-    // Frequency options array
-    // ===========================================================================
-    let frequencyOptions = [
-      {value: 15, label: '15 min'},
-      {value: 60, label: 'Hourly'},
-      {value: 1440, label: 'Daily'},
-      {value: 10080, label: 'Weekly'}
-    ];
-
     // Data for form heading
     // ===========================================================================
     let headingData = {
@@ -98,7 +89,7 @@ class Edit extends PageEdit {
                 disabled={running}
                 className='size-180'
                 name='frequency'
-                options={frequencyOptions}
+                options={this.props.frequencyOptions}
                 onChange={this.createSelectHandler('frequency')}
                 autosize={false}
                 clearable={false}
@@ -110,7 +101,7 @@ class Edit extends PageEdit {
               <label htmlFor='funReportNextSend'>Next send:</label>
               <Datetime 
                 defaultValue={item.next_send}
-                onBlur={(value) => this.preformAction({['next_send']: value.format('YYYY-MM-DD HH:mm:ss')})}
+                onBlur={(value) => this.preformAction('next_send', (typeof value === 'string') ? value : value.format('YYYY-MM-DD HH:mm:ss'))}
                 dateFormat='YYYY-MM-DD'
                 timeFormat=' HH:mm:ss'
                 inputProps={{
@@ -140,6 +131,15 @@ class Edit extends PageEdit {
       </section>
     );
   }
+}
+
+Edit.defaultProps = {
+  frequencyOptions: [
+    {value: 15, label: '15 min'},
+    {value: 60, label: 'Hourly'},
+    {value: 1440, label: 'Daily'},
+    {value: 10080, label: 'Weekly'}
+  ]
 }
 
 // Transform app state to component props

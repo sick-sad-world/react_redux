@@ -13,12 +13,12 @@ export default function Toggler (props) {
 
   let options = [];
   forOwn(props.options, (val, label) => {
-    let id = `fun-${label}-${val}`;
+    let id = `fun-${props.name}-${label}-${val}`;
     options.push(<input
                     disabled={props.disabled}
                     type='radio'
                     id={id}
-                    key={val}
+                    key={props.name+'-'+val}
                     defaultChecked={val === props.value}
                     onChange={props.onChange}
                     onFocus={setRootFocusClass}

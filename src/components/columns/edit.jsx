@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { find, bindAll, includes } from 'lodash';
+import { find, bindAll, includes, without, concat, pick, isNaN } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
@@ -18,13 +18,13 @@ import PageEdit from '../pageEdit';
 
 // Import actions
 // ===========================================================================
-import { defColumnData } from '../../reducers/defaults';
+import { defColumn, defColumnData } from '../../reducers/defaults';
 
 class Edit extends PageEdit {
   constructor (props) {
     super(props, {
       language (item) {
-        return (item.data) ? item.data.language : 'Any';
+        return item.data && item.data.language;
       },
       autoreload (item) {
         return (item.data) ? item.data.autoreload : 0;
@@ -39,9 +39,73 @@ class Edit extends PageEdit {
       }
     });
 
+    let regExp = /MIN|MAX|LIKE/;
+    this.state.advFilters = pick(this.props.item.data, (v, k) => regExp.test(k));
+
     // Bind action handlers to component
     // ===========================================================================
     bindAll(this, ['preformAction', 'inputHandler', 'createSelectHandler']);
+  }
+
+  // Send request to server with new props
+  // @overriding [preformAction] pageEdit.jsx:51
+  // ===========================================================================
+  preformAction (name, value) {
+    let item = this.props.item;
+    let data = false;
+
+    // Convert number to number
+    // ===========================================================================
+    if (!isNaN(parseFloat(value))) {
+      value = parseFloat(value);
+    }
+
+    // Convert null to undefined
+    // ===========================================================================
+    if (value === null || (name.indexOf('is_') === 0 && value === 'on')) {
+      value = undefined;
+    }
+
+    if (this.props.item.id) {
+      // Modify if item is already existed
+      // ===========================================================================
+      switch (name) {
+        case 'name':
+          if (value !== item.name) {
+            data = {name: value};
+          }
+        break;
+        case 'display_settings':
+          if (includes(item.display_settings, value)) {
+            data = {display_settings: without(item.display_settings, value)};
+          } else {
+            data = {display_settings: concat(item.display_settings, value)};
+          }
+        break;
+        default:
+          // Compose sorting property
+          // ===========================================================================
+          if (name.indexOf('sort') === 0) {
+            name = 'sort';
+            value = (this.state.sort_pref) ? this.state.sort_pref + '_' + this.state.sort_prop : this.state.sort_prop;
+          }
+
+          // Proper autoreload disabled value
+          // ===========================================================================
+          if (name === 'autoreload' && !value) {
+            value = 0;
+          }
+
+          data = { data: Object.assign({}, item.data, {[name]: value}) };
+          //data.data = JSON.stringify(data.data);
+        break;
+      }
+      console.log(name, value, data.data);
+      if (data && !data.data) {
+        data.id = item.id;
+        this.actions.updateData(data).catch(this.actions.throwError);
+      }
+    }
   }
 
   render() {
@@ -62,6 +126,7 @@ class Edit extends PageEdit {
 
     let componentRootClass = classNames({
       'mod-subsection-edit': true,
+      'mod-column-edit': true,
       'state-loading': running
     });
 
@@ -73,13 +138,14 @@ class Edit extends PageEdit {
       displaySettingsRow.push((
         <td key={`cell${i}`}>
           <label>
-            <span className='switcher-checkbox'>
+            <span className={`switcher-checkbox${(running) ? ' is-disabled' : ''}`}>
               <input
                 type='checkbox'
                 name='display_settings'
                 value={setting}
                 disabled={running}
-                defaultChecked={includes(item.display_settings, setting)}
+                onChange={this.inputHandler}
+                checked={includes(item.display_settings, setting)}
               />
               <Icon icon='check' />
             </span>
@@ -155,6 +221,7 @@ class Edit extends PageEdit {
                 disabled={running}
                 className='size-120'
                 name='autoreload'
+                placeholder='Disabled...'
                 options={this.props.autoReloadOptions}
                 onChange={this.createSelectHandler('autoreload')}
                 autosize={false}
@@ -176,25 +243,39 @@ class Edit extends PageEdit {
             </div>
             <div className='row-flex'>
               <span className='form-label'>Sort results by:</span>
-              <Select
-                disabled={running}
-                className='size-120'
-                name='sort_pref'
-                options={this.props.sortPrefix}
-                onChange={this.createSelectHandler('sort_pref')}
-                autosize={false}
-                clearable={true}
-                value={this.state.sort_pref}
-              />
-              <Select
-                disabled={running}
-                name='sort_prop'
-                options={this.props.sortProperty}
-                onChange={this.createSelectHandler('sort_prop')}
-                autosize={false}
-                clearable={false}
-                value={this.state.sort_prop}
-              />
+              <div className='sorting-selects'>
+                <Select
+                  disabled={running}
+                  className='size-120'
+                  name='sort_pref'
+                  options={this.props.sortPrefix}
+                  onChange={this.createSelectHandler('sort_pref')}
+                  autosize={false}
+                  clearable={true}
+                  value={this.state.sort_pref}
+                />
+                <Select
+                  disabled={running}
+                  className='size-180'
+                  name='sort_prop'
+                  options={this.props.sortProperty}
+                  onChange={this.createSelectHandler('sort_prop')}
+                  autosize={false}
+                  clearable={false}
+                  value={this.state.sort_prop}
+                />
+                <span className='switcher-direction'>
+                  <input
+                    type='checkbox'
+                    disabled={running}
+                    name='direction'
+                    onChange={this.inputHandler}
+                    checked={item.data.direction === 'desc'}
+                    value={(item.data.direction === 'desc') ? 'asc' : 'desc'}
+                  />
+                  <Icon icon='bar-graph' />
+                </span>
+              </div>
             </div>
             <fieldset className='row'>
               <legend>Select what to display for each item</legend>
@@ -213,7 +294,7 @@ class Edit extends PageEdit {
                 name='is_image'
                 options={{
                   'Only': 1,
-                  'Include': 'NaN',
+                  'Include': undefined,
                   'Omit': 0
                 }}
                 onChange={this.inputHandler}
@@ -227,7 +308,7 @@ class Edit extends PageEdit {
                 name='is_video'
                 options={{
                   'Only': 1,
-                  'Include': 'NaN',
+                  'Include': undefined,
                   'Omit': 0
                 }}
                 onChange={this.inputHandler}
@@ -241,7 +322,7 @@ class Edit extends PageEdit {
                 name='is_facebook'
                 options={{
                   'Only': 1,
-                  'Include': 'NaN',
+                  'Include': undefined,
                   'Omit': 0
                 }}
                 onChange={this.inputHandler}
@@ -255,18 +336,19 @@ class Edit extends PageEdit {
                 name='is_gallery'
                 options={{
                   'Only': 1,
-                  'Include': 'NaN',
+                  'Include': undefined,
                   'Omit': 0
                 }}
                 onChange={this.inputHandler}
                 value={item.data.is_gallery} />
             </div>
-            <div className='row-wrap'>
+            <div className='row-flex'>
               <span className='form-label'>Language:</span>
               <Select
                 disabled={running}
                 className='size-180'
                 name='language'
+                placeholder='Any'
                 options={this.props.language}
                 onChange={this.createSelectHandler('language')}
                 autosize={false}
@@ -318,6 +400,31 @@ class Edit extends PageEdit {
                 name='exclude_search'
               />
             </div>
+            <div className='row-flex'>
+              <span className='form-label'>Found since/before <i><b>n</b></i> hours ago:</span>
+              <div className='row-time-gap'>
+                <input 
+                  disabled={running}
+                  defaultValue={item.data.since}
+                  onBlur={this.inputHandler}
+                  placeholder='Since...'
+                  className='size-120'
+                  id='funColumnSince'
+                  type='text'
+                  name='since'
+                />
+                <input 
+                  disabled={running}
+                  defaultValue={item.data.before}
+                  onBlur={this.inputHandler}
+                  placeholder='Before...'
+                  className='size-120'
+                  id='funColumnBefore'
+                  type='text'
+                  name='before'
+                />
+              </div>
+            </div>
           </div>
         </form>
       </section>
@@ -345,7 +452,6 @@ Edit.defaultProps = {
     'comments_video'
   ], 
   language: [
-    {label: 'Any', value: 'Any'},
     {label: 'English', value: 'English'},
     {label: 'French', value: 'French'},
     {label: 'German', value: 'German'},
@@ -361,7 +467,6 @@ Edit.defaultProps = {
     {label: 'Undetected', value: 'Undetected'}
   ],
   autoReloadOptions: [
-    {label: 'Disabled', value: 0},
     {label: '15sec', value: 15},
     {label: '30sec', value: 30},
     {label: '1min', value: 60},
@@ -396,6 +501,17 @@ let mapStateToProps = ({ columns, sets, sources, app }, ownProps) => {
   
   if (item) {
     item.data = Object.assign({}, defColumnData, item.data);
+    // Transform string -> Array
+    // @ should be removed when i communicate with maarten
+    // ===========================================================================
+    if (typeof item.display_settings === 'string') {
+      item.display_settings = item.display_settings.split(',');
+    }
+    if (!item.display_settings || !item.display_settings.length) {
+    // Set default data if none is provided
+    // ===========================================================================
+      item.display_settings = defColumn.display_settings;
+    }
   }
 
   return {

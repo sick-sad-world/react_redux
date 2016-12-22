@@ -48,15 +48,21 @@ export default class PageEdit extends React.Component {
 
   // Send request to server with new props 
   // ===========================================================================
-  preformAction (data) {
-    if (this.props.item.id) {
+  preformAction (name, value) {
+    let data = {};
+    let item = this.props.item;
+    if (item.id) {
       // Modify if item is already existed
       // ===========================================================================
-      this.actions.updateData(Object.assign({id: this.props.item.id}, data)).catch(this.actions.throwError);
+      if (item[name] !== value) {
+        data[name] = value;
+        this.actions.updateData(Object.assign({id: item.id}, data)).catch(this.actions.throwError);
+      }
     } else {
       // Create item if ID == 0
       // ===========================================================================
-      this.actions.createData(Object.assign({}, this.props.item, data)).then(({payload}) => {
+      data[name] = value;
+      this.actions.createData(Object.assign({}, item, data)).then(({payload}) => {
         this.props.router.push(`/${this.props.type}s/${payload.id}`);
       }).catch(this.actions.throwError);
     }
@@ -66,9 +72,7 @@ export default class PageEdit extends React.Component {
   // -> Function which handles action change
   // ===========================================================================
   inputHandler(e) {
-    this.preformAction({
-      [e.target.name]: e.target.value
-    });
+    this.preformAction(e.target.name, e.target.value);
   }
 
   // Select handler creator
@@ -79,10 +83,9 @@ export default class PageEdit extends React.Component {
       // Set state to update selects
       // then run change handler to send chnages to server
       // ===========================================================================
+      value = (isArray(value)) ? value.map(v => v.value) : (value) ? value.value : value;
       this.setState({[name]: value}, () => {
-        this.preformAction({
-          [name]: (isArray(value)) ? value.map(v => v.value) : value.value
-        });
+        this.preformAction(name, value);
       });
     }
   }

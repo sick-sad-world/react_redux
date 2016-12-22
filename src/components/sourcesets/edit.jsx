@@ -92,7 +92,7 @@ class Edit extends PageEdit {
     } else {
       val = concat(this.props.item.source_ids, val);
     }
-    this.preformAction({['source_ids']: val});
+    this.preformAction('source_ids', val);
   }
 
   render() {

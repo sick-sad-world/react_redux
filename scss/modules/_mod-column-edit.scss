@@ -12,12 +12,20 @@
 			margin: 0 baseUnit(0.5);
 		}
 	}
-	.row-time-gap {
-		div {
-			flex: 0 0 50%;
-		}
-		div + div {
-			padding-left: baseUnit(0.5);
-		}
-	}
+  table {
+    label {
+      text-indent: baseUnit();
+      text-transform: capitalize;
+    }
+  }
+  .sorting-selects,
+  .row-time-gap {
+    > * {
+      display: inline-block;
+      vertical-align: top;
+      &:not(:last-child) {
+        margin-right: baseUnit(2);
+      }
+    }
+  }
 }

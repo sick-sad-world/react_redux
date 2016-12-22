@@ -25,7 +25,7 @@
 
   // Unique styles for list section
   .mod-subsection-list {
-    flex: 0 1 30%;
+    flex: 0 0 30%;
     min-width: map-get($layout, buffer);
     z-index: 2;
     position: relative;

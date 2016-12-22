@@ -36,17 +36,6 @@ class Edit extends PageEdit {
     let item = this.props.item;
     let running = this.props.appState === 3
 
-    // Frequency options array
-    // ===========================================================================
-    let frequencyOptions = [
-      {value: 5, label: '5 min'},
-      {value: 10, label: '10 min'},
-      {value: 15, label: '15 min'},
-      {value: 20, label: '20 min'},
-      {value: 30, label: '30 min'},
-      {value: 60, label: '60 min'}
-    ];
-
     // Data for form heading
     // ===========================================================================
     let headingData = {
@@ -98,7 +87,7 @@ class Edit extends PageEdit {
                 disabled={running}
                 className='size-120'
                 name='frequency'
-                options={frequencyOptions}
+                options={this.props.frequencyOptions}
                 onChange={this.createSelectHandler('frequency')}
                 autosize={false}
                 clearable={false}
@@ -128,6 +117,17 @@ class Edit extends PageEdit {
       </section>
     );
   }
+}
+
+Edit.defaultProps = {
+  frequencyOptions: [
+    {value: 5, label: '5 min'},
+    {value: 10, label: '10 min'},
+    {value: 15, label: '15 min'},
+    {value: 20, label: '20 min'},
+    {value: 30, label: '30 min'},
+    {value: 60, label: '60 min'}
+  ]
 }
 
 // Transform app state to component props
