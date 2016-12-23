@@ -45,7 +45,7 @@ span[class*="switcher-"] {
 
 span.switcher-checkbox {
 	svg {
-		fill: $c-border;
+		fill: lighten($c-border, 10%);
 		border-radius: $bdrs;
     width: $pointer-unit - 4px;
     height: $pointer-unit - 4px;

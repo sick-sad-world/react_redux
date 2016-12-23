@@ -32,11 +32,11 @@ export default class Sourceset extends React.PureComponent {
             </span>
           </div>
           <nav className='nav-links'>
-            <a href="" onClick={e => {
+            <a href='' onClick={e => {
               e.preventDefault();
               selectHandler('set', id);
             }} title='Add this set to selection'><Icon icon='reply-all' /></a>
-            <a href="" onClick={e => {
+            <a href='' onClick={e => {
               e.preventDefault();
               expandHandler((expanded) ? 0 : id);
             }} title='View contents'><Icon icon={(expanded) ? 'chevron-up' : 'chevron-down'} /></a>

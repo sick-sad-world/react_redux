@@ -8,7 +8,7 @@ export default function fetch (url, data, opts) {
     jsonp(Object.assign({
       url: `http://api.trendolizer.com/v3/${url}`,
       data: data,
-      complete: reject,
+      error: reject,
       success: resolve
     }, opts));
   });

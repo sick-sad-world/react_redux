@@ -17,6 +17,19 @@
       text-indent: baseUnit();
       text-transform: capitalize;
     }
+    .switcher-checkbox {
+      margin-right: baseUnit();
+    }
+  }
+  .adv-filters {
+    fieldset {
+      .row-flex {
+        margin-bottom: baseUnit();
+      }
+      input[name='adv_val'] {
+        flex: 1 1 auto;
+      }
+    }
   }
   .sorting-selects,
   .row-time-gap {

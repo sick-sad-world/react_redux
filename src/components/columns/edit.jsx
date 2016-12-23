@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { find, bindAll, includes, without, concat, pick, isNaN } from 'lodash';
+import { find, bindAll, includes, without, concat, pickBy, isNaN, isUndefined, map, keys, omitBy } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
@@ -39,12 +39,27 @@ class Edit extends PageEdit {
       }
     });
 
-    let regExp = /MIN|MAX|LIKE/;
-    this.state.advFilters = pick(this.props.item.data, (v, k) => regExp.test(k));
-
+    this.getAdvFiltersFromProps(this.props);
     // Bind action handlers to component
     // ===========================================================================
-    bindAll(this, ['preformAction', 'inputHandler', 'createSelectHandler']);
+    bindAll(this, ['preformAction', 'inputHandler', 'createSelectHandler', 'createAdvFilter']);
+  }
+
+  onComponentWillReceiveProps (newProps) {
+    this.getAdvFiltersFromProps(newProps);
+  }
+
+  // Pick adv filters and assign it to state
+  // ===========================================================================
+  getAdvFiltersFromProps (props) {
+    this.advRegExp = /MIN|MAX|LIKE/;
+    Object.assign(this.state, {
+      adv_type: 'MIN',
+      adv_pref: null,
+      adv_prop: 'likes',
+      adv_val: '',
+      advFilters: pickBy(props.item.data, (v, k) => this.advRegExp.test(k))
+    })
   }
 
   // Send request to server with new props
@@ -62,7 +77,7 @@ class Edit extends PageEdit {
 
     // Convert null to undefined
     // ===========================================================================
-    if (value === null || (name.indexOf('is_') === 0 && value === 'on')) {
+    if (value === '' || value === null || (name.indexOf('is_') === 0 && value === 'on')) {
       value = undefined;
     }
 
@@ -97,15 +112,24 @@ class Edit extends PageEdit {
           }
 
           data = { data: Object.assign({}, item.data, {[name]: value}) };
-          //data.data = JSON.stringify(data.data);
+          data.data = JSON.stringify(omitBy(data.data, isUndefined));
         break;
       }
-      console.log(name, value, data.data);
-      if (data && !data.data) {
+
+      if (data) {
         data.id = item.id;
         this.actions.updateData(data).catch(this.actions.throwError);
       }
     }
+  }
+
+  // Create advanced filter through subform
+  // ===========================================================================
+  createAdvFilter (e) {
+    e.preventDefault();
+    let { adv_type, adv_pref, adv_prop, adv_val} = this.state;
+    let key = `${adv_type}(${(adv_pref) ? adv_pref+'_'+adv_prop : adv_prop})`;
+    this.preformAction(key, adv_val);
   }
 
   render() {
@@ -113,7 +137,8 @@ class Edit extends PageEdit {
     // ===========================================================================
     if (!this.props.item.id) return null;
     let item = this.props.item;
-    let running = this.props.appState === 3
+    let running = this.props.appState === 3;
+    let emptyAdvFilter = <li className='is-default'><i>No advanced filters configured for this column. Click below to add one or more.</i></li>;
 
     // Data for form heading
     // ===========================================================================
@@ -226,6 +251,7 @@ class Edit extends PageEdit {
                 onChange={this.createSelectHandler('autoreload')}
                 autosize={false}
                 clearable={true}
+                searchable={false}
                 value={this.state.autoreload}
               />
             </div>
@@ -248,10 +274,12 @@ class Edit extends PageEdit {
                   disabled={running}
                   className='size-120'
                   name='sort_pref'
+                  placeholder='Prefix...'
                   options={this.props.sortPrefix}
                   onChange={this.createSelectHandler('sort_pref')}
                   autosize={false}
                   clearable={true}
+                  searchable={false}
                   value={this.state.sort_pref}
                 />
                 <Select
@@ -262,6 +290,7 @@ class Edit extends PageEdit {
                   onChange={this.createSelectHandler('sort_prop')}
                   autosize={false}
                   clearable={false}
+                  searchable={false}
                   value={this.state.sort_prop}
                 />
                 <span className='switcher-direction'>
@@ -353,6 +382,7 @@ class Edit extends PageEdit {
                 onChange={this.createSelectHandler('language')}
                 autosize={false}
                 clearable={true}
+                searchable={false}
                 value={this.state.language}
               />
             </div>
@@ -425,6 +455,75 @@ class Edit extends PageEdit {
                 />
               </div>
             </div>
+          </div>
+          <div className='form-block adv-filters'>
+            <ul className='tag-list row'>
+              { (keys(this.state.advFilters).length) ?
+                  map(this.state.advFilters, (v, k) => 
+                    <li key={`${k}=${v}`}>{`${k}=${v}`}<span onClick={() => this.preformAction(k)}><Icon icon='cross' /></span></li>)
+                      : emptyAdvFilter }
+            </ul>
+            <fieldset>
+              <legend>Advanced filtering options:</legend>
+              <div className='row-flex'>
+                <Select
+                  disabled={running}
+                  className='size-90'
+                  name='adv_type'
+                  options={[{value: 'MIN', label: 'MIN'}, {value: 'MAX', label: 'MAX'}]}
+                  onChange={(v) => this.setState({'adv_type': v.value})}
+                  autosize={false}
+                  clearable={false}
+                  searchable={false}
+                  value={this.state.adv_type}
+                />
+                <Select
+                  disabled={running}
+                  className='size-120'
+                  name='adv_pref'
+                  placeholder='Prefix...'
+                  options={this.props.sortPrefix}
+                  onChange={(v) => this.setState({adv_pref: v.value})}
+                  autosize={false}
+                  clearable={true}
+                  searchable={false}
+                  value={this.state.adv_pref}
+                />
+                <Select
+                  disabled={running}
+                  className='size-180'
+                  name='adv_prop'
+                  options={this.props.sortProperty}
+                  onChange={(v) => this.setState({adv_prop: v.value})}
+                  autosize={false}
+                  clearable={false}
+                  searchable={false}
+                  value={this.state.adv_prop}
+                />
+                <input 
+                  disabled={running}
+                  className='size-120'
+                  onChange={(e) => this.setState({'adv_val': (e.target.value.length) ? parseFloat(e.target.value) : ''})}
+                  value={this.state.adv_val}
+                  type='number'
+                  step='0.001'
+                  placeholder='Amount...'
+                  name='adv_val'
+                />
+                <button onClick={this.createAdvFilter} className='button is-accent size-60'>Add</button>
+              </div>
+            </fieldset>
+            <small className='form-description row'>
+              <p>Use advanced filters to set additional limits on the values certain attributes of the items in the column can have. Use the ADD button to add a new advanced filter. Multiple advanced filters can be active at the same time.</p>
+              <dl>
+                <dt>MAX(xxxxx)</dt>
+                <dd>maximum allowed value for xxxxxx (where xxxxx is a valid column name*)</dd>
+              </dl>
+              <dl>
+                <dt>MIN(xxxxx)</dt>
+                <dd>minimum allowed value for xxxxxx (where xxxxx is a valid column name*)</dd>
+              </dl>
+            </small>
           </div>
         </form>
       </section>

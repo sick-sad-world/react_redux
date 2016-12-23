@@ -81,7 +81,7 @@ select[multiple] {
 .Select-placeholder,
 .Select--single > .Select-control .Select-value {
   bottom: 0;
-  color: #aaa;
+  @include form-pholder();
   left: 0;
   line-height: $form-unit - 2px;
   padding-left: 10px;

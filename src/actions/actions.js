@@ -31,6 +31,8 @@ export default function createAction (url, ACTION) {
       dispatch(setAppState(3));
     }
 
+    let reqData =  (data) ? Object.assign({}, data) : {};
+
     // Fire a call to server
     // ===========================================================================
     return fetch(url, data).then(payload => {
@@ -53,21 +55,12 @@ export default function createAction (url, ACTION) {
           // ===========================================================================
           dispatch({ type: ACTIONS['MESSAGE'], text: (payload.message || payload.success) });
 
-          // Ensure we have proper payload for reducer
+          // Should be removed as we organize our workflow with backend
           // ===========================================================================
-          if (payload.id) {
-            // If we have ID -> provide it (for example DELETE action)
-            // ===========================================================================
-            payload = {id: payload.id};
-
-          } else {
-            // Esle data -> we sent to server (for example COLUMN edit actions)
-            // ===========================================================================
-            delete data.callback;
-            payload = data || {};
-
+          if (reqData.data) {
+            reqData.data = JSON.parse(reqData.data);
           }
-
+          payload = reqData;
         }
       }
 
