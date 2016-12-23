@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import React from 'React';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 // Import Child components
 // ===========================================================================
@@ -98,7 +99,7 @@ class Edit extends PageEdit {
   render() {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
-    if (!this.props.item.id) return null;
+    if (!this.props.item.id || this.props.params.create) return null;
     let running = this.props.appState === 3;
     let { item, own_sources } = this.props;
 
@@ -154,6 +155,11 @@ class Edit extends PageEdit {
                 type='text'
                 name='name'
               />
+            </div>
+            <div className='row'>
+              <Link to={{
+                pathname: `${this.props.location.pathname}/create`
+              }} className='button is-accent'>Create new feeds</Link>
             </div>
           </div>
           <div className='form-block'>

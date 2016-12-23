@@ -12,7 +12,7 @@ import classNames from 'classnames';
 // ===========================================================================
 export default class Source extends React.PureComponent {
   render() {
-    let { disabled, current, url, type, sortable, button, name } = this.props;
+    let { disabled, url, type, sortable, button, name } = this.props;
 
     // Root element classes
     // ===========================================================================
