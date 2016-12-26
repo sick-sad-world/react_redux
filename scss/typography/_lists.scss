@@ -114,8 +114,7 @@ ol ol {
 			flex-direction: column;
 			justify-content: center;
 			@include pos();
-			width: 90%;
-			margin: auto;
+      padding: 0 5%;
 			text-align: center;
 			line-height: 1.25;
 			font-size: 1.5em;

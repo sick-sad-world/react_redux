@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { forOwn, bindAll, mapValues, isArray } from 'lodash';
+import { forOwn, bindAll, mapValues, isArray, isPlainObject } from 'lodash';
 import classNames from 'classnames';
 import fetch from '../../fetch';
 
@@ -264,7 +264,7 @@ class FeedCreation extends React.Component {
     let type = this.state.type;
     return (type !== 'Twitter' && type !== 'Reddit' && type !== 'Facebook') ? (
       <div className='result-area'>
-        <h5 className='t-heading'>{ this.props.texts[this.state.type].resultHeading }</h5>
+        <h3 className='t-heading'>{ this.props.texts[this.state.type].resultHeading }</h3>
         <ul className='entity-list result'>
           { (!this.state.results) ? <li className='state-empty'>{this.props.texts[this.state.type].resultDefault}</li> : this.generateResults() }
         </ul>
@@ -281,7 +281,7 @@ class FeedCreation extends React.Component {
       forOwn(this.state.results, (v, k) => {
         // Push heading
         // ===========================================================================
-        let heading = <li key={`heading_${k}`}><h4>{this.props.texts[k].resultHeading}</h4></li>
+        let heading = <li className='subtitle mod-entity' key={`heading_${k}`}><div><h4 className='text'>{this.props.texts[k].resultHeading}</h4></div></li>
         items.push(heading);
         if (v.length) {
           // Iterate over results
@@ -324,7 +324,7 @@ class FeedCreation extends React.Component {
         );
       case 'HTML':
         return (
-          <li key={`type_${i}`}><a href={item} target='_blank'>{item}</a></li>
+          <li className='simple-link' key={`type_${i}`}><a href={item} target='_blank'>{item}</a></li>
         );
       case 'Facebook':
         return (
@@ -332,8 +332,7 @@ class FeedCreation extends React.Component {
             <div>
               <a href={item} target='_blank' className='text'>
                 <span className='url'>
-                  <em className='counter' data-type={type}>{type}</em>
-                  {item}
+                  <em className='badge' data-type={type}>{type}</em> {item}
                 </span>
               </a>
             </div>
@@ -396,6 +395,17 @@ class FeedCreation extends React.Component {
           }
           
           if (this.state.type === 'autodetect') {
+
+            if (!isPlainObject(this.state.results)) {
+              results = {
+                RSS: [],
+                HTML: [],
+                Facebook: []
+              }
+            } else {
+              results = Object.assign({}, this.state.results);
+            }
+
             // Set proper type key
             // ===========================================================================
             switch (check) {
@@ -412,7 +422,6 @@ class FeedCreation extends React.Component {
 
             // Set autodetect results
             // ===========================================================================
-            results = (!isArray(this.state.results)) ? this.state.results || {} : {};
             results[type] = payload;
             this.setState({results});
           } else {

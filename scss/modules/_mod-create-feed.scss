@@ -19,7 +19,7 @@
 		display: flex;
 		flex-direction: column;
 		overflow: hidden;
-		h5 {
+		h3 {
 			display: block;
 			flex: 0 0 $entity-unit;
 			line-height: 1;
@@ -28,27 +28,22 @@
 			border-bottom: $bd;
 		}
 	}
+
+  .subtitle {
+    & + li[class*='state-'] {
+      position: static;
+      height: 20vh;
+      border-bottom: $bd;
+    }
+  }
+
+  .simple-link {
+    @include ellipsis;
+    padding: 0 baseUni();
+  }
+
 	.result {
 		flex: 0 1 100%;
 		overflow-y: auto;
-		&[type="autodetect"] {
-			li[type], .mod-entity {
-				border-bottom: $bd;
-			}
-			li[class*="state-"] + li {
-				border-top: $bd;
-			}
-			.state-loading, .state-error {
-				height: 180px;
-				position: static;
-				padding: 1em 0;
-			}
-		}
-		li:not(.mod-entity) {
-			padding: 0 baseUnit();
-		}
-	}
-	.mod-entity {
-		border-top: 0;
 	}
 }
