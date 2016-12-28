@@ -26,7 +26,18 @@ class Edit extends PageEdit {
 
     // Bind action handlers to component
     // ===========================================================================
-    bindAll(this, ['preformAction', 'inputHandler', 'createSelectHandler']);
+    bindAll(this, ['preformAction', 'inputHandler', 'createSelectHandler', 'recipientHandler']);
+  }
+
+  // Select recipient from list providen by injectable
+  // ===========================================================================
+  recipientHandler (e) {
+    let value = e.target.getAttribute('data-value');
+    if (value === this.props.item.recipient) {
+      value = this.props.email;
+    }
+
+    this.preformAction('recipient', value);
   }
 
   render() {
@@ -110,7 +121,7 @@ class Edit extends PageEdit {
           <div className='form-block'>
             <div className='row'>
               <h3 className='form-subtitle'>Email assigment:</h3>
-              <EmailList email={this.props.email} email_bcc={this.props.email_bcc} className='row' disabled={running} />
+              <EmailList className='row' active={item.recipient} disabled={running} onClick={this.recipientHandler} />
             </div>
           </div>
         </form>
@@ -156,9 +167,8 @@ let mapStateToProps = ({ alerts, columns, app, user }, ownProps) => {
   return {
     appState: app.appState,
     type: 'alert',
-    email: user.email,
-    email_bcc: user.email_bcc,
     item: item || {},
+    email: user.email,
     columns: columns.map((item) => {
       return {
         value: item.id,

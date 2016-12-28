@@ -30,15 +30,6 @@ class Edit extends PageEdit {
     let item = this.props.item;
     let running = this.props.appState === 3;
 
-    // Data for form heading
-    // ===========================================================================
-    let headingData = {
-      title: 'Edit form',
-      description: 'Simple edit form to manipulate entity props',
-      name: item.name,
-      running: running
-    };
-
     let componentRootClass = classNames({
       'mod-subsection-edit': true,
       'state-loading': running
@@ -48,7 +39,7 @@ class Edit extends PageEdit {
     // ===========================================================================
     return (
       <section className={componentRootClass}>
-        <EditFormHeader {...headingData} />
+        <EditFormHeader {...this.props.headingData} running={running} />
         <form className='subsection-content columned'>
           <div className='form-block'>
             <div className='row'>
@@ -74,13 +65,39 @@ class Edit extends PageEdit {
               />
             </div>
             <div className='row'>
+              <label htmlFor='funUserEmail'>Email:</label>
+              <input 
+                disabled={running}
+                defaultValue={item.email}
+                onBlur={this.inputHandler}
+                id='funUserEmail'
+                type='email'
+                name='email'
+              />
+            </div>
+            <div className='row'>
               <h3 className='form-subtitle'>Email BCC assigment:</h3>
-              <EmailList email={item.email} email_bcc={item.email_bcc} className='row' disabled={running} />
+              <EmailList
+                className='row'
+                disabled={running}
+                empty={<li className='is-default'>No email bcc created yet. All alerts/reports will be sended to main email.</li>}
+                description='This additional e-mail adresses may be used to send alerts or reports'
+              />
             </div>
           </div>
         </form>
       </section>
     );
+  }
+}
+
+// Default common data for Edit form
+// ===========================================================================
+Edit.defaultProps = {
+  headingData: {
+    title: 'Profile settings',
+    description: 'Tell us a bit about yourself...',
+    name: ''
   }
 }
 
