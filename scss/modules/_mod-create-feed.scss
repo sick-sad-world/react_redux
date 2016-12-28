@@ -40,6 +40,9 @@
   .simple-link {
     @include ellipsis;
     padding: 0 baseUni();
+    + .subtitle {
+      border-top: $bd;
+    }
   }
 
 	.result {

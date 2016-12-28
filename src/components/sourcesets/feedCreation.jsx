@@ -27,12 +27,11 @@ class FeedCreation extends React.Component {
       type: 'autodetect',
       url: '',
       feed: [''],
-      checks: {
-        find_urls: true,
-        find_feeds: true,
-        find_facebook: true
-      },
-      results: false
+      results: {
+        RSS: 'find_feeds',
+        HTML: 'find_urls',
+        Facebook: 'find_facebook'
+      }
     }
 
     // Create bound actions
@@ -70,8 +69,8 @@ class FeedCreation extends React.Component {
                 type='checkbox'
                 name='type'
                 title='RSS Feed'
-                value='find_feeds'
-                checked={this.state.checks.find_feeds}
+                value='RSS'
+                checked={this.state.results.RSS}
                 onChange={e => this.chooseFeedType('autodetect', e.target.value, e.target.checked)}
               />
               <Icon icon='check' />
@@ -84,8 +83,8 @@ class FeedCreation extends React.Component {
                 type='checkbox'
                 name='type'
                 title='Facebook Page'
-                value='find_facebook'
-                checked={this.state.checks.find_facebook}
+                value='Facebook'
+                checked={this.state.results.Facebook}
                 onChange={e => this.chooseFeedType('autodetect', e.target.value, e.target.checked)}
               />
               <Icon icon='check' />
@@ -98,8 +97,8 @@ class FeedCreation extends React.Component {
                 type='checkbox'
                 name='type'
                 title='HTML Scraping'
-                value='find_urls'
-                checked={this.state.checks.find_urls}
+                value='HTML'
+                checked={this.state.results.HTML}
                 onChange={e => this.chooseFeedType('autodetect', e.target.value, e.target.checked)}
               />
               <Icon icon='check' />
@@ -266,7 +265,7 @@ class FeedCreation extends React.Component {
       <div className='result-area'>
         <h3 className='t-heading'>{ this.props.texts[this.state.type].resultHeading }</h3>
         <ul className='entity-list result'>
-          { (!this.state.results) ? <li className='state-empty'>{this.props.texts[this.state.type].resultDefault}</li> : this.generateResults() }
+          { this.generateResults() }
         </ul>
       </div>
     ) : null;
@@ -276,13 +275,20 @@ class FeedCreation extends React.Component {
   // @return DOM
   // ===========================================================================
   generateResults () {
-    if (this.state.type === 'autodetect') {
-      let items = [];
-      forOwn(this.state.results, (v, k) => {
-        // Push heading
-        // ===========================================================================
-        let heading = <li className='subtitle mod-entity' key={`heading_${k}`}><div><h4 className='text'>{this.props.texts[k].resultHeading}</h4></div></li>
-        items.push(heading);
+    let items = [];
+    let makeResults = (v, k) => {
+      // Push heading
+      // ===========================================================================
+      if (this.state.type === 'autodetect') {
+        items.push((
+          <li className='subtitle mod-entity' key={`heading_${k}`}>
+            <div>
+              <h4 className='text'>{this.props.texts[k].resultHeading}</h4>
+            </div>
+          </li>
+        ));
+      }
+      if (isArray(v)) {
         if (v.length) {
           // Iterate over results
           // ===========================================================================
@@ -292,13 +298,16 @@ class FeedCreation extends React.Component {
         } else {
           // Or push empty message
           // ===========================================================================
-          items.push(<li className='state-empty'>{this.props.texts[k].resultEmpty}</li>);
+          items.push(<li key={`empty_${k}`} className='state-empty'>{this.props.texts[k].resultEmpty}</li>);
         }
-      });
-      return items;
-    } else {
-      return (this.state.results.length) ? this.state.results.map(this.generateResult) : (<li className='state-empty'>{this.props.texts[this.state.type].resultEmpty}</li>);
+      } else {
+        items.push(<li key={`def_${k}`} className='state-empty'>{this.props.texts[k].resultDefault}</li>);
+      }
     }
+    makeResults(this.state.results.RSS, 'RSS');
+    makeResults(this.state.results.Facebook, 'Facebook');
+    makeResults(this.state.results.HTML, 'HTML')
+    return items;
   }
 
   // Generate single result
@@ -347,27 +356,22 @@ class FeedCreation extends React.Component {
     this.setState({
       type: type,
       feed: [''],
-      results: false,
-      checks: mapValues(this.state.checks, (v, k) => {
-        switch (type) {
-          case 'RSS':
-            return k === 'find_feeds';
-          case 'HTML':
-            return k === 'find_urls';
-          case 'autodetect':
-            return (!check) ? true : (check === k) ? val : v;
-          default:
-            return v;
+      results: mapValues(this.state.results, (v, k) => {
+        if (type === k) {
+          return true;
+        } else if (type === 'autodetect') {
+          return (check) ? !!((check === k) ? val : v) : true;
+        } else {
+          return false;
         }
       })
-    })
+    });
   }
 
   // Run URL look up
   // ===========================================================================
   checkFeed (e) {
     e.preventDefault();
-    let checks = [];
     let url = this.state.url;
 
     // Show proper message if URL is not match criterea
@@ -376,59 +380,21 @@ class FeedCreation extends React.Component {
       return this.actions.throwError('Provide reasonable url to test');
     }
 
-    // Define - what type will be used
-    // ===========================================================================
-    forOwn(this.state.checks, (v, k) => {
-      if (v) checks.push(k);
-    });
-
     // Run each of them (possible multiple items)
     // ===========================================================================
-    checks.forEach((check) => {
-      fetch(check, {url})
-        .then(payload => {
-          let results, type;
-          // Cut down payload length it it exceeds limit
-          // ===========================================================================
-          if (payload.length > 50) {
-            payload.length = 50;
-          }
-          
-          if (this.state.type === 'autodetect') {
-
-            if (!isPlainObject(this.state.results)) {
-              results = {
-                RSS: [],
-                HTML: [],
-                Facebook: []
-              }
-            } else {
-              results = Object.assign({}, this.state.results);
+    forOwn(this.state.results, (v, k) => {
+      if (v) {
+        fetch(this.props.checkUrls[k], {url})
+          .then(payload => {
+            if (payload.length > 50) {
+              payload.length = 50;
             }
-
-            // Set proper type key
-            // ===========================================================================
-            switch (check) {
-              case 'find_feeds':
-                type = 'RSS';
-                break;
-              case 'find_urls':
-                type = 'HTML';
-                break;
-              case 'find_facebook':
-                type = 'Facebook';
-                break;
-            }
-
-            // Set autodetect results
-            // ===========================================================================
-            results[type] = payload;
-            this.setState({results});
-          } else {
-            this.setState({results: payload});
-          }
-        })
-        .catch(this.actions.throwError)
+            this.setState({
+              results: Object.assign({}, this.state.results, {[k]: payload})
+            })
+          })
+          .catch(this.actions.throwError)
+      }
     });
   }
 
@@ -529,7 +495,12 @@ FeedCreation.defaultProps = {
 
 let mapStateToProps = ({ sources, app }, ownProps) => ({
   appState: app.appState,
-  set_id: parseInt(ownProps.params.id)
+  set_id: parseInt(ownProps.params.id),
+  checkUrls: {
+    RSS: 'find_feeds',
+    HTML: 'find_urls',
+    Facebook: 'find_facebook'
+  }
 });
 
 export default connect(mapStateToProps)(FeedCreation);
