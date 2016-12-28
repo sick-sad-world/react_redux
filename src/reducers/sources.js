@@ -9,7 +9,7 @@ export function sources (state = [], action) {
     case GET_SOURCES:
       return uniqBy(action.payload, 'id');
     case ADD_SOURCE:
-      return concat(state, action.payload);
+      return uniqBy(concat(state, action.payload), 'id');
     case DELETE_SOURCE:
       return reject(state, {id: action.payload.id});
     default:

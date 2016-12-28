@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { forOwn, bindAll, mapValues, isArray, isPlainObject } from 'lodash';
+import { forOwn, bindAll, mapValues, isArray, concat, filter, find } from 'lodash';
 import classNames from 'classnames';
 import fetch from '../../fetch';
 
@@ -26,7 +26,7 @@ class FeedCreation extends React.Component {
     this.state = {
       type: 'autodetect',
       url: '',
-      feed: [''],
+      feed: [],
       results: {
         RSS: 'find_feeds',
         HTML: 'find_urls',
@@ -41,7 +41,11 @@ class FeedCreation extends React.Component {
       throwError: throwError
     }, this.props.dispatch);
 
-    bindAll(this, ['checkFeed', 'chooseFeedType', 'generateResultArea', 'generateResults', 'generateResult']);
+    bindAll(this, ['checkFeed', 'chooseFeedType', 'selectFeed', 'inFeeds', 'createFeed']);
+  }
+
+  inFeeds (feed) {
+    return !!find(this.state.feed, (v) => v.feed === feed);
   }
 
   // Generate form for Autodetect
@@ -108,7 +112,7 @@ class FeedCreation extends React.Component {
         </div>
         <div className='row button-group'>
           <input type='button' className='button size-half is-accent' onClick={this.checkFeed} value="Test URL" />
-          <input className='button size-half is-accent' disabled={!this.state.feed[0].length} type='button' value='Create' />
+          <input className='button size-half is-accent' disabled={!this.state.feed.length} onClick={this.createFeed} type='button' value='Create' />
         </div>
         <div className='form-description'>{ this.props.texts.autodetect.desrc }</div>
       </form>
@@ -134,7 +138,7 @@ class FeedCreation extends React.Component {
         </div>
         <div className='row button-group'>
           <input type='submit' value="Test URL" onClick={this.checkFeed} className='button is-accent size-half' />
-          <input className='button is-accent size-half' disabled={!this.state.feed[0].length} type='button' value='Create' />
+          <input className='button is-accent size-half' disabled={!this.state.feed.length} onClick={this.createFeed} type='button' value='Create' />
         </div>
         <div className='form-description'>{ this.props.texts.RSS.desrc }</div>
       </form>
@@ -160,7 +164,7 @@ class FeedCreation extends React.Component {
         </div>
         <div className='row button-group'>
           <input type='submit' value="Test URL" onClick={this.checkFeed} className='button is-accent size-half' />
-          <input className='button is-accent size-half' disabled={!this.state.feed[0].length} type='button' value='Create' />
+          <input className='button is-accent size-half' disabled={!this.state.feed.length} onClick={this.createFeed} type='button' value='Create' />
         </div>
         <div className='form-description'>{ this.props.texts.HTML.desrc }</div>
       </form>
@@ -179,8 +183,8 @@ class FeedCreation extends React.Component {
             type='text'
             name='feed'
             id='funFacebookFeedUrl'
-            onChange={(e) => this.setState({feed: [e.target.value]})}
-            value={this.state.feed[0]}
+            onChange={(e) => this.setState({feed: [{type: this.state.type, value: e.target.value}]})}
+            value={(this.state.feed[0]) ? this.state.feed[0].value : ''}
           />
           <small>(URL of a facebook page)</small>
         </div>
@@ -196,7 +200,7 @@ class FeedCreation extends React.Component {
           <small>(If the Facebook page is related to a website, enter the URL here, otherwise put the FB URL in here too)</small>
         </div>
         <div className='row'>
-          <input className='button is-accent size-half' type='button' value='Create' />
+          <input className='button is-accent size-half' type='button' value='Create' onClick={this.createFeed} />
         </div>
         <div className='form-description'>{ this.props.texts.Facebook.desrc }</div>
       </form>
@@ -217,13 +221,13 @@ class FeedCreation extends React.Component {
             name='url'
             placeholder='#hastag or keyword'
             id='funTwitterQuery'
-            onChange={(e) => this.setState({url: e.target.value, feed: [e.target.value]})}
+            onChange={(e) => this.setState({url: e.target.value, feed: [{type: this.state.type, value: e.target.value}]})}
             value={this.state.url}
           />
         </div>
         <small className='form-description'>{ this.props.texts.Twitter.desrc }</small>
         <div className='row'>
-          <input className='button is-accent size-half' type='button' value='Create' />
+          <input className='button is-accent size-half' type='button' value='Create' onClick={this.createFeed} />
         </div>
       </form>
     );
@@ -243,14 +247,14 @@ class FeedCreation extends React.Component {
               name='url'
               placeholder='subreddit'
               id='funRedditFeed'
-              onChange={(e) => this.setState({url: e.target.value, feed: [e.target.value]})}
+              onChange={(e) => this.setState({url: e.target.value, feed: [{type: this.state.type, feed: e.target.value}]})}
               value={this.state.url}
             />
           </span>
         </div>
         <small className='form-description'>{ this.props.texts.Reddit.desrc }</small>
         <div className='row'>
-          <input className='button is-accent size-half' type='button' value='Create' />
+          <input className='button is-accent size-half' type='button' value='Create' onClick={this.createFeed} />
         </div>
       </form>
     );
@@ -300,7 +304,7 @@ class FeedCreation extends React.Component {
           // ===========================================================================
           items.push(<li key={`empty_${k}`} className='state-empty'>{this.props.texts[k].resultEmpty}</li>);
         }
-      } else {
+      } else if (this.state.type === k || this.state.type === 'autodetect') {
         items.push(<li key={`def_${k}`} className='state-empty'>{this.props.texts[k].resultDefault}</li>);
       }
     }
@@ -321,7 +325,11 @@ class FeedCreation extends React.Component {
     switch (type) {
       case 'RSS':
         return (
-          <li className='mod-entity' key={`${type}_${i}`}>
+          <li
+            className={`mod-entity ${(this.inFeeds(item.uri)) ? 'is-selected' : ''}`}
+            onClick={(e) => {e.preventDefault(); this.selectFeed(item.uri, type)}}
+            key={`${type}_${i}`}
+          >
             <div>
               <a href={item.uri} className='text'>
                 <span className='url'>
@@ -333,11 +341,15 @@ class FeedCreation extends React.Component {
         );
       case 'HTML':
         return (
-          <li className='simple-link' key={`type_${i}`}><a href={item} target='_blank'>{item}</a></li>
+          <li className='simple-link' key={`${type}_${i}`}><a href={item} target='_blank'>{item}</a></li>
         );
       case 'Facebook':
         return (
-          <li className='mod-entity' key={`type_${i}`}>
+          <li
+            className={`mod-entity ${(this.inFeeds(item)) ? 'is-selected' : ''}`}
+            onClick={(e) => {e.preventDefault(); this.selectFeed(item, type)}}
+            key={`${type}_${i}`}
+          >
             <div>
               <a href={item} target='_blank' className='text'>
                 <span className='url'>
@@ -355,7 +367,8 @@ class FeedCreation extends React.Component {
   chooseFeedType (type, check, val) {
     this.setState({
       type: type,
-      feed: [''],
+      feed: [],
+      url: '',
       results: mapValues(this.state.results, (v, k) => {
         if (type === k) {
           return true;
@@ -366,6 +379,16 @@ class FeedCreation extends React.Component {
         }
       })
     });
+  }
+
+  // Select feed by clicking - works for facebook and RSS feeds
+  // ===========================================================================
+  selectFeed(feed, type) {
+    if (this.inFeeds(feed)) {
+      this.setState({feed: filter(this.state.feed, (v) => v.feed !== feed)})
+    } else {
+      this.setState({feed: concat({feed, type}, this.state.feed)})
+    }
   }
 
   // Run URL look up
@@ -389,13 +412,29 @@ class FeedCreation extends React.Component {
             if (payload.length > 50) {
               payload.length = 50;
             }
-            this.setState({
+
+            let newState = {
               results: Object.assign({}, this.state.results, {[k]: payload})
-            })
+            };
+            if (k === 'HTML' && payload.length) {
+              newState.feed = concat(this.state.feed, {
+                type: 'HTML',
+                feed: url
+              })
+            }
+            this.setState(newState)
           })
           .catch(this.actions.throwError)
       }
     });
+  }
+
+  createFeed () {
+    Promise.all(
+      this.state.feed.map((feed) => this.actions.createData(Object.assign({set_id: this.props.set_id, url: this.state.url}, feed)))
+    ).then(() => {
+      this.props.router.goBack();
+    }).catch(this.actions.throwError);
   }
 
   render() {
