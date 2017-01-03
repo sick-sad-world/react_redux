@@ -77,6 +77,12 @@ class Workspace extends React.Component {
       'sidebar': true,
       'is-expanded': this.state.sidebar
     });
+
+    let paceClass = classNames({
+      'pace': true,
+      'is-running': this.props.appState !== 2
+    })
+
     // Return JSX layout of a component
     // ===========================================================================
     return (this.props.userState) ? (
@@ -86,6 +92,7 @@ class Workspace extends React.Component {
           <MainNav toggle={this.handlerSidebar} logout={this.handlerLogout} />
         </aside>
         <div className='screen-content'>
+          <span className={paceClass}>{this.props.actionState}</span>
           <div className='mod-page'>
             {list}
             {main}
@@ -100,4 +107,4 @@ class Workspace extends React.Component {
 // Connect our Container to State
 // @ deps -> App, (User in future)
 // ===========================================================================
-export default connect(({app}) =>({userState: app.userState, appState: app.appState, sidebar: true}))(Workspace);
+export default connect(({app}) =>({...app, sidebar: true}))(Workspace);

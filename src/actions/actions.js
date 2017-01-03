@@ -6,7 +6,7 @@ import fetch from '../fetch';
 // Action constructor (for default AJAX comunnication)
 // Since most of our actions are the same - i create this
 // ===========================================================================
-export default function createAction (url, ACTION) {
+export default function createAction (url, ACTION, text) {
 
   // Check whatever we provided an URL (otherwise no point doing something)
   // ===========================================================================
@@ -28,7 +28,7 @@ export default function createAction (url, ACTION) {
     // Set app state to [loading]
     // ===========================================================================
     if (!silent) {
-      dispatch(setAppState(3));
+      dispatch(setAppState(3, text));
     }
 
     let reqData =  (data) ? Object.assign({}, data) : {};
@@ -101,9 +101,9 @@ export const throwError = (error) => (dispatch) => {
 // Create all default actions for all default entities
 // ===========================================================================
 export const readData = (type) => createAction(type, ACTIONS[`GET_${type.toUpperCase()}`]);
-export const createData = (type) => createAction(`add_${type}`, ACTIONS[`ADD_${type.toUpperCase()}`]);
-export const updateData = (type) => createAction(type, ACTIONS[`EDIT_${type.toUpperCase()}`]);
-export const deleteData = (type) => createAction(`remove_${type}`, ACTIONS[`DELETE_${type.toUpperCase()}`]);
+export const createData = (type) => createAction(`add_${type}`, ACTIONS[`ADD_${type.toUpperCase()}`], `Creating new ${type}`);
+export const updateData = (type) => createAction(type, ACTIONS[`EDIT_${type.toUpperCase()}`], `Saving ${type} changes`);
+export const deleteData = (type) => createAction(`remove_${type}`, ACTIONS[`DELETE_${type.toUpperCase()}`], `Deleting ${type}`);
 
 // Create specific action to fetch All data from a server:
 // On app init - for example (utilizing Promise.all)
