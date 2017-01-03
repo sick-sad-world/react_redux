@@ -150,7 +150,7 @@ select[multiple] {
   width: 16px;
 }
 .Select-loading {
-  animation: Select-animation-spin 400ms infinite linear;
+  animation: spin 400ms infinite linear;
   width: 16px;
   height: 16px;
   box-sizing: border-box;
@@ -162,7 +162,7 @@ select[multiple] {
   vertical-align: middle;
 }
 .Select-clear-zone {
-  animation: Select-animation-fadeIn 200ms;
+  animation: fadeIn 200ms;
   color: $c-icon;
   cursor: pointer;
   display: table-cell;
