@@ -6,7 +6,7 @@ export const app = (state = defaultAppState, action) => {
     case ACTIONS['LOGIN']:
       return Object.assign({}, state, {
         userState: true,
-        actionState: 'User loaded'
+        actionState: 'Authorized'
       });
     case ACTIONS['GET_USER']:
       return Object.assign({}, state, {
@@ -31,7 +31,7 @@ export const app = (state = defaultAppState, action) => {
     case ACTIONS['GET_SOURCES']:
       return Object.assign({}, state, {actionState: 'Sources loaded', loadingStep: state.loadingStep + 1});
     case ACTIONS['SET_APP_STATE']:
-      return Object.assign({}, state, {appState: action.appState});
+      return Object.assign({}, state, {appState: action.appState, actionState: action.actionState || ''});
     default:
       return state;
   }

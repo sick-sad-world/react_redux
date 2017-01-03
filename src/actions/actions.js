@@ -74,7 +74,7 @@ export default function createAction (url, ACTION) {
 
 // Set app state (simple and SYNC)
 // ===========================================================================
-export const setAppState = (state) => ({ type: ACTIONS['SET_APP_STATE'], appState: state });
+export const setAppState = (appState, actionState) => ({ type: ACTIONS['SET_APP_STATE'], appState, actionState });
 
 // Throw action related to error (SYNC)
 // ===========================================================================
