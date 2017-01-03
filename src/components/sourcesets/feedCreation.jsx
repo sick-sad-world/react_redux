@@ -18,7 +18,7 @@ import Icon from '../icon';
 
 // Import actions
 // ===========================================================================
-import { createData, throwError } from '../../actions/actions';
+import { createData, updateData, throwError } from '../../actions/actions';
 
 class FeedCreation extends React.Component {
   constructor (props) {
@@ -37,6 +37,7 @@ class FeedCreation extends React.Component {
     // Create bound actions
     // ===========================================================================
     this.actions = bindActionCreators({
+      updateData: updateData('set'),
       createData: createData('source'),
       throwError: throwError
     }, this.props.dispatch);
@@ -430,11 +431,23 @@ class FeedCreation extends React.Component {
   }
 
   createFeed () {
+    let source_ids = [];
     Promise.all(
-      this.state.feed.map((feed) => this.actions.createData(Object.assign({set_id: this.props.set_id, url: this.state.url}, feed)))
-    ).then(() => {
+      this.state.feed.map((feed) => {
+        return this.actions.createData(Object.assign({set_id: this.props.set.id, url: this.state.url}, feed)).then((payload) => source_ids.push(payload.id));
+      })
+    )
+    .then(() => {
+      let source_ids = concat(this.props.set.source_ids, source_ids);
+      return this.actions.updateData({
+        id: this.props.set.id,
+        source_ids: source_ids
+      });
+    })
+    .then(() => {
       this.props.router.goBack();
-    }).catch(this.actions.throwError);
+    })
+    .catch(this.actions.throwError);
   }
 
   render() {
@@ -532,9 +545,9 @@ FeedCreation.defaultProps = {
   }
 }
 
-let mapStateToProps = ({ sources, app }, ownProps) => ({
+let mapStateToProps = ({ set, sources, app }, ownProps) => ({
   appState: app.appState,
-  set_id: parseInt(ownProps.params.id),
+  set: find(set, {id: parseInt(ownProps.params.id)}),
   checkUrls: {
     RSS: 'find_feeds',
     HTML: 'find_urls',
