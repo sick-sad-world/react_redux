@@ -33,7 +33,7 @@ class EmailList extends React.Component {
       throwError: throwError
     }, this.props.dispatch);  
 
-    bindAll(this, ['createEmail', 'removeEmail']);
+    bindAll(this, ['createEmail', 'removeEmail', 'makeListItem']);
   }
   // Create new email -> to [email_bcc] list
   // ===========================================================================
@@ -53,15 +53,45 @@ class EmailList extends React.Component {
   // Remove existing email -> from [email_bcc] list
   // ===========================================================================
   removeEmail (email) {
-    this.actions.updateData({
-      email_bcc: without(this.props.email_bcc, email)
-    }).catch(this.actions.throwError);
+    return (e) => {
+      e.stopPropagation();
+      return this.actions.updateData({
+        email_bcc: without(this.props.email_bcc, email)
+      }).catch(this.actions.throwError);
+    }
+  }
+
+  // Wrapper for external onClick listener provided to component
+  // ===========================================================================
+  onClickWrapper (email) {
+    return (e) => {
+      e.preventDefault();
+      this.props.onClick(email);
+    }
+  }
+
+  // Create list item DOM element -> used in render method
+  // ===========================================================================
+  makeListItem (email, i) {
+    // Specify classes for each item
+    // ===========================================================================
+    let className = classNames({
+      'is-disabled': this.props.disabled,
+      'is-selected': email === this.props.active
+    });
+
+    return (
+      <li key={`email_${i}`} className={className} onClick={(this.props.onClick) ? this.onClickWrapper(email) : null} data-value={email} >
+        {email}
+        <a onClick={this.removeEmail(email)}><Icon icon='cross'/></a>
+      </li>
+    );
   }
 
   render () {
     // Decompose props
     // ===========================================================================
-    let { active, email_bcc, email, disabled, description, className, onClick } = this.props;
+    let { email_bcc, email, disabled, description, className } = this.props;
 
     // Define empty template
     // ===========================================================================
@@ -72,30 +102,7 @@ class EmailList extends React.Component {
     return (
       <div className={`mod-email-list ${className}`}>
         <ul className='tag-list'>
-          { (email_bcc && email_bcc.length) ? email_bcc.map((email, i) => {
-            // Specify classes for each item
-            // ===========================================================================
-            let className = classNames({
-              'is-disabled': disabled,
-              'is-selected': email === active
-            });
-            return (
-              <li
-                key={`email_${i}`}
-                className={className}
-                onClick={onClick}
-                data-value={email}
-              >
-                {email}
-                <a onClick={e => {
-                  e.stopPropagation();
-                  this.removeEmail(email);
-                }}>
-                  <Icon icon='cross'/>
-                </a>
-              </li>
-            );
-          }) : empty }
+          { (email_bcc && email_bcc.length) ? email_bcc.map(this.makeListItem) : empty }
         </ul>
         <div className='row-flex'>
           <input

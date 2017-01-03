@@ -33,8 +33,7 @@ class Edit extends PageEdit {
 
   // Select recipient from list providen by injectable
   // ===========================================================================
-  recipientHandler (e) {
-    let value = e.target.getAttribute('data-value');
+  recipientHandler (value) {
     if (value === this.props.item.recipient) {
       value = this.props.email;
     }
@@ -49,15 +48,6 @@ class Edit extends PageEdit {
     let item = this.props.item;
     let running = this.props.appState === 3;
 
-    // Data for form heading
-    // ===========================================================================
-    let headingData = {
-      title: 'Edit form',
-      description: 'Simple edit form to manipulate entity props',
-      name: item.name,
-      running: running
-    };
-
     let componentRootClass = classNames({
       'mod-subsection-edit': true,
       'state-loading': running
@@ -67,7 +57,7 @@ class Edit extends PageEdit {
     // ===========================================================================
     return (
       <section className={componentRootClass}>
-        <EditFormHeader {...headingData} />
+        <EditFormHeader {...this.props.headingTexts} name={item.name} running={running} />
         <form className='subsection-content columned'>
           <div className='form-block'>
             <div className='row'>
@@ -147,6 +137,10 @@ class Edit extends PageEdit {
 }
 
 Edit.defaultProps = {
+  headingData: {
+    title: 'Edit report',
+    description: 'Pick the columns to send. Set time to send, e-mail recipient and report name here.',
+  },
   frequencyOptions: [
     {value: 15, label: '15 min'},
     {value: 60, label: 'Hourly'},
@@ -174,7 +168,7 @@ const mapStateToProps = ({ reports, columns, app, user }, ownProps) => {
   } else {
     // Or find existing one
     // ===========================================================================
-    item = find(reports, {id: parseInt(ownProps.params.id)});
+    item = find(reports, {id: parseInt(ownProps.params.id)}) || {};
   }
 
   // Return prepared data
@@ -182,7 +176,7 @@ const mapStateToProps = ({ reports, columns, app, user }, ownProps) => {
   return {
     appState: app.appState,
     type: 'report',
-    item: item || {},
+    item: item,
     emai: user.email,
     columns: columns.map((item) => {
       return {

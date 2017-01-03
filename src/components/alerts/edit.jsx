@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { find, bindAll } from 'lodash';
+import { find, bindAll, isNumber } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
@@ -31,8 +31,7 @@ class Edit extends PageEdit {
 
   // Select recipient from list providen by injectable
   // ===========================================================================
-  recipientHandler (e) {
-    let value = e.target.getAttribute('data-value');
+  recipientHandler (value) {
     if (value === this.props.item.recipient) {
       value = this.props.email;
     }
@@ -43,18 +42,9 @@ class Edit extends PageEdit {
   render() {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
-    if (!this.props.item.id) return null;
+    if (!isNumber(this.props.item.id)) return null;
     let item = this.props.item;
     let running = this.props.appState === 3
-
-    // Data for form heading
-    // ===========================================================================
-    let headingData = {
-      title: 'Edit form',
-      description: 'Simple edit form to manipulate entity props',
-      name: item.name,
-      running: running
-    };
 
     let componentRootClass = classNames({
       'mod-subsection-edit': true,
@@ -65,7 +55,7 @@ class Edit extends PageEdit {
     // ===========================================================================
     return (
       <section className={componentRootClass}>
-        <EditFormHeader {...headingData} />
+        <EditFormHeader {...this.props.headingTexts} name={item.name} running={running} />
         <form className='subsection-content columned'>
           <div className='form-block'>
             <div className='row'>
@@ -116,6 +106,9 @@ class Edit extends PageEdit {
                 multi
                 value={this.state.columns}
               />
+              <small className="form-description">
+                Watched columns (click on columns in the list to watch them too)
+              </small>
             </div>
           </div>
           <div className='form-block'>
@@ -131,6 +124,10 @@ class Edit extends PageEdit {
 }
 
 Edit.defaultProps = {
+  headingTexts: {
+    title: 'Edit alert',
+    description: 'Pick the columns to watch. Set checking frequency, e-mail recipient and alert name here.',
+  },
   frequencyOptions: [
     {value: 5, label: '5 min'},
     {value: 10, label: '10 min'},
@@ -159,7 +156,7 @@ let mapStateToProps = ({ alerts, columns, app, user }, ownProps) => {
   } else {
     // Or find existing one
     // ===========================================================================
-    item = find(alerts, {id: parseInt(ownProps.params.id)});
+    item = find(alerts, {id: parseInt(ownProps.params.id)}) || {};
   }
 
   // Return prepared data
@@ -167,15 +164,13 @@ let mapStateToProps = ({ alerts, columns, app, user }, ownProps) => {
   return {
     appState: app.appState,
     type: 'alert',
-    item: item || {},
+    item: item,
     email: user.email,
-    columns: columns.map((item) => {
-      return {
-        value: item.id,
-        label: item.name,
-        clearableValue: true
-      }
-    })
+    columns: columns.map((item) => ({
+      value: item.id,
+      label: item.name,
+      clearableValue: true
+    }))
   }
 };
 

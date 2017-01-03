@@ -3,7 +3,7 @@
 import React from 'React';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { pick, bindAll } from 'lodash';
+import { bindAll } from 'lodash';
 
 // Import child components
 // ===========================================================================
@@ -53,33 +53,39 @@ class List extends React.Component {
   }
 
   render() {
-    // Define common text values
-    // ===========================================================================
-    let texts = {
-      title: 'Columns Management',
-      description: 'Create, edit or delete dashboard columns. Drag to reorder, use the eye icon to hide/unhide them (tip: hidden columns can still be used for alerts/reports).',
-      btn: 'Create new column',
-      deleting: 'Are you sure want to delete this Column?',
-      empty: 'No columns created yet. Use form above to create one.'
-    };
-
     return (
-      <PageList texts={texts} {...this.props} >
+      <PageList {...this.props} >
         <ListItem customIcon={this.getItemIcon} />
       </PageList>
     );
   }
 }
 
+// Define common text values
+// ===========================================================================
+List.defaultProps = {
+  texts: {
+    title: 'Columns Management',
+    description: 'Create, edit or delete dashboard columns. Drag to reorder, use the eye icon to hide/unhide them (tip: hidden columns can still be used for alerts/reports).',
+    btn: 'Create new column',
+    deleting: 'Are you sure want to delete this Column?',
+    empty: 'No columns created yet. Use form above to create one.'
+  }
+};
+
+// Provide default parameters for list
+// ===========================================================================
 const mapStateToProps = ({ columns }, ownProps) => {
-  // Provide default parameters for list
-  // ===========================================================================
   return {
     curId: parseInt(ownProps.params.id),
     type: 'column',
     sortable: false,
     deletable: true,
-    items: columns.map((item) => pick(item, ['id', 'name', 'open']))
+    items: columns.map((item) => ({
+      id: item.id,
+      name: item.name,
+      open: item.open
+    }))
   }
 }
 

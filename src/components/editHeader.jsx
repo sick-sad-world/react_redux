@@ -8,7 +8,7 @@ export default function EditFormHeader (props) {
   return (
     <header className='subsection-header'>
       <div className='text'>
-        <h1>{`${props.title} ${(props.name) ? "'"+props.name+"'" : ''}`}</h1>
+        <h1>{`${props.title} ${(props.name) ? ": '"+props.name+"'" : ''}`}</h1>
         <p>{props.description}</p>
       </div>
       <Loading run={props.running} />
