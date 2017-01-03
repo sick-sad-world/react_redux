@@ -88,7 +88,7 @@ class Edit extends PageEdit {
   render() {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
-    if (!this.props.item || this.props.params.create) return null;
+    if (!this.props.item.id || this.props.params.create) return null;
     let running = this.props.appState === 3;
     let { item, own_sources } = this.props;
 
@@ -148,7 +148,7 @@ class Edit extends PageEdit {
             <section className='mod-submanagement'>
               <div className={submanagementClass}>
                 <div className='header'>
-                  <span>Sourceset has {item.source_ids.length} sources total.</span>
+                  <span>Sourceset has {own_sources.length} sources total.</span>
                 </div>
                 <ul className='entity-list'>
                   {(own_sources.length) ? own_sources.map((source) => {

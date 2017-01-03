@@ -23,43 +23,62 @@ import { defColumn, defColumnData } from '../../reducers/defaults';
 class Edit extends PageEdit {
   constructor (props) {
     super(props, {
-      language (item) {
-        return item.data && item.data.language;
-      },
-      autoreload (item) {
-        return (item.data) ? item.data.autoreload : 0;
-      },
+      name: true,
+      display_settings: true,
+      show_favorites: (item) => item.data.show_favorites,
+      show_ignored: (item) => item.data.show_ignored,
+      infinite: (item) => item.data.infinite,
+      limit: (item) => item.data.limit,
+      sort: (item) => item.data.sort,
+      direction: (item) => item.data.direction,
+      author: (item) => item.data.author,
+      search: (item) => item.data.search,
+      exclude_search: (item) => item.data.exclude_search,
+      url: (item) => item.data.url,
+      since: (item) => item.data.since,
+      before: (item) => item.data.before,
+      source: (item) => item.data.source,
+      set: (item) => item.data.set,
+      ignore_source: (item) => item.data.ignore_source,
+      ignore_set: (item) => item.data.ignore_set,
+      is_image: (item) => item.data.is_image,
+      is_video: (item) => item.data.is_video,
+      is_facebook: (item) => item.data.is_facebook,
+      is_gallery: (item) => item.data.is_gallery,
+      language: (item) => item.data.language,
+      autoreload: (item) => item.data.autoreload,
       sort_pref (item) {
-        let prefix = (item.data) ? find(this.props.sortPrefix, (pref) => item.data.sort.indexOf(pref.value) > -1) : null;
+        let prefix = find(this.props.sortPrefix, (pref) => item.data.sort.indexOf(pref.value) > -1);
         return (prefix) ? prefix.value : '';
       },
       sort_prop (item) {
-        let property = (item.data) ? find(this.props.sortProperty, (prop) => item.data.sort.indexOf(prop.value) > -1) : null;
+        let property = find(this.props.sortProperty, (prop) => item.data.sort.indexOf(prop.value) > -1);
         return (property) ? property.value : '';
       }
     });
 
-    this.getAdvFiltersFromProps(this.props);
+    Object.assign(this.state, this.getAdvFiltersFromProps(this.props));
     // Bind action handlers to component
     // ===========================================================================
-    bindAll(this, ['preformAction', 'inputHandler', 'createSelectHandler', 'createAdvFilter']);
+    bindAll(this, ['preformAction', 'stateHandler', 'changeHandler', 'createSelectHandler', 'createAdvFilter']);
   }
 
   onComponentWillReceiveProps (newProps) {
-    this.getAdvFiltersFromProps(newProps);
+    if (this.props.appState !== 3) {
+      this.setState(this.getAdvFiltersFromProps(newProps))
+    }
   }
 
   // Pick adv filters and assign it to state
   // ===========================================================================
   getAdvFiltersFromProps (props) {
-    this.advRegExp = /MIN|MAX|LIKE/;
-    Object.assign(this.state, {
+    return {
       adv_type: 'MIN',
       adv_pref: null,
       adv_prop: 'likes',
       adv_val: '',
-      advFilters: pickBy(props.item.data, (v, k) => this.advRegExp.test(k))
-    })
+      advFilters: pickBy(props.item.data, (v, k) => this.props.advRegExp.test(k))
+    };
   }
 
   // Send request to server with new props
@@ -140,15 +159,6 @@ class Edit extends PageEdit {
     let running = this.props.appState === 3;
     let emptyAdvFilter = <li className='is-default'><i>No advanced filters configured for this column. Click below to add one or more.</i></li>;
 
-    // Data for form heading
-    // ===========================================================================
-    let headingData = {
-      title: 'Edit form',
-      description: 'Simple edit form to manipulate entity props',
-      name: item.name,
-      running: running
-    };
-
     let componentRootClass = classNames({
       'mod-subsection-edit': true,
       'mod-column-edit': true,
@@ -169,7 +179,7 @@ class Edit extends PageEdit {
                 name='display_settings'
                 value={setting}
                 disabled={running}
-                onChange={this.inputHandler}
+                onChange={this.changeHandler}
                 checked={includes(item.display_settings, setting)}
               />
               <Icon icon='check' />
@@ -189,15 +199,16 @@ class Edit extends PageEdit {
     // ===========================================================================
     return (
       <section className={componentRootClass}>
-        <EditFormHeader {...headingData} />
+        <EditFormHeader {...this.props.headingTexts} name={item.name} running={running} />
         <form className='subsection-content columned'>
           <div className='form-block'>
             <div className='row'>
               <label htmlFor='funColumnName'>Column name:</label>
               <input 
                 disabled={running}
-                defaultValue={item.name}
-                onBlur={this.inputHandler}
+                value={this.state.name}
+                onChange={this.stateHandler}
+                onBlur={this.changeHandler}
                 id='funColumnName'
                 type='text'
                 name='name'
@@ -213,8 +224,8 @@ class Edit extends PageEdit {
                   'Yes': 1,
                   'No': 0
                 }}
-                onChange={this.inputHandler}
-                value={item.data.show_ignored} />
+                onChange={this.changeHandler}
+                value={this.state.show_ignored} />
             </div>
             <div className='row-flex'>
               <span className='form-label'>Show only favorited items</span>
@@ -225,8 +236,8 @@ class Edit extends PageEdit {
                   'Yes': 1,
                   'No': 0
                 }}
-                onChange={this.inputHandler}
-                value={item.data.show_favorites} />
+                onChange={this.changeHandler}
+                value={this.state.show_favorites} />
             </div>
             <div className='row-flex'>
               <span className='form-label'>Infinite scroll</span>
@@ -237,8 +248,8 @@ class Edit extends PageEdit {
                   'On': 1,
                   'Off': 0
                 }}
-                onChange={this.inputHandler}
-                value={item.data.infinite} />
+                onChange={this.changeHandler}
+                value={this.state.infinite} />
             </div>
             <div className='row-flex'>
               <span className='form-label'>Autoreloading</span>
@@ -260,8 +271,9 @@ class Edit extends PageEdit {
               <input 
                 disabled={running}
                 className='size-120'
-                defaultValue={item.data.limit}
-                onBlur={this.inputHandler}
+                value={this.state.limit}
+                onChange={this.stateHandler}
+                onBlur={this.changeHandler}
                 id='funColumnLimit'
                 type='number'
                 name='limit'
@@ -298,9 +310,9 @@ class Edit extends PageEdit {
                     type='checkbox'
                     disabled={running}
                     name='direction'
-                    onChange={this.inputHandler}
-                    checked={item.data.direction === 'desc'}
-                    value={(item.data.direction === 'desc') ? 'asc' : 'desc'}
+                    onChange={this.changeHandler}
+                    checked={this.state.direction === 'desc'}
+                    value={(this.state.direction === 'desc') ? 'asc' : 'desc'}
                   />
                   <Icon icon='bar-graph' />
                 </span>
@@ -326,8 +338,9 @@ class Edit extends PageEdit {
                   'Include': undefined,
                   'Omit': 0
                 }}
-                onChange={this.inputHandler}
-                value={item.data.is_image} />
+                onChangege={this.stateHandler}
+                onChange={this.changeHandler}
+                value={this.state.is_image} />
             </div>
             <div className='row-flex'>
               <span className='form-label'>Videos:</span>
@@ -340,8 +353,9 @@ class Edit extends PageEdit {
                   'Include': undefined,
                   'Omit': 0
                 }}
-                onChange={this.inputHandler}
-                value={item.data.is_video} />
+                onChangege={this.stateHandler}
+                onChange={this.changeHandler}
+                value={this.state.is_video} />
             </div>
             <div className='row-flex'>
               <span className='form-label'>Facebook posts:</span>
@@ -354,8 +368,9 @@ class Edit extends PageEdit {
                   'Include': undefined,
                   'Omit': 0
                 }}
-                onChange={this.inputHandler}
-                value={item.data.is_facebook} />
+                onChangege={this.stateHandler}
+                onChange={this.changeHandler}
+                value={this.state.is_facebook} />
             </div>
             <div className='row-flex'>
               <span className='form-label'>Galleries:</span>
@@ -368,8 +383,9 @@ class Edit extends PageEdit {
                   'Include': undefined,
                   'Omit': 0
                 }}
-                onChange={this.inputHandler}
-                value={item.data.is_gallery} />
+                onChangege={this.stateHandler}
+                onChange={this.changeHandler}
+                value={this.state.is_gallery} />
             </div>
             <div className='row-flex'>
               <span className='form-label'>Language:</span>
@@ -390,8 +406,9 @@ class Edit extends PageEdit {
               <label htmlFor='funColumnSearch'>Title/description contains:</label>
               <input 
                 disabled={running}
-                defaultValue={item.data.search}
-                onBlur={this.inputHandler}
+                defaultValue={this.state.search}
+                onChange={this.stateHandler}
+                onBlur={this.changeHandler}
                 id='funColumnSearch'
                 type='text'
                 name='search'
@@ -401,8 +418,9 @@ class Edit extends PageEdit {
               <label htmlFor='funColumnUrl'>URL contains:</label>
               <input 
                 disabled={running}
-                defaultValue={item.data.url}
-                onBlur={this.inputHandler}
+                defaultValue={this.state.url}
+                onChange={this.stateHandler}
+                onBlur={this.changeHandler}
                 id='funColumnUrl'
                 type='text'
                 name='url'
@@ -412,8 +430,9 @@ class Edit extends PageEdit {
               <label htmlFor='funColumnAuthor'>Author contains:</label>
               <input 
                 disabled={running}
-                defaultValue={item.data.author}
-                onBlur={this.inputHandler}
+                defaultValue={this.state.author}
+                onChange={this.stateHandler}
+                onBlur={this.changeHandler}
                 id='funColumnAuthor'
                 type='text'
                 name='author'
@@ -423,8 +442,9 @@ class Edit extends PageEdit {
               <label htmlFor='funColumnExclude'>Title/description does not contain:</label>
               <input 
                 disabled={running}
-                defaultValue={item.data.exclude_search}
-                onBlur={this.inputHandler}
+                defaultValue={this.state.exclude_search}
+                onChange={this.stateHandler}
+                onBlur={this.changeHandler}
                 id='funColumnExclude'
                 type='text'
                 name='exclude_search'
@@ -435,8 +455,9 @@ class Edit extends PageEdit {
               <div className='row-time-gap'>
                 <input 
                   disabled={running}
-                  defaultValue={item.data.since}
-                  onBlur={this.inputHandler}
+                  defaultValue={this.state.since}
+                  onChange={this.stateHandler}
+                  onBlur={this.changeHandler}
                   placeholder='Since...'
                   className='size-120'
                   id='funColumnSince'
@@ -445,8 +466,9 @@ class Edit extends PageEdit {
                 />
                 <input 
                   disabled={running}
-                  defaultValue={item.data.before}
-                  onBlur={this.inputHandler}
+                  defaultValue={this.state.before}
+                  onChange={this.stateHandler}
+                  onBlur={this.changeHandler}
                   placeholder='Before...'
                   className='size-120'
                   id='funColumnBefore'
@@ -532,6 +554,10 @@ class Edit extends PageEdit {
 }
 
 Edit.defaultProps = {
+  headingTexts: {
+    title: 'Edit column',
+    description: 'Select the type of items to show in this column and how to display them.'
+  },
   displaySettings: [
     'title',
     'url',
@@ -596,7 +622,7 @@ Edit.defaultProps = {
 // @ deps -> Columns, Sources, Sets
 // ===========================================================================
 let mapStateToProps = ({ columns, sets, sources, app }, ownProps) => {
-  let item = find(columns, {id: parseInt(ownProps.params.id)});
+  let item = find(columns, {id: parseInt(ownProps.params.id)}) || {};
   
   if (item) {
     item.data = Object.assign({}, defColumnData, item.data);
@@ -616,9 +642,10 @@ let mapStateToProps = ({ columns, sets, sources, app }, ownProps) => {
   return {
     appState: app.appState,
     type: 'column',
-    item: item || {},
+    item: item,
     sets,
-    sources
+    sources,
+    advRegExp: /MIN|MAX|LIKE/
   };
 };
 

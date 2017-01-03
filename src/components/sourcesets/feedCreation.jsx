@@ -437,14 +437,10 @@ class FeedCreation extends React.Component {
         return this.actions.createData(Object.assign({
           set_id: this.props.set.id,
           url: this.state.url
-        }, feed)).then(({payload}) => {
-          console.log(payload);
-          source_ids.push(payload.id);
-        });
+        }, feed)).then(({payload}) => source_ids.push(payload.id));
       })
     )
     .then(() => {
-      console.log(concat(this.props.set.source_ids, source_ids));
       return this.actions.updateData({
         id: this.props.set.id,
         source_ids: concat(this.props.set.source_ids, source_ids)
