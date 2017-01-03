@@ -67,6 +67,8 @@ class Workspace extends React.Component {
   // Render our screen
   // ===========================================================================
   render() {
+    if (!this.props.userState) return null;
+    
     // Get our display components
     // ===========================================================================
     let { list, main, additional } = this.props;
@@ -85,7 +87,7 @@ class Workspace extends React.Component {
 
     // Return JSX layout of a component
     // ===========================================================================
-    return (this.props.userState) ? (
+    return (
       <section className='screen-main mod-screen-main'>
         <aside className={sidebarClass}>
           <UserBlock />
@@ -100,7 +102,7 @@ class Workspace extends React.Component {
           </div>
         </div>
       </section>
-    ) : null;
+    );
   }
 }
 
