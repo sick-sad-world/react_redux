@@ -22,13 +22,17 @@ import PageEdit from '../pageEdit';
 class Edit extends PageEdit {
   constructor (props) {
     super(props, {
-      frequency: (item) => item ? item.frequency : 1440,
-      columns: (item) => item ? item.columns : []
+      name: true,
+      active: true,
+      frequency: true,
+      columns: true,
+      recipient: true,
+      next_send: true
     });
 
     // Bind action handlers to component
     // ===========================================================================
-    bindAll(this, ['preformAction', 'inputHandler', 'createSelectHandler', 'recipientHandler']);
+    bindAll(this, ['preformAction', 'stateHandler', 'changeHandler', 'createSelectHandler', 'recipientHandler']);
   }
 
   // Select recipient from list providen by injectable
@@ -37,8 +41,7 @@ class Edit extends PageEdit {
     if (value === this.props.item.recipient) {
       value = this.props.email;
     }
-
-    this.preformAction('recipient', value);
+    this.changeHandler('recipient', value);
   }
 
   render() {
@@ -64,8 +67,9 @@ class Edit extends PageEdit {
               <label htmlFor='funReportName'>Report name:</label>
               <input 
                 disabled={running}
-                defaultValue={item.name}
-                onBlur={this.inputHandler}
+                value={this.state.name}
+                onChange={this.stateHandler}
+                onBlur={this.preformAction('name')}
                 id='funReportName'
                 type='text'
                 name='name'
@@ -81,8 +85,9 @@ class Edit extends PageEdit {
                   'Active': 1,
                   'Inactive': 0
                 }}
-                onChange={this.inputHandler}
-                value={item.active} />
+                value={this.state.active}
+                onChange={this.changeHandler}
+              />
             </div>
             <div className='row-flex-wrap'>
               <label htmlFor='funReportFrequency'>Frequency:</label>
@@ -101,8 +106,8 @@ class Edit extends PageEdit {
             <div className='row-flex'>
               <label htmlFor='funReportNextSend'>Next send:</label>
               <Datetime 
-                defaultValue={item.next_send}
-                onBlur={(value) => this.preformAction('next_send', (typeof value === 'string') ? value : value.format('YYYY-MM-DD HH:mm:ss'))}
+                defaultValue={this.state.next_send}
+                onBlur={(value) => this.changeHandler('next_send', (typeof value === 'string') ? value : value.format('YYYY-MM-DD HH:mm:ss'))}
                 dateFormat='YYYY-MM-DD'
                 timeFormat=' HH:mm:ss'
                 inputProps={{
@@ -137,7 +142,7 @@ class Edit extends PageEdit {
 }
 
 Edit.defaultProps = {
-  headingData: {
+  headingTexts: {
     title: 'Edit report',
     description: 'Pick the columns to send. Set time to send, e-mail recipient and report name here.',
   },

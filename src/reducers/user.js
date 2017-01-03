@@ -17,10 +17,10 @@ export const user = (state = defaultUser, action) => {
       // ===========================================================================
       delete action.payload.error; 
       action.payload.image = absolutizePath(action.payload.image);
-      return state = Object.assign(state, action.payload);
+      return state = Object.assign({}, state, action.payload);
     case EDIT_USER:
       action.payload.image = absolutizePath(action.payload.image);
-      return state = Object.assign(state, action.payload);
+      return state = Object.assign({}, state, action.payload);
     default:
       return state;
   }

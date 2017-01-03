@@ -16,11 +16,15 @@ import PageEdit from '../pageEdit';
 
 class Edit extends PageEdit {
   constructor (props) {
-    super(props);
+    super(props, {
+      fullname: true,
+      email: true,
+      position: true
+    });
 
     // Bind action handlers to component
     // ===========================================================================
-    bindAll(this, ['preformAction', 'inputHandler', 'createSelectHandler']);
+    bindAll(this, ['preformAction', 'stateHandler', 'createSelectHandler']);
   }
 
   render() {
@@ -39,15 +43,16 @@ class Edit extends PageEdit {
     // ===========================================================================
     return (
       <section className={componentRootClass}>
-        <EditFormHeader {...this.props.headingData} running={running} />
+        <EditFormHeader {...this.props.headingTexts} running={running} />
         <form className='subsection-content columned'>
           <div className='form-block'>
             <div className='row'>
               <label htmlFor='funUserDisplayName'>Username:</label>
               <input 
                 disabled={running}
-                defaultValue={item.fullname}
-                onBlur={this.inputHandler}
+                value={this.state.fullname}
+                onChange={this.stateHandler}
+                onBlur={this.preformAction('fullname')}
                 id='funUserDisplayName'
                 type='text'
                 name='fullname'
@@ -57,8 +62,9 @@ class Edit extends PageEdit {
               <label htmlFor='funUserPosition'>Position:</label>
               <input 
                 disabled={running}
-                defaultValue={item.position}
-                onBlur={this.inputHandler}
+                value={this.state.position}
+                onChange={this.stateHandler}
+                onBlur={this.preformAction('position')}
                 id='funUserPosition'
                 type='text'
                 name='position'
@@ -68,8 +74,9 @@ class Edit extends PageEdit {
               <label htmlFor='funUserEmail'>Email:</label>
               <input 
                 disabled={running}
-                defaultValue={item.email}
-                onBlur={this.inputHandler}
+                value={this.state.email}
+                onChange={this.stateHandler}
+                onBlur={this.preformAction('email')}
                 id='funUserEmail'
                 type='email'
                 name='email'
@@ -94,7 +101,7 @@ class Edit extends PageEdit {
 // Default common data for Edit form
 // ===========================================================================
 Edit.defaultProps = {
-  headingData: {
+  headingTexts: {
     title: 'Profile settings',
     description: 'Tell us a bit about yourself...',
     name: ''

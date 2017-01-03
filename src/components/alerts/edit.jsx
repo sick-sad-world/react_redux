@@ -20,23 +20,25 @@ import PageEdit from '../pageEdit';
 class Edit extends PageEdit {
   constructor (props) {
     super(props, {
-      frequency: (item) => item ? item.frequency : 15,
-      columns: (item) => item ? item.columns : []
+      name: true,
+      active: true,
+      frequency: true,
+      columns: true,
+      recipient: true
     });
 
     // Bind action handlers to component
     // ===========================================================================
-    bindAll(this, ['preformAction', 'inputHandler', 'createSelectHandler', 'recipientHandler']);
+    bindAll(this, ['preformAction', 'stateHandler', 'changeHandler', 'createSelectHandler', 'recipientHandler']);
   }
 
   // Select recipient from list providen by injectable
   // ===========================================================================
   recipientHandler (value) {
-    if (value === this.props.item.recipient) {
+    if (value === this.state.recipient) {
       value = this.props.email;
     }
-
-    this.preformAction('recipient', value);
+    this.changeHandler('recipient', value);
   }
 
   render() {
@@ -62,8 +64,9 @@ class Edit extends PageEdit {
               <label htmlFor='funAlertName'>Alert name:</label>
               <input 
                 disabled={running}
-                defaultValue={item.name}
-                onBlur={this.inputHandler}
+                value={this.state.name}
+                onChange={this.stateHandler}
+                onBlur={this.preformAction('name')}
                 id='funAlertName'
                 type='text'
                 name='name'
@@ -79,8 +82,9 @@ class Edit extends PageEdit {
                   'Active': 1,
                   'Inactive': 0
                 }}
-                onChange={this.inputHandler}
-                value={item.active} />
+                value={this.state.active}
+                onChange={this.changeHandler}
+              />
             </div>
             <div className='row-flex-wrap'>
               <label htmlFor='funAlertFrequency'>Frequency:</label>
@@ -114,7 +118,7 @@ class Edit extends PageEdit {
           <div className='form-block'>
             <div className='row'>
               <h3 className='form-subtitle'>Email assigment:</h3>
-              <EmailList className='row' active={item.recipient} disabled={running} onClick={this.recipientHandler} />
+              <EmailList className='row' active={this.state.recipient} disabled={running} onClick={this.recipientHandler} />
             </div>
           </div>
         </form>

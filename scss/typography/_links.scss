@@ -4,6 +4,7 @@
 a {
   color: $c-accent;
   text-decoration: none;
+  cursor: pointer;
   // @style: GENERIC LINKS HERE
   &:hover,
   &:focus {

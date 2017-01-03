@@ -286,6 +286,7 @@ select[multiple] {
   border-radius: $bdrs;
   border: 1px solid rgba($c-accent, .5);
   color: $c-accent;
+  cursor: pointer;
   display: inline-block;
   font-size: 0.9em;
   line-height: 1.4;

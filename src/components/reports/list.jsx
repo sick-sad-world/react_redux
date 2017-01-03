@@ -21,11 +21,13 @@ class List extends React.Component {
 // Define common text values
 // ===========================================================================
 List.defaultProps = {
-  title: 'Reports Management',
-  description: 'Create, edit and delete reports that will be sent to you when specific columns get new items.',
-  btn: 'Create new report',
-  deleting: 'Are you sure want to delete this Report?',
-  empty: 'No reports created yet. Use form above to create one.'
+  texts: {
+    title: 'Reports Management',
+    description: 'Create, edit and delete reports that will be sent to you when specific columns get new items.',
+    btn: 'Create new report',
+    deleting: 'Are you sure want to delete this Report?',
+    empty: 'No reports created yet. Use form above to create one.'
+  }
 };
 
 // Provide default parameters for list

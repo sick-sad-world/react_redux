@@ -434,14 +434,20 @@ class FeedCreation extends React.Component {
     let source_ids = [];
     Promise.all(
       this.state.feed.map((feed) => {
-        return this.actions.createData(Object.assign({set_id: this.props.set.id, url: this.state.url}, feed)).then((payload) => source_ids.push(payload.id));
+        return this.actions.createData(Object.assign({
+          set_id: this.props.set.id,
+          url: this.state.url
+        }, feed)).then(({payload}) => {
+          console.log(payload);
+          source_ids.push(payload.id);
+        });
       })
     )
     .then(() => {
-      let source_ids = concat(this.props.set.source_ids, source_ids);
+      console.log(concat(this.props.set.source_ids, source_ids));
       return this.actions.updateData({
         id: this.props.set.id,
-        source_ids: source_ids
+        source_ids: concat(this.props.set.source_ids, source_ids)
       });
     })
     .then(() => {
@@ -453,7 +459,7 @@ class FeedCreation extends React.Component {
   render() {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
-    if (!this.props.set_id || !this.props.params.create) return null;
+    if (!this.props.set || !this.props.params.create) return null;
     let running = this.props.appState === 3;
     let type = this.state.type;
     let texts = this.props.texts;
@@ -545,9 +551,9 @@ FeedCreation.defaultProps = {
   }
 }
 
-let mapStateToProps = ({ set, sources, app }, ownProps) => ({
+let mapStateToProps = ({ sets, sources, app }, ownProps) => ({
   appState: app.appState,
-  set: find(set, {id: parseInt(ownProps.params.id)}),
+  set: find(sets, {id: parseInt(ownProps.params.id)}),
   checkUrls: {
     RSS: 'find_feeds',
     HTML: 'find_urls',

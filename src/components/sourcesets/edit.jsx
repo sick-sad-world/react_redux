@@ -19,28 +19,20 @@ import Source from './source';
 import EditFormHeader from '../editHeader';
 import PageEdit from '../pageEdit';
 
-// Import actions
-// ===========================================================================
-import { deleteData } from '../../actions/actions';
-
 class Edit extends PageEdit {
   constructor (props) {
-    super(props);
-    this.state = {
-      loading: false,
+    super(props, {
+      name: true,
+      source_ids: true
+    });
+    this.state = Object.assign(this.state, {
       deleting: 0,
       dialogPos: 0
-    }
-    
-    // Create bound actions
-    // ===========================================================================
-    this.actions.deleteData = bindActionCreators({
-      deleteData: deleteData('source')
-    }, this.props.dispatch).deleteData;
+    });
 
     // Bind action handlers to component
     // ===========================================================================
-    bindAll(this, ['preformAction', 'inputHandler', 'makeSourceButton', 'stateDelete', 'handlerDelete', 'sourcesHandler']);
+    bindAll(this, ['preformAction', 'stateHandler', 'makeSourceButton', 'stateDelete', 'handlerDelete', 'sourcesHandler']);
   }
 
   stateDelete (e, id) {
@@ -74,12 +66,9 @@ class Edit extends PageEdit {
   // ===========================================================================
   makeSourceButton (uniq_ids, id) {
     if (includes(uniq_ids, id)) {
-      return <a href='' onClick={(e) => this.stateDelete(e, id)} title='Delete this source'><Icon icon='trash' /></a>;
+      return <a onClick={(e) => this.stateDelete(e, id)} title='Delete this source'><Icon icon='trash' /></a>;
     } else {
-      return <a href='' onClick={(e) => {
-        e.preventDefault();
-        this.sourcesHandler('source', id, true);
-      }} title='Remove this source from set'><Icon icon='forward' /></a>;
+      return <a onClick={(e) => this.sourcesHandler('source', id, true)} title='Remove this source from set'><Icon icon='forward' /></a>;
     }
   }
 
@@ -89,17 +78,17 @@ class Edit extends PageEdit {
   sourcesHandler (type, id, deleting) {
     let val = (type === 'source') ? id : find(this.props.sets, {id}).source_ids;
     if (deleting) {
-      val = without(this.props.item.source_ids, val);
+      val = without(this.state.source_ids, val);
     } else {
-      val = concat(this.props.item.source_ids, val);
+      val = concat(this.state.source_ids, val);
     }
-    this.preformAction('source_ids', val);
+    this.changeHandler('source_ids', val);
   }
 
   render() {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
-    if (!this.props.item.id || this.props.params.create) return null;
+    if (!this.props.item || this.props.params.create) return null;
     let running = this.props.appState === 3;
     let { item, own_sources } = this.props;
 
@@ -107,15 +96,6 @@ class Edit extends PageEdit {
     // @ used when items feeds list is empty
     // ===========================================================================
     let empty = <li className='state-empty'>This set has no sources. Please assign some or create.</li>
-
-    // Data for form heading
-    // ===========================================================================
-    let headingData = {
-      title: 'Edit form',
-      description: 'Simple edit form to manipulate entity props',
-      name: item.name,
-      running: running
-    };
 
     let componentRootClass = classNames({
       'mod-subsection-edit': true,
@@ -142,15 +122,16 @@ class Edit extends PageEdit {
     // ===========================================================================
     return (
       <section className={componentRootClass}>
-        <EditFormHeader {...headingData} />
+        <EditFormHeader {...this.props.headingTexts} name={item.name} running={running} />
         <form className='subsection-content columned'>
           <div className='form-block'>
             <div className='row'>
               <label htmlFor='funSetName'>Sourceset name:</label>
               <input 
                 disabled={running}
-                defaultValue={item.name}
-                onBlur={this.inputHandler}
+                value={this.state.name}
+                onChange={this.stateHandler}
+                onBlur={this.preformAction('name')}
                 id='funSetName'
                 type='text'
                 name='name'
@@ -188,6 +169,13 @@ class Edit extends PageEdit {
         </form>
       </section>
     );
+  }
+}
+
+Edit.defaultProps = {
+  headingTexts: {
+    title: 'Edit form',
+    description: 'Simple edit form to manipulate entity props'
   }
 }
 
