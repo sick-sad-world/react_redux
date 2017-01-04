@@ -7,7 +7,7 @@ import classNames from 'classnames';
 // ===========================================================================
 import React from 'React';
 import { connect } from 'react-redux';
-import { defAlert } from '../../reducers/defaults';
+import { defAlert } from '../../helpers/defaults';
 
 // Import Child components
 // ===========================================================================

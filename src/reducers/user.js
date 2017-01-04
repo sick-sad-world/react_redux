@@ -1,5 +1,5 @@
 import { LOGIN, LOGOUT, GET_USER, CREATE_USER, EDIT_USER } from '../actions/types';
-import { defaultUser } from './defaults';
+import { defaultUser } from '../helpers/defaults';
 
 // Ensure path is absolute
 // ===========================================================================

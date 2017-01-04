@@ -6,9 +6,9 @@ import 'babel-polyfill';
 // ===========================================================================
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import messager from './middlewares/messager';
+import messager from './helpers/messager';
 import * as reducers from './reducers';
-import * as defaults from './reducers/defaults';
+import * as defaults from './helpers/defaults';
 
 // Import all required actions
 // ===========================================================================

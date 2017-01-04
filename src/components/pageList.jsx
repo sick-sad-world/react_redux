@@ -33,12 +33,6 @@ export default class PageList extends React.Component {
     bindAll(this, ['stateDelete', 'handlerDelete', 'handlerCreate', 'createListItem'])
   }
 
-  componentWillReceiveProps () {
-    // Reset delete dialog position
-    // ===========================================================================
-    // this.stateDelete(0, 0);
-  }
-
   // Set [delete] state, to show confirmation dialog
   // ===========================================================================
   stateDelete (id, dialogPos) {
@@ -58,8 +52,7 @@ export default class PageList extends React.Component {
       type: this.props.type,
       current: item.id === this.props.curId,
       sortable: this.props.sortable,
-      deletable: this.props.deletable,
-      stateDelete: this.stateDelete
+      deleteAction: (this.props.deletable) ? this.stateDelete : null
     }, item))
   }
 

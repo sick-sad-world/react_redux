@@ -20,13 +20,13 @@ export default store => next => action => {
       break;
     case CLIENT_ERROR:
       console.error(action.text);
-      push('Client Error:', 'error.png', action.text);
+      push('Client Error:', '/img/icons/new.svg', action.text);
       break;
     case SERVER_ERROR:
-      push('Error:', 'error.png', action.text);
+      push('Error:', '/img/icons/new.svg', action.text);
       break;
     case HTML_ERROR:
-      push('HTML error:', 'error.png', action.text);
+      push('HTML error:', '/img/icons/new.svg', action.text);
       break;
     default:
       return next(action);

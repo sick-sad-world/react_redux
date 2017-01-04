@@ -1,11 +1,9 @@
 /* Main screen layout
 ========================================================================== */
 .mod-screen-main {
-  $pace: baseUnit(2);
 	background-color: $c-alt;
 	overflow-x: auto;
 	overflow-y: hidden;
-
 	.sidebar {
 		flex: 0 0 $entity-unit;
 		transition: flex $dur;
@@ -16,6 +14,9 @@
 		a {
 			color: $c-alt;
 		}
+    .pace {
+      font-size: 0;
+    }
 		.mod-user-block {
 			margin: baseUnit() baseUnit() baseUnit(2);
 			div {
@@ -29,6 +30,9 @@
 					opacity: 1;
 				}
 			}
+      .pace {
+        font-size: 0.75em;
+      }
 		}
 	}
 
@@ -37,23 +41,9 @@
 		overflow: hidden;
 		position: relative;
 	}
-  .pace {
-    @include pos(0 0 false 0);
-    background-image: linear-gradient(right, lighten($c-accent, 15%) 0%, $c-accent 25%, lighten($c-accent, 15%) 50%, $c-accent 100%);
-    background-size: 800% 800%;
-    display: block;
-    text-align: center;
-    color: $c-alt;
-    font-size: 0.75em;
-    line-height: $pace;
-    height: $pace;
-    &.is-running {
-      animation: background-sliding-hor 5s linear 0s infinite;
-    }
-  }
 
   .mod-page {
-    @include pos($pace 0 0 0);
+    @include pos();
     width: 100%;
   }
 

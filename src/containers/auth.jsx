@@ -21,12 +21,15 @@ class Auth extends React.Component {
     e.preventDefault();
     let dispatch = this.props.dispatch;
     let { username, password } = e.target.elements;
-    dispatch(setAppState(1));
+    
     dispatch(login({
         username: username.value,
         password: password.value
       }))
-      .then(() => dispatch(fetchData(true, true)))
+      .then(() => {
+        dispatch(setAppState(1));
+        return dispatch(fetchData(true, true));
+      })
       .catch((error) => dispatch(throwError(error)))
       .then(() => dispatch(setAppState(2)));
   }

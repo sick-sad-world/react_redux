@@ -19,15 +19,24 @@ export default class ListItem extends React.PureComponent {
   deleteHandler (e) {
     e.preventDefault();
     let pos, target = e.target;
+
+    // Find root element
+    // ===========================================================================
     while (!target.classList.contains('mod-entity')) {
       target = target.parentNode;
     }
+
+    // Get coordinates
+    // ===========================================================================
     pos = target.offsetTop + target.parentNode.offsetTop - e.target.clientHeight * 2;
-    this.props.stateDelete(this.props.id, pos);
+
+    // Call method provided
+    // ===========================================================================
+    this.props.deleteAction(this.props.id, pos);
   }
 
   render() {
-    let { disabled, current, type, sortable, deletable, name, id, counter, order } = this.props;
+    let { disabled, current, type, sortable, name, id, counter, order } = this.props;
 
     // Root element classes
     // ===========================================================================
@@ -56,7 +65,7 @@ export default class ListItem extends React.PureComponent {
 
     // Make delete button if item deletable
     // ===========================================================================
-    let deleteBtn = (deletable) ? (<a href='' onClick={this.deleteHandler} title={`Delete this ${type}`}><Icon icon='trash' /></a>) : null;
+    let deleteBtn = (this.props.deleteAction) ? (<a href='' onClick={this.deleteHandler} title={`Delete this ${type}`}><Icon icon='trash' /></a>) : null;
     
     return (
       <li className={rootClasses} data-order={order}>

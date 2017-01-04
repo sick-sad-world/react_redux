@@ -1,5 +1,5 @@
 import * as ACTIONS from '../actions/types';
-import { defaultAppState } from './defaults';
+import { defaultAppState } from '../helpers/defaults';
 
 export const app = (state = defaultAppState, action) => {
   switch (action.type) {

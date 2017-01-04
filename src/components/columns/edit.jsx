@@ -19,7 +19,7 @@ import PageEdit from '../pageEdit';
 
 // Import actions
 // ===========================================================================
-import { defColumn, defColumnData } from '../../reducers/defaults';
+import { defColumn, defColumnData } from '../../helpers/defaults';
 
 class Edit extends PageEdit {
   constructor (props) {

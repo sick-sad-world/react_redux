@@ -10,7 +10,7 @@ import React from 'React';
 import Select from 'react-select';
 import Datetime from 'react-datetime';
 import { connect } from 'react-redux';
-import { defReport } from '../../reducers/defaults';
+import { defReport } from '../../helpers/defaults';
 
 // Import Child components
 // ===========================================================================

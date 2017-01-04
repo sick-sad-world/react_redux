@@ -20,7 +20,7 @@ class Assigment extends React.Component {
     this.state = this.mapItemToState(this.props.item);
   }
 
-  componentWillRecieveProps (newProps) {
+  componentWillReceiveProps (newProps) {
     this.setState(this.mapItemToState(newProps.item))
   }
 

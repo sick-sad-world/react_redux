@@ -1,5 +1,5 @@
 import { GET_SETS, ADD_SET, EDIT_SET, DELETE_SET } from '../actions/types';
-import basicReducer from './reducerFactory'
+import basicReducer from '../helpers/reducer-factory'
 
 export const sets = basicReducer({
   ADD: ADD_SET,

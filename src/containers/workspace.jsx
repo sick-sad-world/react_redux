@@ -90,11 +90,11 @@ class Workspace extends React.Component {
     return (
       <section className='screen-main mod-screen-main'>
         <aside className={sidebarClass}>
+          <span className={paceClass}>{this.props.actionState}</span>
           <UserBlock />
           <MainNav toggle={this.handlerSidebar} logout={this.handlerLogout} />
         </aside>
         <div className='screen-content'>
-          <span className={paceClass}>{this.props.actionState}</span>
           <div className='mod-page'>
             {list}
             {main}
