@@ -160,7 +160,7 @@ class Edit extends PageEdit {
               <FeedsList 
                 sets={this.props.sets}
                 sources={this.props.sources}
-                omit={{set: [item.id], sources: item.source_ids}}
+                disable={{source: this.state.source_ids}}
                 disabled={running}
                 selectHandler={this.sourcesHandler}
               />
@@ -183,14 +183,26 @@ Edit.defaultProps = {
 // @ deps -> Sets, Columns
 // ===========================================================================
 let mapStateToProps = ({ sets, sources, app }, ownProps) => {
-let item = find(sets, {id: parseInt(ownProps.params.id)}) || {};
+  
+  let id = parseInt(ownProps.params.id);
+  let otherSets = [];
+  let item = {};
+
+  sets.forEach((set) => {
+    if (set.id === id) {
+      item = set;
+    } else {
+      otherSets.push(set);
+    }
+  });
+
   return {
     appState: app.appState,
     type: 'set',
-    item: item,
+    item,
     own_sources: (item.id) ? filter(sources, (source) => includes(item.source_ids, source.id)) : [],
     sources,
-    sets
+    sets: otherSets
   }
 };
 

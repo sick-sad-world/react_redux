@@ -111,6 +111,6 @@ export default class PageEdit extends React.Component {
     } else {
       value = concat(this.state[name], value);
     }
-    this.setState({[name]: value}, () => this.preformAction(name));
+    this.setState({[name]: value}, this.preformAction(name));
   }
 }

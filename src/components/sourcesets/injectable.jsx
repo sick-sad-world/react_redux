@@ -43,19 +43,44 @@ export default class FeedsList extends React.Component {
     return newProps || validSearch || searchCanceled || expandedChanged;
   }
 
+  makeSetComponent(set, disabled) {
+    let expanded = this.state.expanded === set.id;
+    let data = Object.assign({
+      key: set.id,
+      expanded,
+      disabled,
+      buttons: [
+        <a key='sel' onClick={e => this.props.selectHandler('set', set.id)} title='Add this set to selection'><Icon icon='reply-all' /></a>,
+        <a key='show' onClick={e => this.expandHandler((expanded) ? 0 : set.id)} title='View contents'><Icon icon={(expanded) ? 'chevron-up' : 'chevron-down'} /></a>
+      ]
+    }, set);
+
+    return (
+      <Sourceset {...data}>
+        {(expanded) ? this.props.sources.map((source) => {
+          if (includes(set.source_ids, source.id)) {
+            return this.makeSourceComponent(source, includes(this.props.disable.sources, source.id));
+          } else {
+            return null;
+          }
+        }) : null}
+      </Sourceset>
+    );
+  }
+
   makeSourceComponent(source, disabled) {
+    let data = Object.assign({
+      key: source.id,
+      disabled,
+      button: (<a onClick={(e) => this.props.selectHandler('source', source.id)} title='Add this source to selection'><Icon icon='reply'/></a>)
+    }, source)
 
-    let button = <a href='' onClick={(e) => {
-      e.preventDefault();
-      this.props.selectHandler('source', source.id);
-    }} title='Add this source to selection'><Icon icon='reply'/></a>;
-
-    return <Source key={source.id} button={button} disabled={disabled} {...source} />;
+    return <Source {...data} />;
   }
 
   render () {
     let search;
-    let { sources, sets, omit, selectHandler, disabled } = this.props;
+    let { sources, sets, disable, disabled } = this.props;
     // Define empty template
     // ===========================================================================
     let list = <li className='state-empty'>No sets or sources created yet. Make some before you can assign. </li>;
@@ -71,31 +96,12 @@ export default class FeedsList extends React.Component {
       if (this.state.search.length < 3) {
         // Display default list where sources grouped by sets
         // ===========================================================================
-        list = sets.map((set) => {
-          let expanded = this.state.expanded === set.id;
-          return (!includes(omit.set, set.id)) ? (
-            <Sourceset key={set.id} expanded={expanded} {...set} selectHandler={selectHandler} expandHandler={this.expandHandler}>
-            {(expanded) ? sources.map((source) => {
-              if (includes(set.source_ids, source.id)) {
-                return this.makeSourceComponent(source, includes(omit.sources, source.id));
-              } else {
-                return null;
-              }
-            }) : null}
-            </Sourceset>
-          ) : null;
-        });
+        list = sets.map((set) => this.makeSetComponent(set, includes(disable.set, set.id)));
       } else {
         search = new RegExp(this.state.search, 'i');
         // Display filtered sources by search parameter
         // ===========================================================================
-        list = sources.map((source) => {
-          if (search.test(source.name)) {
-            return this.makeSourceComponent(source, includes(omit.sources, source.id));
-          } else {
-            return null;
-          }
-        });
+        list = sources.map((source) => (search.test(source.name)) ? this.makeSourceComponent(source, includes(disable.sources, source.id)) : null);
       }
     }
 

@@ -12,13 +12,14 @@ import classNames from 'classnames';
 // ===========================================================================
 export default class Sourceset extends React.PureComponent {
   render() {
-    let { id, expanded, sortable, name, source_ids, expandHandler, selectHandler } = this.props;
+    let { id, expanded, sortable, name, source_ids, buttons, disabled } = this.props;
 
     // Root element classes
     // ===========================================================================
     let rootClasses = classNames({
       'mod-entity': true,
       'mod-sourceset': true,
+      'is-disabled': disabled,
       'is-expanded': expanded
     });
     
@@ -31,16 +32,7 @@ export default class Sourceset extends React.PureComponent {
               <em className='counter'>{source_ids.length}</em> { name }
             </span>
           </div>
-          <nav className='nav-links'>
-            <a href='' onClick={e => {
-              e.preventDefault();
-              selectHandler('set', id);
-            }} title='Add this set to selection'><Icon icon='reply-all' /></a>
-            <a href='' onClick={e => {
-              e.preventDefault();
-              expandHandler((expanded) ? 0 : id);
-            }} title='View contents'><Icon icon={(expanded) ? 'chevron-up' : 'chevron-down'} /></a>
-          </nav>
+          { (buttons && buttons.length) ? <nav className='nav-links'>{buttons}</nav> : null }
         </div>
         {(this.props.children) ? <ul className='entity-list'>{this.props.children}</ul> : null}
       </li>

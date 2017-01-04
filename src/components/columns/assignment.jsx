@@ -1,23 +1,38 @@
 // Import utility stuff
 // ===========================================================================
-import { find, map, pick, filter, includes } from 'lodash';
+import { find, without, concat, filter, includes } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 // Import Child components
 // ===========================================================================
+import Icon from '../icon';
 import FeedsList from '../sourcesets/injectable';
-import Set from '../sourcesets/sourceset';
+import Sourceset from '../sourcesets/sourceset';
 import Source from '../sourcesets/source';
+
+// Import actions
+// ===========================================================================
+import { updateData, throwError } from '../../actions/actions';
 
 class Assigment extends React.Component {
   constructor (props) {
     super(props);
 
     this.state = this.mapItemToState(this.props.item);
+    this.manageFeed = this.manageFeed.bind(this);
+
+    // Create bound actions
+    // ===========================================================================
+    this.actions = bindActionCreators({
+      updateData: updateData('column'),
+      throwError: throwError
+    }, this.props.dispatch);
+
   }
 
   componentWillReceiveProps (newProps) {
@@ -32,6 +47,19 @@ class Assigment extends React.Component {
       own_sets: (item.data) ? filter(this.props.sets, (set) => includes(item.data.set, set.id)) : [],
       own_sources: (item.data) ? filter(this.props.sources, (source) => includes(item.data.source, source.id)) : []
     };
+  }
+
+  manageFeed (type, id, deleting) {
+    let val = (deleting) ? without(this.state[type], id) : concat(this.state[type], id);
+
+    this.actions.updateData({
+      id: this.props.item.id,
+      data: JSON.stringify(Object.assign({}, this.props.item.data, {[type]: val}))
+    }).catch(this.actions.throwError);
+  }
+
+  createDeselectButton (type, id) {
+    return <a onClick={() =>this.manageFeed(type, id, true)} title='Remove this ${type} from feeds'><Icon icon='forward' /></a>;
   }
 
   render() {
@@ -49,31 +77,31 @@ class Assigment extends React.Component {
         <div className='subsection-content mod-submanagement'>
           <div className='selected'>
             <div className='header'>
-              <span>Sourceset has {this.state.set.length} sets and {this.state.source.length} sources total.</span>
+              <span>Column has {this.state.set.length} sets and {this.state.source.length} sources assigned.</span>
             </div>
             <ul className='entity-list'>
               <li className='list-title'><h4>Sets selected</h4></li>
               { (this.state.own_sets.length) ? this.state.own_sets.map((set) => {
-                
+                return <Sourceset key={set.id} {...set} buttons={[this.createDeselectButton('set', set.id)]} />
               }) : (<li className='state-empty'>{this.props.texts.empty_set}</li>) }
               <li className='list-title'><h4>Sources selected</h4></li>
-              { (this.state.own_sources.length) ? this.state.own_sources.map((set) => {
-                
+              { (this.state.own_sources.length) ? this.state.own_sources.map((source) => {
+                return <Source key={source.id} {...source} button={this.createDeselectButton('source', source.id)} />
               }) : (<li className='state-empty'>{this.props.texts.empty_source}</li>) }
             </ul>
           </div>
           <FeedsList 
             sets={this.props.sets}
             sources={this.props.sources}
-            omit={{set: this.state.set, sources: this.state.source}}
+            disable={{set: this.state.set, source: this.state.source}}
             disabled={running}
-            selectHandler={this.sourcesHandler}
+            selectHandler={this.manageFeed}
           />
         </div>
       </section>
     );
   }
-};
+}
 
 // Assign default text to component
 // ===========================================================================

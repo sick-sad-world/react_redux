@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { find, bindAll, includes, pickBy, isNaN, isUndefined, map, keys, omitBy } from 'lodash';
+import { find, bindAll, includes, pickBy, omit, isNaN, isUndefined, map, keys, omitBy } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
@@ -72,13 +72,12 @@ class Edit extends PageEdit {
   // Pick adv filters and assign it to state
   // ===========================================================================
   getAdvFiltersFromProps (props) {
-    return {
+    return Object.assign({
       adv_type: 'MIN',
       adv_pref: null,
       adv_prop: 'likes',
-      adv_val: '',
-      advFilters: pickBy(props.item.data, (v, k) => this.props.advRegExp.test(k))
-    };
+      adv_val: ''
+    }, pickBy(props.item.data, (v, k) => this.props.advRegExp.test(k)));
   }
 
   // Send request to server with new props
@@ -161,6 +160,8 @@ class Edit extends PageEdit {
       'mod-column-edit': true,
       'state-loading': running
     });
+
+    let advFilters = pickBy(this.props.item.data, (v, k) => this.props.advRegExp.test(k));
 
     // Create display settings
     // ===========================================================================
@@ -481,9 +482,9 @@ class Edit extends PageEdit {
           </div>
           <div className='form-block adv-filters'>
             <ul className='tag-list row'>
-              { (keys(this.state.advFilters).length) ?
-                  map(this.state.advFilters, (v, k) => 
-                    <li key={`${k}=${v}`}>{`${k}=${v}`}<span onClick={this.preformAction(k)}><Icon icon='cross' /></span></li>)
+              { (keys(advFilters).length) ?
+                  map(advFilters, (v, k) => 
+                    <li key={`${k}=${v}`}>{`${k}=${v}`}<span onClick={() => this.changeHandler(k, null)} ><Icon icon='cross' /></span></li>)
                       : emptyAdvFilter }
             </ul>
             <fieldset>

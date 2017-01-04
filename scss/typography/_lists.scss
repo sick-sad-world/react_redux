@@ -79,6 +79,7 @@ ol ol {
 		}
 		&.is-default {
 			width: 100%;
+      text-align: center;
 			@include form-pholder(1.125em);
 		}
     &.is-disabled {
