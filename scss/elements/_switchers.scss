@@ -32,6 +32,9 @@ span[class*="switcher-"] {
 	&:hover {
 		@include style-hover();
 	}
+  &.is-disabled {
+    @include style-disabled();
+  }
 	&.is-focused {
 		@include style-focus();
 	}

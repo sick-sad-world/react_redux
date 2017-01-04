@@ -54,6 +54,7 @@ export default class PageList extends React.Component {
   createListItem (item) {
     return React.cloneElement(this.props.children, Object.assign({
       key: item.id,
+      order: item.order,
       type: this.props.type,
       current: item.id === this.props.curId,
       sortable: this.props.sortable,

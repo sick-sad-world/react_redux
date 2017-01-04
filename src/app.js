@@ -79,7 +79,7 @@ render(
           <Route path='/dashboard(/:id)' components={{main: Dashboard}} />
           <Route path='/alerts(/:id)' components={Alerts}/>
           <Route path='/reports(/:id)' components={Reports}/>
-          <Route path='/columns(/:id)(/:assigment)' components={Columns}/>
+          <Route path='/columns(/:id)(/:assignment)' components={Columns}/>
           <Route path='/sets(/:id)(/:create)' components={Sourcesets}/>
           <Route path='/settings' components={{main: Profile}}/>
         </Route>

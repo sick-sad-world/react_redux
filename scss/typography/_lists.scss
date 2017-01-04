@@ -149,6 +149,11 @@ ol ol {
 			}
 		}
 	}
+  > li.list-title + li[class*="state-"] {
+    position: static;
+    height: $entity-unit * 2 + 2px;
+    border-bottom: $bd;
+  }
 }
 
 .column-list {

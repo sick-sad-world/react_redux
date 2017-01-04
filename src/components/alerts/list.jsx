@@ -41,6 +41,7 @@ const mapStateToProps = ({ alerts }, ownProps) => {
     create: 'delayed',
     items: alerts.map((item) => ({
       id: item.id,
+      order: item.order,
       name: item.name
     }))
   }

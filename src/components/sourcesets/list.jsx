@@ -40,6 +40,7 @@ const mapStateToProps = ({ sets }, ownProps) => {
     deletable: true,
     items: sets.map((item) => ({
       id: item.id,
+      order: item.order,
       name: item.name,
       counter: item.source_ids.length
     }))

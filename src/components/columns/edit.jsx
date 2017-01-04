@@ -1,12 +1,13 @@
 // Import utility stuff
 // ===========================================================================
-import { find, bindAll, includes, without, concat, pickBy, isNaN, isUndefined, map, keys, omitBy } from 'lodash';
+import { find, bindAll, includes, pickBy, isNaN, isUndefined, map, keys, omitBy } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 // Import Child components
 // ===========================================================================
@@ -29,7 +30,6 @@ class Edit extends PageEdit {
       show_ignored: (item) => item.data.show_ignored,
       infinite: (item) => item.data.infinite,
       limit: (item) => item.data.limit,
-      sort: (item) => item.data.sort,
       direction: (item) => item.data.direction,
       author: (item) => item.data.author,
       search: (item) => item.data.search,
@@ -60,7 +60,7 @@ class Edit extends PageEdit {
     Object.assign(this.state, this.getAdvFiltersFromProps(this.props));
     // Bind action handlers to component
     // ===========================================================================
-    bindAll(this, ['preformAction', 'stateHandler', 'changeHandler', 'createSelectHandler', 'createAdvFilter']);
+    bindAll(this, ['preformAction', 'stateHandler', 'changeHandler', 'createSelectHandler', 'createAdvFilter', 'modifyStateArray']);
   }
 
   onComponentWillReceiveProps (newProps) {
@@ -84,39 +84,32 @@ class Edit extends PageEdit {
   // Send request to server with new props
   // @overriding [preformAction] pageEdit.jsx:51
   // ===========================================================================
-  preformAction (name, value) {
-    let item = this.props.item;
-    let data = false;
+  preformAction (name) {
+    return () => {
+      let item = this.props.item;
+      let value = this.state[name];
+      let data = false;
 
-    // Convert number to number
-    // ===========================================================================
-    if (!isNaN(parseFloat(value))) {
-      value = parseFloat(value);
-    }
-
-    // Convert null to undefined
-    // ===========================================================================
-    if (value === '' || value === null || (name.indexOf('is_') === 0 && value === 'on')) {
-      value = undefined;
-    }
-
-    if (this.props.item.id) {
-      // Modify if item is already existed
+      // Convert number to number
       // ===========================================================================
-      switch (name) {
-        case 'name':
-          if (value !== item.name) {
-            data = {name: value};
+      if (!isNaN(parseFloat(value))) {
+        value = parseFloat(value);
+      }
+
+      // Convert null to undefined
+      // ===========================================================================
+      if (value === '' || value === null || (name.indexOf('is_') === 0 && value === 'on')) {
+        value = undefined;
+      }
+
+      if (item.id) {
+        // Modify if item is already existed
+        // ===========================================================================
+        if (name === 'name' || name === 'display_settings') {
+          if (value !== item[name]) {
+            data = {[name]: value};
           }
-        break;
-        case 'display_settings':
-          if (includes(item.display_settings, value)) {
-            data = {display_settings: without(item.display_settings, value)};
-          } else {
-            data = {display_settings: concat(item.display_settings, value)};
-          }
-        break;
-        default:
+        } else {
           // Compose sorting property
           // ===========================================================================
           if (name.indexOf('sort') === 0) {
@@ -129,15 +122,18 @@ class Edit extends PageEdit {
           if (name === 'autoreload' && !value) {
             value = 0;
           }
-
-          data = { data: Object.assign({}, item.data, {[name]: value}) };
-          data.data = JSON.stringify(omitBy(data.data, isUndefined));
-        break;
-      }
-
-      if (data) {
-        data.id = item.id;
-        this.actions.updateData(data).catch(this.actions.throwError);
+          if (value !== item.data[name]) {
+            data = { data: Object.assign({}, item.data, {[name]: value}) };
+            data.data = JSON.stringify(omitBy(data.data, isUndefined));
+          } else {
+            data = null;
+          }
+        }
+        
+        if (data) {
+          data.id = item.id;
+          this.actions.updateData(data).catch(this.actions.throwError);
+        }
       }
     }
   }
@@ -148,14 +144,15 @@ class Edit extends PageEdit {
     e.preventDefault();
     let { adv_type, adv_pref, adv_prop, adv_val} = this.state;
     let key = `${adv_type}(${(adv_pref) ? adv_pref+'_'+adv_prop : adv_prop})`;
-    this.preformAction(key, adv_val);
+    this.setState({
+      [key]: adv_val
+    }, this.preformAction(key));
   }
 
   render() {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
-    if (!this.props.item.id) return null;
-    let item = this.props.item;
+    if (!this.props.item.id || this.props.params.assignment) return null;
     let running = this.props.appState === 3;
     let emptyAdvFilter = <li className='is-default'><i>No advanced filters configured for this column. Click below to add one or more.</i></li>;
 
@@ -179,8 +176,8 @@ class Edit extends PageEdit {
                 name='display_settings'
                 value={setting}
                 disabled={running}
-                onChange={this.changeHandler}
-                checked={includes(item.display_settings, setting)}
+                onChange={this.modifyStateArray}
+                checked={includes(this.state.display_settings, setting)}
               />
               <Icon icon='check' />
             </span>
@@ -199,7 +196,7 @@ class Edit extends PageEdit {
     // ===========================================================================
     return (
       <section className={componentRootClass}>
-        <EditFormHeader {...this.props.headingTexts} name={item.name} running={running} />
+        <EditFormHeader {...this.props.headingTexts} name={this.state.name} running={running} />
         <form className='subsection-content columned'>
           <div className='form-block'>
             <div className='row'>
@@ -214,6 +211,10 @@ class Edit extends PageEdit {
                 name='name'
               />
             </div>
+            <fieldset className='row'>
+              <legend>Feeds assigned:</legend>
+              <Link to={`${this.props.location.pathname}/assignment`} className='is-button is-accent'>Assign feeds</Link>
+            </fieldset>
             <h4 className='form-subtitle'>Display options:</h4>
             <div className='row-flex'>
               <span className='form-label'>Display ignored items anyway</span>
@@ -305,7 +306,7 @@ class Edit extends PageEdit {
                   searchable={false}
                   value={this.state.sort_prop}
                 />
-                <span className='switcher-direction'>
+                <span className={`switcher-direction${(running) ? ' is-disabled' : ''}`}>
                   <input
                     type='checkbox'
                     disabled={running}
@@ -482,7 +483,7 @@ class Edit extends PageEdit {
             <ul className='tag-list row'>
               { (keys(this.state.advFilters).length) ?
                   map(this.state.advFilters, (v, k) => 
-                    <li key={`${k}=${v}`}>{`${k}=${v}`}<span onClick={() => this.preformAction(k)}><Icon icon='cross' /></span></li>)
+                    <li key={`${k}=${v}`}>{`${k}=${v}`}<span onClick={this.preformAction(k)}><Icon icon='cross' /></span></li>)
                       : emptyAdvFilter }
             </ul>
             <fieldset>
@@ -553,6 +554,8 @@ class Edit extends PageEdit {
   }
 }
 
+// Assign default text and possible dropdown values to component
+// ===========================================================================
 Edit.defaultProps = {
   headingTexts: {
     title: 'Edit column',

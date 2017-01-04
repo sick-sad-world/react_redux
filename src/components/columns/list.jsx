@@ -83,6 +83,7 @@ const mapStateToProps = ({ columns }, ownProps) => {
     deletable: true,
     items: columns.map((item) => ({
       id: item.id,
+      order: item.order,
       name: item.name,
       open: item.open
     }))

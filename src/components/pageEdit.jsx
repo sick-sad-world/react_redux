@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { isArray, bindAll, mapValues, isFunction } from 'lodash';
+import { isArray, includes, without, concat, mapValues, isFunction } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
@@ -93,13 +93,24 @@ export default class PageEdit extends React.Component {
   // -> Function which handles both action and state change
   // ===========================================================================
   createSelectHandler (name) {
-    return (value) => {
+    return (v) => {
       // Set state to update selects
       // then run change handler to send chnages to server
       // ===========================================================================
       this.setState({
-        [name]: (isArray(value)) ? value.map(v => v.value) : (value) ? value.value : value
+        [name]: (isArray(v)) ? v.map(v => v.value) : (v) ? v.value : v
       }, this.preformAction(name));
     }
+  }
+
+  modifyStateArray (e) {
+    let name = e.target.name;
+    let value = e.target.value;
+    if (includes(this.state[name], value)) {
+      value = without(this.state[name], value);
+    } else {
+      value = concat(this.state[name], value);
+    }
+    this.setState({[name]: value}, () => this.preformAction(name));
   }
 }

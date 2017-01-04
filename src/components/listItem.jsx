@@ -27,7 +27,7 @@ export default class ListItem extends React.PureComponent {
   }
 
   render() {
-    let { disabled, current, type, sortable, deletable, name, id, counter } = this.props;
+    let { disabled, current, type, sortable, deletable, name, id, counter, order } = this.props;
 
     // Root element classes
     // ===========================================================================
@@ -52,14 +52,14 @@ export default class ListItem extends React.PureComponent {
     
     // Make сounter
     // ===========================================================================
-    let badge = (counter) ? <em className='counter'>{counter}</em> : null;
+    let badge = (counter >= 0) ? <em className='counter'>{counter}</em> : null;
 
     // Make delete button if item deletable
     // ===========================================================================
     let deleteBtn = (deletable) ? (<a href='' onClick={this.deleteHandler} title={`Delete this ${type}`}><Icon icon='trash' /></a>) : null;
     
     return (
-      <li className={rootClasses}>
+      <li className={rootClasses} data-order={order}>
         <div>
           { dragHandle }
           <div className='text'>

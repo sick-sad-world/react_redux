@@ -41,6 +41,7 @@ const mapStateToProps = ({ reports }, ownProps) => {
     create: 'delayed',
     items: reports.map((item) => ({
       id: item.id,
+      order: item.order,
       name: item.name
     }))
   }
