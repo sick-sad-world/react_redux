@@ -33,7 +33,7 @@ import App from './containers/app'
 
 // Import components wich represents each of App sections
 // ===========================================================================
-import Dashboard from './components/dashboard';
+import Dashboard from './components/columns/dashboard';
 import * as Alerts from './components/alerts';
 import * as Reports from './components/reports';
 import * as Columns from './components/columns';
@@ -45,7 +45,7 @@ import Profile from './components/user/profile';
 let initialState = {
   app: defaults.defaultAppState,
   user: defaults.defaultUser,
-  results: {},
+  links: {},
   alerts: [],
   reports: [],
   columns: [],
