@@ -45,6 +45,7 @@ import Profile from './components/user/profile';
 let initialState = {
   app: defaults.defaultAppState,
   user: defaults.defaultUser,
+  results: {},
   alerts: [],
   reports: [],
   columns: [],

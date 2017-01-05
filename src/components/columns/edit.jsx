@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { find, bindAll, includes, pickBy, omit, isNaN, isUndefined, map, keys, omitBy } from 'lodash';
+import { find, bindAll, includes, pickBy, isNaN, isUndefined, map, keys, omitBy } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff

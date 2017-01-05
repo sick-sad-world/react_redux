@@ -35,6 +35,10 @@ export const ADD_COLUMN = 'ADD_COLUMN';
 export const EDIT_COLUMN = 'EDIT_COLUMN';
 export const DELETE_COLUMN = 'DELETE_COLUMN';
 
+// Column actions
+// ===========================================================================
+export const GET_RESULTS = 'GET_RESULTS';
+
 // Sourcesets actions
 // ===========================================================================
 export const GET_SETS = 'GET_SETS';
