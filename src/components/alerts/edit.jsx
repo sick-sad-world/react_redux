@@ -46,7 +46,7 @@ class Edit extends PageEdit {
     // ===========================================================================
     if (!isNumber(this.props.item.id)) return null;
     let item = this.props.item;
-    let running = this.props.appState === 3
+    let running = this.props.state === 3
 
     let componentRootClass = classNames({
       'mod-subsection-edit': true,
@@ -145,7 +145,7 @@ Edit.defaultProps = {
 // Transform app state to component props
 // @ deps -> Alert, Columns
 // ===========================================================================
-let mapStateToProps = ({ alerts, columns, app, user }, ownProps) => {
+let mapStateToProps = ({ alerts, columns, user }, ownProps) => {
   let item;
 
   if (ownProps.params.id === 'new') {
@@ -160,17 +160,17 @@ let mapStateToProps = ({ alerts, columns, app, user }, ownProps) => {
   } else {
     // Or find existing one
     // ===========================================================================
-    item = find(alerts, {id: parseInt(ownProps.params.id)}) || {};
+    item = find(alerts.data, {id: parseInt(ownProps.params.id)}) || {};
   }
 
   // Return prepared data
   // ===========================================================================
   return {
-    appState: app.appState,
+    state: columns.state,
     type: 'alert',
     item: item,
     email: user.email,
-    columns: columns.map((item) => ({
+    columns: columns.data.map((item) => ({
       value: item.id,
       label: item.name,
       clearableValue: true

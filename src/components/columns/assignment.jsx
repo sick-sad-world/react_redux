@@ -64,7 +64,7 @@ class Assigment extends React.Component {
 
   render() {
     if (!this.props.item.id || !this.props.params.assignment) return null;
-    let running = this.props.appState === 3;
+    let running = this.props.state === 3;
 
     return (
       <section className='mod-subsection-management'>
@@ -114,11 +114,11 @@ Assigment.defaultProps = {
   }
 };
 
-let mapStateToProps = ({ columns, sets, sources, app }, ownProps) => ({
-  appState: app.appState,
-  sets,
-  sources,
-  item: find(columns, {id: parseInt(ownProps.params.id)}) || {}
+let mapStateToProps = ({ columns, sets, sources }, ownProps) => ({
+  state: columns.state,
+  sets: sets.data,
+  sources: sources.data,
+  item: find(columns.data, {id: parseInt(ownProps.params.id)}) || {}
 });
 
 export default connect(mapStateToProps)(Assigment);

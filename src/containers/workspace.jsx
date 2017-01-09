@@ -82,7 +82,7 @@ class Workspace extends React.Component {
 
     let paceClass = classNames({
       'pace': true,
-      'is-running': this.props.appState !== 2
+      'is-running': this.props.state !== 2
     })
 
     // Return JSX layout of a component

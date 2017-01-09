@@ -6,8 +6,8 @@ import fetch from '../fetch';
 // Action constructor (for default AJAX comunnication)
 // Since most of our actions are the same - i create this
 // ===========================================================================
-export default function createAction (url, ACTION, text) {
-
+export default function createAction (url, ACTION, type) {
+  let STATE_ACTION = `SET_${type.toUpperCase()}_STATE`; 
   // Check whatever we provided an URL (otherwise no point doing something)
   // ===========================================================================
   if (typeof url !== 'string' && !url && !url.length) {
@@ -27,46 +27,51 @@ export default function createAction (url, ACTION, text) {
 
     // Set app state to [loading]
     // ===========================================================================
-    if (!silent) {
-      dispatch(setAppState(3, text));
-    }
+    dispatch({
+      type: STATE_ACTION,
+      state: 3,
+      silent
+    });
 
-    let reqData =  (data) ? Object.assign({}, data) : {};
+    let reqData =  {...data};
 
     // Fire a call to server
     // ===========================================================================
     return fetch(url, data).then(payload => {
       
-      if (!silent) {
+      // Set app state to idle
+      // ===========================================================================
+      dispatch({
+        type: STATE_ACTION,
+        state: 2,
+        silent: silent
+      });
+      
+      if (payload.error) {
         
-        // Set app state to idle
+        // Fire [error] action if error found
         // ===========================================================================
-        dispatch(setAppState(2));
+        throw { type: ACTIONS['SERVER_ERROR'], text: payload.error, silent };
 
-        if (payload.error) {
-          
-          // Fire [error] action if error found
-          // ===========================================================================
-          throw { type: ACTIONS['SERVER_ERROR'], text: payload.error };
+      } else if (payload.message || payload.success) {
 
-        } else if (payload.message || payload.success) {
-
-          // Fire message to display proper message if responce contains only it
-          // ===========================================================================
+        // Fire message to display proper message if responce contains only it
+        // ===========================================================================
+        if (!silent) {
           dispatch({ type: ACTIONS['MESSAGE'], text: (payload.message || payload.success) });
-
-          // Should be removed as we organize our workflow with backend
-          // ===========================================================================
-          if (reqData.data) {
-            reqData.data = JSON.parse(reqData.data);
-          }
-          payload = reqData;
         }
+
+        // Should be removed as we organize our workflow with backend
+        // ===========================================================================
+        if (reqData.data) {
+          reqData.data = JSON.parse(reqData.data);
+        }
+        payload = reqData;
       }
 
       // Dispatch proper action
       // ===========================================================================
-      return dispatch({type: ACTION, payload, silent});
+      return dispatch({type: ACTION, payload});
     });
 
   }
@@ -74,7 +79,7 @@ export default function createAction (url, ACTION, text) {
 
 // Set app state (simple and SYNC)
 // ===========================================================================
-export const setAppState = (appState, actionState) => ({ type: ACTIONS['SET_APP_STATE'], appState, actionState });
+export const setAppState = (state) => ({ type: ACTIONS['SET_APP_STATE'], state });
 
 // Throw action related to error (SYNC)
 // ===========================================================================
@@ -95,26 +100,54 @@ export const throwError = (error) => (dispatch) => {
       text: error.text || error
     }
   }
+  error.state = 4;
   return dispatch(error);
 };
 
+// Get single result for a specific column
+// ===========================================================================
+export const getResult = (column) => (dispatch) => {
+  dispatch({type: ACTIONS['SET_LINKS_STATE'], id: column.id, state: 3})
+  return fetch('links', column.data).then(payload => {
+    dispatch({type: ACTIONS['SET_LINKS_STATE'], id: column.id, state: 2});
+    dispatch({type: ACTIONS['GET_LINKS'], payload: payload, id: column.id});
+  });
+}
+
+// Get results for all columns with a time delay
+// ===========================================================================
+export const getAllResults = (data) => (dispatch) => {
+  let columns;
+
+  data.forEach((item) => {
+    if(item && item.type === ACTIONS['GET_COLUMNS']) {
+      columns = item.payload;
+    }
+  });
+  
+  columns.forEach((column, i) => {
+    if (!column.open) return;
+    setTimeout(() => dispatch(getResult(column)).catch(err => dispatch(throwError(err))), i*1500);
+  });
+}
+
 // Create all default actions for all default entities
 // ===========================================================================
-export const readData = (type) => createAction(type, ACTIONS[`GET_${type.toUpperCase()}`]);
-export const createData = (type) => createAction(`add_${type}`, ACTIONS[`ADD_${type.toUpperCase()}`], `Creating new ${type}`);
-export const updateData = (type) => createAction(type, ACTIONS[`EDIT_${type.toUpperCase()}`], `Saving ${type} changes`);
-export const deleteData = (type) => createAction(`remove_${type}`, ACTIONS[`DELETE_${type.toUpperCase()}`], `Deleting ${type}`);
+export const readData = (type) => createAction(type, ACTIONS[`GET_${type.toUpperCase()}`], type);
+export const createData = (type) => createAction(`add_${type}`, ACTIONS[`ADD_${type.toUpperCase()}`], type);
+export const updateData = (type) => createAction(type, ACTIONS[`EDIT_${type.toUpperCase()}`], type);
+export const deleteData = (type) => createAction(`remove_${type}`, ACTIONS[`DELETE_${type.toUpperCase()}`], type);
 
 // Create specific action to fetch All data from a server:
 // On app init - for example (utilizing Promise.all)
 // ===========================================================================
-export const fetchData = (silent, getUser) => (dispatch) => Promise.all([
-  (getUser) ? dispatch(readData('user')(silent)) : null,
-  dispatch(readData('alerts')(silent)),
-  dispatch(readData('reports')(silent)),
-  dispatch(readData('columns')({data: 1}, silent)),
-  dispatch(readData('sets')(silent)),
-  dispatch(readData('sources')(silent))
+export const fetchData = (getUser) => (dispatch) => Promise.all([
+  (getUser) ? dispatch(readData('user')(true)) : null,
+  dispatch(readData('alerts')(true)),
+  dispatch(readData('reports')(true)),
+  dispatch(readData('sets')(true)),
+  dispatch(readData('sources')(true)),
+  dispatch(readData('columns')({data: 1}, true))
 ]);
 
 // Create auth actions

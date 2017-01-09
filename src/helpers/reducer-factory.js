@@ -1,22 +1,37 @@
-import { LOGIN, LOGOUT } from '../actions/types';
+import { LOGOUT } from '../actions/types';
 import { reject, concat } from 'lodash';
+import { defaultCountable } from '../helpers/defaults';
 
 export default function basicReducer (actions) {
-  return function (state = [], action) {
+  return function (state = {}, action) {
     switch (action.type) {
       case LOGOUT:
-      case LOGIN:
-        return [];
+        return defaultCountable;
+      case actions.STATE:
+        return {
+          data: state.data,
+          state: action.state
+        }
       case actions.GET:
-        return action.payload;
+        return {
+          data: action.payload,
+          state: state.state
+        };
       case actions.ADD:
-        return concat(state, action.payload);
+        return {
+          data: concat(state.data, action.payload),
+          state: state.state
+        };
       case actions.EDIT:
-        return state.map((item) => {
-          return (item.id === action.payload.id) ? Object.assign({}, item, action.payload) : item;
-        });
+        return {
+          data: state.data.map((item) => (item.id === action.payload.id) ? Object.assign({}, item, action.payload) : item),
+          state: state.state
+        };
       case actions.DELETE:
-        return reject(state, {id: action.payload.id});
+        return {
+          data: reject(state, {id: action.payload.id}),
+          state: state.state
+        };
       default:
         if (actions.hasOwnProperty(action.type) && typeof actions[action.type] === 'function') {
           return actions[action.type](state, action);

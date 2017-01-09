@@ -456,7 +456,7 @@ class FeedCreation extends React.Component {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
     if (!this.props.set || !this.props.params.create) return null;
-    let running = this.props.appState === 3;
+    let running = this.props.state === 3;
     let type = this.state.type;
     let texts = this.props.texts;
 
@@ -547,9 +547,9 @@ FeedCreation.defaultProps = {
   }
 }
 
-let mapStateToProps = ({ sets, sources, app }, ownProps) => ({
-  appState: app.appState,
-  set: find(sets, {id: parseInt(ownProps.params.id)}),
+let mapStateToProps = ({ sets, sources }, ownProps) => ({
+  state: sources.state,
+  set: find(sets.data, {id: parseInt(ownProps.params.id)}),
   checkUrls: {
     RSS: 'find_feeds',
     HTML: 'find_urls',

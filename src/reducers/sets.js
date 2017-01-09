@@ -1,18 +1,22 @@
-import { GET_SETS, ADD_SET, EDIT_SET, DELETE_SET } from '../actions/types';
+import { GET_SETS, SET_SETS_STATE, ADD_SET, EDIT_SET, DELETE_SET } from '../actions/types';
 import basicReducer from '../helpers/reducer-factory'
 
 export const sets = basicReducer({
+  STATE: SET_SETS_STATE,
   ADD: ADD_SET,
   DELETE: DELETE_SET,
   EDIT_SET: function(state, action) {
-    return state.map((item) => {
-      if (item.id === action.payload.id) {
-        delete action.payload.sources;
-        return Object.assign({}, item, action.payload)
-      } else {
-        return item;
-      }
-    });
+    return {
+      data: state.map((item) => {
+        if (item.id === action.payload.id) {
+          delete action.payload.sources;
+          return Object.assign({}, item, action.payload)
+        } else {
+          return item;
+        }
+      }),
+      state: state.state
+    };
   },
   GET_SETS: function(state, action) {
     let feeds = {};
@@ -33,6 +37,9 @@ export const sets = basicReducer({
         }
       });
     });
-    return action.payload;
+    return {
+      data: action.payload,
+      state: state.state
+    };
   }
 });

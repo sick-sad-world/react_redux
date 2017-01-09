@@ -49,7 +49,7 @@ class Edit extends PageEdit {
     // ===========================================================================
     if (!this.props.item.id) return null;
     let item = this.props.item;
-    let running = this.props.appState === 3;
+    let running = this.props.state === 3;
 
     let componentRootClass = classNames({
       'mod-subsection-edit': true,
@@ -173,17 +173,17 @@ const mapStateToProps = ({ reports, columns, app, user }, ownProps) => {
   } else {
     // Or find existing one
     // ===========================================================================
-    item = find(reports, {id: parseInt(ownProps.params.id)}) || {};
+    item = find(reports.data, {id: parseInt(ownProps.params.id)}) || {};
   }
 
   // Return prepared data
   // ===========================================================================
   return {
-    appState: app.appState,
+    state: app.state,
     type: 'report',
     item: item,
     emai: user.email,
-    columns: columns.map((item) => {
+    columns: columns.data.map((item) => {
       return {
         value: item.id,
         label: item.name,

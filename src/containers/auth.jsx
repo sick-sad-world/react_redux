@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
-import { login, setAppState, throwError, fetchData } from '../actions/actions';
+import { login, setAppState, throwError, fetchData, getAllResults } from '../actions/actions';
 
 // Import Child components
 // ===========================================================================
@@ -26,12 +26,10 @@ class Auth extends React.Component {
         username: username.value,
         password: password.value
       }))
-      .then(() => {
-        dispatch(setAppState(1));
-        return dispatch(fetchData(true, true));
-      })
-      .catch((error) => dispatch(throwError(error)))
-      .then(() => dispatch(setAppState(2)));
+      .then(() => dispatch(setAppState(1)))
+      .then(() => dispatch(fetchData(true)))
+      .then((data) => dispatch(getAllResults(data)))
+      .catch((error) => dispatch(throwError(error)));
   }
 
   // Handle reaction of a new user

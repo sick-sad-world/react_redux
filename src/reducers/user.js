@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, GET_USER, CREATE_USER, EDIT_USER } from '../actions/types';
+import { LOGOUT, GET_USER, CREATE_USER, EDIT_USER } from '../actions/types';
 import { defaultUser } from '../helpers/defaults';
 
 // Ensure path is absolute
@@ -8,7 +8,6 @@ let absolutizePath = (path) => (path && path.indexOf('/') > 0) ? '/'+path : path
 export const user = (state = defaultUser, action) => {
   switch (action.type) {
     case LOGOUT:
-    case LOGIN:
       return defaultUser;
     case GET_USER:
       // Delete error on initial getUser call where we:

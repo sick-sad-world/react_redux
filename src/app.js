@@ -12,7 +12,7 @@ import * as defaults from './helpers/defaults';
 
 // Import all required actions
 // ===========================================================================
-import { throwError, setAppState, readData, fetchData } from './actions/actions';
+import { throwError, setAppState, readData, fetchData, getAllResults } from './actions/actions';
 
 // Import all stuff related to React
 // ===========================================================================
@@ -46,11 +46,11 @@ let initialState = {
   app: defaults.defaultAppState,
   user: defaults.defaultUser,
   links: {},
-  alerts: [],
-  reports: [],
-  columns: [],
-  sources: [],
-  sets: []
+  alerts: defaults.defaultCountable,
+  reports: defaults.defaultCountable,
+  columns: defaults.defaultCountable,
+  sources: defaults.defaultCountable,
+  sets: defaults.defaultCountable
 };
 
 // Compose reducers
@@ -95,6 +95,6 @@ render(
 // ===========================================================================
 TrendolizerStore.dispatch(setAppState(1));
 TrendolizerStore.dispatch(readData('user')(true))
-  .then((action) => action.payload.id && TrendolizerStore.dispatch(fetchData(true)))
-  .catch((error) => TrendolizerStore.dispatch(throwError(error)))
-  .then(() => TrendolizerStore.dispatch(setAppState(2)));
+  .then((action) => action.payload.id && TrendolizerStore.dispatch(fetchData()))
+  .then((data) => TrendolizerStore.dispatch(getAllResults(data)))
+  .catch((error) => TrendolizerStore.dispatch(throwError(error)));

@@ -64,7 +64,7 @@ class Edit extends PageEdit {
   }
 
   onComponentWillReceiveProps (newProps) {
-    if (this.props.appState !== 3) {
+    if (this.props.state !== 3) {
       this.setState(this.getAdvFiltersFromProps(newProps))
     }
   }
@@ -152,7 +152,7 @@ class Edit extends PageEdit {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
     if (!this.props.item.id || this.props.params.assignment) return null;
-    let running = this.props.appState === 3;
+    let running = this.props.state === 3;
     let emptyAdvFilter = <li className='is-default'><i>No advanced filters configured for this column. Click below to add one or more.</i></li>;
 
     let componentRootClass = classNames({
@@ -567,8 +567,8 @@ Edit.defaultProps = Object.assign({
 // Transform app state to component props
 // @ deps -> Columns, Sources, Sets
 // ===========================================================================
-let mapStateToProps = ({ columns, sets, sources, app }, ownProps) => {
-  let item = find(columns, {id: parseInt(ownProps.params.id)}) || {};
+let mapStateToProps = ({ columns, sets, sources }, ownProps) => {
+  let item = find(columns.data, {id: parseInt(ownProps.params.id)}) || {};
   
   if (item) {
     item.data = Object.assign({}, defColumnData, item.data);
@@ -586,9 +586,9 @@ let mapStateToProps = ({ columns, sets, sources, app }, ownProps) => {
   }
 
   return {
-    appState: app.appState,
+    appState: columns.state,
     type: 'column',
-    item: item,
+    item,
     sets,
     sources,
     advRegExp: /MIN|MAX|LIKE/

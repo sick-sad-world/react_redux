@@ -39,7 +39,7 @@ const mapStateToProps = ({ alerts }, ownProps) => {
     sortable: false,
     deletable: true,
     create: 'delayed',
-    items: alerts.map((item) => ({
+    items: alerts.data.map((item) => ({
       id: item.id,
       order: item.order,
       name: item.name

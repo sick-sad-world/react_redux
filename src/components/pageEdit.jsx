@@ -42,7 +42,7 @@ export default class PageEdit extends React.Component {
   // Update state to hook our dropdowns
   // ===========================================================================
   componentWillReceiveProps(newProps) {
-    if (newProps.appState !== 3) {
+    if (newProps.state !== 3) {
       this.setState(this.mapItemToState(newProps.item));
       if (isFunction(this.onComponentWillReceiveProps)) {
         this.onComponentWillReceiveProps.call(this, newProps);
