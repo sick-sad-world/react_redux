@@ -24,7 +24,7 @@ class Dashboard extends React.Component {
     let columns = this.props.columns;
     return (
       <section className='mod-dashboard'>
-        { (columns.length) ? columns.map((column) => <Column item={column} />) : null }
+        { (columns.length) ? columns.map((column) => <Column key={column.id} item={column} />) : null }
         <section className='state-empty'>
           Create new column please
         </section>

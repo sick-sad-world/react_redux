@@ -98,6 +98,22 @@ export const throwError = (error) => (dispatch) => {
   return dispatch(error);
 };
 
+const getResult = (column) => (dispatch) => {
+  dispatch({type: ACTIONS['SET_LINKS_STATE'], id: column.id, state: 3})
+  return fetch('links', column.data).then(payload => {
+    dispatch({type: ACTIONS['GET_LINKS'], payload: payload, id: column.id, state: 2});
+  });
+}
+
+const getAllResults = (dispatch) => ({payload}) => {
+  payload.forEach((column, i) => {
+    if (!column.open) return;
+    setTimeout(() => {
+      dispatch(getResult(column)).catch(err => dispatch(throwError(err)));
+    }, i*2000);
+  });
+}
+
 // Create all default actions for all default entities
 // ===========================================================================
 export const readData = (type) => createAction(type, ACTIONS[`GET_${type.toUpperCase()}`]);
@@ -110,9 +126,9 @@ export const deleteData = (type) => createAction(`remove_${type}`, ACTIONS[`DELE
 // ===========================================================================
 export const fetchData = (silent, getUser) => (dispatch) => Promise.all([
   (getUser) ? dispatch(readData('user')(silent)) : null,
+  dispatch(readData('columns')({data: 1}, silent)).then(getAllResults(dispatch)),
   dispatch(readData('alerts')(silent)),
   dispatch(readData('reports')(silent)),
-  dispatch(readData('columns')({data: 1}, silent)),
   dispatch(readData('sets')(silent)),
   dispatch(readData('sources')(silent))
 ]);

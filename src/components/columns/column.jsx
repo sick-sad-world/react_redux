@@ -49,31 +49,24 @@ class Column extends React.Component {
             name='sort_pref'
             placeholder='Prefix...'
             options={this.props.sortPrefix}
-            onChange={this.createSelectHandler('sort_pref')}
             autosize={false}
             clearable={true}
             searchable={false}
-            value={this.state.sort_pref}
           />
           <Select
             disabled={running}
             className='size-180'
             name='sort_prop'
             options={this.props.sortProperty}
-            onChange={this.createSelectHandler('sort_prop')}
             autosize={false}
             clearable={false}
             searchable={false}
-            value={this.state.sort_prop}
           />
           <span className={`switcher-direction${(running) ? ' is-disabled' : ''}`}>
             <input
               type='checkbox'
               disabled={running}
               name='direction'
-              onChange={this.changeHandler}
-              checked={this.state.direction === 'desc'}
-              value={(this.state.direction === 'desc') ? 'asc' : 'desc'}
             />
             <Icon icon='bar-graph' />
           </span>
@@ -119,7 +112,6 @@ class Column extends React.Component {
 // @deps LINKS
 // ===========================================================================
 const mapStateToProps = ({links, app}, ownProps) => {
-  console.log(ownProps);
   return {appState: app.appState, links: links[ownProps.item.id]}
 };
 
