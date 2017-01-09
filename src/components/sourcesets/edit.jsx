@@ -89,7 +89,7 @@ class Edit extends PageEdit {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
     if (!this.props.item.id || this.props.params.create) return null;
-    let running = this.props.appState === 3;
+    let running = this.props.state === 3;
     let { item, own_sources } = this.props;
 
     // Empty item template
@@ -182,7 +182,7 @@ Edit.defaultProps = {
 // Transform app state to component props
 // @ deps -> Sets, Columns
 // ===========================================================================
-let mapStateToProps = ({ sets, sources, app }, ownProps) => {
+let mapStateToProps = ({ sets, sources }, ownProps) => {
   
   let id = parseInt(ownProps.params.id);
   let otherSets = [];
@@ -197,10 +197,10 @@ let mapStateToProps = ({ sets, sources, app }, ownProps) => {
   });
 
   return {
-    appState: app.appState,
+    state: sets.state,
     type: 'set',
     item,
-    own_sources: (item.id) ? filter(sources, (source) => includes(item.source_ids, source.id)) : [],
+    own_sources: (item.id) ? filter(sources.data, (source) => includes(item.source_ids, source.id)) : [],
     sources,
     sets: otherSets
   }

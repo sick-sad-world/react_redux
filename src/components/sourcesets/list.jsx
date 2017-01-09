@@ -38,7 +38,7 @@ const mapStateToProps = ({ sets }, ownProps) => {
     type: 'set',
     sortable: false,
     deletable: true,
-    items: sets.map((item) => ({
+    items: sets.data.map((item) => ({
       id: item.id,
       order: item.order,
       name: item.name,

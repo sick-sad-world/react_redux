@@ -1,17 +1,31 @@
-import { LOGIN, LOGOUT, GET_SOURCES, ADD_SOURCE, EDIT_SOURCE, DELETE_SOURCE } from '../actions/types';
+import { LOGOUT, GET_SOURCES, SET_SOURCES_STATE, ADD_SOURCE, EDIT_SOURCE, DELETE_SOURCE } from '../actions/types';
 import { concat, reject, uniqBy } from 'lodash';
+import { defaultCountable } from '../helpers/defaults';
 
-export function sources (state = [], action) {
+export function sources (state = {}, action) {
   switch (action.type) {
     case LOGOUT:
-    case LOGIN:
-      return [];
+      return {};
+    case SET_SOURCES_STATE:
+      return {
+        data: state.data,
+        state: action.state
+      };
     case GET_SOURCES:
-      return uniqBy(action.payload, 'id');
+      return {
+        data: uniqBy(action.payload, 'id'),
+        state: state.state
+      };
     case ADD_SOURCE:
-      return uniqBy(concat(state, action.payload), 'id');
+      return {
+        data: uniqBy(concat(state, action.payload), 'id'),
+        state: state.state
+      };
     case DELETE_SOURCE:
-      return reject(state, {id: action.payload.id});
+      return {
+        data: reject(state, {id: action.payload.id}),
+        state: state.state
+      };
     default:
       return state;
   }

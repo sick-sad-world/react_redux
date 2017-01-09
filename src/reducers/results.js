@@ -8,7 +8,7 @@ export const links = (state = {}, action) => {
       return Object.assign({}, state, {
         [action.id]: {
           data: action.payload,
-          state: action.state || state[action.id].state
+          state: state.state
         }
       });
     default:

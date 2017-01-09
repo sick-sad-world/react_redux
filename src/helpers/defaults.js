@@ -1,8 +1,12 @@
 export const defaultAppState = {
-  appState: 0, // 0 -init, 1 -fetching, 2 -ready, 3 -loading, 4 -error 
+  state: 0, // 0 -init, 1 -fetching, 2 -ready, 3 -loading, 4 -error 
   userState: false,
-  actionState: 'App initializing',
   loadingStep: 0
+}
+
+export const defaultCountable = {
+  data: [],
+  state: 0
 }
 
 export const defaultUser = {

@@ -111,8 +111,8 @@ class Column extends React.Component {
 // Take columns and results from state tree
 // @deps LINKS
 // ===========================================================================
-const mapStateToProps = ({links, app}, ownProps) => {
-  return {appState: app.appState, links: links[ownProps.item.id]}
+const mapStateToProps = ({links}, ownProps) => {
+  return {state: links.state, links: links[ownProps.item.id]}
 };
 
 export default connect(mapStateToProps)(Column);

@@ -32,7 +32,7 @@ class Edit extends PageEdit {
     // ===========================================================================
     if (!this.props.item.id) return null;
     let item = this.props.item;
-    let running = this.props.appState === 3;
+    let running = this.props.state === 3;
 
     let componentRootClass = classNames({
       'mod-subsection-edit': true,
@@ -115,7 +115,7 @@ const mapStateToProps = ({ app, user }) => {
   // Return prepared data
   // ===========================================================================
   return {
-    appState: app.appState,
+    appState: appstate,
     type: 'user',
     item: user
   }

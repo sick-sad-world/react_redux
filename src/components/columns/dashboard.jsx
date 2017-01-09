@@ -37,7 +37,8 @@ class Dashboard extends React.Component {
 // @deps COLUMNS
 // ===========================================================================
 const mapStateToProps = ({columns}) => ({
-  columns: filter(columns, {open: 1})
+  state: columns.state,
+  columns: filter(columns.data, {open: 1})
 });
 
 export default connect(mapStateToProps)(Dashboard);
