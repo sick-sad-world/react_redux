@@ -104,7 +104,9 @@ export const throwError = (error) => (dispatch) => {
   return dispatch(error);
 };
 
-const getResult = (column) => (dispatch) => {
+// Get single result for a specific column
+// ===========================================================================
+export const getResult = (column) => (dispatch) => {
   dispatch({type: ACTIONS['SET_LINKS_STATE'], id: column.id, state: 3})
   return fetch('links', column.data).then(payload => {
     dispatch({type: ACTIONS['SET_LINKS_STATE'], id: column.id, state: 2});
@@ -112,10 +114,20 @@ const getResult = (column) => (dispatch) => {
   });
 }
 
-const getAllResults = (dispatch) => ({payload}) => {
-  payload.forEach((column, i) => {
+// Get results for all columns with a time delay
+// ===========================================================================
+export const getAllResults = (data) => (dispatch) => {
+  let columns;
+
+  data.forEach((item) => {
+    if(item && item.type === ACTIONS['GET_COLUMNS']) {
+      columns = item.payload;
+    }
+  });
+  
+  columns.forEach((column, i) => {
     if (!column.open) return;
-    setTimeout(() => dispatch(getResult(column)).catch(err => dispatch(throwError(err))), i*2000);
+    setTimeout(() => dispatch(getResult(column)).catch(err => dispatch(throwError(err))), i*1500);
   });
 }
 
@@ -135,7 +147,7 @@ export const fetchData = (getUser) => (dispatch) => Promise.all([
   dispatch(readData('reports')(true)),
   dispatch(readData('sets')(true)),
   dispatch(readData('sources')(true)),
-  dispatch(readData('columns')({data: 1}, true)).then(getAllResults(dispatch))
+  dispatch(readData('columns')({data: 1}, true))
 ]);
 
 // Create auth actions

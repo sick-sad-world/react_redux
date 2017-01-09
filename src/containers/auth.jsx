@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
-import { login, setAppState, throwError, fetchData } from '../actions/actions';
+import { login, setAppState, throwError, fetchData, getAllResults } from '../actions/actions';
 
 // Import Child components
 // ===========================================================================
@@ -28,6 +28,7 @@ class Auth extends React.Component {
       }))
       .then(() => dispatch(setAppState(1)))
       .then(() => dispatch(fetchData(true)))
+      .then((data) => dispatch(getAllResults(data)))
       .catch((error) => dispatch(throwError(error)));
   }
 

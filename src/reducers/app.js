@@ -10,6 +10,26 @@ export const app = (state = defaultAppState, action) => {
     }
   } else {
     switch (action.type) {
+      case ACTIONS['GET_ALERTS']:
+        return Object.assign({}, state, {
+          loadingStep: state.loadingStep + 1
+        });
+      case ACTIONS['GET_REPORTS']:
+        return Object.assign({}, state, {
+          loadingStep: state.loadingStep + 1
+        });
+      case ACTIONS['GET_SETS']:
+        return Object.assign({}, state, {
+          loadingStep: state.loadingStep + 1
+        });
+      case ACTIONS['GET_SOURCES']:
+        return Object.assign({}, state, {
+          loadingStep: state.loadingStep + 1
+        });
+      case ACTIONS['GET_COLUMNS']:
+        return Object.assign({}, state, {
+          loadingStep: state.loadingStep + 1
+        });
       case ACTIONS['LOGIN']:
         return Object.assign({}, state, {
           userState: true,
@@ -29,4 +49,5 @@ export const app = (state = defaultAppState, action) => {
         return state;
     }
   }
+
 }

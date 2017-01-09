@@ -116,8 +116,8 @@ Assigment.defaultProps = {
 
 let mapStateToProps = ({ columns, sets, sources }, ownProps) => ({
   state: columns.state,
-  sets,
-  sources,
+  sets: sets.data,
+  sources: sources.data,
   item: find(columns.data, {id: parseInt(ownProps.params.id)}) || {}
 });
 

@@ -188,7 +188,7 @@ let mapStateToProps = ({ sets, sources }, ownProps) => {
   let otherSets = [];
   let item = {};
 
-  sets.forEach((set) => {
+  sets.data.forEach((set) => {
     if (set.id === id) {
       item = set;
     } else {
@@ -201,7 +201,7 @@ let mapStateToProps = ({ sets, sources }, ownProps) => {
     type: 'set',
     item,
     own_sources: (item.id) ? filter(sources.data, (source) => includes(item.source_ids, source.id)) : [],
-    sources,
+    sources: sources.data,
     sets: otherSets
   }
 };

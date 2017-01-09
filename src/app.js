@@ -12,7 +12,7 @@ import * as defaults from './helpers/defaults';
 
 // Import all required actions
 // ===========================================================================
-import { throwError, setAppState, readData, fetchData } from './actions/actions';
+import { throwError, setAppState, readData, fetchData, getAllResults } from './actions/actions';
 
 // Import all stuff related to React
 // ===========================================================================
@@ -96,4 +96,5 @@ render(
 TrendolizerStore.dispatch(setAppState(1));
 TrendolizerStore.dispatch(readData('user')(true))
   .then((action) => action.payload.id && TrendolizerStore.dispatch(fetchData()))
+  .then((data) => TrendolizerStore.dispatch(getAllResults(data)))
   .catch((error) => TrendolizerStore.dispatch(throwError(error)));
