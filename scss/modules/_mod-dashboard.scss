@@ -3,6 +3,7 @@
 .mod-dashboard {
 	padding: baseUnit();
 	overflow-x: auto;
+  display: flex;
 	.mod-column, .sortable-placeholder {
 		display: flex;
 		flex: 0 0 auto;

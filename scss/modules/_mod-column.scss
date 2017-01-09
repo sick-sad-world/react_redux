@@ -32,8 +32,6 @@
 	.column-settings {
 		border-bottom: $bd;
 		display: block;
-		max-height: 0;
-		visibility: collapse;
 		flex: 0 1 auto;
 		background-color: $c-element;
 		padding: 0 baseUnit();
@@ -79,10 +77,6 @@
 	&.is-expanded {
 		.column-header nav a.btn-settings {
 			color: $c-accent;
-		}
-		.column-settings {
-			max-height: none;
-			visibility: visible;
 		}
 	}
 	&.is-loading {

@@ -22,12 +22,11 @@ import { throwError, createData } from '../../actions/actions';
 class Dashboard extends React.Component {
   render() {
     let columns = this.props.columns;
+    let empty = <section className='state-empty'>Create new column please</section>;
     return (
       <section className='mod-dashboard'>
-        { (columns.length) ? columns.map((column) => <Column item={column} />) : null }
-        <section className='state-empty'>
-          Create new column please
-        </section>
+        { (columns.length) ? columns.map((column) => <Column key={column.id} item={column} />) : empty }
+        
       </section>
     );
   }
@@ -36,8 +35,6 @@ class Dashboard extends React.Component {
 // Take columns and results from state tree
 // @deps COLUMNS
 // ===========================================================================
-const mapStateToProps = ({columns}) => ({
-  columns: filter(columns, {open: 1})
-});
+const mapStateToProps = ({columns}) => ({columns: filter(columns, (col) => !!col.open)});
 
 export default connect(mapStateToProps)(Dashboard);
