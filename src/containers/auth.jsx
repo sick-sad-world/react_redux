@@ -29,6 +29,7 @@ class Auth extends React.Component {
       .then(() => dispatch(setAppState(1)))
       .then(() => dispatch(fetchData(true)))
       .then((data) => dispatch(getAllResults(data)))
+      .then(() => dispatch(setAppState(2)))
       .catch((error) => dispatch(throwError(error)));
   }
 

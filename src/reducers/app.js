@@ -2,7 +2,7 @@ import * as ACTIONS from '../actions/types';
 import { defaultAppState } from '../helpers/defaults';
 
 export const app = (state = defaultAppState, action) => {
-  if (action.state) {
+  if (action.state && action.type !== ACTIONS['SET_LINKS_STATE']) {
     if (!action.silent) {
       return Object.assign({}, state, {state: action.state})
     } else {

@@ -21,20 +21,27 @@ import { throwError, createData } from '../../actions/actions';
 // ===========================================================================
 class Dashboard extends React.Component {
   render() {
-    let columns = this.props.columns;
-    let empty = <section className='state-empty'>Create new column please</section>;
+    let data = this.props.data;
+    let empty = <section className='state-empty'>{this.props.stateEmpty}</section>;
     return (
       <section className='mod-dashboard'>
-        { (columns.length) ? columns.map((column) => <Column key={column.id} item={column} />) : empty }
-        
+        { (this.props.state > 1) ?(data.length) ? data.map((column) => <Column key={column.id} item={column} />) : empty : null }
       </section>
     );
   }
 }
 
+// Default props for a Component
+// ===========================================================================
+Dashboard.defaultProps = {
+  stateEmpty: 'No columns created',
+  state: 1,
+  data: []
+};
+
 // Take columns and results from state tree
 // @deps COLUMNS
 // ===========================================================================
-const mapStateToProps = ({columns}) => ({columns: filter(columns, (col) => !!col.open)});
+const mapStateToProps = ({columns}) => ({state: columns.state, data: filter(columns.data, (col) => !!col.open)});
 
 export default connect(mapStateToProps)(Dashboard);

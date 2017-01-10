@@ -94,7 +94,8 @@ render(
 // Ask server about initial data
 // ===========================================================================
 TrendolizerStore.dispatch(setAppState(1));
-TrendolizerStore.dispatch(readData('user')(true))
+TrendolizerStore.dispatch(readData('user')(null, {silent: true}))
   .then((action) => action.payload.id && TrendolizerStore.dispatch(fetchData()))
   .then((data) => TrendolizerStore.dispatch(getAllResults(data)))
-  .catch((error) => TrendolizerStore.dispatch(throwError(error)));
+  .catch((error) => TrendolizerStore.dispatch(throwError(error)))
+  .then(() => TrendolizerStore.dispatch(setAppState(2)));

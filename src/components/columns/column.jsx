@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { filter, bindAll } from 'lodash';
+import { filter, bindAll, pick } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import Select from 'react-select';
 import Icon from '../icon';
 import Toggler from '../toggler';
+import Result from './result';
 
 // Import actions
 // ===========================================================================
@@ -110,6 +111,26 @@ class Column extends React.Component {
     );
   }
 
+  renderResults (tableProps) {
+    let { display_settings } = this.props.item;
+    if (this.props.data.length) {
+      return this.props.data.map((result) => <Result key={result.id} displaySettings={display_settings} {...tableProps} {...result} />);
+    } else {
+      return (<li className='state-empty'>{this.props.stateEmpty}</li>);
+    }
+  }
+
+  renderResultState () {
+    switch (this.props.state) {
+      case 1:
+        return (<li className='state-default'>{this.props.statePending}</li>);
+      case 3:
+        return (<li className='state-loading'><img src='img/loading.svg' alt='Content is being loaded' />{this.props.stateLoading}</li>);
+      case 4:
+        return (<li className='state-error'><Icon icon='new' />{this.props.stateError}</li>);
+    }
+  }
+
   hideColumn(e) {
     e.preventDefault();
     this.actions.updateData({open: 0}).catch(this.actions.throwError);
@@ -129,6 +150,7 @@ class Column extends React.Component {
 
   render() {
     let item = this.props.item;
+    let tableProps = pick(this.props, ['tableRange', 'tableTexts', 'tableStats']);
     return (
       <section className='mod-column'>
         <header className='column-header'>
@@ -141,18 +163,34 @@ class Column extends React.Component {
         </header>
         { (this.state.expanded) ? this.renderEditForm() : null }
         <ul className='entity-list t-scrollable-y'>
-
+          {(this.props.state === 2) ? this.renderResults(tableProps) : this.renderResultState()}
         </ul>
       </section>
     );
   }
 }
 
+Column.defaultProps = {
+  statePending: 'Wait a second results are in quene...',
+  stateLoading: 'Content is being loaded, please stand by...',
+  stateEmpty: 'It seems we could not find any items matching your query at this time. <br />Try again later or modify the filter settings for this column.',
+  stateError: 'It seems there was a problem with the server.',
+  tableRange: [0.3, 0.5, 0.75, 0.99999],
+  tableTexts: [
+    'These story is not "hot" anymore',
+    'A bit hot, but past it prime',
+    'This is "hot" story',
+    'This is very "hot" story',
+    'Be careful this is "new" story and result may be different'
+  ],
+  tableStats: ['tweets', 'likes', 'shares', 'pins', 'comments', 'votes_video', 'views_video', 'comments_video'],
+  state: 1,
+  data: []
+}
+
 // Take columns and results from state tree
 // @deps LINKS
 // ===========================================================================
-const mapStateToProps = ({links}, ownProps) => {
-  return {state: links.state, links: links[ownProps.item.id]}
-};
+const mapStateToProps = ({links}, ownProps) => (links[ownProps.item.id] || {});
 
 export default connect(mapStateToProps)(Column);

@@ -16,24 +16,38 @@ export default function createAction (url, ACTION, type) {
 
   // Default wrapper for [redux-thunk] actions
   // ===========================================================================
-  return (data, silent) => (dispatch) => {
+  return (data, options) => (dispatch) => {
 
-    // Set parameters, data and [silent] mode
+    // Form options
     // ===========================================================================
-    if (typeof data === 'boolean') {
-      silent = data;
-      data = undefined;
+    let opts = Object.assign({
+      silent: false,
+    }, options);
+
+    let resData = {
+      type: ACTION
+    };
+    // Process data object
+    // ===========================================================================
+    if (data) {
+      resData.payload = {...data};
+      if (data.id) {
+        resData.id = data.id;
+        opts.id = data.id;
+      }
+      if (data.data) {
+        resData.payload.data = JSON.parse(data.data);
+      }
     }
+    Object.assign(resData, opts);
+
+    // Form state action
+    // ===========================================================================
+    let stateData = { type: STATE_ACTION, ...opts};
 
     // Set app state to [loading]
     // ===========================================================================
-    dispatch({
-      type: STATE_ACTION,
-      state: 3,
-      silent
-    });
-
-    let reqData =  {...data};
+    dispatch(Object.assign({state: 3}, stateData));
 
     // Fire a call to server
     // ===========================================================================
@@ -41,37 +55,26 @@ export default function createAction (url, ACTION, type) {
       
       // Set app state to idle
       // ===========================================================================
-      dispatch({
-        type: STATE_ACTION,
-        state: 2,
-        silent: silent
-      });
+      dispatch(Object.assign({state: 2}, stateData));
       
       if (payload.error) {
-        
         // Fire [error] action if error found
         // ===========================================================================
-        throw { type: ACTIONS['SERVER_ERROR'], text: payload.error, silent };
-
+        throw Object.assign({ type: ACTIONS['SERVER_ERROR'], text: payload.error, opts });
       } else if (payload.message || payload.success) {
-
         // Fire message to display proper message if responce contains only it
         // ===========================================================================
-        if (!silent) {
-          dispatch({ type: ACTIONS['MESSAGE'], text: (payload.message || payload.success) });
+        if (!opts.silent) {
+          dispatch({ type: ACTIONS['SUCCESS_MESSAGE'], text: (payload.message || payload.success) });
         }
-
-        // Should be removed as we organize our workflow with backend
-        // ===========================================================================
-        if (reqData.data) {
-          reqData.data = JSON.parse(reqData.data);
-        }
-        payload = reqData;
       }
 
       // Dispatch proper action
       // ===========================================================================
-      return dispatch({type: ACTION, payload});
+      if (payload) {
+        resData.payload = payload;
+      }
+      return dispatch(resData);
     });
 
   }
@@ -104,20 +107,11 @@ export const throwError = (error) => (dispatch) => {
   return dispatch(error);
 };
 
-// Get single result for a specific column
-// ===========================================================================
-export const getResult = (column) => (dispatch) => {
-  dispatch({type: ACTIONS['SET_LINKS_STATE'], id: column.id, state: 3})
-  return fetch('links', column.data).then(payload => {
-    dispatch({type: ACTIONS['SET_LINKS_STATE'], id: column.id, state: 2});
-    dispatch({type: ACTIONS['GET_LINKS'], payload: payload, id: column.id});
-  });
-}
-
 // Get results for all columns with a time delay
 // ===========================================================================
 export const getAllResults = (data) => (dispatch) => {
   let columns;
+  let reader = readData('links');
 
   data.forEach((item) => {
     if(item && item.type === ACTIONS['GET_COLUMNS']) {
@@ -127,7 +121,13 @@ export const getAllResults = (data) => (dispatch) => {
   
   columns.forEach((column, i) => {
     if (!column.open) return;
-    setTimeout(() => dispatch(getResult(column)).catch(err => dispatch(throwError(err))), i*1500);
+    let id = column.id;
+    let state = {type: ACTIONS['SET_LINKS_STATE'], id};
+    let delay = (i > 4) ? i*1200 : 0;
+    dispatch({state: 1, ...state});
+    setTimeout(() => {
+      dispatch(reader(column.data, {id, silent: true})).then(() => dispatch({state: 2, ...state})).catch(err => dispatch(throwError(err)));
+    }, delay);
   });
 }
 
@@ -142,12 +142,12 @@ export const deleteData = (type) => createAction(`remove_${type}`, ACTIONS[`DELE
 // On app init - for example (utilizing Promise.all)
 // ===========================================================================
 export const fetchData = (getUser) => (dispatch) => Promise.all([
-  (getUser) ? dispatch(readData('user')(true)) : null,
-  dispatch(readData('alerts')(true)),
-  dispatch(readData('reports')(true)),
-  dispatch(readData('sets')(true)),
-  dispatch(readData('sources')(true)),
-  dispatch(readData('columns')({data: 1}, true))
+  (getUser) ? dispatch(readData('user')(null, {silent: true})) : null,
+  dispatch(readData('alerts')(null, {silent: true})),
+  dispatch(readData('reports')(null, {silent: true})),
+  dispatch(readData('sets')(null, {silent: true})),
+  dispatch(readData('sources')(null, {silent: true})),
+  dispatch(readData('columns')({data: 1}, {silent: true}))
 ]);
 
 // Create auth actions

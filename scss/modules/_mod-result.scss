@@ -6,6 +6,14 @@
 	clear: both;
 	width: 100%;
 	$aside: baseUnit(6);
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+  .content {
+    margin: 0 baseUnit(0.5);
+  }
 	aside + .content {
 		margin-left: $aside + baseUnit();
 	}
@@ -25,16 +33,20 @@
 		display: inline-block;
 		width: 100%;
 	}
-	img {
-		display: block !important;
-		float: left;
-		width: 45%;
-		margin-right: baseUnit();
-		&[src^="data:image"] { height: 0; }
-		&.is-wide {
-			float: none;
-			width: 100%;
-		}
+	figure {
+    position: relative;
+    &:not(.is-wide) {
+      float: left;
+      width: 45%;
+      margin-right: baseUnit();
+    }
+    figcaption {
+      @include pos(false 0 0 0);
+      background-color: rgba(#000, .75);
+      font-size: 1.25em;
+      color: $c-alt;
+      padding: baseUnit();
+    }
 	}
 	aside {
 		float: left;

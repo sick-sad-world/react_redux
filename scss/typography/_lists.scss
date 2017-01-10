@@ -127,6 +127,14 @@ ol ol {
 				height: 100px;
 			}
 		}
+    &.state-default {
+      $c: map-get($states, info);
+			color: $c;
+			svg {
+				fill: $c;
+        opacity: 0.75;
+			}
+    }
 		&.state-empty {
 			$c: map-get($states, info);
 			color: $c;
@@ -157,7 +165,7 @@ ol ol {
   }
 }
 
-.column-list {
+.feeds-list {
 	list-style: none;
 	&:after{
 		display: table;

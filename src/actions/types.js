@@ -3,7 +3,9 @@
 export const SERVER_ERROR = 'SERVER_ERROR';
 export const HTML_ERROR = 'HTML_ERROR';
 export const CLIENT_ERROR = 'CLIENT_ERROR';
-export const MESSAGE = 'MESSAGE';
+export const SUCCESS_MESSAGE = 'SUCCESS_MESSAGE';
+export const INFO_MESSAGE = 'INFO_MESSAGE';
+export const WARNING_MESSAGE = 'WARNING_MESSAGE';
 export const SET_APP_STATE = 'SET_APP_STATE';
 
 // App state actions
