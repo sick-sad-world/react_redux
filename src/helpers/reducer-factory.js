@@ -29,7 +29,7 @@ export default function basicReducer (actions) {
         };
       case actions.DELETE:
         return {
-          data: reject(state, {id: action.payload.id}),
+          data: reject(state.data, {id: action.payload.id}),
           state: state.state
         };
       default:
