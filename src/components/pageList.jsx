@@ -8,7 +8,7 @@ import { bindAll } from 'lodash';
 
 // Import actions
 // ===========================================================================
-import { createData, deleteData, throwError } from '../actions/actions';
+import { createAction, throwError } from '../actions/actions';
 
 // Abstract Page list component
 // ===========================================================================
@@ -25,8 +25,9 @@ export default class PageList extends React.Component {
     // Create bound actions
     // ===========================================================================
     this.actions = bindActionCreators({
-      createData: createData(this.props.type),
-      deleteData: deleteData(this.props.type),
+      create: createAction(this.props.type, 4),
+      update: createAction(this.props.type, 5),
+      delete: createAction(this.props.type, 6),
       throwError: throwError
     }, this.props.dispatch);
 
@@ -82,7 +83,7 @@ export default class PageList extends React.Component {
     } else {
       // Create item
       // ===========================================================================
-      this.actions.createData({name: value, order: this.props.items.length}).catch(this.actions.throwError);
+      this.actions.create({name: value, order: this.props.items.length}).catch(this.actions.throwError);
     }
   }
 
@@ -91,7 +92,7 @@ export default class PageList extends React.Component {
   // ===========================================================================
   handlerDelete (e) {
     e.preventDefault();
-    this.actions.deleteData({id: this.state.deleting}).catch(this.actions.throwError).then(() => this.stateDelete(0, 0));
+    this.actions.delete({id: this.state.deleting}).catch(this.actions.throwError).then(() => this.stateDelete(0, 0));
   }
 
   render () {
@@ -144,4 +145,4 @@ export default class PageList extends React.Component {
       </section>
     );
   }
-} 
+}

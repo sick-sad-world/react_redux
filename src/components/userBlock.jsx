@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { pick } from 'lodash';
 import React from 'React';
 import { connect } from 'react-redux';
 
@@ -17,7 +17,7 @@ class UserBlock extends React.Component {
   }
 }
 
-let mapStateToProps = ({user}) => _.pick(user, ['fullname', 'image', 'position']);
+let mapStateToProps = ({user}) => pick(user, ['fullname', 'image', 'position']);
 
 export default connect(mapStateToProps)(UserBlock);
 

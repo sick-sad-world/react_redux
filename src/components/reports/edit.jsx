@@ -173,7 +173,7 @@ const mapStateToProps = ({ reports, columns, app, user }, ownProps) => {
   } else {
     // Or find existing one
     // ===========================================================================
-    item = find(reports.data, {id: parseInt(ownProps.params.id)}) || {};
+    item = find(reports, {id: parseInt(ownProps.params.id)}) || {};
   }
 
   // Return prepared data
@@ -183,7 +183,7 @@ const mapStateToProps = ({ reports, columns, app, user }, ownProps) => {
     type: 'report',
     item: item,
     emai: user.email,
-    columns: columns.data.map((item) => {
+    columns: columns.map((item) => {
       return {
         value: item.id,
         label: item.name,

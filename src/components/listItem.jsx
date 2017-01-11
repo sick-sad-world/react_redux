@@ -18,20 +18,8 @@ export default class ListItem extends React.PureComponent {
   }
   deleteHandler (e) {
     e.preventDefault();
-    let pos, target = e.target;
-
-    // Find root element
-    // ===========================================================================
-    while (!target.classList.contains('mod-entity')) {
-      target = target.parentNode;
-    }
-
-    // Get coordinates
-    // ===========================================================================
-    pos = target.offsetTop + target.parentNode.offsetTop - e.target.clientHeight * 2;
-
-    // Call method provided
-    // ===========================================================================
+    let target = this.getDomNode();
+    let pos = target.offsetTop + target.parentNode.offsetTop - e.target.clientHeight * 2; 
     this.props.deleteAction(this.props.id, pos);
   }
 

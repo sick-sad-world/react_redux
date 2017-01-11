@@ -13,18 +13,11 @@ import Icon from '../icon';
 
 // Import actions
 // ===========================================================================
-import { updateData, throwError } from '../../actions/actions';
+import { createAction, throwError } from '../../actions/actions';
 
 class List extends React.Component {
   constructor(props) {
     super(props);
-
-    // Create bound actions
-    // ===========================================================================
-    this.actions = bindActionCreators({
-      updateData: updateData('column'),
-      throwError: throwError
-    }, this.props.dispatch);
 
     bindAll(this, ['changeVis', 'getItemIcon']);
   }
@@ -33,7 +26,7 @@ class List extends React.Component {
   // ===========================================================================
   changeVis (e, data) {
     e.preventDefault();
-    this.actions.updateData(data).catch(this.actions.throwError);
+    this.actions.update(data).catch(this.actions.throwError);
   }
 
   // Generate visibility icon

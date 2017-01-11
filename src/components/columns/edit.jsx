@@ -131,7 +131,7 @@ class Edit extends PageEdit {
         
         if (data) {
           data.id = item.id;
-          this.actions.updateData(data).catch(this.actions.throwError);
+          this.actions.update(data).catch(this.actions.throwError);
         }
       }
     }
@@ -567,8 +567,8 @@ Edit.defaultProps = Object.assign({
 // Transform app state to component props
 // @ deps -> Columns, Sources, Sets
 // ===========================================================================
-let mapStateToProps = ({ columns, sets, sources }, ownProps) => {
-  let item = find(columns.data, {id: parseInt(ownProps.params.id)}) || {};
+let mapStateToProps = ({ app, columns }, ownProps) => {
+  let item = find(columns, {id: parseInt(ownProps.params.id)}) || {};
   
   if (item) {
     item.data = Object.assign({}, defColumnData, item.data);
@@ -586,11 +586,9 @@ let mapStateToProps = ({ columns, sets, sources }, ownProps) => {
   }
 
   return {
-    state: columns.state,
+    state: app.state,
     type: 'column',
     item,
-    sets,
-    sources,
     advRegExp: /MIN|MAX|LIKE/
   };
 };

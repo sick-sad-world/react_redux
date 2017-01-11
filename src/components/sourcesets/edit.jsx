@@ -182,13 +182,13 @@ Edit.defaultProps = {
 // Transform app state to component props
 // @ deps -> Sets, Columns
 // ===========================================================================
-let mapStateToProps = ({ sets, sources }, ownProps) => {
+let mapStateToProps = ({ app, sets, sources }, ownProps) => {
   
   let id = parseInt(ownProps.params.id);
   let otherSets = [];
   let item = {};
 
-  sets.data.forEach((set) => {
+  sets.forEach((set) => {
     if (set.id === id) {
       item = set;
     } else {
@@ -197,11 +197,11 @@ let mapStateToProps = ({ sets, sources }, ownProps) => {
   });
 
   return {
-    state: sets.state,
+    state: app.state,
     type: 'set',
     item,
-    own_sources: (item.id) ? filter(sources.data, (source) => includes(item.source_ids, source.id)) : [],
-    sources: sources.data,
+    own_sources: (item.id) ? filter(sources, (source) => includes(item.source_ids, source.id)) : [],
+    sources: sources,
     sets: otherSets
   }
 };

@@ -12,7 +12,7 @@ import classNames from 'classnames';
 // ===========================================================================
 export default class Sourceset extends React.PureComponent {
   render() {
-    let { id, expanded, sortable, name, source_ids, buttons, disabled } = this.props;
+    let { expanded, sortable, name, source_ids, buttons, disabled } = this.props;
 
     // Root element classes
     // ===========================================================================

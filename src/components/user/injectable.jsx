@@ -12,7 +12,7 @@ import Icon from '../icon';
 
 // Import actions
 // ===========================================================================
-import { updateData, throwError } from '../../actions/actions';
+import { createAction, throwError } from '../../actions/actions';
 
 // Email injectable Component - provide list of user Emails whatever it need
 // ===========================================================================
@@ -29,7 +29,7 @@ class EmailList extends React.Component {
     // Create bound actions
     // ===========================================================================
     this.actions = bindActionCreators({
-      updateData: updateData('user'),
+      update: createAction('user', 4),
       throwError: throwError
     }, this.props.dispatch);  
 
@@ -44,7 +44,7 @@ class EmailList extends React.Component {
     } else if (includes(this.props.email_bcc, this.state.new) || this.props.email === this.state.new) {
       this.actions.throwError('You already have this email in list, try another one.');
     } else {
-      this.actions.updateData({
+      this.actions.update({
         email_bcc: concat(this.props.email_bcc, this.state.new)
       }).then(() => this.setState({new: ''})).catch(this.actions.throwError);
     }
@@ -55,7 +55,7 @@ class EmailList extends React.Component {
   removeEmail (email) {
     return (e) => {
       e.stopPropagation();
-      return this.actions.updateData({
+      return this.actions.update({
         email_bcc: without(this.props.email_bcc, email)
       }).catch(this.actions.throwError);
     }

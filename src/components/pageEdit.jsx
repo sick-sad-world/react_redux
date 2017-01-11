@@ -9,7 +9,7 @@ import { bindActionCreators } from 'redux';
 
 // Import actions
 // ===========================================================================
-import { createData, updateData, deleteData, throwError } from '../actions/actions';
+import { createAction, throwError } from '../actions/actions';
 
 export default class PageEdit extends React.Component {
   constructor(props, stateMap) {
@@ -26,9 +26,9 @@ export default class PageEdit extends React.Component {
     // Create bound actions
     // ===========================================================================
     this.actions = bindActionCreators({
-      createData: createData(props.type),
-      updateData: updateData(props.type),
-      deleteData: deleteData(props.type),
+      create: createAction(props.type, 4),
+      update: createAction(props.type, 5),
+      delete: createAction(props.type, 6),
       throwError: throwError
     }, this.props.dispatch);  
   }
@@ -60,12 +60,12 @@ export default class PageEdit extends React.Component {
         // Modify if item is already existed
         // ===========================================================================
         if (item[name] !== value) {
-          this.actions.updateData({id: item.id, [name]: value}).catch(this.actions.throwError);
+          this.actions.update({id: item.id, [name]: value}).catch(this.actions.throwError);
         }
       } else {
         // Create item if ID == 0
         // ===========================================================================
-        this.actions.createData(Object.assign({}, item, {[name]: value})).then(({payload}) => {
+        this.actions.create(Object.assign({}, item, {[name]: value})).then(({payload}) => {
           this.props.router.push(`/${this.props.type}s/${payload.id}`);
         }).catch(this.actions.throwError);
       }

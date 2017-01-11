@@ -6,16 +6,11 @@ import classNames from 'classnames';
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 // Import Child components
 // ===========================================================================
 import Column from './column';
-
-// Import actions
-// ===========================================================================
-import { throwError, createData } from '../../actions/actions';
 
 // Main app screen - Dashboard
 // ===========================================================================
@@ -42,6 +37,6 @@ Dashboard.defaultProps = {
 // Take columns and results from state tree
 // @deps COLUMNS
 // ===========================================================================
-const mapStateToProps = ({columns}) => ({state: columns.state, data: filter(columns.data, (col) => !!col.open)});
+const mapStateToProps = ({app, columns}) => ({state: app.state, data: filter(columns, (col) => !!col.open)});
 
 export default connect(mapStateToProps)(Dashboard);

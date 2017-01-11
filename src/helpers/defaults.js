@@ -1,12 +1,14 @@
 export const defaultAppState = {
-  state: 0, // 0 -init, 1 -fetching, 2 -ready, 3 -loading, 4 -error 
+  state: 1, // 0 -error, 1 -init, 2 -ready, 3 -reading, 4 -creation, 5 -editing, 6 -deleting, 7 -sorting 
   userState: false,
-  loadingStep: 0
+  loadingStep: 0,
+  messages: []
 }
 
-export const defaultCountable = {
-  data: [],
-  state: 0
+export const defaultMessage = {
+  type: 'info', // info, loading, error, success, warning
+  entity: '',   // user, alert, report, source, set, column, link
+  duration: 0   // Time message will be visible, 0 - infinite
 }
 
 export const defaultUser = {
