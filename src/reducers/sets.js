@@ -1,8 +1,8 @@
-import { GET_SETS, SET_SETS_STATE, ADD_SET, EDIT_SET, DELETE_SET } from '../actions/types';
+import { GET_SETS, SET_SET_STATE, ADD_SET, EDIT_SET, DELETE_SET } from '../actions/types';
 import basicReducer from '../helpers/reducer-factory'
 
 export const sets = basicReducer({
-  STATE: SET_SETS_STATE,
+  STATE: SET_SET_STATE,
   ADD: ADD_SET,
   DELETE: DELETE_SET,
   EDIT_SET: function(state, action) {

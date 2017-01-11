@@ -13,6 +13,7 @@ export default store => next => action => {
       this.close();
     }
   });
+  
   if (!action.silent) {
     switch (action.type) {
       case SUCCESS_MESSAGE:

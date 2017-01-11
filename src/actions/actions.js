@@ -67,13 +67,12 @@ export default function createAction (url, ACTION, type) {
         if (!opts.silent) {
           dispatch({ type: ACTIONS['SUCCESS_MESSAGE'], text: (payload.message || payload.success) });
         }
+      } else {
+        resData.payload = payload;
       }
 
       // Dispatch proper action
       // ===========================================================================
-      if (payload) {
-        resData.payload = payload;
-      }
       return dispatch(resData);
     });
 
@@ -122,7 +121,7 @@ export const getAllResults = (data) => (dispatch) => {
   columns.forEach((column, i) => {
     if (!column.open) return;
     let id = column.id;
-    let state = {type: ACTIONS['SET_LINKS_STATE'], id};
+    let state = {type: ACTIONS['SET_LINK_STATE'], id};
     let delay = (i > 4) ? i*1200 : 0;
     dispatch({state: 1, ...state});
     setTimeout(() => {
@@ -133,7 +132,7 @@ export const getAllResults = (data) => (dispatch) => {
 
 // Create all default actions for all default entities
 // ===========================================================================
-export const readData = (type) => createAction(type, ACTIONS[`GET_${type.toUpperCase()}`], type);
+export const readData = (type) => createAction(type, ACTIONS[`GET_${type.toUpperCase()}`], type.substring(0, type.length - 1));
 export const createData = (type) => createAction(`add_${type}`, ACTIONS[`ADD_${type.toUpperCase()}`], type);
 export const updateData = (type) => createAction(type, ACTIONS[`EDIT_${type.toUpperCase()}`], type);
 export const deleteData = (type) => createAction(`remove_${type}`, ACTIONS[`DELETE_${type.toUpperCase()}`], type);

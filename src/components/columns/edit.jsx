@@ -586,7 +586,7 @@ let mapStateToProps = ({ columns, sets, sources }, ownProps) => {
   }
 
   return {
-    appState: columns.state,
+    state: columns.state,
     type: 'column',
     item,
     sets,

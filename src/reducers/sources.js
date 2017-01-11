@@ -1,4 +1,4 @@
-import { LOGOUT, GET_SOURCES, SET_SOURCES_STATE, ADD_SOURCE, EDIT_SOURCE, DELETE_SOURCE } from '../actions/types';
+import { LOGOUT, GET_SOURCES, SET_SOURCE_STATE, ADD_SOURCE, EDIT_SOURCE, DELETE_SOURCE } from '../actions/types';
 import { concat, reject, uniqBy } from 'lodash';
 import { defaultCountable } from '../helpers/defaults';
 
@@ -6,7 +6,7 @@ export function sources (state = {}, action) {
   switch (action.type) {
     case LOGOUT:
       return {};
-    case SET_SOURCES_STATE:
+    case SET_SOURCE_STATE:
       return {
         data: state.data,
         state: action.state

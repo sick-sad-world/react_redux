@@ -1,4 +1,4 @@
-import { LOGOUT, GET_LINKS, SET_LINKS_STATE } from '../actions/types';
+import { LOGOUT, GET_LINKS, SET_LINK_STATE } from '../actions/types';
 
 const turncrateText = (result) => {
   let limit = 120;
@@ -34,13 +34,13 @@ export const links = (state = {}, action) => {
   switch (action.type) {
     case LOGOUT: 
       return {};
-    case SET_LINKS_STATE:
-      return Object.assign({}, state, {[action.id]: Object.assign({data: []}, state[action.id], {state: action.state})});
+    case SET_LINK_STATE:
+      return Object.assign({}, state, {[action.id]: Object.assign({data: []}, state[action.id], {state: action.state || 2})});
     case GET_LINKS:
       return Object.assign({}, state, {
         [action.id]: {
           data: action.payload.map(turncrateText),
-          state: state.state
+          state: state.state || 2
         }
       });
     default:

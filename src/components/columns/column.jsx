@@ -33,13 +33,13 @@ class Column extends React.Component {
     // Create bound actions
     // ===========================================================================
     this.actions = bindActionCreators({
-      createData: readData('result'),
+      refreshResults: readData('links'),
       updateData: updateData('column'),
       deleteData: deleteData('column'),
       throwError: throwError
     }, this.props.dispatch);
 
-    bindAll(this, ['toggleExpandedState', 'deleteColumn', 'hideColumn']);
+    bindAll(this, ['toggleExpandedState', 'deleteColumn', 'hideColumn', 'refreshResults']);
   }
 
   renderEditForm () {
@@ -148,6 +148,12 @@ class Column extends React.Component {
     });
   }
 
+  refreshResults (e) {
+    e.preventDefault();
+    let item = this.props.item;
+    this.actions.refreshResults(item.data, {id: item.id}).catch(this.actions.throwError);
+  }
+
   render() {
     let item = this.props.item;
     let tableProps = pick(this.props, ['tableRange', 'tableTexts', 'tableStats']);
@@ -157,7 +163,7 @@ class Column extends React.Component {
           <Icon className='drag-handle' icon='dots-three-vertical' />
           <h1 className='funName'>{ item.name }</h1>
           <nav className='nav-links'>
-            <a title='Refresh column'><Icon icon='ccw' /></a>
+            <a title='Refresh column' onClick={this.refreshResults}><Icon icon='ccw' /></a>
             <a onClick={this.toggleExpandedState} title='Column settings'><Icon icon='cog' /></a>
           </nav>
         </header>

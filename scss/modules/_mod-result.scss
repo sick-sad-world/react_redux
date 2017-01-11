@@ -33,6 +33,10 @@
 		display: inline-block;
 		width: 100%;
 	}
+  img {
+    margin: auto;
+    display: block;
+  }
 	figure {
     position: relative;
     &:not(.is-wide) {
@@ -40,14 +44,14 @@
       width: 45%;
       margin-right: baseUnit();
     }
-    figcaption {
-      @include pos(false 0 0 0);
-      background-color: rgba(#000, .75);
-      font-size: 1.25em;
-      color: $c-alt;
-      padding: baseUnit();
-    }
 	}
+  figcaption {
+    @include pos(false 0 0 0);
+    background-color: rgba(#000, .75);
+    font-size: 1.25em;
+    color: $c-alt;
+    padding: baseUnit();
+  }
 	aside {
 		float: left;
 		width: $aside;
@@ -90,12 +94,6 @@
 			&:before {
 				color: inherit;
 			}
-		}
-		.full {
-			display: none;
-		}
-		&.is-expanded .full {
-			display: block;
 		}
 	}
 	table {

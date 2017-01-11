@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { includes, compact, filter } from 'lodash';
+import { includes, bindAll, filter } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
@@ -13,12 +13,24 @@ import { Link } from 'react-router';
 export default class Result extends React.Component {
   constructor (props) {
     super(props);
-    this.checkDisplay = this.checkDisplay.bind(this);
+    
+    this.state = {
+      fulltext: false
+    }
+
+    bindAll(this, ['checkDisplay', 'toggleFullText'])
   }
+
   checkDisplay (stat) {
     let value = this.props[stat];
     return includes(this.props.displaySettings, stat) && ((typeof value === 'string' && value.length) || (typeof value === 'number' && value >= 0));
   }
+
+  toggleFullText (e) {
+    e.preventDefault();
+    this.setState({fulltext: !this.state.fulltext});
+  }
+
   render() {
     let props = this.props;
     let display = props.displaySettings;
@@ -44,11 +56,9 @@ export default class Result extends React.Component {
             ) : null }
             { (this.checkDisplay('description')) ? (
               <div className='descr'>
-                <div className='summary'>
-                  { props.description }
-                  { (props.additional.length) ? <a className="btn-toggle-text" onClick={null}> Show full text</a> : null }
-                </div>
-                {(props.additional.length) ? <div className='full'>{props.additional}</div> : null }
+                <div className='summary'>{ props.description }</div>
+                { (props.additional.length) ? <a className="btn-toggle-text" onClick={null}> Show full text</a> : null }
+                {(this.state.fulltext && props.additional.length) ? <div className='full'>{props.additional}</div> : null }
               </div>
             ) : null }
             <footer>
