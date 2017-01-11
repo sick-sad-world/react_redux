@@ -19,7 +19,7 @@ import Result from './result';
 
 // Import actions
 // ===========================================================================
-import { throwError, readData, updateData, deleteData } from '../../actions/actions';
+import { throwError, createAction } from '../../actions/actions';
 
 // Main app screen - Dashboard
 // ===========================================================================
@@ -33,9 +33,9 @@ class Column extends React.Component {
     // Create bound actions
     // ===========================================================================
     this.actions = bindActionCreators({
-      refreshResults: readData('links'),
-      updateData: updateData('column'),
-      deleteData: deleteData('column'),
+      refresh: createAction('link', 3),
+      update: createAction('column', 4),
+      delete: createAction('column', 6),
       throwError: throwError
     }, this.props.dispatch);
 
@@ -133,12 +133,12 @@ class Column extends React.Component {
 
   hideColumn(e) {
     e.preventDefault();
-    this.actions.updateData({open: 0}).catch(this.actions.throwError);
+    this.actions.update({open: 0}).catch(this.actions.throwError);
   }
 
   deleteColumn(e) {
     e.preventDefault();
-    this.actions.deleteData({id: this.props.item.id}).catch(this.actions.throwError);
+    this.actions.delete({id: this.props.item.id}).catch(this.actions.throwError);
   }
 
   toggleExpandedState(e) {
@@ -151,7 +151,7 @@ class Column extends React.Component {
   refreshResults (e) {
     e.preventDefault();
     let item = this.props.item;
-    this.actions.refreshResults(item.data, {id: item.id}).catch(this.actions.throwError);
+    this.actions.refresh(item.data, {id: item.id}).catch(this.actions.throwError);
   }
 
   render() {
