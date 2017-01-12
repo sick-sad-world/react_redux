@@ -1,7 +1,8 @@
 // Import utility stuff
 // ===========================================================================
-import { filter, bindAll, pick } from 'lodash';
+import { find, filter, bindAll, pick } from 'lodash';
 import classNames from 'classnames';
+import { defColumnParameters } from '../../helpers/defaults'; 
 
 // Import React related stuff
 // ===========================================================================
@@ -25,25 +26,51 @@ import { throwError, createAction, getResults } from '../../actions/actions';
 // ===========================================================================
 class Column extends React.Component {
   constructor (props) {
-    super(props)
+    super(props);
+    
+    let item = this.props.item.data;
+    let prefix = find(this.props.sortPrefix, (pref) => item.sort.indexOf(pref.value) > -1);
+    let property = find(this.props.sortProperty, (prop) => item.sort.indexOf(prop.value) > -1);
     this.state = {
-      expanded: false
+      expanded: false,
+      direction: item.direction,
+      infinite: item.infinite,
+      autoreload: item.autoreload,
+      sort_pref: (prefix) ? prefix.value : '',
+      sort_prop: (property) ? property.value : ''
     }
 
     // Create bound actions
     // ===========================================================================
     this.actions = bindActionCreators({
-      update: createAction('column', 4),
+      update: createAction('column', 5),
       delete: createAction('column', 6),
+      refresh: getResults,
       throwError: throwError
     }, this.props.dispatch);
-    this.actions.refresh = getResults;
 
-    bindAll(this, ['toggleExpandedState', 'deleteColumn', 'hideColumn', 'refreshResults']);
+    bindAll(this, ['toggleExpandedState', 'deleteColumn', 'hideColumn', 'refreshResults', 'changeHandler']);
+  }
+
+  changeHandler(name) {
+    return (e) => {
+      let val = (e.value) ? e.value : e.target.value;
+      let item = this.props.item;
+      this.setState({
+        [name]: val
+      }, () => {
+        this.actions.update({
+          id: item.id,
+          data: JSON.stringify(Object.assign({}, item.data, {
+            [(name.indexOf('sort') > -1) ? 'sort' : name]: val
+          }))
+        }).then(() => this.actions.refresh(item.data, item.id)).catch(this.actions.throwError);
+      })
+    }
   }
 
   renderEditForm () {
-    let running = false;
+    let running = this.props.state > 2;
     return (
       <form className='column-settings'>
         <div className='row-flex'>
@@ -53,26 +80,31 @@ class Column extends React.Component {
             name='sort_pref'
             placeholder='Prefix...'
             options={this.props.sortPrefix}
-            onChange={null}
+            onChange={this.changeHandler('sort_pref')}
             autosize={false}
             clearable={true}
             searchable={false}
+            value={this.state.sort_pref}
           />
           <Select
             disabled={running}
             className='size-180'
             name='sort_prop'
             options={this.props.sortProperty}
-            onChange={null}
+            onChange={this.changeHandler('sort_prop')}
             autosize={false}
             clearable={false}
             searchable={false}
+            value={this.state.sort_prop}
           />
           <span className={`switcher-direction${(running) ? ' is-disabled' : ''}`}>
             <input
               type='checkbox'
               disabled={running}
               name='direction'
+              onChange={this.changeHandler('direction')}
+              checked={this.state.direction === 'desc'}
+              value={(this.state.direction === 'desc') ? 'asc' : 'desc'}
             />
             <Icon icon='bar-graph' />
           </span>
@@ -86,20 +118,20 @@ class Column extends React.Component {
               'Yes': this.state.infinite || 30,
               'No': 0
             }}
-            onChange={null}
+            onChange={this.changeHandler('infinite')}
             value={this.state.infinite} />
         </div>
         <div className='row-flex'>
           <span className='form-label'>Autoreloading</span>
           <Toggler
             disabled={running}
-            name='autoreloading'
+            name='autoreload'
             options={{
               'On': 1,
               'Off': 0
             }}
-            onChange={null}
-            value={this.state.autoreloading} />
+            onChange={this.changeHandler('autoreload')}
+            value={this.state.autoreload} />
         </div>
         <div className='row-flex column-subnav'>
           
@@ -126,7 +158,7 @@ class Column extends React.Component {
         return (<li className='state-default'>{this.props.statePending}</li>);
       case 3:
         return (<li className='state-loading'><img src='img/loading.svg' alt='Content is being loaded' />{this.props.stateLoading}</li>);
-      case 4:
+      case 0:
         return (<li className='state-error'><Icon icon='new' />{this.props.stateError}</li>);
     }
   }
@@ -151,7 +183,7 @@ class Column extends React.Component {
   refreshResults (e) {
     e.preventDefault();
     let item = this.props.item;
-    this.actions.refresh(item.data, {id: item.id}).catch(this.actions.throwError);
+    this.actions.refresh(item.data, item.id).catch(this.actions.throwError);
   }
 
   render() {
@@ -191,7 +223,9 @@ Column.defaultProps = {
   ],
   tableStats: ['tweets', 'likes', 'shares', 'pins', 'comments', 'votes_video', 'views_video', 'comments_video'],
   state: 1,
-  data: []
+  data: [],
+  sortPrefix: defColumnParameters.sortPrefix,
+  sortProperty: defColumnParameters.sortProperty
 }
 
 // Take columns and results from state tree

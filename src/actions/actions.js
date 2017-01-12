@@ -22,9 +22,12 @@ export const createAction = (entity, action) => {
     }, options);
 
     let resData = {
-      payload: data,
+      payload: Object.assign({}, data),
       id: (data && data.id) || opts.id
     };
+    if (data && data.data) {
+      resData.payload.data = JSON.parse(data.data);
+    }
 
     switch (action) {
       case 3:

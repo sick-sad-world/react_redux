@@ -49,7 +49,7 @@ class Edit extends PageEdit {
     // ===========================================================================
     if (!this.props.item.id) return null;
     let item = this.props.item;
-    let running = this.props.state === 3;
+    let running = this.props.state > 3;
 
     let componentRootClass = classNames({
       'mod-subsection-edit': true,

@@ -456,7 +456,7 @@ class FeedCreation extends React.Component {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
     if (!this.props.set || !this.props.params.create) return null;
-    let running = this.props.state === 3;
+    let running = this.props.state > 3;
     let type = this.state.type;
     let texts = this.props.texts;
 

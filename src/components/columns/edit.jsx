@@ -152,7 +152,7 @@ class Edit extends PageEdit {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
     if (!this.props.item.id || this.props.params.assignment) return null;
-    let running = this.props.state === 3;
+    let running = this.props.state > 3;
     let emptyAdvFilter = <li className='is-default'><i>No advanced filters configured for this column. Click below to add one or more.</i></li>;
 
     let componentRootClass = classNames({

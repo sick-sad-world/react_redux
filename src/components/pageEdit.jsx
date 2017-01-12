@@ -79,7 +79,8 @@ export default class PageEdit extends React.Component {
     this.setState({[e.target.name]: e.target.value});
   }
 
-  // 
+  // Different changes sent to server
+  // @blur -> text inputs @change -> other
   // ===========================================================================
   changeHandler(e, val) {
     let name = e.target ? e.target.name : e;

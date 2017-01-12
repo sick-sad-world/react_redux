@@ -1,6 +1,7 @@
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
+import { findDOMNode } from 'react-dom';
 import Icon from './icon';
 import { Link } from 'react-router';
 
@@ -18,7 +19,7 @@ export default class ListItem extends React.PureComponent {
   }
   deleteHandler (e) {
     e.preventDefault();
-    let target = this.getDomNode();
+    let target = findDOMNode(this);
     let pos = target.offsetTop + target.parentNode.offsetTop - e.target.clientHeight * 2; 
     this.props.deleteAction(this.props.id, pos);
   }

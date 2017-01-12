@@ -6,6 +6,7 @@ import classNames from 'classnames';
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
+import { findDOMNode } from 'react-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -37,10 +38,8 @@ class Edit extends PageEdit {
 
   stateDelete (e, id) {
     e.preventDefault();
-    let pos, target = e.target;
-    while (!target.classList.contains('mod-entity')) {
-      target = target.parentNode;
-    }
+    let pos;
+    let target = findDOMNode(this);
     pos = target.offsetTop - e.target.clientHeight;
     this.setState({
       deleting: (this.state.deleting === id) ? 0 : id,
@@ -89,7 +88,7 @@ class Edit extends PageEdit {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
     if (!this.props.item.id || this.props.params.create) return null;
-    let running = this.props.state === 3;
+    let running = this.props.state > 3;
     let { item, own_sources } = this.props;
 
     // Empty item template
