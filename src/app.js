@@ -6,7 +6,6 @@ import 'babel-polyfill';
 // ===========================================================================
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import messager from './helpers/messager';
 import * as reducers from './reducers';
 import * as defaults from './helpers/defaults';
 
@@ -62,7 +61,7 @@ let composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 let TrendolizerStore = createStore(
   combineReducers({ ...reducers, routing: routerReducer }),
   initialState,
-  composeEnhancers(applyMiddleware(thunk, messager))
+  composeEnhancers(applyMiddleware(thunk))
 );
 
 // Sync App history with store
@@ -93,7 +92,6 @@ render(
 
 // Ask server about initial data
 // ===========================================================================
-TrendolizerStore.dispatch(setAppState(1));
 TrendolizerStore.dispatch(createAction('user', 3)(null, {message: false, state: false}))
   .then((action) => action.payload.id && TrendolizerStore.dispatch(fetchData()))
   .then((data) => TrendolizerStore.dispatch(getAllResults(data)))

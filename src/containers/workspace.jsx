@@ -6,11 +6,12 @@ import classNames from 'classnames';
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
-import { logout, throwError } from '../actions/actions';
+import { createAction, throwError } from '../actions/actions';
 
 // Import Child components
 // ===========================================================================
@@ -31,6 +32,13 @@ class Workspace extends React.Component {
     this.state = {
       sidebar: this.props.sidebar || true
     };
+
+    // Create bound actions for a container
+    // ===========================================================================
+    this.actions = bindActionCreators({
+      logout: createAction('logout', 8),
+      throwError: throwError
+    }, this.props.dispatch);
 
     // Bind handlers to our component
     // ===========================================================================
@@ -61,7 +69,7 @@ class Workspace extends React.Component {
   // ===========================================================================
   handlerLogout(e) {
     e.preventDefault();
-    this.props.dispatch(logout()).catch((error) => this.props.dispatch(throwError(error)));
+    this.actions.logout().catch(this.actions.throwError);
   }
 
   // Render our screen

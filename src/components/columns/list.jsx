@@ -74,7 +74,7 @@ const mapStateToProps = ({ columns }, ownProps) => {
     type: 'column',
     sortable: false,
     deletable: true,
-    items: columns.data.map((item) => ({
+    items: columns.map((item) => ({
       id: item.id,
       order: item.order,
       name: item.name,

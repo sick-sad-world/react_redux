@@ -38,6 +38,10 @@ export const app = (state = defaultAppState, action) => {
         userState: action.payload.id > 0,
         loadingStep: (action.payload.id) ? state.loadingStep + 1 : 0
       });
+    case ACTIONS['SET_APP_STATE']:
+      return Object.assign({}, state, {
+        state: action.state,
+      });
     case ACTIONS['ERROR']:
       return Object.assign({}, state, {
         state: 0,

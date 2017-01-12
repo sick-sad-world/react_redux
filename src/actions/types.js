@@ -36,7 +36,7 @@ export const DELETE_COLUMN = 'DELETE_COLUMN';
 // Results actions
 // ===========================================================================
 export const GET_LINKS = 'GET_LINKS';
-export const SET_LINK_STATE = 'LINKS_STATE';
+export const LINKS_STATE = 'LINKS_STATE';
 
 // Sourcesets actions
 // ===========================================================================

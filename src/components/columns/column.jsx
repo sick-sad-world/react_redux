@@ -19,7 +19,7 @@ import Result from './result';
 
 // Import actions
 // ===========================================================================
-import { throwError, createAction } from '../../actions/actions';
+import { throwError, createAction, getResults } from '../../actions/actions';
 
 // Main app screen - Dashboard
 // ===========================================================================
@@ -33,11 +33,11 @@ class Column extends React.Component {
     // Create bound actions
     // ===========================================================================
     this.actions = bindActionCreators({
-      refresh: createAction('link', 3),
       update: createAction('column', 4),
       delete: createAction('column', 6),
       throwError: throwError
     }, this.props.dispatch);
+    this.actions.refresh = getResults;
 
     bindAll(this, ['toggleExpandedState', 'deleteColumn', 'hideColumn', 'refreshResults']);
   }

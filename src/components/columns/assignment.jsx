@@ -17,7 +17,7 @@ import Source from '../sourcesets/source';
 
 // Import actions
 // ===========================================================================
-import { updateData, throwError } from '../../actions/actions';
+import { createAction, throwError } from '../../actions/actions';
 
 class Assigment extends React.Component {
   constructor (props) {
@@ -29,7 +29,7 @@ class Assigment extends React.Component {
     // Create bound actions
     // ===========================================================================
     this.actions = bindActionCreators({
-      updateData: updateData('column'),
+      update: createAction('column', 5),
       throwError: throwError
     }, this.props.dispatch);
 
@@ -52,7 +52,7 @@ class Assigment extends React.Component {
   manageFeed (type, id, deleting) {
     let val = (deleting) ? without(this.state[type], id) : concat(this.state[type], id);
 
-    this.actions.updateData({
+    this.actions.update({
       id: this.props.item.id,
       data: JSON.stringify(Object.assign({}, this.props.item.data, {[type]: val}))
     }).catch(this.actions.throwError);

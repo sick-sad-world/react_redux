@@ -6,7 +6,7 @@ import fetch from '../fetch';
 // Action constructor (for default AJAX comunnication)
 // Since most of our actions are the same - i create this
 // ===========================================================================
-export default function createAction (entity, action) {
+export const createAction = (entity, action) => {
 
   // Default wrapper for [redux-thunk] actions
   // ===========================================================================
@@ -23,14 +23,14 @@ export default function createAction (entity, action) {
 
     let resData = {
       payload: data,
-      id: data.id || opts.id
+      id: (data && data.id) || opts.id
     };
 
     switch (action) {
       case 3:
         if (entity === 'user') {
-          url = entity;
-          resData.type = ACTIONS[`GET_${entity.toUpperCase()}`];
+          url = 'user';
+          resData.type = ACTIONS['GET_USER'];
         } else {
           url = entity+'s';
           resData.type = ACTIONS[`GET_${entity.toUpperCase()}S`];
@@ -51,6 +51,10 @@ export default function createAction (entity, action) {
       case 7:
         url = `sort_${entity}s`;
         resData.type = ACTIONS[`SORT_${entity.toUpperCase()}S`];
+        break;
+      case 8:
+        url = entity;
+        resData.type = ACTIONS[`${entity.toUpperCase()}`];
         break;
       default:
         throw {}
@@ -148,11 +152,31 @@ export const throwError = (error) => (dispatch) => {
   return dispatch(action);
 };
 
+export const getResults = (data, id) => (dispatch) => {
+  // Set state to loading
+  // ===========================================================================
+  dispatch({
+    state: 3,
+    type: ACTIONS['LINKS_STATE'],
+    id
+  });
+
+  // Run actual call
+  // ===========================================================================
+  return fetch('links', data).then((payload) => {
+    dispatch({
+      type: ACTIONS['GET_LINKS'],
+      id,
+      state: 2,
+      payload
+    })
+  });
+}
+
 // Get results for all columns with a time delay
 // ===========================================================================
 export const getAllResults = (data) => (dispatch) => {
   let columns;
-  let reader = createAction('link', 3);
 
   // Pick exacly columns data to iterate over for Results fetching
   // ===========================================================================
@@ -164,22 +188,8 @@ export const getAllResults = (data) => (dispatch) => {
   
   columns.forEach((column, i) => {
     if (!column.open) return;
-    let state = {
-      type: ACTIONS['SET_LINK_STATE'],
-      id: column.id
-    };
     let delay = (i > 4) ? i*1200 : 0;
-
-    dispatch({state: 1, ...state});
-    setTimeout(() => {
-      dispatch(reader(column.data, {
-        id: column.id,
-        state: false,
-        message: false
-      }))
-        .then(() => dispatch({state: 2, ...state}))
-        .catch(err => dispatch(throwError(err)));
-    }, delay);
+    setTimeout(() => dispatch(getResults(column.data, column.id)).catch(err => dispatch(throwError(err))), delay);
   });
 }
 
@@ -201,20 +211,3 @@ export const fetchData = (getUser) => (dispatch) => {
     dispatch(createAction('column', 3)({data: 1}, opts))
   ])
 };
-
-// Create auth actions
-// ===========================================================================
-export const login = (data) => (dispatch) => fetch('login', data).then(payload => {
-  if (payload.error) {
-    throw payload.error;
-  } else {
-    return dispatch({type: ACTIONS['LOGIN']})
-  }
-});
-export const logout = (data) => (dispatch) => fetch('logout', data).then(payload => {
-  if (payload.error) {
-    throw payload.error;
-  } else {
-    return dispatch({type: ACTIONS['LOGOUT']})
-  }
-});

@@ -10,8 +10,8 @@ export const sets = basicReducer({
     return state.map((item) => (item.id === action.payload.id) ? Object.assign({}, item, action.payload) : item);
   },
   GET_SETS: (state, action) => {
-    let feeds = pickUniqueSources(action.payload); 
-    action.payload.forEach(setUniqueSources, feeds);
+    let feeds = pickUniqueSources(action.payload);
+    action.payload.forEach((set) => setUniqueSources(set, feeds));
     return action.payload;
   }
 });

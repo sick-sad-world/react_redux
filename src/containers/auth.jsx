@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
-import { login, setAppState, throwError, fetchData, getAllResults } from '../actions/actions';
+import { createAction, setAppState, throwError, fetchData, getAllResults } from '../actions/actions';
 
 // Import Child components
 // ===========================================================================
@@ -22,7 +22,7 @@ class Auth extends React.Component {
     let dispatch = this.props.dispatch;
     let { username, password } = e.target.elements;
     
-    dispatch(login({
+    dispatch(createAction('login', 8)({
         username: username.value,
         password: password.value
       }))

@@ -31,7 +31,7 @@ class App extends React.Component {
 
   render () {
     let { actionState, loadingStep } = this.props;
-    return (this.props.state < 2) ? <ProgressTracker text={actionState} step={loadingStep} /> : this.props.children;
+    return (this.props.state === 1) ? <ProgressTracker text={actionState} step={loadingStep} /> : this.props.children;
   }
 
 }

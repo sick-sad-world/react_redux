@@ -145,7 +145,7 @@ Edit.defaultProps = {
 // Transform app state to component props
 // @ deps -> Alert, Columns
 // ===========================================================================
-let mapStateToProps = ({ alerts, columns, user }, ownProps) => {
+let mapStateToProps = ({ app, alerts, columns, user }, ownProps) => {
   let item;
 
   if (ownProps.params.id === 'new') {
@@ -160,17 +160,17 @@ let mapStateToProps = ({ alerts, columns, user }, ownProps) => {
   } else {
     // Or find existing one
     // ===========================================================================
-    item = find(alerts.data, {id: parseInt(ownProps.params.id)}) || {};
+    item = find(alerts, {id: parseInt(ownProps.params.id)}) || {};
   }
 
   // Return prepared data
   // ===========================================================================
   return {
-    state: columns.state,
+    state: app.state,
     type: 'alert',
     item: item,
     email: user.email,
-    columns: columns.data.map((item) => ({
+    columns: columns.map((item) => ({
       value: item.id,
       label: item.name,
       clearableValue: true
