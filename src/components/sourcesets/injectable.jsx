@@ -59,7 +59,7 @@ export default class FeedsList extends React.Component {
       <Sourceset {...data}>
         {(expanded) ? this.props.sources.map((source) => {
           if (includes(set.source_ids, source.id)) {
-            return this.makeSourceComponent(source, includes(this.props.disable.sources, source.id));
+            return this.makeSourceComponent(source, includes(this.props.disable.source, source.id));
           } else {
             return null;
           }
@@ -101,7 +101,7 @@ export default class FeedsList extends React.Component {
         search = new RegExp(this.state.search, 'i');
         // Display filtered sources by search parameter
         // ===========================================================================
-        list = sources.map((source) => (search.test(source.name)) ? this.makeSourceComponent(source, includes(disable.sources, source.id)) : null);
+        list = sources.map((source) => (search.test(source.name)) ? this.makeSourceComponent(source, includes(disable.source, source.id)) : null);
       }
     }
 

@@ -1,7 +1,8 @@
 // Import utility stuff
 // ===========================================================================
-import { find, bindAll, includes, pickBy, isNaN, isUndefined, map, keys, omitBy } from 'lodash';
+import { find, bindAll, includes, pickBy, keys, map, omitBy, isUndefined } from 'lodash';
 import classNames from 'classnames';
+import { transformColumnValue, composeColumnSort } from '../../helpers/functions';
 
 // Import React related stuff
 // ===========================================================================
@@ -85,35 +86,25 @@ class Edit extends PageEdit {
   // ===========================================================================
   preformAction (name) {
     return () => {
-      let item = this.props.item;
-      let value = this.state[name];
       let data = false;
+      let value = this.state[name];
+      let item = this.props.item;
 
-      // Convert number to number
-      // ===========================================================================
-      if (!isNaN(parseFloat(value))) {
-        value = parseFloat(value);
-      }
-
-      // Convert null to undefined
-      // ===========================================================================
-      if (value === '' || value === null || (name.indexOf('is_') === 0 && value === 'on')) {
-        value = undefined;
-      }
-
-      if (item.id) {
+      if (this.props.item.id) {
         // Modify if item is already existed
         // ===========================================================================
         if (name === 'name' || name === 'display_settings') {
-          if (value !== item[name]) {
-            data = {[name]: value};
+          if (value !== this.props.item[name]) {
+            data = { id: this.props.item.id, [name]: value};
           }
         } else {
+          value = transformColumnValue(value);
+
           // Compose sorting property
           // ===========================================================================
           if (name.indexOf('sort') === 0) {
             name = 'sort';
-            value = (this.state.sort_pref) ? this.state.sort_pref + '_' + this.state.sort_prop : this.state.sort_prop;
+            value = composeColumnSort(this.state.sort_pref, this.state.sort_prop);
           }
 
           // Proper autoreload disabled value
@@ -121,16 +112,19 @@ class Edit extends PageEdit {
           if (name === 'autoreload' && !value) {
             value = 0;
           }
+
+          // Actual merging of exact data Object
+          // ===========================================================================
           if (value !== item.data[name]) {
-            data = { data: Object.assign({}, item.data, {[name]: value}) };
-            data.data = JSON.stringify(omitBy(data.data, isUndefined));
-          } else {
-            data = null;
+            data = {
+              id:this.props.item.id,
+              data: omitBy(Object.assign({}, item.data, {[name]: value}), isUndefined)
+            };
+            delete data.data.callback;
           }
         }
         
         if (data) {
-          data.id = item.id;
           this.actions.update(data).catch(this.actions.throwError);
         }
       }

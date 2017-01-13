@@ -16,6 +16,20 @@ export const pickUniqueSources = (sets) => {
   return feeds;
 }
 
+export const transformColumnValue = (value) => {
+  let numVal = parseFloat(value);
+
+  if (value === '' || value === null || (name.indexOf('is_') === 0 && value === 'on')) {
+    return undefined;
+  } else if (typeof numVal === 'number' && numVal === numVal) {
+    return numVal
+  } else {
+    return value;
+  }
+}
+
+export const composeColumnSort = (pref, prop) => (pref) ? pref + '_' + prop : prop;
+
 export const setUniqueSources = (set, feeds) => {
   set.uniq_ids = [];
   set.source_ids.forEach((source) => {

@@ -54,7 +54,7 @@ class Assigment extends React.Component {
 
     this.actions.update({
       id: this.props.item.id,
-      data: JSON.stringify(Object.assign({}, this.props.item.data, {[type]: val}))
+      data: Object.assign({}, this.props.item.data, {[type]: val})
     }).catch(this.actions.throwError);
   }
 

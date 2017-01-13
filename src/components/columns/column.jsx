@@ -1,8 +1,9 @@
 // Import utility stuff
 // ===========================================================================
-import { find, filter, bindAll, pick } from 'lodash';
+import { find, omitBy, isUndefined, bindAll, pick } from 'lodash';
 import classNames from 'classnames';
 import { defColumnParameters } from '../../helpers/defaults'; 
+import { composeColumnSort } from '../../helpers/functions';
 
 // Import React related stuff
 // ===========================================================================
@@ -49,24 +50,28 @@ class Column extends React.Component {
       throwError: throwError
     }, this.props.dispatch);
 
-    bindAll(this, ['toggleExpandedState', 'deleteColumn', 'hideColumn', 'refreshResults', 'changeHandler']);
+    bindAll(this, ['toggleExpandedState', 'deleteColumn', 'hideColumn', 'refreshResults', 'changeHandler', 'createSelectHandler', 'preformAction']);
   }
 
-  changeHandler(name) {
-    return (e) => {
-      let val = (e.value) ? e.value : e.target.value;
-      let item = this.props.item;
+  createSelectHandler (name) {
+    return (v) => {
       this.setState({
-        [name]: val
-      }, () => {
-        this.actions.update({
-          id: item.id,
-          data: JSON.stringify(Object.assign({}, item.data, {
-            [(name.indexOf('sort') > -1) ? 'sort' : name]: val
-          }))
-        }).then(() => this.actions.refresh(item.data, item.id)).catch(this.actions.throwError);
-      })
+        [name]: (v) ? v.value : v
+      }, () => this.preformAction({'sort': composeColumnSort(this.state.sort_pref, this.state.sort_prop)}))
     }
+  }
+
+  changeHandler(e) {
+    let data = { [e.target.name]: e.target.value };
+    this.setState(data, () => this.preformAction(data));
+  }
+
+  preformAction(data) {
+    let item = this.props.item;
+    return this.actions.update({
+      id: item.id,
+      data: Object.assign({}, item.data, data)
+    }).then(() => this.actions.refresh(item.data, item.id)).catch(this.actions.throwError);
   }
 
   renderEditForm () {
@@ -80,7 +85,7 @@ class Column extends React.Component {
             name='sort_pref'
             placeholder='Prefix...'
             options={this.props.sortPrefix}
-            onChange={this.changeHandler('sort_pref')}
+            onChange={this.createSelectHandler('sort_pref')}
             autosize={false}
             clearable={true}
             searchable={false}
@@ -91,7 +96,7 @@ class Column extends React.Component {
             className='size-180'
             name='sort_prop'
             options={this.props.sortProperty}
-            onChange={this.changeHandler('sort_prop')}
+            onChange={this.createSelectHandler('sort_prop')}
             autosize={false}
             clearable={false}
             searchable={false}
@@ -102,7 +107,7 @@ class Column extends React.Component {
               type='checkbox'
               disabled={running}
               name='direction'
-              onChange={this.changeHandler('direction')}
+              onChange={this.changeHandler}
               checked={this.state.direction === 'desc'}
               value={(this.state.direction === 'desc') ? 'asc' : 'desc'}
             />
@@ -118,7 +123,7 @@ class Column extends React.Component {
               'Yes': this.state.infinite || 30,
               'No': 0
             }}
-            onChange={this.changeHandler('infinite')}
+            onChange={this.changeHandler}
             value={this.state.infinite} />
         </div>
         <div className='row-flex'>
@@ -130,7 +135,7 @@ class Column extends React.Component {
               'On': 1,
               'Off': 0
             }}
-            onChange={this.changeHandler('autoreload')}
+            onChange={this.changeHandler}
             value={this.state.autoreload} />
         </div>
         <div className='row-flex column-subnav'>
@@ -183,7 +188,7 @@ class Column extends React.Component {
   refreshResults (e) {
     e.preventDefault();
     let item = this.props.item;
-    this.actions.refresh(item.data, item.id).catch(this.actions.throwError);
+    this.actions.refresh(omitBy(item.data, isUndefined), item.id).catch(this.actions.throwError);
   }
 
   render() {

@@ -1,6 +1,7 @@
 // Import action types and our communication helper
 // ===========================================================================
 import * as ACTIONS from './types';
+import { mapValues, isPlainObject } from 'lodash';
 import fetch from '../fetch';
 
 // Action constructor (for default AJAX comunnication)
@@ -22,12 +23,9 @@ export const createAction = (entity, action) => {
     }, options);
 
     let resData = {
-      payload: Object.assign({}, data),
+      payload: { ...data },
       id: (data && data.id) || opts.id
     };
-    if (data && data.data) {
-      resData.payload.data = JSON.parse(data.data);
-    }
 
     switch (action) {
       case 3:
@@ -72,6 +70,8 @@ export const createAction = (entity, action) => {
       });
     }
 
+    // Send message
+    // ===========================================================================
     if (opts.message) {
       dispatch({
         type: ACTIONS['MESSAGE'],
@@ -86,7 +86,7 @@ export const createAction = (entity, action) => {
 
     // Fire a call to server
     // ===========================================================================
-    return fetch(url, data).then(payload => {
+    return fetch(url, mapValues(data, (v) => (isPlainObject(v)) ? JSON.stringify(v) : v)).then(payload => {
       
       // Set app state to idle
       // ===========================================================================
@@ -97,10 +97,11 @@ export const createAction = (entity, action) => {
         });
       }
       
+      if (action === 5) console.log(data, resData.payload, payload);
       if (payload.error && !opts.ignoreError) {
         // Fire [error] action if error found
         // ===========================================================================
-        throw Object.assign(payload.error);
+        throw payload.error;
       } else if (!payload.message && !payload.success) {
         resData.payload = payload;
       }
@@ -114,7 +115,7 @@ export const createAction = (entity, action) => {
             type: 'success',
             entity,
             action,
-            text: payload.message || payload.success
+            text: payload.message || payload.success || opts.message
           }
         });
       }
