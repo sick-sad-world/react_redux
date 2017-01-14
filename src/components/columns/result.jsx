@@ -6,6 +6,7 @@ import classNames from 'classnames';
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
+import LazyLoad from 'react-lazy-load';
 import { Link } from 'react-router';
 
 // Main app screen - Dashboard
@@ -50,7 +51,9 @@ export default class Result extends React.Component {
             </header>
             { (this.checkDisplay('image')) ? (
               <figure className={(isWideImage) ? 'is-wide' : null}>
-                <img src={props.image} />
+                <LazyLoad>
+                  <img src={props.image} />
+                </LazyLoad>
                 { (isWideImage) ? <figcaption>{props.title}</figcaption> : null }
               </figure>
             ) : null }
