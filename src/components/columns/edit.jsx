@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { find, bindAll, includes, pickBy, keys, map, omitBy, isUndefined, defaultsDeep } from 'lodash';
+import { find, bindAll, includes, pickBy, keys, map } from 'lodash';
 import classNames from 'classnames';
 import { transformColumnValue, composeColumnSort } from '../../helpers/functions';
 
@@ -120,7 +120,7 @@ class Edit extends PageEdit {
           if (value !== item.data[name]) {
             data = {
               id:this.props.item.id,
-              data: omitBy(Object.assign({}, item.data, {[name]: value}), isUndefined)
+              data: Object.assign({}, item.data, {[name]: value})
             };
             delete data.data.callback;
           }

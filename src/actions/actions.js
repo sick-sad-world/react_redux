@@ -1,7 +1,7 @@
 // Import action types and our communication helper
 // ===========================================================================
 import * as ACTIONS from './types';
-import { mapValues, isPlainObject, omitBy, isUndefined } from 'lodash';
+import { reduce, isPlainObject, omitBy, isUndefined } from 'lodash';
 import fetch from '../fetch';
 
 // Action constructor (for default AJAX comunnication)
@@ -14,6 +14,7 @@ export const createAction = (entity, action) => {
   return (data, options) => (dispatch) => {
 
     let url;
+    let type;
 
     let opts = Object.assign({
       state: true,
@@ -22,40 +23,46 @@ export const createAction = (entity, action) => {
       id: null
     }, options);
 
-    let resData = {
-      payload: { ...data },
-      id: (data && data.id) || opts.id
-    };
+    // Compose data for call
+    // ===========================================================================
+    let reqData = reduce(data, (acc, v, k) => {
+      if (isPlainObject(v)) {
+        acc[k] = JSON.stringify(v);
+      } else if (!isUndefined(v)) {
+        acc[k] = v;
+      }
+      return acc;
+    }, {});
 
     switch (action) {
       case 3:
         if (entity === 'user') {
           url = 'user';
-          resData.type = ACTIONS['GET_USER'];
+          type = ACTIONS['GET_USER'];
         } else {
           url = entity+'s';
-          resData.type = ACTIONS[`GET_${entity.toUpperCase()}S`];
+          type = ACTIONS[`GET_${entity.toUpperCase()}S`];
         }
         break;
       case 4:
         url = 'add_'+entity;
-        resData.type = ACTIONS[`ADD_${entity.toUpperCase()}`];
+        type = ACTIONS[`ADD_${entity.toUpperCase()}`];
         break;
       case 5:
         url = entity;
-        resData.type = ACTIONS[`EDIT_${entity.toUpperCase()}`];
+        type = ACTIONS[`EDIT_${entity.toUpperCase()}`];
         break;
       case 6:
         url = 'remove_'+entity;
-        resData.type = ACTIONS[`DELETE_${entity.toUpperCase()}`];
+        type = ACTIONS[`DELETE_${entity.toUpperCase()}`];
         break;
       case 7:
         url = `sort_${entity}s`;
-        resData.type = ACTIONS[`SORT_${entity.toUpperCase()}S`];
+        type = ACTIONS[`SORT_${entity.toUpperCase()}S`];
         break;
       case 8:
         url = entity;
-        resData.type = ACTIONS[`${entity.toUpperCase()}`];
+        type = ACTIONS[`${entity.toUpperCase()}`];
         break;
       default:
         throw {}
@@ -83,10 +90,9 @@ export const createAction = (entity, action) => {
       });
     }
 
-
     // Fire a call to server
     // ===========================================================================
-    return fetch(url, mapValues(data, (v) => (isPlainObject(v)) ? JSON.stringify(v) : v)).then(payload => {
+    return fetch(url, reqData).then(payload => {
       
       // Set app state to idle
       // ===========================================================================
@@ -101,8 +107,8 @@ export const createAction = (entity, action) => {
         // Fire [error] action if error found
         // ===========================================================================
         throw payload.error;
-      } else if (!payload.message && !payload.success) {
-        resData.payload = payload;
+      } else if (payload.message || payload.success) {
+        payload = omitBy(data, isUndefined);
       }
 
       // Fire message to display proper message if responce contains only it
@@ -120,7 +126,11 @@ export const createAction = (entity, action) => {
       }
       // Dispatch proper action
       // ===========================================================================
-      return dispatch(resData);
+      return dispatch({
+        type,
+        payload,
+        id: payload.id || opts.id
+      });
     });
 
   }

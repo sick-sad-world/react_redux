@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { find, omitBy, isUndefined, bindAll, pick } from 'lodash';
+import { find, bindAll, pick } from 'lodash';
 import classNames from 'classnames';
 import { defColumnParameters } from '../../helpers/defaults'; 
 import { composeColumnSort } from '../../helpers/functions';
@@ -188,7 +188,7 @@ class Column extends React.Component {
   refreshResults (e) {
     e.preventDefault();
     let item = this.props.item;
-    this.actions.refresh(omitBy(item.data, isUndefined), item.id).catch(this.actions.throwError);
+    this.actions.refresh(item.data, item.id).catch(this.actions.throwError);
   }
 
   render() {
