@@ -47,22 +47,25 @@
 		margin-bottom: 0;
 		border-top: $bd;
 		padding: baseUnit(0.5) 0;
-		a, button {
+		a {
 			flex: 1 1 33%;
-			background: none;
-			border-radius: 0;
-			padding: 0;
-			border: 0;
 			color: $c-icon;
 			text-shadow: none;
+      text-align: center;
+      line-height: $form-unit;
 			transition: color $dur;
-			&:not(:last-child) {
-				border-right: $bd;
-			}
+      &:not(:last-child) {
+        border-right: $bd;
+      }
 			&:hover, &:focus {
 				color: darken($c-icon, 10%);
 			}
 		}
+    svg {
+      display: inline-block;
+      vertical-align: -2px;
+      width: $form-unit;
+    }
 	}
 	> ul {
 		flex: 1 1 auto;

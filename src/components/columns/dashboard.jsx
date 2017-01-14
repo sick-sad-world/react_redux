@@ -1,7 +1,9 @@
 // Import utility stuff
 // ===========================================================================
-import { filter } from 'lodash';
+import { reduce, defaultsDeep } from 'lodash';
 import classNames from 'classnames';
+import { ensureColumnData } from '../../helpers/functions';
+import { defColumn, defColumnParameters } from '../../helpers/defaults';
 
 // Import React related stuff
 // ===========================================================================
@@ -20,7 +22,7 @@ class Dashboard extends React.Component {
     let empty = <section className='state-empty'>{this.props.stateEmpty}</section>;
     return (
       <section className='mod-dashboard'>
-        { (this.props.state > 1) ?(data.length) ? data.map((column) => <Column key={column.id} item={column} />) : empty : null }
+        { (data.length) ? data.map((column) => <Column key={column.id} item={column} />) : empty }
       </section>
     );
   }
@@ -37,6 +39,14 @@ Dashboard.defaultProps = {
 // Take columns and results from state tree
 // @deps COLUMNS
 // ===========================================================================
-const mapStateToProps = ({app, columns}) => ({state: app.state, data: filter(columns, (col) => !!col.open)});
+const mapStateToProps = ({app, columns}) => ({
+  state: app.state,
+  data: reduce(columns, (acc, column) => {
+    if (column.open) {
+      acc.push(ensureColumnData(column, defColumn))
+    }
+    return acc;
+  }, [])
+});
 
 export default connect(mapStateToProps)(Dashboard);

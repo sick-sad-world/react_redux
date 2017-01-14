@@ -1,7 +1,6 @@
 // Import react related stuff
 // ===========================================================================
 import React from 'React';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { bindAll } from 'lodash';
 
@@ -11,44 +10,32 @@ import PageList from '../pageList';
 import ListItem from '../listItem';
 import Icon from '../icon';
 
-// Import actions
-// ===========================================================================
-import { createAction, throwError } from '../../actions/actions';
-
 class List extends React.Component {
   constructor(props) {
     super(props);
-
-    bindAll(this, ['changeVis', 'getItemIcon']);
+    bindAll(this, ['makeVisHandler', 'makeItemIcon']);
   }
 
   // Change visibility filter
   // ===========================================================================
-  changeVis (e, data) {
-    e.preventDefault();
-    this.actions.update(data).catch(this.actions.throwError);
+  makeVisHandler (data) {
+    return () => {
+      this.actions.update(data).catch(this.actions.throwError);
+    }
   }
 
   // Generate visibility icon
   // ===========================================================================
-  getItemIcon (props) {
-    let title, params, icon;
-    if (props.open) {
-      title = 'Hide this Column';
-      icon = 'eye-with-line';
-      params = {id: props.id, open: 0};
-    } else {
-      title = 'Show this Column';
-      icon = 'eye';
-      params = {id: props.id, open: 1};
-    }
-    return <a href='' onClick={e => this.changeVis(e, params)} title={title}><Icon icon={icon} /></a>;
+  makeItemIcon (props) {
+    let { id, open } = props;
+    let visIconData = this.props.visIconData;
+    return <a onClick={this.makeVisHandler({id, open})} title={visIconData[open].title}><Icon icon={visIconData[open].icon} /></a>;
   }
 
   render() {
     return (
       <PageList {...this.props} >
-        <ListItem customIcon={this.getItemIcon} />
+        <ListItem customIcon={this.makeItemIcon} />
       </PageList>
     );
   }
@@ -63,7 +50,8 @@ List.defaultProps = {
     btn: 'Create new column',
     deleting: 'Are you sure want to delete this Column?',
     empty: 'No columns created yet. Use form above to create one.'
-  }
+  },
+  visIconData: [{icon: 'eye', title: 'Show this column'}, {icon: 'eye-with-line', title: 'Hide this column'}]
 };
 
 // Provide default parameters for list

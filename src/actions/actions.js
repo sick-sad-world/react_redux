@@ -1,7 +1,7 @@
 // Import action types and our communication helper
 // ===========================================================================
 import * as ACTIONS from './types';
-import { mapValues, isPlainObject } from 'lodash';
+import { mapValues, isPlainObject, omitBy, isUndefined } from 'lodash';
 import fetch from '../fetch';
 
 // Action constructor (for default AJAX comunnication)
@@ -97,7 +97,6 @@ export const createAction = (entity, action) => {
         });
       }
       
-      if (action === 5) console.log(data, resData.payload, payload);
       if (payload.error && !opts.ignoreError) {
         // Fire [error] action if error found
         // ===========================================================================
@@ -167,7 +166,7 @@ export const getResults = (data, id) => (dispatch) => {
 
   // Run actual call
   // ===========================================================================
-  return fetch('links', data).then((payload) => {
+  return fetch('links', omitBy(data, isUndefined)).then((payload) => {
     dispatch({
       type: ACTIONS['GET_LINKS'],
       id,

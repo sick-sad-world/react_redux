@@ -76,6 +76,8 @@ class Column extends React.Component {
 
   renderEditForm () {
     let running = this.props.state > 2;
+    let open = this.props.item.open;
+    let visIconData = this.props.visIconData;
     return (
       <form className='column-settings'>
         <div className='row-flex'>
@@ -138,20 +140,18 @@ class Column extends React.Component {
             onChange={this.changeHandler}
             value={this.state.autoreload} />
         </div>
-        <div className='row-flex column-subnav'>
-          
-          <a onClick={this.hideColumn} title='Hide this column'>Hide</a>
-          <Link to={`columns/${this.props.item.id}`}  title='Column setting screen'>Settings</Link>
-          <a onClick={this.deleteColumn} title='Delete this column'>Delete</a>
+        <div className='column-subnav'>
+          <a onClick={this.hideColumn} title={visIconData[open].title}><Icon icon={visIconData[open].icon} />Hide</a>
+          <Link to={`columns/${this.props.item.id}`}  title='Column setting screen'><Icon icon='cog' />Settings</Link>
+          <a onClick={this.deleteColumn} title='Delete this column'><Icon icon='trash' />Delete</a>
         </div>
       </form>
     );
   }
 
   renderResults (tableProps) {
-    let { display_settings } = this.props.item;
     if (this.props.data.length) {
-      return this.props.data.map((result) => <Result key={result.id} displaySettings={display_settings} {...tableProps} {...result} />);
+      return this.props.data.map((result) => <Result key={result.id} displaySettings={this.props.item.display_settings} {...tableProps} {...result} />);
     } else {
       return (<li className='state-empty'>{this.props.stateEmpty}</li>);
     }
@@ -200,7 +200,7 @@ class Column extends React.Component {
           <Icon className='drag-handle' icon='dots-three-vertical' />
           <h1 className='funName'>{ item.name }</h1>
           <nav className='nav-links'>
-            <a title='Refresh column' onClick={this.refreshResults}><Icon icon='ccw' /></a>
+            <a title='Refresh column' onClick={this.refreshResults}><Icon icon='cw' /></a>
             <a onClick={this.toggleExpandedState} title='Column settings'><Icon icon='cog' /></a>
           </nav>
         </header>
@@ -230,12 +230,13 @@ Column.defaultProps = {
   state: 1,
   data: [],
   sortPrefix: defColumnParameters.sortPrefix,
-  sortProperty: defColumnParameters.sortProperty
+  sortProperty: defColumnParameters.sortProperty,
+  visIconData: [{icon: 'eye', title: 'Show this column'}, {icon: 'eye-with-line', title: 'Hide this column'}]
 }
 
 // Take columns and results from state tree
 // @deps LINKS
 // ===========================================================================
-const mapStateToProps = ({links}, ownProps) => (links[ownProps.item.id] || {});
+const mapStateToProps = ({links}, ownProps) => ({...links[ownProps.item.id]} || {});
 
 export default connect(mapStateToProps)(Column);

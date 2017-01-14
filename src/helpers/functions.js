@@ -1,5 +1,3 @@
-// Ensure path is absolute
-// ===========================================================================
 export const absolutizePath = (path) => (path && path.indexOf('/') > 0) ? '/'+path : path;
 
 export const pickUniqueSources = (sets) => {
@@ -15,6 +13,21 @@ export const pickUniqueSources = (sets) => {
   });
   return feeds;
 }
+
+export const ensureColumnData = (item, defaults) => {
+  if (item) {
+    item.data = Object.assign({}, defaults.data, item.data);
+    if (typeof item.display_settings === 'string') {
+      item.display_settings = item.display_settings.split(',');
+    }
+    if (!item.display_settings || !item.display_settings.length) {
+      item.display_settings = defaults.display_settings;
+    }
+    return item;
+  } else {
+    return {data: {}};
+  }
+} 
 
 export const transformColumnValue = (value) => {
   let numVal = parseFloat(value);

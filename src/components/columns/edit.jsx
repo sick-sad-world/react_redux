@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { find, bindAll, includes, pickBy, keys, map, omitBy, isUndefined } from 'lodash';
+import { find, bindAll, includes, pickBy, keys, map, omitBy, isUndefined, defaultsDeep } from 'lodash';
 import classNames from 'classnames';
 import { transformColumnValue, composeColumnSort } from '../../helpers/functions';
 
@@ -20,7 +20,8 @@ import PageEdit from '../pageEdit';
 
 // Import actions
 // ===========================================================================
-import { defColumn, defColumnData, defColumnParameters } from '../../helpers/defaults';
+import { ensureColumnData } from '../../helpers/functions';
+import { defColumn, defColumnParameters } from '../../helpers/defaults';
 
 class Edit extends PageEdit {
   constructor (props) {
@@ -49,16 +50,17 @@ class Edit extends PageEdit {
       language: (item) => item.data.language,
       autoreload: (item) => item.data.autoreload,
       sort_pref (item) {
-        let prefix = find(this.props.sortPrefix, (pref) => item.data.sort.indexOf(pref.value) > -1);
+        let prefix = item.data.sort && find(this.props.sortPrefix, (pref) => item.data.sort.indexOf(pref.value) > -1);
         return (prefix) ? prefix.value : '';
       },
       sort_prop (item) {
-        let property = find(this.props.sortProperty, (prop) => item.data.sort.indexOf(prop.value) > -1);
+        let property = item.data.sort && find(this.props.sortProperty, (prop) => item.data.sort.indexOf(prop.value) > -1);
         return (property) ? property.value : '';
       }
     });
 
     Object.assign(this.state, this.getAdvFiltersFromProps(this.props));
+
     // Bind action handlers to component
     // ===========================================================================
     bindAll(this, ['preformAction', 'stateHandler', 'changeHandler', 'createSelectHandler', 'createAdvFilter', 'modifyStateArray']);
@@ -561,30 +563,11 @@ Edit.defaultProps = Object.assign({
 // Transform app state to component props
 // @ deps -> Columns, Sources, Sets
 // ===========================================================================
-let mapStateToProps = ({ app, columns }, ownProps) => {
-  let item = find(columns, {id: parseInt(ownProps.params.id)}) || {};
-  
-  if (item) {
-    item.data = Object.assign({}, defColumnData, item.data);
-    // Transform string -> Array
-    // @ should be removed when i communicate with maarten
-    // ===========================================================================
-    if (typeof item.display_settings === 'string') {
-      item.display_settings = item.display_settings.split(',');
-    }
-    if (!item.display_settings || !item.display_settings.length) {
-    // Set default data if none is provided
-    // ===========================================================================
-      item.display_settings = defColumn.display_settings;
-    }
-  }
-
-  return {
-    state: app.state,
-    type: 'column',
-    item,
-    advRegExp: /MIN|MAX|LIKE/
-  };
-};
+let mapStateToProps = ({ app, columns }, ownProps) => ({
+  state: app.state,
+  type: 'column',
+  item: ensureColumnData(find(columns, {id: parseInt(ownProps.params.id)}), defColumn),
+  advRegExp: /MIN|MAX|LIKE/
+});
 
 export default connect(mapStateToProps)(Edit);
