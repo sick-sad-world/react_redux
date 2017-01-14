@@ -45,12 +45,16 @@ export const app = (state = defaultAppState, action) => {
     case ACTIONS['ERROR']:
       return Object.assign({}, state, {
         state: 0,
-         messages: [action.payload, ...state.messages]
-      });
-    case ACTIONS['MESSAGE']:
-      return Object.assign({}, state, {
         messages: [action.payload, ...state.messages]
-      })
+      });
+    case ACTIONS['PUSH_MESSAGE']:
+      return Object.assign({}, state, {
+        messages: [Object.assign({id: state.length, visible: true}, action.payload), ...state.messages]
+      });
+    case ACTIONS['HIDE_MESSAGE']:
+      return Object.assign({}, state, {
+        messages: state.map((message) => (message.id === action.id) ? Object.assign({}, message, {visible: false}) : message)
+      });
     default:
       return state;
   }

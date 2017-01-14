@@ -3,13 +3,13 @@ export const defaultAppState = {
   userState: false,
   loadingStep: 0,
   messages: []
-}
+};
 
 export const defaultMessage = {
   type: 'info', // info, loading, error, success, warning
-  entity: '',   // user, alert, report, source, set, column, link
-  duration: 0   // Time message will be visible, 0 - infinite
-}
+  entity: '', // user, alert, report, source, set, column, link
+  duration: 0 // Time message will be visible, 0 - infinite
+};
 
 export const defaultUser = {
   id: null,
@@ -33,7 +33,7 @@ export const defReport = {
   next_send: '',
   last_sent: '',
   recipient: ''
-}
+};
 
 export const defAlert = {
   id: 0,
@@ -43,7 +43,7 @@ export const defAlert = {
   columns: [0],
   frequency: 15,
   recipient: ''
-}
+};
 
 export const defColumnData = {
   show_favorites: 0,
@@ -68,7 +68,7 @@ export const defColumnData = {
   is_video: undefined,
   is_facebook: undefined,
   is_gallery: undefined
-}
+};
 
 export const defColumn = {
   id: 0,
@@ -77,7 +77,7 @@ export const defColumn = {
   name: '',
   data: defColumnData,
   display_settings: ['title', 'found', 'url', 'image', 'description', 'likes', 'tweets', 'shares']
-}
+};
 
 export const defColumnParameters = {
   displaySettings: [
@@ -97,45 +97,105 @@ export const defColumnParameters = {
     'votes_video',
     'views_video',
     'comments_video'
-  ], 
-  language: [
-    {label: 'English', value: 'English'},
-    {label: 'French', value: 'French'},
-    {label: 'German', value: 'German'},
-    {label: 'Dutch', value: 'Dutch'},
-    {label: 'Spanish', value: 'Spanish'},
-    {label: 'Korean', value: 'Korean'},
-    {label: 'Arabic', value: 'Arabic'},
-    {label: 'Chinese', value: 'Chinese'},
-    {label: 'Hindi', value: 'Hindi'},
-    {label: 'Japanese', value: 'Japanese'},
-    {label: 'Greek', value: 'Greek'},
-    {label: 'Unknown', value: 'Unknown'},
-    {label: 'Undetected', value: 'Undetected'}
   ],
-  autoReloadOptions: [
-    {label: '15sec', value: 15},
-    {label: '30sec', value: 30},
-    {label: '1min', value: 60},
-    {label: '2min', value: 120},
-    {label: '5min', value: 300},
-    {label: '10min', value: 600}
-  ],
-  sortPrefix: [
-    {label: 'rate', value: 'rate'},
-    {label: 'maxrate', value: 'maxrate'},
-    {label: 'hotness', value: 'hotness'},
-    {label: 'acc', value: 'acc'}
-  ],
-  sortProperty: [
-    {label: 'found', value: 'found'},
-    {label: 'tweets', value: 'tweets'},
-    {label: 'likes', value: 'likes'},
-    {label: 'shares', value: 'shares'},
-    {label: 'pins', value: 'pins'},
-    {label: 'comments_video', value: 'comments_video'},
-    {label: 'comments', value: 'comments'},
-    {label: 'votes_video', value: 'votes_video'},
-    {label: 'views_video', value: 'views_video'}
-  ]
-}
+  language: [{
+    label: 'English',
+    value: 'English'
+  }, {
+    label: 'French',
+    value: 'French'
+  }, {
+    label: 'German',
+    value: 'German'
+  }, {
+    label: 'Dutch',
+    value: 'Dutch'
+  }, {
+    label: 'Spanish',
+    value: 'Spanish'
+  }, {
+    label: 'Korean',
+    value: 'Korean'
+  }, {
+    label: 'Arabic',
+    value: 'Arabic'
+  }, {
+    label: 'Chinese',
+    value: 'Chinese'
+  }, {
+    label: 'Hindi',
+    value: 'Hindi'
+  }, {
+    label: 'Japanese',
+    value: 'Japanese'
+  }, {
+    label: 'Greek',
+    value: 'Greek'
+  }, {
+    label: 'Unknown',
+    value: 'Unknown'
+  }, {
+    label: 'Undetected',
+    value: 'Undetected'
+  }],
+  autoReloadOptions: [{
+    label: '15sec',
+    value: 15
+  }, {
+    label: '30sec',
+    value: 30
+  }, {
+    label: '1min',
+    value: 60
+  }, {
+    label: '2min',
+    value: 120
+  }, {
+    label: '5min',
+    value: 300
+  }, {
+    label: '10min',
+    value: 600
+  }],
+  sortPrefix: [{
+    label: 'rate',
+    value: 'rate'
+  }, {
+    label: 'maxrate',
+    value: 'maxrate'
+  }, {
+    label: 'hotness',
+    value: 'hotness'
+  }, {
+    label: 'acc',
+    value: 'acc'
+  }],
+  sortProperty: [{
+    label: 'found',
+    value: 'found'
+  }, {
+    label: 'tweets',
+    value: 'tweets'
+  }, {
+    label: 'likes',
+    value: 'likes'
+  }, {
+    label: 'shares',
+    value: 'shares'
+  }, {
+    label: 'pins',
+    value: 'pins'
+  }, {
+    label: 'comments_video',
+    value: 'comments_video'
+  }, {
+    label: 'comments',
+    value: 'comments'
+  }, {
+    label: 'votes_video',
+    value: 'votes_video'
+  }, {
+    label: 'views_video',
+    value: 'views_video'
+  }]
+};

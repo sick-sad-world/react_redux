@@ -1,7 +1,8 @@
 // Utility actions
 // ===========================================================================
 export const ERROR = 'ERROR';
-export const MESSAGE = 'MESSAGE';
+export const PUSH_MESSAGE = 'PUSH_MESSAGE';
+export const HIDE_MESSAGE = 'HIDE_MESSAGE';
 export const SET_APP_STATE = 'SET_APP_STATE';
 
 // App state actions

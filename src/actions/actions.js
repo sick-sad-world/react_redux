@@ -81,7 +81,7 @@ export const createAction = (entity, action) => {
     // ===========================================================================
     if (opts.message) {
       dispatch({
-        type: ACTIONS['MESSAGE'],
+        type: ACTIONS['PUSH_MESSAGE'],
         payload: {
           type: 'loading',
           entity,
@@ -115,7 +115,7 @@ export const createAction = (entity, action) => {
       // ===========================================================================
       if (opts.message) {
         dispatch({
-          type: ACTIONS['MESSAGE'],
+          type: ACTIONS['PUSH_MESSAGE'],
           payload: {
             type: 'success',
             entity,
@@ -139,6 +139,11 @@ export const createAction = (entity, action) => {
 // Set app state (simple and SYNC)
 // ===========================================================================
 export const setAppState = (state) => ({ type: ACTIONS['SET_APP_STATE'], state });
+
+// Hide message 
+// @case onClick or by timeout
+// ===========================================================================
+export const hideMessage = (id) => ({type: ACTIONS['HIDE_MESSAGE'], id });
 
 // Throw action related to error (SYNC)
 // ===========================================================================
@@ -165,6 +170,9 @@ export const throwError = (error) => (dispatch) => {
   return dispatch(action);
 };
 
+// Get results for a single column
+// @data - column data Object required
+// ===========================================================================
 export const getResults = (data, id) => (dispatch) => {
   // Set state to loading
   // ===========================================================================
