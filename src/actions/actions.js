@@ -25,6 +25,7 @@ export const createAction = (entity, action) => {
     }, options);
 
     let id = (data) ? data.id || opts.id : opts.id;
+    let messageId = moment().unix();
 
     // Compose data for call
     // ===========================================================================
@@ -86,7 +87,7 @@ export const createAction = (entity, action) => {
       dispatch({
         type: ACTIONS['PUSH_MESSAGE'],
         payload: {
-          id: moment().unix(),
+          id: messageId,
           type: 'loading',
           entity,
           action,
@@ -112,6 +113,7 @@ export const createAction = (entity, action) => {
         // Fire [error] action if error found
         // ===========================================================================
         throw {
+          id: messageId,
           entity,
           action,
           entityId: id,
@@ -125,13 +127,10 @@ export const createAction = (entity, action) => {
       // ===========================================================================
       if (opts.message) {
         dispatch({
-          type: ACTIONS['PUSH_MESSAGE'],
+          type: ACTIONS['EDIT_MESSAGE'],
+          id: messageId,
           payload: {
-            id: moment().unix(),
             type: 'success',
-            entity,
-            action,
-            entityId: id,
             text: payload.message || payload.success || opts.message
           }
         });
@@ -175,7 +174,12 @@ export const throwError = (error) => (dispatch) => {
     action.payload.type = 'server error';
     action.payload.text = error.url;
   } else {
-    Object.assign(action.payload, error);
+    if (error.messageId) {
+      action.id = error.messageId;
+      action.payload = error;
+    } else {
+      Object.assign(action.payload, error);
+    }
   }
 
   return dispatch(action);
