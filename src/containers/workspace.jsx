@@ -88,17 +88,11 @@ class Workspace extends React.Component {
       'is-expanded': this.state.sidebar
     });
 
-    let paceClass = classNames({
-      'pace': true,
-      'is-running': this.props.state !== 2
-    })
-
     // Return JSX layout of a component
     // ===========================================================================
     return (
       <section className='screen-main mod-screen-main'>
         <aside className={sidebarClass}>
-          <span className={paceClass}>{this.props.actionState}</span>
           <UserBlock />
           <MainNav toggle={this.handlerSidebar} logout={this.handlerLogout} />
         </aside>
