@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { reduce } from 'lodash';
+import { reduce, bindAll } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
@@ -14,31 +14,50 @@ import Message from './message';
 
 // Import Actions
 // ===========================================================================
-import { editMessage } from '../actions/actions';
+import { sendMessage } from '../actions/actions';
 
 class Messages extends React.Component {
-  makeHideHandler (id) {
-    return (e) => {
-      this.editMessage(id, {visible: false});
+  constructor(props) {
+    super(props);
+    this.timeouts = {};
+    bindAll(this, ['hideHandler']);
+  }
+
+  hideHandler (id) {
+    this.props.dispatch(sendMessage({visible: false}, id));
+    if (this.timeouts[id]) {
+      delete this.timeouts[id];
     }
   }
 
   render() {
-    let { limit, timeout } = this.props;
-    return (
-      <ul>{ reduce(this.props.items, (acc, message, i) => {
+    let { limit, timeout, actions } = this.props;
+    let ids = [];
+    let list = (
+      <ul className='sys-messages'>{ reduce(this.props.items, (acc, message, i) => {
         if (i <= limit && message.visible) {
-          acc.push(<Message onClick={this.makeHideHandler(message.id)} key={message.id} {...message} />);
+          if (message.type !== 'loading') {
+            ids.push(message.id);
+          }
+          acc.push(<Message onClick={() => this.hideHandler(message.id)} key={message.id} {...message} actionText={actions[message.action]} />);
         }
         return acc;
       }, []) }</ul>
     );
+    ids.forEach((id) => this.timeouts[id] = setTimeout(this.hideHandler, timeout, id))
+    return list;
   }
 }
 
 Messages.defaultProps = {
   timeout: 8000,
-  limit: 4
+  limit: 4,
+  actions: {
+    3: 'reading',
+    4: 'creating',
+    5: 'updating',
+    6: 'sorting'
+  }
 }
 
 // Transform app state to component props

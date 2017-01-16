@@ -84,16 +84,13 @@ export const createAction = (entity, action) => {
     // Send message
     // ===========================================================================
     if (opts.message) {
-      dispatch({
-        type: ACTIONS['PUSH_MESSAGE'],
-        payload: {
-          id: messageId,
-          type: 'loading',
-          entity,
-          action,
-          entityId: id
-        }
-      });
+      dispatch(sendMessage({
+        id: messageId,
+        type: 'loading',
+        entity,
+        action,
+        entityId: id
+      }));
     }
 
     // Fire a call to server
@@ -126,14 +123,10 @@ export const createAction = (entity, action) => {
       // Fire message to display proper message if responce contains only it
       // ===========================================================================
       if (opts.message) {
-        dispatch({
-          type: ACTIONS['EDIT_MESSAGE'],
-          id: messageId,
-          payload: {
-            type: 'success',
-            text: payload.message || payload.success || opts.message
-          }
-        });
+        dispatch(sendMessage({
+          type: 'success',
+          text: payload.success || opts.message
+        }, messageId));
       }
 
       // Dispatch proper action
@@ -161,6 +154,7 @@ export const throwError = (error) => (dispatch) => {
     type: ACTIONS['ERROR'],
     payload: {
       id: moment().unix(),
+      visible: true,
       type: 'error',
       text: ''
     }
@@ -168,10 +162,10 @@ export const throwError = (error) => (dispatch) => {
 
   if (error instanceof Error) {
     console.error(error);
-    action.payload.type = 'client error';
+    action.payload.type = 'error client';
     action.payload.text = error.stack;
   } else if (error.event) {
-    action.payload.type = 'server error';
+    action.payload.type = 'error server';
     action.payload.text = error.url;
   } else {
     if (error.messageId) {
@@ -183,6 +177,24 @@ export const throwError = (error) => (dispatch) => {
   }
 
   return dispatch(action);
+};
+
+export const sendMessage = (mess, id) => {
+  if (id) {
+    return {
+      type: ACTIONS['EDIT_MESSAGE'],
+      id,
+      payload: mess
+    };
+  } else {
+    return {
+      type: ACTIONS['PUSH_MESSAGE'],
+      payload: Object.assign({
+        id: moment().unix(),
+        visible: true
+      }, mess)
+    };
+  }
 };
 
 // Get results for a single column

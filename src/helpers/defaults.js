@@ -5,9 +5,12 @@ export const defaultAppState = {
 };
 
 export const defaultMessage = {
-  type: 'info', // info, loading, error, success, warning
-  entity: '', // user, alert, report, source, set, column, link
-  duration: 0 // Time message will be visible, 0 - infinite
+  id: 0,          // Id -> Unix timestamp
+  type: 'info',   // info, loading, error, success, warning
+  action: 0,      // Type of action preformed
+  entity: '',     // user, alert, report, source, set, column, link
+  entityId: null, // Id of entity message related to
+  duration: 0     // Time message will be visible, 0 - infinite
 };
 
 export const defaultUser = {

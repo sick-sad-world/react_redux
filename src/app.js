@@ -32,7 +32,6 @@ import App from './containers/app'
 
 // Import components wich represents each of App sections
 // ===========================================================================
-import Messages from './components/messages';
 import Dashboard from './components/columns/dashboard';
 import * as Alerts from './components/alerts';
 import * as Reports from './components/reports';
@@ -76,7 +75,6 @@ render(
   <Provider store={TrendolizerStore}>
     <Router history={history}>
       <Route path='/' component={App}>
-        <Messages />
         <Route path='/auth' component={Auth} />
         <Route component={Workspace}>
           <Route path='/dashboard(/:id)' components={{main: Dashboard}} />

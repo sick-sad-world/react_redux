@@ -33,6 +33,13 @@ section[class^="screen"] {
 	@include overlay();
 }
 
+.sys-messages {
+  position: fixed;
+  bottom: baseUnit();
+  right: baseUnit();
+  z-index: 10;
+}
+
 .size-half {
   width: 50% !important;
 }

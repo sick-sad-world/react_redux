@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 // Import Child components
 // ===========================================================================
 import ProgressTracker from '../components/progressTracker';
+import Messages from '../components/messages';
 
 // This is CORE APP Component
 // It renders app if state > 1 or Progressbar if not
@@ -30,8 +31,13 @@ class App extends React.Component {
   }
 
   render () {
-    let { actionState, loadingStep } = this.props;
-    return (this.props.state === 1) ? <ProgressTracker text={actionState} step={loadingStep} /> : this.props.children;
+    let { actionState, loadingStep } = this.props;;
+    return (
+      <div>
+        {(this.props.state === 1) ? <ProgressTracker text={actionState} step={loadingStep} /> : this.props.children}
+        <Messages />
+      </div>
+    )
   }
 
 }
