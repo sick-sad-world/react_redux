@@ -75,7 +75,7 @@ class Column extends React.Component {
   }
 
   renderEditForm () {
-    let running = this.props.state > 2;
+    let running = this.props.colState > 3;
     let open = this.props.item.open;
     let visIconData = this.props.visIconData;
     return (
