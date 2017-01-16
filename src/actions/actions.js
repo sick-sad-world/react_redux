@@ -35,7 +35,7 @@ export const createAction = (entity, action) => {
         acc[k] = v;
       }
       return acc;
-    }, {});
+    }, {id});
 
     switch (action) {
       case 3:
@@ -86,9 +86,11 @@ export const createAction = (entity, action) => {
       dispatch({
         type: ACTIONS['PUSH_MESSAGE'],
         payload: {
+          id: moment().unix(),
           type: 'loading',
           entity,
-          action
+          action,
+          entityId: id
         }
       });
     }
@@ -109,7 +111,12 @@ export const createAction = (entity, action) => {
       if (payload.error && !opts.ignoreError) {
         // Fire [error] action if error found
         // ===========================================================================
-        throw payload.error;
+        throw {
+          entity,
+          action,
+          entityId: id,
+          error: payload.error
+        };
       } else if (payload.message || payload.success) {
         payload = data;
       }
@@ -148,17 +155,13 @@ export const createAction = (entity, action) => {
 // ===========================================================================
 export const setAppState = (state) => ({ type: ACTIONS['SET_APP_STATE'], state });
 
-// Hide message 
-// @case onClick or by timeout
-// ===========================================================================
-export const hideMessage = (id) => ({type: ACTIONS['HIDE_MESSAGE'], id });
-
 // Throw action related to error (SYNC)
 // ===========================================================================
 export const throwError = (error) => (dispatch) => {
   let action = {
     type: ACTIONS['ERROR'],
     payload: {
+      id: moment().unix(),
       type: 'error',
       text: ''
     }
@@ -172,7 +175,7 @@ export const throwError = (error) => (dispatch) => {
     action.payload.type = 'server error';
     action.payload.text = error.url;
   } else {
-    action.payload.text = error;
+    Object.assign(action.payload, error);
   }
 
   return dispatch(action);

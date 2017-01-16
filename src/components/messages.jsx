@@ -14,12 +14,12 @@ import Message from './message';
 
 // Import Actions
 // ===========================================================================
-import { hideMessage } from '../actions/actions';
+import { editMessage } from '../actions/actions';
 
 class Messages extends React.Component {
   makeHideHandler (id) {
     return (e) => {
-      this.hideMessage(id)
+      this.editMessage(id, {visible: false});
     }
   }
 
@@ -44,6 +44,6 @@ Messages.defaultProps = {
 // Transform app state to component props
 // @ deps -> App
 // ===========================================================================
-const mapStateToProps = ({ app }) => ({ items: app.messages });
+const mapStateToProps = ({ messages }) => ({ items: messages });
 
 export default connect(mapStateToProps)(Messages);

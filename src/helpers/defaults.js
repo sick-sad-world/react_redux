@@ -1,8 +1,7 @@
 export const defaultAppState = {
   state: 1, // 0 -error, 1 -init, 2 -ready, 3 -reading, 4 -creation, 5 -editing, 6 -deleting, 7 -sorting 
   userState: false,
-  loadingStep: 0,
-  messages: []
+  loadingStep: 0
 };
 
 export const defaultMessage = {

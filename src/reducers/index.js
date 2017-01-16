@@ -1,3 +1,4 @@
+export { messages } from './messages';
 export { alerts } from './alerts';
 export { reports } from './reports';
 export { columns } from './columns';
