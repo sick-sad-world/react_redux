@@ -5,6 +5,7 @@ import { find, without, concat, filter, includes } from 'lodash';
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
+import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -69,6 +70,9 @@ class Assigment extends React.Component {
     return (
       <section className='mod-subsection-management'>
         <header className='subsection-header'>
+          <Link to={`/columns/${this.props.item.id}`}>
+            <Icon icon='chevron-left' />
+          </Link>
           <div className='text'>
             <h1>{this.props.texts.title}: "{this.state.name}"</h1>
             <p>{this.props.texts.description}</p>

@@ -7,6 +7,7 @@ import moment from 'moment';
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
+import { Link } from 'react-router';
 import Select from 'react-select';
 import Datetime from 'react-datetime';
 import { connect } from 'react-redux';
@@ -15,6 +16,7 @@ import { defReport } from '../../helpers/defaults';
 // Import Child components
 // ===========================================================================
 import EmailList from '../user/injectable';
+import Icon from '../icon';
 import Toggler from '../toggler';
 import PageEdit from '../pageEdit';
 
@@ -60,6 +62,9 @@ class Edit extends PageEdit {
     return (
       <section className={componentRootClass}>
         <header className='subsection-header'>
+          <Link to='/alerts'>
+            <Icon icon='chevron-left' />
+          </Link>
           <div className='text'>
             <h1>{`${texts.title} ${(item.name) ? ": '"+item.name+"'" : ''}`}</h1>
             <p>{texts.description}</p>

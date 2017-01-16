@@ -6,12 +6,14 @@ import classNames from 'classnames';
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { defAlert } from '../../helpers/defaults';
 
 // Import Child components
 // ===========================================================================
 import Select from 'react-select';
+import Icon from '../icon';
 import EmailList from '../user/injectable';
 import Toggler from '../toggler';
 import PageEdit from '../pageEdit';
@@ -54,6 +56,9 @@ class Edit extends PageEdit {
     return (
       <section className={componentRootClass}>
         <header className='subsection-header'>
+          <Link to='/alerts'>
+            <Icon icon='chevron-left' />
+          </Link>
           <div className='text'>
             <h1>{`${texts.title} ${(item.name) ? ": '"+item.name+"'" : ''}`}</h1>
             <p>{texts.description}</p>

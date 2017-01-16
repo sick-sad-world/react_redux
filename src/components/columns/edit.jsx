@@ -196,6 +196,9 @@ class Edit extends PageEdit {
     return (
       <section className={componentRootClass}>
         <header className='subsection-header'>
+          <Link to='/columns'>
+            <Icon icon='chevron-left' />
+          </Link>
           <div className='text'>
             <h1>{`${texts.title} ${(item.name) ? ": '"+item.name+"'" : ''}`}</h1>
             <p>{texts.description}</p>

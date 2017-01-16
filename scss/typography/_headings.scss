@@ -82,12 +82,15 @@ h6, .t-caption {
 		line-height: 1;
 		font-size: $display1-font-size;
 	}
-	> svg {
+	svg {
 		margin: auto;
 		fill: $c-icon;
 		width: round($icon-unit*1.5);
 		height: round($icon-unit*1.5);
 	}
+  > a {
+    display: flex;
+  }
 	.nav {
 		flex: 0 0 $form-unit;
 		display: flex;
@@ -98,12 +101,6 @@ h6, .t-caption {
     position: relative;
     z-index: 1;
 	}
-  .loading-cogs {
-    @include pos(false 0 0 false);
-    height: 100px;
-    width: 100px;
-    opacity: 0.5;
-  }
 }
 
 // @style: CUSTOM HEADERS HERE

@@ -469,6 +469,9 @@ class FeedCreation extends React.Component {
     return (
       <section className={componentRootClass}>
         <header className='subsection-header'>
+          <Link to={`/sets/${this.props.item.id}`}>
+            <Icon icon='chevron-left' />
+          </Link>
           <div className='text'>
             <h1>{texts.title}</h1>
             <p>{texts.description}</p>
