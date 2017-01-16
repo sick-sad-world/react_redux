@@ -27,6 +27,7 @@
   .mod-subsection-list {
     flex: 0 0 30%;
     min-width: map-get($layout, buffer);
+    max-width: map-get($layout, buffer)*1.5;
     z-index: 2;
     position: relative;
     .subsection-header {
