@@ -30,52 +30,6 @@ svg.is-rotating {
 	@include svg-rotate('.flip-svg');
 }
 
-.loading-cogs {
-  width: 200px;
-  height: 200px;
-  overflow: hidden;
-  svg {
-    position: absolute;
-  }
-  .cog-1 {
-    width: 120%;
-    height: 120%;
-    right: -10%;
-    bottom: -40%;
-    fill: lighten($c-icon, 30%);
-    animation: spin-rev 15s linear infinite paused;
-  }
-  .cog-2 {
-    bottom: -20%;
-    right: 55%;
-    width: 50%;
-    height: 50%;
-    fill: lighten($c-icon, 20%);
-    animation: spin 12s linear infinite paused;
-  }
-  .cog-3 {
-    width: 40%;
-    height: 40%;
-    right: -10%;
-    bottom: 30%;
-    fill: lighten($c-icon, 20%);
-    animation: spin 12s linear infinite paused;
-  }
-  .cog-4 {
-    bottom: -30%;
-    right: -15%;
-    width: 80%;
-    height: 80%;
-    fill: lighten($c-icon, 10%);
-    animation: spin-rev 12s linear infinite paused;
-  }
-  &.is-running {
-    svg {
-      animation-play-state: running;
-    }
-  }
-}
-
 // @style DEFAULT IGURES AND OBJECTS HERE
 
 figure {}

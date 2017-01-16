@@ -11,7 +11,6 @@ import { connect } from 'react-redux';
 // Import Child components
 // ===========================================================================
 import EmailList from './injectable';
-import EditFormHeader from '../editHeader';
 import PageEdit from '../pageEdit';
 
 class Edit extends PageEdit {
@@ -42,7 +41,12 @@ class Edit extends PageEdit {
     // ===========================================================================
     return (
       <section className={componentRootClass}>
-        <EditFormHeader {...this.props.headingTexts} running={running} />
+        <header className='subsection-header'>
+          <div className='text'>
+            <h1>{this.props.texts.title}</h1>
+            <p>{this.props.texts.description}</p>
+          </div>
+        </header>
         <form className='subsection-content columned'>
           <div className='form-block'>
             <div className='row'>
@@ -100,7 +104,7 @@ class Edit extends PageEdit {
 // Default common data for Edit form
 // ===========================================================================
 Edit.defaultProps = {
-  headingTexts: {
+  texts: {
     title: 'Profile settings',
     description: 'Tell us a bit about yourself...',
     name: ''

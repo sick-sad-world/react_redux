@@ -14,7 +14,6 @@ import { defAlert } from '../../helpers/defaults';
 import Select from 'react-select';
 import EmailList from '../user/injectable';
 import Toggler from '../toggler';
-import EditFormHeader from '../editHeader';
 import PageEdit from '../pageEdit';
 
 class Edit extends PageEdit {
@@ -35,17 +34,14 @@ class Edit extends PageEdit {
   // Select recipient from list providen by injectable
   // ===========================================================================
   recipientHandler (value) {
-    if (value === this.state.recipient) {
-      value = this.props.email;
-    }
-    this.changeHandler('recipient', value);
+    this.changeHandler('recipient', (value === this.state.recipient) ? this.props.email : value);
   }
 
   render() {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
     if (!isNumber(this.props.item.id)) return null;
-    let item = this.props.item;
+    let { texts, item } = this.props;
     let running = this.props.state > 3
 
     let componentRootClass = classNames({
@@ -57,7 +53,12 @@ class Edit extends PageEdit {
     // ===========================================================================
     return (
       <section className={componentRootClass}>
-        <EditFormHeader {...this.props.headingTexts} name={item.name} running={running} />
+        <header className='subsection-header'>
+          <div className='text'>
+            <h1>{`${texts.title} ${(item.name) ? ": '"+item.name+"'" : ''}`}</h1>
+            <p>{texts.description}</p>
+          </div>
+        </header>
         <form className='subsection-content columned'>
           <div className='form-block'>
             <div className='row'>
@@ -128,7 +129,7 @@ class Edit extends PageEdit {
 }
 
 Edit.defaultProps = {
-  headingTexts: {
+  texts: {
     title: 'Edit alert',
     description: 'Pick the columns to watch. Set checking frequency, e-mail recipient and alert name here.',
   },

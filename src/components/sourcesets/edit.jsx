@@ -17,7 +17,6 @@ import FeedsList from './injectable';
 import DeletingPopup from '../deletingPopup';
 import Icon from '../icon';
 import Source from './source';
-import EditFormHeader from '../editHeader';
 import PageEdit from '../pageEdit';
 
 class Edit extends PageEdit {
@@ -89,7 +88,7 @@ class Edit extends PageEdit {
     // ===========================================================================
     if (!this.props.item.id || this.props.params.create) return null;
     let running = this.props.state > 3;
-    let { item, own_sources } = this.props;
+    let { item, own_sources, texts } = this.props;
 
     // Empty item template
     // @ used when items feeds list is empty
@@ -121,7 +120,12 @@ class Edit extends PageEdit {
     // ===========================================================================
     return (
       <section className={componentRootClass}>
-        <EditFormHeader {...this.props.headingTexts} name={item.name} running={running} />
+        <header className='subsection-header'>
+          <div className='text'>
+            <h1>{`${texts.title} ${(item.name) ? ": '"+item.name+"'" : ''}`}</h1>
+            <p>{texts.description}</p>
+          </div>
+        </header>
         <form className='subsection-content columned'>
           <div className='form-block'>
             <div className='row'>
@@ -172,7 +176,7 @@ class Edit extends PageEdit {
 }
 
 Edit.defaultProps = {
-  headingTexts: {
+  texts: {
     title: 'Edit form',
     description: 'Simple edit form to manipulate entity props'
   }

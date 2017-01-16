@@ -3,6 +3,7 @@
 import * as ACTIONS from './types';
 import { reduce, isPlainObject, omitBy, isUndefined } from 'lodash';
 import fetch from '../fetch';
+import moment from 'moment';
 
 // Action constructor (for default AJAX comunnication)
 // Since most of our actions are the same - i create this
@@ -22,6 +23,8 @@ export const createAction = (entity, action) => {
       ignoreError: false,
       id: null
     }, options);
+
+    let id = (data) ? data.id || opts.id : opts.id;
 
     // Compose data for call
     // ===========================================================================
@@ -108,7 +111,7 @@ export const createAction = (entity, action) => {
         // ===========================================================================
         throw payload.error;
       } else if (payload.message || payload.success) {
-        payload = omitBy(data, isUndefined);
+        payload = data;
       }
 
       // Fire message to display proper message if responce contains only it
@@ -117,19 +120,24 @@ export const createAction = (entity, action) => {
         dispatch({
           type: ACTIONS['PUSH_MESSAGE'],
           payload: {
+            id: moment().unix(),
             type: 'success',
             entity,
             action,
+            entityId: id,
             text: payload.message || payload.success || opts.message
           }
         });
       }
+
       // Dispatch proper action
       // ===========================================================================
+      delete payload.callback;
+      if (action === 5) delete payload.id;
       return dispatch({
         type,
         payload,
-        id: payload.id || opts.id
+        id
       });
     });
 

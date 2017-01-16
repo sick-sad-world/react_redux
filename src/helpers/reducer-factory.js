@@ -11,9 +11,9 @@ export default function basicReducer (actions) {
       case actions.ADD:
         return concat(state, action.payload);
       case actions.EDIT:
-        return state.map((item) => (item.id === action.payload.id) ? Object.assign({}, item, action.payload) : item);
+        return state.map((item) => (item.id === action.id) ? Object.assign({}, item, action.payload) : item);
       case actions.DELETE:
-        return reject(state, {id: action.payload.id});
+        return reject(state, {id: action.id});
       default:
         if (actions.hasOwnProperty(action.type) && typeof actions[action.type] === 'function') {
           return actions[action.type](state, action);

@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { find, bindAll, includes, pickBy, keys, map } from 'lodash';
+import { find, bindAll, includes, pickBy, keys, map, omitBy, isUndefined } from 'lodash';
 import classNames from 'classnames';
 import { transformColumnValue, composeColumnSort } from '../../helpers/functions';
 
@@ -15,11 +15,11 @@ import { Link } from 'react-router';
 import Select from 'react-select';
 import Icon from '../icon';
 import Toggler from '../toggler';
-import EditFormHeader from '../editHeader';
 import PageEdit from '../pageEdit';
 
 // Import actions
 // ===========================================================================
+import { getResults } from '../../actions/actions';
 import { ensureColumnData } from '../../helpers/functions';
 import { defColumn, defColumnParameters } from '../../helpers/defaults';
 
@@ -61,6 +61,8 @@ class Edit extends PageEdit {
 
     Object.assign(this.state, this.getAdvFiltersFromProps(this.props));
 
+    this.actions.refresh = getResults;
+
     // Bind action handlers to component
     // ===========================================================================
     bindAll(this, ['preformAction', 'stateHandler', 'changeHandler', 'createSelectHandler', 'createAdvFilter', 'modifyStateArray']);
@@ -91,13 +93,14 @@ class Edit extends PageEdit {
       let data = false;
       let value = this.state[name];
       let item = this.props.item;
+      let id = item.id;
 
-      if (this.props.item.id) {
+      if (id) {
         // Modify if item is already existed
         // ===========================================================================
         if (name === 'name' || name === 'display_settings') {
           if (value !== this.props.item[name]) {
-            data = { id: this.props.item.id, [name]: value};
+            data = { [name]: value };
           }
         } else {
           value = transformColumnValue(value);
@@ -119,15 +122,13 @@ class Edit extends PageEdit {
           // ===========================================================================
           if (value !== item.data[name]) {
             data = {
-              id:this.props.item.id,
-              data: Object.assign({}, item.data, {[name]: value})
+              data: omitBy(Object.assign({}, item.data, {[name]: value}), isUndefined)
             };
-            delete data.data.callback;
           }
         }
         
         if (data) {
-          this.actions.update(data).catch(this.actions.throwError);
+          this.actions.update(data, {id}).then(({payload}) => (payload.data) ? this.props.dispatch(this.actions.refresh(payload.data, id)) : null).catch(this.actions.throwError);
         }
       }
     }
@@ -148,6 +149,7 @@ class Edit extends PageEdit {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
     if (!this.props.item.id || this.props.params.assignment) return null;
+    let { texts, item } = this.props; 
     let running = this.props.state > 3;
     let emptyAdvFilter = <li className='is-default'><i>No advanced filters configured for this column. Click below to add one or more.</i></li>;
 
@@ -193,7 +195,12 @@ class Edit extends PageEdit {
     // ===========================================================================
     return (
       <section className={componentRootClass}>
-        <EditFormHeader {...this.props.headingTexts} name={this.state.name} running={running} />
+        <header className='subsection-header'>
+          <div className='text'>
+            <h1>{`${texts.title} ${(item.name) ? ": '"+item.name+"'" : ''}`}</h1>
+            <p>{texts.description}</p>
+          </div>
+        </header>
         <form className='subsection-content columned'>
           <div className='form-block'>
             <div className='row'>
@@ -554,7 +561,7 @@ class Edit extends PageEdit {
 // Assign default text and possible dropdown values to component
 // ===========================================================================
 Edit.defaultProps = Object.assign({
-  headingTexts: {
+  texts: {
     title: 'Edit column',
     description: 'Select the type of items to show in this column and how to display them.'
   }

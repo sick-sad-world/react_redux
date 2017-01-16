@@ -27,7 +27,7 @@ export const ensureColumnData = (item, defaults) => {
   } else {
     return {data: {}};
   }
-} 
+}
 
 export const transformColumnValue = (value) => {
   let numVal = parseFloat(value);

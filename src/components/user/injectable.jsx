@@ -29,7 +29,7 @@ class EmailList extends React.Component {
     // Create bound actions
     // ===========================================================================
     this.actions = bindActionCreators({
-      update: createAction('user', 4),
+      update: createAction('user', 5),
       throwError: throwError
     }, this.props.dispatch);  
 
@@ -61,15 +61,6 @@ class EmailList extends React.Component {
     }
   }
 
-  // Wrapper for external onClick listener provided to component
-  // ===========================================================================
-  onClickWrapper (email) {
-    return (e) => {
-      e.preventDefault();
-      this.props.onClick(email);
-    }
-  }
-
   // Create list item DOM element -> used in render method
   // ===========================================================================
   makeListItem (email, i) {
@@ -81,7 +72,7 @@ class EmailList extends React.Component {
     });
 
     return (
-      <li key={`email_${i}`} className={className} onClick={(this.props.onClick) ? this.onClickWrapper(email) : null} data-value={email} >
+      <li key={`email_${i}`} className={className} onClick={(this.props.onClick) ? this.props.onClick(email) : null} data-value={email} >
         {email}
         <a onClick={this.removeEmail(email)}><Icon icon='cross'/></a>
       </li>

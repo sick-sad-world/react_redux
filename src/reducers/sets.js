@@ -7,7 +7,7 @@ export const sets = basicReducer({
   DELETE: DELETE_SET,
   EDIT_SET: (state, action) => {
     delete action.payload.sources;
-    return state.map((item) => (item.id === action.payload.id) ? Object.assign({}, item, action.payload) : item);
+    return state.map((item) => (item.id === action.id) ? Object.assign({}, item, action.payload) : item);
   },
   GET_SETS: (state, action) => {
     let feeds = pickUniqueSources(action.payload);

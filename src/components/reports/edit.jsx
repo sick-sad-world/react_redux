@@ -16,7 +16,6 @@ import { defReport } from '../../helpers/defaults';
 // ===========================================================================
 import EmailList from '../user/injectable';
 import Toggler from '../toggler';
-import EditFormHeader from '../editHeader';
 import PageEdit from '../pageEdit';
 
 class Edit extends PageEdit {
@@ -48,7 +47,7 @@ class Edit extends PageEdit {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
     if (!this.props.item.id) return null;
-    let item = this.props.item;
+    let { texts, item } = this.props;
     let running = this.props.state > 3;
 
     let componentRootClass = classNames({
@@ -60,7 +59,12 @@ class Edit extends PageEdit {
     // ===========================================================================
     return (
       <section className={componentRootClass}>
-        <EditFormHeader {...this.props.headingTexts} name={item.name} running={running} />
+        <header className='subsection-header'>
+          <div className='text'>
+            <h1>{`${texts.title} ${(item.name) ? ": '"+item.name+"'" : ''}`}</h1>
+            <p>{texts.description}</p>
+          </div>
+        </header>
         <form className='subsection-content columned'>
           <div className='form-block'>
             <div className='row'>
@@ -142,7 +146,7 @@ class Edit extends PageEdit {
 }
 
 Edit.defaultProps = {
-  headingTexts: {
+  texts: {
     title: 'Edit report',
     description: 'Pick the columns to send. Set time to send, e-mail recipient and report name here.',
   },
