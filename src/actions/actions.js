@@ -1,7 +1,13 @@
 // Import action types and our communication helper
 // ===========================================================================
 import * as ACTIONS from './types';
-import { reduce, isPlainObject, omitBy, isUndefined, keys } from 'lodash';
+import {
+  reduce,
+  isPlainObject,
+  omitBy,
+  isUndefined,
+  keys
+} from 'lodash';
 import fetch from '../fetch';
 import moment from 'moment';
 
@@ -36,7 +42,9 @@ export const createAction = (entity, action) => {
         acc[k] = v;
       }
       return acc;
-    }, {id});
+    }, {
+      id
+    });
 
     switch (action) {
       case 3:
@@ -44,12 +52,12 @@ export const createAction = (entity, action) => {
           url = 'user';
           type = ACTIONS['GET_USER'];
         } else {
-          url = entity+'s';
+          url = entity + 's';
           type = ACTIONS[`GET_${entity.toUpperCase()}S`];
         }
         break;
       case 4:
-        url = 'add_'+entity;
+        url = 'add_' + entity;
         type = ACTIONS[`ADD_${entity.toUpperCase()}`];
         break;
       case 5:
@@ -57,7 +65,7 @@ export const createAction = (entity, action) => {
         type = ACTIONS[`EDIT_${entity.toUpperCase()}`];
         break;
       case 6:
-        url = 'remove_'+entity;
+        url = 'remove_' + entity;
         type = ACTIONS[`DELETE_${entity.toUpperCase()}`];
         break;
       case 7:
@@ -96,7 +104,7 @@ export const createAction = (entity, action) => {
     // Fire a call to server
     // ===========================================================================
     return fetch(url, reqData).then(payload => {
-      
+
       // Set app state to idle
       // ===========================================================================
       if (opts.state) {
@@ -105,7 +113,7 @@ export const createAction = (entity, action) => {
           state: 2
         });
       }
-      
+
       if (payload.error && !opts.ignoreError) {
         // Fire [error] action if error found
         // ===========================================================================
@@ -145,7 +153,10 @@ export const createAction = (entity, action) => {
 
 // Set app state (simple and SYNC)
 // ===========================================================================
-export const setAppState = (state) => ({ type: ACTIONS['SET_APP_STATE'], state });
+export const setAppState = (state) => ({
+  type: ACTIONS['SET_APP_STATE'],
+  state
+});
 
 // Throw action related to error (SYNC)
 // ===========================================================================
@@ -261,11 +272,11 @@ export const getAllResults = (data) => (dispatch) => {
   // Pick exacly columns data to iterate over for Results fetching
   // ===========================================================================
   data.forEach((item) => {
-    if(item && item.type === ACTIONS['GET_COLUMNS']) {
+    if (item && item.type === ACTIONS['GET_COLUMNS']) {
       columns = item.payload;
     }
   });
-  
+
 
   // Create our [Top-level] Promise chain
   // ===========================================================================
@@ -277,7 +288,7 @@ export const getAllResults = (data) => (dispatch) => {
 
       // Define time delay and set id to hash of columns being fetched
       // ===========================================================================
-      let delay = (i > 4) ? i*1200 : 0;
+      let delay = (i > 4) ? i * 1200 : 0;
       ids[column.id] = true;
 
       // Promise wrapper around timeout
@@ -285,7 +296,10 @@ export const getAllResults = (data) => (dispatch) => {
       return new Promise((resolve, reject) => {
         // Run our call and simple forward results to [Upper-level] promise chain
         // ===========================================================================
-        setTimeout(() => dispatch(getResults(column.data, { id: column.id, message: false })).then(resolve).catch(reject), delay);
+        setTimeout(() => dispatch(getResults(column.data, {
+          id: column.id,
+          message: false
+        })).then(resolve).catch(reject), delay);
       }).then(() => {
         // When code is done - update our message by removing [ID] of column
         // wich result loading is done from list
@@ -296,8 +310,10 @@ export const getAllResults = (data) => (dispatch) => {
         }, messageId));
       });
     })
-  ).then(() => dispatch(sendMessage({visible: false}, messageId))).catch(err => dispatch(throwError(err)));
-  
+  ).then(() => dispatch(sendMessage({
+    visible: false
+  }, messageId))).catch(err => dispatch(throwError(err)));
+
   // Send message at a start
   // ===========================================================================
   dispatch(sendMessage({
@@ -324,6 +340,8 @@ export const fetchData = (getUser) => (dispatch) => {
     dispatch(createAction('report', 3)(null, opts)),
     dispatch(createAction('set', 3)(null, opts)),
     dispatch(createAction('source', 3)(null, opts)),
-    dispatch(createAction('column', 3)({data: 1}, opts))
+    dispatch(createAction('column', 3)({
+      data: 1
+    }, opts))
   ])
 };

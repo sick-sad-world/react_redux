@@ -33,6 +33,7 @@ class Column extends React.Component {
     let prefix = find(this.props.sortPrefix, (pref) => item.sort.indexOf(pref.value) > -1);
     let property = find(this.props.sortProperty, (prop) => item.sort.indexOf(prop.value) > -1);
     this.state = {
+      deleting: false,
       expanded: false,
       direction: item.direction,
       infinite: item.infinite,
@@ -50,7 +51,7 @@ class Column extends React.Component {
       throwError: throwError
     }, this.props.dispatch);
 
-    bindAll(this, ['toggleExpandedState', 'deleteColumn', 'hideColumn', 'refreshResults', 'changeHandler', 'createSelectHandler', 'preformAction']);
+    bindAll(this, ['makeStateToggler', 'deleteColumn', 'hideColumn', 'refreshResults', 'changeHandler', 'createSelectHandler', 'preformAction']);
   }
 
   createSelectHandler (name) {
@@ -143,7 +144,7 @@ class Column extends React.Component {
         <div className='column-subnav'>
           <a onClick={this.hideColumn} title={visIconData[open].title}><Icon icon={visIconData[open].icon} />Hide</a>
           <Link to={`columns/${this.props.item.id}`}  title='Column setting screen'><Icon icon='cog' />Settings</Link>
-          <a onClick={this.deleteColumn} title='Delete this column'><Icon icon='trash' />Delete</a>
+          <a onClick={this.makeStateToggler('deleting')} title='Delete this column'><Icon icon='trash' />Delete</a>
         </div>
       </form>
     );
@@ -178,10 +179,9 @@ class Column extends React.Component {
     this.actions.delete({id: this.props.item.id}).catch(this.actions.throwError);
   }
 
-  toggleExpandedState(e) {
-    e.preventDefault();
-    this.setState({
-      expanded: !this.state.expanded
+  makeStateToggler(prop) {
+    return () => this.setState({
+      [prop]: !this.state[prop]
     });
   }
 
@@ -201,7 +201,7 @@ class Column extends React.Component {
           <h1 className='funName'>{ item.name }</h1>
           <nav className='nav-links'>
             <a title='Refresh column' onClick={this.refreshResults}><Icon icon='cw' /></a>
-            <a onClick={this.toggleExpandedState} title='Column settings'><Icon icon='cog' /></a>
+            <a onClick={this.makeStateToggler('expanded')} title='Column settings'><Icon icon='cog' /></a>
           </nav>
         </header>
         { (this.state.expanded) ? this.renderEditForm() : null }
