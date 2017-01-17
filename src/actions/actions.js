@@ -266,15 +266,6 @@ export const getAllResults = (data) => (dispatch) => {
     }
   });
   
-  // Send message at a start
-  // ===========================================================================
-  dispatch(sendMessage({
-    id: messageId,
-    type: 'loading',
-    entityId: keys(ids).join(','),
-    entity: 'results',
-    action: 3
-  }));
 
   // Create our [Top-level] Promise chain
   // ===========================================================================
@@ -306,6 +297,16 @@ export const getAllResults = (data) => (dispatch) => {
       });
     })
   ).then(() => dispatch(sendMessage({visible: false}, messageId))).catch(err => dispatch(throwError(err)));
+  
+  // Send message at a start
+  // ===========================================================================
+  dispatch(sendMessage({
+    id: messageId,
+    type: 'loading',
+    entityId: keys(ids).join(','),
+    entity: 'results',
+    action: 3
+  }));
 }
 
 // Create specific action to fetch All data from a server:
