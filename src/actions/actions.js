@@ -1,7 +1,7 @@
 // Import action types and our communication helper
 // ===========================================================================
 import * as ACTIONS from './types';
-import { reduce, isPlainObject, omitBy, isUndefined } from 'lodash';
+import { reduce, isPlainObject, omitBy, isUndefined, keys } from 'lodash';
 import fetch from '../fetch';
 import moment from 'moment';
 
@@ -199,24 +199,55 @@ export const sendMessage = (mess, id) => {
 // Get results for a single column
 // @data - column data Object required
 // ===========================================================================
-export const getResults = (data, id) => (dispatch) => {
+export const getResults = (data, options) => (dispatch) => {
+  let messageId = moment().unix();
+  let opts = Object.assign({
+    id: null,
+    message: true
+  }, options);
+
+  if (!opts.id) {
+    throw {
+      id: messageId,
+      error: 'Id of a column is required -> results will be stored by this key'
+    }
+  }
+
   // Set state to loading
   // ===========================================================================
   dispatch({
     state: 3,
     type: ACTIONS['LINKS_STATE'],
-    id
+    id: opts.id
   });
+
+  if (opts.message) {
+    dispatch(sendMessage({
+      type: 'loading',
+      id: messageId,
+      entityId: opts.id,
+      entity: 'results',
+      action: 3
+    }))
+  }
 
   // Run actual call
   // ===========================================================================
   return fetch('links', omitBy(data, isUndefined)).then((payload) => {
+    if (opts.message) {
+      dispatch(sendMessage({
+        type: 'success',
+        entityId: opts.id,
+        entity: 'results',
+        action: 3
+      }, messageId))
+    }
     dispatch({
       type: ACTIONS['GET_LINKS'],
-      id,
+      id: opts.id,
       state: 2,
       payload
-    })
+    });
   });
 }
 
@@ -224,6 +255,8 @@ export const getResults = (data, id) => (dispatch) => {
 // ===========================================================================
 export const getAllResults = (data) => (dispatch) => {
   let columns;
+  let ids = {};
+  let messageId = moment().unix();
 
   // Pick exacly columns data to iterate over for Results fetching
   // ===========================================================================
@@ -233,11 +266,46 @@ export const getAllResults = (data) => (dispatch) => {
     }
   });
   
-  columns.forEach((column, i) => {
-    if (!column.open) return;
-    let delay = (i > 4) ? i*1200 : 0;
-    setTimeout(() => dispatch(getResults(column.data, column.id)).catch(err => dispatch(throwError(err))), delay);
-  });
+  // Send message at a start
+  // ===========================================================================
+  dispatch(sendMessage({
+    id: messageId,
+    type: 'loading',
+    entityId: keys(ids).join(','),
+    entity: 'results',
+    action: 3
+  }));
+
+  // Create our [Top-level] Promise chain
+  // ===========================================================================
+  Promise.all(
+    columns.map((column, i) => {
+      // If column hidden - do nothing
+      // ===========================================================================
+      if (!column.open) return null;
+
+      // Define time delay and set id to hash of columns being fetched
+      // ===========================================================================
+      let delay = (i > 4) ? i*1200 : 0;
+      ids[column.id] = true;
+
+      // Promise wrapper around timeout
+      // ===========================================================================
+      return new Promise((resolve, reject) => {
+        // Run our call and simple forward results to [Upper-level] promise chain
+        // ===========================================================================
+        setTimeout(() => dispatch(getResults(column.data, { id: column.id, message: false })).then(resolve).catch(reject), delay);
+      }).then(() => {
+        // When code is done - update our message by removing [ID] of column
+        // wich result loading is done from list
+        // ===========================================================================
+        delete ids[column.id];
+        return dispatch(sendMessage({
+          entityId: keys(ids).join(',')
+        }, messageId));
+      });
+    })
+  ).then(() => dispatch(sendMessage({visible: false}, messageId))).catch(err => dispatch(throwError(err)));
 }
 
 // Create specific action to fetch All data from a server:

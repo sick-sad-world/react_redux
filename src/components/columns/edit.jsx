@@ -128,7 +128,7 @@ class Edit extends PageEdit {
         }
         
         if (data) {
-          this.actions.update(data, {id}).then(({payload}) => (payload.data) ? this.props.dispatch(this.actions.refresh(payload.data, id)) : null).catch(this.actions.throwError);
+          this.actions.update(data, {id}).then(({payload}) => (payload.data) ? this.props.dispatch(this.actions.refresh(payload.data, {id})) : null).catch(this.actions.throwError);
         }
       }
     }

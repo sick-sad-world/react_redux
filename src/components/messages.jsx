@@ -28,10 +28,11 @@ class Messages extends React.Component {
   // Handler uset to set MESSAGE visibility to [false]
   // ===========================================================================
   hideHandler (id) {
-    this.props.dispatch(sendMessage({visible: false}, id));
     if (this.timeouts[id]) {
+      clearTimeout(this.timeouts[id]);
       delete this.timeouts[id];
     }
+    this.props.dispatch(sendMessage({visible: false}, id));
   }
 
   render() {
@@ -43,7 +44,7 @@ class Messages extends React.Component {
     let list = (
       <ul className='sys-messages'>{ reduce(this.props.items, (acc, message, i) => {
         if (i <= limit && message.visible) {
-          if (message.type !== 'loading') {
+          if (message.type !== 'loading' && !this.timeouts[message.id]) {
             ids.push(message.id);
           }
           acc.push(<Message onClick={() => this.hideHandler(message.id)} key={message.id} {...message} actionText={actions[message.action]} />);

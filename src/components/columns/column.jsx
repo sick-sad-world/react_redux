@@ -71,7 +71,7 @@ class Column extends React.Component {
     return this.actions.update({
       id: item.id,
       data: Object.assign({}, item.data, data)
-    }).then(() => this.actions.refresh(item.data, item.id)).catch(this.actions.throwError);
+    }).then(() => this.actions.refresh(item.data, {id: item.id})).catch(this.actions.throwError);
   }
 
   renderEditForm () {
@@ -188,7 +188,7 @@ class Column extends React.Component {
   refreshResults (e) {
     e.preventDefault();
     let item = this.props.item;
-    this.actions.refresh(item.data, item.id).catch(this.actions.throwError);
+    this.actions.refresh(item.data, {id: item.id}).catch(this.actions.throwError);
   }
 
   render() {
