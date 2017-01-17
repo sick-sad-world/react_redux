@@ -1,17 +1,19 @@
 import React from 'react';
 import classNames from 'classnames';
 import Icon from './icon';
+import { capitalize } from 'lodash';
 
 export default function Message (props) {
   let text = props.text;
-  let type = props.type.split(' ')[0];
   let className = classNames({
     'message': true,
-    [`is-${type}`]: true
+    [`is-${props.type}`]: true
   });
 
+  // Use defined text or compose new one
+  // ===========================================================================
   if (typeof props.text !== 'string') {
-    text = `${props.actionText} of ${props.entity} ${(props.entityId) ? 'ID: '+props.entityId : ''}`;
+    text = `${capitalize(props.actionText)} of ${props.entity} ${(props.entityId) ? 'ID: '+props.entityId : ''}`;
     if (props.type === 'loading') {
       text += ' in progress...';
     } else {
@@ -21,9 +23,11 @@ export default function Message (props) {
 
   return (
     <li className={className}>
-      { (props.type == 'loading') ? (<img src='' className='icon' />) : (<Icon className='icon' icon={type} />) }
+      <div className='icon'>
+        { (props.type == 'loading') ? (<img src='/img/loading2.svg' />) : (<Icon icon={props.type} />) }
+      </div>
       <div>
-        <h5>{props.type}</h5>
+        <h5>{capitalize(props.type)}</h5>
         <p>{text}</p>
       </div>
       <a onClick={props.onClick} className='close'>

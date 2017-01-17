@@ -161,11 +161,10 @@ export const throwError = (error) => (dispatch) => {
   }
 
   if (error instanceof Error) {
-    console.error(error);
-    action.payload.type = 'error client';
+    action.payload.type = 'error';
     action.payload.text = error.stack;
   } else if (error.event) {
-    action.payload.type = 'error server';
+    action.payload.type = 'error';
     action.payload.text = error.url;
   } else {
     if (error.messageId) {

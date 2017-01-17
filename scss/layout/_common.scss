@@ -35,9 +35,17 @@ section[class^="screen"] {
 
 .sys-messages {
   position: fixed;
+  width: map-get($layout, 'buffer') * 1.5;
+  box-shadow: $sh-popup;
   bottom: baseUnit();
   right: baseUnit();
+  list-style: none;
+  padding: 0;
+  margin: 0;
   z-index: 10;
+  li:not(:last-child) {
+    border-bottom: $bd;
+  }
 }
 
 .size-half {

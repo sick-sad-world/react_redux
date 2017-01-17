@@ -17,12 +17,16 @@ import Message from './message';
 import { sendMessage } from '../actions/actions';
 
 class Messages extends React.Component {
+  // Create timeouts hash and bind handler
+  // ===========================================================================
   constructor(props) {
     super(props);
     this.timeouts = {};
     bindAll(this, ['hideHandler']);
   }
 
+  // Handler uset to set MESSAGE visibility to [false]
+  // ===========================================================================
   hideHandler (id) {
     this.props.dispatch(sendMessage({visible: false}, id));
     if (this.timeouts[id]) {
@@ -33,6 +37,9 @@ class Messages extends React.Component {
   render() {
     let { limit, timeout, actions } = this.props;
     let ids = [];
+
+    // Prepare message list
+    // ===========================================================================
     let list = (
       <ul className='sys-messages'>{ reduce(this.props.items, (acc, message, i) => {
         if (i <= limit && message.visible) {
@@ -44,11 +51,16 @@ class Messages extends React.Component {
         return acc;
       }, []) }</ul>
     );
+    
+    // Set timeout right before DOM rendering to minimize time delay
+    // ===========================================================================
     ids.forEach((id) => this.timeouts[id] = setTimeout(this.hideHandler, timeout, id))
     return list;
   }
 }
 
+// Default number of messages visible and timeout value
+// ===========================================================================
 Messages.defaultProps = {
   timeout: 8000,
   limit: 4,
