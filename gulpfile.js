@@ -131,7 +131,7 @@ gulp.task("build:compass", ["build:copy"], () => {
  * Optimize and minify all required images and place them in target location
  */
 gulp.task("build:images", ["build:compass"], function() {
-  return gulp.src("img/**/*.{ico,png,jpg,jpeg,gif,webp}")
+  return gulp.src(p(CONFIG.img, "*.{ico,png,jpg,jpeg,gif,webp,svg}"))
 		.pipe(imagemin())
 		.pipe(gulp.dest(p(CONFIG.build, CONFIG.img)));
 });
