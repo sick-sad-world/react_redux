@@ -1,9 +1,9 @@
 // Import utility stuff
 // ===========================================================================
 import { find, bindAll, pick } from 'lodash';
-import classNames from 'classnames';
+import editable from '../behaviours/editable';
 import { defColumnParameters } from '../../helpers/defaults'; 
-import { composeColumnSort } from '../../helpers/functions';
+import { composeColumnSort, transformColumnValue } from '../../helpers/functions';
 
 // Import React related stuff
 // ===========================================================================
@@ -51,30 +51,38 @@ class Column extends React.Component {
       throwError: throwError
     }, this.props.dispatch);
 
-    bindAll(this, ['makeStateToggler', 'deleteColumn', 'hideColumn', 'refreshResults', 'changeHandler', 'createSelectHandler', 'preformAction']);
+    // Inject editable behaviour
+    // ===========================================================================
+    editable._inject(this)
+
+    // Bind methods to instance
+    // ===========================================================================
+    bindAll(this, ['makeStateToggler', 'deleteColumn', 'hideColumn', 'refreshResults', 'preformAction']);
   }
 
-  createSelectHandler (name) {
-    return (v) => {
-      this.setState({
-        [name]: (v) ? v.value : v
-      }, () => this.preformAction({'sort': composeColumnSort(this.state.sort_pref, this.state.sort_prop)}))
-    }
+  // [Preformaction] editable interaction method overriding
+  // @support custom [data] logic
+  // ===========================================================================
+  preformAction(name) {
+    return () => {
+      let item = this.props.item;
+      let value = transformColumnValue(this.state[name]);
+      
+      if (name.indexOf('sort') === 0) {
+        name = 'sort';
+        value = composeColumnSort(this.state.sort_pref, this.state.sort_prop);
+      }
+
+      this.actions.update({
+        id: item.id,
+        data: Object.assign({}, item.data, {[name]: value})
+      }).then(() => this.actions.refresh(item.data, {id: item.id})).catch(this.actions.throwError)
+    };
   }
 
-  changeHandler(e) {
-    let data = { [e.target.name]: e.target.value };
-    this.setState(data, () => this.preformAction(data));
-  }
-
-  preformAction(data) {
-    let item = this.props.item;
-    return this.actions.update({
-      id: item.id,
-      data: Object.assign({}, item.data, data)
-    }).then(() => this.actions.refresh(item.data, {id: item.id})).catch(this.actions.throwError);
-  }
-
+  // Render settings part of column
+  // @return -> DOM
+  // ===========================================================================
   renderEditForm () {
     let running = this.props.colState > 3;
     let open = this.props.item.open;
@@ -88,7 +96,7 @@ class Column extends React.Component {
             name='sort_pref'
             placeholder='Prefix...'
             options={this.props.sortPrefix}
-            onChange={this.createSelectHandler('sort_pref')}
+            onChange={this.makeSelectHandler('sort_pref')}
             autosize={false}
             clearable={true}
             searchable={false}
@@ -99,7 +107,7 @@ class Column extends React.Component {
             className='size-180'
             name='sort_prop'
             options={this.props.sortProperty}
-            onChange={this.createSelectHandler('sort_prop')}
+            onChange={this.makeSelectHandler('sort_prop')}
             autosize={false}
             clearable={false}
             searchable={false}
@@ -110,7 +118,7 @@ class Column extends React.Component {
               type='checkbox'
               disabled={running}
               name='direction'
-              onChange={this.changeHandler}
+              onChange={this.updateValue}
               checked={this.state.direction === 'desc'}
               value={(this.state.direction === 'desc') ? 'asc' : 'desc'}
             />
@@ -126,7 +134,7 @@ class Column extends React.Component {
               'Yes': this.state.infinite || 30,
               'No': 0
             }}
-            onChange={this.changeHandler}
+            onChange={this.updateValue}
             value={this.state.infinite} />
         </div>
         <div className='row-flex'>
@@ -138,7 +146,7 @@ class Column extends React.Component {
               'On': 1,
               'Off': 0
             }}
-            onChange={this.changeHandler}
+            onChange={this.updateValue}
             value={this.state.autoreload} />
         </div>
         <div className='column-subnav'>
@@ -150,18 +158,22 @@ class Column extends React.Component {
     );
   }
 
+  // Render results
+  // @map -> results, @return -> DOM Array
+  // ===========================================================================
   renderResults (tableProps) {
-    if (this.props.data.length) {
-      return this.props.data.map((result) => <Result key={result.id} displaySettings={this.props.item.display_settings} {...tableProps} {...result} />);
-    } else {
-      return (<li className='state-empty'>{this.props.stateEmpty}</li>);
-    }
+    return this.props.data.map((result) => <Result key={result.id} displaySettings={this.props.item.display_settings} {...tableProps} {...result} />)
   }
 
+  // Render different result state empty, error, loading, init
+  // @return -> DOM
+  // ===========================================================================
   renderResultState () {
     switch (this.props.state) {
       case 1:
         return (<li className='state-default'>{this.props.statePending}</li>);
+      case 2:
+        return (<li className='state-empty'>{this.props.stateEmpty}</li>);
       case 3:
         return (<li className='state-loading'><img src='img/loading.svg' alt='Content is being loaded' />{this.props.stateLoading}</li>);
       case 0:
@@ -179,12 +191,15 @@ class Column extends React.Component {
     this.actions.delete({id: this.props.item.id}).catch(this.actions.throwError);
   }
 
+  // Make toggler handler for simple state prop true/false
+  // ===========================================================================
   makeStateToggler(prop) {
-    return () => this.setState({
-      [prop]: !this.state[prop]
-    });
+    return () => this.setState({ [prop]: !this.state[prop] });
   }
 
+  // Run [Refresh] actions
+  // @fetch result for a single column
+  // ===========================================================================
   refreshResults (e) {
     e.preventDefault();
     let item = this.props.item;
@@ -205,8 +220,8 @@ class Column extends React.Component {
           </nav>
         </header>
         { (this.state.expanded) ? this.renderEditForm() : null }
-        <ul className='entity-list t-scrollable-y'>
-          {(this.props.state === 2) ? this.renderResults(tableProps) : this.renderResultState()}
+        <ul className='entity-list'>
+          {(this.props.state === 2 || this.props.data.length) ? this.renderResults(tableProps) : this.renderResultState()}
         </ul>
       </section>
     );

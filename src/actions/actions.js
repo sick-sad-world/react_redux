@@ -122,7 +122,7 @@ export const createAction = (entity, action) => {
           entity,
           action,
           entityId: id,
-          error: payload.error
+          text: payload.error
         };
       } else if (payload.message || payload.success) {
         payload = data;
