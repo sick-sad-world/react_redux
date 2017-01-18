@@ -108,6 +108,23 @@ blockquote {}
   background-color: $c-element;
   box-shadow: 0 5px 10px rgba(0,0,0,.45);
   border-radius: $bdrs * 2;
+  z-index: map-get($layers, overlay) + 1;
+}
+.confirmation-dialog {
+  h4 {
+    display: block;
+    margin-bottom: baseUnit();
+  }
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  .button {
+    flex: 0 1 50%;
+    + .button {
+      margin-left: baseUnit();
+    }
+  }
 }
 
 .delete-confirmation {

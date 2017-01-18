@@ -2,6 +2,7 @@
 // ===========================================================================
 import { find, bindAll, pick } from 'lodash';
 import editable from '../behaviours/editable';
+import deletable from '../behaviours/deletable';
 import { defColumnParameters } from '../../helpers/defaults'; 
 import { inject, composeColumnSort, transformColumnValue } from '../../helpers/functions';
 
@@ -32,6 +33,7 @@ class Column extends React.Component {
     let item = this.props.item.data;
     let prefix = find(this.props.sortPrefix, (pref) => item.sort.indexOf(pref.value) > -1);
     let property = find(this.props.sortProperty, (prop) => item.sort.indexOf(prop.value) > -1);
+
     this.state = {
       deleting: false,
       expanded: false,
@@ -51,13 +53,14 @@ class Column extends React.Component {
       throwError: throwError
     }, this.props.dispatch);
 
-    // Inject editable behaviour
+    // Inject behaviours
     // ===========================================================================
-    inject(this, editable)
+    inject(this, editable);
+    inject(this, deletable);
 
     // Bind methods to instance
     // ===========================================================================
-    bindAll(this, ['makeStateToggler', 'deleteColumn', 'hideColumn', 'refreshResults', 'preformAction']);
+    bindAll(this, ['expandedStateToggler', 'hideColumn', 'refreshResults', 'preformAction']);
   }
 
   // [Preformaction] editable interaction method overriding
@@ -152,7 +155,7 @@ class Column extends React.Component {
         <div className='column-subnav'>
           <a onClick={this.hideColumn} title={visIconData[open].title}><Icon icon={visIconData[open].icon} />Hide</a>
           <Link to={`columns/${this.props.item.id}`}  title='Column setting screen'><Icon icon='cog' />Settings</Link>
-          <a onClick={this.makeStateToggler('deleting')} title='Delete this column'><Icon icon='trash' />Delete</a>
+          <a onClick={this.makeDeletingStateToggler(this.props.item.id)} title='Delete this column'><Icon icon='trash' />Delete</a>
         </div>
       </form>
     );
@@ -181,20 +184,16 @@ class Column extends React.Component {
     }
   }
 
+  // Handler to run [delete] Column action
+  // ===========================================================================
   hideColumn(e) {
-    e.preventDefault();
     this.actions.update({open: 0}).catch(this.actions.throwError);
-  }
-
-  deleteColumn(e) {
-    e.preventDefault();
-    this.actions.delete({id: this.props.item.id}).catch(this.actions.throwError);
   }
 
   // Make toggler handler for simple state prop true/false
   // ===========================================================================
-  makeStateToggler(prop) {
-    return () => this.setState({ [prop]: !this.state[prop] });
+  expandedStateToggler() {
+    this.setState({ expanded: !this.state.expanded });
   }
 
   // Run [Refresh] actions
@@ -216,12 +215,13 @@ class Column extends React.Component {
           <h1 className='funName'>{ item.name }</h1>
           <nav className='nav-links'>
             <a title='Refresh column' onClick={this.refreshResults}><Icon icon='cw' /></a>
-            <a onClick={this.makeStateToggler('expanded')} title='Column settings'><Icon icon='cog' /></a>
+            <a onClick={this.expandedStateToggler} title='Column settings'><Icon icon='cog' /></a>
           </nav>
         </header>
         { (this.state.expanded) ? this.renderEditForm() : null }
+        { (this.state.deleting) ? this.renderDeleteDialog() : null }
         <ul className='entity-list'>
-          {(this.props.state === 2) ? (this.props.data.length) ? this.renderResults(tableProps) : this.renderResultState() : this.renderResultState()}
+          {(this.props.state === 2 && this.props.data.length) ? this.renderResults(tableProps) : this.renderResultState()}
         </ul>
       </section>
     );

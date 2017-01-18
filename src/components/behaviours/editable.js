@@ -1,4 +1,6 @@
-import { updateArrayWithValue, inject } from '../../helpers/functions';
+import {
+  updateArrayWithValue
+} from '../../helpers/functions';
 
 // Editable behaviours
 // ===========================================================================
@@ -6,7 +8,7 @@ export default {
 
   // Update [Value] in state and [preformAction] after
   // ===========================================================================
-  _runStatefullAction (name, value) {
+  _runStatefullAction(name, value) {
     return this.setState({
       [name]: value
     }, this.preformAction(name));
@@ -18,7 +20,9 @@ export default {
   updateState(e, val) {
     let name = e.target ? e.target.name : e;
     let value = e.target ? e.target.value : val;
-    this.setState({[name]: value});
+    this.setState({
+      [name]: value
+    });
   },
 
 
@@ -31,14 +35,14 @@ export default {
   // Make handler, provide name to wrapper
   // Update [Value] in state and [preformAction] after
   // ===========================================================================
-  makeSelectHandler (name) {
+  makeSelectHandler(name) {
     return (v) => this._runStatefullAction(name, (v instanceof Array) ? v.map(v => v.value) : (v) ? v.value : v)
   },
 
   // Send request to server with new props 
   // @name -> provided to wrapper, @value -> got from state
   // ===========================================================================
-  preformAction (name) {
+  preformAction(name) {
     return () => {
       let value = this.state[name];
       let item = this.props.item;
@@ -46,15 +50,23 @@ export default {
         // Modify if item is already existed
         // ===========================================================================
         if (item[name] !== value) {
-          this.actions.update({id: item.id, [name]: value}).catch(this.actions.throwError);
+          this.actions.update({
+            id: item.id,
+            [name]: value
+          }).catch(this.actions.throwError);
         }
       } else {
         // Create item if ID == 0
         // ===========================================================================
-        this.actions.create({...item, [name]: value}).then(({payload}) => {
+        this.actions.create({ ...item,
+          [name]: value
+        }).then(({
+          payload
+        }) => {
           this.props.router.push(`/${this.props.type}s/${payload.id}`);
         }).catch(this.actions.throwError);
       }
     }
   }
+
 }

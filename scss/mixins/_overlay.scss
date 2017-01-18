@@ -5,14 +5,6 @@
 	right: 0;
 	bottom: 0;
 	background-color: $c;
-	opacity: 0;
 	cursor: pointer;
-	visibility: hidden;
-	transition: opacity $dur;
-	z-index: -1;
-	.mod-popup.is-visible ~ & {
-		opacity: 1;
-		visibility: visible;
-		z-index: map-get($layers, overlay);
-	}
+	z-index: map-get($layers, overlay);
 }
