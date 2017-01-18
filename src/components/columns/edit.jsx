@@ -59,13 +59,18 @@ class Edit extends PageEdit {
       }
     });
 
-    Object.assign(this.state, this.getAdvFiltersFromProps(this.props));
+    Object.assign(this.state, {
+      adv_type: 'MIN',
+      adv_pref: null,
+      adv_prop: 'likes',
+      adv_val: ''
+    }, this.getAdvFiltersFromProps(this.props));
 
     this.actions.refresh = getResults;
 
     // Bind action handlers to component
     // ===========================================================================
-    bindAll(this, ['preformAction', 'stateHandler', 'changeHandler', 'createSelectHandler', 'createAdvFilter', 'modifyStateArray']);
+    bindAll(this, ['createAdvFilter']);
   }
 
   onComponentWillReceiveProps (newProps) {
@@ -77,12 +82,7 @@ class Edit extends PageEdit {
   // Pick adv filters and assign it to state
   // ===========================================================================
   getAdvFiltersFromProps (props) {
-    return Object.assign({
-      adv_type: 'MIN',
-      adv_pref: null,
-      adv_prop: 'likes',
-      adv_val: ''
-    }, pickBy(props.item.data, (v, k) => this.props.advRegExp.test(k)));
+    return pickBy(props.item.data, (v, k) => this.props.advRegExp.test(k));
   }
 
   // Send request to server with new props
@@ -139,10 +139,7 @@ class Edit extends PageEdit {
   createAdvFilter (e) {
     e.preventDefault();
     let { adv_type, adv_pref, adv_prop, adv_val} = this.state;
-    let key = `${adv_type}(${(adv_pref) ? adv_pref+'_'+adv_prop : adv_prop})`;
-    this.setState({
-      [key]: adv_val
-    }, this.preformAction(key));
+    this._runStatefullAction(`${adv_type}(${(adv_pref) ? adv_pref+'_'+adv_prop : adv_prop})`, adv_val);
   }
 
   render() {
@@ -159,7 +156,7 @@ class Edit extends PageEdit {
       'state-loading': running
     });
 
-    let advFilters = pickBy(this.props.item.data, (v, k) => this.props.advRegExp.test(k));
+    let advFilters = pickBy(this.state, (v, k) => this.props.advRegExp.test(k));
 
     // Create display settings
     // ===========================================================================
@@ -175,7 +172,7 @@ class Edit extends PageEdit {
                 name='display_settings'
                 value={setting}
                 disabled={running}
-                onChange={this.modifyStateArray}
+                onChange={this.updateValue}
                 checked={includes(this.state.display_settings, setting)}
               />
               <Icon icon='check' />
@@ -211,8 +208,8 @@ class Edit extends PageEdit {
               <input 
                 disabled={running}
                 value={this.state.name}
-                onChange={this.stateHandler}
-                onBlur={this.changeHandler}
+                onChange={this.updateState}
+                onBlur={this.updateValue}
                 id='funColumnName'
                 type='text'
                 name='name'
@@ -232,7 +229,7 @@ class Edit extends PageEdit {
                   'Yes': 1,
                   'No': 0
                 }}
-                onChange={this.changeHandler}
+                onChange={this.updateValue}
                 value={this.state.show_ignored} />
             </div>
             <div className='row-flex'>
@@ -244,7 +241,7 @@ class Edit extends PageEdit {
                   'Yes': 1,
                   'No': 0
                 }}
-                onChange={this.changeHandler}
+                onChange={this.updateValue}
                 value={this.state.show_favorites} />
             </div>
             <div className='row-flex'>
@@ -256,7 +253,7 @@ class Edit extends PageEdit {
                   'On': 1,
                   'Off': 0
                 }}
-                onChange={this.changeHandler}
+                onChange={this.updateValue}
                 value={this.state.infinite} />
             </div>
             <div className='row-flex'>
@@ -267,7 +264,7 @@ class Edit extends PageEdit {
                 name='autoreload'
                 placeholder='Disabled...'
                 options={this.props.autoReloadOptions}
-                onChange={this.createSelectHandler('autoreload')}
+                onChange={this.makeSelectHandler('autoreload')}
                 autosize={false}
                 clearable={true}
                 searchable={false}
@@ -280,8 +277,8 @@ class Edit extends PageEdit {
                 disabled={running}
                 className='size-120'
                 value={this.state.limit}
-                onChange={this.stateHandler}
-                onBlur={this.changeHandler}
+                onChange={this.updateState}
+                onBlur={this.updateValue}
                 id='funColumnLimit'
                 type='number'
                 name='limit'
@@ -296,7 +293,7 @@ class Edit extends PageEdit {
                   name='sort_pref'
                   placeholder='Prefix...'
                   options={this.props.sortPrefix}
-                  onChange={this.createSelectHandler('sort_pref')}
+                  onChange={this.makeSelectHandler('sort_pref')}
                   autosize={false}
                   clearable={true}
                   searchable={false}
@@ -307,7 +304,7 @@ class Edit extends PageEdit {
                   className='size-180'
                   name='sort_prop'
                   options={this.props.sortProperty}
-                  onChange={this.createSelectHandler('sort_prop')}
+                  onChange={this.makeSelectHandler('sort_prop')}
                   autosize={false}
                   clearable={false}
                   searchable={false}
@@ -318,7 +315,7 @@ class Edit extends PageEdit {
                     type='checkbox'
                     disabled={running}
                     name='direction'
-                    onChange={this.changeHandler}
+                    onChange={this.updateValue}
                     checked={this.state.direction === 'desc'}
                     value={(this.state.direction === 'desc') ? 'asc' : 'desc'}
                   />
@@ -346,8 +343,8 @@ class Edit extends PageEdit {
                   'Include': undefined,
                   'Omit': 0
                 }}
-                onChangege={this.stateHandler}
-                onChange={this.changeHandler}
+                onChangege={this.updateState}
+                onChange={this.updateValue}
                 value={this.state.is_image} />
             </div>
             <div className='row-flex'>
@@ -361,8 +358,8 @@ class Edit extends PageEdit {
                   'Include': undefined,
                   'Omit': 0
                 }}
-                onChangege={this.stateHandler}
-                onChange={this.changeHandler}
+                onChangege={this.updateState}
+                onChange={this.updateValue}
                 value={this.state.is_video} />
             </div>
             <div className='row-flex'>
@@ -376,8 +373,8 @@ class Edit extends PageEdit {
                   'Include': undefined,
                   'Omit': 0
                 }}
-                onChangege={this.stateHandler}
-                onChange={this.changeHandler}
+                onChangege={this.updateState}
+                onChange={this.updateValue}
                 value={this.state.is_facebook} />
             </div>
             <div className='row-flex'>
@@ -391,8 +388,8 @@ class Edit extends PageEdit {
                   'Include': undefined,
                   'Omit': 0
                 }}
-                onChangege={this.stateHandler}
-                onChange={this.changeHandler}
+                onChangege={this.updateState}
+                onChange={this.updateValue}
                 value={this.state.is_gallery} />
             </div>
             <div className='row-flex'>
@@ -403,7 +400,7 @@ class Edit extends PageEdit {
                 name='language'
                 placeholder='Any'
                 options={this.props.language}
-                onChange={this.createSelectHandler('language')}
+                onChange={this.makeSelectHandler('language')}
                 autosize={false}
                 clearable={true}
                 searchable={false}
@@ -415,8 +412,8 @@ class Edit extends PageEdit {
               <input 
                 disabled={running}
                 defaultValue={this.state.search}
-                onChange={this.stateHandler}
-                onBlur={this.changeHandler}
+                onChange={this.updateState}
+                onBlur={this.updateValue}
                 id='funColumnSearch'
                 type='text'
                 name='search'
@@ -427,8 +424,8 @@ class Edit extends PageEdit {
               <input 
                 disabled={running}
                 defaultValue={this.state.url}
-                onChange={this.stateHandler}
-                onBlur={this.changeHandler}
+                onChange={this.updateState}
+                onBlur={this.updateValue}
                 id='funColumnUrl'
                 type='text'
                 name='url'
@@ -439,8 +436,8 @@ class Edit extends PageEdit {
               <input 
                 disabled={running}
                 defaultValue={this.state.author}
-                onChange={this.stateHandler}
-                onBlur={this.changeHandler}
+                onChange={this.updateState}
+                onBlur={this.updateValue}
                 id='funColumnAuthor'
                 type='text'
                 name='author'
@@ -451,8 +448,8 @@ class Edit extends PageEdit {
               <input 
                 disabled={running}
                 defaultValue={this.state.exclude_search}
-                onChange={this.stateHandler}
-                onBlur={this.changeHandler}
+                onChange={this.updateState}
+                onBlur={this.updateValue}
                 id='funColumnExclude'
                 type='text'
                 name='exclude_search'
@@ -464,8 +461,8 @@ class Edit extends PageEdit {
                 <input 
                   disabled={running}
                   defaultValue={this.state.since}
-                  onChange={this.stateHandler}
-                  onBlur={this.changeHandler}
+                  onChange={this.updateState}
+                  onBlur={this.updateValue}
                   placeholder='Since...'
                   className='size-120'
                   id='funColumnSince'
@@ -475,8 +472,8 @@ class Edit extends PageEdit {
                 <input 
                   disabled={running}
                   defaultValue={this.state.before}
-                  onChange={this.stateHandler}
-                  onBlur={this.changeHandler}
+                  onChange={this.updateState}
+                  onBlur={this.updateValue}
                   placeholder='Before...'
                   className='size-120'
                   id='funColumnBefore'
@@ -490,7 +487,7 @@ class Edit extends PageEdit {
             <ul className='tag-list row'>
               { (keys(advFilters).length) ?
                   map(advFilters, (v, k) => 
-                    <li key={`${k}=${v}`}>{`${k}=${v}`}<span onClick={() => this.changeHandler(k, null)} ><Icon icon='cross' /></span></li>)
+                    <li key={`${k}=${v}`}>{`${k}=${v}`}<span onClick={() => this.updateValue(k, null)} ><Icon icon='cross' /></span></li>)
                       : emptyAdvFilter }
             </ul>
             <fieldset>
@@ -540,7 +537,7 @@ class Edit extends PageEdit {
                   placeholder='Amount...'
                   name='adv_val'
                 />
-                <button onClick={this.createAdvFilter} className='button is-accent size-60'>Add</button>
+                <button onClick={this.createAdvFilter} disabled={running} className='button is-accent size-60'>Add</button>
               </div>
             </fieldset>
             <small className='form-description row'>

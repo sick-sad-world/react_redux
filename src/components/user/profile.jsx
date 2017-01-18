@@ -1,6 +1,5 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
@@ -20,10 +19,6 @@ class Edit extends PageEdit {
       email: true,
       position: true
     });
-
-    // Bind action handlers to component
-    // ===========================================================================
-    bindAll(this, ['preformAction', 'stateHandler', 'createSelectHandler']);
   }
 
   render() {
@@ -54,7 +49,7 @@ class Edit extends PageEdit {
               <input 
                 disabled={running}
                 value={this.state.fullname}
-                onChange={this.stateHandler}
+                onChange={this.updateState}
                 onBlur={this.preformAction('fullname')}
                 id='funUserDisplayName'
                 type='text'
@@ -66,7 +61,7 @@ class Edit extends PageEdit {
               <input 
                 disabled={running}
                 value={this.state.position}
-                onChange={this.stateHandler}
+                onChange={this.updateState}
                 onBlur={this.preformAction('position')}
                 id='funUserPosition'
                 type='text'
@@ -78,7 +73,7 @@ class Edit extends PageEdit {
               <input 
                 disabled={running}
                 value={this.state.email}
-                onChange={this.stateHandler}
+                onChange={this.updateState}
                 onBlur={this.preformAction('email')}
                 id='funUserEmail'
                 type='email'

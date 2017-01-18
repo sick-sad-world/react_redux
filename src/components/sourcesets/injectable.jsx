@@ -50,8 +50,8 @@ export default class FeedsList extends React.Component {
       expanded,
       disabled,
       buttons: [
-        <a key='sel' onClick={e => this.props.selectHandler('set', set.id)} title='Add this set to selection'><Icon icon='reply-all' /></a>,
-        <a key='show' onClick={e => this.expandHandler((expanded) ? 0 : set.id)} title='View contents'><Icon icon={(expanded) ? 'chevron-up' : 'chevron-down'} /></a>
+        <a key='sel' onClick={() => this.props.selectHandler('set', set.id)} title='Add this set to selection'><Icon icon='reply-all' /></a>,
+        <a key='show' onClick={() => this.expandHandler((expanded) ? 0 : set.id)} title='View contents'><Icon icon={(expanded) ? 'chevron-up' : 'chevron-down'} /></a>
       ]
     }, set);
 
@@ -72,7 +72,7 @@ export default class FeedsList extends React.Component {
     let data = Object.assign({
       key: source.id,
       disabled,
-      button: (<a onClick={(e) => this.props.selectHandler('source', source.id)} title='Add this source to selection'><Icon icon='reply'/></a>)
+      button: (<a onClick={() => this.props.selectHandler('source', source.id)} title='Add this source to selection'><Icon icon='reply'/></a>)
     }, source)
 
     return <Source {...data} />;

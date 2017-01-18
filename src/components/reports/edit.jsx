@@ -33,16 +33,13 @@ class Edit extends PageEdit {
 
     // Bind action handlers to component
     // ===========================================================================
-    bindAll(this, ['preformAction', 'stateHandler', 'changeHandler', 'createSelectHandler', 'recipientHandler']);
+    bindAll(this, ['recipientHandler']);
   }
 
   // Select recipient from list providen by injectable
   // ===========================================================================
   recipientHandler (value) {
-    if (value === this.props.item.recipient) {
-      value = this.props.email;
-    }
-    this.changeHandler('recipient', value);
+    return () => this.updateValue('recipient', (value === this.state.recipient) ? this.props.email : value);
   }
 
   render() {
@@ -77,7 +74,7 @@ class Edit extends PageEdit {
               <input 
                 disabled={running}
                 value={this.state.name}
-                onChange={this.stateHandler}
+                onChange={this.updateState}
                 onBlur={this.preformAction('name')}
                 id='funReportName'
                 type='text'
@@ -95,7 +92,7 @@ class Edit extends PageEdit {
                   'Inactive': 0
                 }}
                 value={this.state.active}
-                onChange={this.changeHandler}
+                onChange={this.updateValue}
               />
             </div>
             <div className='row-flex-wrap'>
@@ -105,7 +102,7 @@ class Edit extends PageEdit {
                 className='size-180'
                 name='frequency'
                 options={this.props.frequencyOptions}
-                onChange={this.createSelectHandler('frequency')}
+                onChange={this.makeSelectHandler('frequency')}
                 autosize={false}
                 clearable={false}
                 value={this.state.frequency}
@@ -115,8 +112,8 @@ class Edit extends PageEdit {
             <div className='row-flex'>
               <label htmlFor='funReportNextSend'>Next send:</label>
               <Datetime 
-                defaultValue={this.state.next_send}
-                onBlur={(value) => this.changeHandler('next_send', (typeof value === 'string') ? value : value.format('YYYY-MM-DD HH:mm:ss'))}
+                value={this.state.next_send}
+                onChange={(value) => this.updateValue('next_send', (typeof value === 'string') ? value : value.format('YYYY-MM-DD HH:mm:ss'))}
                 dateFormat='YYYY-MM-DD'
                 timeFormat=' HH:mm:ss'
                 inputProps={{
@@ -132,7 +129,7 @@ class Edit extends PageEdit {
                 disabled={running}
                 name='columns'
                 options={this.props.columns}
-                onChange={this.createSelectHandler('columns')}
+                onChange={this.makeSelectHandler('columns')}
                 multi
                 value={this.state.columns}
               />

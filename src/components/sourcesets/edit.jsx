@@ -35,7 +35,7 @@ class Edit extends PageEdit {
 
     // Bind action handlers to component
     // ===========================================================================
-    bindAll(this, ['preformAction', 'stateHandler', 'makeSourceButton', 'sourcesHandler']);
+    bindAll(this, ['makeSourceButton', 'sourcesHandler']);
   }
 
   // Make button for [own_sources] list
@@ -60,7 +60,7 @@ class Edit extends PageEdit {
     } else {
       val = concat(this.state.source_ids, val);
     }
-    this.changeHandler('source_ids', val);
+    this.updateValue('source_ids', val);
   }
 
   render() {
@@ -106,7 +106,7 @@ class Edit extends PageEdit {
               <input 
                 disabled={running}
                 value={this.state.name}
-                onChange={this.stateHandler}
+                onChange={this.updateState}
                 onBlur={this.preformAction('name')}
                 id='funSetName'
                 type='text'

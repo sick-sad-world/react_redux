@@ -1,6 +1,8 @@
 // Import utility stuff
 // ===========================================================================
-import { isArray, includes, without, concat, mapValues, isFunction } from 'lodash';
+import { mapValues, isFunction } from 'lodash';
+import { inject } from '../helpers/functions';
+import editable from './behaviours/editable';
 
 // Import React related stuff
 // ===========================================================================
@@ -30,7 +32,9 @@ export default class PageEdit extends React.Component {
       update: createAction(props.type, 5),
       delete: createAction(props.type, 6),
       throwError: throwError
-    }, this.props.dispatch);  
+    }, this.props.dispatch);
+
+    inject(this, editable);
   }
 
   // Pick an dropdown values to inject it into state
@@ -48,70 +52,5 @@ export default class PageEdit extends React.Component {
         this.onComponentWillReceiveProps.call(this, newProps);
       }
     }
-  }
-
-  // Send request to server with new props 
-  // ===========================================================================
-  preformAction (name) {
-    return () => {
-      let value = this.state[name];
-      let item = this.props.item;
-      if (item.id) {
-        // Modify if item is already existed
-        // ===========================================================================
-        if (item[name] !== value) {
-          this.actions.update({id: item.id, [name]: value}).catch(this.actions.throwError);
-        }
-      } else {
-        // Create item if ID == 0
-        // ===========================================================================
-        this.actions.create(Object.assign({}, item, {[name]: value})).then(({payload}) => {
-          this.props.router.push(`/${this.props.type}s/${payload.id}`);
-        }).catch(this.actions.throwError);
-      }
-    }
-  }
-
-  // Input handler 
-  // -> Function which handles action change
-  // ===========================================================================
-  stateHandler(e) {
-    this.setState({[e.target.name]: e.target.value});
-  }
-
-  // Different changes sent to server
-  // @blur -> text inputs @change -> other
-  // ===========================================================================
-  changeHandler(e, val) {
-    let name = e.target ? e.target.name : e;
-    let value = e.target ? e.target.value : val;
-    this.setState({
-      [name]: value
-    }, this.preformAction(name));
-  }
-
-  // Select handler creator
-  // -> Function which handles both action and state change
-  // ===========================================================================
-  createSelectHandler (name) {
-    return (v) => {
-      // Set state to update selects
-      // then run change handler to send chnages to server
-      // ===========================================================================
-      this.setState({
-        [name]: (isArray(v)) ? v.map(v => v.value) : (v) ? v.value : v
-      }, this.preformAction(name));
-    }
-  }
-
-  modifyStateArray (e) {
-    let name = e.target.name;
-    let value = e.target.value;
-    if (includes(this.state[name], value)) {
-      value = without(this.state[name], value);
-    } else {
-      value = concat(this.state[name], value);
-    }
-    this.setState({[name]: value}, this.preformAction(name));
   }
 }

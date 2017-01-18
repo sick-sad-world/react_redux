@@ -30,13 +30,13 @@ class Edit extends PageEdit {
 
     // Bind action handlers to component
     // ===========================================================================
-    bindAll(this, ['preformAction', 'stateHandler', 'changeHandler', 'createSelectHandler', 'recipientHandler']);
+    bindAll(this, ['recipientHandler']);
   }
 
   // Select recipient from list providen by injectable
   // ===========================================================================
   recipientHandler (value) {
-    this.changeHandler('recipient', (value === this.state.recipient) ? this.props.email : value);
+    return () => this.updateValue('recipient', (value === this.state.recipient) ? this.props.email : value);
   }
 
   render() {
@@ -71,7 +71,7 @@ class Edit extends PageEdit {
               <input 
                 disabled={running}
                 value={this.state.name}
-                onChange={this.stateHandler}
+                onChange={this.updateState}
                 onBlur={this.preformAction('name')}
                 id='funAlertName'
                 type='text'
@@ -89,7 +89,7 @@ class Edit extends PageEdit {
                   'Inactive': 0
                 }}
                 value={this.state.active}
-                onChange={this.changeHandler}
+                onChange={this.updateValue}
               />
             </div>
             <div className='row-flex-wrap'>
@@ -99,7 +99,7 @@ class Edit extends PageEdit {
                 className='size-120'
                 name='frequency'
                 options={this.props.frequencyOptions}
-                onChange={this.createSelectHandler('frequency')}
+                onChange={this.makeSelectHandler('frequency')}
                 autosize={false}
                 clearable={false}
                 value={this.state.frequency}
@@ -112,7 +112,7 @@ class Edit extends PageEdit {
                 disabled={running}
                 name='columns'
                 options={this.props.columns}
-                onChange={this.createSelectHandler('columns')}
+                onChange={this.makeSelectHandler('columns')}
                 multi
                 value={this.state.columns}
               />
