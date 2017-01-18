@@ -9,7 +9,7 @@ export default {
       text: 'Are you sure about that?',
       className: 'small-popup confirmation-dialog'
     }, props);
-    let deleteHandler = this.makeDeletingStateToggler(0);
+    let deleteHandler = this.makeDeletingStateToggler();
 
     if (!this.state.deleting) {
       throw {
@@ -32,7 +32,7 @@ export default {
   // Handler to run [delete] instace action
   // ===========================================================================
   handlerDelete(id) {
-    this.actions.delete({id}).catch(this.actions.throwError);
+    this.actions.delete({id}).catch(this.actions.throwError).then(() => this.setState({deleting: 0}));
   },
 
   makeDeletingStateToggler(deleting = 0) {

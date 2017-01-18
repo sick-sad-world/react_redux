@@ -103,6 +103,7 @@ blockquote {}
 } 
 
 .small-popup {
+  position: relative;
   padding: baseUnit();
   border: $bd;
   background-color: $c-element;
@@ -116,43 +117,6 @@ blockquote {}
     margin-bottom: baseUnit();
   }
   .buttons {
-    display: flex;
-    justify-content: space-between;
-  }
-  .button {
-    flex: 0 1 50%;
-    + .button {
-      margin-left: baseUnit();
-    }
-  }
-}
-
-.delete-confirmation {
-  position: relative;
-  width: 222px;
-  &:before, &:after {
-    content: '';
-    display: block;
-    margin: auto;
-    width: 0;
-    height: 0;
-    @include pos(100% 0 false 0);
-    border: baseUnit() solid transparent;
-  }
-  &:before {
-    border-top-color: $c-border;
-    border-left-color: $c-border;
-    border-width: baseUnit() + 1;
-  }
-  &:after {
-    border-top-color: $c-element;
-    border-left-color: $c-element;
-  }
-  .text {
-    display: block;
-    margin-bottom: baseUnit();
-  }
-  p {
     display: flex;
     justify-content: space-between;
   }

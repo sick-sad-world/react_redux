@@ -69,7 +69,8 @@ Messages.defaultProps = {
     3: 'reading',
     4: 'creating',
     5: 'updating',
-    6: 'sorting'
+    6: 'deleting',
+    7: 'sorting'
   }
 }
 

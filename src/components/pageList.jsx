@@ -1,10 +1,15 @@
+// Import utility stuff
+// ===========================================================================
+import { bindAll, reduce } from 'lodash';
+import { inject } from '../helpers/functions';
+import deletable from './behaviours/deletable';
+
+
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import Icon from './icon';
-import DeletingPopup from './deletingPopup'
-import { bindAll } from 'lodash';
 
 // Import actions
 // ===========================================================================
@@ -18,8 +23,7 @@ export default class PageList extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      deleting: 0,
-      dialogPos: 0
+      deleting: 0
     };
 
     // Create bound actions
@@ -31,39 +35,31 @@ export default class PageList extends React.Component {
       throwError: throwError
     }, this.props.dispatch);
 
-    bindAll(this, ['stateDelete', 'handlerDelete', 'handlerCreate', 'createListItem'])
-  }
+    // Inject behaviours
+    // ===========================================================================
+    inject(this, deletable);
 
-  // Set [delete] state, to show confirmation dialog
-  // ===========================================================================
-  stateDelete (id, dialogPos) {
-    this.setState({
-      deleting: (this.state.deleting === id) ? 0 : id,
-      dialogPos: (this.state.dialogPos === dialogPos) ? 0 : dialogPos,
-    });
+    // Bind methods to instance
+    // ===========================================================================
+    bindAll(this, ['handlerCreate', 'createListItem'])
   }
 
   // Create list item component
   // @ used in data mapping
   // ===========================================================================
-  createListItem (item) {
-    return React.cloneElement(this.props.children, Object.assign({
+  createListItem (acc, item) {
+    acc.push(React.cloneElement(this.props.children, Object.assign({
       key: item.id,
       order: item.order,
       type: this.props.type,
       current: item.id === this.props.curId,
       sortable: this.props.sortable,
-      deleteAction: (this.props.deletable) ? this.stateDelete : null
-    }, item))
-  }
-
-  // Redirect to edit from with name for a new item
-  // ===========================================================================
-  routeToNewItemEditForm (name) {
-    this.props.router.push({
-      pathname: `/${this.props.type}s/new`,
-      query: {name: name}
-    });
+      deleteAction: (this.props.deletable) ? this.makeDeletingStateToggler(item.id) : null
+    }, item)));
+    if (this.state.deleting === item.id) {
+      acc.push(this.renderDeleteDialog());
+    }
+    return acc;
   }
 
   // Handler for new item creation
@@ -73,26 +69,20 @@ export default class PageList extends React.Component {
     e.preventDefault();
     let value = e.target.elements.name.value;
 
-    this.stateDelete(0, 0);
     e.target.elements.name.value = '';
 
     if (this.props.create === 'delayed') {
       // Redirect to edit form if need
       // ===========================================================================
-      this.routeToNewItemEditForm(value);
+      this.props.router.push({
+        pathname: `/${this.props.type}s/new`,
+        query: {name: value}
+      });
     } else {
       // Create item
       // ===========================================================================
       this.actions.create({name: value, order: this.props.items.length}).catch(this.actions.throwError);
     }
-  }
-
-  // Run DELETE action itself
-  // @ provide required params
-  // ===========================================================================
-  handlerDelete (e) {
-    e.preventDefault();
-    this.actions.delete({id: this.state.deleting}).catch(this.actions.throwError).then(() => this.stateDelete(0, 0));
   }
 
   render () {
@@ -114,16 +104,6 @@ export default class PageList extends React.Component {
     // ===========================================================================
     let empty = <li className='state-empty'><Icon icon='emoji-sad' />{texts.empty}</li>;
 
-    // Make confirmation dialog if item deletable and [deleting] state active
-    // ===========================================================================
-    let confimation = (this.props.deletable && this.state.deleting > 0 && this.state.dialogPos > 0) ? (
-      <DeletingPopup
-        dialogPos={{top: `${this.state.dialogPos}px`}}
-        handlerDelete={this.handlerDelete}
-        handlerCancel={e => this.stateDelete(0, 0)}
-      />
-    ) : null;
-
     // Return DOM components
     // ===========================================================================
     return (
@@ -139,9 +119,8 @@ export default class PageList extends React.Component {
           </div>
         </header>
         <ul className='subsection-content entity-list'>
-          {(items.length) ? items.map(this.createListItem) : empty }
+          {(items.length) ? reduce(items, this.createListItem, []) : empty }
         </ul>
-        {confimation}
       </section>
     );
   }

@@ -13,17 +13,6 @@ import classNames from 'classnames';
 // @using by: ListView and Management views
 // ===========================================================================
 export default class ListItem extends React.PureComponent {
-  constructor(props) {
-    super(props)
-    this.deleteHandler = this.deleteHandler.bind(this);
-  }
-  deleteHandler (e) {
-    e.preventDefault();
-    let target = findDOMNode(this);
-    let pos = target.offsetTop + target.parentNode.offsetTop - e.target.clientHeight * 2; 
-    this.props.deleteAction(this.props.id, pos);
-  }
-
   render() {
     let { disabled, current, type, sortable, name, id, counter, order } = this.props;
 
@@ -54,7 +43,7 @@ export default class ListItem extends React.PureComponent {
 
     // Make delete button if item deletable
     // ===========================================================================
-    let deleteBtn = (this.props.deleteAction) ? (<a href='' onClick={this.deleteHandler} title={`Delete this ${type}`}><Icon icon='trash' /></a>) : null;
+    let deleteBtn = (this.props.deleteAction) ? (<a onClick={this.props.deleteAction} title={`Delete this ${type}`}><Icon icon='trash' /></a>) : null;
     
     return (
       <li className={rootClasses} data-order={order}>

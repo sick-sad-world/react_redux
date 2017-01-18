@@ -1,20 +1,19 @@
 // Import utility stuff
 // ===========================================================================
-import { find, filter, concat, includes, bindAll, without } from 'lodash';
+import { find, filter, concat, includes, bindAll, without, reduce } from 'lodash';
 import classNames from 'classnames';
+import { inject } from '../../helpers/functions';
+import deletable from '../behaviours/deletable';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
-import { findDOMNode } from 'react-dom';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
 // Import Child components
 // ===========================================================================
 import FeedsList from './injectable';
-import DeletingPopup from '../deletingPopup';
 import Icon from '../icon';
 import Source from './source';
 import PageEdit from '../pageEdit';
@@ -25,37 +24,18 @@ class Edit extends PageEdit {
       name: true,
       source_ids: true
     });
+
     this.state = Object.assign(this.state, {
       deleting: 0,
-      dialogPos: 0
     });
+
+    // Inject behaviours
+    // ===========================================================================
+    inject(this, deletable);
 
     // Bind action handlers to component
     // ===========================================================================
-    bindAll(this, ['preformAction', 'stateHandler', 'makeSourceButton', 'stateDelete', 'handlerDelete', 'sourcesHandler']);
-  }
-
-  stateDelete (e, id) {
-    e.preventDefault();
-    let pos;
-    let target = findDOMNode(this);
-    pos = target.offsetTop - e.target.clientHeight;
-    this.setState({
-      deleting: (this.state.deleting === id) ? 0 : id,
-      dialogPos: (this.state.dialogPos === pos) ? 0 : pos,
-    });
-  }
-
-  // Run DELETE action itself
-  // @ provide required params
-  // ===========================================================================
-  handlerDelete (e) {
-    e.preventDefault();
-    let data = {
-      id: this.state.deleting,
-      set_id: this.props.item.id
-    };
-    this.actions.deleteData(data).catch(this.actions.throwError).then(() => this.setState({deleting: 0, dialogPos: 0}));
+    bindAll(this, ['preformAction', 'stateHandler', 'makeSourceButton', 'sourcesHandler']);
   }
 
   // Make button for [own_sources] list
@@ -64,7 +44,7 @@ class Edit extends PageEdit {
   // ===========================================================================
   makeSourceButton (uniq_ids, id) {
     if (includes(uniq_ids, id)) {
-      return <a onClick={(e) => this.stateDelete(e, id)} title='Delete this source'><Icon icon='trash' /></a>;
+      return <a onClick={this.makeDeletingStateToggler(id)} title='Delete this source'><Icon icon='trash' /></a>;
     } else {
       return <a onClick={(e) => this.sourcesHandler('source', id, true)} title='Remove this source from set'><Icon icon='forward' /></a>;
     }
@@ -157,9 +137,13 @@ class Edit extends PageEdit {
                   <span>Sourceset has {own_sources.length} sources total.</span>
                 </div>
                 <ul className='entity-list'>
-                  {(own_sources.length) ? own_sources.map((source) => {
-                    return <Source key={source.id} sortable={false} button={this.makeSourceButton(item.uniq_ids, source.id)} {...source} />
-                  }) : empty}
+                  {(own_sources.length) ? reduce(own_sources, (acc, source) => {
+                    acc.push(<Source key={source.id} sortable={false} button={this.makeSourceButton(item.uniq_ids, source.id)} {...source} />);
+                    if (this.state.deleting === source.id) {
+                      acc.push(this.renderDeleteDialog());
+                    }
+                    return acc;
+                  }, []) : empty}
                 </ul>
                 { confimation }
               </div>
