@@ -1,18 +1,8 @@
-import { updateArrayWithValue } from '../../helpers/functions';
+import { updateArrayWithValue, inject } from '../../helpers/functions';
 
 // Editable behaviours
 // ===========================================================================
 export default {
-
-  // Merge methods into class
-  // ===========================================================================
-  _inject (obj) {
-    for (let key in this) {
-      if (key !== '_inject' && !(obj[key] instanceof Function)) {
-        obj[key] = this[key].bind(obj);
-      }
-    } 
-  },
 
   // Update [Value] in state and [preformAction] after
   // ===========================================================================

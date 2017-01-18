@@ -3,7 +3,7 @@
 import { find, bindAll, pick } from 'lodash';
 import editable from '../behaviours/editable';
 import { defColumnParameters } from '../../helpers/defaults'; 
-import { composeColumnSort, transformColumnValue } from '../../helpers/functions';
+import { inject, composeColumnSort, transformColumnValue } from '../../helpers/functions';
 
 // Import React related stuff
 // ===========================================================================
@@ -53,7 +53,7 @@ class Column extends React.Component {
 
     // Inject editable behaviour
     // ===========================================================================
-    editable._inject(this)
+    inject(this, editable)
 
     // Bind methods to instance
     // ===========================================================================
@@ -67,7 +67,7 @@ class Column extends React.Component {
     return () => {
       let item = this.props.item;
       let value = transformColumnValue(this.state[name]);
-      
+
       if (name.indexOf('sort') === 0) {
         name = 'sort';
         value = composeColumnSort(this.state.sort_pref, this.state.sort_prop);
@@ -221,7 +221,7 @@ class Column extends React.Component {
         </header>
         { (this.state.expanded) ? this.renderEditForm() : null }
         <ul className='entity-list'>
-          {(this.props.state === 2 || this.props.data.length) ? this.renderResults(tableProps) : this.renderResultState()}
+          {(this.props.state === 2) ? (this.props.data.length) ? this.renderResults(tableProps) : this.renderResultState() : this.renderResultState()}
         </ul>
       </section>
     );
