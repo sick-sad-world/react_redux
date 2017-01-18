@@ -86,16 +86,6 @@ class Edit extends PageEdit {
       'state-disabled': running
     });
 
-    // Make confirmation dialog if item deletable and [deleting] state active
-    // ===========================================================================
-    let confimation = (this.state.deleting > 0 && this.state.dialogPos > 0) ? (
-      <DeletingPopup
-        dialogPos={{top: `${this.state.dialogPos}px`}}
-        handlerDelete={this.handlerDelete}
-        handlerCancel={e => this.setState({deleting: 0, dialogPos: 0})}
-      />
-    ) : null;
-
     // Return DOM layout
     // ===========================================================================
     return (
@@ -145,7 +135,6 @@ class Edit extends PageEdit {
                     return acc;
                   }, []) : empty}
                 </ul>
-                { confimation }
               </div>
               <FeedsList 
                 sets={this.props.sets}
