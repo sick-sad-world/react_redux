@@ -30,19 +30,38 @@ class Column extends React.Component {
   constructor (props) {
     super(props);
     
-    let item = this.props.item.data;
-    let prefix = find(this.props.sortPrefix, (pref) => item.sort.indexOf(pref.value) > -1);
-    let property = find(this.props.sortProperty, (prop) => item.sort.indexOf(prop.value) > -1);
+    // Inject behaviours
+    // ===========================================================================
+    inject(this, editable);
+    inject(this, deletable);
 
-    this.state = {
+    this.interval = null;
+    this.stateMap = {
+      infinite: (item) => item.data.infinite,
+      direction: (item) => item.data.direction,
+      sort_pref (item) {
+        let prefix = item.data.sort && find(this.props.sortPrefix, (pref) => item.data.sort.indexOf(pref.value) > -1);
+        return (prefix) ? prefix.value : '';
+      },
+      sort_prop (item) {
+        let property = item.data.sort && find(this.props.sortProperty, (prop) => item.data.sort.indexOf(prop.value) > -1);
+        return (property) ? property.value : '';
+      },
+      autoreload: (item) => {
+        let ar = item.data.autoreload;
+        if (!ar) {
+          clearInterval(this.interval);
+          this.interval = null;
+        } else if (ar > 0 && ar !== this.props.item.data.autoreload) {
+          this.interval = setInterval(this.refreshResults.bind(this), ar * 1000);
+        }
+        return ar;
+      }
+    };
+    this.state = Object.assign({
       deleting: false,
-      expanded: false,
-      direction: item.direction,
-      infinite: item.infinite,
-      autoreload: item.autoreload,
-      sort_pref: (prefix) ? prefix.value : '',
-      sort_prop: (property) ? property.value : ''
-    }
+      expanded: false
+    }, this.mapItemToState(this.props.item));
 
     // Create bound actions
     // ===========================================================================
@@ -53,14 +72,16 @@ class Column extends React.Component {
       throwError: throwError
     }, this.props.dispatch);
 
-    // Inject behaviours
-    // ===========================================================================
-    inject(this, editable);
-    inject(this, deletable);
 
     // Bind methods to instance
     // ===========================================================================
     bindAll(this, ['expandedStateToggler', 'hideColumn', 'refreshResults', 'preformAction']);
+  }
+
+  componentWillReceiveProps (newProps) {
+    if (newProps.state <= 2) {
+      this.setState(this.mapItemToState(newProps.item));
+    }
   }
 
   // [Preformaction] editable interaction method overriding
@@ -75,11 +96,12 @@ class Column extends React.Component {
         name = 'sort';
         value = composeColumnSort(this.state.sort_pref, this.state.sort_prop);
       }
-
       this.actions.update({
         id: item.id,
         data: Object.assign({}, item.data, {[name]: value})
-      }).then(() => this.actions.refresh(item.data, {id: item.id})).catch(this.actions.throwError)
+      }).then(() => {
+        return (name !== 'autoreload' && name !== 'infinite') ? this.actions.refresh(item.data, {id: item.id}) : null;
+      }).catch(this.actions.throwError)
     };
   }
 
@@ -87,7 +109,7 @@ class Column extends React.Component {
   // @return -> DOM
   // ===========================================================================
   renderEditForm () {
-    let running = this.props.colState > 3;
+    let running = this.props.state > 3;
     let open = this.props.item.open;
     let visIconData = this.props.visIconData;
     return (
@@ -134,7 +156,7 @@ class Column extends React.Component {
             disabled={running}
             name='infinite'
             options={{
-              'Yes': this.state.infinite || 30,
+              'Yes': 1,
               'No': 0
             }}
             onChange={this.updateValue}
@@ -146,7 +168,7 @@ class Column extends React.Component {
             disabled={running}
             name='autoreload'
             options={{
-              'On': 1,
+              'On': this.state.infinite || 30,
               'Off': 0
             }}
             onChange={this.updateValue}
@@ -172,7 +194,7 @@ class Column extends React.Component {
   // @return -> DOM
   // ===========================================================================
   renderResultState () {
-    switch (this.props.state) {
+    switch (this.props.resultState) {
       case 1:
         return (<li className='state-default'>{this.props.statePending}</li>);
       case 2:
@@ -186,7 +208,7 @@ class Column extends React.Component {
 
   // Handler to run [delete] Column action
   // ===========================================================================
-  hideColumn(e) {
+  hideColumn() {
     this.actions.update({open: 0}).catch(this.actions.throwError);
   }
 
@@ -199,8 +221,7 @@ class Column extends React.Component {
   // Run [Refresh] actions
   // @fetch result for a single column
   // ===========================================================================
-  refreshResults (e) {
-    e.preventDefault();
+  refreshResults () {
     let item = this.props.item;
     this.actions.refresh(item.data, {id: item.id}).catch(this.actions.throwError);
   }
@@ -221,7 +242,7 @@ class Column extends React.Component {
         { (this.state.expanded) ? this.renderEditForm() : null }
         { (this.state.deleting) ? this.renderDeleteDialog() : null }
         <ul className='entity-list'>
-          {(this.props.state === 2 && this.props.data.length) ? this.renderResults(tableProps) : this.renderResultState()}
+          {(this.props.resultState === 2 && this.props.data.length) ? this.renderResults(tableProps) : this.renderResultState()}
         </ul>
       </section>
     );
@@ -242,7 +263,7 @@ Column.defaultProps = {
     'Be careful this is "new" story and result may be different'
   ],
   tableStats: ['tweets', 'likes', 'shares', 'pins', 'comments', 'votes_video', 'views_video', 'comments_video'],
-  state: 1,
+  resultState: 1,
   data: [],
   sortPrefix: defColumnParameters.sortPrefix,
   sortProperty: defColumnParameters.sortProperty,
@@ -252,6 +273,15 @@ Column.defaultProps = {
 // Take columns and results from state tree
 // @deps LINKS
 // ===========================================================================
-const mapStateToProps = ({links}, ownProps) => ({...links[ownProps.item.id]} || {});
+const mapStateToProps = ({links}, ownProps) => {
+  if (links[ownProps.item.id]) {
+    return {
+      resultState: links[ownProps.item.id].state,
+      data: links[ownProps.item.id].data
+    };
+  } else {
+    return {};
+  }
+};
 
 export default connect(mapStateToProps)(Column);

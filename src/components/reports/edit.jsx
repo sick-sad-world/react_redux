@@ -2,38 +2,63 @@
 // ===========================================================================
 import { find, bindAll } from 'lodash';
 import classNames from 'classnames';
+import { inject } from '../../helpers/functions';
+import editable from '../behaviours/editable';
+import { defReport } from '../../helpers/defaults';
 import moment from 'moment';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
-import { Link } from 'react-router';
-import Select from 'react-select';
-import Datetime from 'react-datetime';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { defReport } from '../../helpers/defaults';
+import { Link } from 'react-router';
+
+// Import actions
+// ===========================================================================
+import { createAction, throwError } from '../../actions/actions';
 
 // Import Child components
 // ===========================================================================
+import Select from 'react-select';
+import Datetime from 'react-datetime';
 import EmailList from '../user/injectable';
 import Icon from '../icon';
 import Toggler from '../toggler';
-import PageEdit from '../pageEdit';
 
-class Edit extends PageEdit {
+class Edit extends React.Component {
   constructor (props) {
-    super(props, {
+    super(props);
+    inject(this, editable);
+    this.stateMap = {
       name: true,
       active: true,
       frequency: true,
       columns: true,
       recipient: true,
       next_send: true
-    });
-
+    };
+    
     // Bind action handlers to component
     // ===========================================================================
     bindAll(this, ['recipientHandler']);
+
+    this.state = this.mapItemToState(this.props.item);
+    
+    // Create bound actions
+    // ===========================================================================
+    this.actions = bindActionCreators({
+      create: createAction('report', 4),
+      update: createAction('report', 5),
+      throwError: throwError
+    }, this.props.dispatch);
+
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.state <= 2) {
+      this.setState(this.mapItemToState(newProps.item));
+    }
   }
 
   // Select recipient from list providen by injectable
@@ -113,7 +138,7 @@ class Edit extends PageEdit {
               <label htmlFor='funReportNextSend'>Next send:</label>
               <Datetime 
                 value={this.state.next_send}
-                onChange={(value) => this.updateValue('next_send', (typeof value === 'string') ? value : value.format('YYYY-MM-DD HH:mm:ss'))}
+                onChange={(value) => this._runStatefullAction('next_send', (typeof value === 'string') ? value : value.format('YYYY-MM-DD HH:mm:ss'))}
                 dateFormat='YYYY-MM-DD'
                 timeFormat=' HH:mm:ss'
                 inputProps={{
@@ -186,7 +211,6 @@ const mapStateToProps = ({ reports, columns, app, user }, ownProps) => {
   // ===========================================================================
   return {
     state: app.state,
-    type: 'report',
     item: item,
     emai: user.email,
     columns: columns.map((item) => {

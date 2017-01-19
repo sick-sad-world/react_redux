@@ -2,13 +2,20 @@
 // ===========================================================================
 import { find, bindAll, isNumber } from 'lodash';
 import classNames from 'classnames';
+import { inject } from '../../helpers/functions';
+import editable from '../behaviours/editable';
+import { defAlert } from '../../helpers/defaults';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
-import { Link } from 'react-router';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { defAlert } from '../../helpers/defaults';
+import { Link } from 'react-router';
+
+// Import actions
+// ===========================================================================
+import { createAction, throwError } from '../../actions/actions';
 
 // Import Child components
 // ===========================================================================
@@ -16,21 +23,39 @@ import Select from 'react-select';
 import Icon from '../icon';
 import EmailList from '../user/injectable';
 import Toggler from '../toggler';
-import PageEdit from '../pageEdit';
 
-class Edit extends PageEdit {
+class Edit extends React.Component {
   constructor (props) {
-    super(props, {
+    super(props);
+    inject(this, editable);
+    this.stateMap = {
       name: true,
       active: true,
       frequency: true,
       columns: true,
       recipient: true
-    });
-
+    };
+    
     // Bind action handlers to component
     // ===========================================================================
     bindAll(this, ['recipientHandler']);
+
+    this.state = this.mapItemToState(this.props.item);
+    
+    // Create bound actions
+    // ===========================================================================
+    this.actions = bindActionCreators({
+      create: createAction('alert', 4),
+      update: createAction('alert', 5),
+      throwError: throwError
+    }, this.props.dispatch);
+
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.state <= 2) {
+      this.setState(this.mapItemToState(newProps.item));
+    }
   }
 
   // Select recipient from list providen by injectable
@@ -173,7 +198,6 @@ let mapStateToProps = ({ app, alerts, columns, user }, ownProps) => {
   // ===========================================================================
   return {
     state: app.state,
-    type: 'alert',
     item: item,
     email: user.email,
     columns: columns.map((item) => ({

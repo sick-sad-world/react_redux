@@ -3,39 +3,58 @@
 import { find, filter, concat, includes, bindAll, without, reduce } from 'lodash';
 import classNames from 'classnames';
 import { inject } from '../../helpers/functions';
+import editable from '../behaviours/editable';
 import deletable from '../behaviours/deletable';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+
+// Import actions
+// ===========================================================================
+import { createAction, throwError } from '../../actions/actions';
 
 // Import Child components
 // ===========================================================================
 import FeedsList from './injectable';
 import Icon from '../icon';
 import Source from './source';
-import PageEdit from '../pageEdit';
 
-class Edit extends PageEdit {
+class Edit extends React.Component {
   constructor (props) {
-    super(props, {
+    super(props);
+    inject(this, editable);
+    inject(this, deletable);
+    this.stateMap = {
       name: true,
       source_ids: true
-    });
-
-    this.state = Object.assign(this.state, {
-      deleting: 0,
-    });
-
-    // Inject behaviours
-    // ===========================================================================
-    inject(this, deletable);
-
+    };
+    
     // Bind action handlers to component
     // ===========================================================================
     bindAll(this, ['makeSourceButton', 'sourcesHandler']);
+
+    this.state = Object.assign({
+      deleting: 0,
+    }, this.mapItemToState(this.props.item));
+
+    // Create bound actions
+    // ===========================================================================
+    this.actions = bindActionCreators({
+      delete: createAction('source', 6),
+      update: createAction('set', 5),
+      throwError: throwError
+    }, this.props.dispatch);
+
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.state <= 2) {
+      this.setState(this.mapItemToState(newProps.item));
+    }
   }
 
   // Make button for [own_sources] list
@@ -46,7 +65,7 @@ class Edit extends PageEdit {
     if (includes(uniq_ids, id)) {
       return <a onClick={this.makeDeletingStateToggler(id)} title='Delete this source'><Icon icon='trash' /></a>;
     } else {
-      return <a onClick={(e) => this.sourcesHandler('source', id, true)} title='Remove this source from set'><Icon icon='forward' /></a>;
+      return <a onClick={() => this.sourcesHandler('source', id, true)} title='Remove this source from set'><Icon icon='forward' /></a>;
     }
   }
 
@@ -177,7 +196,6 @@ let mapStateToProps = ({ app, sets, sources }, ownProps) => {
 
   return {
     state: app.state,
-    type: 'set',
     item,
     own_sources: (item.id) ? filter(sources, (source) => includes(item.source_ids, source.id)) : [],
     sources: sources,

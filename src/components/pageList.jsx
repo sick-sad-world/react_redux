@@ -22,6 +22,7 @@ export default class PageList extends React.Component {
   // ===========================================================================
   constructor (props) {
     super(props);
+    inject(this, deletable);
     this.state = {
       deleting: 0
     };
@@ -34,10 +35,6 @@ export default class PageList extends React.Component {
       delete: createAction(this.props.type, 6),
       throwError: throwError
     }, this.props.dispatch);
-
-    // Inject behaviours
-    // ===========================================================================
-    inject(this, deletable);
 
     // Bind methods to instance
     // ===========================================================================

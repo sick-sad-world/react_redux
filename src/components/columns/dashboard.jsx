@@ -22,7 +22,7 @@ class Dashboard extends React.Component {
     let empty = <section className='state-empty'>{this.props.stateEmpty}</section>;
     return (
       <section className='mod-dashboard'>
-        { (data.length) ? data.map((column) => <Column key={column.id} colState={this.props.state} item={column} />) : empty }
+        { (data.length) ? data.map((column) => <Column key={column.id} state={this.props.state} item={column} />) : empty }
       </section>
     );
   }

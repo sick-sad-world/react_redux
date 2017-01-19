@@ -1,6 +1,5 @@
-import {
-  updateArrayWithValue
-} from '../../helpers/functions';
+import { mapValues, isFunction, isUndefined } from 'lodash';
+import { updateArrayWithValue } from '../../helpers/functions';
 
 // Editable behaviours
 // ===========================================================================
@@ -14,12 +13,21 @@ export default {
     }, this.preformAction(name));
   },
 
+  // Pick an dropdown values to inject it into state
+  // ===========================================================================
+  mapItemToState (item) {
+    return (item) ? mapValues(this.stateMap, (v, k) => (isFunction(v)) ? v.call(this, item) : item[k]) : {};
+  },
+
   // Update state in oreder to input changes
   // @key -> name @value -> value
   // ===========================================================================
   updateState(e, val) {
     let name = e.target ? e.target.name : e;
-    let value = e.target ? e.target.value : val;
+    let value = parseFloat(e.target ? e.target.value : val);
+    if (value !== value) {
+      value = e.target ? e.target.value : val;
+    }
     this.setState({
       [name]: value
     });
@@ -28,7 +36,10 @@ export default {
 
   updateValue(e, val) {
     let name = e.target ? e.target.name : e;
-    let value = e.target ? e.target.value : val;
+    let value = parseFloat(e.target ? e.target.value : val);
+    if (value !== value) {
+      value = e.target ? e.target.value : val;
+    }
     return this._runStatefullAction(name, (this.state[name] instanceof Array) ? updateArrayWithValue(this.state[name], value) : value);
   },
 
@@ -44,7 +55,7 @@ export default {
   // ===========================================================================
   preformAction(name) {
     return () => {
-      let value = this.state[name];
+      let value = (!isUndefined(value)) ? value : this.state[name];
       let item = this.props.item;
       if (item.id) {
         // Modify if item is already existed

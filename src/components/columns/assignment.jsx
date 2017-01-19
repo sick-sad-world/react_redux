@@ -1,6 +1,8 @@
 // Import utility stuff
 // ===========================================================================
-import { find, without, concat, filter, includes } from 'lodash';
+import { find, without, concat, filter, includes, bindAll } from 'lodash';
+import { inject } from '../../helpers/functions';
+import editable from '../behaviours/editable';
 
 // Import React related stuff
 // ===========================================================================
@@ -23,9 +25,20 @@ import { createAction, throwError } from '../../actions/actions';
 class Assigment extends React.Component {
   constructor (props) {
     super(props);
+    inject(this, editable);
+    this.stateMap = {
+      name: true,
+      set: (item) => item.data.set,
+      source: (item) => item.data.source,
+      own_sets: (item) => filter(this.props.sets, (set) => includes(item.data.set, set.id)),
+      own_sources: (item) => filter(this.props.sources, (source) => includes(item.data.source, source.id))
+    }
 
+    bindAll(this, ['manageFeed']);
+
+    // Bind action handlers to component
+    // ===========================================================================
     this.state = this.mapItemToState(this.props.item);
-    this.manageFeed = this.manageFeed.bind(this);
 
     // Create bound actions
     // ===========================================================================
@@ -37,17 +50,9 @@ class Assigment extends React.Component {
   }
 
   componentWillReceiveProps (newProps) {
-    this.setState(this.mapItemToState(newProps.item))
-  }
-
-  mapItemToState (item) {
-    return {
-      name: item.name,
-      set: (item.data) ? item.data.set : [],
-      source: (item.data) ? item.data.source : [],
-      own_sets: (item.data) ? filter(this.props.sets, (set) => includes(item.data.set, set.id)) : [],
-      own_sources: (item.data) ? filter(this.props.sources, (source) => includes(item.data.source, source.id)) : []
-    };
+    if (newProps.state <= 2) {
+      this.setState(this.mapItemToState(newProps.item));
+    }
   }
 
   manageFeed (type, id, deleting) {
@@ -60,7 +65,7 @@ class Assigment extends React.Component {
   }
 
   createDeselectButton (type, id) {
-    return <a onClick={() =>this.manageFeed(type, id, true)} title='Remove this ${type} from feeds'><Icon icon='forward' /></a>;
+    return <a key='deselect' onClick={() =>this.manageFeed(type, id, true)} title='Remove this ${type} from feeds'><Icon icon='forward' /></a>;
   }
 
   render() {
@@ -122,7 +127,7 @@ let mapStateToProps = ({ app, columns, sets, sources }, ownProps) => ({
   state: app.state,
   sets: sets,
   sources: sources,
-  item: find(columns, {id: parseInt(ownProps.params.id)}) || {}
+  item: find(columns, {id: parseInt(ownProps.params.id)}) || {data: {}}
 });
 
 export default connect(mapStateToProps)(Assigment);

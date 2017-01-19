@@ -1,24 +1,47 @@
 // Import utility stuff
 // ===========================================================================
 import classNames from 'classnames';
+import { inject } from '../../helpers/functions';
+import editable from '../behaviours/editable';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+
+// Import actions
+// ===========================================================================
+import { createAction, throwError } from '../../actions/actions';
 
 // Import Child components
 // ===========================================================================
 import EmailList from './injectable';
-import PageEdit from '../pageEdit';
 
-class Edit extends PageEdit {
+class Edit extends React.Component {
   constructor (props) {
-    super(props, {
+    super(props);
+    inject(this, editable);
+    this.stateMap = {
       fullname: true,
       email: true,
       position: true
-    });
+    }
+
+    this.state = this.mapItemToState(this.props.item);
+
+    // Create bound actions
+    // ===========================================================================
+    this.actions = bindActionCreators({
+      update: createAction('user', 5),
+      throwError: throwError
+    }, this.props.dispatch);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.state <= 2) {
+      this.setState(this.mapItemToState(newProps.item));
+    }
   }
 
   render() {
@@ -114,7 +137,6 @@ const mapStateToProps = ({ app, user }) => {
   // ===========================================================================
   return {
     state: app.state,
-    type: 'user',
     item: user
   }
 };

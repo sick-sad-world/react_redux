@@ -3,10 +3,13 @@
 import { find, bindAll, includes, pickBy, keys, map, omitBy, isUndefined } from 'lodash';
 import classNames from 'classnames';
 import { transformColumnValue, composeColumnSort } from '../../helpers/functions';
+import { inject } from '../../helpers/functions';
+import editable from '../behaviours/editable';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
@@ -15,17 +18,18 @@ import { Link } from 'react-router';
 import Select from 'react-select';
 import Icon from '../icon';
 import Toggler from '../toggler';
-import PageEdit from '../pageEdit';
 
 // Import actions
 // ===========================================================================
-import { getResults } from '../../actions/actions';
+import { getResults, createAction, throwError } from '../../actions/actions';
 import { ensureColumnData } from '../../helpers/functions';
 import { defColumn, defColumnParameters } from '../../helpers/defaults';
 
-class Edit extends PageEdit {
+class Edit extends React.Component {
   constructor (props) {
-    super(props, {
+    super(props);
+    inject(this, editable);
+    this.stateMap = {
       name: true,
       display_settings: true,
       show_favorites: (item) => item.data.show_favorites,
@@ -57,32 +61,32 @@ class Edit extends PageEdit {
         let property = item.data.sort && find(this.props.sortProperty, (prop) => item.data.sort.indexOf(prop.value) > -1);
         return (property) ? property.value : '';
       }
-    });
-
-    Object.assign(this.state, {
-      adv_type: 'MIN',
-      adv_pref: null,
-      adv_prop: 'likes',
-      adv_val: ''
-    }, this.getAdvFiltersFromProps(this.props));
-
-    this.actions.refresh = getResults;
+    };
 
     // Bind action handlers to component
     // ===========================================================================
     bindAll(this, ['createAdvFilter']);
+
+    this.state = Object.assign({
+      adv_type: 'MIN',
+      adv_pref: null,
+      adv_prop: 'likes',
+      adv_val: ''
+    }, this.mapItemToState(this.props.item), pickBy(this.props.item.data, (v, k) => this.props.advRegExp.test(k)));
+
+    // Create bound actions
+    // ===========================================================================
+    this.actions = bindActionCreators({
+      update: createAction('column', 5),
+      refresh: getResults,
+      throwError: throwError
+    }, this.props.dispatch);
   }
 
-  onComponentWillReceiveProps (newProps) {
-    if (this.props.state !== 3) {
-      this.setState(this.getAdvFiltersFromProps(newProps))
+  componentWillReceiveProps(newProps) {
+    if (newProps.state <= 2) {
+      this.setState(Object.assign(this.mapItemToState(newProps.item), pickBy(this.props.item.data, (v, k) => this.props.advRegExp.test(k))));
     }
-  }
-
-  // Pick adv filters and assign it to state
-  // ===========================================================================
-  getAdvFiltersFromProps (props) {
-    return pickBy(props.item.data, (v, k) => this.props.advRegExp.test(k));
   }
 
   // Send request to server with new props
@@ -128,7 +132,7 @@ class Edit extends PageEdit {
         }
         
         if (data) {
-          this.actions.update(data, {id}).then(({payload}) => (payload.data) ? this.props.dispatch(this.actions.refresh(payload.data, {id})) : null).catch(this.actions.throwError);
+          this.actions.update(data, {id}).then(({payload}) => (payload.data) ? this.actions.refresh(payload.data, {id}) : null).catch(this.actions.throwError);
         }
       }
     }
