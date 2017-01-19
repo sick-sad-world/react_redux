@@ -214,7 +214,8 @@ export const getResults = (data, options) => (dispatch) => {
   let messageId = moment().unix();
   let opts = Object.assign({
     id: null,
-    message: true
+    message: true,
+    state: true
   }, options);
 
   if (!opts.id) {
@@ -226,11 +227,13 @@ export const getResults = (data, options) => (dispatch) => {
 
   // Set state to loading
   // ===========================================================================
-  dispatch({
-    state: 3,
-    type: ACTIONS['LINKS_STATE'],
-    id: opts.id
-  });
+  if (opts.state) {
+    dispatch({
+      state: 3,
+      type: ACTIONS['LINKS_STATE'],
+      id: opts.id
+    });
+  }
 
   if (opts.message) {
     dispatch(sendMessage({
@@ -254,7 +257,7 @@ export const getResults = (data, options) => (dispatch) => {
       }, messageId))
     }
     dispatch({
-      type: ACTIONS['GET_LINKS'],
+      type: (data.offset) ? ACTIONS['ADD_LINKS'] : ACTIONS['GET_LINKS'],
       id: opts.id,
       state: 2,
       payload

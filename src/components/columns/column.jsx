@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { find, bindAll, pick } from 'lodash';
+import { find, bindAll, pick, debounce } from 'lodash';
 import editable from '../behaviours/editable';
 import deletable from '../behaviours/deletable';
 import { defColumnParameters } from '../../helpers/defaults'; 
@@ -36,6 +36,7 @@ class Column extends React.Component {
     inject(this, deletable);
 
     this.interval = null;
+    this.infinite = false;
     this.stateMap = {
       infinite: (item) => item.data.infinite,
       direction: (item) => item.data.direction,
@@ -58,6 +59,12 @@ class Column extends React.Component {
         return ar;
       }
     };
+    
+    // Bind methods to instance
+    // ===========================================================================
+    bindAll(this, ['expandedStateToggler', 'hideColumn', 'refreshResults', 'preformAction', 'scrollHandler']);
+    this.debouncedScrollHandler = debounce(this.scrollHandler, 250);
+
     this.state = Object.assign({
       deleting: false,
       expanded: false
@@ -68,14 +75,10 @@ class Column extends React.Component {
     this.actions = bindActionCreators({
       update: createAction('column', 5),
       delete: createAction('column', 6),
-      refresh: getResults,
+      getResults: getResults,
       throwError: throwError
     }, this.props.dispatch);
 
-
-    // Bind methods to instance
-    // ===========================================================================
-    bindAll(this, ['expandedStateToggler', 'hideColumn', 'refreshResults', 'preformAction']);
   }
 
   componentWillReceiveProps (newProps) {
@@ -100,7 +103,7 @@ class Column extends React.Component {
         id: item.id,
         data: Object.assign({}, item.data, {[name]: value})
       }).then(() => {
-        return (name !== 'autoreload' && name !== 'infinite') ? this.actions.refresh(item.data, {id: item.id}) : null;
+        return (name !== 'autoreload' && name !== 'infinite') ? this.actions.getResults(item.data, {id: item.id}) : null;
       }).catch(this.actions.throwError)
     };
   }
@@ -223,7 +226,18 @@ class Column extends React.Component {
   // ===========================================================================
   refreshResults () {
     let item = this.props.item;
-    this.actions.refresh(item.data, {id: item.id}).catch(this.actions.throwError);
+    this.actions.getResults(item.data, {id: item.id}).catch(this.actions.throwError);
+  }
+
+  scrollHandler (e) {
+    if (!this.infinite && e.target.scrollTop >= e.target.scrollHeight - e.target.clientHeight - 100) {
+      let item = this.props.item;
+      this.infinite = true;
+      this.actions
+          .getResults({...item.data, offset: this.props.data.length}, {id: item.id, state: false})
+          .catch(this.actions.throwError)
+          .then(() => {this.infinite = false});
+    }
   }
 
   render() {
@@ -241,7 +255,10 @@ class Column extends React.Component {
         </header>
         { (this.state.expanded) ? this.renderEditForm() : null }
         { (this.state.deleting) ? this.renderDeleteDialog() : null }
-        <ul className='entity-list'>
+        <ul className='entity-list' onScroll={(this.state.infinite) ? (e) => {
+          e.persist();
+          this.debouncedScrollHandler(e);
+        } : null}>
           {(this.props.resultState === 2 && this.props.data.length) ? this.renderResults(tableProps) : this.renderResultState()}
         </ul>
       </section>
