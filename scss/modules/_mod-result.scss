@@ -39,6 +39,7 @@
   }
 	figure {
     position: relative;
+    background-color: $c-main;
     &:not(.is-wide) {
       float: left;
       width: 45%;
@@ -123,62 +124,5 @@
 				background: $c-accent;
 			}
 		}
-	}
-	.graph-container {
-		margin: auto;
-	}
-	.graph-selection {
-		$p: 112px;
-		@include pos(0 false false 100%);
-		list-style: none;
-		padding: baseUnit();
-		z-index: 10;
-		background-color: $c-alt;
-		border: $bd;
-		box-shadow: $sh-base;
-		width: round(map-get($layout, dashboard) *0.783);
-		margin-left: baseUnit(0.5);
-		visibility: collapse;
-		&:before, &:after {
-			display: block;
-			position: absolute;
-			right: 100%;
-			content: '';
-			width: 0;
-			height: 0;
-			border-style: solid;
-			border-color: transparent;
-		}
-		&:before {
-			border-width: baseUnit()  + 2px;
-			border-right-color: $c-border;
-			top: $p - 2px;
-		}
-		&:after {
-			top: $p;
-			border-width: baseUnit();
-			border-right-color: $c-alt;
-		}
-		a.btn-left {
-			display: block;
-			margin-right: baseUnit(0.5);
-		}
-		a.bth-right {
-			display: block;
-			margin-left: baseUnit(0.5);
-		}
-		li {
-			margin: baseUnit() 0 !important;
-			float: left;
-			width: 50%;
-		}
-	}
-	&.is-clumped {
-		small, .descr, footer, figure, aside a {
-			display: none;
-		}
-	}
-	.is-expanded .graph-selection {
-		visibility: visible;
 	}
 }

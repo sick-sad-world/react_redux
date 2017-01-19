@@ -1,12 +1,14 @@
 // Import utility stuff
 // ===========================================================================
 import { includes, bindAll, filter } from 'lodash';
+import { formatNumber, makeSortLabel } from '../../helpers/functions';
 import classNames from 'classnames';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
 import LazyLoad from 'react-lazy-load';
+import Icon from '../icon';
 import { Link } from 'react-router';
 
 // Main app screen - Dashboard
@@ -40,6 +42,15 @@ export default class Result extends React.Component {
     return (
       <li>
         <article className='mod-result'>
+          <aside>
+            <span className='badge comparator'>
+              <b>{(props.sort === 'found') ? 'Found' : formatNumber(props[props.sort])}</b>
+              { makeSortLabel(props.sort) }
+            </span>
+            <a onClick={props.makeAction('refresh', props.hash)}>
+              <Icon icon='cw' />
+            </a>
+          </aside>
           <div className='content'>
             <header>
               { (this.checkDisplay('title')) ? <h1><a href={props.url} target='_blank'>{props.title}</a></h1> : null }

@@ -22,7 +22,7 @@ import Result from './result';
 
 // Import actions
 // ===========================================================================
-import { throwError, createAction, getResults } from '../../actions/actions';
+import { throwError, createAction, createResultAction } from '../../actions/actions';
 
 // Main app screen - Dashboard
 // ===========================================================================
@@ -62,7 +62,7 @@ class Column extends React.Component {
     
     // Bind methods to instance
     // ===========================================================================
-    bindAll(this, ['expandedStateToggler', 'hideColumn', 'refreshResults', 'preformAction', 'scrollHandler']);
+    bindAll(this, ['expandedStateToggler', 'hideColumn', 'refreshResults', 'preformAction', 'scrollHandler', 'makeResultAction']);
     this.debouncedScrollHandler = debounce(this.scrollHandler, 250);
 
     this.state = Object.assign({
@@ -75,7 +75,8 @@ class Column extends React.Component {
     this.actions = bindActionCreators({
       update: createAction('column', 5),
       delete: createAction('column', 6),
-      getResults: getResults,
+      getResults: createResultAction(3),
+      getResult: createResultAction(8),
       throwError: throwError
     }, this.props.dispatch);
 
@@ -189,8 +190,17 @@ class Column extends React.Component {
   // Render results
   // @map -> results, @return -> DOM Array
   // ===========================================================================
-  renderResults (tableProps) {
-    return this.props.data.map((result) => <Result key={result.id} displaySettings={this.props.item.display_settings} {...tableProps} {...result} />)
+  renderResults (sort, tableProps) {
+    return this.props.data.map((result) => {
+      return <Result 
+                key={result.id}
+                sort={sort}
+                makeAction={this.makeResultAction} 
+                displaySettings={this.props.item.display_settings}
+                {...tableProps} 
+                {...result}
+            />
+    })
   }
 
   // Render different result state empty, error, loading, init
@@ -240,6 +250,16 @@ class Column extends React.Component {
     }
   }
 
+  makeResultAction(action, hash) {
+    let id = this.props.item.id;
+    return () => {
+      switch (action) {
+        case 'refresh':
+          return this.actions.getResult({hash}, {id, state: false}).catch(this.actions.throwError);
+      }
+    }
+  }
+
   render() {
     let item = this.props.item;
     let tableProps = pick(this.props, ['tableRange', 'tableTexts', 'tableStats']);
@@ -259,7 +279,7 @@ class Column extends React.Component {
           e.persist();
           this.debouncedScrollHandler(e);
         } : null}>
-          {(this.props.resultState === 2 && this.props.data.length) ? this.renderResults(tableProps) : this.renderResultState()}
+          {(this.props.resultState === 2 && this.props.data.length) ? this.renderResults(item.data.sort, tableProps) : this.renderResultState()}
         </ul>
       </section>
     );

@@ -1,4 +1,5 @@
-import { LOGOUT, GET_LINKS, LINKS_STATE, ADD_LINKS } from '../actions/types';
+import { LOGOUT, GET_LINKS, GET_LINK, LINKS_STATE, ADD_LINKS, DELETE_LINK } from '../actions/types';
+import { reduce } from 'lodash';
 import { splitText } from '../helpers/functions';
 
 
@@ -14,6 +15,13 @@ export const links = (state = {}, action) => {
       return Object.assign({}, state, {
         [action.id]: {
           data: action.payload.map(splitText),
+          state: action.state || 2
+        }
+      });
+    case GET_LINK:
+      return Object.assign({}, state, {
+        [action.id]: {
+          data: action.payload.map((link) => (link.hash === action.payload.hash) ? splitText(action.payload) : link),
           state: action.state || 2
         }
       });

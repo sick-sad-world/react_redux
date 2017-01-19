@@ -14,141 +14,135 @@ import moment from 'moment';
 // Action constructor (for default AJAX comunnication)
 // Since most of our actions are the same - i create this
 // ===========================================================================
-export const createAction = (entity, action) => {
+export const createAction = (entity, action) => (data, options) => (dispatch) => {
 
-  // Default wrapper for [redux-thunk] actions
+  let url;
+  let type;
+
+  let opts = Object.assign({
+    state: true,
+    message: true,
+    ignoreError: false,
+    id: null
+  }, options);
+
+  let id = (data) ? data.id || opts.id : opts.id;
+  let messageId = moment().unix();
+
+  // Compose data for call
   // ===========================================================================
-  return (data, options) => (dispatch) => {
-
-    let url;
-    let type;
-
-    let opts = Object.assign({
-      state: true,
-      message: true,
-      ignoreError: false,
-      id: null
-    }, options);
-
-    let id = (data) ? data.id || opts.id : opts.id;
-    let messageId = moment().unix();
-
-    // Compose data for call
-    // ===========================================================================
-    let reqData = reduce(data, (acc, v, k) => {
-      if (isPlainObject(v)) {
-        acc[k] = JSON.stringify(v);
-      } else if (!isUndefined(v)) {
-        acc[k] = v;
-      }
-      return acc;
-    }, {
-      id
-    });
-
-    switch (action) {
-      case 3:
-        if (entity === 'user') {
-          url = 'user';
-          type = ACTIONS['GET_USER'];
-        } else {
-          url = entity + 's';
-          type = ACTIONS[`GET_${entity.toUpperCase()}S`];
-        }
-        break;
-      case 4:
-        url = 'add_' + entity;
-        type = ACTIONS[`ADD_${entity.toUpperCase()}`];
-        break;
-      case 5:
-        url = entity;
-        type = ACTIONS[`EDIT_${entity.toUpperCase()}`];
-        break;
-      case 6:
-        url = 'remove_' + entity;
-        type = ACTIONS[`DELETE_${entity.toUpperCase()}`];
-        break;
-      case 7:
-        url = `sort_${entity}s`;
-        type = ACTIONS[`SORT_${entity.toUpperCase()}S`];
-        break;
-      case 8:
-        url = entity;
-        type = ACTIONS[`${entity.toUpperCase()}`];
-        break;
-      default:
-        throw {}
+  let reqData = reduce(data, (acc, v, k) => {
+    if (isPlainObject(v)) {
+      acc[k] = JSON.stringify(v);
+    } else if (!isUndefined(v)) {
+      acc[k] = v;
     }
+    return acc;
+  }, {
+    id
+  });
 
-    // Set app state to [loading]
+  switch (action) {
+    case 3:
+      if (entity === 'user') {
+        url = 'user';
+        type = ACTIONS['GET_USER'];
+      } else {
+        url = entity + 's';
+        type = ACTIONS[`GET_${entity.toUpperCase()}S`];
+      }
+      break;
+    case 4:
+      url = 'add_' + entity;
+      type = ACTIONS[`ADD_${entity.toUpperCase()}`];
+      break;
+    case 5:
+      url = entity;
+      type = ACTIONS[`EDIT_${entity.toUpperCase()}`];
+      break;
+    case 6:
+      url = 'remove_' + entity;
+      type = ACTIONS[`DELETE_${entity.toUpperCase()}`];
+      break;
+    case 7:
+      url = `sort_${entity}s`;
+      type = ACTIONS[`SORT_${entity.toUpperCase()}S`];
+      break;
+    case 8:
+      url = entity;
+      type = ACTIONS[`${entity.toUpperCase()}`];
+      break;
+    default:
+      throw {}
+  }
+
+  // Set app state to [loading]
+  // ===========================================================================
+  if (opts.state) {
+    dispatch({
+      type: ACTIONS['SET_APP_STATE'],
+      state: action
+    });
+  }
+
+  // Send message
+  // ===========================================================================
+  if (opts.message) {
+    dispatch(sendMessage({
+      id: messageId,
+      type: 'loading',
+      entity,
+      action,
+      entityId: id
+    }));
+  }
+
+  // Fire a call to server
+  // ===========================================================================
+  return fetch(url, reqData).then(payload => {
+
+    // Set app state to idle
     // ===========================================================================
     if (opts.state) {
       dispatch({
         type: ACTIONS['SET_APP_STATE'],
-        state: action
+        state: 2
       });
     }
 
-    // Send message
+    if (payload.error && !opts.ignoreError) {
+      // Fire [error] action if error found
+      // ===========================================================================
+      throw {
+        id: messageId,
+        entity,
+        action,
+        entityId: id,
+        text: payload.error
+      };
+    } else if (payload.message || payload.success) {
+      payload = data;
+    }
+
+    // Fire message to display proper message if responce contains only it
     // ===========================================================================
     if (opts.message) {
       dispatch(sendMessage({
-        id: messageId,
-        type: 'loading',
-        entity,
-        action,
-        entityId: id
-      }));
+        type: 'success',
+        text: payload.success || opts.message
+      }, messageId));
     }
 
-    // Fire a call to server
+    // Dispatch proper action
     // ===========================================================================
-    return fetch(url, reqData).then(payload => {
-
-      // Set app state to idle
-      // ===========================================================================
-      if (opts.state) {
-        dispatch({
-          type: ACTIONS['SET_APP_STATE'],
-          state: 2
-        });
-      }
-
-      if (payload.error && !opts.ignoreError) {
-        // Fire [error] action if error found
-        // ===========================================================================
-        throw {
-          id: messageId,
-          entity,
-          action,
-          entityId: id,
-          text: payload.error
-        };
-      } else if (payload.message || payload.success) {
-        payload = data;
-      }
-
-      // Fire message to display proper message if responce contains only it
-      // ===========================================================================
-      if (opts.message) {
-        dispatch(sendMessage({
-          type: 'success',
-          text: payload.success || opts.message
-        }, messageId));
-      }
-
-      // Dispatch proper action
-      // ===========================================================================
-      delete payload.callback;
-      if (action === 5) delete payload.id;
-      return dispatch({
-        type,
-        payload,
-        id
-      });
+    delete payload.callback;
+    if (action === 5) delete payload.id;
+    return dispatch({
+      type,
+      payload,
+      id
     });
-
-  }
+  });
 }
 
 // Set app state (simple and SYNC)
@@ -210,8 +204,13 @@ export const sendMessage = (mess, id) => {
 // Get results for a single column
 // @data - column data Object required
 // ===========================================================================
-export const getResults = (data, options) => (dispatch) => {
+export const createResultAction = (action) => (data, options) => (dispatch) => {
+
+  let url;
+  let type;
+
   let messageId = moment().unix();
+
   let opts = Object.assign({
     id: null,
     message: true,
@@ -225,11 +224,30 @@ export const getResults = (data, options) => (dispatch) => {
     }
   }
 
+  switch (action) {
+    case 8:
+      url = 'refresh_links';
+      type = ACTIONS['GET_LINK'];
+      break;
+    case 5:
+      url = 'favorite';
+      type = ACTIONS['EDIT_LINK'];
+      break;
+    case 6:
+      url = 'ignore';
+      type = ACTIONS['DELETE_LINK'];
+      break;
+    default:
+      url = 'links';
+      type = (data.offset) ? ACTIONS['ADD_LINKS'] : ACTIONS['GET_LINKS'];
+      break;
+  }
+
   // Set state to loading
   // ===========================================================================
   if (opts.state) {
     dispatch({
-      state: 3,
+      state: action,
       type: ACTIONS['LINKS_STATE'],
       id: opts.id
     });
@@ -241,23 +259,23 @@ export const getResults = (data, options) => (dispatch) => {
       id: messageId,
       entityId: opts.id,
       entity: 'results',
-      action: 3
+      action: action
     }))
   }
 
   // Run actual call
   // ===========================================================================
-  return fetch('links', omitBy(data, isUndefined)).then((payload) => {
+  return fetch(url, omitBy(data, isUndefined)).then((payload) => {
     if (opts.message) {
       dispatch(sendMessage({
         type: 'success',
         entityId: opts.id,
         entity: 'results',
-        action: 3
+        action: action
       }, messageId))
     }
     dispatch({
-      type: (data.offset) ? ACTIONS['ADD_LINKS'] : ACTIONS['GET_LINKS'],
+      type: type,
       id: opts.id,
       state: 2,
       payload
@@ -271,6 +289,7 @@ export const getAllResults = (data) => (dispatch) => {
   let columns;
   let ids = {};
   let messageId = moment().unix();
+  let getResults = createResultAction(3);
 
   // Pick exacly columns data to iterate over for Results fetching
   // ===========================================================================

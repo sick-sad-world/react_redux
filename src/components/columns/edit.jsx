@@ -21,7 +21,7 @@ import Toggler from '../toggler';
 
 // Import actions
 // ===========================================================================
-import { getResults, createAction, throwError } from '../../actions/actions';
+import { createResultAction, createAction, throwError } from '../../actions/actions';
 import { ensureColumnData } from '../../helpers/functions';
 import { defColumn, defColumnParameters } from '../../helpers/defaults';
 
@@ -78,7 +78,7 @@ class Edit extends React.Component {
     // ===========================================================================
     this.actions = bindActionCreators({
       update: createAction('column', 5),
-      refresh: getResults,
+      refresh: createResultAction(3),
       throwError: throwError
     }, this.props.dispatch);
   }
