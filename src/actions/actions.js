@@ -1,13 +1,7 @@
 // Import action types and our communication helper
 // ===========================================================================
 import * as ACTIONS from './types';
-import {
-  reduce,
-  isPlainObject,
-  omitBy,
-  isUndefined,
-  keys
-} from 'lodash';
+import { reduce, isPlainObject, omitBy, isUndefined, keys } from 'lodash';
 import fetch from '../fetch';
 import moment from 'moment';
 

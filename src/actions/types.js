@@ -3,12 +3,12 @@
 export const ERROR = 'ERROR';
 export const PUSH_MESSAGE = 'PUSH_MESSAGE';
 export const EDIT_MESSAGE = 'EDIT_MESSAGE';
-export const SET_APP_STATE = 'SET_APP_STATE';
 
 // App state actions
 // ===========================================================================
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
+export const SET_APP_STATE = 'SET_APP_STATE';
 
 // Alert actions
 // ===========================================================================
