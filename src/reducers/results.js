@@ -1,5 +1,4 @@
-import { LOGOUT, GET_LINKS, GET_LINK, LINKS_STATE, ADD_LINKS, DELETE_LINK } from '../actions/types';
-import { reduce } from 'lodash';
+import { LOGOUT, GET_LINKS, GET_LINK, LINKS_STATE, ADD_LINKS, REMOVE_LINK, ERROR } from '../actions/types';
 import { splitText } from '../helpers/functions';
 
 
@@ -7,6 +6,17 @@ export const links = (state = {}, action) => {
   switch (action.type) {
     case LOGOUT: 
       return {};
+    case ERROR:
+      if (state[action.payload.entityId]) {
+        return Object.assign({}, state, {
+          [action.payload.entityId]: {
+            state: 0,
+            data: state[action.payload.entityId].data
+          }
+        })
+      } else {
+        return state;
+      }
     case LINKS_STATE:
       return Object.assign({}, state, {
         [action.id]: Object.assign({data: []}, state[action.id], {state: action.state || 2})

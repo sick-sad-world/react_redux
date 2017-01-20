@@ -292,7 +292,7 @@ class Edit extends React.Component {
               <span className='form-label'>Sort results by:</span>
               <div className='sorting-selects'>
                 <Select
-                  disabled={running}
+                  disabled={running || this.state.sort_prop === 'found'}
                   className='size-120'
                   name='sort_pref'
                   placeholder='Prefix...'

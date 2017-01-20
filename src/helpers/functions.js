@@ -1,3 +1,7 @@
+import * as ACTIONS from '../actions/types';
+import moment from 'moment';
+import { isUndefined, isPlainObject, reduce, isArray } from 'lodash';
+
 export const absolutizePath = (path) => (path && path.indexOf('/') > 0) ? '/'+path : path;
 
 export const pickUniqueSources = (sets) => {
@@ -41,7 +45,7 @@ export const transformColumnValue = (value) => {
   }
 }
 
-export const composeColumnSort = (pref, prop) => (pref) ? pref + '_' + prop : prop;
+export const composeColumnSort = (pref, prop) => (pref && prop !== 'found') ? pref + '_' + prop : prop;
 
 export const setUniqueSources = (set, feeds) => {
   set.uniq_ids = [];
@@ -135,4 +139,64 @@ export const makeSortLabel = (stat = '') => {
     stat = stat.replace('hotness_', 'hot ');
   }
   return stat;
+}
+
+export const transformRequestData = (data, id) => reduce(data, (acc, v, k) => {
+  if (isPlainObject(v)) {
+    acc[k] = JSON.stringify(v);
+  } else if ((isArray(v) && v.length) || !isUndefined(v)) {
+    acc[k] = v;
+  }
+  return acc;
+}, (id) ? { id } : {});
+
+export const compileRequstParams = (entity, code, id) => {
+  let data = {};
+  switch (code) {
+    case 3:
+      if (id) {
+        data.url = entity;
+        data.type = ACTIONS[`GET_${entity.toUpperCase()}`];
+      } else {
+        data.url = entity + 's';
+        data.type = ACTIONS[`GET_${entity.toUpperCase()}S`];
+      }
+      break;
+    case 4:
+      data.url = 'add_' + entity;
+      data.type = ACTIONS[`ADD_${entity.toUpperCase()}`];
+      break;
+    case 5:
+      data.url = entity;
+      data.type = ACTIONS[`EDIT_${entity.toUpperCase()}`];
+      break;
+    case 6:
+      data.url = 'remove_' + entity;
+      data.type = ACTIONS[`REMOVE_${entity.toUpperCase()}`];
+      break;
+    case 7:
+      data.url = `sort_${entity}s`;
+      data.type = ACTIONS[`SORT_${entity.toUpperCase()}S`];
+      break;
+    case 8:
+      data.url = entity;
+      data.type = ACTIONS[`${entity.toUpperCase()}`];
+      break;
+    default:
+      throw {
+        text: 'Action code incorrect. Should be between 3 and 8'
+      }
+  }
+  return data;
+}
+
+export const createMessage = (data) => Object.assign({visible: true, id: moment().unix()}, data);
+
+export const transformError = (error) => {
+  if (error instanceof Error) {
+    console.log(error.toString()+' '+error.stack);
+    return {type: 'error', text: error.toString()+' '+error.stack};
+  } else {
+    return {...error, type: 'error'};
+  }
 }

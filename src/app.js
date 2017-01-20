@@ -93,7 +93,7 @@ render(
 
 // Ask server about initial data
 // ===========================================================================
-TrendolizerStore.dispatch(createAction('user', 3)(null, {message: false, state: false}))
+TrendolizerStore.dispatch(createAction('user', 3)(null, {message: false, state: false, id: 'user'}))
   .then((action) => action.payload.id && TrendolizerStore.dispatch(fetchData()))
   .then((data) => TrendolizerStore.dispatch(getAllResults(data)))
   .catch((error) => TrendolizerStore.dispatch(throwError(error)))

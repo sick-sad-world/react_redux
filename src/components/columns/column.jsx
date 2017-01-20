@@ -120,7 +120,7 @@ class Column extends React.Component {
       <form className='column-settings'>
         <div className='row-flex'>
           <Select
-            disabled={running}
+            disabled={running || this.state.sort_prop === 'found'}
             className='size-120'
             name='sort_pref'
             placeholder='Prefix...'
