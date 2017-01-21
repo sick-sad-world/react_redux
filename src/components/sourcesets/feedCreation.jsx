@@ -1,8 +1,9 @@
 // Import utility stuff
 // ===========================================================================
-import { forOwn, bindAll, mapValues, isArray, concat, filter, find } from 'lodash';
+import { forOwn, bindAll, mapValues, isArray, concat, filter, find, without } from 'lodash';
 import classNames from 'classnames';
 import fetch from '../../fetch';
+import moment from 'moment';
 
 // Import React related stuff
 // ===========================================================================
@@ -18,7 +19,7 @@ import Icon from '../icon';
 
 // Import actions
 // ===========================================================================
-import { createAction, throwError } from '../../actions/actions';
+import { createAction, throwError, sendMessage } from '../../actions/actions';
 
 class FeedCreation extends React.Component {
   constructor (props) {
@@ -397,6 +398,8 @@ class FeedCreation extends React.Component {
   checkFeed (e) {
     e.preventDefault();
     let url = this.state.url;
+    let messageId = moment().unix();
+    let messageText = ['Check URL for:']
 
     // Show proper message if URL is not match criterea
     // ===========================================================================
@@ -408,6 +411,7 @@ class FeedCreation extends React.Component {
     // ===========================================================================
     forOwn(this.state.results, (v, k) => {
       if (v) {
+        messageText.push(k);
         fetch(this.props.checkUrls[k], {url})
           .then(payload => {
             if (payload.length > 50) {
@@ -423,11 +427,23 @@ class FeedCreation extends React.Component {
                 feed: url
               })
             }
-            this.setState(newState)
+            messageText = without(messageText, k);
+            this.props.dispatch(sendMessage({
+              id: messageId,
+              type: 'loading',
+              text: messageText.join(' ') + ' feeds',
+              visible: messageText.length > 1
+            }, messageId))
+            this.setState(newState);
           })
           .catch(this.actions.throwError)
       }
     });
+    this.props.dispatch(sendMessage({
+      id: messageId,
+      type: 'loading',
+      text: messageText.join(' ') + ' feeds'
+    }));
   }
 
   createFeed () {
@@ -469,7 +485,7 @@ class FeedCreation extends React.Component {
     return (
       <section className={componentRootClass}>
         <header className='subsection-header'>
-          <Link to={`/sets/${this.props.item.id}`}>
+          <Link to={`/sets/${this.props.set.id}`}>
             <Icon icon='chevron-left' />
           </Link>
           <div className='text'>

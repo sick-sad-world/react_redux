@@ -31,7 +31,7 @@ export const links = (state = {}, action) => {
     case GET_LINK:
       return Object.assign({}, state, {
         [action.id]: {
-          data: action.payload.map((link) => (link.hash === action.payload.hash) ? splitText(action.payload) : link),
+          data: state[action.id].data.map((link) => (link.hash === action.payload.hash) ? Object.assign(link, splitText(action.payload)) : link),
           state: action.state || 2
         }
       });

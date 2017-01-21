@@ -144,7 +144,11 @@ export const makeSortLabel = (stat = '') => {
 export const transformRequestData = (data, id) => reduce(data, (acc, v, k) => {
   if (isPlainObject(v)) {
     acc[k] = JSON.stringify(v);
-  } else if ((isArray(v) && v.length) || !isUndefined(v)) {
+  } else if (isArray(v)) {
+    if (v.length) {
+      acc[k] = v;
+    }
+  } else if (!isUndefined(v)) {
     acc[k] = v;
   }
   return acc;
@@ -194,7 +198,7 @@ export const createMessage = (data) => Object.assign({visible: true, id: moment(
 
 export const transformError = (error) => {
   if (error instanceof Error) {
-    console.log(error.toString()+' '+error.stack);
+    console.error(error.toString()+' '+error.stack);
     return {type: 'error', text: error.toString()+' '+error.stack};
   } else {
     return {...error, type: 'error'};

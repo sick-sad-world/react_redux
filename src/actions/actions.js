@@ -136,6 +136,7 @@ export const createResultAction = (action) => (data, options) => (dispatch) => {
 
   let url;
   let type;
+  let entity = 'result';
 
   let messageId = moment().unix();
 
@@ -168,6 +169,7 @@ export const createResultAction = (action) => (data, options) => (dispatch) => {
     default:
       url = 'links';
       type = (data.offset) ? ACTIONS['ADD_LINKS'] : ACTIONS['GET_LINKS'];
+      entity += 's';
       break;
   }
 
@@ -185,21 +187,21 @@ export const createResultAction = (action) => (data, options) => (dispatch) => {
     dispatch(sendMessage({
       type: 'loading',
       id: messageId,
-      entityId: options.id,
-      entity: 'results',
-      action: action
+      entityId: (url === 'links') ? options.id : data.hash,
+      entity,
+      action
     }))
   }
 
   // Run actual call
   // ===========================================================================
-  return fetch(url, omitBy(data, isUndefined)).then((payload) => {
+  return fetch(url, transformRequestData(data)).then((payload) => {
     if (options.message) {
       dispatch(sendMessage({
         type: 'success',
-        entityId: options.id,
-        entity: 'results',
-        action: action
+        entityId: (url === 'links') ? options.id : data.hash,
+        entity,
+        action
       }, messageId))
     }
     dispatch({
