@@ -74,7 +74,7 @@ let history = syncHistoryWithStore(browserHistory, TrendolizerStore);
 render(
   <Provider store={TrendolizerStore}>
     <Router history={history}>
-      <Route path='/' component={App}>
+      <Route component={App}>
         <Route path='/auth' component={Auth} />
         <Route component={Workspace}>
           <Route path='/dashboard(/:id)' components={{main: Dashboard}} />
@@ -84,8 +84,8 @@ render(
           <Route path='/sets(/:id)(/:create)' components={Sourcesets}/>
           <Route path='/settings' components={{main: Profile}}/>
         </Route>
-        <Redirect from='*' to='/' />
       </Route>
+      <Redirect from='*' to='/dashboard' />
     </Router>
   </Provider>,
   document.getElementById('appRoot')

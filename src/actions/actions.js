@@ -1,7 +1,7 @@
 // Import action types and our communication helper
 // ===========================================================================
 import * as ACTIONS from './types';
-import { omitBy, isNull, keys } from 'lodash';
+import { keys } from 'lodash';
 import { compileRequstParams, transformRequestData, createMessage, transformError } from '../helpers/functions';
 import fetch from '../fetch';
 import moment from 'moment';
@@ -120,7 +120,9 @@ export const createAction = (entity, action) => (data, options) => (dispatch) =>
 
     // Dispatch proper action
     // ===========================================================================
-    delete payload.callback;
+    if (payload) {
+      delete payload.callback;
+    }
     return dispatch({
       type,
       payload,
