@@ -4,7 +4,7 @@ import { find, bindAll, pick, debounce } from 'lodash';
 import editable from '../behaviours/editable';
 import deletable from '../behaviours/deletable';
 import { defColumnParameters } from '../../helpers/defaults'; 
-import { inject, composeColumnSort, transformColumnValue } from '../../helpers/functions';
+import { inject, composeColumData, shouldFetchResults } from '../../helpers/functions';
 
 // Import React related stuff
 // ===========================================================================
@@ -93,19 +93,12 @@ class Column extends React.Component {
   // ===========================================================================
   preformAction(name) {
     return () => {
-      let item = this.props.item;
-      let value = transformColumnValue(this.state[name]);
-
-      if (name.indexOf('sort') === 0) {
-        name = 'sort';
-        value = composeColumnSort(this.state.sort_pref, this.state.sort_prop);
-      }
-      this.actions.update({
-        id: item.id,
-        data: Object.assign({}, item.data, {[name]: value})
-      }).then(() => {
-        return (name !== 'autoreload' && name !== 'infinite') ? this.actions.getResults(item.data, {id: item.id}) : null;
-      }).catch(this.actions.throwError)
+      let { id, data } = this.props.item;
+      let result = composeColumData.call(this, data, name, this.state[name]);
+      if (!result) return;
+      this.actions.update(result, { id }).then(({payload}) => {
+        return (shouldFetchResults(payload, name)) ? this.actions.getResults(payload.data, { id }) : null;
+      }).catch(this.actions.throwError);
     };
   }
 

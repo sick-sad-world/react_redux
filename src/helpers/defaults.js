@@ -55,21 +55,21 @@ export const defColumnData = {
   limit: 30,
   sort: 'rate_likes',
   direction: 'desc',
-  author: undefined,
-  search: undefined,
-  exclude_search: undefined,
-  url: undefined,
-  since: undefined,
-  before: undefined,
-  language: undefined,
+  author: null,
+  search: null,
+  exclude_search: null,
+  url: null,
+  since: null,
+  before: null,
+  language: null,
   source: [],
   set: [],
   ignore_source: [],
   ignore_set: [],
-  is_image: undefined,
-  is_video: undefined,
-  is_facebook: undefined,
-  is_gallery: undefined
+  is_image: null,
+  is_video: null,
+  is_facebook: null,
+  is_gallery: null
 };
 
 export const defColumn = {

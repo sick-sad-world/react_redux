@@ -1,4 +1,4 @@
-import { mapValues, isFunction, isUndefined } from 'lodash';
+import { mapValues, isFunction } from 'lodash';
 import { updateArrayWithValue } from '../../helpers/functions';
 
 // Editable behaviours
@@ -55,7 +55,7 @@ export default {
   // ===========================================================================
   preformAction(name) {
     return () => {
-      let value = (!isUndefined(value)) ? value : this.state[name];
+      let value = this.state[name];
       let item = this.props.item;
       if (item.id) {
         // Modify if item is already existed

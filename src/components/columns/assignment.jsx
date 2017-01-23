@@ -1,7 +1,7 @@
 // Import utility stuff
 // ===========================================================================
-import { find, without, concat, filter, includes, bindAll } from 'lodash';
-import { inject } from '../../helpers/functions';
+import { find, filter, includes, bindAll } from 'lodash';
+import { inject, composeColumData, shouldFetchResults } from '../../helpers/functions';
 import editable from '../behaviours/editable';
 
 // Import React related stuff
@@ -20,7 +20,7 @@ import Source from '../sourcesets/source';
 
 // Import actions
 // ===========================================================================
-import { createAction, throwError } from '../../actions/actions';
+import { createAction, createResultAction, throwError } from '../../actions/actions';
 
 class Assigment extends React.Component {
   constructor (props) {
@@ -44,6 +44,7 @@ class Assigment extends React.Component {
     // ===========================================================================
     this.actions = bindActionCreators({
       update: createAction('column', 5),
+      refresh: createResultAction(3),
       throwError: throwError
     }, this.props.dispatch);
 
@@ -55,17 +56,17 @@ class Assigment extends React.Component {
     }
   }
 
-  manageFeed (type, id, deleting) {
-    let val = (deleting) ? without(this.state[type], id) : concat(this.state[type], id);
-
-    this.actions.update({
-      id: this.props.item.id,
-      data: Object.assign({}, this.props.item.data, {[type]: val})
+  manageFeed (type, feed) {
+    let { id, data } = this.props.item;
+    let result = composeColumData.call(this, data, type, feed);
+    if (!result) return; 
+    this.actions.update(result, { id }).then(({payload}) => {
+      return (shouldFetchResults(payload, name)) ? this.actions.refresh(payload.data, {id}) : null;
     }).catch(this.actions.throwError);
   }
 
   createDeselectButton (type, id) {
-    return <a key='deselect' onClick={() =>this.manageFeed(type, id, true)} title='Remove this ${type} from feeds'><Icon icon='forward' /></a>;
+    return <a key='deselect' onClick={() =>this.manageFeed(type, id)} title='Remove this ${type} from feeds'><Icon icon='forward' /></a>;
   }
 
   render() {

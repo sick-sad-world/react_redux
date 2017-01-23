@@ -1,9 +1,8 @@
 // Import utility stuff
 // ===========================================================================
-import { find, bindAll, includes, pickBy, keys, map, omitBy, isUndefined } from 'lodash';
+import { find, bindAll, includes, pickBy, keys, map, reduce, isUndefined, isNull } from 'lodash';
 import classNames from 'classnames';
-import { transformColumnValue, composeColumnSort } from '../../helpers/functions';
-import { inject } from '../../helpers/functions';
+import { inject, composeColumData, shouldFetchResults } from '../../helpers/functions';
 import editable from '../behaviours/editable';
 
 // Import React related stuff
@@ -47,10 +46,10 @@ class Edit extends React.Component {
       set: (item) => item.data.set,
       ignore_source: (item) => item.data.ignore_source,
       ignore_set: (item) => item.data.ignore_set,
-      is_image: (item) => item.data.is_image,
-      is_video: (item) => item.data.is_video,
-      is_facebook: (item) => item.data.is_facebook,
-      is_gallery: (item) => item.data.is_gallery,
+      is_image: (item) => (isNull(item.data.is_image)) ? 'on' : item.data.is_image,
+      is_video: (item) => (isNull(item.data.is_video)) ? 'on' : item.data.is_video,
+      is_facebook: (item) => (isNull(item.data.is_facebook)) ? 'on' : item.data.is_facebook,
+      is_gallery: (item) => (isNull(item.data.is_gallery)) ? 'on' : item.data.is_gallery,
       language: (item) => item.data.language,
       autoreload: (item) => item.data.autoreload,
       sort_pref (item) {
@@ -85,16 +84,35 @@ class Edit extends React.Component {
 
   componentWillReceiveProps(newProps) {
     if (newProps.state <= 2) {
-      this.setState(Object.assign(this.mapItemToState(newProps.item), pickBy(this.props.item.data, (v, k) => this.props.advRegExp.test(k))));
+      console.log(Object.assign(
+        this.mapItemToState(newProps.item),
+        reduce(this.state, (acc, v, k) => {
+          if (this.props.advRegExp.test(k)) {
+            acc[k] = undefined;
+          }
+          return acc;
+        }, {}),
+        pickBy(newProps.item.data, (v, k) => this.props.advRegExp.test(k))
+      ));
+      this.setState(Object.assign(
+        this.mapItemToState(newProps.item),
+        reduce(this.state, (acc, v, k) => {
+          if (this.props.advRegExp.test(k)) {
+            acc[k] = undefined;
+          }
+          return acc;
+        }, {}),
+        pickBy(newProps.item.data, (v, k) => this.props.advRegExp.test(k))
+      ));
     }
-  }
+  } 
 
   // Send request to server with new props
   // @overriding [preformAction] pageEdit.jsx:51
   // ===========================================================================
   preformAction (name) {
     return () => {
-      let data = false;
+      let result = false;
       let value = this.state[name];
       let item = this.props.item;
       let id = item.id;
@@ -104,36 +122,16 @@ class Edit extends React.Component {
         // ===========================================================================
         if (name === 'name' || name === 'display_settings') {
           if (value !== this.props.item[name]) {
-            data = { [name]: value };
+            result = { [name]: value };
           }
         } else {
-          value = transformColumnValue(value);
-
-          // Compose sorting property
-          // ===========================================================================
-          if (name.indexOf('sort') === 0) {
-            name = 'sort';
-            value = composeColumnSort(this.state.sort_pref, this.state.sort_prop);
-          }
-
-          // Proper autoreload disabled value
-          // ===========================================================================
-          if (name === 'autoreload' && !value) {
-            value = 0;
-          }
-
-          // Actual merging of exact data Object
-          // ===========================================================================
-          if (value !== item.data[name]) {
-            data = {
-              data: omitBy(Object.assign({}, item.data, {[name]: value}), isUndefined)
-            };
-          }
+          result = composeColumData.call(this, item.data, name, this.state[name]);
         }
         
-        if (data) {
-          this.actions.update(data, {id}).then(({payload}) => (payload.data) ? this.actions.refresh(payload.data, {id}) : null).catch(this.actions.throwError);
-        }
+        if (!result) return;
+        this.actions.update(result, { id }).then(({payload}) => {
+          return (shouldFetchResults(payload, name)) ? this.actions.refresh(payload.data, {id}) : null;
+        }).catch(this.actions.throwError);
       }
     }
   }
@@ -160,7 +158,7 @@ class Edit extends React.Component {
       'state-loading': running
     });
 
-    let advFilters = pickBy(this.state, (v, k) => this.props.advRegExp.test(k));
+    let advFilters = pickBy(this.state, (v, k) => this.props.advRegExp.test(k) && !isUndefined(v));
 
     // Create display settings
     // ===========================================================================
@@ -344,7 +342,7 @@ class Edit extends React.Component {
                 name='is_image'
                 options={{
                   'Only': 1,
-                  'Include': undefined,
+                  'Include': 'on',
                   'Omit': 0
                 }}
                 onChangege={this.updateState}
@@ -359,7 +357,7 @@ class Edit extends React.Component {
                 name='is_video'
                 options={{
                   'Only': 1,
-                  'Include': undefined,
+                  'Include': 'on',
                   'Omit': 0
                 }}
                 onChangege={this.updateState}
@@ -374,7 +372,7 @@ class Edit extends React.Component {
                 name='is_facebook'
                 options={{
                   'Only': 1,
-                  'Include': undefined,
+                  'Include': 'on',
                   'Omit': 0
                 }}
                 onChangege={this.updateState}
@@ -389,7 +387,7 @@ class Edit extends React.Component {
                 name='is_gallery'
                 options={{
                   'Only': 1,
-                  'Include': undefined,
+                  'Include': 'on',
                   'Omit': 0
                 }}
                 onChangege={this.updateState}
@@ -415,7 +413,7 @@ class Edit extends React.Component {
               <label htmlFor='funColumnSearch'>Title/description contains:</label>
               <input 
                 disabled={running}
-                defaultValue={this.state.search}
+                value={this.state.search}
                 onChange={this.updateState}
                 onBlur={this.updateValue}
                 id='funColumnSearch'
@@ -427,7 +425,7 @@ class Edit extends React.Component {
               <label htmlFor='funColumnUrl'>URL contains:</label>
               <input 
                 disabled={running}
-                defaultValue={this.state.url}
+                value={this.state.url}
                 onChange={this.updateState}
                 onBlur={this.updateValue}
                 id='funColumnUrl'
@@ -439,7 +437,7 @@ class Edit extends React.Component {
               <label htmlFor='funColumnAuthor'>Author contains:</label>
               <input 
                 disabled={running}
-                defaultValue={this.state.author}
+                value={this.state.author}
                 onChange={this.updateState}
                 onBlur={this.updateValue}
                 id='funColumnAuthor'
@@ -451,7 +449,7 @@ class Edit extends React.Component {
               <label htmlFor='funColumnExclude'>Title/description does not contain:</label>
               <input 
                 disabled={running}
-                defaultValue={this.state.exclude_search}
+                value={this.state.exclude_search}
                 onChange={this.updateState}
                 onBlur={this.updateValue}
                 id='funColumnExclude'
@@ -464,7 +462,7 @@ class Edit extends React.Component {
               <div className='row-time-gap'>
                 <input 
                   disabled={running}
-                  defaultValue={this.state.since}
+                  value={this.state.since}
                   onChange={this.updateState}
                   onBlur={this.updateValue}
                   placeholder='Since...'
@@ -475,7 +473,7 @@ class Edit extends React.Component {
                 />
                 <input 
                   disabled={running}
-                  defaultValue={this.state.before}
+                  value={this.state.before}
                   onChange={this.updateState}
                   onBlur={this.updateValue}
                   placeholder='Before...'

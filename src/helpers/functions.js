@@ -1,6 +1,6 @@
 import * as ACTIONS from '../actions/types';
 import moment from 'moment';
-import { isUndefined, isPlainObject, reduce, isArray } from 'lodash';
+import { isNull, isPlainObject, reduce, isArray } from 'lodash';
 
 export const absolutizePath = (path) => (path && path.indexOf('/') > 0) ? '/'+path : path;
 
@@ -21,6 +21,8 @@ export const pickUniqueSources = (sets) => {
 export const ensureColumnData = (item, defaults) => {
   if (item) {
     item.data = Object.assign({}, defaults.data, item.data);
+    delete item.data.sort_pref;
+    delete item.data.sort_prop;
     if (typeof item.display_settings === 'string') {
       item.display_settings = item.display_settings.split(',');
     }
@@ -36,8 +38,8 @@ export const ensureColumnData = (item, defaults) => {
 export const transformColumnValue = (value) => {
   let numVal = parseFloat(value);
 
-  if (value === '' || value === null || (name.indexOf('is_') === 0 && value === 'on')) {
-    return undefined;
+  if (value === '' || (name.indexOf('is_') === 0 && value === 'on')) {
+    return null;
   } else if (typeof numVal === 'number' && numVal === numVal) {
     return numVal
   } else {
@@ -105,6 +107,49 @@ export const updateArrayWithValue = (arr, val) => {
   return result;
 }
 
+export const composeColumData = function (data, name, value) {
+  let result = false;
+
+  // Transform value to a proper type - number, e.t.c
+  // ===========================================================================
+  let val = transformColumnValue(value);
+
+  // Compose sorting property
+  // ===========================================================================
+  if (name.indexOf('sort') === 0) {
+    name = 'sort';
+    val = composeColumnSort(this.state.sort_pref, this.state.sort_prop);
+  }
+
+  // Proper autoreload disabled value
+  // ===========================================================================
+  if (name === 'autoreload' && !val) {
+    val = 0;
+  }
+
+  // Actual merging of exact data Object
+  // ===========================================================================
+  if (val !== data[name]) {
+    result = {
+      data: {
+        [name]: (data[name] instanceof Array) ? updateArrayWithValue(data[name], val) : val
+      }
+    };
+    for (let key in data) {
+      if (key !== name) {
+        if (data[key] instanceof Array) {
+          if (data[key].length > 0) result.data[key] = data[key];
+        } else {
+          if (!isNull(data[key])) result.data[key] = data[key];
+        }
+      }
+    }
+  }
+  return result;
+}
+
+export const shouldFetchResults = ({data}, name) => data && name !== 'autoreload' && name !== 'infinite';
+
 export const inject = (target, mixin) => {
   for (let key in mixin) {
     if (key !== '_inject' && !(target[key] instanceof Function)) {
@@ -148,7 +193,7 @@ export const transformRequestData = (data, id) => reduce(data, (acc, v, k) => {
     if (v.length) {
       acc[k] = v;
     }
-  } else if (!isUndefined(v)) {
+  } else if (!isNull(v)) {
     acc[k] = v;
   }
   return acc;

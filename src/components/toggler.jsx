@@ -19,7 +19,7 @@ export default function Toggler (props) {
                     type='radio'
                     id={id}
                     key={props.name+'-'+val}
-                    defaultChecked={val === props.value}
+                    checked={val === props.value}
                     onChange={props.onChange}
                     onFocus={setRootFocusClass}
                     onBlur={setRootFocusClass}
