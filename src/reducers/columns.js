@@ -1,7 +1,7 @@
 import { GET_COLUMNS, ADD_COLUMN, EDIT_COLUMN, REMOVE_COLUMN } from '../actions/types';
-import basicReducer from '../helpers/reducer-factory';
+import createReducer from '../helpers/reduserFactory';
 
-export const columns = basicReducer({
+export const columns = createReducer({
   GET: GET_COLUMNS,
   ADD: ADD_COLUMN,
   EDIT: EDIT_COLUMN,
