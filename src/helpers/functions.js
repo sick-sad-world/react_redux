@@ -1,6 +1,6 @@
 import * as ACTIONS from '../actions/types';
 import moment from 'moment';
-import { isNull, isPlainObject, reduce, clone } from 'lodash';
+import { isNull, isPlainObject, isUndefined, reduce, clone } from 'lodash';
 
 export const absolutizePath = (path) => (path && path.indexOf('/') > 0) ? '/'+path : path;
 
@@ -141,7 +141,7 @@ export const composeColumData = function (data, name, value) {
         if (data[key] instanceof Array) {
           if (data[key].length > 0) result.data[key] = data[key];
         } else {
-          if (!isNull(data[key])) result.data[key] = data[key];
+          if (!isNull(data[key]) && !isUndefined(data[key])) result.data[key] = data[key];
         }
       }
     }
@@ -190,7 +190,7 @@ export const makeSortLabel = (stat = '') => {
 export const transformRequestData = (data, id) => reduce(data, (acc, v, k) => {
   if (isPlainObject(v)) {
     acc[k] = JSON.stringify(v);
-  } else if (!isNull(v)) {
+  } else if (!isNull(v) && !isUndefined(v)) {
     acc[k] = v;
   }
   return acc;
