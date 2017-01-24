@@ -30,7 +30,7 @@ const CONFIG = {
   css: 'css',
   templates: false, // set to false to turn it off
   img: 'img',
-  icons: 'img/icons',
+  icons: false,
   icons_sprite: 'img',
   icons_name: 'icons.svg',
   filesToCopy: ['index.html', 'README.md', 'package.json', 'font/**/**.*'],
@@ -130,7 +130,7 @@ gulp.task('build:compass', ['build:copy'], () => {
  * Optimize and minify all required images and place them in target location
  */
 gulp.task('build:images', ['build:compass'], function() {
-  return gulp.src(p(CONFIG.img, '**/*.{ico,png,jpg,jpeg,gif,webp}'))
+  return gulp.src(p(CONFIG.img, '**/*.{ico,png,jpg,jpeg,gif,webp,svg}'))
 		.pipe(imagemin())
     .pipe(gulp.dest(path.join(BUILD, CONFIG.img)));
 });
