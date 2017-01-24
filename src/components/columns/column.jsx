@@ -215,7 +215,7 @@ class Column extends React.Component {
   // Handler to run [delete] Column action
   // ===========================================================================
   hideColumn() {
-    this.actions.update({open: 0}).catch(this.actions.throwError);
+    this.actions.update({id: this.props.item.id, open: 0}).catch(this.actions.throwError);
   }
 
   // Make toggler handler for simple state prop true/false

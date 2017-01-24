@@ -2,7 +2,7 @@
 // ===========================================================================
 import { find, bindAll, includes, pickBy, keys, map, reduce, isUndefined, isNull } from 'lodash';
 import classNames from 'classnames';
-import { inject, composeColumData, shouldFetchResults } from '../../helpers/functions';
+import { inject, composeColumData, shouldFetchResults, ensureColumnData } from '../../helpers/functions';
 import editable from '../behaviours/editable';
 
 // Import React related stuff
@@ -21,7 +21,6 @@ import Toggler from '../toggler';
 // Import actions
 // ===========================================================================
 import { createResultAction, createAction, throwError } from '../../actions/actions';
-import { ensureColumnData } from '../../helpers/functions';
 import { defColumn, defColumnParameters } from '../../helpers/defaults';
 
 class Edit extends React.Component {

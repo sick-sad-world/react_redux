@@ -1,4 +1,4 @@
-import { mapValues, isFunction } from 'lodash';
+import { mapValues, isFunction, isNull } from 'lodash';
 import { updateArrayWithValue } from '../../helpers/functions';
 
 // Editable behaviours
@@ -16,7 +16,10 @@ export default {
   // Pick an dropdown values to inject it into state
   // ===========================================================================
   mapItemToState (item) {
-    return (item) ? mapValues(this.stateMap, (v, k) => (isFunction(v)) ? v.call(this, item) : item[k]) : {};
+    return (item) ? mapValues(this.stateMap, (v, k) => {
+      let val = isFunction(v) ? v.call(this, item) : item[k];
+      return isNull(val) ? '' : val;
+    }) : {};
   },
 
   // Update state in oreder to input changes

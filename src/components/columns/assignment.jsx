@@ -1,7 +1,7 @@
 // Import utility stuff
 // ===========================================================================
 import { find, filter, includes, bindAll } from 'lodash';
-import { inject, composeColumData, shouldFetchResults } from '../../helpers/functions';
+import { inject, composeColumData, shouldFetchResults, ensureColumnData } from '../../helpers/functions';
 import editable from '../behaviours/editable';
 
 // Import React related stuff
@@ -21,6 +21,7 @@ import Source from '../sourcesets/source';
 // Import actions
 // ===========================================================================
 import { createAction, createResultAction, throwError } from '../../actions/actions';
+import { defColumn } from '../../helpers/defaults';
 
 class Assigment extends React.Component {
   constructor (props) {
@@ -128,7 +129,7 @@ let mapStateToProps = ({ app, columns, sets, sources }, ownProps) => ({
   state: app.state,
   sets: sets,
   sources: sources,
-  item: find(columns, {id: parseInt(ownProps.params.id)}) || {data: {}}
+  item: ensureColumnData(find(columns, {id: parseInt(ownProps.params.id)}), defColumn)
 });
 
 export default connect(mapStateToProps)(Assigment);

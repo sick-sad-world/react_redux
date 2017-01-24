@@ -1,6 +1,6 @@
 import * as ACTIONS from '../actions/types';
 import moment from 'moment';
-import { isNull, isPlainObject, reduce, isArray } from 'lodash';
+import { isNull, isPlainObject, reduce, clone } from 'lodash';
 
 export const absolutizePath = (path) => (path && path.indexOf('/') > 0) ? '/'+path : path;
 
@@ -19,6 +19,7 @@ export const pickUniqueSources = (sets) => {
 }
 
 export const ensureColumnData = (item, defaults) => {
+  item = clone(item);
   if (item) {
     item.data = Object.assign({}, defaults.data, item.data);
     delete item.data.sort_pref;
