@@ -568,6 +568,7 @@ FeedCreation.defaultProps = {
 
 let mapStateToProps = ({ app, sets, sources }, ownProps) => ({
   state: app.state,
+  type: 'source',
   set: find(sets, {id: parseInt(ownProps.params.id)}),
   checkUrls: {
     RSS: 'find_feeds',

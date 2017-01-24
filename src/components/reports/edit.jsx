@@ -48,8 +48,8 @@ class Edit extends React.Component {
     // Create bound actions
     // ===========================================================================
     this.actions = bindActionCreators({
-      create: createAction('report', 4),
-      update: createAction('report', 5),
+      create: createAction(this.props.type, 4),
+      update: createAction(this.props.type, 5),
       throwError: throwError
     }, this.props.dispatch);
 
@@ -64,13 +64,13 @@ class Edit extends React.Component {
   // Select recipient from list providen by injectable
   // ===========================================================================
   recipientHandler (value) {
-    return () => this.updateValue('recipient', (value === this.state.recipient) ? this.props.email : value);
+    return () => this._runStatefullAction('recipient', (value === this.state.recipient) ? this.props.email : value);
   }
 
   render() {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
-    if (!this.props.item.id) return null;
+    if (typeof this.props.item.id !== 'number') return null;
     let { texts, item } = this.props;
     let running = this.props.state > 3;
 
@@ -212,7 +212,8 @@ const mapStateToProps = ({ reports, columns, app, user }, ownProps) => {
   return {
     state: app.state,
     item: item,
-    emai: user.email,
+    type: 'report',
+    email: user.email,
     columns: columns.map((item) => {
       return {
         value: item.id,

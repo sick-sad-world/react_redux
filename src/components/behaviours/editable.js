@@ -4,7 +4,7 @@ import { updateArrayWithValue } from '../../helpers/functions';
 // Editable behaviours
 // ===========================================================================
 export default {
-
+  
   // Update [Value] in state and [preformAction] after
   // ===========================================================================
   _runStatefullAction(name, value) {

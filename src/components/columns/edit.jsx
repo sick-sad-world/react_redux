@@ -84,16 +84,6 @@ class Edit extends React.Component {
 
   componentWillReceiveProps(newProps) {
     if (newProps.state <= 2) {
-      console.log(Object.assign(
-        this.mapItemToState(newProps.item),
-        reduce(this.state, (acc, v, k) => {
-          if (this.props.advRegExp.test(k)) {
-            acc[k] = undefined;
-          }
-          return acc;
-        }, {}),
-        pickBy(newProps.item.data, (v, k) => this.props.advRegExp.test(k))
-      ));
       this.setState(Object.assign(
         this.mapItemToState(newProps.item),
         reduce(this.state, (acc, v, k) => {
@@ -211,7 +201,7 @@ class Edit extends React.Component {
                 disabled={running}
                 value={this.state.name}
                 onChange={this.updateState}
-                onBlur={this.updateValue}
+                onBlur={this.preformAction('name')}
                 id='funColumnName'
                 type='text'
                 name='name'
@@ -280,7 +270,7 @@ class Edit extends React.Component {
                 className='size-120'
                 value={this.state.limit}
                 onChange={this.updateState}
-                onBlur={this.updateValue}
+                onBlur={this.preformAction('limit')}
                 id='funColumnLimit'
                 type='number'
                 name='limit'
@@ -345,7 +335,6 @@ class Edit extends React.Component {
                   'Include': 'on',
                   'Omit': 0
                 }}
-                onChangege={this.updateState}
                 onChange={this.updateValue}
                 value={this.state.is_image} />
             </div>
@@ -360,7 +349,6 @@ class Edit extends React.Component {
                   'Include': 'on',
                   'Omit': 0
                 }}
-                onChangege={this.updateState}
                 onChange={this.updateValue}
                 value={this.state.is_video} />
             </div>
@@ -375,7 +363,6 @@ class Edit extends React.Component {
                   'Include': 'on',
                   'Omit': 0
                 }}
-                onChangege={this.updateState}
                 onChange={this.updateValue}
                 value={this.state.is_facebook} />
             </div>
@@ -390,7 +377,6 @@ class Edit extends React.Component {
                   'Include': 'on',
                   'Omit': 0
                 }}
-                onChangege={this.updateState}
                 onChange={this.updateValue}
                 value={this.state.is_gallery} />
             </div>
@@ -415,7 +401,7 @@ class Edit extends React.Component {
                 disabled={running}
                 value={this.state.search}
                 onChange={this.updateState}
-                onBlur={this.updateValue}
+                onBlur={this.preformAction('search')}
                 id='funColumnSearch'
                 type='text'
                 name='search'
@@ -427,7 +413,7 @@ class Edit extends React.Component {
                 disabled={running}
                 value={this.state.url}
                 onChange={this.updateState}
-                onBlur={this.updateValue}
+                onBlur={this.preformAction('url')}
                 id='funColumnUrl'
                 type='text'
                 name='url'
@@ -439,7 +425,7 @@ class Edit extends React.Component {
                 disabled={running}
                 value={this.state.author}
                 onChange={this.updateState}
-                onBlur={this.updateValue}
+                onBlur={this.preformAction('author')}
                 id='funColumnAuthor'
                 type='text'
                 name='author'
@@ -451,7 +437,7 @@ class Edit extends React.Component {
                 disabled={running}
                 value={this.state.exclude_search}
                 onChange={this.updateState}
-                onBlur={this.updateValue}
+                onBlur={this.preformAction('exclude_search')}
                 id='funColumnExclude'
                 type='text'
                 name='exclude_search'
@@ -464,7 +450,7 @@ class Edit extends React.Component {
                   disabled={running}
                   value={this.state.since}
                   onChange={this.updateState}
-                  onBlur={this.updateValue}
+                  onBlur={this.preformAction('since')}
                   placeholder='Since...'
                   className='size-120'
                   id='funColumnSince'
@@ -475,7 +461,7 @@ class Edit extends React.Component {
                   disabled={running}
                   value={this.state.before}
                   onChange={this.updateState}
-                  onBlur={this.updateValue}
+                  onBlur={this.preformAction('before')}
                   placeholder='Before...'
                   className='size-120'
                   id='funColumnBefore'
@@ -489,7 +475,7 @@ class Edit extends React.Component {
             <ul className='tag-list row'>
               { (keys(advFilters).length) ?
                   map(advFilters, (v, k) => 
-                    <li key={`${k}=${v}`}>{`${k}=${v}`}<span onClick={() => this.updateValue(k, null)} ><Icon icon='cross' /></span></li>)
+                    <li key={`${k}=${v}`}>{`${k}=${v}`}<span onClick={() => this.preformAction()(k, null)} ><Icon icon='cross' /></span></li>)
                       : emptyAdvFilter }
             </ul>
             <fieldset>

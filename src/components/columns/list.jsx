@@ -2,7 +2,12 @@
 // ===========================================================================
 import React from 'React';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { bindAll } from 'lodash';
+
+// Import actions
+// ===========================================================================
+import { createAction, throwError } from '../../actions/actions';
 
 // Import child components
 // ===========================================================================
@@ -13,6 +18,12 @@ import Icon from '../icon';
 class List extends React.Component {
   constructor(props) {
     super(props);
+    // Create bound actions
+    // ===========================================================================
+    this.actions = bindActionCreators({
+      update: createAction(this.props.type, 5),
+      throwError: throwError
+    }, this.props.dispatch);
     bindAll(this, ['makeVisHandler', 'makeItemIcon']);
   }
 
@@ -29,7 +40,7 @@ class List extends React.Component {
   makeItemIcon (props) {
     let { id, open } = props;
     let visIconData = this.props.visIconData;
-    return <a onClick={this.makeVisHandler({id, open})} title={visIconData[open].title}><Icon icon={visIconData[open].icon} /></a>;
+    return <a onClick={this.makeVisHandler({id, open: (open) ? 0 : 1})} title={visIconData[open].title}><Icon icon={visIconData[open].icon} /></a>;
   }
 
   render() {

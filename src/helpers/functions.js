@@ -189,10 +189,6 @@ export const makeSortLabel = (stat = '') => {
 export const transformRequestData = (data, id) => reduce(data, (acc, v, k) => {
   if (isPlainObject(v)) {
     acc[k] = JSON.stringify(v);
-  } else if (isArray(v)) {
-    if (v.length) {
-      acc[k] = v;
-    }
   } else if (!isNull(v)) {
     acc[k] = v;
   }

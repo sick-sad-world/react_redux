@@ -31,7 +31,6 @@ export default class PageList extends React.Component {
     // ===========================================================================
     this.actions = bindActionCreators({
       create: createAction(this.props.type, 4),
-      update: createAction(this.props.type, 5),
       delete: createAction(this.props.type, 6),
       throwError: throwError
     }, this.props.dispatch);

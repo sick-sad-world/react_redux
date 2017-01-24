@@ -79,7 +79,7 @@ class Edit extends React.Component {
     } else {
       val = concat(this.state.source_ids, val);
     }
-    this.updateValue('source_ids', val);
+    this._runStatefullAction('source_ids', val);
   }
 
   render() {
@@ -197,6 +197,7 @@ let mapStateToProps = ({ app, sets, sources }, ownProps) => {
   return {
     state: app.state,
     item,
+    type: 'set',
     own_sources: (item.id) ? filter(sources, (source) => includes(item.source_ids, source.id)) : [],
     sources: sources,
     sets: otherSets

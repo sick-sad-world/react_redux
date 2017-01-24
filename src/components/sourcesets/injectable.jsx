@@ -23,12 +23,12 @@ export default class FeedsList extends React.Component {
 
     // Bind handlers
     // ===========================================================================
-    bindAll(this, ['updateState', 'makeSourceComponent', 'expandHandler']);
+    bindAll(this, ['updateSearch', 'makeSourceComponent', 'expandHandler']);
   }
   
-  updateState (e) {
+  updateSearch (e) {
     this.setState({
-      [e.target.name]: e.target.value || ''
+      search: e.target.value || ''
     });
   }
 
@@ -108,7 +108,7 @@ export default class FeedsList extends React.Component {
     return (
       <div className={rootClass}>
         <div className='header'>
-          <input type='text' name='search' defaultValue={this.state.search} onChange={this.updateState} placeholder='Search for...' />
+          <input type='text' name='search' defaultValue={this.state.search} onChange={this.updateSearch} placeholder='Search for...' />
         </div>
         <ul className='entity-list'>
           {list}

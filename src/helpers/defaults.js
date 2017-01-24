@@ -9,18 +9,18 @@ export const defaultMessage = {
   type: 'info',   // info, loading, error, success, warning
   action: 0,      // Type of action preformed
   entity: '',     // user, alert, report, source, set, column, link
-  entityId: null, // Id of entity message related to
+  entityId: 0, // Id of entity message related to
   duration: 0     // Time message will be visible, 0 - infinite
 };
 
 export const defaultUser = {
-  id: null,
+  id: 0,
   email: '',
   email_bcc: [],
   name: '',
   fullname: 'Name Surname',
   position: 'user position',
-  status: null,
+  status: '',
   is_admin: '0',
   image: '/img/ph_user.png'
 };
@@ -55,21 +55,21 @@ export const defColumnData = {
   limit: 30,
   sort: 'rate_likes',
   direction: 'desc',
-  author: null,
-  search: null,
-  exclude_search: null,
-  url: null,
-  since: null,
-  before: null,
-  language: null,
+  author: '',
+  search: '',
+  exclude_search: '',
+  url: '',
+  since: '',
+  before: '',
+  language: '',
   source: [],
   set: [],
   ignore_source: [],
   ignore_set: [],
-  is_image: null,
-  is_video: null,
-  is_facebook: null,
-  is_gallery: null
+  is_image: 'on',
+  is_video: 'on',
+  is_facebook: 'on',
+  is_gallery: 'on'
 };
 
 export const defColumn = {

@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { find, bindAll, isNumber } from 'lodash';
+import { find, bindAll } from 'lodash';
 import classNames from 'classnames';
 import { inject } from '../../helpers/functions';
 import editable from '../behaviours/editable';
@@ -45,8 +45,8 @@ class Edit extends React.Component {
     // Create bound actions
     // ===========================================================================
     this.actions = bindActionCreators({
-      create: createAction('alert', 4),
-      update: createAction('alert', 5),
+      create: createAction(this.props.type, 4),
+      update: createAction(this.props.type, 5),
       throwError: throwError
     }, this.props.dispatch);
 
@@ -61,13 +61,13 @@ class Edit extends React.Component {
   // Select recipient from list providen by injectable
   // ===========================================================================
   recipientHandler (value) {
-    return () => this.updateValue('recipient', (value === this.state.recipient) ? this.props.email : value);
+    return () => this._runStatefullAction('recipient', (value === this.state.recipient) ? this.props.email : value);
   }
 
   render() {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
-    if (!isNumber(this.props.item.id)) return null;
+    if (typeof this.props.item.id !== 'number') return null;
     let { texts, item } = this.props;
     let running = this.props.state > 3
 
@@ -200,6 +200,7 @@ let mapStateToProps = ({ app, alerts, columns, user }, ownProps) => {
     state: app.state,
     item: item,
     email: user.email,
+    type: 'alert',
     columns: columns.map((item) => ({
       value: item.id,
       label: item.name,
