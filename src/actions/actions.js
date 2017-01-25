@@ -209,11 +209,11 @@ export const createResultAction = (action) => (data, options) => (dispatch) => {
       break;
     case 5:
       url = 'favorite';
-      type = ACTIONS['EDIT_LINK'];
+      type = ACTIONS['FAVORITE_LINK'];
       break;
     case 6:
       url = 'ignore';
-      type = ACTIONS['EDIT_LINK'];
+      type = ACTIONS['IGNORE_LINK'];
       break;
     default:
       url = 'links';
@@ -246,11 +246,13 @@ export const createResultAction = (action) => (data, options) => (dispatch) => {
   // ===========================================================================
   return fetch(url, transformRequestData(data)).then((payload) => {
     if (payload.error) {
-      dispatch({
-        state: 0,
-        type: ACTIONS['LINKS_STATE'],
-        id: options.id
-      });
+      if (options.state) {
+        dispatch({
+          state: 0,
+          type: ACTIONS['LINKS_STATE'],
+          id: options.id
+        });
+      }
       throw {
         id: messageId,
         payload: {
@@ -263,9 +265,11 @@ export const createResultAction = (action) => (data, options) => (dispatch) => {
         dispatch(sendMessage({
           type: 'success',
           text: (payload) ? payload.success : options.message
-        }, messageId))
+        }, messageId));
+        if (payload.success) {
+          payload = data;
+        }
       }
-
       return dispatch({
         type: type,
         id: options.id,

@@ -13,7 +13,7 @@ import { Link } from 'react-router';
 
 // Main app screen - Dashboard
 // ===========================================================================
-export default class Result extends React.Component {
+class Result extends React.Component {
   constructor (props) {
     super(props);
     
@@ -47,8 +47,14 @@ export default class Result extends React.Component {
               <b>{(props.sort === 'found') ? 'Found' : formatNumber(props[props.sort])}</b>
               { sortParamToShort(props.sort) }
             </span>
-            <a onClick={props.makeAction('refresh', props.hash)}>
+            <a onClick={props.makeAction('refresh', {hash: props.hash})} title='Refresh this result'>
               <Icon icon='cw' />
+            </a>
+            <a onClick={props.makeAction('favorite', {hash: props.hash, unfavorite: props.favorite})} title={props.favoriteBtndata[props.favorite].title}>
+              <Icon icon={props.favoriteBtndata[props.favorite].icon} />
+            </a>
+            <a onClick={props.makeAction('ignore', {hash: props.hash, unignore: props.ignore})} title={props.ignoreBtndata[props.ignore].title}>
+              <Icon icon={props.ignoreBtndata[props.ignore].icon} />
             </a>
           </aside>
           <div className='content'>
@@ -112,3 +118,11 @@ export default class Result extends React.Component {
     );
   }
 }
+Result.defaultProps = {
+  favorite: 0,
+  ignore: 0,
+  favoriteBtndata: [{icon: 'star', title: 'Favorite this result'}, {icon: 'star-outlined', title: 'Unfavorite this result'}],
+  ignoreBtndata: [{icon: 'eye-with-line', title: 'Ignore this result'}, {icon: 'eye', title: 'Unignore this result'}]
+};
+
+export default Result;

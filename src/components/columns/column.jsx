@@ -62,7 +62,7 @@ class Column extends React.Component {
     
     // Bind methods to instance
     // ===========================================================================
-    bindAll(this, ['expandedStateToggler', 'hideColumn', 'refreshResults', 'preformAction', 'scrollHandler', 'makeResultAction']);
+    bindAll(this, ['expandedStateToggler', 'hideColumn', 'refreshResults', 'preformAction', 'scrollHandler', 'makeResultAction', 'renderResult']);
     this.debouncedScrollHandler = debounce(this.scrollHandler, 250);
 
     this.state = Object.assign({
@@ -77,6 +77,8 @@ class Column extends React.Component {
       delete: createAction('column', 6),
       getResults: createResultAction(3),
       getResult: createResultAction(8),
+      favoriteResult: createResultAction(5),
+      ignoreResult: createResultAction(6),
       throwError: throwError
     }, this.props.dispatch);
 
@@ -184,16 +186,22 @@ class Column extends React.Component {
   // @map -> results, @return -> DOM Array
   // ===========================================================================
   renderResults (sort, tableProps) {
+    let data = this.props.item.data;
     return this.props.data.map((result) => {
-      return <Result 
-                key={result.id}
-                sort={sort}
-                makeAction={this.makeResultAction} 
-                displaySettings={this.props.item.display_settings}
-                {...tableProps} 
-                {...result}
-            />
+      if (data.show_favorites) {
+        return (result.favorite) ? this.renderResult(result, sort, tableProps) : null;
+      } else {
+        if (!result.ignore || (data.show_ignored && result.ignore)) {
+          return this.renderResult(result, sort, tableProps);
+        }
+      }
     })
+  }
+
+  // Render single result
+  // ===========================================================================
+  renderResult (result, sort, tableProps) {
+    return <Result key={result.id} sort={sort} makeAction={this.makeResultAction} displaySettings={this.props.item.display_settings} {...tableProps} {...result} />
   }
 
   // Render different result state empty, error, loading, init
@@ -243,12 +251,16 @@ class Column extends React.Component {
     }
   }
 
-  makeResultAction(action, hash) {
+  makeResultAction(action, data) {
     let id = this.props.item.id;
     return () => {
       switch (action) {
         case 'refresh':
-          return this.actions.getResult({hash}, {id, state: false}).catch(this.actions.throwError);
+          return this.actions.getResult(data, {id, state: false}).catch(this.actions.throwError);
+        case 'ignore':
+          return this.actions.ignoreResult(data, {id, state: false}).catch(this.actions.throwError);
+        case 'favorite':
+          return this.actions.favoriteResult(data, {id, state: false}).catch(this.actions.throwError);
       }
     }
   }
