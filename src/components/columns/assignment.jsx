@@ -1,7 +1,7 @@
 // Import utility stuff
 // ===========================================================================
 import { find, filter, includes, bindAll } from 'lodash';
-import { inject, composeColumData, shouldFetchResults, ensureColumnData } from '../../helpers/functions';
+import { inject, composeColumData, shouldFetchResults, normalizeColumn } from '../../helpers/functions';
 import editable from '../behaviours/editable';
 
 // Import React related stuff
@@ -129,7 +129,7 @@ let mapStateToProps = ({ app, columns, sets, sources }, ownProps) => ({
   state: app.state,
   sets: sets,
   sources: sources,
-  item: ensureColumnData(find(columns, {id: parseInt(ownProps.params.id)}), defColumn)
+  item: normalizeColumn(find(columns, {id: parseInt(ownProps.params.id)}), defColumn)
 });
 
 export default connect(mapStateToProps)(Assigment);

@@ -56,8 +56,44 @@ export const createAction = (entity, action) => (data, options) => (dispatch) =>
   }, options);
 
   let messageId = moment().unix();
+  let url;
+  let type;
 
-  let { url, type } = compileRequstParams(entity, action, options.id);
+  switch (action) {
+    case 3:
+      if (options.id) {
+        url = entity;
+        type = ACTIONS[`GET_${entity.toUpperCase()}`];
+      } else {
+        url = entity + 's';
+        type = ACTIONS[`GET_${entity.toUpperCase()}S`];
+      }
+      break;
+    case 4:
+      url = 'add_' + entity;
+      type = ACTIONS[`ADD_${entity.toUpperCase()}`];
+      break;
+    case 5:
+      url = entity;
+      type = ACTIONS[`EDIT_${entity.toUpperCase()}`];
+      break;
+    case 6:
+      url = 'remove_' + entity;
+      type = ACTIONS[`REMOVE_${entity.toUpperCase()}`];
+      break;
+    case 7:
+      url = `sort_${entity}s`;
+      type = ACTIONS[`SORT_${entity.toUpperCase()}S`];
+      break;
+    case 8:
+      url = entity;
+      type = ACTIONS[`${entity.toUpperCase()}`];
+      break;
+    default:
+      throw {
+        text: 'Action code incorrect. Should be between 3 and 8'
+      }
+  }
 
   // Set app state to [loading]
   // ===========================================================================

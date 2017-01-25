@@ -2,7 +2,7 @@
 // ===========================================================================
 import { find, bindAll, includes, pickBy, keys, map, reduce, isUndefined, isNull } from 'lodash';
 import classNames from 'classnames';
-import { inject, composeColumData, shouldFetchResults, ensureColumnData } from '../../helpers/functions';
+import { inject, composeColumData, shouldFetchResults, normalizeColumn } from '../../helpers/functions';
 import editable from '../behaviours/editable';
 
 // Import React related stuff
@@ -162,7 +162,7 @@ class Edit extends React.Component {
                 type='checkbox'
                 name='display_settings'
                 value={setting}
-                disabled={running}
+                disabled={running || (setting === 'wide_image' && !includes(this.state.display_settings, 'image'))}
                 onChange={this.updateValue}
                 checked={includes(this.state.display_settings, setting)}
               />
@@ -560,7 +560,7 @@ Edit.defaultProps = Object.assign({
 let mapStateToProps = ({ app, columns }, ownProps) => ({
   state: app.state,
   type: 'column',
-  item: ensureColumnData(find(columns, {id: parseInt(ownProps.params.id)}), defColumn),
+  item: normalizeColumn(find(columns, {id: parseInt(ownProps.params.id)}), defColumn),
   advRegExp: /MIN|MAX|LIKE/
 });
 

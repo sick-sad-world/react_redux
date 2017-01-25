@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll } from 'lodash';
+import { bindAll, pick } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
@@ -16,7 +16,7 @@ import { createAction, throwError } from '../actions/actions';
 // Import Child components
 // ===========================================================================
 import MainNav from '../components/mainNav';
-import UserBlock from '../components/userBlock';
+import UserBlock from '../components/user/briefInfo';
 
 
 // Main app screen - where all fun is taking place
@@ -79,7 +79,7 @@ class Workspace extends React.Component {
     
     // Get our display components
     // ===========================================================================
-    let { list, main, additional } = this.props;
+    let { list, main, additional, user } = this.props;
 
     // Create classList for sidebar
     // ===========================================================================
@@ -93,7 +93,7 @@ class Workspace extends React.Component {
     return (
       <section className='screen-main mod-screen-main'>
         <aside className={sidebarClass}>
-          <UserBlock />
+          <UserBlock {...user} />
           <MainNav toggle={this.handlerSidebar} logout={this.handlerLogout} />
         </aside>
         <div className='screen-content'>
@@ -111,4 +111,4 @@ class Workspace extends React.Component {
 // Connect our Container to State
 // @ deps -> App, (User in future)
 // ===========================================================================
-export default connect(({app}) =>({...app, sidebar: true}))(Workspace);
+export default connect(({app, user}) =>({...app, sidebar: true, user: pick(user, ['fullname', 'image', 'position'])}))(Workspace);

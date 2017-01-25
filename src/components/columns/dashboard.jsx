@@ -2,7 +2,7 @@
 // ===========================================================================
 import { reduce, defaultsDeep } from 'lodash';
 import classNames from 'classnames';
-import { ensureColumnData } from '../../helpers/functions';
+import { normalizeColumn } from '../../helpers/functions';
 import { defColumn, defColumnParameters } from '../../helpers/defaults';
 
 // Import React related stuff
@@ -43,7 +43,7 @@ const mapStateToProps = ({app, columns}) => ({
   state: app.state,
   data: reduce(columns, (acc, column) => {
     if (column.open) {
-      acc.push(ensureColumnData(column, defColumn))
+      acc.push(normalizeColumn(column, defColumn))
     }
     return acc;
   }, [])

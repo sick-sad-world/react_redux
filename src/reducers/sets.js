@@ -1,6 +1,6 @@
 import { GET_SETS, ADD_SET, EDIT_SET, REMOVE_SET } from '../actions/types';
 import createReducer from '../helpers/reduserFactory';
-import { pickUniqueSources, setUniqueSources } from '../helpers/functions';
+import { calcFeedOccurance, setUniqFeeds } from '../helpers/functions';
 
 export const sets = createReducer({
   ADD: ADD_SET,
@@ -10,8 +10,8 @@ export const sets = createReducer({
     return state.map((item) => (item.id === action.id) ? Object.assign({}, item, action.payload) : item);
   },
   GET_SETS: (state, action) => {
-    let feeds = pickUniqueSources(action.payload);
-    action.payload.forEach((set) => setUniqueSources(set, feeds));
+    let feeds = calcFeedOccurance(action.payload);
+    action.payload.forEach((set) => setUniqFeeds(set, feeds));
     return action.payload;
   }
 });

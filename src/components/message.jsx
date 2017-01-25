@@ -24,7 +24,7 @@ export default function Message (props) {
   return (
     <li className={className}>
       <div className='icon'>
-        { (props.type == 'loading') ? (<img src='/img/loading2.svg' />) : (<Icon icon={props.type} />) }
+        { (props.type == 'loading') ? (<img src='/img/loading2.svg' />) : (<Icon viewBox='0 0 24 24' icon={props.type} />) }
       </div>
       <div>
         <h5>{capitalize(props.type)}</h5>
