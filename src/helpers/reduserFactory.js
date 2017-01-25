@@ -1,10 +1,11 @@
-import { LOGOUT } from '../actions/types';
+import { LOGOUT, LOGIN } from '../actions/types';
 import { reject, concat } from 'lodash';
 
 export default function createReducer (actions) {
   return function (state = [], action) {
     switch (action.type) {
       case LOGOUT:
+      case LOGIN:
         return [];
       case actions.GET:
         return action.payload;

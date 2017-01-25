@@ -9,7 +9,10 @@ export default function fetch (url, data, opts) {
       url: `http://api.trendolizer.com/v3/${url}`,
       data: data,
       error: reject,
-      success: resolve
+      success (data, params) {
+        delete data.callback;
+        resolve(data, params);
+      }
     }, opts));
   });
 }

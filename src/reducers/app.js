@@ -44,7 +44,7 @@ export const app = (state = defaultAppState, action) => {
       });
     case ACTIONS['ERROR']:
       return Object.assign({}, state, {
-        state: 0
+        state: 0,
       });
     default:
       return state;

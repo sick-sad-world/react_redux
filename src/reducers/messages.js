@@ -1,13 +1,11 @@
-import * as ACTIONS from '../actions/types';
+import { ERROR, PUSH_MESSAGE, EDIT_MESSAGE } from '../actions/types';
 
 export const messages = (state = [], action) => {
-  if (action.type === ACTIONS['ERROR']) {
-    action.type = (action.id) ? ACTIONS['EDIT_MESSAGE'] : ACTIONS['PUSH_MESSAGE'];
-  }
   switch (action.type) {
-    case ACTIONS['PUSH_MESSAGE']:
+    case PUSH_MESSAGE:
+    case ERROR:
       return [action.payload, ...state];
-    case ACTIONS['EDIT_MESSAGE']:
+    case EDIT_MESSAGE:
       return state.map((message) => (message.id === action.id) ? Object.assign({}, message, action.payload) : message);
     default:
       return state;

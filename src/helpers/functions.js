@@ -78,17 +78,6 @@ export const updateArrayWithValue = (arr, val) => {
   // ===========================================================================
   export const createMessage = (data) => Object.assign({visible: true, id: moment().unix()}, data);
 
-  // Create single-shaped error Message object from different sources
-  // ===========================================================================
-  export const transformError = (error) => {
-    if (error instanceof Error) {
-      console.error(error.toString()+' '+error.stack);
-      return {type: 'error', text: error.toString()+' '+error.stack};
-    } else {
-      return {...error, type: 'error'};
-    }
-  }
-
 /**
  * Feeds unility methods
  * ===========================================================================

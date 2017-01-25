@@ -13,10 +13,9 @@ import Messages from '../components/messages';
 // ===========================================================================
 class App extends React.Component {
   render () {
-    let { actionState, loadingStep } = this.props;
     return (
       <div>
-        { (this.props.state === 1) ? <ProgressTracker text={actionState} step={loadingStep} /> : this.props.children }
+        { (this.props.state === 1) ? <ProgressTracker step={this.props.loadingStep} /> : this.props.children }
         <Messages />
       </div>
     )

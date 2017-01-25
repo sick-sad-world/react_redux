@@ -2,7 +2,7 @@
 // ===========================================================================
 import * as ACTIONS from './types';
 import { keys } from 'lodash';
-import { compileRequstParams, transformRequestData, createMessage, transformError } from '../helpers/functions';
+import { compileRequstParams, transformRequestData, createMessage } from '../helpers/functions';
 import fetch from '../fetch';
 import moment from 'moment';
 
@@ -16,15 +16,28 @@ export const setAppState = (state) => ({
 // Throw action related to error (SYNC)
 // ===========================================================================
 export const throwError = (error) => (dispatch) => {
-  let action = {
-    type: ACTIONS['ERROR'],
-    payload: createMessage(transformError(error))
-  };
-  if (error.id) {
-    action.id = error.id;
-    delete action.payload.id;
-  } 
-  dispatch(action);
+  let action;
+  if (error instanceof Error) {
+    action = {
+      type: ACTIONS['ERROR'],
+      payload: createMessage({ type: 'error', text: 'Javascript Error: ' + error.toString()+' '+error.stack})
+    };
+  } else if (error.event) {
+    action = {
+      type: ACTIONS['ERROR'],
+      payload: createMessage({ type: 'error', text: 'Network Error: ' + error.url})
+    };
+  } else {
+    if (error.id) {
+      action = { ...error, type: ACTIONS['EDIT_MESSAGE'] }
+    } else {
+      action = {
+        type: ACTIONS['PUSH_MESSAGE'],
+        payload: createMessage(error)
+      }
+    }
+  }
+  return dispatch(action);
 };
 
 // Create or edit message in system notification module
@@ -134,13 +147,12 @@ export const createAction = (entity, action) => (data, options) => (dispatch) =>
     if (payload.error) {
       throw {
         id: messageId,
-        entity,
-        action,
-        entityId: options.id,
-        text: payload.error
-      };
+        payload: {
+          text: payload.error,
+          type: 'error'
+        }
+      }
     }
-
     // Fire message to display proper message if responce contains only it
     // ===========================================================================
     if (options.message) {
@@ -156,9 +168,6 @@ export const createAction = (entity, action) => (data, options) => (dispatch) =>
 
     // Dispatch proper action
     // ===========================================================================
-    if (payload) {
-      delete payload.callback;
-    }
     return dispatch({
       type,
       payload,
@@ -186,8 +195,10 @@ export const createResultAction = (action) => (data, options) => (dispatch) => {
 
   if (!options.id) {
     throw {
-      entityId: options.id,
-      error: 'Id of a column is required -> results will be stored by this key'
+      id: messageId,
+      entity,
+      action,
+      text: 'Id of a column is required -> results will be stored by this key'
     }
   }
 
@@ -202,7 +213,7 @@ export const createResultAction = (action) => (data, options) => (dispatch) => {
       break;
     case 6:
       url = 'ignore';
-      type = ACTIONS['REMOVE_LINK'];
+      type = ACTIONS['EDIT_LINK'];
       break;
     default:
       url = 'links';
@@ -234,20 +245,34 @@ export const createResultAction = (action) => (data, options) => (dispatch) => {
   // Run actual call
   // ===========================================================================
   return fetch(url, transformRequestData(data)).then((payload) => {
-    if (options.message) {
-      dispatch(sendMessage({
-        type: 'success',
-        entityId: (url === 'links') ? options.id : data.hash,
-        entity,
-        action
-      }, messageId))
+    if (payload.error) {
+      dispatch({
+        state: 0,
+        type: ACTIONS['LINKS_STATE'],
+        id: options.id
+      });
+      throw {
+        id: messageId,
+        payload: {
+          text: payload.error,
+          type: 'error'
+        }
+      }
+    } else {
+      if (options.message) {
+        dispatch(sendMessage({
+          type: 'success',
+          text: (payload) ? payload.success : options.message
+        }, messageId))
+      }
+
+      return dispatch({
+        type: type,
+        id: options.id,
+        state: 2,
+        payload
+      });
     }
-    dispatch({
-      type: type,
-      id: options.id,
-      state: 2,
-      payload
-    });
   });
 }
 

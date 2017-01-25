@@ -54,7 +54,7 @@ class Workspace extends React.Component {
   // Redirect to auth if user is unauthentificated
   // ===========================================================================
   componentWillUpdate(newProps) {
-    !newProps && this.props.router.push('/auth');
+    !newProps.userState && this.props.router.push('/auth');
   }
 
   // Handler for toggling sidebar state

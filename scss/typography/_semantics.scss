@@ -155,7 +155,7 @@ blockquote {}
 }
 
 .message {
-  $icon: $pointer-unit;
+  $icon: $pointer-unit * 2;
   display: flex;
   background-color: $c-element;
   position: relative;
@@ -163,17 +163,17 @@ blockquote {}
   .icon {
     display: flex;
     flex: 0 0 auto;
-    width: $icon * 2.5;
-    min-height: $icon * 2.5;
+    width: $icon * 1.25;
+    min-height: $icon * 1.25;
     align-self: stretch;
     img {
       margin: auto;
-      width: $icon * 2;
-      height: $icon * 2;
-    }
-    svg {
       width: $icon;
       height: $icon;
+    }
+    svg {
+      width: $icon * 0.75;
+      height: $icon * 0.75;
     }
   }
   div {
@@ -191,7 +191,6 @@ blockquote {}
   }
   &.is-error {
     .icon {
-      background-color: rgba(map-get($states, 'error'), .35);
       svg {
         fill: map-get($states, 'error');
       }
@@ -199,7 +198,6 @@ blockquote {}
   }
   &.is-warning {
     .icon {
-      background-color: rgba(map-get($states, 'warning'), .35);
       svg {
         fill: map-get($states, 'warning');
       }
@@ -207,7 +205,6 @@ blockquote {}
   }
   &.is-info {
     .icon {
-      background-color: rgba(map-get($states, 'info'), .35);
       svg {
         fill: map-get($states, 'info');
       }
@@ -215,7 +212,6 @@ blockquote {}
   }
   &.is-success {
     .icon {
-      background-color: rgba(map-get($states, 'success'), .35);
       svg {
         fill: map-get($states, 'success');
       }
