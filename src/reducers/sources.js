@@ -1,5 +1,5 @@
-import { LOGOUT, GET_SOURCES, SET_SOURCE_STATE, ADD_SOURCE, EDIT_SOURCE, REMOVE_SOURCE } from '../actions/types';
-import { concat, reject, uniqBy } from 'lodash';
+import { GET_SOURCES, ADD_SOURCE, REMOVE_SOURCE } from '../actions/types';
+import { concat, uniqBy } from 'lodash';
 import createReducer from '../helpers/reduserFactory'
 
 export const sources = createReducer({

@@ -1,5 +1,6 @@
-import { LOGIN, LOGOUT, GET_LINKS, GET_LINK, LINKS_STATE, ADD_LINKS, FAVORITE_LINK, IGNORE_LINK } from '../actions/types';
+import { LOGIN, LOGOUT, GET_LINKS, GET_LINK, LINKS_STATE, ADD_LINKS, FAVORITE_LINK, IGNORE_LINK, REMOVE_COLUMN } from '../actions/types';
 import { splitText } from '../helpers/functions';
+import { reduce } from 'lodash';
 
 
 export const links = (state = {}, action) => {
@@ -49,6 +50,11 @@ export const links = (state = {}, action) => {
           state: (action.hasOwnProperty('state')) ? action.state : 2
         }
       });
+    case REMOVE_COLUMN:
+      return reduce(state, ((acc, res, id) => {
+        if (id !== action.id) acc[id] = res;
+        return acc;
+      }), {});
     default:
       return state;
   }
