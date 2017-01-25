@@ -5,17 +5,13 @@ export default {
   // Render confirmation dialog
   // ===========================================================================
   renderDeleteDialog(props) {
+    if (!this.state.deleting) return null;
+
     props = Object.assign({
       text: 'Are you sure about that?',
       className: 'small-popup confirmation-dialog'
     }, props);
     let deleteHandler = this.makeDeletingStateToggler();
-
-    if (!this.state.deleting) {
-      throw {
-        text: 'You should provide an [ID] of item to delete'
-      }
-    }
 
     return ([
       <span key='overlay' onClick={deleteHandler} className='overlay'></span>,

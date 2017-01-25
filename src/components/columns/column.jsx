@@ -98,7 +98,7 @@ class Column extends React.Component {
       let { id, data } = this.props.item;
       let result = composeColumData.call(this, data, name, this.state[name]);
       if (!result) return;
-      this.actions.update(result, { id }).then(({payload}) => {
+      this.actions.update({id, data: result}).then(({payload}) => {
         return (shouldFetchResults(payload, name)) ? this.actions.getResults(payload.data, { id }) : null;
       }).catch(this.actions.throwError);
     };

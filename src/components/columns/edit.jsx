@@ -111,14 +111,14 @@ class Edit extends React.Component {
         // ===========================================================================
         if (name === 'name' || name === 'display_settings') {
           if (value !== this.props.item[name]) {
-            result = { [name]: value };
+            result = { id, [name]: value };
           }
         } else {
-          result = composeColumData.call(this, item.data, name, this.state[name]);
+          result = { id, data: composeColumData.call(this, item.data, name, this.state[name]) };
         }
         
         if (!result) return;
-        this.actions.update(result, { id }).then(({payload}) => {
+        this.actions.update(result).then(({payload}) => {
           return (shouldFetchResults(payload, name)) ? this.actions.refresh(payload.data, {id}) : null;
         }).catch(this.actions.throwError);
       }

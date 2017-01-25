@@ -13,6 +13,10 @@ export const inject = (target, mixin) => {
   } 
 }
 
+// Toggle binary switchers from 0 to 1 and reverse
+// ===========================================================================
+export const binToggle = (v) => (v) ? 0 : 1;  
+
 // Ensure path to a file [image] is absolute
 // ===========================================================================
 export const absolutizePath = (path) => (path && path.indexOf('/') !== 0) ? '/'+path : path;
@@ -65,14 +69,14 @@ export const updateArrayWithValue = (arr, val) => {
 
   // Stringify nested [Objects] in order to send proper data to back-end
   // ===========================================================================
-  export const transformRequestData = (data, id) => reduce(data, (acc, v, k) => {
+  export const transformRequestData = (data) => reduce(data, (acc, v, k) => {
     if (isPlainObject(v)) {
       acc[k] = JSON.stringify(v);
     } else if (!isNull(v) && !isUndefined(v)) {
       acc[k] = v;
     }
     return acc;
-  }, (id) ? { id } : {});
+  }, {});
 
   // Create message, set [visiblity] to [true] and set ID if not provided
   // ===========================================================================
@@ -182,16 +186,14 @@ export const updateArrayWithValue = (arr, val) => {
     // ===========================================================================
     if (val !== data[name]) {
       result = {
-        data: {
-          [name]: (data[name] instanceof Array) ? updateArrayWithValue(data[name], val) : val
-        }
+        [name]: (data[name] instanceof Array) ? updateArrayWithValue(data[name], val) : val
       };
       for (let key in data) {
         if (key !== name) {
           if (data[key] instanceof Array) {
-            if (data[key].length > 0) result.data[key] = data[key];
+            if (data[key].length > 0) result[key] = data[key];
           } else {
-            if (!isNull(data[key]) && !isUndefined(data[key])) result.data[key] = data[key];
+            if (!isNull(data[key]) && !isUndefined(data[key])) result[key] = data[key];
           }
         }
       }

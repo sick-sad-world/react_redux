@@ -73,9 +73,7 @@ export default {
         // ===========================================================================
         this.actions.create({ ...item,
           [name]: value
-        }).then(({
-          payload
-        }) => {
+        }).then(({ payload }) => {
           this.props.router.push(`/${this.props.type}s/${payload.id}`);
         }).catch(this.actions.throwError);
       }

@@ -1,18 +1,19 @@
 import jsonp from 'browser-jsonp';
+import { transformRequestData } from './helpers/functions';
 
 // Just an wrapper to a third-party module
 // which provides default settings and callback mapping
 // ===========================================================================
-export default function fetch (url, data, opts) {
+export default function fetch (url, data) {
   return new Promise((resolve, reject) => {
-    jsonp(Object.assign({
+    jsonp({
       url: `http://api.trendolizer.com/v3/${url}`,
-      data: data,
+      data: transformRequestData(data),
       error: reject,
-      success (data, params) {
-        delete data.callback;
-        resolve(data, params);
+      success (payload) {
+        delete payload.callback;
+        resolve(payload);
       }
-    }, opts));
+    });
   });
 }

@@ -60,8 +60,8 @@ class Assigment extends React.Component {
   manageFeed (type, feed) {
     let { id, data } = this.props.item;
     let result = composeColumData.call(this, data, type, feed);
-    if (!result) return; 
-    this.actions.update(result, { id }).then(({payload}) => {
+    if (!result) return;
+    this.actions.update({id, data: result}).then(({payload}) => {
       return (shouldFetchResults(payload, name)) ? this.actions.refresh(payload.data, {id}) : null;
     }).catch(this.actions.throwError);
   }

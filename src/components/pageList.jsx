@@ -52,7 +52,7 @@ export default class PageList extends React.Component {
       sortable: this.props.sortable,
       deleteAction: (this.props.deletable) ? this.makeDeletingStateToggler(item.id) : null
     }, item)));
-    if (this.state.deleting === item.id) {
+    if (this.state.deleting > 0 && this.state.deleting === item.id) {
       acc.push(this.renderDeleteDialog());
     }
     return acc;

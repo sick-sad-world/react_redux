@@ -428,8 +428,7 @@ class FeedCreation extends React.Component {
               })
             }
             messageText = without(messageText, k);
-            this.props.dispatch(sendMessage({
-              id: messageId,
+            this.props.dispatch(sendMessage(messageId, {
               type: 'loading',
               text: messageText.join(' ') + ' feeds',
               visible: messageText.length > 1
@@ -439,7 +438,7 @@ class FeedCreation extends React.Component {
           .catch(this.actions.throwError)
       }
     });
-    this.props.dispatch(sendMessage({
+    this.props.dispatch(sendMessage(null, {
       id: messageId,
       type: 'loading',
       text: messageText.join(' ') + ' feeds'
