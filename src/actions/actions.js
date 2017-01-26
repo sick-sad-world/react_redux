@@ -107,9 +107,11 @@ export const createAction = (entity, action) => (data, options) => (dispatch) =>
 
     if (options.message) {
       dispatch(sendMessage(messageId, { ...message, type: 'success', text: payload.success || payload.message }));
-      if(payload.success || payload.message) result.payload = data;
     }
     
+    if(payload.success || payload.message) {
+      result.payload = data;
+    }
     
     if ((action === 5 || action === 6) && data && data.id) {
       result.id = data.id;
