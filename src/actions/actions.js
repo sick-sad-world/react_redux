@@ -2,7 +2,7 @@
 // ===========================================================================
 import * as ACTIONS from './types';
 import { keys } from 'lodash';
-import { compileRequstParams, transformRequestData, createMessage } from '../helpers/functions';
+import { transformRequestData, createMessage } from '../helpers/functions';
 import fetch from '../fetch';
 import moment from 'moment';
 
