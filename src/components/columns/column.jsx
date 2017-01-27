@@ -22,7 +22,7 @@ import Result from './result';
 
 // Import actions
 // ===========================================================================
-import { throwError, createAction, createResultAction } from '../../actions/actions';
+import { throwError, createAction, getResults, refreshResult, ignoreResult, favoriteResult } from '../../actions/actions';
 
 // Main app screen - Dashboard
 // ===========================================================================
@@ -75,10 +75,10 @@ class Column extends React.Component {
     this.actions = bindActionCreators({
       update: createAction('column', 5),
       delete: createAction('column', 6),
-      getResults: createResultAction(3),
-      getResult: createResultAction(8),
-      favoriteResult: createResultAction(5),
-      ignoreResult: createResultAction(6),
+      getResults: getResults,
+      getResult: refreshResult,
+      favoriteResult: favoriteResult,
+      ignoreResult: ignoreResult,
       throwError: throwError
     }, this.props.dispatch);
 

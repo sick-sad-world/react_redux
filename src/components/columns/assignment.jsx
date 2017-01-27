@@ -20,7 +20,7 @@ import Source from '../sourcesets/source';
 
 // Import actions
 // ===========================================================================
-import { createAction, createResultAction, throwError } from '../../actions/actions';
+import { createAction, getResults, throwError } from '../../actions/actions';
 import { defColumn } from '../../helpers/defaults';
 
 class Assigment extends React.Component {
@@ -45,7 +45,7 @@ class Assigment extends React.Component {
     // ===========================================================================
     this.actions = bindActionCreators({
       update: createAction('column', 5),
-      refresh: createResultAction(3),
+      refresh: getResults,
       throwError: throwError
     }, this.props.dispatch);
 

@@ -39,7 +39,7 @@ export const REMOVE_COLUMN = 'REMOVE_COLUMN';
 export const GET_LINKS = 'GET_LINKS';
 export const ADD_LINKS = 'ADD_LINKS';
 export const LINKS_STATE = 'LINKS_STATE';
-export const GET_LINK = 'GET_LINK';
+export const REFRESH_LINK = 'REFRESH_LINK';
 export const FAVORITE_LINK = 'FAVORITE_LINK';
 export const IGNORE_LINK = 'IGNORE_LINK';
 
