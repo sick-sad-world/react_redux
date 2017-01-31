@@ -32,7 +32,7 @@ class Messages extends React.Component {
       clearTimeout(this.timeouts[id]);
       delete this.timeouts[id];
     }
-    this.props.dispatch(sendMessage(id, {visible: false}));
+    this.props.dispatch(sendMessage({id, visible: false}));
   }
 
   render() {

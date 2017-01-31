@@ -24,7 +24,8 @@ export default class PageList extends React.Component {
     super(props);
     inject(this, deletable);
     this.state = {
-      deleting: 0
+      deleting: 0,
+      items: props.items
     };
 
     // Create bound actions
@@ -40,6 +41,10 @@ export default class PageList extends React.Component {
     bindAll(this, ['handlerCreate', 'createListItem'])
   }
 
+  componentWillReceiveProps (newProps) {
+    if (newProps.state === 2) this.setState({items: newProps.items});
+  }
+
   // Create list item component
   // @ used in data mapping
   // ===========================================================================
@@ -47,7 +52,6 @@ export default class PageList extends React.Component {
     acc.push(React.cloneElement(this.props.children, Object.assign({
       key: item.id,
       order: item.order,
-      type: this.props.type,
       current: item.id === this.props.curId,
       sortable: this.props.sortable,
       deleteAction: (this.props.deletable) ? this.makeDeletingStateToggler(item.id) : null
@@ -71,7 +75,7 @@ export default class PageList extends React.Component {
       // Redirect to edit form if need
       // ===========================================================================
       this.props.router.push({
-        pathname: `/${this.props.type}s/new`,
+        pathname: this.props.router.location.pathname+'/new',
         query: {name: value}
       });
     } else {
@@ -85,7 +89,6 @@ export default class PageList extends React.Component {
     // Define variables via destructing
     // Define text defaults
     // ===========================================================================
-    let items = this.props.items;
     let texts = Object.assign({
       title: 'List title',
       description: 'List description.',
@@ -115,7 +118,7 @@ export default class PageList extends React.Component {
           </div>
         </header>
         <ul className='subsection-content entity-list'>
-          {(items.length) ? reduce(items, this.createListItem, []) : empty }
+          {(this.state.items.length) ? reduce(this.state.items, this.createListItem, []) : empty }
         </ul>
       </section>
     );

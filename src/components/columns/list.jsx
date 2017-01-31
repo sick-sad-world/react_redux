@@ -46,7 +46,7 @@ class List extends React.Component {
   render() {
     return (
       <PageList {...this.props} >
-        <ListItem customIcon={this.makeItemIcon} />
+        <ListItem type='column' customIcon={this.makeItemIcon} />
       </PageList>
     );
   }
@@ -67,12 +67,13 @@ List.defaultProps = {
 
 // Provide default parameters for list
 // ===========================================================================
-const mapStateToProps = ({ columns }, ownProps) => {
+const mapStateToProps = ({ columns, app }, ownProps) => {
   return {
+    state: app.state,
     curId: parseInt(ownProps.params.id),
-    type: 'column',
     sortable: false,
     deletable: true,
+    type: 'columns',
     items: columns.map((item) => ({
       id: item.id,
       order: item.order,

@@ -12,7 +12,7 @@ class List extends React.Component {
   render() {
     return (
       <PageList {...this.props} >
-        <ListItem />
+        <ListItem type='report' />
       </PageList>
     );
   }
@@ -32,12 +32,13 @@ List.defaultProps = {
 
 // Provide default parameters for list
 // ===========================================================================
-const mapStateToProps = ({ reports }, ownProps) => {
+const mapStateToProps = ({ reports, app }, ownProps) => {
   return {
+    state: app.state,
     curId: parseInt(ownProps.params.id),
-    type: 'report',
     sortable: false,
     deletable: true,
+    type: 'report',
     create: 'delayed',
     items: reports.map((item) => ({
       id: item.id,

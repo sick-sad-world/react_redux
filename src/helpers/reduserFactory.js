@@ -1,5 +1,6 @@
 import { LOGOUT, LOGIN } from '../actions/types';
-import { reject, concat } from 'lodash';
+import { reject, uniqBy } from 'lodash';
+import { mergeArrayById } from './functions';
 
 export default function createReducer (actions) {
   return function (state = [], action) {
@@ -8,13 +9,13 @@ export default function createReducer (actions) {
       case LOGIN:
         return [];
       case actions.GET:
-        return action.payload;
+        return uniqBy(action.payload, 'id');
       case actions.ADD:
-        return concat(state, action.payload);
+        return mergeArrayById(state, action.payload);
       case actions.EDIT:
-        return state.map((item) => (item.id === action.id) ? Object.assign({}, item, action.payload) : item);
+        return mergeArrayById(state, action.payload);
       case actions.DELETE:
-        return reject(state, {id: action.id});
+        return reject(state, {id: action.payload.id});
       default:
         if (actions.hasOwnProperty(action.type) && typeof actions[action.type] === 'function') {
           return actions[action.type](state, action);

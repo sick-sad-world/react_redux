@@ -12,7 +12,7 @@ class List extends React.Component {
   render() {
     return (
       <PageList {...this.props} >
-        <ListItem />
+        <ListItem type='set' />
       </PageList>
     );
   }
@@ -32,12 +32,13 @@ List.defaultProps = {
 
 // Provide default parameters for list
 // ===========================================================================
-const mapStateToProps = ({ sets }, ownProps) => {
+const mapStateToProps = ({ sets, app }, ownProps) => {
   return {
+    state: app.state,
     curId: parseInt(ownProps.params.id),
-    type: 'set',
     sortable: false,
     deletable: true,
+    type: 'set',
     items: sets.map((item) => ({
       id: item.id,
       order: item.order,

@@ -39,6 +39,23 @@ export const formatNumber = (num, gap = 1) => {
   }
 }
 
+// Add new item to array id ID not found
+// Update item if ID found
+// ===========================================================================
+export const mergeArrayById = (arr, obj) => {
+  let changed = false;
+  let result = arr.map((item) => {
+    if (item.id === obj.id) {
+      changed = true;
+      return Object.assign({}, item, obj);
+    } else {
+      return item;
+    }
+  });
+  if (!changed) result.push(obj);
+  return result;
+}
+
 // Modify [Array] with value provided
 // if [val] in [Array] -> return new one WITHOUT [val]
 // if [val] not in [Array] -> return new one WITH [val]

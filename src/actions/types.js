@@ -2,7 +2,6 @@
 // ===========================================================================
 export const ERROR = 'ERROR';
 export const PUSH_MESSAGE = 'PUSH_MESSAGE';
-export const EDIT_MESSAGE = 'EDIT_MESSAGE';
 
 // App state actions
 // ===========================================================================

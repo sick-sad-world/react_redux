@@ -1,7 +1,6 @@
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
-import { findDOMNode } from 'react-dom';
 import Icon from './icon';
 import { Link } from 'react-router';
 

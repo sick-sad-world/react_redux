@@ -19,7 +19,7 @@ export default {
         <h4>{props.text}</h4>
         <span className='buttons'>
           <a onClick={() => this.handlerDelete(this.state.deleting)} className='button'>Delete</a>
-          <span onClick={deleteHandler} className='button is-accent'>Cancel</span>
+          <span onClick={deleteHandler} className='button is-accent'>Close</span>
         </span>
       </div>
     ]);
@@ -28,7 +28,9 @@ export default {
   // Handler to run [delete] instace action
   // ===========================================================================
   handlerDelete(id) {
-    this.actions.delete({id}).catch(this.actions.throwError).then(() => this.setState({deleting: 0}));
+    if (this.props.state === 2) {
+      this.actions.delete({id}).catch(this.actions.throwError).then(() => this.setState({deleting: 0}));
+    }
   },
 
   makeDeletingStateToggler(deleting = 0) {

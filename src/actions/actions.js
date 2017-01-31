@@ -26,47 +26,28 @@ export const setResultState = (id, state) => ({ type: ACTIONS['LINKS_STATE'], id
 // Throw action related to error (SYNC)
 // ===========================================================================
 export const throwError = (error) => (dispatch) => {
-  let action;
+  let message;
   if (error instanceof Error) {
     console.error(error);
-    action = {
-      type: ACTIONS['ERROR'],
-      payload: createMessage({ type: 'error', text: 'Javascript Error: ' + error.toString()+' '+error.stack})
-    };
+    message = createMessage({ type: 'error', text: 'Javascript Error: ' + error.toString()+' '+error.stack})
   } else if (error.event) {
-    action = {
-      type: ACTIONS['ERROR'],
-      payload: createMessage({ type: 'error', text: 'Network Error: ' + error.url})
-    };
+    message = createMessage({ type: 'error', text: 'Network Error: ' + error.url})
   } else {
-    if (error.id) {
-      action = { ...error, type: ACTIONS['EDIT_MESSAGE'] }
-    } else {
-      action = {
-        type: ACTIONS['PUSH_MESSAGE'],
-        payload: createMessage(error)
-      }
-    }
+    message = createMessage(error);
+    message.type = 'error';
   }
-  return dispatch(action);
+  return dispatch({
+    type: ACTIONS['ERROR'],
+    payload: message
+  });
 };
 
 // Create or edit message in system notification module
 // ===========================================================================
-export const sendMessage = (id, data) => {
-  if (typeof id === 'number') {
-    return {
-      id,
-      type: ACTIONS['EDIT_MESSAGE'],
-      payload: data
-    }
-  } else {
-    return {
-      type: ACTIONS['PUSH_MESSAGE'],
-      payload: createMessage(data)
-    }
-  }
-};
+export const sendMessage = (data) => ({
+  type: ACTIONS['PUSH_MESSAGE'],
+  payload: createMessage(data)
+});
 
 // Action constructor (for default AJAX comunnication)
 // Since most of our actions are the same - i create this
@@ -88,52 +69,39 @@ export const createAction = (entity, action) => (data, options) => (dispatch) =>
 
   if (options.state) dispatch(setAppState(action));
 
-  if (options.message) dispatch(sendMessage(null, {...message, id: messageId, type: 'loading'}));
+  if (options.message) dispatch(sendMessage({...message, id: messageId, type: 'loading'}));
 
   return fetch(url, data)
     // Set back state to idle
-    // ===========================================================================
-    .then((payload) => {
-      if (options.state) dispatch(setAppState(2));
-      return payload;
-    })
     // Throw error - if error message is presented
     // ===========================================================================
     .then((payload) => {
       if (payload.error) {
         throw {
           id: messageId,
-          payload: {
-            type: 'error',
-            text: payload.error
-          }
+          text: payload.error
         }
       } else {
+        if (options.state) dispatch(setAppState(2));
         return payload;
       }
     })
     // Display message if need and ensure that payload is actual data 
     // ===========================================================================
     .then((payload) => {
-      let message = payload.success || payload.message;
+      let messageText = payload.success || payload.message;
       if (options.message) {
-        dispatch(sendMessage(messageId, {
+        dispatch(sendMessage({
+          id: messageId,
           type: 'success',
-          text: (typeof options.message === 'string') ? options.message : message
+          text: (typeof options.message === 'string') ? options.message : messageText
         }));
       }
-      return (message) ? data : payload;
+      return (messageText) ? data : payload;
     })
     // Create action Object
     // ===========================================================================
-    .then((payload) => {
-      let result = { type, payload };
-      if ((action === 5 || action === 6) && data && data.id) {
-        result.id = data.id;
-      }
-      return result;
-    })
-    .then(dispatch);
+    .then((payload) => dispatch({ type, payload }));
 };
 
 // Get results for a single column
@@ -157,7 +125,7 @@ export const createResultAction = (action, url, type) => (data, options) => (dis
 
   if (options.state) dispatch(setResultState(options.id, action));
 
-  if (options.message) dispatch(sendMessage(null, { ...message, id: messageId, type: 'loading' }))
+  if (options.message) dispatch(sendMessage({ ...message, id: messageId, type: 'loading' }))
 
   // Run actual call
   // ===========================================================================
@@ -169,10 +137,7 @@ export const createResultAction = (action, url, type) => (data, options) => (dis
         dispatch(setResultState(options.id, 0));
         throw {
           id: messageId,
-          payload: {
-            text: payload.error,
-            type: 'error'
-          }
+          text: payload.error
         }
       } else {
         return payload;
@@ -181,19 +146,24 @@ export const createResultAction = (action, url, type) => (data, options) => (dis
     // Display message if need and ensure that payload is actual data 
     // ===========================================================================
     .then((payload) => {
-      let message = payload.success || payload.message;
+      let messageText = payload.success || payload.message;
       if (options.message) {
-        dispatch(sendMessage(messageId, {
+        dispatch(sendMessage({
+          id: messageId,
           type: 'success',
-          text: (typeof options.message === 'string') ? options.message : message
+          text: (typeof options.message === 'string') ? options.message : messageText
         }));
       }
-      return (message) ? data : payload;
+      return (messageText) ? data : payload;
     })
     // Create action Object
     // ===========================================================================
-    .then((payload) => ({ type: (data.offset) ? ACTIONS['ADD_LINK'] : type, id: options.id, state: 2, payload }))
-    .then(dispatch);
+    .then((payload) => dispatch({
+      type: (data.offset) ? ACTIONS['ADD_LINK'] : type,
+      id: options.id,
+      state: 2,
+      payload
+    }));
 }
 
 export const getResults = createResultAction(3, 'links', ACTIONS['GET_LINKS']);
@@ -243,18 +213,20 @@ export const getAllResults = (data) => (dispatch) => {
         // wich result loading is done from list
         // ===========================================================================
         delete ids[column.id];
-        return dispatch(sendMessage(messageId, {
+        return dispatch(sendMessage({
+          id: messageId,
           entityId: Object.keys(ids).join(',')
         }));
       });
     })
-  ).then(() => dispatch(sendMessage(messageId, {
+  ).then(() => dispatch(sendMessage({
+    id: messageId,
     visible: false
   }))).catch(err => dispatch(throwError(err)));
 
   // Send message at a start
   // ===========================================================================
-  dispatch(sendMessage(null, {
+  dispatch(sendMessage({
     id: messageId,
     type: 'loading',
     entityId: Object.keys(ids).join(','),
