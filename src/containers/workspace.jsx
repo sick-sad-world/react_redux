@@ -11,12 +11,12 @@ import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
-import { createAction, throwError } from '../actions/actions';
+import { errorHandler, logout } from '../actions/actions';
 
 // Import Child components
 // ===========================================================================
 import MainNav from '../components/mainNav';
-import UserBlock from '../components/user/briefInfo';
+import UserBlock from '../components/briefInfo';
 
 
 // Main app screen - where all fun is taking place
@@ -33,13 +33,6 @@ class Workspace extends React.Component {
       sidebar: this.props.sidebar || true
     };
 
-    // Create bound actions for a container
-    // ===========================================================================
-    this.actions = bindActionCreators({
-      logout: createAction('logout', 8),
-      throwError: throwError
-    }, this.props.dispatch);
-
     // Bind handlers to our component
     // ===========================================================================
     bindAll(this, ['handlerSidebar', 'handlerLogout']);
@@ -48,13 +41,13 @@ class Workspace extends React.Component {
   // Redirect to auth if user is unauthentificated
   // ===========================================================================
   componentWillMount() {
-    !this.props.userState && this.props.router.push('/auth');
+    !this.props.userAuthenticated && this.props.router.push('/auth');
   }
 
   // Redirect to auth if user is unauthentificated
   // ===========================================================================
   componentWillUpdate(newProps) {
-    !newProps.userState && this.props.router.push('/auth');
+    !newProps.userAuthenticated && this.props.router.push('/auth');
   }
 
   // Handler for toggling sidebar state
@@ -69,17 +62,13 @@ class Workspace extends React.Component {
   // ===========================================================================
   handlerLogout(e) {
     e.preventDefault();
-    this.actions.logout().catch(this.actions.throwError);
+    this.props.logout().catch(this.props.errorHandler);
   }
 
   // Render our screen
   // ===========================================================================
   render() {
-    if (!this.props.userState) return null;
-    
-    // Get our display components
-    // ===========================================================================
-    let { list, main, additional, user } = this.props;
+    if (!this.props.userAuthenticated) return null;
 
     // Create classList for sidebar
     // ===========================================================================
@@ -93,14 +82,12 @@ class Workspace extends React.Component {
     return (
       <section className='screen-main mod-screen-main'>
         <aside className={sidebarClass}>
-          <UserBlock {...user} />
+          <UserBlock {...this.props.user} />
           <MainNav toggle={this.handlerSidebar} logout={this.handlerLogout} />
         </aside>
         <div className='screen-content'>
           <div className='mod-page'>
-            {list}
-            {main}
-            {additional}
+            {this.props.children}
           </div>
         </div>
       </section>
@@ -111,4 +98,15 @@ class Workspace extends React.Component {
 // Connect our Container to State
 // @ deps -> App, (User in future)
 // ===========================================================================
-export default connect(({app, user}) =>({...app, sidebar: true, user: pick(user, ['fullname', 'image', 'position'])}))(Workspace);
+const mapStateToProps = ({app, user}) =>({
+  ...app,
+  sidebar: true,
+  user: pick(user.payload, ['fullname', 'image', 'position'])
+});
+
+const mapDispatchToProps = (dispatch) => (bindActionCreators({
+  logout,
+  errorHandler
+}, dispatch));
+
+export default connect(mapStateToProps, mapDispatchToProps)(Workspace);

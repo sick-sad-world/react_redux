@@ -1,11 +1,12 @@
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
-import { createAction, setAppState, throwError, fetchData, getAllResults } from '../actions/actions';
+import { login, getUser, setAppState, fetchData, errorHandler } from '../actions/actions';
 
 // Import Child components
 // ===========================================================================
@@ -19,18 +20,16 @@ class Auth extends React.Component {
   // ===========================================================================
   handleAuth(e) {
     e.preventDefault();
-    let dispatch = this.props.dispatch;
     let { username, password } = e.target.elements;
-    
-    dispatch(createAction('login', 8)({
+    this.props.login({
         username: username.value,
         password: password.value
-      }))
-      .then(() => dispatch(setAppState(1)))
-      .then(() => dispatch(fetchData(true)))
-      .then((data) => dispatch(getAllResults(data)))
-      .then(() => dispatch(setAppState(2)))
-      .catch((error) => dispatch(throwError(error)));
+      })
+      .then(() => this.props.setAppState(1))
+      .then(() => this.props.getUser(null, {state: false, notification: false}))
+      .then(() => this.props.fetchData())
+      .then(() => this.props.setAppState(2))
+      .catch(this.props.errorHandler);
   }
 
   // Handle reaction of a new user
@@ -42,19 +41,19 @@ class Auth extends React.Component {
   // Redirect to auth if user is unauthentificated
   // ===========================================================================
   componentWillMount() {
-    this.props.userState && this.props.router.push('/dashboard');
+    this.props.userAuthenticated && this.props.router.push('/');
   }
 
   // Redirect to auth if user is unauthentificated
   // ===========================================================================
   componentWillUpdate(newProps) {
-    newProps && this.props.router.push('/dashboard');
+    newProps.userAuthenticated && this.props.router.push('/');
   }
 
   // Render our screen
   // ===========================================================================
   render() {
-    if (this.props.userState) return null;
+    if (this.props.userAuthenticated) return null;
 
     // Set default texts for a page
     // ===========================================================================
@@ -94,4 +93,16 @@ Auth.defaultProps = {
 // Connect our Container to State
 // @ deps -> App
 // ===========================================================================
-export default connect(({app}) => ({userState: app.userState}))(Auth);
+const mapStateToProps = ({app}) => ({
+  userAuthenticated: app.userAuthenticated
+});
+
+const mapDispatchToProps = (dispatch) => (bindActionCreators({
+  login,
+  getUser,
+  fetchData,
+  errorHandler,
+  setAppState
+}, dispatch));
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);

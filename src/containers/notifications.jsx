@@ -1,7 +1,6 @@
 // Import utility stuff
 // ===========================================================================
 import { reduce, bindAll } from 'lodash';
-import classNames from 'classnames';
 
 // Import React related stuff
 // ===========================================================================
@@ -10,13 +9,13 @@ import { connect } from 'react-redux';
 
 // Import Child components
 // ===========================================================================
-import Message from './message';
+import Notification from '../components/notification';
 
 // Import Actions
 // ===========================================================================
-import { sendMessage } from '../actions/actions';
+import { notification } from '../actions/actions';
 
-class Messages extends React.Component {
+class Notifications extends React.Component {
   // Create timeouts hash and bind handler
   // ===========================================================================
   constructor(props) {
@@ -25,14 +24,14 @@ class Messages extends React.Component {
     bindAll(this, ['hideHandler']);
   }
 
-  // Handler uset to set MESSAGE visibility to [false]
+  // Handler uset to set Notification visibility to [false]
   // ===========================================================================
   hideHandler (id) {
     if (this.timeouts[id]) {
       clearTimeout(this.timeouts[id]);
       delete this.timeouts[id];
     }
-    this.props.dispatch(sendMessage({id, visible: false}));
+    this.props.dispatch(notification({id, visible: false}));
   }
 
   render() {
@@ -42,12 +41,10 @@ class Messages extends React.Component {
     // Prepare message list
     // ===========================================================================
     let list = (
-      <ul className='sys-messages'>{ reduce(this.props.items, (acc, message, i) => {
+      <ul className='sys-notifications'>{ reduce(this.props.items, (acc, message, i) => {
         if (i <= limit && message.visible) {
-          if (message.type !== 'error' && message.type !== 'loading' && !this.timeouts[message.id]) {
-            ids.push(message.id);
-          }
-          acc.push(<Message onClick={() => this.hideHandler(message.id)} key={message.id} {...message} actionText={actions[message.action]} />);
+          if (message.type !== 'loading' && !this.timeouts[message.id]) ids.push(message.id);
+          acc.push(<Notification onClick={() => this.hideHandler(message.id)} key={message.id} {...message} actionText={actions[message.action]} />);
         }
         return acc;
       }, []) }</ul>
@@ -60,23 +57,16 @@ class Messages extends React.Component {
   }
 }
 
-// Default number of messages visible and timeout value
+// Default number of notifications visible and timeout value
 // ===========================================================================
-Messages.defaultProps = {
+Notifications.defaultProps = {
   timeout: 8000,
   limit: 4,
-  actions: {
-    3: 'reading',
-    4: 'creating',
-    5: 'updating',
-    6: 'deleting',
-    7: 'sorting'
-  }
 }
 
 // Transform app state to component props
 // @ deps -> App
 // ===========================================================================
-const mapStateToProps = ({ messages }) => ({ items: messages });
+const mapStateToProps = ({ notifications }) => ({ items: notifications });
 
-export default connect(mapStateToProps)(Messages);
+export default connect(mapStateToProps)(Notifications);

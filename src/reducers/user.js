@@ -1,16 +1,31 @@
-import { LOGOUT, GET_USER, CREATE_USER, EDIT_USER } from '../actions/types';
-import { defaultUser } from '../helpers/defaults';
+import { GET_USER, EDIT_USER, SET_USER_STATE, LOGOUT } from '../actions/types';
 
-export const user = (state = defaultUser, action) => {
+export const defaultUser = {
+  state: 1,
+  payload: {
+    id: 0,
+    email: '',
+    email_bcc: [],
+    name: '',
+    fullname: '',
+    position: '',
+    status: '',
+    is_admin: 0,
+    image: '/img/ph_user.png'
+  }
+}
+
+export default function reducer (state = {...defaultUser}, action) {
   switch (action.type) {
-    case LOGOUT:
-      return defaultUser;
-    case GET_USER:
-      delete action.payload.error;
-      return state = Object.assign({}, state, action.payload, {image: defaultUser.image});
+    case SET_USER_STATE:
+      return {...state, state: action.state};
     case EDIT_USER:
-      return state = Object.assign({}, state, action.payload);
+    case GET_USER:
+      return {...state, state: 2, payload: action.payload}
+    case LOGOUT:
+      return {...defaultUser};
     default:
       return state;
   }
 }
+

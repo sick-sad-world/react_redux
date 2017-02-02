@@ -1,5 +1,17 @@
 import jsonp from 'browser-jsonp';
-import { transformRequestData } from './helpers/functions';
+import { reduce, isPlainObject, isNull, isUndefined } from 'lodash';
+
+// Transform data for serialization function
+// Nested objects - to string, exclude [null, undefined]
+// ===========================================================================
+export const transformRequestData = (data) => reduce(data, (acc, v, k) => {
+  if (isPlainObject(v)) {
+    acc[k] = JSON.stringify(v);
+  } else if (!isNull(v) && !isUndefined(v)) {
+    acc[k] = v;
+  }
+  return acc;
+}, {});
 
 // Just an wrapper to a third-party module
 // which provides default settings and callback mapping

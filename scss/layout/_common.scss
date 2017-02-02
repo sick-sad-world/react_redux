@@ -33,7 +33,7 @@ section[class^="screen"] {
 	@include overlay();
 }
 
-.sys-messages {
+.sys-notifications {
   position: fixed;
   width: map-get($layout, 'buffer') * 1.5;
   box-shadow: $sh-popup;

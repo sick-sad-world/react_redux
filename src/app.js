@@ -6,12 +6,18 @@ import 'babel-polyfill';
 // ===========================================================================
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import * as reducers from './reducers';
-import * as defaults from './helpers/defaults';
+import app from './reducers/app';
+import user from './reducers/user';
+import notifications from './reducers/notifications';
+import columns from './reducers/columns';
+import sets from './reducers/sets';
+import sources from './reducers/sources';
+import alerts from './reducers/alerts';
+import reports from './reducers/reports';
 
 // Import all required actions
 // ===========================================================================
-import { throwError, setAppState, createAction, fetchData, getAllResults } from './actions/actions';
+import { setAppState, getUser, fetchData, errorHandler } from './actions/actions';
 
 // Import all stuff related to React
 // ===========================================================================
@@ -26,32 +32,15 @@ import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 
 // Import two main screens fo an App
 // ===========================================================================
-import Workspace from './containers/workspace';
-import Auth from './containers/auth';
-import App from './containers/app'
+// import Workspace from './containers/workspace';
+// import Auth from './containers/auth';
+// import App from './containers/app'
 
 // Import components wich represents each of App sections
 // ===========================================================================
-import Dashboard from './components/columns/dashboard';
-import * as Alerts from './components/alerts';
-import * as Reports from './components/reports';
-import * as Columns from './components/columns';
-import * as Sourcesets from './components/sourcesets';
-import Profile from './components/user/profile';
-
-// Set App itinial state
-// ===========================================================================
-let initialState = {
-  app: defaults.defaultAppState,
-  messages: [],
-  user: defaults.defaultUser,
-  links: {},
-  alerts: [],
-  reports: [],
-  columns: [],
-  sources: [],
-  sets: []
-};
+import App from './containers/app';
+import Auth from './containers/auth';
+import Workspace from './containers/workspace';
 
 // Compose reducers
 // ===========================================================================
@@ -60,8 +49,17 @@ let composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 // Create actual store
 // ===========================================================================
 let TrendolizerStore = createStore(
-  combineReducers({ ...reducers, routing: routerReducer }),
-  initialState,
+  combineReducers({
+    app,
+    user,
+    notifications,
+    columns,
+    sets,
+    sources,
+    alerts,
+    reports,
+    routing: routerReducer
+  }),
   composeEnhancers(applyMiddleware(thunk))
 );
 
@@ -74,18 +72,12 @@ let history = syncHistoryWithStore(browserHistory, TrendolizerStore);
 render(
   <Provider store={TrendolizerStore}>
     <Router history={history}>
-      <Route component={App}>
+      <Route components={App}>
         <Route path='/auth' component={Auth} />
-        <Route component={Workspace}>
-          <Route path='/dashboard(/:id)' components={{main: Dashboard}} />
-          <Route path='/alerts(/:id)' components={Alerts}/>
-          <Route path='/reports(/:id)' components={Reports}/>
-          <Route path='/columns(/:id)(/:assignment)' components={Columns}/>
-          <Route path='/sets(/:id)(/:create)' components={Sourcesets}/>
-          <Route path='/settings' components={{main: Profile}}/>
+        <Route path='/' component={Workspace}>
         </Route>
       </Route>
-      <Redirect from='*' to='/dashboard' />
+      <Redirect from='*' to='/' />
     </Router>
   </Provider>,
   document.getElementById('appRoot')
@@ -93,8 +85,8 @@ render(
 
 // Ask server about initial data
 // ===========================================================================
-TrendolizerStore.dispatch(createAction('user', 3)({id: 'user'}, {message: false, state: false}))
-  .then((action) => action.payload.id && TrendolizerStore.dispatch(fetchData()))
-  .then((data) => TrendolizerStore.dispatch(getAllResults(data)))
-  .catch((error) => TrendolizerStore.dispatch(throwError(error)))
+TrendolizerStore
+  .dispatch(getUser(null, {state: false, notification: false}))
+  .then(() => TrendolizerStore.dispatch(fetchData()))
+  .catch((err) => TrendolizerStore.dispatch(errorHandler(err)))
   .then(() => TrendolizerStore.dispatch(setAppState(2)));
