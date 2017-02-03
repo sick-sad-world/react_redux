@@ -1,6 +1,6 @@
 import fetch from '../fetch';
 import moment from 'moment';
-import { notification } from './actions';
+import { notification } from '../redux/notifications';
 
 export default function createAction (config) {
 
@@ -56,7 +56,7 @@ export default function createAction (config) {
         if (options.notification) dispatch(notification({
           id: notificationId,
           type: 'success',
-          text: config.successMessage || payload.success
+          text: payload.success || config.successMessage
         }));
 
         // Dispatch actual action with data provided

@@ -13,7 +13,7 @@ import Notification from '../components/notification';
 
 // Import Actions
 // ===========================================================================
-import { notification } from '../actions/actions';
+import { notification } from '../redux/notifications';
 
 class Notifications extends React.Component {
   // Create timeouts hash and bind handler
@@ -35,16 +35,16 @@ class Notifications extends React.Component {
   }
 
   render() {
-    let { limit, timeout, actions } = this.props;
+    let { limit, timeout, actions, notifications } = this.props;
     let ids = [];
 
     // Prepare message list
     // ===========================================================================
     let list = (
-      <ul className='sys-notifications'>{ reduce(this.props.items, (acc, message, i) => {
+      <ul className='sys-notifications'>{ reduce(notifications, (acc, message, i) => {
         if (i <= limit && message.visible) {
           if (message.type !== 'loading' && !this.timeouts[message.id]) ids.push(message.id);
-          acc.push(<Notification onClick={() => this.hideHandler(message.id)} key={message.id} {...message} actionText={actions[message.action]} />);
+          acc.push(<Notification onClick={() => this.hideHandler(message.id)} key={message.id} {...message} />);
         }
         return acc;
       }, []) }</ul>
@@ -67,6 +67,6 @@ Notifications.defaultProps = {
 // Transform app state to component props
 // @ deps -> App
 // ===========================================================================
-const mapStateToProps = ({ notifications }) => ({ items: notifications });
+const mapStateToProps = ({ notifications }) => ({ notifications });
 
 export default connect(mapStateToProps)(Notifications);

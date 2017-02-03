@@ -6,7 +6,8 @@ import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
-import { login, getUser, setAppState, fetchData, errorHandler } from '../actions/actions';
+import { login, setAppState, fetchData, errorHandler } from '../redux/app';
+import { getUser } from '../redux/user';
 
 // Import Child components
 // ===========================================================================

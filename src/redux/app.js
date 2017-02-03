@@ -1,21 +1,32 @@
-import * as ACTIONS from './types';
-import moment from 'moment';
-import createAction from './factory';
+import * as ACTIONS from '../helpers/types';
+import createAction from '../helpers/actionFactory';
+import { notification } from './notifications';
 import { getColumns } from './columns';
 import { getSets } from './sets';
 import { getSources } from './sources';
 import { getAlerts } from './alerts';
 import { getReports } from './reports';
 
-export const notification = (note) => (dispatch) => dispatch({
-  type: ACTIONS.PUSH_NOTIFICATION,
-  payload: {
-    id: moment().unix(),
-    type: 'info',
-    visible: true,
-    ...note
+export const defaultApp = {
+  state: 1,
+  loadingStep: 1,
+  userAuthenticated: false
+}
+
+export default function reducer (state = defaultApp, action) {
+  switch (action.type) {
+    case ACTIONS.LOGIN:
+      return {...state, userAuthenticated: true}
+    case ACTIONS.LOGOUT:
+      return {...state, userAuthenticated: false}
+    case ACTIONS.GET_USER:
+      return {...state, userAuthenticated: !!action.payload.id}
+    case ACTIONS.SET_APP_STATE:
+      return {...state, state: action.state}
+    default:
+      return state;
   }
-});
+}
 
 export const errorHandler = (error) => (dispatch) => {
   if (error instanceof Error || error.event) {
@@ -59,27 +70,6 @@ export const logout = createAction({
   url: 'logout',
   pendingMessage: 'Shutting down session...',
   successMessage: 'Logged out.'
-});
-
-export const setUserState = (state) => ({
-  type: ACTIONS.SET_USER_STATE,
-  state
-});
-
-export const getUser = createAction({
-  type: ACTIONS.GET_USER,
-  state_type: ACTIONS.SET_USER_STATE,
-  url: 'user',
-  pendingMessage: 'Reading user data...',
-  successMessage: 'User data has been read.'
-});
-
-export const editUser = createAction({
-  type: ACTIONS.EDIT_USER,
-  state_type: ACTIONS.SET_USER_STATE,
-  url: 'user',
-  pendingMessage: 'Updating user data...',
-  successMessage: 'User data has been updated.'
 });
 
 export const fetchData = (options) => {

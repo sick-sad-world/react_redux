@@ -14,9 +14,6 @@
 		a {
 			color: $c-alt;
 		}
-    .pace {
-      font-size: 0;
-    }
 		.mod-user-block {
 			margin: baseUnit() baseUnit() baseUnit(2);
 			div {
@@ -30,9 +27,6 @@
 					opacity: 1;
 				}
 			}
-      .pace {
-        font-size: 0.75em;
-      }
 		}
 	}
 
@@ -48,7 +42,11 @@
   }
 
 	.mod-dashboard {
+    display: none;
 		@include pos();
 		align-items: stretch;
+    &:last-child {
+      display: block;
+    }
 	}
 }

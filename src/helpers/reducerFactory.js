@@ -1,4 +1,4 @@
-import { LOGOUT, LOGIN } from '../actions/types';
+import { LOGOUT, LOGIN } from '../helpers/types';
 import { reject, uniqBy } from 'lodash';
 
 export const mergeArrayById = (arr, obj) => {
@@ -29,7 +29,7 @@ export default function createReducer (config) {
           state: 2,
           payload: mergeArrayById(state.payload, action.payload)
         }
-      case config.DELETE:
+      case config.REMOVE:
         return {
           state: 2,
           payload: reject(state.payload, {id: action.payload.id})

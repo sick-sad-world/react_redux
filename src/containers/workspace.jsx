@@ -11,12 +11,13 @@ import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
-import { errorHandler, logout } from '../actions/actions';
+import { errorHandler, logout } from '../redux/app';
 
 // Import Child components
 // ===========================================================================
 import MainNav from '../components/mainNav';
 import UserBlock from '../components/briefInfo';
+import Dashboard from '../containers/dashboard';
 
 
 // Main app screen - where all fun is taking place
@@ -86,9 +87,8 @@ class Workspace extends React.Component {
           <MainNav toggle={this.handlerSidebar} logout={this.handlerLogout} />
         </aside>
         <div className='screen-content'>
-          <div className='mod-page'>
-            {this.props.children}
-          </div>
+          <Dashboard />
+          {this.props.children}
         </div>
       </section>
     );

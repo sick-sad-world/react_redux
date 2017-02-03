@@ -6,18 +6,19 @@ import 'babel-polyfill';
 // ===========================================================================
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import app from './reducers/app';
-import user from './reducers/user';
-import notifications from './reducers/notifications';
-import columns from './reducers/columns';
-import sets from './reducers/sets';
-import sources from './reducers/sources';
-import alerts from './reducers/alerts';
-import reports from './reducers/reports';
+import app from './redux/app';
+import user from './redux/user';
+import notifications from './redux/notifications';
+import columns from './redux/columns';
+import sets from './redux/sets';
+import sources from './redux/sources';
+import alerts from './redux/alerts';
+import reports from './redux/reports';
 
 // Import all required actions
 // ===========================================================================
-import { setAppState, getUser, fetchData, errorHandler } from './actions/actions';
+import { getUser } from './redux/user';
+import { setAppState, fetchData, errorHandler } from './redux/app';
 
 // Import all stuff related to React
 // ===========================================================================
@@ -30,17 +31,16 @@ import { Provider } from 'react-redux';
 import { Router, Route, Redirect, browserHistory } from 'react-router';
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 
-// Import two main screens fo an App
-// ===========================================================================
-// import Workspace from './containers/workspace';
-// import Auth from './containers/auth';
-// import App from './containers/app'
-
 // Import components wich represents each of App sections
 // ===========================================================================
 import App from './containers/app';
 import Auth from './containers/auth';
 import Workspace from './containers/workspace';
+import Columns from './containers/columns';
+import Sourcesets from './containers/sets';
+import Alerts from './containers/alerts';
+import Reports from './containers/reports';
+import User from './containers/user';
 
 // Compose reducers
 // ===========================================================================
@@ -75,6 +75,19 @@ render(
       <Route components={App}>
         <Route path='/auth' component={Auth} />
         <Route path='/' component={Workspace}>
+          <Route path='/columns' component={Columns}>
+            <Route path=':id' component={Columns} />
+          </Route>
+          <Route path='/sets' component={Sourcesets}>
+            <Route path=':id' component={Sourcesets} />
+          </Route>
+          <Route path='/alerts' component={Alerts}>
+            <Route path=':id' component={Alerts} />
+          </Route>
+          <Route path='/reports' component={Reports}>
+            <Route path=':id' component={Reports} />
+          </Route>
+          <Route path='/settings' component={User} />
         </Route>
       </Route>
       <Redirect from='*' to='/' />
