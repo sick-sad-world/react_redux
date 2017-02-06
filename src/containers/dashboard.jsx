@@ -17,7 +17,7 @@ import { editColumn, deleteColumn } from '../redux/columns';
 // ===========================================================================
 
 
-class Sourcesets extends React.Component {
+class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     console.log('Dashboard cnst');
@@ -38,7 +38,7 @@ class Sourcesets extends React.Component {
 }
 
 // Connect our Container to State
-// @ deps -> Sourcesets
+// @ deps -> Columns
 // ===========================================================================
 const mapStateToProps = ({columns}) => ({...columns});
 
@@ -48,4 +48,4 @@ const mapDispatchToProps = (dispatch) => (bindActionCreators({
   errorHandler
 }, dispatch))
 
-export default connect(mapStateToProps, mapDispatchToProps)(Sourcesets);
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

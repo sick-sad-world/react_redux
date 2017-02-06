@@ -75,19 +75,19 @@ render(
       <Route components={App}>
         <Route path='/auth' component={Auth} />
         <Route path='/' component={Workspace}>
-          <Route path='/columns' component={Columns}>
+          <Route path='/columns' component={Columns} label='Columns list' icon='archive'>
             <Route path=':id' component={Columns} />
           </Route>
-          <Route path='/sets' component={Sourcesets}>
+          <Route path='/sets' component={Sourcesets} label='Sourcesets list' icon='globe'>
             <Route path=':id' component={Sourcesets} />
           </Route>
-          <Route path='/alerts' component={Alerts}>
+          <Route path='/alerts' component={Alerts} label='Alerts list' icon='paper-plane'>
             <Route path=':id' component={Alerts} />
           </Route>
-          <Route path='/reports' component={Reports}>
+          <Route path='/reports' component={Reports} label='Reports list' icon='news'>
             <Route path=':id' component={Reports} />
           </Route>
-          <Route path='/settings' component={User} />
+          <Route path='/settings' component={User} label='Settings' icon='cog'/>
         </Route>
       </Route>
       <Redirect from='*' to='/' />

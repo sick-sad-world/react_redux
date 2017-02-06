@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, pick } from 'lodash';
+import { bindAll, pick, reduce } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
@@ -78,13 +78,18 @@ class Workspace extends React.Component {
       'is-expanded': this.state.sidebar
     });
 
+    let routes = reduce(this.props.route.childRoutes, (acc, {label, path, icon}) => {
+      acc.push({label, path, icon});
+      return acc;
+    }, [{label: 'Dashboard', icon: 'home', path: '/'}]);
+
     // Return JSX layout of a component
     // ===========================================================================
     return (
       <section className='screen-main mod-screen-main'>
         <aside className={sidebarClass}>
           <UserBlock {...this.props.user} />
-          <MainNav toggle={this.handlerSidebar} logout={this.handlerLogout} />
+          <MainNav routes={routes} toggle={this.handlerSidebar} logout={this.handlerLogout} />
         </aside>
         <div className='screen-content'>
           <Dashboard />
