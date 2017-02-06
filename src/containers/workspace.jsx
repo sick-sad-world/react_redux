@@ -36,7 +36,7 @@ class Workspace extends React.Component {
 
     // Bind handlers to our component
     // ===========================================================================
-    bindAll(this, ['handlerSidebar', 'handlerLogout']);
+    bindAll(this, 'handlerSidebar', 'handlerLogout');
   }
 
   // Redirect to auth if user is unauthentificated
@@ -53,16 +53,14 @@ class Workspace extends React.Component {
 
   // Handler for toggling sidebar state
   // ===========================================================================
-  handlerSidebar(e) {
-    e.preventDefault();
+  handlerSidebar() {
     this.setState({ sidebar: !this.state.sidebar });
     e.target.blur();
   }
 
   // Handler for logout operation
   // ===========================================================================
-  handlerLogout(e) {
-    e.preventDefault();
+  handlerLogout() {
     this.props.logout().catch(this.props.errorHandler);
   }
 

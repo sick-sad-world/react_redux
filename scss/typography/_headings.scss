@@ -103,4 +103,24 @@ h6, .t-caption {
 	}
 }
 
+.edit-confirmation {
+  background-color: lighten($c-accent-alt, 30%);
+  box-shadow: inset 0 2px 8px rgba(darken($c-accent-alt, 40%),.2);
+  padding: baseUnit();
+  border-bottom: $bd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  p {
+    display: inline-block;
+  }
+  div {
+    flex: 0 0 auto;
+  }
+  a {
+    margin-left: baseUnit();
+    width: 80px;
+  }
+}
+
 // @style: CUSTOM HEADERS HERE

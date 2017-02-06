@@ -22,7 +22,7 @@ export default class ListSection extends React.Component {
       deleting: 0,
       payload: props.payload
     };
-    bindAll(this, ['createListItem', 'createHandler']);
+    bindAll(this, 'createListItem', 'createHandler');
   }
 
   componentWillReceiveProps (newProps) {

@@ -22,7 +22,7 @@ import ListItem from '../components/listItem';
 class Columns extends React.Component {
   constructor(props) {
     super(props);
-    bindAll(this, ['createItem', 'deleteItem', 'updateVisiblity', 'makeItemIcon']);
+    bindAll(this, 'createItem', 'deleteItem', 'updateVisiblity', 'makeItemIcon');
   }
 
   createItem (value) {

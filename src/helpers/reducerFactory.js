@@ -18,6 +18,11 @@ export default function createReducer (config) {
       case LOGOUT:
       case LOGIN:
         return {state: 1, payload: []};
+      case config.STATE:
+        return {
+          state: (action.state >= 0 ) ? action.state : 0,
+          payload: state.payload
+        }
       case config.GET:
         return {
           state: 2,

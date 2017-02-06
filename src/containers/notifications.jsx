@@ -21,7 +21,7 @@ class Notifications extends React.Component {
   constructor(props) {
     super(props);
     this.timeouts = {};
-    bindAll(this, ['hideHandler']);
+    bindAll(this, 'hideHandler');
   }
 
   // Handler uset to set Notification visibility to [false]

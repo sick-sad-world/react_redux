@@ -11,17 +11,18 @@ import { connect } from 'react-redux';
 // Import actions
 // ===========================================================================
 import { errorHandler } from '../redux/app';
-import { deleteAlert } from '../redux/sets';
+import { editAlert, deleteAlert } from '../redux/alerts';
 
 // Import Child components
 // ===========================================================================
 import ListSection from '../components/listSection';
 import ListItem from '../components/listItem';
+import EditAlert from '../components/edit/alert';
 
 class Alerts extends React.Component {
   constructor(props) {
     super(props);
-    bindAll(this, ['createItem', 'deleteItem']);
+    bindAll(this, 'createItem', 'deleteItem', 'updateItem');
   }
 
   createItem (value) {
@@ -33,6 +34,10 @@ class Alerts extends React.Component {
 
   deleteItem (id) {
     return this.props.deleteAlert({id}).catch(this.props.errorHandler);
+  }
+
+  updateItem (data) {
+    return this.props.editAlert(data).catch(this.props.errorHandler);
   }
 
   render () {
@@ -48,6 +53,9 @@ class Alerts extends React.Component {
         <ListSection {...listData} >
           <ListItem url={this.props.route.path} deleteText='Delete this alert' />
         </ListSection>
+        {(this.props.chosen) ? (
+          <EditAlert data={this.props.chosen} state={this.props.state} columns={this.props.columns} update={this.updateItem} backPath={this.props.route.path} />
+        ) : null}
       </div>
     )
   }
@@ -61,6 +69,7 @@ Alerts.defaultProps = {
       title: 'Alerts Management',
       description: 'Create, edit and delete alerts that will be sent to you when specific columns get new items.',
       btn: 'Create new alert',
+      placeholder: 'Enter name',
       deleting: 'Are you sure want to delete this Alert?',
       empty: 'No alerts created yet. Use form above to create one.'
     }
@@ -70,18 +79,17 @@ Alerts.defaultProps = {
 // Connect our Container to State
 // @ deps -> Alerts
 // ===========================================================================
-const mapStateToProps = ({alerts}, ownProps) => {
-  let curId = parseInt(ownProps.params.id);
-  let isValId = curId !== curId;
+const mapStateToProps = ({alerts, columns}, ownProps) => {
   return {
     ...alerts,
-    curId: (isValId) ? curId : null,
-    chosen: (isValId) ? find(alerts.payload, {id: curId}) : null
+    columns: columns.payload.map(({id, name}) => ({value: id, label: name})),
+    chosen: find(alerts.payload, {id: parseInt(ownProps.params.id)})
   }
 }
 
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
   deleteAlert,
+  editAlert,
   errorHandler
 }, dispatch))
 

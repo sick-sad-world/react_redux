@@ -15,29 +15,29 @@ import { editUser } from '../redux/user';
 
 // Import Child components
 // ===========================================================================
-// import EditUser from '../components/edit/user';
+import EditUser from '../components/edit/user';
 
-class Sourcesets extends React.Component {
+class User extends React.Component {
   constructor(props) {
     super(props);
     this.updateItem = this.updateItem.bind(this);
   }
 
   updateItem (data) {
-    this.props.updateUser(data).catch(this.props.errorHandler);
+    this.props.editUser(data).catch(this.props.errorHandler);
   }
 
   render () {
     return (
       <div className='mod-page'>
-        
+        <EditUser data={this.props.payload} state={this.props.state} update={this.updateItem} />
       </div>
     )
   }
 }
 
 // Connect our Container to State
-// @ deps -> Sourcesets
+// @ deps -> User
 // ===========================================================================
 const mapStateToProps = ({user}) => ({...user});
 
@@ -46,4 +46,4 @@ const mapDispatchToProps = (dispatch) => (bindActionCreators({
   errorHandler
 }, dispatch))
 
-export default connect(mapStateToProps, mapDispatchToProps)(Sourcesets);
+export default connect(mapStateToProps, mapDispatchToProps)(User);

@@ -5,3 +5,8 @@ export const inject = (target, mixin) => {
     }
   } 
 }
+
+export const numOrString = (str, base = 10) => {
+  let int = parseFloat(str, base);
+  return (int !== int) ? str : int; 
+}

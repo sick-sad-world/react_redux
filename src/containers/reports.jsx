@@ -11,17 +11,18 @@ import { connect } from 'react-redux';
 // Import actions
 // ===========================================================================
 import { errorHandler } from '../redux/app';
-import { deleteReport } from '../redux/sets';
+import { editReport, deleteReport } from '../redux/reports';
 
 // Import Child components
 // ===========================================================================
 import ListSection from '../components/listSection';
 import ListItem from '../components/listItem';
+import EditReport from '../components/edit/report';
 
 class Reports extends React.Component {
   constructor(props) {
     super(props);
-    bindAll(this, ['createItem', 'deleteItem']);
+    bindAll(this, 'createItem', 'deleteItem', 'updateItem');
   }
 
   createItem (value) {
@@ -35,7 +36,12 @@ class Reports extends React.Component {
     return this.props.deleteReport({id}).catch(this.props.errorHandler);
   }
 
+  updateItem (data) {
+    return this.props.editReport(data).catch(this.props.errorHandler);
+  }
+
   render () {
+
     let listData = {
       payload: this.props.payload.map(({id, name}) => ({id, name})),
       state: this.props.state,
@@ -43,11 +49,15 @@ class Reports extends React.Component {
       deleteItem: this.deleteItem,
       ...this.props.listProps
     }
+
     return (
       <div className='mod-page'>
         <ListSection {...listData} >
           <ListItem url={this.props.route.path} deleteText='Delete this report' />
         </ListSection>
+        {(this.props.chosen) ? (
+          <EditReport data={this.props.chosen} state={this.props.state} columns={this.props.columns} update={this.updateItem} backPath={this.props.route.path} />
+        ) : null}
       </div>
     )
   }
@@ -61,6 +71,7 @@ Reports.defaultProps = {
       title: 'Reports Management',
       description: 'Create, edit and delete reports that will be sent to you when specific columns get new items.',
       btn: 'Create new report',
+      placeholder: 'Enter name',
       deleting: 'Are you sure want to delete this Report?',
       empty: 'No reports created yet. Use form above to create one.'
     }
@@ -70,17 +81,16 @@ Reports.defaultProps = {
 // Connect our Container to State
 // @ deps -> Reports
 // ===========================================================================
-const mapStateToProps = ({reports}, ownProps) => {
-  let curId = parseInt(ownProps.params.id);
-  let isValId = curId !== curId;
+const mapStateToProps = ({reports, columns}, ownProps) => {
   return {
     ...reports,
-    curId: (isValId) ? curId : null,
-    chosen: (isValId) ? find(reports.payload, {id: curId}) : null
+    columns: columns.payload.map(({id, name}) => ({value: id, label: name})),
+    chosen: find(reports.payload, {id: parseInt(ownProps.params.id)})
   }
 }
 
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
+  editReport,
   deleteReport,
   errorHandler
 }, dispatch))
