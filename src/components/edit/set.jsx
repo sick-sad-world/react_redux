@@ -85,6 +85,9 @@ export default class EditSet extends EditForm {
                   }, []) : this.props.emptyTpl}
                 </ul>
               </div>
+              <div className='list'>
+
+              </div>
             </section>
           </div>
         </form>

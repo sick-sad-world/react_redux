@@ -20,7 +20,7 @@ export const getReports = createAction({
   state_type: SET_REPORT_STATE,
   url: 'reports',
   pendingMessage: 'Reading reports data...',
-  successMessage: 'Alerts data has been read.'
+  successMessage: 'Reports data has been read.'
 });
 
 export const createReport = createAction({

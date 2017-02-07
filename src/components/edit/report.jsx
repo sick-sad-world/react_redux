@@ -10,11 +10,14 @@ import { Link } from 'react-router';
 // Import Child components
 // ===========================================================================
 import EditForm from './editForm';
+import Emails from '../../containers/emails';
 import Select from 'react-select';
 import Datetime from 'react-datetime';
 import Icon from '../icon';
 import Toggler from '../toggler';
 
+// Edit Report
+// ===========================================================================
 export default class EditReport extends EditForm {
 
   mapDataToState (data) {
@@ -127,6 +130,7 @@ export default class EditReport extends EditForm {
           <div className='form-block'>
             <div className='row'>
               <h3 className='form-subtitle'>Email assigment:</h3>
+              <Emails active={this.state.recipient} disabled={running} action={this.updateState('recipient')} />
             </div>
           </div>
         </form>

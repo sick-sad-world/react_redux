@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 // ===========================================================================
 import { errorHandler } from '../redux/app';
 import { editUser } from '../redux/user';
+import { notification } from '../redux/notifications';
 
 // Import Child components
 // ===========================================================================
@@ -30,7 +31,7 @@ class User extends React.Component {
   render () {
     return (
       <div className='mod-page'>
-        <EditUser data={this.props.payload} state={this.props.state} update={this.updateItem} />
+        <EditUser data={this.props.payload} state={this.props.state} update={this.updateItem} notification={this.props.notification} />
       </div>
     )
   }
@@ -43,6 +44,7 @@ const mapStateToProps = ({user}) => ({...user});
 
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
   editUser,
+  notification,
   errorHandler
 }, dispatch))
 

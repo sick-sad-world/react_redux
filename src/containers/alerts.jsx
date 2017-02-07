@@ -51,7 +51,7 @@ class Alerts extends React.Component {
     return (
       <div className='mod-page'>
         <ListSection {...listData} >
-          <ListItem url={this.props.route.path} deleteText='Delete this alert' />
+          <ListItem url={this.props.route.path} current={this.props.curId} deleteText='Delete this alert' />
         </ListSection>
         {(this.props.chosen) ? (
           <EditAlert data={this.props.chosen} state={this.props.state} columns={this.props.columns} update={this.updateItem} backPath={this.props.route.path} />
@@ -80,10 +80,12 @@ Alerts.defaultProps = {
 // @ deps -> Alerts
 // ===========================================================================
 const mapStateToProps = ({alerts, columns}, ownProps) => {
+  let curId = parseInt(ownProps.params.id);
   return {
     ...alerts,
+    curId,
     columns: columns.payload.map(({id, name}) => ({value: id, label: name})),
-    chosen: find(alerts.payload, {id: parseInt(ownProps.params.id)})
+    chosen: find(alerts.payload, {id: curId})
   }
 }
 

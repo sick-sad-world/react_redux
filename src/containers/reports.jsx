@@ -53,7 +53,7 @@ class Reports extends React.Component {
     return (
       <div className='mod-page'>
         <ListSection {...listData} >
-          <ListItem url={this.props.route.path} deleteText='Delete this report' />
+          <ListItem url={this.props.route.path} current={this.props.curId} deleteText='Delete this report' />
         </ListSection>
         {(this.props.chosen) ? (
           <EditReport data={this.props.chosen} state={this.props.state} columns={this.props.columns} update={this.updateItem} backPath={this.props.route.path} />
@@ -82,10 +82,12 @@ Reports.defaultProps = {
 // @ deps -> Reports
 // ===========================================================================
 const mapStateToProps = ({reports, columns}, ownProps) => {
+  let curId = parseInt(ownProps.params.id);
   return {
     ...reports,
+    curId,
     columns: columns.payload.map(({id, name}) => ({value: id, label: name})),
-    chosen: find(reports.payload, {id: parseInt(ownProps.params.id)})
+    chosen: find(reports.payload, {id: curId})
   }
 }
 

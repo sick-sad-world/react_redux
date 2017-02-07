@@ -19,8 +19,8 @@ export default class ListItem extends React.PureComponent {
     // ===========================================================================
     let rootClasses = classNames({
       'mod-entity': true,
-      'is-selected': current && !disabled,
-      'is-disabled': disabled && !current
+      'is-selected': current === id && !disabled,
+      'is-disabled': disabled && current !== id
     });
 
     // Drag handle 
@@ -45,7 +45,7 @@ export default class ListItem extends React.PureComponent {
         <div>
           { dragHandle }
           <div className='text'>
-            <Link to={ (current) ? url : url+'/'+id }>{ badge } { name }</Link>
+            <Link to={ (current === id) ? url : url+'/'+id }>{ badge } { name }</Link>
           </div>
           {(customIcon || deleteBtn) ? (
             <nav className='nav-links'>

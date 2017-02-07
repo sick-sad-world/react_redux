@@ -1,5 +1,5 @@
 import React from 'React';
-import { Link } from 'react-router';
+import { Link, IndexLink } from 'react-router';
 import Icon from './icon';
 
 export default function MainNav (props) {
@@ -9,6 +9,10 @@ export default function MainNav (props) {
         <Icon icon='menu' />
       </a>
       <span className='separator'></span>
+      <IndexLink to='/' activeClassName='is-current' title='Dashboard'>
+        <Icon icon='home' />
+        <span className='t-ellipsis'>Dashboard</span>
+      </IndexLink>
       { props.routes.map(({icon, path, label}) => {
         return (
           <Link key={path} to={path} activeClassName='is-current' title={label}>

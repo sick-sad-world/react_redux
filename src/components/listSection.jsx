@@ -36,7 +36,6 @@ export default class ListSection extends React.Component {
     acc.push(React.cloneElement(this.props.children, Object.assign({
       key: item.id,
       order: item.order,
-      current: item.id === this.props.curId,
       sortable: this.props.sortable,
       deleteAction: (this.props.deletable) ? this.makeDeleteToggler(item.id) : null
     }, item)));

@@ -52,7 +52,7 @@ class Sourcesets extends React.Component {
     return (
       <div className='mod-page'>
         <ListSection {...listData} >
-          <ListItem url={this.props.route.path} deleteText='Delete this set' />
+          <ListItem url={this.props.route.path} current={this.props.curId} deleteText='Delete this set' />
         </ListSection>
         {(this.props.chosen) ? (
           <EditSet data={this.props.chosen} state={this.props.state} sources={this.props.chosen_sources} update={this.updateItem} backPath={this.props.route.path} />
@@ -81,10 +81,12 @@ Sourcesets.defaultProps = {
 // @ deps -> Sourcesets
 // ===========================================================================
 const mapStateToProps = ({sets, sources}, ownProps) => {
-  let chosen = find(sets.payload, {id: parseInt(ownProps.params.id)});
+  let curId = parseInt(ownProps.params.id);
+  let chosen = find(sets.payload, {id: curId});
   return {
     sets,
     sources,
+    curId,
     chosen,
     chosen_sources: (chosen) ? filter(sources, (source) => includes(chosen.source_ids, source.id)) : null
   }

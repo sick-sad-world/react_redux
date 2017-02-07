@@ -9,6 +9,7 @@ import React from 'React';
 // Import Child components
 // ===========================================================================
 import EditForm from './editForm';
+import EmailList from '../listEmail';
 
 export default class EditUser extends EditForm {
   mapDataToState (data) {
@@ -16,7 +17,8 @@ export default class EditUser extends EditForm {
       changed: [],
       fullname: data.fullname,
       email: data.email,
-      position: data.position
+      position: data.position,
+      email_bcc: data.email_bcc
     };
   }
 
@@ -77,7 +79,12 @@ export default class EditUser extends EditForm {
             </div>
             <div className='row'>
               <h3 className='form-subtitle'>Email BCC assigment:</h3>
-              
+              <EmailList
+                email={this.state.email}
+                data={this.state.email_bcc}
+                onChange={this.updateState('email_bcc')}
+                onError={(err) => this.props.notification({type: 'error', text: err})}
+                />
             </div>
           </div>
         </form>

@@ -59,7 +59,7 @@ class Columns extends React.Component {
     return (
       <div className='mod-page'>
         <ListSection {...listData} >
-          <ListItem url={this.props.route.path} customIcon={this.makeItemIcon} deleteText='Delete this column' />
+          <ListItem url={this.props.route.path} customIcon={this.makeItemIcon} current={this.props.curId} deleteText='Delete this column' />
         </ListSection>
       </div>
     )
@@ -86,11 +86,10 @@ Columns.defaultProps = {
 // ===========================================================================
 const mapStateToProps = ({columns}, ownProps) => {
   let curId = parseInt(ownProps.params.id);
-  let isValId = curId !== curId;
   return {
     ...columns,
-    curId: (isValId) ? curId : null,
-    chosen: (isValId) ? find(columns.payload, {id: curId}) : null
+    curId,
+    chosen: find(columns.payload, {id: curId})
   }
 }
 

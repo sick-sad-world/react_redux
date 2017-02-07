@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, pick, reduce } from 'lodash';
+import { bindAll, pick } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
@@ -76,10 +76,7 @@ class Workspace extends React.Component {
       'is-expanded': this.state.sidebar
     });
 
-    let routes = reduce(this.props.route.childRoutes, (acc, {label, path, icon}) => {
-      acc.push({label, path, icon});
-      return acc;
-    }, [{label: 'Dashboard', icon: 'home', path: '/'}]);
+    let routes = this.props.route.childRoutes.map(({label, path, icon}) => ({label, path, icon}));
 
     // Return JSX layout of a component
     // ===========================================================================
