@@ -15,8 +15,8 @@ import { editReport, deleteReport } from '../redux/reports';
 
 // Import Child components
 // ===========================================================================
-import ListSection from '../components/listSection';
-import ListItem from '../components/listItem';
+import ListSection from '../components/list/section';
+import ListItem from '../components/list/item';
 import EditReport from '../components/edit/report';
 
 class Reports extends React.Component {
@@ -43,7 +43,7 @@ class Reports extends React.Component {
   render () {
 
     let listData = {
-      payload: this.props.payload.map(({id, name}) => ({id, name})),
+      payload: this.props.payload,
       state: this.props.state,
       createItem: this.createItem,
       deleteItem: this.deleteItem,
@@ -84,8 +84,9 @@ Reports.defaultProps = {
 const mapStateToProps = ({reports, columns}, ownProps) => {
   let curId = parseInt(ownProps.params.id);
   return {
-    ...reports,
     curId,
+    state: reports.state,
+    payload: reports.payload.map(({id, name}) => ({id, name})),
     columns: columns.payload.map(({id, name}) => ({value: id, label: name})),
     chosen: find(reports.payload, {id: curId})
   }

@@ -1,7 +1,7 @@
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
-import Icon from './icon';
+import Icon from '../icon';
 import { Link } from 'react-router';
 
 // Import utility stuff

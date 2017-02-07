@@ -15,8 +15,8 @@ import { editAlert, deleteAlert } from '../redux/alerts';
 
 // Import Child components
 // ===========================================================================
-import ListSection from '../components/listSection';
-import ListItem from '../components/listItem';
+import ListSection from '../components/list/section';
+import ListItem from '../components/list/item';
 import EditAlert from '../components/edit/alert';
 
 class Alerts extends React.Component {
@@ -42,7 +42,7 @@ class Alerts extends React.Component {
 
   render () {
     let listData = {
-      payload: this.props.payload.map(({id, name}) => ({id, name})),
+      payload: this.props.payload,
       state: this.props.state,
       createItem: this.createItem,
       deleteItem: this.deleteItem,
@@ -82,8 +82,9 @@ Alerts.defaultProps = {
 const mapStateToProps = ({alerts, columns}, ownProps) => {
   let curId = parseInt(ownProps.params.id);
   return {
-    ...alerts,
     curId,
+    state: alerts.state,
+    payload: alerts.payload.map(({id, name}) => ({id, name})),
     columns: columns.payload.map(({id, name}) => ({value: id, label: name})),
     chosen: find(alerts.payload, {id: curId})
   }

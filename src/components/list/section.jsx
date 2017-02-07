@@ -1,14 +1,14 @@
 // Import utility stuff
 // ===========================================================================
 import { bindAll, reduce } from 'lodash';
-import { inject } from '../helpers/functions';
-import deletable from '../helpers/deletable';
+import { inject } from '../../helpers/functions';
+import deletable from '../../helpers/deletable';
 
 
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
-import Icon from './icon';
+import Icon from '../icon';
 
 // Abstract Page list component
 // ===========================================================================

@@ -16,8 +16,8 @@ import { createColumn, editColumn, deleteColumn } from '../redux/columns';
 // Import Child components
 // ===========================================================================
 import Icon from '../components/icon';
-import ListSection from '../components/listSection';
-import ListItem from '../components/listItem';
+import ListSection from '../components/list/section';
+import ListItem from '../components/list/item';
 
 class Columns extends React.Component {
   constructor(props) {
@@ -50,7 +50,7 @@ class Columns extends React.Component {
   render () {
     let listData = {
       curId: this.props.curId,
-      payload: this.props.payload.map(({id, name, open, order}) => ({id, name, open, order})),
+      payload: this.props.payload,
       state: this.props.state,
       createItem: this.createItem,
       deleteItem: this.deleteItem,
@@ -87,8 +87,9 @@ Columns.defaultProps = {
 const mapStateToProps = ({columns}, ownProps) => {
   let curId = parseInt(ownProps.params.id);
   return {
-    ...columns,
     curId,
+    state: columns.state,
+    payload: columns.payload.map(({id, name, open, order}) => ({id, name, open, order})),
     chosen: find(columns.payload, {id: curId})
   }
 }

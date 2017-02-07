@@ -9,7 +9,7 @@ import React from 'React';
 
 // Import child components
 // ===========================================================================
-import Icon from '../components/icon';
+import Icon from '../icon';
 
 // Email injectable Component - provide list of user Emails whatever it need
 // ===========================================================================

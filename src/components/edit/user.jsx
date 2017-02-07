@@ -9,7 +9,7 @@ import React from 'React';
 // Import Child components
 // ===========================================================================
 import EditForm from './editForm';
-import EmailList from '../listEmail';
+import EmailList from '../list/emails';
 
 export default class EditUser extends EditForm {
   mapDataToState (data) {

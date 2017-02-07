@@ -5,7 +5,6 @@ import classNames from 'classnames';
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
-import { Link } from 'react-router';
 
 // Import Child components
 // ===========================================================================
@@ -13,7 +12,6 @@ import EditForm from './editForm';
 import Emails from '../../containers/emails';
 import Select from 'react-select';
 import Datetime from 'react-datetime';
-import Icon from '../icon';
 import Toggler from '../toggler';
 
 // Edit Report
@@ -50,15 +48,7 @@ export default class EditReport extends EditForm {
 
     return (
       <section className={componentRootClass}>
-        <header className='subsection-header'>
-          <Link to={this.props.backPath}>
-            <Icon icon='chevron-left' />
-          </Link>
-          <div className='text'>
-            <h1>{`${this.props.texts.title} ${(this.state.name) ? ": '"+this.state.name+"'" : ''}`}</h1>
-            <p>{this.props.texts.description}</p>
-          </div>
-        </header>
+        { this.renderFormHeader() }
         { this.renderConfirmation() }
         <form className='subsection-content columned'>
           <div className='form-block'>

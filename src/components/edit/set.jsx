@@ -1,7 +1,9 @@
 // Import utility stuff
 // ===========================================================================
 import classNames from 'classnames';
-import { reduce } from 'lodash';
+import { inject, updateArrayWithValue } from '../../helpers/functions';
+import { reject, includes, reduce, concat } from 'lodash';
+import deletable from '../../helpers/deletable';
 
 // Import React related stuff
 // ===========================================================================
@@ -12,8 +14,16 @@ import { Link } from 'react-router';
 // ===========================================================================
 import EditForm from './editForm';
 import Icon from '../icon';
+import FeedsList from '../list/feeds';
+import Source from '../list/source';
 
 export default class EditSet extends EditForm {
+
+  constructor (props) {
+    super(props);
+    inject(this, deletable);
+    this.state.deleting = 0;
+  }
 
   mapDataToState (data) {
     return {
@@ -25,6 +35,10 @@ export default class EditSet extends EditForm {
     };
   }
 
+  getSourceIds(id) {
+    return (id instanceof Array) ? concat(this.state.source_ids, id) : updateArrayWithValue(this.state.source_ids, id);
+  }
+
   render () {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
@@ -33,6 +47,7 @@ export default class EditSet extends EditForm {
 
     let componentRootClass = classNames({
       'mod-subsection-edit': true,
+      'mod-sourceset-edit': true,
       'state-loading': running
     });
 
@@ -41,17 +56,11 @@ export default class EditSet extends EditForm {
       'state-disabled': running
     });
 
+    let sourceHandler = this.updateState('source_ids', 'getSourceIds');
+
     return (
       <section className={componentRootClass}>
-        <header className='subsection-header'>
-          <Link to={this.props.backPath}>
-            <Icon icon='chevron-left' />
-          </Link>
-          <div className='text'>
-            <h1>{`${this.props.texts.title} ${(this.state.name) ? ": '"+this.state.name+"'" : ''}`}</h1>
-            <p>{this.props.texts.description}</p>
-          </div>
-        </header>
+        { this.renderFormHeader() }
         { this.renderConfirmation() }
         <form className='subsection-content columned'>
           <div className='form-block'>
@@ -75,19 +84,27 @@ export default class EditSet extends EditForm {
             <section className='mod-submanagement'>
               <div className={submanagementClass}>
                 <div className='header'>
-                  <span>Sourceset has {this.props.sources.length} sources total.</span>
+                  <span>Sourceset has {this.state.source_ids.length} sources total.</span>
                 </div>
                 <ul className='entity-list'>
-                  {(this.props.sources.length) ? reduce(this.props.sources, (acc, source) => {
-                    acc.push(<Source key={source.id} sortable={false} button={this.makeSourceButton(this.state.uniq_ids, source.id)} {...source} />);
-                    if (this.state.deleting === source.id) acc.push(this.renderDeleteDialog());
+                  {(this.state.source_ids.length) ? reduce(this.props.sources, (acc, source) => {
+                    let btn = null;
+                    if (includes(this.state.source_ids, source.id)) {
+                      if (includes(this.state.uniq_ids, source.id)) {
+                        btn = <a onClick={this.makeDeleteToggler(source.id)} title='Delete this source'><Icon icon='trash' /></a>;
+                      } else {
+                        btn = <a onClick={() => sourceHandler(source.id)} title='Remove this source from set'><Icon icon='forward' /></a>;
+                      }
+                      acc.push(<Source key={source.id} sortable={false} button={btn} {...source} />);
+                    }
+                    if (this.state.deleting === source.id) {
+                      acc.push(this.renderDeleteDialog());
+                    }
                     return acc;
                   }, []) : this.props.emptyTpl}
                 </ul>
               </div>
-              <div className='list'>
-
-              </div>
+              <FeedsList sets={reject(this.props.sets, {id: this.state.id})} sources={this.props.sources} disable={{source: this.state.source_ids}} action={sourceHandler} />
             </section>
           </div>
         </form>

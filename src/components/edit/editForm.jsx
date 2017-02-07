@@ -6,6 +6,8 @@ import { numOrString } from '../../helpers/functions';
 // Import React related stuff
 // ===========================================================================
 import React from 'React';
+import Icon from '../icon';
+import { Link } from 'react-router';
 
 // Edit form high-order component - all basic interactions
 // ===========================================================================
@@ -56,6 +58,18 @@ export default class EditForm extends React.Component {
 
   resetState () {
     return this.setState(this.mapDataToState(this.props.data));
+  }
+
+  renderFormHeader () {
+    return (
+      <header className='subsection-header'>
+        { (this.props.backPath) ? <Link to={this.props.backPath}><Icon icon='chevron-left' /></Link> : null }
+        <div className='text'>
+          <h1>{`${this.props.texts.title} "${this.state.name}"`}</h1>
+          <p>{this.props.texts.description}</p>
+        </div>
+      </header>
+    );
   }
 
   renderConfirmation () {

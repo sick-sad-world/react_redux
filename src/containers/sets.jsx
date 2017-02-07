@@ -15,8 +15,8 @@ import { createSet, editSet, deleteSet } from '../redux/sets';
 
 // Import Child components
 // ===========================================================================
-import ListSection from '../components/listSection';
-import ListItem from '../components/listItem';
+import ListSection from '../components/list/section';
+import ListItem from '../components/list/item';
 import EditSet from '../components/edit/set';
 
 class Sourcesets extends React.Component {
@@ -43,7 +43,7 @@ class Sourcesets extends React.Component {
 
   render () {
     let listData = {
-      payload: this.props.sets.payload.map(({id, name, source_ids}) => ({id, name, counter: source_ids.length})),
+      payload: this.props.sets,
       state: this.props.state,
       createItem: this.createItem,
       deleteItem: this.deleteItem,
@@ -55,7 +55,7 @@ class Sourcesets extends React.Component {
           <ListItem url={this.props.route.path} current={this.props.curId} deleteText='Delete this set' />
         </ListSection>
         {(this.props.chosen) ? (
-          <EditSet data={this.props.chosen} state={this.props.state} sources={this.props.chosen_sources} update={this.updateItem} backPath={this.props.route.path} />
+          <EditSet data={this.props.chosen} state={this.props.state} sets={this.props.sets} sources={this.props.sources} update={this.updateItem} backPath={this.props.route.path} />
         ) : null}
       </div>
     )
@@ -82,13 +82,13 @@ Sourcesets.defaultProps = {
 // ===========================================================================
 const mapStateToProps = ({sets, sources}, ownProps) => {
   let curId = parseInt(ownProps.params.id);
-  let chosen = find(sets.payload, {id: curId});
+  
   return {
-    sets,
-    sources,
     curId,
-    chosen,
-    chosen_sources: (chosen) ? filter(sources, (source) => includes(chosen.source_ids, source.id)) : null
+    state: sets.state,
+    sets: sets.payload.map(({id, name, source_ids}) => ({id, name, source_ids, counter: source_ids.length})),
+    sources: sources.payload,
+    chosen: find(sets.payload, {id: curId}),
   }
 }
 
