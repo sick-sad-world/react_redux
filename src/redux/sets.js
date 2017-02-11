@@ -29,6 +29,13 @@ export const setUniqFeeds = (set, feeds) => {
   });
 }
 
+export const defaultSet = {
+  id: 0,
+  order: null,
+  name: '',
+  source_ids: []
+};
+
 export default createReducer({
   ADD: ADD_SET,
   REMOVE: REMOVE_SET,
@@ -54,7 +61,7 @@ export const getSets = createAction({
   successMessage: 'Sourceset data has been read.'
 });
 
-export const createReport = createAction({
+export const createSet = createAction({
   type: ADD_SET,
   state_type: SET_SET_STATE,
   url: 'add_set',
@@ -62,7 +69,7 @@ export const createReport = createAction({
   successMessage: 'Set succesfully created.'
 });
 
-export const editReport = createAction({
+export const editSet = createAction({
   type: EDIT_SET,
   state_type: SET_SET_STATE,
   url: 'set',
@@ -70,7 +77,7 @@ export const editReport = createAction({
   successMessage: 'Set data has been updated.'
 });
 
-export const deleteReport = createAction({
+export const deleteSet = createAction({
   type: REMOVE_SET,
   state_type: SET_SET_STATE,
   url: 'remove_set',

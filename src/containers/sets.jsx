@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, find, filter, includes } from 'lodash';
+import { bindAll, find } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
@@ -22,14 +22,14 @@ import EditSet from '../components/edit/set';
 class Sourcesets extends React.Component {
   constructor(props) {
     super(props);
-    bindAll(this, 'createItem', 'deleteItem');
+    bindAll(this, 'createItem', 'deleteItem', 'updateItem');
   }
 
   createItem (value) {
     this.props.createSet({
       name: value
     }).then(({payload}) => {
-      this.props.router.push(this.props.route.path+'/'+payload.id);
+      this.props.router.push(`${this.props.route.path}/${payload.id}`);
     }).catch(this.props.errorHandler);
   }
 
@@ -82,7 +82,6 @@ Sourcesets.defaultProps = {
 // ===========================================================================
 const mapStateToProps = ({sets, sources}, ownProps) => {
   let curId = parseInt(ownProps.params.id);
-  
   return {
     curId,
     state: sets.state,

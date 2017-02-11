@@ -18,19 +18,24 @@ import { createColumn, editColumn, deleteColumn } from '../redux/columns';
 import Icon from '../components/icon';
 import ListSection from '../components/list/section';
 import ListItem from '../components/list/item';
+import EditColumn from '../components/edit/column';
 
 class Columns extends React.Component {
   constructor(props) {
     super(props);
-    bindAll(this, 'createItem', 'deleteItem', 'updateVisiblity', 'makeItemIcon');
+    bindAll(this, 'createItem', 'deleteItem', 'updateItem', 'updateVisiblity', 'makeItemIcon');
   }
 
   createItem (value) {
     this.props.createColumn({
       name: value
     }).then(({payload}) => {
-      this.props.router.push(this.props.route.path+'/'+payload.id);
+      this.props.router.push(`${this.props.route.path}/${payload.id}`);
     }).catch(this.props.errorHandler);
+  }
+
+  updateItem(data) {
+    return this.props.updateColumn(data).catch(this.props.errorHandler);
   }
 
   deleteItem (id) {
@@ -48,6 +53,7 @@ class Columns extends React.Component {
   }
 
   render () {
+    
     let listData = {
       curId: this.props.curId,
       payload: this.props.payload,
@@ -56,11 +62,15 @@ class Columns extends React.Component {
       deleteItem: this.deleteItem,
       ...this.props.listProps
     }
+
     return (
       <div className='mod-page'>
         <ListSection {...listData} >
           <ListItem url={this.props.route.path} customIcon={this.makeItemIcon} current={this.props.curId} deleteText='Delete this column' />
         </ListSection>
+        {(this.props.chosen) ? (
+          <EditColumn data={this.props.chosen} state={this.props.state} update={this.updateItem} backPath={this.props.route.path} />
+        ) : null}
       </div>
     )
   }
@@ -89,7 +99,7 @@ const mapStateToProps = ({columns}, ownProps) => {
   return {
     curId,
     state: columns.state,
-    payload: columns.payload.map(({id, name, open, order}) => ({id, name, open, order})),
+    payload: columns.payload.map(({id, name, open}) => ({id, name, open})),
     chosen: find(columns.payload, {id: curId})
   }
 }
