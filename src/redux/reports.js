@@ -2,6 +2,17 @@ import { GET_REPORTS, ADD_REPORT, EDIT_REPORT, REMOVE_REPORT, SET_REPORT_STATE }
 import createReducer from '../helpers/reducerFactory';
 import createAction from '../helpers/actionFactory';
 
+export const defaultReport = {
+  id: 0,
+  name: '',
+  columns: [],
+  next_send: null,
+  active: 1,
+  frequency: 1440,
+  recipient: '',
+  order: null
+};
+
 export default createReducer({
   GET: GET_REPORTS,
   ADD: ADD_REPORT,

@@ -42,9 +42,9 @@ export const errorHandler = (error) => (dispatch) => {
     
     // Set User state to ERROR
     // ===========================================================================
-    if (error.state_type) {
+    if (error.state) {
       dispatch({
-        type: error.state_type,
+        type: error.state,
         state: 0
       });  
     }

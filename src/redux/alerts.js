@@ -2,6 +2,18 @@ import { GET_ALERTS, ADD_ALERT, EDIT_ALERT, REMOVE_ALERT, SET_ALERT_STATE } from
 import createReducer from '../helpers/reducerFactory';
 import createAction from '../helpers/actionFactory';
 
+export const defaultAlert = {
+  id: 0,
+  active: 1,
+  columns: [],
+  frequency: 15,
+  name: '',
+  order: null,
+  recipient: '',
+  via_mail: true,
+  via_twitter: null
+}
+
 export default createReducer({
   GET: GET_ALERTS,
   ADD: ADD_ALERT,

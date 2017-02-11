@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 // Import actions
 // ===========================================================================
 import { errorHandler } from '../redux/app';
-import { editAlert, deleteAlert } from '../redux/alerts';
+import { editAlert, deleteAlert, createAlert, defaultAlert } from '../redux/alerts';
 
 // Import Child components
 // ===========================================================================
@@ -27,7 +27,7 @@ class Alerts extends React.Component {
 
   createItem (value) {
     this.props.router.push({
-      pathname: this.props.route.path+'/new',
+      pathname: `${this.props.route.path}/new`,
       query: {name: value}
     });
   }
@@ -37,7 +37,14 @@ class Alerts extends React.Component {
   }
 
   updateItem (data) {
-    return this.props.editAlert(data).catch(this.props.errorHandler);
+    if (data.id) {
+      return this.props.editAlert(data).catch(this.props.errorHandler);
+    } else {
+      delete data.id;
+      return this.props.createAlert(data).then(({payload}) => {
+        this.props.router.push(`${this.props.route.path}/${payload.id}`)
+      }).catch(this.props.errorHandler);
+    }
   }
 
   render () {
@@ -80,17 +87,29 @@ Alerts.defaultProps = {
 // @ deps -> Alerts
 // ===========================================================================
 const mapStateToProps = ({alerts, columns}, ownProps) => {
-  let curId = parseInt(ownProps.params.id);
+  let curId, chosen;
+  if (ownProps.params.id === 'new') {
+    curId = ownProps.params.id;
+    chosen = {
+      ...defaultAlert,
+      name: ownProps.location.query.name,
+      order: alerts.payload.length
+    };
+  } else {
+    curId = parseInt(ownProps.params.id);
+    chosen = find(alerts.payload, {id: curId});
+  }
   return {
     curId,
     state: alerts.state,
     payload: alerts.payload.map(({id, name}) => ({id, name})),
     columns: columns.payload.map(({id, name}) => ({value: id, label: name})),
-    chosen: find(alerts.payload, {id: curId})
+    chosen
   }
 }
 
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
+  createAlert,
   deleteAlert,
   editAlert,
   errorHandler

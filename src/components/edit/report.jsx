@@ -1,6 +1,7 @@
 // Import utility stuff
 // ===========================================================================
 import classNames from 'classnames';
+import moment from 'moment';
 
 // Import React related stuff
 // ===========================================================================
@@ -27,12 +28,13 @@ export default class EditReport extends EditForm {
       frequency: data.frequency,
       columns: data.columns,
       recipient: data.recipient,
-      next_send: data.next_send
+      next_send: data.next_send || moment().add(1, 'hours').format(this.props.timeFormat)
     };
   }
 
   getNextSend (value) {
-    return (typeof value === 'string') ? value : value.format('YYYY-MM-DD HH:mm:ss');
+    console.log(value);
+    return (typeof value === 'string') ? value : value.format(this.props.timeFormat);
   }
 
   render () {
@@ -135,6 +137,7 @@ EditReport.defaultProps = {
     description: 'Pick the columns to send. Set time to send, e-mail recipient and report name here.',
     confirmation: '{data} was changed. Save changes?'
   },
+  timeFormat: 'YYYY-MM-DD HH:mm:ss',
   frequencyOptions: [
     {value: 15, label: '15 min'},
     {value: 60, label: 'Hourly'},
