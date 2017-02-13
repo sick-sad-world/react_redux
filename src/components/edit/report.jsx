@@ -33,7 +33,6 @@ export default class EditReport extends EditForm {
   }
 
   getNextSend (value) {
-    console.log(value);
     return (typeof value === 'string') ? value : value.format(this.props.timeFormat);
   }
 
