@@ -2,8 +2,43 @@ import { GET_COLUMNS, ADD_COLUMN, EDIT_COLUMN, REMOVE_COLUMN, SET_COLUMN_STATE }
 import createReducer from '../helpers/reducerFactory';
 import createAction from '../helpers/actionFactory';
 
+export const defDisplaySettings = ['title', 'found', 'url', 'image', 'description', 'likes', 'tweets', 'shares'];
+
+export const defColumnData = {
+  show_favorites: 0,
+  show_ignored: 0,
+  autoreload: 0,
+  infinite: 1,
+  limit: 30,
+  sort: 'rate_likes',
+  direction: 'desc',
+  author: '',
+  search: '',
+  exclude_search: '',
+  url: '',
+  since: '',
+  before: '',
+  language: '',
+  source: [],
+  set: [],
+  ignore_source: [],
+  ignore_set: [],
+  is_image: '',
+  is_video: '',
+  is_facebook: '',
+  is_gallery: ''
+};
+
+export const defColumn = {
+  id: null,
+  order: null,
+  open: 1,
+  name: '',
+  display_settings: defDisplaySettings,
+  data: defColumnData
+};
+
 export const defColumnParameters = {
-  displaySettingsDefaults: ['title', 'found', 'url', 'image', 'description', 'likes', 'tweets', 'shares'],
   displaySettings: [
     'title',
     'url',

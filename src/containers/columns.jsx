@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 // Import actions
 // ===========================================================================
 import { errorHandler } from '../redux/app';
-import { createColumn, editColumn, deleteColumn } from '../redux/columns';
+import { defColumn, createColumn, editColumn, deleteColumn } from '../redux/columns';
 
 // Import Child components
 // ===========================================================================
@@ -96,11 +96,16 @@ Columns.defaultProps = {
 // ===========================================================================
 const mapStateToProps = ({columns}, ownProps) => {
   let curId = parseInt(ownProps.params.id);
+  let chosen = find(columns.payload, {id: curId});
+  if (chosen) {
+    if (!chosen.display_settings) chosen.display_settings = defColumn.display_settings;
+    chosen.data = { ...defColumn.data, ...chosen.data };
+  }
   return {
     curId,
     state: columns.state,
     payload: columns.payload.map(({id, name, open}) => ({id, name, open})),
-    chosen: find(columns.payload, {id: curId})
+    chosen,
   }
 }
 
