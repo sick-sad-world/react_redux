@@ -1,3 +1,4 @@
+import { find } from 'lodash';
 import { GET_COLUMNS, ADD_COLUMN, EDIT_COLUMN, REMOVE_COLUMN, SET_COLUMN_STATE } from '../helpers/types';
 import createReducer from '../helpers/reducerFactory';
 import createAction from '../helpers/actionFactory';
@@ -39,6 +40,7 @@ export const defColumn = {
 };
 
 export const defColumnParameters = {
+  advRegExp: /MIN|MAX|LIKE/,
   displaySettings: [
     'title',
     'url',
@@ -157,6 +159,16 @@ export const defColumnParameters = {
     label: 'views_video',
     value: 'views_video'
   }]
+};
+
+export const decomposeColumnSort = (sort = defColumnData.sort) => {
+  let prefix = find(defColumnParameters.sortPrefix, (pref) => sort.indexOf(pref.value) > -1);
+  let property = find(defColumnParameters.sortProperty, (prop) => sort.indexOf(prop.value) > -1);
+  return {
+    sort: undefined,
+    sort_pref: (prefix) ? prefix.value : '',
+    sort_prop: (property) ? property.value : '',
+  }
 };
 
 export const composeColumnSort = (pref, prop) => (pref && prop !== 'found') ? pref + '_' + prop : prop;

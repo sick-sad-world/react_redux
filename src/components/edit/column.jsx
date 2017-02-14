@@ -1,9 +1,9 @@
 // Import utility stuff
 // ===========================================================================
-import { find, reduce, includes, isEqual, without, concat, pickBy, map } from 'lodash';
+import { reduce, includes, pickBy, map, without, concat } from 'lodash';
 import classNames from 'classnames';
 import { updateArrayWithValue } from '../../helpers/functions';
-import { defColumnData, defColumnParameters, composeColumnSort } from '../../redux/columns';
+import { defColumnParameters, composeColumnSort } from '../../redux/columns';
 
 // Import React related stuff
 // ===========================================================================
@@ -22,23 +22,14 @@ import Toggler from '../toggler';
 export default class EditColumn extends EditForm {
 
   mapDataToState (data) {
-    return reduce(data.data, (acc, v, k) => {
-      if (k === 'sort') {
-        acc['sort_prefix'] = find(this.props.sortPrefix, (pref) => data.data.sort.indexOf(pref.value) > -1) || '';
-        acc['sort_prop'] = find(this.props.sortProperty, (prop) => data.data.sort.indexOf(prop.value) > -1) || '';
-      } else {
-        acc[k] = v;
-      } 
-      return acc;
-    }, {
-      name: data.name,
-      display_settings: data.display_settings,
+    return {
+      ...data,
       changed: [],
       adv_type: 'MIN',
       adv_pref: '',
       adv_prop: 'likes',
       adv_val: ''
-    });
+    };
   }
 
   updateHandler (e) {
@@ -48,27 +39,24 @@ export default class EditColumn extends EditForm {
     return this.props.update(data);
   }
 
-  updateState (name, value) {
-    return (e) => {
-      let newState = {
-        [name]: value || (name === 'display_settings') ? updateArrayWithValue(this.state.display_settings, e.target.value) : this.getValue(e)
-      };
-      let source = (name === 'name' || name === 'display_settings') ? this.props.data[name] : this.props.data.data[name];
-      if (isEqual(newState[name], source)) {
-        if (includes(this.state.changed, name)) newState.changed = without(this.state.changed, name);
-      } else {
-        if (!includes(this.state.changed, name)) newState.changed = concat(this.state.changed, name);
-      }
-      this.setState(newState);
-    }
-  }
-
   createAdvFilter () {
     return (e) => {
       e.preventDefault();
       let { adv_type, adv_pref, adv_prop, adv_val} = this.state;
-      this.updateState(`${adv_type}(${(adv_pref) ? adv_pref+'_'+adv_prop : adv_prop})`, (adv_val > 0) ? adv_val: undefined);
+      this.stateUpdater(`${adv_type}(${(adv_pref) ? adv_pref+'_'+adv_prop : adv_prop})`, (adv_val > 0) ? adv_val: undefined);
     }
+  }
+
+  removeAdvFilter (name) {
+    return () => this.stateUpdater(name, undefined);
+  }
+
+  getDisplaySettings(e) {
+    return updateArrayWithValue(this.state.display_settings, e.target.value);
+  }
+
+  getAutoreload (e) {
+    return (e) ? e : 0;
   }
 
   render () {
@@ -100,7 +88,7 @@ export default class EditColumn extends EditForm {
                 name='display_settings'
                 value={setting}
                 disabled={running || isWideImageDisabled}
-                onChange={this.updateState('display_settings')}
+                onChange={this.updateState('display_settings', 'getDisplaySettings')}
                 checked={includes(this.state.display_settings, setting)}
               />
               <Icon icon='check' />
@@ -184,7 +172,7 @@ export default class EditColumn extends EditForm {
                 name='autoreload'
                 placeholder='Disabled...'
                 options={this.props.autoReloadOptions}
-                onChange={this.updateState('autoreload')}
+                onChange={this.updateState('autoreload', 'getAutoreload')}
                 autosize={false}
                 clearable={true}
                 searchable={false}
@@ -396,7 +384,7 @@ export default class EditColumn extends EditForm {
             <ul className='tag-list row'>
               { (Object.keys(advFilters).length) ?
                   map(advFilters, (v, k) => 
-                    <li key={`${k}=${v}`}>{`${k}=${v}`}<span onClick={() => this.preformAction()(k, null)} ><Icon icon='cross' /></span></li>)
+                    <li key={`${k}=${v}`}>{`${k}=${v}`}<span onClick={this.removeAdvFilter(k)} ><Icon icon='cross' /></span></li>)
                       : this.props.tplAdvFiltersEmpty }
             </ul>
             <fieldset>
@@ -407,7 +395,7 @@ export default class EditColumn extends EditForm {
                   className='size-90'
                   name='adv_type'
                   options={[{value: 'MIN', label: 'MIN'}, {value: 'MAX', label: 'MAX'}]}
-                  onChange={(v) => this.setState({adv_type: v.value})}
+                  onChange={(v) => this.setState({adv_type: (v) ? v.value : ''})}
                   autosize={false}
                   clearable={false}
                   searchable={false}
@@ -419,7 +407,7 @@ export default class EditColumn extends EditForm {
                   name='adv_pref'
                   placeholder='Prefix...'
                   options={this.props.sortPrefix}
-                  onChange={(v) => this.setState({adv_pref: v.value})}
+                  onChange={(v) => this.setState({adv_pref: (v) ? v.value : ''})}
                   autosize={false}
                   clearable={true}
                   searchable={false}
@@ -430,7 +418,7 @@ export default class EditColumn extends EditForm {
                   className='size-180'
                   name='adv_prop'
                   options={this.props.sortProperty}
-                  onChange={(v) => this.setState({adv_prop: v.value})}
+                  onChange={(v) => this.setState({adv_prop: (v) ? v.value : ''})}
                   autosize={false}
                   clearable={false}
                   searchable={false}
@@ -473,7 +461,6 @@ EditColumn.defaultProps = {
     description: 'Select the type of items to show in this column and how to display them.',
     confirmation: '{data} was changed. Save changes?'
   },
-  advRegExp: /MIN|MAX|LIKE/,
   tplAdvFiltersEmpty: (<li className='is-default'><i>No advanced filters configured for this column. Click below to add one or more.</i></li>),
   ...defColumnParameters
 };

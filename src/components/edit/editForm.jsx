@@ -25,30 +25,34 @@ export default class EditForm extends React.Component {
 
   getValue (e) {
     let value = undefined;
-    if (e.target) {
-      value = e.target.value;
-    } else if (e instanceof Array && e[0].value) {
-      value = e.map(v => v.value);
-    } else if (e.value) {
-      value = e.value;
+    if (e) {
+      if (e.target) {
+        value = e.target.value;
+      } else if (e instanceof Array) {
+        value = e.map(v => v.value);
+      } else if (e.value) {
+        value = e.value;
+      } else {
+        value = e;
+      }
     } else {
-      value = e;
+      value = '';
     }
     return (typeof value === 'string') ? numOrString(value) : value;
   }
   
   updateState (name, getter) {
-    return (e) => {
-      let newState = {
-        [name]: (this[getter] instanceof Function) ? this[getter].call(this, e) : this.getValue(e)
-      };
-      if (isEqual(newState[name], this.props.data[name])) {
-        if (includes(this.state.changed, name)) newState.changed = without(this.state.changed, name);
-      } else {
-        if (!includes(this.state.changed, name)) newState.changed = concat(this.state.changed, name);
-      }
-      this.setState(newState);
+    return (e) => this.stateUpdater(name, (this[getter] instanceof Function) ? this[getter].call(this, e) : this.getValue(e));
+  }
+
+  stateUpdater (name, value) {
+    let newState = {[name]: value};
+    if (isEqual(newState[name], this.props.data[name])) {
+      if (includes(this.state.changed, name)) newState.changed = without(this.state.changed, name);
+    } else {
+      if (!includes(this.state.changed, name)) newState.changed = concat(this.state.changed, name);
     }
+    return this.setState(newState);
   }
 
   updateHandler (e) {
