@@ -23,13 +23,18 @@ export default class FeedCreate extends React.Component {
       url: '',
       feed: [],
       results: {
-        RSS: 'find_feeds',
-        HTML: 'find_urls',
-        Facebook: 'find_facebook'
+        RSS: true,
+        HTML: true,
+        Facebook: true
       }
     }
 
-    bindAll(this, ['checkFeed', 'chooseFeedType', 'selectFeed', 'inFeeds']);
+    bindAll(this, ['checkFeed', 'chooseFeedType', 'selectFeed', 'inFeeds', 'createFeeds', 'setSingleFeed']);
+  }
+
+  createFeeds (e) {
+    e.preventDefault();
+    this.props.action(this.state.feed);
   }
 
   inFeeds (feed) {
@@ -100,7 +105,7 @@ export default class FeedCreate extends React.Component {
         </div>
         <div className='row button-group'>
           <input type='button' className='button size-half is-accent' onClick={this.checkFeed} value="Test URL" />
-          <input className='button size-half is-accent' disabled={!this.state.feed.length} onClick={this.props.action} type='button' value='Create' />
+          <input className='button size-half is-accent' disabled={!this.state.feed.length} onClick={this.createFeeds} type='button' value='Create' />
         </div>
         <div className='form-description'>{ this.props.texts.autodetect.desrc }</div>
       </form>
@@ -126,7 +131,7 @@ export default class FeedCreate extends React.Component {
         </div>
         <div className='row button-group'>
           <input type='submit' value="Test URL" onClick={this.checkFeed} className='button is-accent size-half' />
-          <input className='button is-accent size-half' disabled={!this.state.feed.length} onClick={this.props.action} type='button' value='Create' />
+          <input className='button is-accent size-half' disabled={!this.state.feed.length} onClick={this.createFeeds} type='button' value='Create' />
         </div>
         <div className='form-description'>{ this.props.texts.RSS.desrc }</div>
       </form>
@@ -152,7 +157,7 @@ export default class FeedCreate extends React.Component {
         </div>
         <div className='row button-group'>
           <input type='submit' value="Test URL" onClick={this.checkFeed} className='button is-accent size-half' />
-          <input className='button is-accent size-half' disabled={!this.state.feed.length} onClick={this.props.action} type='button' value='Create' />
+          <input className='button is-accent size-half' disabled={!this.state.feed.length} onClick={this.createFeeds} type='button' value='Create' />
         </div>
         <div className='form-description'>{ this.props.texts.HTML.desrc }</div>
       </form>
@@ -171,7 +176,7 @@ export default class FeedCreate extends React.Component {
             type='text'
             name='feed'
             id='funFacebookFeedUrl'
-            onChange={(e) => this.setState({feed: [{type: this.state.type, value: e.target.value}]})}
+            onChange={this.setSingleFeed}
             value={(this.state.feed[0]) ? this.state.feed[0].value : ''}
           />
           <small>(URL of a facebook page)</small>
@@ -188,7 +193,7 @@ export default class FeedCreate extends React.Component {
           <small>(If the Facebook page is related to a website, enter the URL here, otherwise put the FB URL in here too)</small>
         </div>
         <div className='row'>
-          <input className='button is-accent size-half' type='button' value='Create' onClick={this.props.action} />
+          <input className='button is-accent size-half' type='button' value='Create' onClick={this.createFeeds} />
         </div>
         <div className='form-description'>{ this.props.texts.Facebook.desrc }</div>
       </form>
@@ -209,13 +214,13 @@ export default class FeedCreate extends React.Component {
             name='url'
             placeholder='#hastag or keyword'
             id='funTwitterQuery'
-            onChange={(e) => this.setState({url: e.target.value, feed: [{type: this.state.type, value: e.target.value}]})}
+            onChange={this.setSingleFeed}
             value={this.state.url}
           />
         </div>
         <small className='form-description'>{ this.props.texts.Twitter.desrc }</small>
         <div className='row'>
-          <input className='button is-accent size-half' type='button' value='Create' onClick={this.props.action} />
+          <input className='button is-accent size-half' type='button' value='Create' onClick={this.createFeeds} />
         </div>
       </form>
     );
@@ -235,14 +240,14 @@ export default class FeedCreate extends React.Component {
               name='url'
               placeholder='subreddit'
               id='funRedditFeed'
-              onChange={(e) => this.setState({url: e.target.value, feed: [{type: this.state.type, feed: e.target.value}]})}
+              onChange={this.setSingleFeed}
               value={this.state.url}
             />
           </span>
         </div>
         <small className='form-description'>{ this.props.texts.Reddit.desrc }</small>
         <div className='row'>
-          <input className='button is-accent size-half' type='button' value='Create' onClick={this.props.action} />
+          <input className='button is-accent size-half' type='button' value='Create' onClick={this.createFeeds} />
         </div>
       </form>
     );
@@ -356,7 +361,7 @@ export default class FeedCreate extends React.Component {
     this.setState({
       type: type,
       feed: [],
-      url: '',
+      url: (check) ? this.state.url : '',
       results: mapValues(this.state.results, (v, k) => {
         if (type === k) {
           return true;
@@ -375,8 +380,20 @@ export default class FeedCreate extends React.Component {
     if (this.inFeeds(feed)) {
       this.setState({feed: filter(this.state.feed, (v) => v.feed !== feed)})
     } else {
-      this.setState({feed: concat({feed, type}, this.state.feed)})
+      this.setState({feed: concat({set_id: this.props.id, feed, type, url: this.state.url}, this.state.feed)})
     }
+  }
+
+  setSingleFeed (e) {
+    return this.setState({
+      url: e.target.value,
+      feed: [{
+        url: e.target.value,
+        set_id: this.props.id,
+        type: this.state.type,
+        feed: e.target.value}
+      ]
+    });
   }
 
   // Run URL look up
@@ -390,7 +407,7 @@ export default class FeedCreate extends React.Component {
     // Show proper message if URL is not match criterea
     // ===========================================================================
     if (!url.length) {
-      return this.actions.throwError('Provide reasonable url to test');
+      return this.props.errorHandler({text: 'Provide reasonable url to test'});
     }
 
     // Run each of them (possible multiple items)
@@ -410,7 +427,9 @@ export default class FeedCreate extends React.Component {
             if (k === 'HTML' && payload.length) {
               newState.feed = concat(this.state.feed, {
                 type: 'HTML',
-                feed: url
+                feed: url,
+                set_id: this.props.id,
+                url: this.state.url
               })
             }
             messageText = without(messageText, k);
@@ -435,7 +454,7 @@ export default class FeedCreate extends React.Component {
   render() {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
-    if (!this.props.set) return null;
+    if (!this.props.id) return null;
     let running = this.props.state > 3;
     let type = this.state.type;
     let texts = this.props.texts;
@@ -449,11 +468,11 @@ export default class FeedCreate extends React.Component {
     return (
       <section className={componentRootClass}>
         <header className='subsection-header'>
-          <Link to={`/sets/${this.props.set.id}`}>
+          <Link to={`/sets/${this.props.id}`}>
             <Icon icon='chevron-left' />
           </Link>
           <div className='text'>
-            <h1>{texts.title}</h1>
+            <h1>{texts.title}{this.props.name}</h1>
             <p>{texts.description}</p>
           </div>
         </header>
@@ -496,7 +515,7 @@ FeedCreate.defaultProps = {
     Facebook: 'find_facebook'
   },
   texts: {
-    title: 'New feeds creation',
+    title: 'Create new feeds for:',
     description: 'Feed creation dialog',
     autodetect: {
       resultHeading: 'Scraping, RSS and Facebook tests',

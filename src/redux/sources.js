@@ -23,7 +23,7 @@ export const getSources = createAction({
   successMessage: 'Sources data has been read.'
 });
 
-export const createReport = createAction({
+export const createSource = createAction({
   type: ADD_SOURCE,
   state_type: SET_SOURCE_STATE,
   url: 'add_source',
@@ -31,7 +31,7 @@ export const createReport = createAction({
   successMessage: 'Source succesfully created.'
 });
 
-export const deleteReport = createAction({
+export const deleteSource = createAction({
   type: REMOVE_SOURCE,
   state_type: SET_SOURCE_STATE,
   url: 'remove_source',

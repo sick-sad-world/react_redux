@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import { errorHandler } from '../redux/app';
 import { notification } from '../redux/notifications';
 import { createSet, editSet, deleteSet } from '../redux/sets';
+import { createSource, deleteSource } from '../redux/sources';
 
 // Import Child components
 // ===========================================================================
@@ -24,7 +25,7 @@ import FeedCreate from '../components/feedCreate';
 class Sourcesets extends React.Component {
   constructor(props) {
     super(props);
-    bindAll(this, 'createItem', 'deleteItem', 'updateItem');
+    bindAll(this, 'createItem', 'deleteItem', 'updateItem', 'createFeed');
   }
 
   createItem (value) {
@@ -43,26 +44,16 @@ class Sourcesets extends React.Component {
     return this.props.deleteSet({id}).catch(this.props.errorHandler);
   }
 
-  createFeed () {
+  createFeed (feeds) {
     let source_ids = [];
-    Promise.all(
-      this.state.feed.map((feed) => {
-        return this.actions.create(Object.assign({
-          set_id: this.props.set.id,
-          url: this.state.url
-        }, feed)).then(({payload}) => source_ids.push(payload.id));
-      })
-    )
-    .then(() => {
-      return this.actions.update({
-        id: this.props.set.id,
-        source_ids: concat(this.props.set.source_ids, source_ids)
-      });
-    })
-    .then(() => {
-      this.props.router.goBack();
-    })
-    .catch(this.actions.throwError);
+    Promise
+      .all(feeds.map((feed) => this.props.createSource(feed).then(({payload}) => source_ids.push(payload.id))))
+      .then(() => this.updateItem({
+        id: this.props.curId,
+        source_ids: concat(this.props.chosen.source_ids, source_ids)
+      }))
+      .then(() => this.props.router.goBack())
+      .catch(this.props.errorHandler);
   }
 
   render () {
@@ -79,7 +70,8 @@ class Sourcesets extends React.Component {
       if (this.props.params.create) {
         Edit = (
           <FeedCreate
-            set={this.props.chosen}
+            id={this.props.chosen.id}
+            name={this.props.chosen.name}
             action={this.createFeed}
             notification={this.props.notification}
             errorHandler={this.props.errorHandler}
@@ -93,6 +85,7 @@ class Sourcesets extends React.Component {
             sets={this.props.sets}
             sources={this.props.sources}
             update={this.updateItem}
+            deleteItem={this.props.deleteSource}
             backPath={this.props.route.path}
           />
         );
@@ -140,8 +133,10 @@ const mapStateToProps = ({sets, sources}, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
   createSet,
+  createSource,
   editSet,
   deleteSet,
+  deleteSource,
   notification,
   errorHandler
 }, dispatch))
