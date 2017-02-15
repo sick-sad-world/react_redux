@@ -10,8 +10,6 @@ import React from 'react';
 
 // Import Child components
 // ===========================================================================
-import Sourceset from '../list/sourceset';
-import Source from '../list/source';
 import EditForm from './editForm';
 import Feeds from '../../containers/feeds';
 
@@ -23,8 +21,8 @@ export default class AssignFeedsToColumn extends EditForm {
     return {
       name: data.name,
       id: data.id,
-      set: data.sets,
-      source: data.sources,
+      set: data.set,
+      source: data.source,
       changed: [],
     };
   }
@@ -68,28 +66,12 @@ export default class AssignFeedsToColumn extends EditForm {
       <section className={componentRootClass}>
         { this.renderFormHeader() }
         { this.renderConfirmation() }
-        <div className='subsection-content mod-submanagement'>
-          <div className='selected'>
-            <div className='header'>
-              <span>Column has {this.state.set.length} sets and {this.state.source.length} sources assigned.</span>
-            </div>
-            <ul className='entity-list'>
-              <li className='list-title'><h4>Sets selected</h4></li>
-              { (this.state.own_sets.length) ? this.state.own_sets.map((set) => {
-                return <Sourceset key={set.id} {...set} buttons={[this.createDeselectButton('set', set.id)]} />
-              }) : (<li className='state-empty'>{this.props.texts.empty_set}</li>) }
-              <li className='list-title'><h4>Sources selected</h4></li>
-              { (this.state.own_sources.length) ? this.state.own_sources.map((source) => {
-                return <Source key={source.id} {...source} button={this.createDeselectButton('source', source.id)} />
-              }) : (<li className='state-empty'>{this.props.texts.empty_source}</li>) }
-            </ul>
-          </div>
-          <Feeds 
-            disable={{set: this.state.sets, source: this.state.sources}}
-            disabled={running}
-            action={this.feedsHandler()}
-          />
-        </div>
+        <Feeds
+          className='subsection-content mod-submanagement'
+          current={{set: this.state.set, source: this.state.source}}
+          disabled={running}
+          action={this.feedsHandler()}
+        />
       </section>
     );
   }

@@ -22,6 +22,8 @@ export default class Sourceset extends React.PureComponent {
       'is-disabled': disabled,
       'is-expanded': expanded
     });
+
+    let badge = (counter) ? <em className='counter'>{counter}</em> : null;
     
     return (
       <li className={className}>
@@ -29,7 +31,7 @@ export default class Sourceset extends React.PureComponent {
           { (sortable) ? <Icon className='drag-handle' icon='dots-three-vertical' /> : null }
           <div className='text'>
             <span className='title'>
-              <em className='counter'>{counter}</em> { name }
+              { badge } { name }
             </span>
           </div>
           { (buttons && buttons.length) ? <nav className='nav-links'>{buttons}</nav> : null }

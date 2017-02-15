@@ -77,7 +77,7 @@ export default class FeedsList extends React.Component {
       'list': true,
       'state-disabled': disabled
     });
-
+    
     // Build up resulting list
     // ===========================================================================
     if (sets.length) {
