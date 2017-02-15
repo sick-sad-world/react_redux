@@ -76,10 +76,14 @@ render(
         <Route path='/auth' component={Auth} />
         <Route path='/' component={Workspace}>
           <Route path='/columns' component={Columns} label='Columns list' icon='archive'>
-            <Route path=':id' component={Columns} />
+            <Route path=':id' component={Columns}>
+              <Route path=':assignment' component={Sourcesets} />
+            </Route>
           </Route>
           <Route path='/sets' component={Sourcesets} label='Sourcesets list' icon='globe'>
-            <Route path=':id' component={Sourcesets} />
+            <Route path=':id' component={Sourcesets}>
+              <Route path=':create' component={Sourcesets} />
+            </Route>
           </Route>
           <Route path='/alerts' component={Alerts} label='Alerts list' icon='paper-plane'>
             <Route path=':id' component={Alerts} />

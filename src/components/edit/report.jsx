@@ -5,7 +5,7 @@ import moment from 'moment';
 
 // Import React related stuff
 // ===========================================================================
-import React from 'React';
+import React from 'react';
 
 // Import Child components
 // ===========================================================================

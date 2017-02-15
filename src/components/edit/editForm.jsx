@@ -5,7 +5,7 @@ import { numOrString } from '../../helpers/functions';
 
 // Import React related stuff
 // ===========================================================================
-import React from 'React';
+import React from 'react';
 import Icon from '../icon';
 import { Link } from 'react-router';
 

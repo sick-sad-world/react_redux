@@ -4,7 +4,7 @@ import { bindAll, find } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
-import React from 'React';
+import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -19,6 +19,7 @@ import Icon from '../components/icon';
 import ListSection from '../components/list/section';
 import ListItem from '../components/list/item';
 import EditColumn from '../components/edit/column';
+import AssignFeedsToColumn from '../components/edit/feedsAssignment';
 
 class Columns extends React.Component {
   constructor(props) {
@@ -59,14 +60,24 @@ class Columns extends React.Component {
       ...this.props.listProps
     }
 
+    let Edit = null;
+    
+    
+    if (this.props.chosen && this.props.curId) {
+      if (this.props.params.assignment) {
+        Edit = null;
+        //Edit = <AssignFeedsToColumn data={this.props.chosen} state={this.props.state} update={this.updateItem} backPath={`this.props.route.path/${this.props.curId}`} />;
+      } else {
+        Edit = <EditColumn data={this.props.chosen} state={this.props.state} update={this.updateItem} backPath={this.props.route.path} />;
+      }
+    }
+
     return (
       <div className='mod-page'>
         <ListSection {...listData} >
           <ListItem url={this.props.route.path} customIcon={this.makeItemIcon} current={this.props.curId} deleteText='Delete this column' />
         </ListSection>
-        {(this.props.chosen) ? (
-          <EditColumn data={this.props.chosen} state={this.props.state} update={this.updateItem} backPath={this.props.route.path} />
-        ) : null}
+        {Edit}
       </div>
     )
   }
@@ -102,7 +113,7 @@ const mapStateToProps = ({columns}, ownProps) => {
       name: chosen.name,
       open: chosen.open,
       id: chosen.id,
-      display_settings: chosen.display_settings || defColumn.display_settings
+      display_settings: chosen.display_settings
     }
   }
   return {

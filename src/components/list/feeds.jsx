@@ -1,7 +1,7 @@
 // Import React related stuff
 // ===========================================================================
 import classNames from 'classnames';
-import React from 'React';
+import React from 'react';
 import { includes, bindAll } from 'lodash';
 
 // Import child components
@@ -25,7 +25,6 @@ export default class FeedsList extends React.Component {
     bindAll(this, 'makeSourceComponent', 'expandHandler');
   }
 
-
   expandHandler (id) {
     this.setState({expanded: id});
   }
@@ -44,7 +43,7 @@ export default class FeedsList extends React.Component {
       expanded,
       disabled,
       buttons: [
-        <a key='sel' onClick={() => this.props.action(set.source_ids)} title='Add this set to selection'><Icon icon='reply-all' /></a>,
+        <a key='sel' onClick={() => this.props.action('set', set.id)} title='Add this set to selection'><Icon icon='reply-all' /></a>,
         <a key='show' onClick={() => this.setState({expanded: (expanded) ? 0 : set.id})} title='View contents'><Icon icon={(expanded) ? 'chevron-up' : 'chevron-down'} /></a>
       ]
     }, set);
@@ -63,7 +62,7 @@ export default class FeedsList extends React.Component {
   }
 
   makeSourceComponent(source, disabled) {
-    let btn = <a onClick={() => this.props.action(source.id)} title='Add this source to selection'><Icon icon='reply'/></a>;
+    let btn = <a onClick={() => this.props.action('source', source.id)} title='Add this source to selection'><Icon icon='reply'/></a>;
     return <Source key={source.id} disabled={disabled} button={btn} {...source} />;
   }
 
@@ -111,5 +110,5 @@ export default class FeedsList extends React.Component {
 
 FeedsList.defaultProps = {
   search: 3,
-  emptyTpl: <li className='state-empty'>No sets or sources created yet. Make some before you can assign. </li>
+  emptyTpl: <li className='state-empty'>No sets or sources created yet. Make some before so you will have to choose from. </li>
 }

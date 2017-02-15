@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 // Import React related stuff
 // ===========================================================================
-import React from 'React';
+import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -55,7 +55,6 @@ class Workspace extends React.Component {
   // ===========================================================================
   handlerSidebar() {
     this.setState({ sidebar: !this.state.sidebar });
-    e.target.blur();
   }
 
   // Handler for logout operation

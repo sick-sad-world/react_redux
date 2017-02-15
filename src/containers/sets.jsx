@@ -1,16 +1,17 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, find } from 'lodash';
+import { bindAll, find, concat } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
-import React from 'React';
+import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
 import { errorHandler } from '../redux/app';
+import { notification } from '../redux/notifications';
 import { createSet, editSet, deleteSet } from '../redux/sets';
 
 // Import Child components
@@ -18,6 +19,7 @@ import { createSet, editSet, deleteSet } from '../redux/sets';
 import ListSection from '../components/list/section';
 import ListItem from '../components/list/item';
 import EditSet from '../components/edit/set';
+import FeedCreate from '../components/feedCreate';
 
 class Sourcesets extends React.Component {
   constructor(props) {
@@ -41,7 +43,30 @@ class Sourcesets extends React.Component {
     return this.props.deleteSet({id}).catch(this.props.errorHandler);
   }
 
+  createFeed () {
+    let source_ids = [];
+    Promise.all(
+      this.state.feed.map((feed) => {
+        return this.actions.create(Object.assign({
+          set_id: this.props.set.id,
+          url: this.state.url
+        }, feed)).then(({payload}) => source_ids.push(payload.id));
+      })
+    )
+    .then(() => {
+      return this.actions.update({
+        id: this.props.set.id,
+        source_ids: concat(this.props.set.source_ids, source_ids)
+      });
+    })
+    .then(() => {
+      this.props.router.goBack();
+    })
+    .catch(this.actions.throwError);
+  }
+
   render () {
+    let Edit = null;
     let listData = {
       payload: this.props.sets,
       state: this.props.state,
@@ -49,14 +74,36 @@ class Sourcesets extends React.Component {
       deleteItem: this.deleteItem,
       ...this.props.listProps
     }
+
+    if (this.props.curId && this.props.chosen) {
+      if (this.props.params.create) {
+        Edit = (
+          <FeedCreate
+            set={this.props.chosen}
+            action={this.createFeed}
+            notification={this.props.notification}
+            errorHandler={this.props.errorHandler}
+          />
+        );
+      } else {
+        Edit = (
+          <EditSet
+            data={this.props.chosen}
+            state={this.props.state}
+            sets={this.props.sets}
+            sources={this.props.sources}
+            update={this.updateItem}
+            backPath={this.props.route.path}
+          />
+        );
+      }
+    }
     return (
       <div className='mod-page'>
         <ListSection {...listData} >
           <ListItem url={this.props.route.path} current={this.props.curId} deleteText='Delete this set' />
         </ListSection>
-        {(this.props.chosen) ? (
-          <EditSet data={this.props.chosen} state={this.props.state} sets={this.props.sets} sources={this.props.sources} update={this.updateItem} backPath={this.props.route.path} />
-        ) : null}
+        {Edit}
       </div>
     )
   }
@@ -95,6 +142,7 @@ const mapDispatchToProps = (dispatch) => (bindActionCreators({
   createSet,
   editSet,
   deleteSet,
+  notification,
   errorHandler
 }, dispatch))
 

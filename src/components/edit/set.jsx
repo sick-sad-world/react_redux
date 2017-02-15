@@ -7,7 +7,7 @@ import deletable from '../../helpers/deletable';
 
 // Import React related stuff
 // ===========================================================================
-import React from 'React';
+import React from 'react';
 import { Link } from 'react-router';
 
 // Import Child components
@@ -76,7 +76,7 @@ export default class EditSet extends EditForm {
               />
             </div>
             <div className='row'>
-              <Link to='create' className='button is-accent'>Create new feeds</Link>
+              <Link to={`${this.props.backPath}/${this.props.data.id}/create`} className='button is-accent'>Create new feeds</Link>
             </div>
           </div>
           <div className='form-block'>

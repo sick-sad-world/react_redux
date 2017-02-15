@@ -7,7 +7,7 @@ import { defColumnParameters, composeColumnSort } from '../../redux/columns';
 
 // Import React related stuff
 // ===========================================================================
-import React from 'React';
+import React from 'react';
 
 // Import Child components
 // ===========================================================================
