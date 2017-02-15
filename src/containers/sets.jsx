@@ -25,7 +25,7 @@ import FeedCreate from '../components/feedCreate';
 class Sourcesets extends React.Component {
   constructor(props) {
     super(props);
-    bindAll(this, 'createItem', 'deleteItem', 'updateItem', 'createFeed');
+    bindAll(this, 'createItem', 'deleteItem', 'updateItem', 'createFeed', 'deleteFeed');
   }
 
   createItem (value) {
@@ -42,6 +42,13 @@ class Sourcesets extends React.Component {
 
   deleteItem (id) {
     return this.props.deleteSet({id}).catch(this.props.errorHandler);
+  }
+
+  deleteFeed (id) {
+    return this.props.deleteSource({
+      set_id: this.props.curId,
+      id: id
+    }).catch(this.props.errorHandler);
   }
 
   createFeed (feeds) {
@@ -85,7 +92,7 @@ class Sourcesets extends React.Component {
             sets={this.props.sets}
             sources={this.props.sources}
             update={this.updateItem}
-            deleteItem={this.props.deleteSource}
+            deleteItem={this.deleteFeed}
             backPath={this.props.route.path}
           />
         );
