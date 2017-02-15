@@ -23,7 +23,7 @@ import EditColumn from '../components/edit/column';
 class Columns extends React.Component {
   constructor(props) {
     super(props);
-    bindAll(this, 'createItem', 'deleteItem', 'updateItem', 'updateVisiblity', 'makeItemIcon');
+    bindAll(this, 'createItem', 'deleteItem', 'updateItem', 'makeItemIcon');
   }
 
   createItem (value) {
@@ -35,21 +35,17 @@ class Columns extends React.Component {
   }
 
   updateItem(data) {
-    return this.props.updateColumn(data).catch(this.props.errorHandler);
+    return this.props.editColumn(data).catch(this.props.errorHandler);
   }
 
   deleteItem (id) {
     return this.props.deleteColumn({id}).catch(this.props.errorHandler);
   }
 
-  updateVisiblity (data) {
-    return this.props.editColumn(data).catch(this.props.errorHandler);
-  }
-
   makeItemIcon (props) {
     let { id, open } = props;
     let visIconData = this.props.visIconData;
-    return <a onClick={() => this.updateVisiblity({id, open: (open) ? 0 : 1})} title={visIconData[open].title}><Icon icon={visIconData[open].icon} /></a>;
+    return <a onClick={() => this.updateItem({id, open: (open) ? 0 : 1})} title={visIconData[open].title}><Icon icon={visIconData[open].icon} /></a>;
   }
 
   render () {
@@ -104,6 +100,7 @@ const mapStateToProps = ({columns}, ownProps) => {
       ...chosen.data,
       ...decomposeColumnSort(chosen.data.sort),
       name: chosen.name,
+      open: chosen.open,
       id: chosen.id,
       display_settings: chosen.display_settings || defColumn.display_settings
     }

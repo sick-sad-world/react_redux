@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { reduce, includes, pickBy, map, without, concat } from 'lodash';
+import { reduce, includes, pickBy, map, forOwn } from 'lodash';
 import classNames from 'classnames';
 import { updateArrayWithValue } from '../../helpers/functions';
 import { defColumnParameters, composeColumnSort } from '../../redux/columns';
@@ -34,8 +34,23 @@ export default class EditColumn extends EditForm {
 
   updateHandler (e) {
     e.preventDefault();
-    let data = {};
+    let data = {
+      id: this.state.id,
+      name: this.state.name,
+      open: this.state.open,
+      display_settings: this.state.display_settings,
+      data: {
+        sort: composeColumnSort(this.state.sort_pref, this.state.sort_prop)
+      }
+    };
 
+    forOwn(this.state, (v, k) => {
+      if (data.hasOwnProperty(k) || v === '') return;
+      if (k === 'changed' || k.indexOf('sort') === 0 || k.indexOf('adv_') === 0) return;
+      if (v instanceof Array && !v.length) return;
+      data.data[k] = v;
+    });
+    
     return this.props.update(data);
   }
 
