@@ -41,7 +41,7 @@ class Feeds extends React.Component {
               }
             }) : (<li className='state-empty'>{this.props.empty_set}</li>) }
             <li className='list-title'><h4>Sources selected</h4></li>
-            { (cur_sources.length) ? this.state.own_sources.map((source) => {
+            { (cur_sources.length) ? this.props.sources.map((source) => {
               if (includes(cur_sources, source.id)) {
                 return <Source key={source.id} {...source} button={this.createDeselectButton('source', source.id)} />;
               } else {

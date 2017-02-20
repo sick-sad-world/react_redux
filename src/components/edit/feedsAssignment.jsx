@@ -35,9 +35,7 @@ export default class AssignFeedsToColumn extends EditForm {
     e.preventDefault();
     let data = {
       id: this.state.id,
-      name: this.state.name,
-      open: this.state.open,
-      display_settings: this.state.display_settings,
+      data: {...this.props.data}
     };
 
     forOwn(this.state, (v, k) => {
