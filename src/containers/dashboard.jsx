@@ -15,12 +15,19 @@ import { editColumn, deleteColumn } from '../redux/columns';
 
 // Import Child components
 // ===========================================================================
-
+import Column from '../components/column';
 
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
-    console.log('Dashboard cnst');
+  }
+
+  createList (func) {
+    if (this.props.state === 1) {
+      return this.props.loadingTpl;
+    } else {
+      return (this.props.payload.length) ? this.props.payload.reduce(func, []) : this.props.emptyTpl;
+    }
   }
 
   updateItem (data) {
@@ -28,13 +35,36 @@ class Dashboard extends React.Component {
   }
 
   render () {
-    console.log('Dashboard render');
     return (
       <div className='mod-dashboard'>
-        {this.props.payload.map((c) => JSON.stringify(c)).join(' ')}
+        {this.createList((acc, column) => {
+          let item = null;
+          if (column.open) {
+            item = (
+              <Column
+                key={column.id}
+                id={column.id}
+                name={column.name}
+                open={column.open}
+                infinite={column.data.infinite}
+                autoreload={column.data.autoreload}
+                direction={column.data.direction}
+                sort={column.data.sort}
+              >
+              </Column>
+            )
+          }
+          if (item) acc.push(item);
+          return acc;
+        })}
       </div>
     )
   }
+}
+
+Dashboard.defaultProps = {
+  emptyTpl: <section className='state-empty'>No columns created</section>,
+  loadingTpl: <section className='state-loading'>Loading...</section>
 }
 
 // Connect our Container to State

@@ -46,7 +46,7 @@
 		@include pos();
 		align-items: stretch;
     &:last-child {
-      display: block;
+      display: flex;
     }
 	}
 }
