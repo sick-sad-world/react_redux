@@ -104,7 +104,7 @@ export const getAllResults = (data) => (dispatch) => {
 
   // Create our [Top-level] Promise chain
   // ===========================================================================
-  let results =  Promise.all(
+  Promise.all(
     columns.map((column, i) => {
       // If column hidden - do nothing
       // ===========================================================================
@@ -122,10 +122,10 @@ export const getAllResults = (data) => (dispatch) => {
         // Run our call and simple forward results to [Upper-level] promise chain
         // ===========================================================================
         setTimeout(() => {
-          return dispatch(getResults(column.data, {id: column.id}), {
+          return dispatch(getResults(column.data, {
             id: column.id,
             notification: false
-          }).then(resolve).catch(reject)
+          })).then(resolve).catch(reject)
         }, delay);
 
       }).then(() => {
@@ -143,7 +143,7 @@ export const getAllResults = (data) => (dispatch) => {
   ).then(() => dispatch(notification({
     id: notificationId,
     visible: false
-  })));
+  }))).catch((err) => dispatch(errorHandler(err)));
 
   // Send message at a start
   // ===========================================================================
@@ -153,5 +153,4 @@ export const getAllResults = (data) => (dispatch) => {
     text: `Results for columns ${Object.keys(ids).join(',')} downloading now...`
   }));
 
-  return results;
 }

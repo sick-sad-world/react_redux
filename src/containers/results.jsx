@@ -1,10 +1,7 @@
-// Import utility stuff
-// ===========================================================================
-import { } from 'lodash';
-
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 // Import Child components
@@ -12,7 +9,38 @@ import { connect } from 'react-redux';
 import Result from '../components/result';
 import Icon from '../components/icon';
 
+// Import actions
+// ===========================================================================
+import { errorHandler } from '../redux/app';
+import { refreshResult, ignoreResult, favoriteResult } from '../redux/results';
+
 class Results extends React.Component {
+  constructor (props) {
+    super(props);
+    this.makeResultAction = this.makeResultAction.bind(this);
+  }
+  makeResultAction(action, data) {
+    return () => {
+      switch (action) {
+        case 'refresh':
+          return this.props.refreshResult(data, {
+            id: this.props.id,
+            state: false
+          }).catch(this.props.throwError);
+        case 'ignore':
+          return this.props.ignoreResult(data, {
+            id: this.props.id,
+            state: false
+          }).catch(this.props.throwError);
+        case 'favorite':
+          return this.props.favoriteResult(data, {
+            id: this.props.id,
+            state: false
+          }).catch(this.props.throwError);
+      }
+    }
+  }
+
   createResultList() {
     switch (this.props.state) {
       case 1:
@@ -33,12 +61,21 @@ class Results extends React.Component {
         );
       case 2:
         return (this.props.payload.length) ? (this.props.payload.map((result) => {
-          return (<Result key={result.hash} sort={this.props.sort} display_settings={this.props.display_settings} {...result} />)
+          return (
+            <Result
+              key={result.hash}
+              sort={this.props.sort}
+              display_settings={this.props.display_settings}
+              makeAction={this.makeResultAction}
+              {...result}
+            />
+          );
         })) : (<li className='state-empty'>{this.props.stateEmpty}</li>);
       default:
         return null
     }
   }
+
   render () {
     return (
       <ul className='entity-list' onScroll={(this.props.onScroll) ? (e) => {
@@ -58,7 +95,19 @@ Results.defaultProps = {
   stateError: 'It seems there was a problem with the server.'
 }
 
-export default connect(({results}, ownProps) => {
+// Connect our Container to State
+// @ deps -> Reports
+// ===========================================================================
+const mapStateToProps = ({results}, ownProps) => {
   let result = results[ownProps.id];
   return {...result};
-})(Results);
+};
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+  refreshResult,
+  ignoreResult,
+  favoriteResult,
+  errorHandler
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Results);

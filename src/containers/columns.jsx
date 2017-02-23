@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, find } from 'lodash';
+import { bindAll, find, some, includes } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
@@ -40,8 +40,12 @@ class Columns extends React.Component {
       .catch(this.props.errorHandler);
   }
 
-  updateItem(data) {
-    return this.props.editColumn(data).then(({payload}) => this.props.getResults(payload.data, {id: payload.id})).catch(this.props.errorHandler);
+  updateItem(data, changed) {
+    return this.props.editColumn(data).then(({payload}) => {
+      if (some(changed, (v) => !includes(this.props.notRelatedProps, v))) {
+        return this.props.getResults(payload.data, {id: payload.id});
+      }
+    }).catch(this.props.errorHandler);
   }
 
   deleteItem (id) {
@@ -99,6 +103,7 @@ Columns.defaultProps = {
       empty: 'No columns created yet. Use form above to create one.'
     }
   },
+  notRelatedProps: ['name', 'display_settings', 'infinite', 'autoreload'],
   visIconData: [{icon: 'eye', title: 'Show this column'}, {icon: 'eye-with-line', title: 'Hide this column'}]
 };
 

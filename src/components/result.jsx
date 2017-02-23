@@ -45,7 +45,7 @@ class Result extends React.Component {
               <b>{(props.sort === 'found') ? 'Found' : formatNumber(props[props.sort])}</b>
               { sortParamToShort(props.sort) }
             </span>
-            {/*<a onClick={props.makeAction('refresh', {hash: props.hash})} title='Refresh this result'>
+            <a onClick={props.makeAction('refresh', {hash: props.hash})} title='Refresh this result'>
               <Icon icon='cw' />
             </a>
             <a onClick={props.makeAction('favorite', {hash: props.hash, unfavorite: props.favorite})} title={props.favoriteBtndata[props.favorite].title}>
@@ -53,7 +53,7 @@ class Result extends React.Component {
             </a>
             <a onClick={props.makeAction('ignore', {hash: props.hash, unignore: props.ignore})} title={props.ignoreBtndata[props.ignore].title}>
               <Icon icon={props.ignoreBtndata[props.ignore].icon} />
-            </a>*/}
+            </a>
           </aside>
           <div className='content'>
             <header>

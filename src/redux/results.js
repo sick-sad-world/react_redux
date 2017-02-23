@@ -57,7 +57,13 @@ export default function results(state = {}, action) {
       return {
         ...state,
         [action.entity]: {
-          payload: state[action.entity].payload.map((link) => (link.hash === action.payload.hash) ? {...link, ...splitText(action.payload)} : link),
+          payload: state[action.entity].payload.map((link) => {
+            if (link.hash === action.payload.hash) {
+              return {...link, ...splitText(action.payload)};
+            } else {
+              return link;
+            }
+          }),
           state: (action.hasOwnProperty('state')) ? action.state : 2
         }
       };

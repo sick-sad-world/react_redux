@@ -36,6 +36,15 @@
   img {
     margin: auto;
     display: block;
+    position: relative;
+    &:after {
+      content: '';
+      display: block;
+      margin-top: -22px;
+      background-image: url('../img/ph_content.png');
+      background-size: cover;
+      height: 120px;
+    }
   }
 	figure {
     position: relative;

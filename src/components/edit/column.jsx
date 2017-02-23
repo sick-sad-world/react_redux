@@ -22,12 +22,13 @@ import Toggler from '../toggler';
 export default class EditColumn extends EditForm {
 
   mapDataToState (data) {
+    let display_settings =  data.display_settings || defColumn.display_settings;
     return {
       ...defColumn.data,
       ...data.data,
       ...decomposeColumnSort(data.data.sort),
       name: data.name,
-      display_settings: data.display_settings || defColumn.display_settings,
+      display_settings: (typeof display_settings === 'string') ? display_settings.split(',') : display_settings,
       changed: [],
       adv_type: 'MIN',
       adv_pref: '',
@@ -60,7 +61,7 @@ export default class EditColumn extends EditForm {
       ) return;
       data.data[k] = v;
     });
-    return this.props.update(data);
+    return this.props.update(data, this.state.changed);
   }
 
   createAdvFilter () {

@@ -41,7 +41,7 @@ export default class AssignFeedsToColumn extends EditForm {
       }
     };
     
-    return this.props.update(data);
+    return this.props.update(data, this.state.changed);
   }
 
   render () {

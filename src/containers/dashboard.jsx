@@ -32,11 +32,12 @@ class Dashboard extends React.Component {
     }
   }
 
-  updateItem(data) {
+  updateItem(data, changed) {
     let column = find(this.props.payload, {id: data.id});
+    let shouldRefresh = data.data.sort !== column.data.sort || data.data.direction !== column.data.direction;
     if (!column) return;
     return this.props.editColumn(defaultsDeep(data, column)).then(({payload}) => {
-      if (payload.open) {
+      if (payload.open && shouldRefresh) {
         return this.props.getResults(payload.data, {id: payload.id});
       }
     }).catch(this.props.errorHandler);

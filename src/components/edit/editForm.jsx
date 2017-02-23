@@ -57,7 +57,7 @@ export default class EditForm extends React.Component {
 
   updateHandler (e) {
     e.preventDefault();
-    return this.props.update(omit(this.state, 'changed'));
+    return this.props.update(omit(this.state, 'changed'), this.state.changed);
   }
 
   resetState () {

@@ -33,8 +33,19 @@ export default class Column extends React.Component {
 
   mapDataToState(data) {
     let expanded = this.state && this.state.expanded || false;
+    let curAutoreload = (this.state) ? this.state.autoreload : 0;
     if (expanded && window.location.pathname !== '/') {
       expanded = false;
+    }
+
+    if (data.autoreload > 0) {
+      if (data.autoreload !== curAutoreload) {
+        clearInterval(this.interval);
+        this.interval = setInterval(this.props.onClick, data.autoreload * 1000);
+      }
+    } else if (this.interval) {
+      clearInterval(this.interval);
+      this.interval = null;
     }
 
     return {
