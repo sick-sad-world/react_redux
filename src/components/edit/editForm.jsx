@@ -28,7 +28,7 @@ export default class EditForm extends React.Component {
     if (e) {
       if (e.target) {
         value = e.target.value;
-      } else if (e instanceof Array) {
+      } else if (e instanceof Array && e[0] && e[0].value) {
         value = e.map(v => v.value);
       } else if (e.value) {
         value = e.value;
