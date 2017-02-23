@@ -1,6 +1,8 @@
 // Import utility stuff
 // ===========================================================================
 import { bindAll, debounce } from 'lodash';
+import { inject } from '../helpers/functions';
+import deletable from '../helpers/deletable';
 import { numOrString } from '../helpers/functions';
 import { defColumnParameters, decomposeColumnSort, composeColumnSort } from '../redux/columns';
 
@@ -21,6 +23,7 @@ import Results from '../containers/results';
 export default class Column extends React.Component {
   constructor (props) {
     super(props);
+    inject(this, deletable);
     this.interval = null;
     this.state = this.mapDataToState(props);
     bindAll(this, 'expandedStateToggler', 'hideColumn', 'scrollHandler');
@@ -49,6 +52,7 @@ export default class Column extends React.Component {
     }
 
     return {
+      deleting: 0,
       expanded: expanded,
       name: data.name,
       open: data.open,
@@ -169,7 +173,7 @@ export default class Column extends React.Component {
           <Link to={`/columns/${this.props.id}`} title='Column setting screen'>
             <Icon icon='cog' />Settings
           </Link>
-          {/*<a onClick={this.makeDeletingStateToggler(this.props.id)} title='Delete this column'><Icon icon='trash' />Delete</a>*/}
+          <a onClick={this.makeDeleteToggler(this.props.id)} title='Delete this column'><Icon icon='trash' />Delete</a>
         </div>
       </form>
     );
@@ -187,6 +191,7 @@ export default class Column extends React.Component {
           </nav>
         </header>
         {(this.state.expanded) ? this.renderEditForm() : null}
+        {(this.state.deleting) ? this.renderDeleteDialog() : null}
         <Results
           id={this.props.id}
           sort={this.props.sort}

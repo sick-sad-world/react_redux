@@ -2,6 +2,7 @@
 // ===========================================================================
 import { bindAll, find, defaultsDeep } from 'lodash';
 
+
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
@@ -21,7 +22,7 @@ import { editColumn, deleteColumn, defColumn } from '../redux/columns';
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
-    bindAll(this, 'updateItem', 'refreshResults', 'pushResults');
+    bindAll(this, 'updateItem', 'refreshResults', 'pushResults', 'deleteItem');
   }
 
   createList (func) {
@@ -32,7 +33,7 @@ class Dashboard extends React.Component {
     }
   }
 
-  updateItem(data, changed) {
+  updateItem(data) {
     let column = find(this.props.payload, {id: data.id});
     let shouldRefresh = data.data.sort !== column.data.sort || data.data.direction !== column.data.direction;
     if (!column) return;
@@ -59,6 +60,10 @@ class Dashboard extends React.Component {
     }
   }
 
+  deleteItem(id) {
+    this.props.deleteColumn({id}).catch(this.props.errorHandler);
+  }
+
   render () {
     return (
       <div className='mod-dashboard'>
@@ -78,6 +83,7 @@ class Dashboard extends React.Component {
               onChange={this.updateItem}
               onScroll={this.pushResults(column.id)}
               onClick={this.refreshResults(column.id)}
+              deleteItem={this.deleteItem}
             />
           );
           if (item) acc.push(item);
