@@ -3,7 +3,7 @@
 import { reduce, includes, pickBy, map, forOwn } from 'lodash';
 import classNames from 'classnames';
 import { updateArrayWithValue } from '../../helpers/functions';
-import { defColumnParameters, composeColumnSort } from '../../redux/columns';
+import { defColumnParameters, composeColumnSort, defColumn, decomposeColumnSort } from '../../redux/columns';
 
 // Import React related stuff
 // ===========================================================================
@@ -23,7 +23,11 @@ export default class EditColumn extends EditForm {
 
   mapDataToState (data) {
     return {
-      ...data,
+      ...defColumn.data,
+      ...data.data,
+      ...decomposeColumnSort(data.data.sort),
+      name: data.name,
+      display_settings: data.display_settings || defColumn.display_settings,
       changed: [],
       adv_type: 'MIN',
       adv_pref: '',
@@ -34,10 +38,10 @@ export default class EditColumn extends EditForm {
 
   updateHandler (e) {
     e.preventDefault();
+
     let data = {
-      id: this.state.id,
+      id: this.props.data.id,
       name: this.state.name,
-      open: this.state.open,
       display_settings: this.state.display_settings,
       data: {
         sort: composeColumnSort(this.state.sort_pref, this.state.sort_prop)
@@ -45,12 +49,17 @@ export default class EditColumn extends EditForm {
     };
 
     forOwn(this.state, (v, k) => {
-      if (data.hasOwnProperty(k) || v === '') return;
-      if (k === 'changed' || k.indexOf('sort') === 0 || k.indexOf('adv_') === 0) return;
-      if (v instanceof Array && !v.length) return;
+      if (
+        v === '' ||
+        data.hasOwnProperty(k) ||
+        k === 'display_settings' ||
+        k === 'changed' ||
+        k.indexOf('sort') === 0 ||
+        k.indexOf('adv_') === 0 ||
+        (v instanceof Array && !v.length)
+      ) return;
       data.data[k] = v;
     });
-    
     return this.props.update(data);
   }
 
@@ -71,7 +80,7 @@ export default class EditColumn extends EditForm {
   }
 
   getAutoreload (e) {
-    return (e) ? e : 0;
+    return (e) ? e.value : 0;
   }
 
   render () {
@@ -79,12 +88,6 @@ export default class EditColumn extends EditForm {
     // ===========================================================================
     if (!this.props.data) return null;
     let running = this.props.state > 2;
-
-    let componentRootClass = classNames({
-      'mod-subsection-edit': true,
-      'mod-column-edit': true,
-      'state-loading': running
-    });
 
     let advFilters = pickBy(this.state, (v, k) => this.props.advRegExp.test(k) && v !== undefined);
 
@@ -119,10 +122,14 @@ export default class EditColumn extends EditForm {
     });
 
     return (
-      <section className={componentRootClass}>
+      <section className={classNames({
+        'mod-subsection-edit': true,
+        'mod-column-edit': true,
+        'state-loading': running
+      })}>
         { this.renderFormHeader() }
         { this.renderConfirmation() }
-        <form className='subsection-content columned'>
+        <form className='subsection-content columned' onSubmit={this.updateHandler}>
           <div className='form-block'>
             <div className='row'>
               <label htmlFor='funColumnName'>Column name:</label>
@@ -449,7 +456,7 @@ export default class EditColumn extends EditForm {
                   placeholder='Amount...'
                   name='adv_val'
                 />
-                <button onClick={this.createAdvFilter()} disabled={running} className='button is-accent size-60'>Add</button>
+                <a onClick={this.createAdvFilter()} disabled={running} className='button is-accent size-60'>Add</a>
               </div>
             </fieldset>
             <small className='form-description row'>

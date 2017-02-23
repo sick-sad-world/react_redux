@@ -45,21 +45,14 @@ export default class EditSet extends EditForm {
     if (!this.props.data) return null;
     let running = this.props.state > 2;
 
-    let componentRootClass = classNames({
-      'mod-subsection-edit': true,
-      'mod-sourceset-edit': true,
-      'state-loading': running
-    });
-
-    let submanagementClass = classNames({
-      'selected': true,
-      'state-disabled': running
-    });
-
     let sourceHandler = this.updateState('source_ids', 'getSourceIds');
 
     return (
-      <section className={componentRootClass}>
+      <section className={classNames({
+        'mod-subsection-edit': true,
+        'mod-sourceset-edit': true,
+        'state-loading': running
+      })}>
         { this.renderFormHeader() }
         { this.renderConfirmation() }
         <form className='subsection-content columned'>
@@ -82,7 +75,10 @@ export default class EditSet extends EditForm {
           <div className='form-block'>
             <h4 className='row'>Feeds management</h4>
             <section className='mod-submanagement'>
-              <div className={submanagementClass}>
+              <div className={classNames({
+                'selected': true,
+                'state-disabled': running
+              })}>
                 <div className='header'>
                   <span>Sourceset has {this.state.source_ids.length} sources total.</span>
                 </div>

@@ -12,7 +12,6 @@ import { connect } from 'react-redux';
 // ===========================================================================
 import { errorHandler } from '../redux/app';
 import { editUser } from '../redux/user';
-import { notification } from '../redux/notifications';
 
 // Import Child components
 // ===========================================================================
@@ -44,7 +43,6 @@ const mapStateToProps = ({user}) => ({...user});
 
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
   editUser,
-  notification,
   errorHandler
 }, dispatch))
 

@@ -29,7 +29,7 @@ class Emails extends React.Component {
         disabled={this.props.disabled || this.state > 2}
         data={this.props.data}
         onError={(err) => this.props.notification({type: 'error', text: err})}
-        onChange={(email_bcc) => this.editUser({email_bcc}).catch(this.props.errorHandler)}
+        onChange={(email_bcc) => this.props.editUser({email_bcc}).catch(this.props.errorHandler)}
       />
     );
   }

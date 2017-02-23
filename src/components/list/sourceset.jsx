@@ -14,19 +14,15 @@ export default class Sourceset extends React.PureComponent {
   render() {
     let { expanded, sortable, name, counter, buttons, disabled } = this.props;
 
-    // Root element classes
-    // ===========================================================================
-    let className = classNames({
-      'mod-entity': true,
-      'mod-sourceset': true,
-      'is-disabled': disabled,
-      'is-expanded': expanded
-    });
-
     let badge = (counter) ? <em className='counter'>{counter}</em> : null;
     
     return (
-      <li className={className}>
+      <li className={classNames({
+        'mod-entity': true,
+        'mod-sourceset': true,
+        'is-disabled': disabled,
+        'is-expanded': expanded
+      })}>
         <div>
           { (sortable) ? <Icon className='drag-handle' icon='dots-three-vertical' /> : null }
           <div className='text'>

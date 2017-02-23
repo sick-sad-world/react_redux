@@ -29,11 +29,11 @@ class Feeds extends React.Component {
       <div className={this.props.className}>
         <div className='selected'>
           <div className='header'>
-            <span>Column has {cur_sets.length} sets and {cur_sources.length} sources assigned.</span>
+            <span>Column has {(cur_sets) ? cur_sets.length : 0} sets and {(cur_sources) ? cur_sources.length : 0} sources assigned.</span>
           </div>
           <ul className='entity-list'>
             <li className='list-title'><h4>Sets selected</h4></li>
-            { (cur_sets.length) ? this.props.sets.map((set) => {
+            {(cur_sets && cur_sets.length) ? this.props.sets.map((set) => {
               if (includes(cur_sets, set.id)) {
                 return <Sourceset key={set.id} {...set} buttons={[this.createDeselectButton('set', set.id)]} />;
               } else {
@@ -41,7 +41,7 @@ class Feeds extends React.Component {
               }
             }) : (<li className='state-empty'>{this.props.empty_set}</li>) }
             <li className='list-title'><h4>Sources selected</h4></li>
-            { (cur_sources.length) ? this.props.sources.map((source) => {
+            { (cur_sources && cur_sources.length) ? this.props.sources.map((source) => {
               if (includes(cur_sources, source.id)) {
                 return <Source key={source.id} {...source} button={this.createDeselectButton('source', source.id)} />;
               } else {
@@ -63,6 +63,10 @@ class Feeds extends React.Component {
 }
 
 Feeds.defaultProps = {
+  current: {
+    set: 0,
+    source: 0,
+  },
   empty_set: 'This column dosen\'t watch any sets',
   empty_source: 'This column dosen\'t watch any sources'
 }

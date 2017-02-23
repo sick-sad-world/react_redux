@@ -13,16 +13,12 @@ import classNames from 'classnames';
 export default class Source extends React.PureComponent {
   render() {
     let { disabled, url, type, sortable, button, name } = this.props;
-
-    // Root element classes
-    // ===========================================================================
-    let rootClasses = classNames({
-      'mod-entity': true,
-      'is-disabled': disabled
-    });
     
     return (
-      <li className={rootClasses}>
+      <li className={classNames({
+        'mod-entity': true,
+        'is-disabled': disabled
+      })}>
         <div>
           { (sortable) ? <Icon className='drag-handle' icon='dots-three-vertical' /> : null }
           <div className='text'>

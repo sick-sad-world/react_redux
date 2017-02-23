@@ -15,14 +15,6 @@ export default class ListItem extends React.PureComponent {
   render() {
     let { disabled, current, url, sortable, name, id, counter, order } = this.props;
 
-    // Root element classes
-    // ===========================================================================
-    let rootClasses = classNames({
-      'mod-entity': true,
-      'is-selected': current === id && !disabled,
-      'is-disabled': disabled && current !== id
-    });
-
     // Drag handle 
     // ===========================================================================
     let dragHandle = (sortable) ? <Icon className='drag-handle' icon='dots-three-vertical' /> : null;
@@ -41,7 +33,11 @@ export default class ListItem extends React.PureComponent {
     let deleteBtn = (this.props.deleteAction) ? (<a onClick={this.props.deleteAction} title={this.props.deleteText}><Icon icon='trash' /></a>) : null;
     
     return (
-      <li className={rootClasses} data-order={order}>
+      <li className={classNames({
+        'mod-entity': true,
+        'is-selected': current === id && !disabled,
+        'is-disabled': disabled && current !== id
+      })} data-order={order}>
         <div>
           { dragHandle }
           <div className='text'>

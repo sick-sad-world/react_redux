@@ -26,13 +26,16 @@ export default class EmailList extends React.Component {
   // ===========================================================================
   makeListItem (email, i) {
     let isActive = email === this.props.active;
-    let className = classNames({
-      'is-disabled': this.props.disabled,
-      'is-selected': isActive
-    });
 
     return (
-      <li key={`email_${i}`} className={className} onClick={this.makeActionHandler(email, isActive)} >
+      <li 
+        key={`email_${i}`} 
+        className={classNames({
+          'is-disabled': this.props.disabled,
+          'is-selected': isActive
+        })}
+        onClick={this.makeActionHandler(email, isActive)} 
+      >
         {email}
         <a onClick={() => this.props.onChange(without(this.props.data, email))}><Icon icon='cross'/></a>
       </li>
@@ -45,6 +48,7 @@ export default class EmailList extends React.Component {
 
   addEmail (e) {
     e.preventDefault();
+    console.log(e.target);
     if (includes(this.props.data, this.state.new)) {
       if (this.props.onError instanceof Function ) this.props.onError('You already have this email in list, try another one.');
     } else {
@@ -67,7 +71,7 @@ export default class EmailList extends React.Component {
             value={this.state.new}
             onChange={(e) => this.setState({new: e.target.value})}
           />
-          <button disabled={this.props.disabled} className='button is-accent size-90' onClick={this.addEmail}>Add new</button>
+          <a disabled={this.props.disabled} className='button is-accent size-90' onClick={this.addEmail}>Add new</a>
         </div>
         <div className='form-description'>{this.props.description.replace('{email}', this.props.email)}</div>
       </div>

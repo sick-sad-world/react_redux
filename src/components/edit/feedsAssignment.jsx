@@ -20,9 +20,8 @@ export default class AssignFeedsToColumn extends EditForm {
   mapDataToState (data) {
     return {
       name: data.name,
-      id: data.id,
-      set: data.set,
-      source: data.source,
+      set: data.data.set || [],
+      source: data.data.source || [],
       changed: [],
     };
   }
@@ -34,16 +33,13 @@ export default class AssignFeedsToColumn extends EditForm {
   updateHandler (e) {
     e.preventDefault();
     let data = {
-      id: this.state.id,
-      data: {...this.props.data}
+      id: this.props.data.id,
+      data: {
+        ...this.props.data.data,
+        set: (this.state.set.length) ? this.state.set : undefined,
+        source: (this.state.source.length) ? this.state.source : undefined
+      }
     };
-
-    forOwn(this.state, (v, k) => {
-      if (data.hasOwnProperty(k) || v === '') return;
-      if (k === 'changed' || k.indexOf('sort') === 0 || k.indexOf('adv_') === 0) return;
-      if (v instanceof Array && !v.length) return;
-      data.data[k] = v;
-    });
     
     return this.props.update(data);
   }
@@ -54,14 +50,12 @@ export default class AssignFeedsToColumn extends EditForm {
     if (!this.props.data) return null;
     let running = this.props.state > 2;
 
-    let componentRootClass = classNames({
-      'mod-subsection-management': true,
-      'state-loading': running
-    });
-
 
     return (
-      <section className={componentRootClass}>
+      <section className={classNames({
+        'mod-subsection-management': true,
+        'state-loading': running
+      })}>
         { this.renderFormHeader() }
         { this.renderConfirmation() }
         <Feeds

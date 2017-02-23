@@ -28,15 +28,13 @@ export default function Toggler (props) {
     options.push(<label htmlFor={id} key={label}>{label}</label>);
   });
 
-  let className = classNames({
-    [props.className]: true,
-    'toggler': true,
-    'is-triple': options.length === 6,
-    'is-disabled': props.disabled
-  })
-
   return (
-    <div className={className}>
+    <div className={classNames({
+      [props.className]: true,
+      'toggler': true,
+      'is-triple': options.length === 6,
+      'is-disabled': props.disabled
+    })}>
       {options}
       <em></em>
       <span></span>

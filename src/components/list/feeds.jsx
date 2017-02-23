@@ -72,11 +72,6 @@ export default class FeedsList extends React.Component {
     // Define empty template
     // ===========================================================================
     let list = this.props.emptyTpl;
-
-    let rootClass = classNames({
-      'list': true,
-      'state-disabled': disabled
-    });
     
     // Build up resulting list
     // ===========================================================================
@@ -94,7 +89,10 @@ export default class FeedsList extends React.Component {
     }
 
     return (
-      <div className={rootClass}>
+      <div className={classNames({
+        'list': true,
+        'state-disabled': disabled
+      })}>
         <div className='header'>
           {(this.props.search > 0) ? (
             <input type='text' name='search' defaultValue={this.state.search} onChange={(e) => this.setState({ search: e.target.value || '' })} placeholder='Search for...' />

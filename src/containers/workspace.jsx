@@ -17,8 +17,7 @@ import { errorHandler, logout } from '../redux/app';
 // ===========================================================================
 import MainNav from '../components/mainNav';
 import UserBlock from '../components/briefInfo';
-import Dashboard from '../containers/dashboard';
-
+import Dashboard from './dashboard';
 
 // Main app screen - where all fun is taking place
 // ===========================================================================
@@ -68,20 +67,16 @@ class Workspace extends React.Component {
   render() {
     if (!this.props.userAuthenticated) return null;
 
-    // Create classList for sidebar
-    // ===========================================================================
-    let sidebarClass = classNames({
-      'sidebar': true,
-      'is-expanded': this.state.sidebar
-    });
-
     let routes = this.props.route.childRoutes.map(({label, path, icon}) => ({label, path, icon}));
 
     // Return JSX layout of a component
     // ===========================================================================
     return (
       <section className='screen-main mod-screen-main'>
-        <aside className={sidebarClass}>
+        <aside className={classNames({
+          'sidebar': true,
+          'is-expanded': this.state.sidebar
+        })}>
           <UserBlock {...this.props.user} />
           <MainNav routes={routes} toggle={this.handlerSidebar} logout={this.handlerLogout} />
         </aside>

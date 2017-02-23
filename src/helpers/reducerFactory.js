@@ -8,7 +8,7 @@ export const mergeArrayById = (arr, obj) => {
     changed = true;
     return {...item, ...obj};
   });
-  if (!changed) result.push(obj);
+  if (!changed) result.push({...obj});
   return result;
 }
 

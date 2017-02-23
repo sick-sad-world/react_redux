@@ -28,13 +28,11 @@ export default class EditUser extends EditForm {
     if (!this.props.data) return null;
     let running = this.props.state > 2;
 
-    let componentRootClass = classNames({
-      'mod-subsection-edit': true,
-      'state-loading': running
-    });
-
     return (
-      <section className={componentRootClass}>
+      <section className={classNames({
+        'mod-subsection-edit': true,
+        'state-loading': running
+      })}>
         <header className='subsection-header'>
           <div className='text'>
             <h1>{this.props.texts.title}</h1>
@@ -42,7 +40,7 @@ export default class EditUser extends EditForm {
           </div>
         </header>
         { this.renderConfirmation() }
-        <form onSubmit={this.updateHandler} className='subsection-content columned'>
+        <form className='subsection-content columned'>
           <div className='form-block'>
             <div className='row'>
               <label htmlFor='funUserDisplayName'>Username:</label>

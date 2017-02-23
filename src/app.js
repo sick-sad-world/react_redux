@@ -10,6 +10,7 @@ import app from './redux/app';
 import user from './redux/user';
 import notifications from './redux/notifications';
 import columns from './redux/columns';
+import results from './redux/results';
 import sets from './redux/sets';
 import sources from './redux/sources';
 import alerts from './redux/alerts';
@@ -18,7 +19,7 @@ import reports from './redux/reports';
 // Import all required actions
 // ===========================================================================
 import { getUser } from './redux/user';
-import { setAppState, fetchData, errorHandler } from './redux/app';
+import { setAppState, fetchData, getAllResults, errorHandler } from './redux/app';
 
 // Import all stuff related to React
 // ===========================================================================
@@ -53,6 +54,7 @@ let TrendolizerStore = createStore(
     app,
     user,
     notifications,
+    results,
     columns,
     sets,
     sources,
@@ -105,5 +107,6 @@ render(
 TrendolizerStore
   .dispatch(getUser(null, {state: false, notification: false}))
   .then(() => TrendolizerStore.dispatch(fetchData()))
+  .then((data) => TrendolizerStore.dispatch(getAllResults(data)))
   .catch((err) => TrendolizerStore.dispatch(errorHandler(err)))
   .then(() => TrendolizerStore.dispatch(setAppState(2)));

@@ -7,7 +7,7 @@ import { reduce, isPlainObject, isNull, isUndefined } from 'lodash';
 export const transformRequestData = (data) => reduce(data, (acc, v, k) => {
   if (isPlainObject(v)) {
     acc[k] = JSON.stringify(v);
-  } else if (!isNull(v) && !isUndefined(v)) {
+  } else if (!isNull(v) && !isUndefined(v) && v !== '') {
     acc[k] = v;
   }
   return acc;

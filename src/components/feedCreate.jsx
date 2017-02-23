@@ -459,14 +459,12 @@ export default class FeedCreate extends React.Component {
     let type = this.state.type;
     let texts = this.props.texts;
 
-    let componentRootClass = classNames({
-      'mod-subsection-management': true,
-      'mod-create-source': true,
-      'state-loading': running
-    });
-
     return (
-      <section className={componentRootClass}>
+      <section className={classNames({
+        'mod-subsection-management': true,
+        'mod-create-source': true,
+        'state-loading': running
+      })}>
         <header className='subsection-header'>
           <Link to={`/sets/${this.props.id}`}>
             <Icon icon='chevron-left' />

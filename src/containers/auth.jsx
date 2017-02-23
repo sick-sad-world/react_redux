@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
-import { login, setAppState, fetchData, errorHandler } from '../redux/app';
+import { login, setAppState, fetchData, getAllResults, errorHandler } from '../redux/app';
 import { getUser } from '../redux/user';
 
 // Import Child components
@@ -29,6 +29,7 @@ class Auth extends React.Component {
       .then(() => this.props.setAppState(1))
       .then(() => this.props.getUser(null, {state: false, notification: false}))
       .then(() => this.props.fetchData())
+      .then((data) => this.props.getAllResults(data))
       .then(() => this.props.setAppState(2))
       .catch(this.props.errorHandler);
   }
@@ -103,6 +104,7 @@ const mapDispatchToProps = (dispatch) => (bindActionCreators({
   getUser,
   fetchData,
   errorHandler,
+  getAllResults,
   setAppState
 }, dispatch));
 

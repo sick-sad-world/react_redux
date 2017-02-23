@@ -1,7 +1,9 @@
 import * as ACTIONS from '../helpers/types';
+import moment from 'moment';
 import createAction from '../helpers/actionFactory';
 import { notification } from './notifications';
 import { getColumns } from './columns';
+import { getResults } from './results';
 import { getSets } from './sets';
 import { getSources } from './sources';
 import { getAlerts } from './alerts';
@@ -87,4 +89,69 @@ export const fetchData = (options) => {
     dispatch(getAlerts(null, options)),
     dispatch(getReports(null, options))
   ]);
+}
+
+export const getAllResults = (data) => (dispatch) => {
+  let columns;
+  let ids = {};
+  let notificationId = moment().unix();
+
+  // Pick exacly columns data to iterate over for Results fetching
+  // ===========================================================================
+  data.forEach((item) => {
+    if (item && item.type === ACTIONS['GET_COLUMNS']) columns = item.payload;
+  });
+
+  // Create our [Top-level] Promise chain
+  // ===========================================================================
+  let results =  Promise.all(
+    columns.map((column, i) => {
+      // If column hidden - do nothing
+      // ===========================================================================
+      if (!column.open) return null;
+
+      // Define time delay and set id to hash of columns being fetched
+      // ===========================================================================
+      let delay = (i > 4) ? i * 1200 : 0;
+      ids[column.id] = true;
+
+      // Promise wrapper around timeout
+      // ===========================================================================
+      return new Promise((resolve, reject) => {
+
+        // Run our call and simple forward results to [Upper-level] promise chain
+        // ===========================================================================
+        setTimeout(() => {
+          return dispatch(getResults(column.data, {id: column.id}), {
+            id: column.id,
+            notification: false
+          }).then(resolve).catch(reject)
+        }, delay);
+
+      }).then(() => {
+        // When code is done - update our message by removing [ID] of column
+        // wich result loading is done from list
+        // ===========================================================================
+        delete ids[column.id];
+        return dispatch(notification({
+          id: notificationId,
+          type: 'loading',
+          text: `Results for columns ${Object.keys(ids).join(',')} downloading now...`
+        }));
+      });
+    })
+  ).then(() => dispatch(notification({
+    id: notificationId,
+    visible: false
+  })));
+
+  // Send message at a start
+  // ===========================================================================
+  dispatch(notification({
+    id: notificationId,
+    type: 'loading',
+    text: `Results for columns ${Object.keys(ids).join(',')} downloading now...`
+  }));
+
+  return results;
 }

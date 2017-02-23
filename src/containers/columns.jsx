@@ -11,7 +11,8 @@ import { connect } from 'react-redux';
 // Import actions
 // ===========================================================================
 import { errorHandler } from '../redux/app';
-import { defColumn, createColumn, editColumn, deleteColumn, decomposeColumnSort } from '../redux/columns';
+import { getResults } from '../redux/results';
+import { createColumn, editColumn, deleteColumn } from '../redux/columns';
 
 // Import Child components
 // ===========================================================================
@@ -28,15 +29,19 @@ class Columns extends React.Component {
   }
 
   createItem (value) {
-    this.props.createColumn({
-      name: value
-    }).then(({payload}) => {
-      this.props.router.push(`${this.props.route.path}/${payload.id}`);
-    }).catch(this.props.errorHandler);
+    this.props
+      .createColumn({ name: value })
+      .then(({payload}) => {
+        this.props.router.push(`${this.props.route.path}/${payload.id}`);
+        if (payload.open) {
+          return this.props.getResults(payload.data, {id: payload.id});
+        }
+      })
+      .catch(this.props.errorHandler);
   }
 
   updateItem(data) {
-    return this.props.editColumn(data).catch(this.props.errorHandler);
+    return this.props.editColumn(data).then(({payload}) => this.props.getResults(payload.data, {id: payload.id})).catch(this.props.errorHandler);
   }
 
   deleteItem (id) {
@@ -102,24 +107,11 @@ Columns.defaultProps = {
 // ===========================================================================
 const mapStateToProps = ({columns}, ownProps) => {
   let curId = parseInt(ownProps.params.id);
-  let chosen = find(columns.payload, {id: curId});
-  if (chosen) {
-    if (!chosen.display_settings) chosen.display_settings = defColumn.display_settings;
-    chosen = {
-      ...defColumn.data,
-      ...chosen.data,
-      ...decomposeColumnSort(chosen.data.sort),
-      name: chosen.name,
-      open: chosen.open,
-      id: chosen.id,
-      display_settings: chosen.display_settings
-    }
-  }
   return {
     curId,
     state: columns.state,
     payload: columns.payload.map(({id, name, open}) => ({id, name, open})),
-    chosen,
+    chosen: find(columns.payload, {id: curId}),
   }
 }
 
@@ -127,6 +119,7 @@ const mapDispatchToProps = (dispatch) => (bindActionCreators({
   createColumn,
   editColumn,
   deleteColumn,
+  getResults,
   errorHandler
 }, dispatch))
 

@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 // Import actions
 // ===========================================================================
 import { errorHandler } from '../redux/app';
+import { notification } from '../redux/notifications';
 import { editAlert, deleteAlert, createAlert, defaultAlert } from '../redux/alerts';
 
 // Import Child components
@@ -112,6 +113,7 @@ const mapDispatchToProps = (dispatch) => (bindActionCreators({
   createAlert,
   deleteAlert,
   editAlert,
+  notification,
   errorHandler
 }, dispatch))
 

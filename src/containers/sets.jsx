@@ -11,7 +11,6 @@ import { connect } from 'react-redux';
 // Import actions
 // ===========================================================================
 import { errorHandler } from '../redux/app';
-import { notification } from '../redux/notifications';
 import { createSet, editSet, deleteSet } from '../redux/sets';
 import { createSource, deleteSource } from '../redux/sources';
 
@@ -144,7 +143,6 @@ const mapDispatchToProps = (dispatch) => (bindActionCreators({
   editSet,
   deleteSet,
   deleteSource,
-  notification,
   errorHandler
 }, dispatch))
 

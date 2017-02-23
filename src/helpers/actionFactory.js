@@ -26,7 +26,8 @@ export default function createAction (config) {
     // ===========================================================================
     if (options.state && config.state_type) dispatch({
       type: config.state_type,
-      state: 3
+      state: 3,
+      entity: options.id
     });
 
     // Create notification of process beginning
@@ -34,7 +35,7 @@ export default function createAction (config) {
     if (options.notification && config.pendingMessage) dispatch(notification({
       id: notificationId,
       type: 'loading',
-      text: config.pendingMessage
+      text: config.pendingMessage.replace('$id', options.id)
     }));
 
     // Run actual call
@@ -45,7 +46,8 @@ export default function createAction (config) {
           throw {
             id: (options.notification) ? notificationId : null,
             state: (options.state && config.state_type) ? config.state_type : null,
-            text: config.errorMessage || payload.error
+            text: payload.error || config.errorMessage.replace('$id', options.id),
+            entity: options.id
           }
         }
         return payload;
@@ -56,14 +58,15 @@ export default function createAction (config) {
         if (options.notification) dispatch(notification({
           id: notificationId,
           type: 'success',
-          text: payload.success || config.successMessage
+          text: payload.success || config.successMessage.replace('$id', options.id)
         }));
 
         // Dispatch actual action with data provided
         // ===========================================================================
         return dispatch({
           type: config.type,
-          payload: (payload.success || payload.message) ? data : payload
+          payload: (payload.success || payload.message) ? data : payload,
+          entity: options.id
         });
       });
   }

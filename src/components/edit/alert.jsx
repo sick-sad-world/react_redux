@@ -35,13 +35,11 @@ export default class EditAlert extends EditForm {
     if (!this.props.data) return null;
     let running = this.props.state > 2;
 
-    let componentRootClass = classNames({
-      'mod-subsection-edit': true,
-      'state-loading': running
-    });
-
     return (
-      <section className={componentRootClass}>
+      <section className={classNames({
+        'mod-subsection-edit': true,
+        'state-loading': running
+      })}>
         { this.renderFormHeader() }
         { this.renderConfirmation() }
         <form className='subsection-content columned'>
