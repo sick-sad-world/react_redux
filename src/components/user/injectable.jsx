@@ -2,7 +2,7 @@
 // ===========================================================================
 import { bindAll, concat, without, includes } from 'lodash';
 import classNames from 'classnames';
-import React from 'React';
+import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 

@@ -1,6 +1,6 @@
 // Import react related stuff
 // ===========================================================================
-import React from 'React';
+import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { bindAll } from 'lodash';

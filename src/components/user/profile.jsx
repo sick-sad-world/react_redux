@@ -6,7 +6,7 @@ import editable from '../behaviours/editable';
 
 // Import React related stuff
 // ===========================================================================
-import React from 'React';
+import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 

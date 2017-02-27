@@ -1,7 +1,7 @@
 // Import React related stuff
 // ===========================================================================
 import classNames from 'classnames';
-import React from 'React';
+import React from 'react';
 import { includes, bindAll } from 'lodash';
 
 // Import child components
