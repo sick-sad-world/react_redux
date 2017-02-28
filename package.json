@@ -3,7 +3,14 @@
   "description": "React-Redux trendolizer client",
   "author": "Igor Koptelov",
   "version": "0.1.0",
-  "scripts": {},
+  "scripts": {
+    "start": "gulp dev --serve --watch",
+    "bundle": "gulp dev",
+    "prebuild": "gulp clean",
+    "build": "gulp build",
+    "prezipbuild": "npm run build",
+    "zipbuild": "gulp zip"
+  },
   "dependencies": {
     "browser-jsonp": "^1.1.5",
     "classnames": "^2.2.5",

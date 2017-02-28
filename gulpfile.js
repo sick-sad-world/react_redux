@@ -1,222 +1,95 @@
-// Config stuff
-// ==================================================================
+// Import packages
+// ===========================================================================
 const packageJSON = require('./package.json');
+const argv = require('yargs').argv;
+const gulp = require('gulp');
+const path = require('path');
+const clean = require('gulp-clean');
+const zip = require('gulp-zip');
 
-// Config for browserSync server
-// ==================================================================
-const SERVER = {
-  online: true,
-  open: false, // 'local', 'external', 'ui', 'ui-external', 'tunnel' or false
-  level: 'info', // 'info', 'debug', 'warn', or 'silent'
-  browser: 'google chrome',
-  port: 3001
-};
-
-// * You should choose only one build system for JS: Browserify(CommonJS) or RequireJS(AMD) or none of them
-const BASE = ''; // Root of your project. May be different due to environment such as Expressjs or Cordova
-const BUILD = 'build';
-const CONFIG = {
-  gzip: {
-    gzipOptions: { level: 9 }
-  },
-  js: 'js',
-  jsRoot: 'app.js',
-  es6: 'src', // set to false to turn it off
-  sass: 'scss',
-  css: 'css',
-  img: 'img',
-  filesToCopy: ['index.html', 'README.md', 'package.json', 'font/**/**.*'],
-  fileName: `${packageJSON.name} ${packageJSON.version}.zip`,
-  preamble: `
+// Define path variables
+// ===========================================================================
+const BASE = path.join(__dirname, 'assets');
+const BUILD = path.join(__dirname, 'build');
+const SASS = path.join(BASE, 'scss/**/*.scss');
+const SCRIPT = path.join(BASE, 'src/**/*.{js,jsx}');
+const PREAMBLE = `
   /* ${packageJSON.name} app v${packageJSON.version}.
    * Compiled at $d.
    * Made by: ${packageJSON.author}.
-   * ================================================================== */`
-};
+   * ================================================================== */`;
 
-// Essential packages
-// ==================================================================
-const browserSync = require('browser-sync');
-const gulp = require('gulp');
+// Import task creators
+// ===========================================================================
+const serve = require('./gulp/serve');
+const sass = require('./gulp/sass')(gulp, SASS);
+const script = require('./gulp/script')(gulp, BASE, 'app.js');
+const image = require('./gulp/image')(gulp, BASE);
 
-// Style plugins
-// ==================================================================
-const sass = require('gulp-sass');
-const autoprefixer = require('gulp-autoprefixer');
+// Define tasks for style processng
+// ===========================================================================
+gulp.task('sass:dev', sass.development(BASE));
+gulp.task('sass:prod', sass.production(BUILD));
 
-// Js plugins
-// ==================================================================
-const browserify = require('browserify');
-const babelify = require('babelify');
-const buffer = require('vinyl-buffer');
-const source = require('vinyl-source-stream');
-const uglify = require('gulp-uglify');
+// Define tasks for javascript processng
+// ===========================================================================
+gulp.task('bundle:dev', script.development(BASE));
+gulp.task('bundle:prod', script.production(BUILD, PREAMBLE));
 
-// Icons
-// ==================================================================
-const imagemin = require('gulp-imagemin');
+// Define tasks for image processng
+// ===========================================================================
+// gulp.task('icons:dev', image.icons(BASE));
+gulp.task('image:prod', image.images(BUILD));
+// gulp.task('icons:prod', image.icons(BUILD));
 
-// Utils
-// ==================================================================
-const sourcemaps = require('gulp-sourcemaps');
-const clean = require('gulp-clean');
-const zip = require('gulp-zip');
-const gzip = require('gulp-gzip');
-const path = require('path');
+// Define default development task
+// ===========================================================================
+gulp.task('dev', ['sass:dev', 'bundle:dev'], () => {
 
-const p = (...args) => path.join.apply(path, [BASE, ...args]);
+  // Run dev server if --serve is set
+  // ===========================================================================
+  if (argv.serve) serve(packageJSON.name, BASE, ['index.html', 'app.js', 'app.css', 'img']);
 
-// Build section
-// ==================================================================
-
-/**
- * Clean previous build in target location
- */
-gulp.task('build:clean', () => gulp.src(BUILD, {read: false}).pipe(clean()));
-
-/**
- * Copy all required files wich dosen't need any transformations for build in target location
- */
-gulp.task('build:copy', ['build:clean'], () => gulp.src(CONFIG.filesToCopy.map(item => p(item)), {base: (BASE.length) ? BASE : __dirname}).pipe(gulp.dest(BUILD)));
-
-/**
- * Generate CSS out of .scss files w/o sourcemaps in target location
- */
-gulp.task('build:compass', () => gulp.src(p(CONFIG.sass, '**/*.scss'))
-  .pipe(sass({
-    precision: 3,
-    outputStyle: 'compressed'
-  }).on('error', sass.logError))
-  .pipe(autoprefixer({
-    cascade: false
-  }))
-  .pipe(gzip(CONFIG.gzip))
-  .pipe(gulp.dest(path.join(BUILD, CONFIG.css)))
-);
-
-/**
- * Optimize and minify all required images and place them in target location
- */
-gulp.task('build:images', () => gulp.src(p(CONFIG.img, '**/*.{ico,png,jpg,jpeg,gif,webp,svg}')).pipe(imagemin()).pipe(gulp.dest(path.join(BUILD, CONFIG.img))));
-
-/**
- * Compile ES6 script to ES5 for compability reasons, w/o sourcemap
- */
-gulp.task('build:babel', () => browserify({
-    entries: p(CONFIG.es6, CONFIG.jsRoot),
-    debug: true,
-    extensions: ['.js', '.jsx']
-  })
-  .transform('babelify', {
-    presets: ['react', 'es2015', 'stage-0', 'stage-1'],
-    plugins: ['babel-plugin-transform-es2015-modules-umd']
-  })
-  .bundle()
-  .pipe(source(CONFIG.jsRoot))
-  .pipe(buffer())
-  .pipe(uglify({
-    output: {
-      preamble: CONFIG.preamble.replace('$d', (new Date().toUTCString()))
-    }
-  }))
-  .pipe(gzip(CONFIG.gzip))
-  .pipe(gulp.dest(path.join(BUILD, CONFIG.js)))
-);
-
-/**
- * Build your project
- */
-gulp.task('build', ['build:copy', 'build:compass', 'build:images', 'build:babel'], () => {
-  console.log(`Project: ${packageJSON.name} app ${packageJSON.version} build'up done....`);
-});
-
-/**
- * Build your project and put it into archive
- */
-gulp.task('zipbuild', ['build'], () => {
-  let dateString = new Date().toLocaleString().replace(/\//g, '.');
-  return gulp.src(path.join(BUILD, '**/**.*'), {base: BUILD})
-		.pipe(zip(CONFIG.fileName.replace('$d', dateString).replace(/[ ,]/g, '_')))
-		.pipe(gulp.dest(__dirname));
-});
-
-// Development section
-// ==================================================================
-/**
- * Generate CSS out of .scss files /w sourcemaps in target location
- */
-gulp.task('compass:dev', () => gulp.src(p(CONFIG.sass, '**/*.scss'))
-  .pipe(sass({
-    precision: 3,
-    outputStyle: 'expaned'
-  }).on('error', sass.logError))
-  .pipe(autoprefixer({
-    cascade: false
-  }))
-  .pipe(sourcemaps.write('.'))
-  .pipe(gulp.dest(p(CONFIG.css)))
-);
-
-/**
- * Compile ES6 script to ES5 for compability reasons, sourcemap included
- */
-gulp.task('babel:dev', () => browserify({
-    entries: p(CONFIG.es6, CONFIG.jsRoot),
-    debug: true,
-    extensions: ['.js', '.jsx']
-  })
-  .transform('babelify', {
-    presets: ['react', 'es2015', 'stage-0', 'stage-1'],
-    plugins: ['babel-plugin-transform-es2015-modules-umd']
-  })
-  .bundle()
-  .pipe(source(CONFIG.jsRoot))
-  .pipe(buffer())
-  .pipe(gulp.dest(p(CONFIG.js)))
-);
-
-/**
- * Default task for development - runs server with livereload also watches all required
- * files and folders for changes
- */
-gulp.task('default', ['babel:dev', 'compass:dev'], () => {
-
-  if (SERVER) {
-    browserSync({
-      port: SERVER.port,
-      open: SERVER.open,
-      browser: SERVER.browser,
-      online: SERVER.online,
-      server: {
-        baseDir: BASE,
-        routes: {
-          '/css': p(CONFIG.css),
-          '/img': p(CONFIG.img),
-          '/js': p(CONFIG.js),
-          '/src': p(CONFIG.es6)
-        }
-      },
-      middleware: [(req, res, next) => {
-        if (req.url.indexOf('.') < 0)  req.url = '/index.html';
-        next();
-      }],
-      files: [
-        p(CONFIG.img, '**/*.{ico,png,jpg,jpeg,gif,webp,svg}'),
-        p(CONFIG.css, 'app.css'),
-        p(CONFIG.js, 'app.js'),
-        p('index.html'),
-      ],
-      watchOptions: {
-        ignored: /node_modules/
-      },
-      notify: false,
-      logLevel: SERVER.level,
-      logPrefix: packageJSON.name,
-      logConnections: true,
-      logFileChanges: true
-    });
+  // Watch files if --watch is set
+  // ===========================================================================
+  if (argv.watch) {
+    gulp.watch(SASS, ['sass:dev']);
+    gulp.watch(SCRIPT, ['bundle:dev']);
+    // gulp.watch(path.join(BASE, 'img/icons/**/*.svg'), 'icons:dev');
   }
+  
+});
 
-  gulp.watch([p(CONFIG.es6), p(CONFIG.es6, '**/*.{js,jsx}')], ['babel:dev']);
-  gulp.watch([p(CONFIG.sass), p(CONFIG.sass, '**/*.scss')], ['compass:dev']);
+// Clean production folder before creating new build
+// ===========================================================================
+gulp.task('clean', () => gulp.src(BUILD, {read: false}).pipe(clean()));
+
+// Copy project assets (fonts, html, e.t.c)
+// ===========================================================================
+gulp.task('copy:assets', () => {
+  return gulp.src([
+    path.join(BASE, 'index.html'),
+    path.join(BASE, 'font/**/**.*')
+    ], {base: BASE}).pipe(gulp.dest(BUILD))
+});
+
+// Copy project docs
+// ===========================================================================
+gulp.task('copy:docs', () => {
+  return gulp.src([
+    'README.md',
+    'package.json'
+    ]).pipe(gulp.dest(BUILD))
+});
+
+// Task for building a production version
+// ===========================================================================
+gulp.task('build', ['copy:assets', 'copy:docs', 'sass:prod', 'image:prod', 'bundle:prod'], () => console.log('Build complete'));
+
+// Task for archiving build results
+// ===========================================================================
+gulp.task('zip', function() {
+  return gulp.src('**/**.*', {base: BUILD})
+		.pipe(zip(`${packageJSON.name} ${packageJSON.version}.zip`))
+		.pipe(gulp.dest(__dirname));
 });

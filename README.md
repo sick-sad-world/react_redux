@@ -2,12 +2,9 @@
 
 > Just in tutorial purposes, but who knows
 
-Matching usual front-end project or require.js single-page-app. This is branch for gulp-based ES6 version.
-
-Use this file to create some markdown for GitHub e.t.c
 
 ### Installation:
  * run `npm i` to install npm modules
- * run `bower i` to install frontend libraries (optional)
- * run `gulp` to compile icons and css and start BrowserSync server
- * run `gulp build` to build your project
+ * run `npm start` to compile assets and run BrowserSync server and watchers for development
+ * run `npm run bundle` to compile assets in development mode but without serving and watching
+ * run `npm run build` to compile assets in production mode to `build` directory
