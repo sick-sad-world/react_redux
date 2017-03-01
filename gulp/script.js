@@ -15,8 +15,7 @@ module.exports = (gulp, BASE, JSROOT) => {
           extensions: ['.js', '.jsx']
         })
         .transform('babelify', {
-          presets: ['react', 'es2015', 'stage-0', 'stage-1'],
-          plugins: ['babel-plugin-transform-es2015-modules-umd']
+          presets: ['react', 'es2015', 'stage-0']
         })
         .bundle()
         .pipe(source(JSROOT))

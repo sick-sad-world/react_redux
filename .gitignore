@@ -2,9 +2,9 @@
 js/vendor
 node_modules
 css
-app.css
-app.css.map
-app.js
+assets/app.css
+assets/app.css.map
+assets/app.js
 .zip
 js
 img/sprite.symbol.html

@@ -12,6 +12,12 @@ module.exports = (name, BASE, watch) => browserSync.init({
   logFileChanges: true,
   server: { baseDir: BASE },
   files: watch.map((p) => path.join(BASE, p)),
+  middleware: [
+    (req, res, next) => {
+     if (req.url.indexOf('.') < 0) req.url = '/index.html';
+     next();
+   }
+  ],
   watchOptions: {
     ignored: /node_modules/
   }

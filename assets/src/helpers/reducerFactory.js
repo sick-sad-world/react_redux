@@ -20,7 +20,7 @@ export default function createReducer (config) {
         return {state: 1, payload: []};
       case config.STATE:
         return {
-          state: (action.state >= 0 ) ? action.state : 0,
+          state: action.state || 2,
           payload: state.payload
         }
       case config.GET:
