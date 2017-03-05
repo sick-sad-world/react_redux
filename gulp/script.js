@@ -1,32 +1,50 @@
 const path = require('path');
+const gulp = require('gulp');
 const browserify = require('browserify');
 const babelify = require('babelify');
 const buffer = require('vinyl-buffer');
-const source = require('vinyl-source-stream');
 const uglify = require('gulp-uglify');
 const gzip = require('gulp-gzip');
+const source = require('vinyl-source-stream2');
+const watchify = require('watchify');
+const livereactload = require('livereactload');
+const gutil = require('gulp-util');
 
-module.exports = (gulp, BASE, JSROOT) => {
+module.exports = (BASE, JSROOT) => {
   return {
     bundle (debug = false) {
       return browserify({
-          entries: path.join(BASE, 'src', JSROOT),
-          debug: debug,
-          extensions: ['.js', '.jsx']
-        })
-        .transform('babelify', {
-          presets: ['react', 'es2015', 'stage-0', 'stage-1'],
-          plugins: ['babel-plugin-transform-es2015-modules-umd']
-        })
-        .bundle()
-        .pipe(source(JSROOT))
-        .pipe(buffer());
+        entries: 'assets/src/app.js',
+        cache: {},
+        packageCache: {},
+        debug: debug,
+        extensions: ['.js', '.jsx'],
+        plugin: (debug) ? [watchify, livereactload] : null,
+      })
     },
     development (TARGET) {
-      return () => this.bundle(true).pipe(gulp.dest(TARGET));
+      return () => {
+        let b = this.bundle(true);
+
+        let _build = () => b.bundle()
+          .on('error', (err) => gutil.log(err.stack))
+          .pipe(source(JSROOT))
+          .pipe(gulp.dest(TARGET));
+        
+        b.on('update', () => {
+          gutil.log('Rerunning browserify...');
+          const updateStart = Date.now();
+          _build().on('end', () => gutil.log(`...Done ${Date.now() - updateStart} ms`));
+        });
+
+        return _build();
+      }
     },
     production (TARGET, PREAMBLE = '') {
       return () => this.bundle()
+        .bundle()
+        .pipe(source(JSROOT))
+        .pipe(buffer())
         .pipe(uglify({
           output: {
             preamble: PREAMBLE
