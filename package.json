@@ -2,42 +2,28 @@
   "name": "trendolizer",
   "description": "React-Redux trendolizer client",
   "author": "Igor Koptelov",
-  "version": "0.1.0",
+  "version": "0.7.0",
   "scripts": {
-    "start": "gulp dev --serve --watch",
-    "bundle": "gulp dev",
+    "start": "gulp dev",
+    "prebundle": "gulp clean",
+    "bundle": "gulp bundle",
     "prebuild": "gulp clean",
-    "build": "gulp build",
-    "prezipbuild": "npm run build",
-    "zipbuild": "gulp zip"
+    "build": "gulp build"
   },
   "browserify": {
-    "transform": [
-      "babelify"
-    ]
+    "transform": [ "babelify" ]
   },
   "babel": {
-    "presets": [
-      "react",
-      "es2015",
-      "stage-0"
-    ],
+    "presets": [ "react", "es2015", "stage-0" ],
     "env": {
       "development": {
         "plugins": [
-          [
-            "react-transform",
-            {
-              "transforms": [
-                {
-                  "transform": "livereactload/babel-transform",
-                  "imports": [
-                    "react"
-                  ]
-                }
-              ]
-            }
-          ]
+          ["react-transform", {
+            "transforms": [{
+              "transform": "livereactload/babel-transform",
+              "imports": [ "react" ]
+            }]
+          }]
         ]
       }
     }
@@ -77,7 +63,6 @@
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.1",
     "gulp-clean": "^0.3.2",
-    "gulp-concat": "^2.6.0",
     "gulp-gzip": "^1.4.0",
     "gulp-imagemin": "^3.1.1",
     "gulp-sass": "^2.3.2",
@@ -85,7 +70,6 @@
     "gulp-uglify": "^2.0.0",
     "gulp-util": "^3.0.8",
     "livereactload": "^3.2.0",
-    "react-proxy": "^1.1.8",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream2": "^0.1.1",
     "watchify": "^3.9.0"

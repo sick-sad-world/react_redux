@@ -14,7 +14,7 @@ module.exports = (BASE, JSROOT) => {
   return {
     bundle (debug = false) {
       return browserify({
-        entries: 'assets/src/app.js',
+        entries: path.join(BASE, JSROOT),
         cache: {},
         packageCache: {},
         debug: debug,
@@ -26,10 +26,7 @@ module.exports = (BASE, JSROOT) => {
       return () => {
         let b = this.bundle(true);
 
-        let _build = () => b.bundle()
-          .on('error', (err) => gutil.log(err.stack))
-          .pipe(source(JSROOT))
-          .pipe(gulp.dest(TARGET));
+        let _build = () => b.bundle().on('error', (err) => gutil.log(err.stack)).pipe(source(JSROOT)).pipe(gulp.dest(TARGET));
         
         b.on('update', () => {
           gutil.log('Rerunning browserify...');
@@ -39,6 +36,9 @@ module.exports = (BASE, JSROOT) => {
 
         return _build();
       }
+    },
+    demo(TARGET) {
+      return () => this.bundle().bundle().pipe(source(JSROOT)).pipe(buffer()).pipe(gulp.dest(TARGET));
     },
     production (TARGET, PREAMBLE = '') {
       return () => this.bundle()
