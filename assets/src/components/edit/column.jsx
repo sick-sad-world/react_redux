@@ -142,7 +142,6 @@ export default class EditColumn extends EditForm {
           <div className='form-block'>
             <TextInput
               className='row'
-              id='funColumnName'
               name='name'
               label='Column name'
               disabled={running}
@@ -205,18 +204,16 @@ export default class EditColumn extends EditForm {
                 value={this.state.autoreload}
               />
             </div>
-            <div className='row-flex'>
-              <label htmlFor='funColumnLimit'>Max number of items:</label>
-              <input 
-                disabled={running}
-                className='size-120'
-                value={this.state.limit}
-                onChange={this.updateState('limit')}
-                id='funColumnLimit'
-                type='number'
-                name='limit'
-              />
-            </div>
+            <TextInput
+              className='row-flex'
+              inputClassName='size-120'
+              name='limit'
+              type='number'
+              label='Max number of items'
+              disabled={running}
+              value={this.state.limit}
+              onChange={this.updateState('limit')}
+            />
             <div className='row-flex'>
               <span className='form-label'>Sort results by:</span>
               <Sorting
@@ -309,7 +306,6 @@ export default class EditColumn extends EditForm {
             </div>
             <TextInput
               className='row'
-              id='funColumnSearch'
               name='search'
               label='Title/description contains'
               disabled={running}
@@ -318,7 +314,6 @@ export default class EditColumn extends EditForm {
             />
             <TextInput
               className='row'
-              id='funColumnUrl'
               name='url'
               label='URL contains'
               disabled={running}
@@ -327,7 +322,6 @@ export default class EditColumn extends EditForm {
             />
             <TextInput
               className='row'
-              id='funColumnAuthor'
               name='author'
               label='Author contains'
               disabled={running}
@@ -336,7 +330,6 @@ export default class EditColumn extends EditForm {
             />
             <TextInput
               className='row'
-              id='funColumnExclude'
               name='exclude_search'
               label='Title/description does not contains'
               disabled={running}

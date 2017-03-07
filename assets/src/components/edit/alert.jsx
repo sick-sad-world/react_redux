@@ -47,7 +47,6 @@ export default class EditAlert extends EditForm {
           <div className='form-block'>
             <TextInput
               className='row'
-              id='funAlertName'
               name='name'
               label='Alert name'
               disabled={running}

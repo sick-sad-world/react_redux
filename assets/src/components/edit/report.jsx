@@ -54,7 +54,6 @@ export default class EditReport extends EditForm {
           <div className='form-block'>
             <TextInput
               className='row'
-              id='funReportName'
               name='name'
               label='Report name'
               disabled={running}

@@ -45,7 +45,6 @@ export default class EditUser extends EditForm {
           <div className='form-block'>
             <TextInput
               className='row'
-              id='funUserDisplayName'
               name='fullname'
               label='Fullname'
               disabled={running}
@@ -54,7 +53,6 @@ export default class EditUser extends EditForm {
             />
             <TextInput
               className='row'
-              id='funUserPosition'
               name='position'
               label='Position'
               disabled={running}
@@ -63,7 +61,6 @@ export default class EditUser extends EditForm {
             />
             <TextInput
               className='row'
-              id='funUserEmail'
               name='email'
               type='email'
               fullname='Email'

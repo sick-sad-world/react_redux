@@ -60,7 +60,6 @@ export default class EditSet extends EditForm {
           <div className='form-block'>
             <TextInput
               className='row'
-              id='funSetName'
               name='name'
               label='Sourceset name'
               disabled={running}
