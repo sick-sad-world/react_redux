@@ -1,6 +1,6 @@
 import { GET_ALERTS, ADD_ALERT, EDIT_ALERT, REMOVE_ALERT, SET_ALERT_STATE } from '../helpers/types';
-import createReducer from '../helpers/reducerFactory';
-import createAction from '../helpers/actionFactory';
+import createReducer from '../helpers/reducer-factory';
+import createAction from '../helpers/action-factory';
 
 export const defaultAlert = {
   id: 0,

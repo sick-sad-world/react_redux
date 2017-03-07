@@ -1,6 +1,6 @@
 import { LOGIN, LOGOUT, GET_RESULTS, GET_RESULT, SET_RESULT_STATE, ADD_RESULTS, FAVORITE_RESULT, IGNORE_RESULT, REMOVE_COLUMN } from '../helpers/types';
 import { reduce } from 'lodash';
-import createAction from '../helpers/actionFactory';
+import createAction from '../helpers/action-factory';
 
 export const splitText = (result) => {
   let limit = 120;

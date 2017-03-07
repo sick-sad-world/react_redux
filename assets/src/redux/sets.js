@@ -1,6 +1,6 @@
 import { GET_SETS, ADD_SET, EDIT_SET, REMOVE_SET, SET_SET_STATE } from '../helpers/types';
-import createReducer from '../helpers/reducerFactory';
-import createAction from '../helpers/actionFactory';
+import createReducer from '../helpers/reducer-factory';
+import createAction from '../helpers/action-factory';
 
 // Create hash of all Sources [id] where value is a number of occurances
 // ===========================================================================

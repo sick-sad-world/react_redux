@@ -1,5 +1,5 @@
 import { GET_USER, EDIT_USER, SET_USER_STATE, LOGOUT } from '../helpers/types';
-import createAction from '../helpers/actionFactory';
+import createAction from '../helpers/action-factory';
 
 export const defaultUser = {
   state: 1,

@@ -1,7 +1,7 @@
 import { find } from 'lodash';
 import { GET_COLUMNS, ADD_COLUMN, EDIT_COLUMN, REMOVE_COLUMN, SET_COLUMN_STATE } from '../helpers/types';
-import createReducer from '../helpers/reducerFactory';
-import createAction from '../helpers/actionFactory';
+import createReducer from '../helpers/reducer-factory';
+import createAction from '../helpers/action-factory';
 
 export const defDisplaySettings = ['title', 'found', 'url', 'image', 'description', 'likes', 'tweets', 'shares'];
 

@@ -19,7 +19,7 @@ import { createSource, deleteSource } from '../redux/sources';
 import ListSection from '../components/list/section';
 import ListItem from '../components/list/item';
 import EditSet from '../components/edit/set';
-import FeedCreate from '../components/feedCreate';
+import FeedCreate from '../components/feed-create';
 
 class Sourcesets extends React.Component {
   constructor(props) {

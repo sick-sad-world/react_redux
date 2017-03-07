@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 // Import Child components
 // ===========================================================================
-import ProgressTracker from '../components/progressTracker';
+import ProgressTracker from '../components/progress-tracker';
 import Notifications from './notifications';
 
 // This is CORE APP Component

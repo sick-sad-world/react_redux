@@ -1,6 +1,6 @@
 import { GET_REPORTS, ADD_REPORT, EDIT_REPORT, REMOVE_REPORT, SET_REPORT_STATE } from '../helpers/types';
-import createReducer from '../helpers/reducerFactory';
-import createAction from '../helpers/actionFactory';
+import createReducer from '../helpers/reducer-factory';
+import createAction from '../helpers/action-factory';
 
 export const defaultReport = {
   id: 0,

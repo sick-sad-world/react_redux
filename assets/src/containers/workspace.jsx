@@ -15,7 +15,7 @@ import { errorHandler, logout } from '../redux/app';
 
 // Import Child components
 // ===========================================================================
-import MainNav from '../components/mainNav';
+import MainNav from '../components/main-nav';
 import UserBlock from '../components/briefInfo';
 import Dashboard from './dashboard';
 

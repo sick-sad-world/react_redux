@@ -1,4 +1,4 @@
-import { mergeArrayById } from '../helpers/reducerFactory';
+import { mergeArrayById } from '../helpers/reducer-factory';
 import { PUSH_NOTIFICATION } from '../helpers/types';
 import moment from 'moment';
 

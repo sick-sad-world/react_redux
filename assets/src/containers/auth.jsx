@@ -11,8 +11,8 @@ import { getUser } from '../redux/user';
 
 // Import Child components
 // ===========================================================================
-import FormLogin from '../components/formLogin';
-import FormRegister from '../components/formRegister';
+import FormLogin from '../components/form-login';
+import FormRegister from '../components/form-register';
 
 // Authentification screen containing both of auth forms
 // ===========================================================================

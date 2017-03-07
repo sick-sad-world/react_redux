@@ -1,6 +1,6 @@
 import { GET_SOURCES, ADD_SOURCE, REMOVE_SOURCE, SET_SOURCE_STATE } from '../helpers/types';
-import createReducer from '../helpers/reducerFactory';
-import createAction from '../helpers/actionFactory';
+import createReducer from '../helpers/reducer-factory';
+import createAction from '../helpers/action-factory';
 
 export default createReducer({
   GET: GET_SOURCES,

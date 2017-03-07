@@ -1,6 +1,6 @@
 import * as ACTIONS from '../helpers/types';
 import moment from 'moment';
-import createAction from '../helpers/actionFactory';
+import createAction from '../helpers/action-factory';
 import { notification } from './notifications';
 import { getColumns } from './columns';
 import { getResults } from './results';
