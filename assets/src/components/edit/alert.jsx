@@ -9,9 +9,9 @@ import React from 'react';
 // Import Child components
 // ===========================================================================
 import EditForm from './edit-form';
-import TextInput from '../forms/input-text';
 import Emails from '../../containers/emails';
-import Select from 'react-select';
+import Dropdown from '../forms/dropdown';
+import TextInput from '../forms/input-text';
 import Toggler from '../forms/toggler';
 
 // Edit Alert
@@ -66,34 +66,28 @@ export default class EditAlert extends EditForm {
               value={this.state.active}
               onChange={this.updateState('active')}
             />
-            <div className='row-flex-wrap'>
-              <label htmlFor='funAlertFrequency'>Frequency:</label>
-              <Select
-                disabled={running}
-                className='size-120'
-                name='frequency'
-                options={this.props.frequencyOptions}
-                onChange={this.updateState('frequency')}
-                autosize={false}
-                clearable={false}
-                value={this.state.frequency}
-              />
-              <small className='form-description'>Check column(s) for new items every <i>x</i> minutes</small>
-            </div>
-            <div className='row'>
-              <label htmlFor='funAlertColumns'>Columns assigment:</label>
-              <Select
-                disabled={running}
-                name='columns'
-                options={this.props.columns}
-                onChange={this.updateState('columns')}
-                multi
-                value={this.state.columns}
-              />
-              <small className="form-description">
-                Watched columns (click on columns in the list to watch them too)
-              </small>
-            </div>
+            <Dropdown
+              label='Frequency'
+              disabled={running}
+              className='row-flex-wrap'
+              selectClassName='size-120'
+              name='frequency'
+              options={this.props.frequencyOptions}
+              onChange={this.updateState('frequency')}
+              value={this.state.frequency}
+              desc={<span>Check column(s) for new items every <i>x</i> minutes</span>}
+            />
+            <Dropdown
+              label='Columns assigment'
+              disabled={running}
+              className='row'
+              name='columns'
+              options={this.props.columns}
+              onChange={this.updateState('columns')}
+              multi={true}
+              value={this.state.columns}
+              desc='Watched columns (click on columns in the list to watch them too)'
+            />
           </div>
           <div className='form-block'>
             <div className='row'>

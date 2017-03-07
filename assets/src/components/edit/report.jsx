@@ -9,12 +9,12 @@ import React from 'react';
 
 // Import Child components
 // ===========================================================================
+import Datetime from 'react-datetime';
 import EditForm from './edit-form';
 import TextInput from '../forms/input-text';
-import Emails from '../../containers/emails';
-import Select from 'react-select';
-import Datetime from 'react-datetime';
+import Dropdown from '../forms/dropdown';
 import Toggler from '../forms/toggler';
+import Emails from '../../containers/emails';
 
 // Edit Report
 // ===========================================================================
@@ -73,20 +73,17 @@ export default class EditReport extends EditForm {
               value={this.state.active}
               onChange={this.updateState('active')}
             />
-            <div className='row-flex-wrap'>
-              <label htmlFor='funReportFrequency'>Frequency:</label>
-              <Select
-                disabled={running}
-                className='size-180'
-                name='frequency'
-                options={this.props.frequencyOptions}
-                onChange={this.updateState('frequency')}
-                autosize={false}
-                clearable={false}
-                value={this.state.frequency}
-              />
-              <small className='form-description'>Check column(s) for new items every <i>x</i> minutes</small>
-            </div>
+            <Dropdown
+              label='Frequency'
+              disabled={running}
+              className='row-flex-wrap'
+              selectClassName='size-120'
+              name='frequency'
+              options={this.props.frequencyOptions}
+              onChange={this.updateState('frequency')}
+              value={this.state.frequency}
+              desc={<span>Check column(s) for new items every <i>x</i> minutes</span>}
+            />
             <div className='row-flex'>
               <label htmlFor='funReportNextSend'>Next send:</label>
               <Datetime 
@@ -101,17 +98,17 @@ export default class EditReport extends EditForm {
                 }}
               />
             </div>
-            <div className='row'>
-              <label htmlFor='funReportColumns'>Columns assigment:</label>
-              <Select
-                disabled={running}
-                name='columns'
-                options={this.props.columns}
-                onChange={this.updateState('columns')}
-                multi
-                value={this.state.columns}
-              />
-            </div>
+            <Dropdown
+              label='Columns assigment'
+              disabled={running}
+              className='row'
+              name='columns'
+              options={this.props.columns}
+              onChange={this.updateState('columns')}
+              multi={true}
+              value={this.state.columns}
+              desc='Watched columns (click on columns in the list to watch them too)'
+            />
           </div>
           <div className='form-block'>
             <div className='row'>
