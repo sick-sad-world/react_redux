@@ -12,7 +12,8 @@ import { Link } from 'react-router';
 
 // Import Child components
 // ===========================================================================
-import EditForm from './editForm';
+import TextInput from '../forms/input-text';
+import EditForm from './edit-form';
 import Icon from '../icon';
 import FeedsList from '../list/feeds';
 import Source from '../list/source';
@@ -57,17 +58,15 @@ export default class EditSet extends EditForm {
         { this.renderConfirmation() }
         <form className='subsection-content columned'>
           <div className='form-block'>
-            <div className='row'>
-              <label htmlFor='funSetName'>Sourceset name:</label>
-              <input 
-                disabled={running}
-                value={this.state.name}
-                onChange={this.updateState('name')}
-                id='funSetName'
-                type='text'
-                name='name'
-              />
-            </div>
+            <TextInput
+              className='row'
+              id='funSetName'
+              name='name'
+              label='Sourceset name'
+              disabled={running}
+              value={this.state.name}
+              onChange={this.updateState('name')}
+            />
             <div className='row'>
               <Link to={`${this.props.backPath}/${this.props.data.id}/create`} className='button is-accent'>Create new feeds</Link>
             </div>

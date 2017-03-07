@@ -21,19 +21,23 @@
       "es2015",
       "stage-0"
     ],
-    "plugins": ["lodash"],
+    "plugins": [
+      "lodash"
+    ],
     "env": {
       "development": {
         "plugins": [
           [
             "react-transform",
             {
-              "transforms": [{
-                "transform": "livereactload/babel-transform",
-                "imports": [
-                  "react"
-                ]
-              }]
+              "transforms": [
+                {
+                  "transform": "livereactload/babel-transform",
+                  "imports": [
+                    "react"
+                  ]
+                }
+              ]
             }
           ]
         ]
@@ -43,6 +47,7 @@
   "dependencies": {
     "browser-jsonp": "^1.1.5",
     "classnames": "^2.2.5",
+    "formsy-react": "^0.19.2",
     "lodash": "^4.17.2",
     "lodash-es": "^4.17.2",
     "moment": "^2.17.1",
@@ -83,6 +88,7 @@
     "gulp-uglify": "^2.0.0",
     "gulp-util": "^3.0.8",
     "livereactload": "^3.2.0",
+    "react-proxy": "^1.1.8",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream2": "^0.1.1",
     "watchify": "^3.9.0"

@@ -10,7 +10,7 @@ import React from 'react';
 
 // Import Child components
 // ===========================================================================
-import EditForm from './editForm';
+import EditForm from './edit-form';
 import Feeds from '../../containers/feeds';
 
 // Edit Column
@@ -27,7 +27,9 @@ export default class AssignFeedsToColumn extends EditForm {
   }
 
   feedsHandler () {
-    return (type, id) => this.stateUpdater(type, updateArrayWithValue(this.state[type], id))
+    return (type, id) => this.stateUpdater({
+      type: updateArrayWithValue(this.state[type], id)
+    })
   }
 
   updateHandler (e) {

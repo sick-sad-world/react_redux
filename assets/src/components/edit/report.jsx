@@ -9,11 +9,12 @@ import React from 'react';
 
 // Import Child components
 // ===========================================================================
-import EditForm from './editForm';
+import EditForm from './edit-form';
+import TextInput from '../forms/input-text';
 import Emails from '../../containers/emails';
 import Select from 'react-select';
 import Datetime from 'react-datetime';
-import Toggler from '../toggler';
+import Toggler from '../forms/toggler';
 
 // Edit Report
 // ===========================================================================
@@ -51,31 +52,28 @@ export default class EditReport extends EditForm {
         { this.renderConfirmation() }
         <form className='subsection-content columned'>
           <div className='form-block'>
-            <div className='row'>
-              <label htmlFor='funReportName'>Report name:</label>
-              <input 
-                disabled={running}
-                value={this.state.name}
-                onChange={this.updateState('name')}
-                id='funReportName'
-                type='text'
-                name='name'
-              />
-            </div>
-            <div className='row-flex'>
-              <span className='form-label'>Status:</span>
-              <Toggler 
-                disabled={running}
-                className='size-120'
-                name='active'
-                options={{
-                  'Active': 1,
-                  'Inactive': 0
-                }}
-                value={this.state.active}
-                onChange={this.updateState('active')}
-              />
-            </div>
+            <TextInput
+              className='row'
+              id='funReportName'
+              name='name'
+              label='Report name'
+              disabled={running}
+              value={this.state.name}
+              onChange={this.updateState('name')}
+            />
+            <Toggler 
+              label='Status'
+              className='row-flex'
+              togglerClassName='size-180'
+              disabled={running}
+              name='active'
+              options={{
+                'Active': 1,
+                'Inactive': 0
+              }}
+              value={this.state.active}
+              onChange={this.updateState('active')}
+            />
             <div className='row-flex-wrap'>
               <label htmlFor='funReportFrequency'>Frequency:</label>
               <Select

@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { includes, without, concat, bindAll, omit, capitalize, isEqual } from 'lodash';
+import { includes, without, concat, bindAll, omit, capitalize, isEqual, forOwn } from 'lodash';
 import { numOrString } from '../../helpers/functions';
 
 // Import React related stuff
@@ -20,7 +20,6 @@ export default class EditForm extends React.Component {
   }
 
   componentWillReceiveProps (newProps) {
-    console.log(newProps);
     if (newProps.state === 2 && this.props.state !== newProps.state) this.setState(this.mapDataToState(newProps.data));
   }
 
@@ -43,16 +42,21 @@ export default class EditForm extends React.Component {
   }
   
   updateState (name, getter) {
-    return (e) => this.stateUpdater(name, (this[getter] instanceof Function) ? this[getter].call(this, e) : this.getValue(e));
+    return (e) => this.stateUpdater({
+      [name]: (this[getter] instanceof Function) ? this[getter].call(this, e) : this.getValue(e)
+    });
   }
 
-  stateUpdater (name, value) {
-    let newState = {[name]: value};
-    if (isEqual(newState[name], this.props.data[name])) {
-      if (includes(this.state.changed, name)) newState.changed = without(this.state.changed, name);
-    } else {
-      if (!includes(this.state.changed, name)) newState.changed = concat(this.state.changed, name);
-    }
+  stateUpdater (newState = {}) {
+    let changed = [...this.state.changed]
+    forOwn(newState, (v, k) => {
+      if (isEqual(v, this.props.data[k])) {
+        if (includes(this.state.changed, k)) changed = without(changed, k);
+      } else {
+        if (!includes(this.state.changed, k)) changed = concat(changed, k);
+      }
+    });
+    newState.changed = changed;
     return this.setState(newState);
   }
 

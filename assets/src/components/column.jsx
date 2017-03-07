@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, debounce } from 'lodash';
+import { bindAll, debounce, pick } from 'lodash';
 import { inject } from '../helpers/functions';
 import deletable from '../helpers/deletable';
 import { numOrString } from '../helpers/functions';
@@ -13,9 +13,9 @@ import React from 'react';
 // Import Child components
 // ===========================================================================
 import { Link } from 'react-router';
-import Select from 'react-select';
 import Icon from './icon';
-import Toggler from './toggler';
+import Sorting from './forms/sorting';
+import Toggler from './forms/toggler';
 import Results from '../containers/results';
 
 // Main app screen - Dashboard
@@ -54,12 +54,7 @@ export default class Column extends React.Component {
     return {
       deleting: 0,
       expanded: expanded,
-      name: data.name,
-      open: data.open,
-      infinite: data.infinite,
-      autoreload: data.autoreload,
-      direction: data.direction,
-      ...decomposeColumnSort(data.sort),
+      ...pick(data, 'name', 'open', 'direction', 'infinite', 'autoreload', 'sort')
     }
   }
 
@@ -69,21 +64,15 @@ export default class Column extends React.Component {
 
   updateValue(name) {
     return (e) => {
-      let value = undefined;
-        if (e === null) {
-          value = e;
+      let newState = undefined;
+        if (name === 'sorting' && e.sort) {
+          newState = e;
         } else if (e.target) {
-          value = numOrString(e.target.value);
-        } else if (e.value) {
-          value = e.value;
+          newState = {[name]: numOrString(e.target.value)};
         }
-      return this.setState({[name]: value}, () => {
-        return this.props.onChange({id: this.props.id, data: {
-          direction: this.state.direction,
-          infinite: this.state.infinite,
-          autoreload: this.state.autoreload,
-          sort: composeColumnSort(this.state.sort_pref, this.state.sort_prop)
-        }});
+      if (newState === undefined) return;
+      return this.setState(newState, () => {
+        return this.props.onChange({id: this.props.id, data: pick(this.state, 'direction', 'infinite', 'autoreload', 'sort')});
       })
     }
   }
@@ -108,66 +97,37 @@ export default class Column extends React.Component {
     let visIconData = this.props.visIconData;
     return (
       <form className='column-settings'>
-        <div className='row-flex'>
-          <Select
-            disabled={running || this.state.sort_prop === 'found'}
-            className='size-120'
-            name='sort_pref'
-            placeholder='Prefix...'
-            options={this.props.sortPrefix}
-            onChange={this.updateValue('sort_pref')}
-            autosize={false}
-            clearable={true}
-            searchable={false}
-            value={this.state.sort_pref}
-          />
-          <Select
-            disabled={running}
-            className='size-180'
-            name='sort_prop'
-            options={this.props.sortProperty}
-            onChange={this.updateValue('sort_prop')}
-            autosize={false}
-            clearable={false}
-            searchable={false}
-            value={this.state.sort_prop}
-          />
-          <span className={`switcher-direction${(running) ? ' is-disabled' : ''}`}>
-            <input
-              type='checkbox'
-              disabled={running}
-              name='direction'
-              onChange={this.updateValue('direction')}
-              checked={this.state.direction === 'desc'}
-              value={(this.state.direction === 'desc') ? 'asc' : 'desc'}
-            />
-            <Icon icon='bar-graph' />
-          </span>
-        </div>
-        <div className='row-flex'>
-          <span className='form-label'>Infinite scroll</span>
-          <Toggler
-            disabled={running}
-            name='infinite'
-            options={{
-              'Yes': 1,
-              'No': 0
-            }}
-            onChange={this.updateValue('infinite')}
-            value={this.state.infinite} />
-        </div>
-        <div className='row-flex'>
-          <span className='form-label'>Autoreloading</span>
-          <Toggler
-            disabled={running}
-            name='autoreload'
-            options={{
-              'On': this.state.autoreload || 30,
-              'Off': 0
-            }}
-            onChange={this.updateValue('autoreload')}
-            value={this.state.autoreload} />
-        </div>
+        <Sorting
+          className='row-flex'
+          value={this.state.sort}
+          direction={this.state.direction}
+          disabled={running}
+          onChange={this.updateValue('sorting')}
+        />
+        <Toggler
+          disabled={running}
+          label='Infinite scroll'
+          className='row-flex'
+          name='infinite'
+          options={{
+            'Yes': 1,
+            'No': 0
+          }}
+          onChange={this.updateValue('infinite')}
+          value={this.state.infinite}
+        />
+        <Toggler
+          disabled={running}
+          label='Autoreloading'
+          className='row-flex'
+          name='autoreload'
+          options={{
+            'On': this.state.autoreload || 30,
+            'Off': 0
+          }}
+          onChange={this.updateValue('autoreload')}
+          value={this.state.autoreload}
+        />
         <div className='column-subnav'>
           <a onClick={this.hideColumn} title={visIconData[open].title}><Icon icon={visIconData[open].icon} />Hide</a>
           <Link to={`/columns/${this.props.id}`} title='Column setting screen'>
@@ -204,7 +164,5 @@ export default class Column extends React.Component {
 }
 
 Column.defaultProps = {
-  sortPrefix: defColumnParameters.sortPrefix,
-  sortProperty: defColumnParameters.sortProperty,
   visIconData: [{icon: 'eye', title: 'Show this column'}, {icon: 'eye-with-line', title: 'Hide this column'}]
 }

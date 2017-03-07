@@ -23,6 +23,12 @@ export default function reducer (state = defaultApp, action) {
       return {...state, userAuthenticated: false}
     case ACTIONS.GET_USER:
       return {...state, userAuthenticated: !!action.payload.id}
+    case ACTIONS.GET_ALERTS:
+    case ACTIONS.GET_REPORTS:
+    case ACTIONS.GET_SETS:
+    case ACTIONS.GET_SOURCES:
+    case ACTIONS.GET_COLUMNS:
+      return {...state, loadingStep: state.loadingStep + 1 }
     case ACTIONS.SET_APP_STATE:
       return {...state, state: action.state}
     default:

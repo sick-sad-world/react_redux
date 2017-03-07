@@ -8,7 +8,8 @@ import React from 'react';
 
 // Import Child components
 // ===========================================================================
-import EditForm from './editForm';
+import TextInput from '../forms/input-text';
+import EditForm from './edit-form';
 import EmailList from '../list/emails';
 
 export default class EditUser extends EditForm {
@@ -42,39 +43,34 @@ export default class EditUser extends EditForm {
         { this.renderConfirmation() }
         <form className='subsection-content columned'>
           <div className='form-block'>
-            <div className='row'>
-              <label htmlFor='funUserDisplayName'>Username:</label>
-              <input 
-                disabled={running}
-                value={this.state.fullname}
-                onChange={this.updateState('fullname')}
-                id='funUserDisplayName'
-                type='text'
-                name='fullname'
-              />
-            </div>
-            <div className='row'>
-              <label htmlFor='funUserPosition'>Position:</label>
-              <input 
-                disabled={running}
-                value={this.state.position}
-                onChange={this.updateState('position')}
-                id='funUserPosition'
-                type='text'
-                name='position'
-              />
-            </div>
-            <div className='row'>
-              <label htmlFor='funUserEmail'>Email:</label>
-              <input 
-                disabled={running}
-                value={this.state.email}
-                onChange={this.updateState('email')}
-                id='funUserEmail'
-                type='email'
-                name='email'
-              />
-            </div>
+            <TextInput
+              className='row'
+              id='funUserDisplayName'
+              name='fullname'
+              label='Fullname'
+              disabled={running}
+              value={this.state.fullname}
+              onChange={this.updateState('fullname')}
+            />
+            <TextInput
+              className='row'
+              id='funUserPosition'
+              name='position'
+              label='Position'
+              disabled={running}
+              value={this.state.position}
+              onChange={this.updateState('position')}
+            />
+            <TextInput
+              className='row'
+              id='funUserEmail'
+              name='email'
+              type='email'
+              fullname='Email'
+              disabled={running}
+              value={this.state.email}
+              onChange={this.updateState('email')}
+            />
             <div className='row'>
               <h3 className='form-subtitle'>Email BCC assigment:</h3>
               <EmailList

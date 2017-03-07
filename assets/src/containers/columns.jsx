@@ -20,7 +20,7 @@ import Icon from '../components/icon';
 import ListSection from '../components/list/section';
 import ListItem from '../components/list/item';
 import EditColumn from '../components/edit/column';
-import AssignFeedsToColumn from '../components/edit/feedsAssignment';
+import AssignFeedsToColumn from '../components/edit/feeds-assignment';
 
 class Columns extends React.Component {
   constructor(props) {

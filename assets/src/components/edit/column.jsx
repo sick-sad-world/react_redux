@@ -1,9 +1,9 @@
 // Import utility stuff
 // ===========================================================================
-import { reduce, includes, pickBy, map, forOwn } from 'lodash';
+import { includes, pickBy, map, forOwn } from 'lodash';
 import classNames from 'classnames';
 import { updateArrayWithValue } from '../../helpers/functions';
-import { defColumnParameters, composeColumnSort, defColumn, decomposeColumnSort } from '../../redux/columns';
+import { defColumnParameters, defColumn } from '../../redux/columns';
 
 // Import React related stuff
 // ===========================================================================
@@ -13,9 +13,11 @@ import React from 'react';
 // ===========================================================================
 import { Link } from 'react-router';
 import Icon from '../icon';
-import EditForm from './editForm';
+import Sorting from '../forms/sorting';
+import TextInput from '../forms/input-text';
+import EditForm from './edit-form';
 import Select from 'react-select';
-import Toggler from '../toggler';
+import Toggler from '../forms/toggler';
 
 // Edit Column
 // ===========================================================================
@@ -26,7 +28,6 @@ export default class EditColumn extends EditForm {
     return {
       ...defColumn.data,
       ...data.data,
-      ...decomposeColumnSort(data.data.sort),
       name: data.name,
       display_settings: (typeof display_settings === 'string') ? display_settings.split(',') : display_settings,
       changed: [],
@@ -37,6 +38,12 @@ export default class EditColumn extends EditForm {
     };
   }
 
+  updateSorting () {
+    return (sorting) => {
+      this.stateUpdater(sorting);
+    };
+  }
+
   updateHandler (e) {
     e.preventDefault();
 
@@ -44,9 +51,7 @@ export default class EditColumn extends EditForm {
       id: this.props.data.id,
       name: this.state.name,
       display_settings: this.state.display_settings,
-      data: {
-        sort: composeColumnSort(this.state.sort_pref, this.state.sort_prop)
-      }
+      data: {}
     };
 
     forOwn(this.state, (v, k) => {
@@ -68,12 +73,15 @@ export default class EditColumn extends EditForm {
     return (e) => {
       e.preventDefault();
       let { adv_type, adv_pref, adv_prop, adv_val} = this.state;
-      this.stateUpdater(`${adv_type}(${(adv_pref) ? adv_pref+'_'+adv_prop : adv_prop})`, (adv_val > 0) ? adv_val: undefined);
+      let name = `${adv_type}(${(adv_pref) ? adv_pref+'_'+adv_prop : adv_prop})`;
+      this.stateUpdater({
+        [name]: (adv_val > 0) ? adv_val: undefined
+      });
     }
   }
 
   removeAdvFilter (name) {
-    return () => this.stateUpdater(name, undefined);
+    return () => this.stateUpdater({name: undefined});
   }
 
   getDisplaySettings(e) {
@@ -132,61 +140,56 @@ export default class EditColumn extends EditForm {
         { this.renderConfirmation() }
         <form className='subsection-content columned' onSubmit={this.updateHandler}>
           <div className='form-block'>
-            <div className='row'>
-              <label htmlFor='funColumnName'>Column name:</label>
-              <input 
-                disabled={running}
-                value={this.state.name}
-                onChange={this.updateState('name')}
-                id='funColumnName'
-                type='text'
-                name='name'
-              />
-            </div>
+            <TextInput
+              className='row'
+              id='funColumnName'
+              name='name'
+              label='Column name'
+              disabled={running}
+              value={this.state.name}
+              onChange={this.updateState('name')}
+            />
             <fieldset className='row'>
               <legend>Feeds assigned:</legend>
               <Link to={`${this.props.backPath}/${this.props.data.id}/assignment`} className='is-button is-accent'>Assign feeds</Link>
             </fieldset>
             <h4 className='form-subtitle'>Display options:</h4>
-            <div className='row-flex'>
-              <span className='form-label'>Display ignored items anyway</span>
-              <Toggler
-                disabled={running}
-                name='show_ignored'
-                options={{
-                  'Yes': 1,
-                  'No': 0
-                }}
-                onChange={this.updateState('show_ignored')}
-                value={this.state.show_ignored} 
-              />
-            </div>
-            <div className='row-flex'>
-              <span className='form-label'>Show only favorited items</span>
-              <Toggler
-                disabled={running}
-                name='show_favorites'
-                options={{
-                  'Yes': 1,
-                  'No': 0
-                }}
-                onChange={this.updateState('show_favorites')}
-                value={this.state.show_favorites} 
-              />
-            </div>
-            <div className='row-flex'>
-              <span className='form-label'>Infinite scroll</span>
-              <Toggler
-                disabled={running}
-                name='infinite'
-                options={{
-                  'On': 1,
-                  'Off': 0
-                }}
-                onChange={this.updateState('infinite')}
-                value={this.state.infinite}
-              />
-            </div>
+            <Toggler
+              disabled={running}
+              label='Display ignored items anyway'
+              className='row-flex'
+              name='show_ignored'
+              options={{
+                'Yes': 1,
+                'No': 0
+              }}
+              onChange={this.updateState('show_ignored')}
+              value={this.state.show_ignored} 
+            />
+            <Toggler
+              disabled={running}
+              label='Show only favorited items'
+              className='row-flex'
+              name='show_favorites'
+              options={{
+                'Yes': 1,
+                'No': 0
+              }}
+              onChange={this.updateState('show_favorites')}
+              value={this.state.show_favorites} 
+            />
+            <Toggler
+              label='Infinite scroll'
+              className='row-flex'
+              disabled={running}
+              name='infinite'
+              options={{
+                'On': 1,
+                'Off': 0
+              }}
+              onChange={this.updateState('infinite')}
+              value={this.state.infinite}
+            />
             <div className='row-flex'>
               <span className='form-label'>Autoreloading</span>
               <Select
@@ -216,42 +219,13 @@ export default class EditColumn extends EditForm {
             </div>
             <div className='row-flex'>
               <span className='form-label'>Sort results by:</span>
-              <div className='sorting-selects'>
-                <Select
-                  disabled={running || this.state.sort_prop === 'found'}
-                  className='size-120'
-                  name='sort_pref'
-                  placeholder='Prefix...'
-                  options={this.props.sortPrefix}
-                  onChange={this.updateState('sort_pref')}
-                  autosize={false}
-                  clearable={true}
-                  searchable={false}
-                  value={this.state.sort_pref}
-                />
-                <Select
-                  disabled={running}
-                  className='size-180'
-                  name='sort_prop'
-                  options={this.props.sortProperty}
-                  onChange={this.updateState('sort_prop')}
-                  autosize={false}
-                  clearable={false}
-                  searchable={false}
-                  value={this.state.sort_prop}
-                />
-                <span className={`switcher-direction${(running) ? ' is-disabled' : ''}`}>
-                  <input
-                    type='checkbox'
-                    disabled={running}
-                    name='direction'
-                    onChange={this.updateState('direction')}
-                    checked={this.state.direction === 'desc'}
-                    value={(this.state.direction === 'desc') ? 'asc' : 'desc'}
-                  />
-                  <Icon icon='bar-graph' />
-                </span>
-              </div>
+              <Sorting
+                className='sorting-selects'
+                value={this.state.sort}
+                direction={this.state.direction}
+                disabled={running}
+                onChange={this.updateSorting()}
+              />
             </div>
             <fieldset className='row'>
               <legend>Select what to display for each item</legend>
@@ -262,62 +236,62 @@ export default class EditColumn extends EditForm {
           </div>
           <div className='form-block'>
             <h4 className='form-subtitle'>Content type(s):</h4>
-            <div className='row-flex'>
-              <span className='form-label'>Images:</span>
-              <Toggler
-                className='size-180'
-                disabled={running}
-                name='is_image'
-                options={{
-                  'Only': 1,
-                  'Include': '',
-                  'Omit': 0
-                }}
-                onChange={this.updateState('is_image')}
-                value={this.state.is_image} />
-            </div>
-            <div className='row-flex'>
-              <span className='form-label'>Videos:</span>
-              <Toggler
-                className='size-180'
-                disabled={running}
-                name='is_video'
-                options={{
-                  'Only': 1,
-                  'Include': '',
-                  'Omit': 0
-                }}
-                onChange={this.updateState('is_video')}
-                value={this.state.is_video} />
-            </div>
-            <div className='row-flex'>
-              <span className='form-label'>Facebook posts:</span>
-              <Toggler
-                className='size-180'
-                disabled={running}
-                name='is_facebook'
-                options={{
-                  'Only': 1,
-                  'Include': '',
-                  'Omit': 0
-                }}
-                onChange={this.updateState('is_facebook')}
-                value={this.state.is_facebook} />
-            </div>
-            <div className='row-flex'>
-              <span className='form-label'>Galleries:</span>
-              <Toggler
-                className='size-180'
-                disabled={running}
-                name='is_gallery'
-                options={{
-                  'Only': 1,
-                  'Include': '',
-                  'Omit': 0
-                }}
-                onChange={this.updateState('is_gallery')}
-                value={this.state.is_gallery} />
-            </div>
+            <Toggler
+              label='Images'
+              className='row-flex'
+              togglerClassName='size-180'
+              disabled={running}
+              name='is_image'
+              options={{
+                'Only': 1,
+                'Include': '',
+                'Omit': 0
+              }}
+              onChange={this.updateState('is_image')}
+              value={this.state.is_image}
+            />
+            <Toggler
+              label='Videos'
+              className='row-flex'
+              togglerClassName='size-180'
+              disabled={running}
+              name='is_video'
+              options={{
+                'Only': 1,
+                'Include': '',
+                'Omit': 0
+              }}
+              onChange={this.updateState('is_video')}
+              value={this.state.is_video}
+            />
+            <Toggler
+              label='Facebook posts'
+              className='row-flex'
+              togglerClassName='size-180'
+              disabled={running}
+              name='is_facebook'
+              options={{
+                'Only': 1,
+                'Include': '',
+                'Omit': 0
+              }}
+              onChange={this.updateState('is_facebook')}
+              value={this.state.is_facebook}
+            />
+            <Toggler
+              label='Galleries'
+              className='row-flex'
+              togglerClassName='size-180'
+              disabled={running}
+              name='is_gallery'
+              options={{
+                'Only': 1,
+                'Include': '',
+                'Omit': 0
+              }}
+              onChange={this.updateState('is_gallery')}
+              value={this.state.is_gallery}
+            />
             <div className='row-flex'>
               <span className='form-label'>Language:</span>
               <Select
@@ -333,50 +307,42 @@ export default class EditColumn extends EditForm {
                 value={this.state.language}
               />
             </div>
-            <div className='row'>
-              <label htmlFor='funColumnSearch'>Title/description contains:</label>
-              <input 
-                disabled={running}
-                value={this.state.search}
-                onChange={this.updateState('search')}
-                id='funColumnSearch'
-                type='text'
-                name='search'
-              />
-            </div>
-            <div className='row'>
-              <label htmlFor='funColumnUrl'>URL contains:</label>
-              <input 
-                disabled={running}
-                value={this.state.url}
-                onChange={this.updateState('url')}
-                id='funColumnUrl'
-                type='text'
-                name='url'
-              />
-            </div>
-            <div className='row'>
-              <label htmlFor='funColumnAuthor'>Author contains:</label>
-              <input 
-                disabled={running}
-                value={this.state.author}
-                onChange={this.updateState('author')}
-                id='funColumnAuthor'
-                type='text'
-                name='author'
-              />
-            </div>
-            <div className='row'>
-              <label htmlFor='funColumnExclude'>Title/description does not contain:</label>
-              <input 
-                disabled={running}
-                value={this.state.exclude_search}
-                onChange={this.updateState('exclude_search')}
-                id='funColumnExclude'
-                type='text'
-                name='exclude_search'
-              />
-            </div>
+            <TextInput
+              className='row'
+              id='funColumnSearch'
+              name='search'
+              label='Title/description contains'
+              disabled={running}
+              value={this.state.search}
+              onChange={this.updateState('search')}
+            />
+            <TextInput
+              className='row'
+              id='funColumnUrl'
+              name='url'
+              label='URL contains'
+              disabled={running}
+              value={this.state.url}
+              onChange={this.updateState('url')}
+            />
+            <TextInput
+              className='row'
+              id='funColumnAuthor'
+              name='author'
+              label='Author contains'
+              disabled={running}
+              value={this.state.author}
+              onChange={this.updateState('author')}
+            />
+            <TextInput
+              className='row'
+              id='funColumnExclude'
+              name='exclude_search'
+              label='Title/description does not contains'
+              disabled={running}
+              value={this.state.exclude_search}
+              onChange={this.updateState('exclude_search')}
+            />
             <div className='row-flex'>
               <span className='form-label'>Found since/before <i><b>n</b></i> hours ago:</span>
               <div className='row-time-gap'>
