@@ -12,7 +12,8 @@ import { getReports } from './reports';
 export const defaultApp = {
   state: 1,
   loadingStep: 1,
-  userAuthenticated: false
+  userAuthenticated: false,
+  error: null
 }
 
 export default function reducer (state = defaultApp, action) {
@@ -29,6 +30,8 @@ export default function reducer (state = defaultApp, action) {
     case ACTIONS.GET_SOURCES:
     case ACTIONS.GET_COLUMNS:
       return {...state, loadingStep: state.loadingStep + 1 }
+    case ACTIONS.ERROR:
+      return {...state, error: action.error}
     case ACTIONS.SET_APP_STATE:
       return {...state, state: action.state}
     default:
@@ -38,6 +41,10 @@ export default function reducer (state = defaultApp, action) {
 
 export const errorHandler = (error) => (dispatch) => {
   if (error instanceof Error || error.event) {
+    dispatch({
+      type: ACTIONS.ERROR,
+      error: error.toString()
+    })
     throw error;
   } else {
     // Create notification of process failed ending

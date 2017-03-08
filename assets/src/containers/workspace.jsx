@@ -81,7 +81,7 @@ class Workspace extends React.Component {
           <MainNav routes={routes} toggle={this.handlerSidebar} logout={this.handlerLogout} />
         </aside>
         <div className='screen-content'>
-          <Dashboard />
+          <Dashboard location={this.props.location} />
           {this.props.children}
         </div>
       </section>

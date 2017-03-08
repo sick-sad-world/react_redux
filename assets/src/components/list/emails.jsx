@@ -48,7 +48,6 @@ export default class EmailList extends React.Component {
 
   addEmail (e) {
     e.preventDefault();
-    console.log(e.target);
     if (includes(this.props.data, this.state.new)) {
       if (this.props.onError instanceof Function ) this.props.onError('You already have this email in list, try another one.');
     } else {

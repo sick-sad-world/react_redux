@@ -15,6 +15,13 @@ class App extends React.Component {
   render () {
     return (
       <div>
+        { (this.props.error) ? (
+          <div className='global-error'>
+            <h3>Oops! Error encountered</h3>
+            <p>{this.props.error}</p>
+            <small>Please contact us and provide details. So we able to fix it.</small>
+          </div>
+        ) : null }
         { (this.props.state === 1) ? <ProgressTracker step={this.props.loadingStep} /> : this.props.children }
         <Notifications/>
       </div>

@@ -2,7 +2,7 @@
 // ===========================================================================
 import classNames from 'classnames';
 import { inject, updateArrayWithValue } from '../../helpers/functions';
-import { reject, includes, reduce, concat } from 'lodash';
+import { reject, includes, reduce, concat, bindAll } from 'lodash';
 import deletable from '../../helpers/deletable';
 
 // Import React related stuff
@@ -24,6 +24,7 @@ export default class EditSet extends EditForm {
     super(props);
     inject(this, deletable);
     this.state.deleting = 0;
+    bindAll(this, 'renderSource');
   }
 
   mapDataToState (data) {
@@ -40,13 +41,31 @@ export default class EditSet extends EditForm {
     return (id instanceof Array) ? concat(this.state.source_ids, id) : updateArrayWithValue(this.state.source_ids, id);
   }
 
+  makeStateUpdater(id) {
+    return () => this.updateState('source_ids', 'getSourceIds')(id);
+  }
+
+  renderSource (acc, source) {
+    let btn = null;
+    if (includes(this.state.source_ids, source.id)) {
+      if (includes(this.state.uniq_ids, source.id)) {
+        btn = <a onClick={this.makeDeleteToggler(source.id)} title='Delete this source'><Icon icon='trash' /></a>;
+      } else {
+        btn = <a onClick={this.makeStateUpdater(source.id)} title='Remove this source from set'><Icon icon='forward' /></a>;
+      }
+      acc.push(<Source key={source.id} sortable={false} button={btn} {...source} />);
+    }
+    if (this.state.deleting === source.id) {
+      acc.push(this.renderDeleteDialog());
+    }
+    return acc;
+  }
+
   render () {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
     if (!this.props.data) return null;
     let running = this.props.state > 2;
-
-    let sourceHandler = this.updateState('source_ids', 'getSourceIds');
 
     return (
       <section className={classNames({
@@ -81,24 +100,15 @@ export default class EditSet extends EditForm {
                   <span>Sourceset has {this.state.source_ids.length} sources total.</span>
                 </div>
                 <ul className='entity-list'>
-                  {(this.state.source_ids.length) ? reduce(this.props.sources, (acc, source) => {
-                    let btn = null;
-                    if (includes(this.state.source_ids, source.id)) {
-                      if (includes(this.state.uniq_ids, source.id)) {
-                        btn = <a onClick={this.makeDeleteToggler(source.id)} title='Delete this source'><Icon icon='trash' /></a>;
-                      } else {
-                        btn = <a onClick={() => sourceHandler(source.id)} title='Remove this source from set'><Icon icon='forward' /></a>;
-                      }
-                      acc.push(<Source key={source.id} sortable={false} button={btn} {...source} />);
-                    }
-                    if (this.state.deleting === source.id) {
-                      acc.push(this.renderDeleteDialog());
-                    }
-                    return acc;
-                  }, []) : this.props.emptyTpl}
+                  {(this.state.source_ids.length) ? reduce(this.props.sources, this.renderSource, []) : this.props.emptyTpl}
                 </ul>
               </div>
-              <FeedsList sets={reject(this.props.sets, {id: this.state.id})} sources={this.props.sources} disable={{source: this.state.source_ids}} action={sourceHandler} />
+              <FeedsList
+                sets={reject(this.props.sets, {id: this.state.id})}
+                sources={this.props.sources}
+                disable={{source: this.state.source_ids}}
+                action={this.updateState('source_ids', 'getSourceIds')}
+              />
             </section>
           </div>
         </form>

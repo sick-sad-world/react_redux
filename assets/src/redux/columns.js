@@ -39,6 +39,50 @@ export const defColumn = {
   data: defColumnData
 };
 
+export const defColumnSorting = {
+  sortPrefix: [{
+    label: 'rate',
+    value: 'rate'
+  }, {
+    label: 'maxrate',
+    value: 'maxrate'
+  }, {
+    label: 'hotness',
+    value: 'hotness'
+  }, {
+    label: 'acc',
+    value: 'acc'
+  }],
+  sortProperty: [{
+    label: 'found',
+    value: 'found'
+  }, {
+    label: 'tweets',
+    value: 'tweets'
+  }, {
+    label: 'likes',
+    value: 'likes'
+  }, {
+    label: 'shares',
+    value: 'shares'
+  }, {
+    label: 'pins',
+    value: 'pins'
+  }, {
+    label: 'comments_video',
+    value: 'comments_video'
+  }, {
+    label: 'comments',
+    value: 'comments'
+  }, {
+    label: 'votes_video',
+    value: 'votes_video'
+  }, {
+    label: 'views_video',
+    value: 'views_video'
+  }]
+}
+
 export const defColumnParameters = {
   advRegExp: /MIN|MAX|LIKE/,
   displaySettings: [
@@ -117,55 +161,13 @@ export const defColumnParameters = {
   }, {
     label: '10min',
     value: 600
-  }],
-  sortPrefix: [{
-    label: 'rate',
-    value: 'rate'
-  }, {
-    label: 'maxrate',
-    value: 'maxrate'
-  }, {
-    label: 'hotness',
-    value: 'hotness'
-  }, {
-    label: 'acc',
-    value: 'acc'
-  }],
-  sortProperty: [{
-    label: 'found',
-    value: 'found'
-  }, {
-    label: 'tweets',
-    value: 'tweets'
-  }, {
-    label: 'likes',
-    value: 'likes'
-  }, {
-    label: 'shares',
-    value: 'shares'
-  }, {
-    label: 'pins',
-    value: 'pins'
-  }, {
-    label: 'comments_video',
-    value: 'comments_video'
-  }, {
-    label: 'comments',
-    value: 'comments'
-  }, {
-    label: 'votes_video',
-    value: 'votes_video'
-  }, {
-    label: 'views_video',
-    value: 'views_video'
   }]
 };
 
 export const decomposeColumnSort = (sort = defColumnData.sort) => {
-  let prefix = find(defColumnParameters.sortPrefix, (pref) => sort.indexOf(pref.value) > -1);
-  let property = find(defColumnParameters.sortProperty, (prop) => sort.indexOf(prop.value) > -1);
+  let prefix = find(defColumnSorting.sortPrefix, (pref) => sort.indexOf(pref.value) > -1);
+  let property = find(defColumnSorting.sortProperty, (prop) => sort.indexOf(prop.value) > -1);
   return {
-    sort: undefined,
     sort_pref: (prefix) ? prefix.value : '',
     sort_prop: (property) ? property.value : '',
   }

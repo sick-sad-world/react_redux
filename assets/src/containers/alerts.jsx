@@ -62,7 +62,14 @@ class Alerts extends React.Component {
           <ListItem url={this.props.route.path} current={this.props.curId} deleteText='Delete this alert' />
         </ListSection>
         {(this.props.chosen) ? (
-          <EditAlert data={this.props.chosen} state={this.props.state} columns={this.props.columns} update={this.updateItem} backPath={this.props.route.path} />
+          <EditAlert
+            data={this.props.chosen}
+            state={this.props.state}
+            current={this.props.curId}
+            columns={this.props.columns}
+            update={this.updateItem}
+            backPath={this.props.route.path}
+          />
         ) : null}
       </div>
     )

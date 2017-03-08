@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { includes, pickBy, map, forOwn } from 'lodash';
+import { includes, forOwn} from 'lodash';
 import classNames from 'classnames';
 import { updateArrayWithValue } from '../../helpers/functions';
 import { defColumnParameters, defColumn } from '../../redux/columns';
@@ -13,11 +13,12 @@ import React from 'react';
 // ===========================================================================
 import { Link } from 'react-router';
 import Icon from '../icon';
+import EditForm from './edit-form';
 import Sorting from '../forms/sorting';
 import TextInput from '../forms/input-text';
-import EditForm from './edit-form';
-import Select from 'react-select';
+import Dropdown from '../forms/dropdown';
 import Toggler from '../forms/toggler';
+import AdvFilters from '../forms/adv-filters';
 
 // Edit Column
 // ===========================================================================
@@ -25,23 +26,36 @@ export default class EditColumn extends EditForm {
 
   mapDataToState (data) {
     let display_settings =  data.display_settings || defColumn.display_settings;
+    let advanced_filters = {};
+    let columnData = {};
+
+    forOwn(data.data, (v, k) => {
+      if (this.props.advRegExp.test(k)) {
+        advanced_filters[k] = v;
+      } else {
+        columnData[k] = v;
+      }
+    })
+
     return {
-      ...defColumn.data,
-      ...data.data,
       name: data.name,
-      display_settings: (typeof display_settings === 'string') ? display_settings.split(',') : display_settings,
       changed: [],
-      adv_type: 'MIN',
-      adv_pref: '',
-      adv_prop: 'likes',
-      adv_val: ''
+      display_settings: (typeof display_settings === 'string') ? display_settings.split(',') : display_settings,
+      advanced_filters,
+      ...defColumn.data,
+      ...columnData
+      //...omit(data.data, this.props.advRegExp),
+      //advanced_filters: pick(data.data, this.props.advRegExp)
+      //advanced_filters: pick(data.data, (v, k) => this.props.advRegExp.test(k) && v !== undefined)
     };
   }
 
   updateSorting () {
-    return (sorting) => {
-      this.stateUpdater(sorting);
-    };
+    return (data) => this.stateUpdater(data);
+  }
+
+  updateFilters () {
+    return (data) => this.stateUpdater({advanced_filters: data});
   }
 
   updateHandler (e) {
@@ -51,37 +65,21 @@ export default class EditColumn extends EditForm {
       id: this.props.data.id,
       name: this.state.name,
       display_settings: this.state.display_settings,
-      data: {}
+      data: {...this.state.advanced_filters}
     };
 
     forOwn(this.state, (v, k) => {
       if (
-        v === '' ||
-        data.hasOwnProperty(k) ||
-        k === 'display_settings' ||
-        k === 'changed' ||
-        k.indexOf('sort') === 0 ||
-        k.indexOf('adv_') === 0 ||
-        (v instanceof Array && !v.length)
+        v === '' ||                       // Not empty
+        data.hasOwnProperty(k) ||         // Already in data
+        k === 'display_settings' ||       // Not display_settings
+        k === 'changed' ||                // Not changed
+        k === 'advanced_filters' ||             // Not advanced filters
+        (v instanceof Array && !v.length) // Not empty Array
       ) return;
       data.data[k] = v;
     });
     return this.props.update(data, this.state.changed);
-  }
-
-  createAdvFilter () {
-    return (e) => {
-      e.preventDefault();
-      let { adv_type, adv_pref, adv_prop, adv_val} = this.state;
-      let name = `${adv_type}(${(adv_pref) ? adv_pref+'_'+adv_prop : adv_prop})`;
-      this.stateUpdater({
-        [name]: (adv_val > 0) ? adv_val: undefined
-      });
-    }
-  }
-
-  removeAdvFilter (name) {
-    return () => this.stateUpdater({name: undefined});
   }
 
   getDisplaySettings(e) {
@@ -97,8 +95,6 @@ export default class EditColumn extends EditForm {
     // ===========================================================================
     if (!this.props.data) return null;
     let running = this.props.state > 2;
-
-    let advFilters = pickBy(this.state, (v, k) => this.props.advRegExp.test(k) && v !== undefined);
 
     // Create display settings
     // ===========================================================================
@@ -189,21 +185,17 @@ export default class EditColumn extends EditForm {
               onChange={this.updateState('infinite')}
               value={this.state.infinite}
             />
-            <div className='row-flex'>
-              <span className='form-label'>Autoreloading</span>
-              <Select
-                disabled={running}
-                className='size-120'
-                name='autoreload'
-                placeholder='Disabled...'
-                options={this.props.autoReloadOptions}
-                onChange={this.updateState('autoreload', 'getAutoreload')}
-                autosize={false}
-                clearable={true}
-                searchable={false}
-                value={this.state.autoreload}
-              />
-            </div>
+            <Dropdown
+              disabled={running}
+              className='row-flex'
+              label='Autoreloading'
+              selectClassName='size-120'
+              name='autoreload'
+              options={this.props.autoReloadOptions}
+              onChange={this.updateState('autoreload', 'getAutoreload')}
+              clearable={true}
+              value={this.state.autoreload}
+            />
             <TextInput
               className='row-flex'
               inputClassName='size-120'
@@ -289,21 +281,17 @@ export default class EditColumn extends EditForm {
               onChange={this.updateState('is_gallery')}
               value={this.state.is_gallery}
             />
-            <div className='row-flex'>
-              <span className='form-label'>Language:</span>
-              <Select
-                disabled={running}
-                className='size-180'
-                name='language'
-                placeholder='Any'
-                options={this.props.language}
-                onChange={this.updateState('language')}
-                autosize={false}
-                clearable={true}
-                searchable={false}
-                value={this.state.language}
-              />
-            </div>
+            <Dropdown
+              disabled={running}
+              className='row-flex'
+              label='Language'
+              selectClassName='size-180'
+              name='language'
+              options={this.props.language}
+              onChange={this.updateState('language')}
+              clearable={true}
+              value={this.state.language}
+            />
             <TextInput
               className='row'
               name='search'
@@ -362,75 +350,11 @@ export default class EditColumn extends EditForm {
               </div>
             </div>
           </div>
-          <div className='form-block adv-filters'>
-            <ul className='tag-list row'>
-              { (Object.keys(advFilters).length) ?
-                  map(advFilters, (v, k) => 
-                    <li key={`${k}=${v}`}>{`${k}=${v}`}<span onClick={this.removeAdvFilter(k)} ><Icon icon='cross' /></span></li>)
-                      : this.props.tplAdvFiltersEmpty }
-            </ul>
-            <fieldset>
-              <legend>Advanced filtering options:</legend>
-              <div className='row-flex'>
-                <Select
-                  disabled={running}
-                  className='size-90'
-                  name='adv_type'
-                  options={[{value: 'MIN', label: 'MIN'}, {value: 'MAX', label: 'MAX'}]}
-                  onChange={(v) => this.setState({adv_type: (v) ? v.value : ''})}
-                  autosize={false}
-                  clearable={false}
-                  searchable={false}
-                  value={this.state.adv_type}
-                />
-                <Select
-                  disabled={running}
-                  className='size-120'
-                  name='adv_pref'
-                  placeholder='Prefix...'
-                  options={this.props.sortPrefix}
-                  onChange={(v) => this.setState({adv_pref: (v) ? v.value : ''})}
-                  autosize={false}
-                  clearable={true}
-                  searchable={false}
-                  value={this.state.adv_pref}
-                />
-                <Select
-                  disabled={running}
-                  className='size-180'
-                  name='adv_prop'
-                  options={this.props.sortProperty}
-                  onChange={(v) => this.setState({adv_prop: (v) ? v.value : ''})}
-                  autosize={false}
-                  clearable={false}
-                  searchable={false}
-                  value={this.state.adv_prop}
-                />
-                <input 
-                  disabled={running}
-                  className='size-120'
-                  onChange={(e) => this.setState({adv_val: (e.target.value.length) ? parseFloat(e.target.value) : 0})}
-                  value={this.state.adv_val}
-                  type='number'
-                  step='0.001'
-                  placeholder='Amount...'
-                  name='adv_val'
-                />
-                <a onClick={this.createAdvFilter()} disabled={running} className='button is-accent size-60'>Add</a>
-              </div>
-            </fieldset>
-            <small className='form-description row'>
-              <p>Use advanced filters to set additional limits on the values certain attributes of the items in the column can have. Use the ADD button to add a new advanced filter. Multiple advanced filters can be active at the same time.</p>
-              <dl>
-                <dt>MAX(xxxxx)</dt>
-                <dd>maximum allowed value for xxxxxx (where xxxxx is a valid column name*)</dd>
-              </dl>
-              <dl>
-                <dt>MIN(xxxxx)</dt>
-                <dd>minimum allowed value for xxxxxx (where xxxxx is a valid column name*)</dd>
-              </dl>
-            </small>
-          </div>
+          <AdvFilters
+            value={this.state.advanced_filters}
+            disabled={running}
+            onChange={this.updateFilters()}
+          />
         </form>
       </section>
     );
@@ -443,6 +367,5 @@ EditColumn.defaultProps = {
     description: 'Select the type of items to show in this column and how to display them.',
     confirmation: '{data} was changed. Save changes?'
   },
-  tplAdvFiltersEmpty: (<li className='is-default'><i>No advanced filters configured for this column. Click below to add one or more.</i></li>),
   ...defColumnParameters
 };

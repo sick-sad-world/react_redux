@@ -20,7 +20,9 @@ export default class EditForm extends React.Component {
   }
 
   componentWillReceiveProps (newProps) {
-    if (newProps.state === 2 && this.props.state !== newProps.state) this.setState(this.mapDataToState(newProps.data));
+    if ((newProps.state === 2 && this.props.state !== newProps.state) || this.props.current !== newProps.current) {
+      this.setState(this.mapDataToState(newProps.data));
+    }
   }
 
   getValue (e) {
@@ -86,7 +88,7 @@ export default class EditForm extends React.Component {
 
     let text = this.props.texts.confirmation;
     if (text.indexOf('{data}') > -1) {
-      text = text.replace('{data}', this.state.changed.map((change => capitalize(change))).join(', '));
+      text = text.replace('{data}', this.state.changed.map((change => capitalize(change).replace('_', ' '))).join(', '));
     }
 
     return (

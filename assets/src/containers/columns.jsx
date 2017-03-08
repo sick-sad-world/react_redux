@@ -74,9 +74,20 @@ class Columns extends React.Component {
     
     if (this.props.chosen && this.props.curId) {
       if (this.props.params.assignment) {
-        Edit = <AssignFeedsToColumn data={this.props.chosen} state={this.props.state} update={this.updateItem} backPath={`${this.props.route.path}/${this.props.curId}`} />;
+        Edit = <AssignFeedsToColumn
+          data={this.props.chosen}
+          state={this.props.state}
+          update={this.updateItem}
+          backPath={`${this.props.route.path}/${this.props.curId}`}
+        />;
       } else {
-        Edit = <EditColumn data={this.props.chosen} state={this.props.state} update={this.updateItem} backPath={this.props.route.path} />;
+        Edit = <EditColumn
+          data={this.props.chosen}
+          state={this.props.state}
+          update={this.updateItem}
+          current={this.props.curId}
+          backPath={this.props.route.path}
+        />;
       }
     }
 

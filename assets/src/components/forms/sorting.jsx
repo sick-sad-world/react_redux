@@ -1,7 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 import Icon from '../icon';
-import { defColumnParameters, decomposeColumnSort, composeColumnSort } from '../../redux/columns';
+import { defColumnSorting, decomposeColumnSort, composeColumnSort } from '../../redux/columns';
 
 // Sorting dropdonws and direction toggler
 // ===========================================================================
@@ -12,7 +12,9 @@ export default class Sorting extends React.Component {
   }
 
   componentWillReceiveProps (newProps) {
-    if (this.props.running === newProps.running) this.mapDataToState(newProps);
+    if (this.props.value !== newProps.value && this.props.direction !== newProps.direction) {
+      this.setState(this.mapDataToState(newProps));
+    }
   }
 
   mapDataToState ({value, direction}) {
@@ -78,6 +80,5 @@ export default class Sorting extends React.Component {
 }
 
 Sorting.defaultProps = {
-  sortPrefix: defColumnParameters.sortPrefix,
-  sortProperty: defColumnParameters.sortProperty
+  ...defColumnSorting
 }

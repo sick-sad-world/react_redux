@@ -1,6 +1,7 @@
 
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
+export const ERROR = 'ERROR';
 export const SET_APP_STATE = 'SET_APP_STATE';
 export const PUSH_NOTIFICATION = 'PUSH_NOTIFICATION';
 

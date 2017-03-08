@@ -63,7 +63,15 @@ class Reports extends React.Component {
           <ListItem url={this.props.route.path} current={this.props.curId} deleteText='Delete this report' />
         </ListSection>
         {(this.props.chosen) ? (
-          <EditReport data={this.props.chosen} state={this.props.state} columns={this.props.columns} create={this.createItem} update={this.updateItem} backPath={this.props.route.path} />
+          <EditReport
+            data={this.props.chosen}
+            state={this.props.state}
+            current={this.props.curId}
+            columns={this.props.columns}
+            create={this.createItem}
+            update={this.updateItem}
+            backPath={this.props.route.path}
+          />
         ) : null}
       </div>
     )

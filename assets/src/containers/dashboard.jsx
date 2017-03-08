@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, find, defaultsDeep } from 'lodash';
+import { bindAll, find, defaultsDeep, isEqual } from 'lodash';
 
 
 // Import React related stuff
@@ -22,7 +22,12 @@ import { editColumn, deleteColumn, defColumn } from '../redux/columns';
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
+    console.log('Dashboard mount');
     bindAll(this, 'updateItem', 'refreshResults', 'pushResults', 'deleteItem');
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return !isEqual(this.props.payload, nextProps.payload) || nextProps.location.pathname === '/';
   }
 
   createList (func) {
@@ -65,6 +70,7 @@ class Dashboard extends React.Component {
   }
 
   render () {
+    console.log('Dashboard render');
     return (
       <div className='mod-dashboard'>
         {this.createList((acc, column) => {

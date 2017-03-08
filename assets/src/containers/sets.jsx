@@ -88,6 +88,7 @@ class Sourcesets extends React.Component {
           <EditSet
             data={this.props.chosen}
             state={this.props.state}
+            current={this.props.curId}
             sets={this.props.sets}
             sources={this.props.sources}
             update={this.updateItem}
