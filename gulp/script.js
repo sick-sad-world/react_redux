@@ -7,6 +7,7 @@ const uglify = require('gulp-uglify');
 const gzip = require('gulp-gzip');
 const source = require('vinyl-source-stream2');
 const watchify = require('watchify');
+const sourcemaps = require('gulp-sourcemaps');
 const livereactload = require('livereactload');
 const gutil = require('gulp-util');
 
@@ -26,7 +27,13 @@ module.exports = (BASE, JSROOT) => {
       return () => {
         let b = this.bundle(true);
 
-        let _build = () => b.bundle().on('error', (err) => gutil.log(err.stack)).pipe(source(JSROOT)).pipe(gulp.dest(TARGET));
+        let _build = () => b.bundle()
+          .on('error', (err) => gutil.log(err.stack))
+          .pipe(source(JSROOT))
+          .pipe(buffer())
+          // .pipe(sourcemaps.init({loadMaps: true}))
+          // .pipe(sourcemaps.write())
+          .pipe(gulp.dest(TARGET));
         
         b.on('update', () => {
           gutil.log('Rerunning browserify...');
