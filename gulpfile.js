@@ -34,7 +34,7 @@ gulp.task('sass:prod', sass.production(BUILD));
 // Define tasks for javascript processng
 // ===========================================================================
 gulp.task('bundle:dev', script.development(BASE));
-gulp.task('bundle:demo', script.production(BASE));
+gulp.task('bundle:demo', script.demo(BASE));
 gulp.task('bundle:prod', script.production(BUILD, PREAMBLE));
 
 // Define tasks for image processng
