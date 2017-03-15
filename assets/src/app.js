@@ -2,25 +2,6 @@
 // ===========================================================================
 import 'babel-polyfill';
 
-// Imports related to State tree
-// ===========================================================================
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
-import app from './redux/app';
-import user from './redux/user';
-import notifications from './redux/notifications';
-import columns from './redux/columns';
-import results from './redux/results';
-import sets from './redux/sets';
-import sources from './redux/sources';
-import alerts from './redux/alerts';
-import reports from './redux/reports';
-
-// Import all required actions
-// ===========================================================================
-import { getUser } from './redux/user';
-import { setAppState, fetchData, getAllResults, errorHandler } from './redux/app';
-
 // Import all stuff related to React
 // ===========================================================================
 import React from 'react';
@@ -30,7 +11,8 @@ import { Provider } from 'react-redux';
 // React routing and connection to store
 // ===========================================================================
 import { Router, Route, Redirect, browserHistory } from 'react-router';
-import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
+import { syncHistoryWithStore } from 'react-router-redux';
+import TrendolizerStore from './redux';
 
 // Import components wich represents each of App sections
 // ===========================================================================
@@ -43,27 +25,6 @@ import Alerts from './containers/alerts';
 import Reports from './containers/reports';
 import User from './containers/user';
 
-// Compose reducers
-// ===========================================================================
-let composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
-// Create actual store
-// ===========================================================================
-let TrendolizerStore = createStore(
-  combineReducers({
-    app,
-    user,
-    notifications,
-    results,
-    columns,
-    sets,
-    sources,
-    alerts,
-    reports,
-    routing: routerReducer
-  }),
-  composeEnhancers(applyMiddleware(thunk))
-);
 
 // Render an actual App
 // ===========================================================================
@@ -97,12 +58,3 @@ render(
   </Provider>,
   document.getElementById('appRoot')
 );
-
-// Ask server about initial data
-// ===========================================================================
-TrendolizerStore
-  .dispatch(getUser(null, {state: false, notification: false}))
-  .then(() => TrendolizerStore.dispatch(fetchData()))
-  .then((data) => TrendolizerStore.dispatch(getAllResults(data)))
-  .catch((err) => TrendolizerStore.dispatch(errorHandler(err)))
-  .then(() => TrendolizerStore.dispatch(setAppState(2)));

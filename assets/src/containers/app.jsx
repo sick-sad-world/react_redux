@@ -9,13 +9,18 @@ import ProgressTracker from '../components/progress-tracker';
 import ClientError from '../components/client-error';
 import Notifications from './notifications';
 
+// Import all required actions
+// ===========================================================================
+import { getUser } from '../redux/user';
+import { setAppState, fetchData, getAllResults, errorHandler } from '../redux/app';
+
 // This is CORE APP Component
 // It renders app if state > 1 or Progressbar if not
 // ===========================================================================
 class App extends React.Component {
 
   componentWillMount() {
-    
+    this.props.getInitialData();
   }
 
   render () {
@@ -33,4 +38,16 @@ class App extends React.Component {
 // Transform app state to component props
 // @ deps -> App
 // ===========================================================================
-export default connect(({app}) => ({...app}))(App);
+const mapStateToProps = ({app}) => ({...app});
+
+const mapDispatchToProps = (dispatch) => ({
+  getInitialData () {
+    dispatch(getUser(null, {state: false, notification: false}))
+      .then(() => dispatch(fetchData()))
+      .then((data) => dispatch(getAllResults(data)))
+      .catch((err) => dispatch(errorHandler(err)))
+      .then(() => dispatch(setAppState(2)));
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
