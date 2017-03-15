@@ -29,7 +29,7 @@ import { Provider } from 'react-redux';
 
 // React routing and connection to store
 // ===========================================================================
-import { Router, Route, IndexRoute, Redirect, browserHistory } from 'react-router';
+import { Router, Route, Redirect, browserHistory } from 'react-router';
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 
 // Import components wich represents each of App sections
@@ -37,7 +37,6 @@ import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 import App from './containers/app';
 import Auth from './containers/auth';
 import Workspace from './containers/workspace';
-import Dashboard from './containers/dashboard';
 import Columns from './containers/columns';
 import Sourcesets from './containers/sets';
 import Alerts from './containers/alerts';
@@ -66,15 +65,11 @@ let TrendolizerStore = createStore(
   composeEnhancers(applyMiddleware(thunk))
 );
 
-// Sync App history with store
-// ===========================================================================
-let history = syncHistoryWithStore(browserHistory, TrendolizerStore);
-
 // Render an actual App
 // ===========================================================================
 render(
   <Provider store={TrendolizerStore}>
-    <Router history={history}>
+    <Router history={syncHistoryWithStore(browserHistory, TrendolizerStore)}>
       <Route components={App}>
         <Route path='/auth' component={Auth} />
         <Route path='/' component={Workspace}>

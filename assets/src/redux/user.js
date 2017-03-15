@@ -1,4 +1,4 @@
-import { GET_USER, EDIT_USER, SET_USER_STATE, LOGOUT } from '../helpers/types';
+import { LOGIN, LOGOUT, GET_USER, EDIT_USER, SET_USER_STATE } from '../helpers/types';
 import createAction from '../helpers/action-factory';
 
 export const defaultUser = {
@@ -33,6 +33,22 @@ export default function reducer (state = {...defaultUser}, action) {
 export const setUserState = (state) => ({
   type: SET_USER_STATE,
   state
+});
+
+export const login = createAction({
+  type: LOGIN,
+  state_type: null,
+  url: 'login',
+  pendingMessage: 'Check auth credentials...',
+  successMessage: 'Logged in.'
+});
+
+export const logout = createAction({
+  type: LOGOUT,
+  state_type: null,
+  url: 'logout',
+  pendingMessage: 'Shutting down session...',
+  successMessage: 'Logged out.'
 });
 
 export const getUser = createAction({

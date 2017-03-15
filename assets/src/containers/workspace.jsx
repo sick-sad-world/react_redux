@@ -11,12 +11,13 @@ import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
-import { errorHandler, logout } from '../redux/app';
+import { errorHandler } from '../redux/app';
+import { logout } from '../redux/user';
 
 // Import Child components
 // ===========================================================================
 import MainNav from '../components/main-nav';
-import UserBlock from '../components/briefInfo';
+import UserBlock from '../components/brief-info';
 import Dashboard from './dashboard';
 
 // Main app screen - where all fun is taking place
@@ -30,7 +31,7 @@ class Workspace extends React.Component {
     // Set initial state
     // ===========================================================================
     this.state = {
-      sidebar: this.props.sidebar || true
+      sidebar: true
     };
 
     // Bind handlers to our component
@@ -41,13 +42,13 @@ class Workspace extends React.Component {
   // Redirect to auth if user is unauthentificated
   // ===========================================================================
   componentWillMount() {
-    !this.props.userAuthenticated && this.props.router.push('/auth');
+    !this.props.payload.id && this.props.router.push('/auth');
   }
 
   // Redirect to auth if user is unauthentificated
   // ===========================================================================
   componentWillUpdate(newProps) {
-    !newProps.userAuthenticated && this.props.router.push('/auth');
+    !newProps.payload.id && this.props.router.push('/auth');
   }
 
   // Handler for toggling sidebar state
@@ -65,8 +66,7 @@ class Workspace extends React.Component {
   // Render our screen
   // ===========================================================================
   render() {
-    if (!this.props.userAuthenticated) return null;
-
+    let { payload } = this.props;
     let routes = this.props.route.childRoutes.map(({label, path, icon}) => ({label, path, icon}));
 
     // Return JSX layout of a component
@@ -77,7 +77,7 @@ class Workspace extends React.Component {
           'sidebar': true,
           'is-expanded': this.state.sidebar
         })}>
-          <UserBlock {...this.props.user} />
+          <UserBlock fullname={payload.fullname} position={payload.position} image={payload.image} />
           <MainNav routes={routes} toggle={this.handlerSidebar} logout={this.handlerLogout} />
         </aside>
         <div className='screen-content'>
@@ -92,11 +92,7 @@ class Workspace extends React.Component {
 // Connect our Container to State
 // @ deps -> App, (User in future)
 // ===========================================================================
-const mapStateToProps = ({app, user}) =>({
-  ...app,
-  sidebar: true,
-  user: pick(user.payload, ['fullname', 'image', 'position'])
-});
+const mapStateToProps = ({app, user}) =>({...user});
 
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
   logout,

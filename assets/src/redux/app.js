@@ -1,6 +1,5 @@
 import * as ACTIONS from '../helpers/types';
 import moment from 'moment';
-import createAction from '../helpers/action-factory';
 import { notification } from './notifications';
 import { getColumns } from './columns';
 import { getResults } from './results';
@@ -12,18 +11,11 @@ import { getReports } from './reports';
 export const defaultApp = {
   state: 1,
   loadingStep: 1,
-  userAuthenticated: false,
   error: null
 }
 
-export default function reducer (state = defaultApp, action) {
+export default function reducer (state = {...defaultApp}, action) {
   switch (action.type) {
-    case ACTIONS.LOGIN:
-      return {...state, userAuthenticated: true}
-    case ACTIONS.LOGOUT:
-      return {...state, userAuthenticated: false}
-    case ACTIONS.GET_USER:
-      return {...state, userAuthenticated: !!action.payload.id}
     case ACTIONS.GET_ALERTS:
     case ACTIONS.GET_REPORTS:
     case ACTIONS.GET_SETS:
@@ -69,22 +61,6 @@ export const errorHandler = (error) => (dispatch) => {
 export const setAppState = (state) => (dispatch) => dispatch({
   type: ACTIONS.SET_APP_STATE,
   state: state
-});
-
-export const login = createAction({
-  type: ACTIONS.LOGIN,
-  state_type: null,
-  url: 'login',
-  pendingMessage: 'Check auth credentials...',
-  successMessage: 'Logged in.'
-});
-
-export const logout = createAction({
-  type: ACTIONS.LOGOUT,
-  state_type: null,
-  url: 'logout',
-  pendingMessage: 'Shutting down session...',
-  successMessage: 'Logged out.'
 });
 
 export const fetchData = (options) => {

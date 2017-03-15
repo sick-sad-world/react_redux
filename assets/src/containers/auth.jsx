@@ -6,8 +6,8 @@ import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
-import { login, setAppState, fetchData, getAllResults, errorHandler } from '../redux/app';
-import { getUser } from '../redux/user';
+import { setAppState, fetchData, getAllResults, errorHandler } from '../redux/app';
+import { getUser, login } from '../redux/user';
 
 // Import Child components
 // ===========================================================================
@@ -43,20 +43,18 @@ class Auth extends React.Component {
   // Redirect to auth if user is unauthentificated
   // ===========================================================================
   componentWillMount() {
-    this.props.userAuthenticated && this.props.router.push('/');
+    this.props.payload.id && this.props.router.push('/');
   }
 
   // Redirect to auth if user is unauthentificated
   // ===========================================================================
   componentWillUpdate(newProps) {
-    newProps.userAuthenticated && this.props.router.push('/');
+    newProps.payload.id && this.props.router.push('/');
   }
 
   // Render our screen
   // ===========================================================================
   render() {
-    if (this.props.userAuthenticated) return null;
-
     // Set default texts for a page
     // ===========================================================================
     let { texts } = this.props;
@@ -95,9 +93,7 @@ Auth.defaultProps = {
 // Connect our Container to State
 // @ deps -> App
 // ===========================================================================
-const mapStateToProps = ({app}) => ({
-  userAuthenticated: app.userAuthenticated
-});
+const mapStateToProps = ({user}) => ({...user});
 
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
   login,

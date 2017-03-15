@@ -6,7 +6,7 @@
   "scripts": {
     "start": "gulp dev",
     "test": "jest",
-    "test-dev": "jest --watchAll",
+    "test-dev": "jest --watch",
     "prebundle": "gulp clean",
     "bundle": "gulp bundle",
     "prebuild": "gulp clean",
