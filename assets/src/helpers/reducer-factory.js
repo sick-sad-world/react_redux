@@ -12,6 +12,13 @@ export const mergeArrayById = (arr, obj) => {
   return result;
 }
 
+export const updateObjectById = (state, id, updater) => {
+  return {
+    ...state,
+    [id]: updater(state[id])
+  }
+}
+
 export default function createReducer (config) {
   return function reducer (state = {state: 1, payload: []}, action) {
     switch (action.type) {

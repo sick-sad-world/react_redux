@@ -44,7 +44,10 @@ const mapDispatchToProps = (dispatch) => ({
   getInitialData () {
     dispatch(getUser(null, {state: false, notification: false}))
       .then(() => dispatch(fetchData()))
-      .then((data) => dispatch(getAllResults(data)))
+      .then((data) => {
+        console.log(data);
+        return dispatch(getAllResults(data))
+      })
       .catch(() => {console.log('Not logged in');})
       .then(() => dispatch(setAppState(2)));
   }

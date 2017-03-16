@@ -40,8 +40,8 @@ export default createReducer({
   ADD: ADD_SET,
   REMOVE: REMOVE_SET,
   STATE: SET_SET_STATE,
-  EDIT_SET: (state, action) => state.map((item) => (item.id === action.id) ? {...item, ...action, sources: undefined} : {...item}),
-  GET_SETS: (state, action) => {
+  [EDIT_SET]: (state, action) => state.map((item) => (item.id === action.id) ? {...item, ...action, sources: undefined} : {...item}),
+  [GET_SETS]: (state, action) => {
     let feeds = calcFeedOccurance(action);
     action.forEach((set) => setUniqFeeds(set, feeds));
     return action;
