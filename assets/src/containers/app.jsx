@@ -12,7 +12,7 @@ import Notifications from './notifications';
 // Import all required actions
 // ===========================================================================
 import { getUser } from '../redux/user';
-import { setAppState, fetchData, getAllResults, errorHandler } from '../redux/app';
+import { setAppState, fetchData, getAllResults } from '../redux/app';
 
 // This is CORE APP Component
 // It renders app if state > 1 or Progressbar if not
@@ -45,7 +45,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(getUser(null, {state: false, notification: false}))
       .then(() => dispatch(fetchData()))
       .then((data) => dispatch(getAllResults(data)))
-      .catch((err) => dispatch(errorHandler(err)))
+      .catch(() => {console.log('Not logged in');})
       .then(() => dispatch(setAppState(2)));
   }
 });

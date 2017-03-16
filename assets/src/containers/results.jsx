@@ -11,7 +11,6 @@ import Icon from '../components/icon';
 
 // Import actions
 // ===========================================================================
-import { errorHandler } from '../redux/app';
 import { refreshResult, ignoreResult, favoriteResult } from '../redux/results';
 
 class Results extends React.Component {
@@ -26,17 +25,17 @@ class Results extends React.Component {
           return this.props.refreshResult(data, {
             id: this.props.id,
             state: false
-          }).catch(this.props.throwError);
+          });
         case 'ignore':
           return this.props.ignoreResult(data, {
             id: this.props.id,
             state: false
-          }).catch(this.props.throwError);
+          });
         case 'favorite':
           return this.props.favoriteResult(data, {
             id: this.props.id,
             state: false
-          }).catch(this.props.throwError);
+          });
       }
     }
   }
@@ -106,8 +105,7 @@ const mapStateToProps = ({results}, ownProps) => {
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   refreshResult,
   ignoreResult,
-  favoriteResult,
-  errorHandler
+  favoriteResult
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Results);

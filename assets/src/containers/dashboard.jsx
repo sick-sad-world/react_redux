@@ -15,14 +15,13 @@ import Column from '../components/column';
 
 // Import actions
 // ===========================================================================
-import { errorHandler } from '../redux/app';
 import { getResults, addResults } from '../redux/results';
 import { editColumn, deleteColumn, defColumn } from '../redux/columns';
 
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
-    console.log('Dashboard mount');
+    //console.log('Dashboard mount');
     bindAll(this, 'updateItem', 'refreshResults', 'pushResults', 'deleteItem');
   }
 
@@ -46,31 +45,36 @@ class Dashboard extends React.Component {
       if (payload.open && shouldRefresh) {
         return this.props.getResults(payload.data, {id: payload.id});
       }
-    }).catch(this.props.errorHandler);
+    });
   }
 
   refreshResults(id) {
     return (e) => {
       let column = find(this.props.payload, {id: id});
-      if (column) return this.props.getResults(column.data, {id: column.id}).catch(this.props.errorHandler);
+      if (column) return this.props.getResults(column.data, {id: column.id});
     }
   }
 
   pushResults(id) {
     return (offset) => {
       let column = find(this.props.payload, {id: id});
-      if (column) {
-        return this.props.addResults({ ...column.data, offset }, {id: column.id, state: false, notification: false}).catch(this.props.errorHandler);
-      }
+      if (column) return this.props.addResults({
+        ...column.data,
+        offset
+      }, {
+        id: column.id,
+        state: false,
+        notification: false
+      });
     }
   }
 
   deleteItem(id) {
-    this.props.deleteColumn({id}).catch(this.props.errorHandler);
+    this.props.deleteColumn({id});
   }
 
   render () {
-    console.log('Dashboard render');
+    //console.log('Dashboard render');
     return (
       <div className='mod-dashboard'>
         {this.createList((acc, column) => {
@@ -123,7 +127,6 @@ const mapStateToProps = ({columns}) => ({
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
   editColumn,
   deleteColumn,
-  errorHandler,
   getResults,
   addResults
 }, dispatch))

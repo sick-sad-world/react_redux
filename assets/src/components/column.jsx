@@ -27,7 +27,7 @@ export default class Column extends React.Component {
     this.interval = null;
     this.state = this.mapDataToState(props);
     bindAll(this, 'expandedStateToggler', 'hideColumn', 'scrollHandler');
-    console.log('Dashboard mount');
+    //console.log('Dashboard mount');
     this.debouncedScrollHandler = debounce(this.scrollHandler, 250);
   }
 
@@ -96,7 +96,7 @@ export default class Column extends React.Component {
     let running = this.props.state > 2;
     let open = this.props.open;
     let visIconData = this.props.visIconData;
-    console.log('Column render');
+    //console.log('Column render');
     return (
       <form className='column-settings'>
         <Sorting

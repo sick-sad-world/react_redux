@@ -11,7 +11,6 @@ import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
-import { errorHandler } from '../redux/app';
 import { logout } from '../redux/user';
 
 // Import Child components
@@ -60,7 +59,7 @@ class Workspace extends React.Component {
   // Handler for logout operation
   // ===========================================================================
   handlerLogout() {
-    this.props.logout().catch(this.props.errorHandler);
+    this.props.logout();
   }
 
   // Render our screen
@@ -92,11 +91,8 @@ class Workspace extends React.Component {
 // Connect our Container to State
 // @ deps -> App, (User in future)
 // ===========================================================================
-const mapStateToProps = ({app, user}) =>({...user});
+const mapStateToProps = ({user}) =>({...user});
 
-const mapDispatchToProps = (dispatch) => (bindActionCreators({
-  logout,
-  errorHandler
-}, dispatch));
+const mapDispatchToProps = (dispatch) => (bindActionCreators({ logout }, dispatch));
 
 export default connect(mapStateToProps, mapDispatchToProps)(Workspace);

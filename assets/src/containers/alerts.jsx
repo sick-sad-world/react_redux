@@ -10,7 +10,6 @@ import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
-import { errorHandler } from '../redux/app';
 import { notification } from '../redux/notifications';
 import { editAlert, deleteAlert, createAlert, defaultAlert } from '../redux/alerts';
 
@@ -34,17 +33,17 @@ class Alerts extends React.Component {
   }
 
   deleteItem (id) {
-    return this.props.deleteAlert({id}).catch(this.props.errorHandler);
+    return this.props.deleteAlert({id});
   }
 
   updateItem (data) {
     if (data.id) {
-      return this.props.editAlert(data).catch(this.props.errorHandler);
+      return this.props.editAlert(data);
     } else {
       delete data.id;
       return this.props.createAlert(data).then(({payload}) => {
         this.props.router.push(`${this.props.route.path}/${payload.id}`)
-      }).catch(this.props.errorHandler);
+      });
     }
   }
 
@@ -120,8 +119,7 @@ const mapDispatchToProps = (dispatch) => (bindActionCreators({
   createAlert,
   deleteAlert,
   editAlert,
-  notification,
-  errorHandler
+  notification
 }, dispatch))
 
 export default connect(mapStateToProps, mapDispatchToProps)(Alerts);

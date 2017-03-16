@@ -10,7 +10,6 @@ import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
-import { errorHandler } from '../redux/app';
 import { getResults } from '../redux/results';
 import { createColumn, editColumn, deleteColumn } from '../redux/columns';
 
@@ -29,15 +28,13 @@ class Columns extends React.Component {
   }
 
   createItem (value) {
-    this.props
-      .createColumn({ name: value })
+    this.props.createColumn({ name: value })
       .then(({payload}) => {
         this.props.router.push(`${this.props.route.path}/${payload.id}`);
         if (payload.open) {
           return this.props.getResults(payload.data, {id: payload.id});
         }
-      })
-      .catch(this.props.errorHandler);
+      });
   }
 
   updateItem(data, changed) {
@@ -45,17 +42,21 @@ class Columns extends React.Component {
       if (some(changed, (v) => !includes(this.props.notRelatedProps, v))) {
         return this.props.getResults(payload.data, {id: payload.id});
       }
-    }).catch(this.props.errorHandler);
+    });
   }
 
   deleteItem (id) {
-    return this.props.deleteColumn({id}).catch(this.props.errorHandler);
+    return this.props.deleteColumn({id});
   }
 
   makeItemIcon (props) {
     let { id, open } = props;
     let visIconData = this.props.visIconData;
-    return <a onClick={() => this.updateItem({id, open: (open) ? 0 : 1})} title={visIconData[open].title}><Icon icon={visIconData[open].icon} /></a>;
+    return (
+      <a onClick={() => this.updateItem({id, open: (open) ? 0 : 1})} title={visIconData[open].title}>
+        <Icon icon={visIconData[open].icon} />
+      </a>
+    );
   }
 
   render () {
@@ -135,8 +136,7 @@ const mapDispatchToProps = (dispatch) => (bindActionCreators({
   createColumn,
   editColumn,
   deleteColumn,
-  getResults,
-  errorHandler
+  getResults
 }, dispatch))
 
 export default connect(mapStateToProps, mapDispatchToProps)(Columns);

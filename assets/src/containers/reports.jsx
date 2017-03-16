@@ -10,7 +10,6 @@ import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
-import { errorHandler } from '../redux/app';
 import { editReport, deleteReport, defaultReport, createReport } from '../redux/reports';
 
 // Import Child components
@@ -33,17 +32,17 @@ class Reports extends React.Component {
   }
 
   deleteItem (id) {
-    return this.props.deleteReport({id}).catch(this.props.errorHandler);
+    return this.props.deleteReport({id});
   }
 
   updateItem (data) {
     if (data.id) {
-      return this.props.editReport(data).catch(this.props.errorHandler);
+      return this.props.editReport(data);
     } else {
       delete data.id;
       return this.props.createReport(data).then(({payload}) => {
         this.props.router.push(`${this.props.route.path}/${payload.id}`)
-      }).catch(this.props.errorHandler);
+      });
     }
   }
 
@@ -121,8 +120,7 @@ const mapStateToProps = ({reports, columns}, ownProps) => {
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
   createReport,
   editReport,
-  deleteReport,
-  errorHandler
+  deleteReport
 }, dispatch))
 
 export default connect(mapStateToProps, mapDispatchToProps)(Reports);

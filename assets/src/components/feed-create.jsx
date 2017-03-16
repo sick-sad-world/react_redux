@@ -407,7 +407,10 @@ export default class FeedCreate extends React.Component {
     // Show proper message if URL is not match criterea
     // ===========================================================================
     if (!url.length) {
-      return this.props.errorHandler({text: 'Provide reasonable url to test'});
+      return this.props.notification({
+        type: 'error',
+        text: 'Provide reasonable url to test'
+      });
     }
 
     // Run each of them (possible multiple items)
@@ -440,8 +443,7 @@ export default class FeedCreate extends React.Component {
               visible: messageText.length > 1
             }, messageId)
             this.setState(newState);
-          })
-          .catch(this.props.errorHandler)
+          });
       }
     });
     this.props.notification({

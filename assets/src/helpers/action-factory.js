@@ -1,6 +1,7 @@
 import fetch from '../fetch';
 import moment from 'moment';
 import { notification } from '../redux/notifications';
+import { clientError } from '../redux/app';
 
 export default function createAction (config) {
 
@@ -22,12 +23,11 @@ export default function createAction (config) {
       ...options
     };
 
-    // Set user state to LOADING
+    // Set entity state to LOADING
     // ===========================================================================
     if (options.state && config.state_type) dispatch({
       type: config.state_type,
-      state: 3,
-      entity: options.id
+      state: 3
     });
 
     // Create notification of process beginning
@@ -43,12 +43,7 @@ export default function createAction (config) {
     return fetch(config.url, data)
       .then((payload) => {
         if (payload.error) {
-          throw {
-            id: (options.notification) ? notificationId : null,
-            state: (options.state && config.state_type) ? config.state_type : null,
-            text: payload.error || config.errorMessage.replace('$id', options.id),
-            entity: options.id
-          }
+          throw { text: payload.error || config.errorMessage.replace('$id', options.id) }
         }
         return payload;
       })
@@ -68,6 +63,31 @@ export default function createAction (config) {
           payload: (payload.success || payload.message) ? data : payload,
           entity: options.id
         });
-      });
+      })
+      .catch((error) => {
+
+        if (error instanceof Error) {
+          // Dispatch global app Error
+          // ===========================================================================
+          dispatch(clientError(error.trace));
+        } else {
+          // Dispatch error notification
+          // ===========================================================================
+          if (options.notification) dispatch(notification({
+            id: notificationId,
+            type: 'error',
+            text: (error.event) ? `Network error: ${error.url}` : error.text
+          }));
+
+          // Set entity state to IDLE
+          // ===========================================================================
+          if (options.state && config.state_type) dispatch({
+            type: config.state_type,
+            state: 2
+          })
+        }
+
+        throw error;
+      })
   }
 }

@@ -23,40 +23,25 @@ export default function reducer (state = {...defaultApp}, action) {
     case ACTIONS.GET_COLUMNS:
       return {...state, loadingStep: state.loadingStep + 1 }
     case ACTIONS.ERROR:
-      return {...state, error: action.error}
+      return {
+        ...state,
+        state: 0,
+        error: action.error
+      }
     case ACTIONS.SET_APP_STATE:
-      return {...state, state: action.state}
+      return {
+        ...state,
+        state: action.state
+      }
     default:
       return state;
   }
 }
 
-export const errorHandler = (error) => (dispatch) => {
-  if (error instanceof Error || error.event) {
-    dispatch({
-      type: ACTIONS.ERROR,
-      error: error.toString()
-    })
-    throw error;
-  } else {
-    // Create notification of process failed ending
-    // ===========================================================================
-    if (error.id) dispatch(notification({
-      id: error.id,
-      type: 'error',
-      text: error.text
-    }));
-    
-    // Set User state to ERROR
-    // ===========================================================================
-    if (error.state) {
-      dispatch({
-        type: error.state,
-        state: 2
-      });  
-    }
-  }
-};
+export const clientError = (error) => (dispatch) => dispatch({
+  type: ACTIONS.ERROR,
+  error: (error instanceof Error) ? error.stack : error
+});
 
 export const setAppState = (state) => (dispatch) => dispatch({
   type: ACTIONS.SET_APP_STATE,
@@ -132,7 +117,7 @@ export const getAllResults = (data) => (dispatch) => {
   ).then(() => dispatch(notification({
     id: notificationId,
     visible: false
-  }))).catch((err) => dispatch(errorHandler(err)));
+  })));
 
   // Send message at a start
   // ===========================================================================

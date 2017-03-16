@@ -10,7 +10,6 @@ import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
-import { errorHandler } from '../redux/app';
 import { editUser } from '../redux/user';
 
 // Import Child components
@@ -24,7 +23,7 @@ class User extends React.Component {
   }
 
   updateItem (data) {
-    this.props.editUser(data).catch(this.props.errorHandler);
+    this.props.editUser(data);
   }
 
   render () {
@@ -41,9 +40,6 @@ class User extends React.Component {
 // ===========================================================================
 const mapStateToProps = ({user}) => ({...user});
 
-const mapDispatchToProps = (dispatch) => (bindActionCreators({
-  editUser,
-  errorHandler
-}, dispatch))
+const mapDispatchToProps = (dispatch) => (bindActionCreators({ editUser }, dispatch))
 
 export default connect(mapStateToProps, mapDispatchToProps)(User);

@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
-import { errorHandler } from '../redux/app';
+import { notification } from '../redux/notifications';
 import { createSet, editSet, deleteSet } from '../redux/sets';
 import { createSource, deleteSource } from '../redux/sources';
 
@@ -32,34 +32,34 @@ class Sourcesets extends React.Component {
       name: value
     }).then(({payload}) => {
       this.props.router.push(`${this.props.route.path}/${payload.id}`);
-    }).catch(this.props.errorHandler);
+    });
   }
 
   updateItem (data) {
-    return this.props.editSet(data).catch(this.props.errorHandler);
+    return this.props.editSet(data);
   }
 
   deleteItem (id) {
-    return this.props.deleteSet({id}).catch(this.props.errorHandler);
+    return this.props.deleteSet({id});
   }
 
   deleteFeed (id) {
     return this.props.deleteSource({
       set_id: this.props.curId,
       id: id
-    }).catch(this.props.errorHandler);
+    });
   }
 
   createFeed (feeds) {
     let source_ids = [];
     Promise
-      .all(feeds.map((feed) => this.props.createSource(feed).then(({payload}) => source_ids.push(payload.id))))
+      .all(feeds.map((feed) => this.props.createSource(feed)
+      .then(({payload}) => source_ids.push(payload.id))))
       .then(() => this.updateItem({
         id: this.props.curId,
         source_ids: concat(this.props.chosen.source_ids, source_ids)
       }))
-      .then(() => this.props.router.goBack())
-      .catch(this.props.errorHandler);
+      .then(() => this.props.router.goBack());
   }
 
   render () {
@@ -80,7 +80,6 @@ class Sourcesets extends React.Component {
             name={this.props.chosen.name}
             action={this.createFeed}
             notification={this.props.notification}
-            errorHandler={this.props.errorHandler}
           />
         );
       } else {
@@ -143,8 +142,8 @@ const mapDispatchToProps = (dispatch) => (bindActionCreators({
   createSource,
   editSet,
   deleteSet,
-  deleteSource,
-  errorHandler
+  notification,
+  deleteSource
 }, dispatch))
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sourcesets);

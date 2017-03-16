@@ -42,7 +42,7 @@ class Notifications extends React.Component {
     // ===========================================================================
     let list = (
       <ul className='sys-notifications'>{ reduce(notifications, (acc, message, i) => {
-        if (i <= limit && message.visible) {
+        if (acc.length <= limit && message.visible) {
           if (message.type !== 'loading' && !this.timeouts[message.id]) ids.push(message.id);
           acc.push(<Notification onClick={() => this.hideHandler(message.id)} key={message.id} {...message} />);
         }

@@ -18,7 +18,7 @@ class Result extends React.Component {
     this.state = {
       fulltext: false
     }
-    console.log('Result mount');
+    //console.log('Result mount');
     bindAll(this, 'checkDisplay', 'toggleFullText')
   }
 
@@ -37,7 +37,7 @@ class Result extends React.Component {
     let display = props.display_settings;
     let isWideImage = includes(display, 'wide_image');
     let tableRows = filter(this.props.tableStats, this.checkDisplay);
-    console.log('Result render');
+    //console.log('Result render');
     return (
       <li>
         <article className='mod-result'>

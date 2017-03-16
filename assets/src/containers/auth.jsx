@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
-import { setAppState, fetchData, getAllResults, errorHandler } from '../redux/app';
+import { setAppState, fetchData, getAllResults } from '../redux/app';
 import { getUser, login } from '../redux/user';
 
 // Import Child components
@@ -21,17 +21,15 @@ class Auth extends React.Component {
   // ===========================================================================
   handleAuth(e) {
     e.preventDefault();
-    let { username, password } = e.target.elements;
     this.props.login({
-        username: username.value,
-        password: password.value
+        username: e.target.elements.username.value,
+        password: e.target.elements.password.value
       })
       .then(() => this.props.setAppState(1))
-      .then(() => this.props.getUser(null, {state: false, notification: false}))
+      .then(() => this.props.getUser(null, { notification: false}))
       .then(() => this.props.fetchData())
       .then((data) => this.props.getAllResults(data))
-      .then(() => this.props.setAppState(2))
-      .catch(this.props.errorHandler);
+      .then(() => this.props.setAppState(2));
   }
 
   // Handle reaction of a new user
@@ -99,7 +97,6 @@ const mapDispatchToProps = (dispatch) => (bindActionCreators({
   login,
   getUser,
   fetchData,
-  errorHandler,
   getAllResults,
   setAppState
 }, dispatch));

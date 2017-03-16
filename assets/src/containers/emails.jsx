@@ -14,7 +14,6 @@ import EmailList from '../components/list/emails';
 // Import actions
 // ===========================================================================
 import { editUser } from '../redux/user';
-import { errorHandler } from '../redux/app';
 import { notification } from '../redux/notifications';
 
 // Email injectable Component - provide list of user Emails whatever it need
@@ -29,7 +28,7 @@ class Emails extends React.Component {
         disabled={this.props.disabled || this.state > 2}
         data={this.props.data}
         onError={(err) => this.props.notification({type: 'error', text: err})}
-        onChange={(email_bcc) => this.props.editUser({email_bcc}).catch(this.props.errorHandler)}
+        onChange={(email_bcc) => this.props.editUser({email_bcc})}
       />
     );
   }
@@ -47,8 +46,7 @@ const mapStateToProps = ({user}) => ({
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   editUser,
-  notification,
-  errorHandler
+  notification
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Emails);
