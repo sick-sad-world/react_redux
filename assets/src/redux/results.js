@@ -1,4 +1,6 @@
 import { LOGIN, LOGOUT, GET_RESULTS, GET_RESULT, SET_RESULT_STATE, ADD_RESULTS, FAVORITE_RESULT, IGNORE_RESULT, REMOVE_COLUMN } from '../helpers/types';
+import moment from 'moment';
+import { notification } from './notifications';
 import createAction from '../helpers/action-factory';
 import { updateObjectById } from '../helpers/reducer-factory';
 
@@ -95,3 +97,67 @@ export const favoriteResult = createAction({
   pendingMessage: 'Changing state of result $id...',
   successMessage: 'Result favor changed.'
 });
+
+export const getAllResults = (data) => (dispatch) => {
+  let ids = {};
+  let notificationId = moment().unix();
+
+  // Create our [Top-level] Promise chain
+  // ===========================================================================
+  Promise.all(
+    data.map((column, i) => {
+      // If column hidden - do nothing
+      // ===========================================================================
+      if (!column.open) return null;
+
+      // Define time delay and set id to hash of columns being fetched
+      // ===========================================================================
+      let delay = (i > 4) ? i * 1200 : 0;
+      ids[column.id] = true;
+
+      // Promise wrapper around timeout
+      // ===========================================================================
+      return new Promise((resolve, reject) => {
+
+        // Run our call and simple forward results to [Upper-level] promise chain
+        // ===========================================================================
+        setTimeout(() => {
+          return dispatch(getResults(column.data, {
+            id: column.id,
+            notification: false
+          })).then(resolve).catch(reject)
+        }, delay);
+
+      }).catch((error) => {
+        // Show error message if something went wrong
+        // ===========================================================================
+        return dispatch(notification({
+          type: 'error',
+          text: `Results for column ${ids[column.id]} ended with error: ${(error.event) ? error.url : error.text}`
+        }));
+      }).then(() => {
+        // When code is done - update our message by removing [ID] of column
+        // wich result loading is done from list
+        // ===========================================================================
+        delete ids[column.id];
+        return dispatch(notification({
+          id: notificationId,
+          type: 'loading',
+          text: `Results for columns ${Object.keys(ids).join(',')} downloading now...`
+        }));
+      });
+    })
+  ).then(() => dispatch(notification({
+    id: notificationId,
+    visible: false
+  })));
+
+  // Send message at a start
+  // ===========================================================================
+  dispatch(notification({
+    id: notificationId,
+    type: 'loading',
+    text: `Results for columns ${Object.keys(ids).join(',')} downloading now...`
+  }));
+
+}

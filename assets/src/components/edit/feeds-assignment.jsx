@@ -28,8 +28,8 @@ export default class AssignFeedsToColumn extends EditForm {
 
   feedsHandler () {
     return (type, id) => this.stateUpdater({
-      type: updateArrayWithValue(this.state[type], id)
-    })
+      [type]: updateArrayWithValue(this.state[type], id)
+    });
   }
 
   updateHandler (e) {

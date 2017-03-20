@@ -6,8 +6,10 @@ import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
-import { setAppState, fetchData, getAllResults } from '../redux/app';
+import { setAppState, fetchData } from '../redux/app';
 import { getUser, login } from '../redux/user';
+import { getColumnsForResults } from '../redux/columns';
+import { getAllResults } from '../redux/results';
 
 // Import Child components
 // ===========================================================================
@@ -28,6 +30,7 @@ class Auth extends React.Component {
       .then(() => this.props.setAppState(1))
       .then(() => this.props.getUser(null, { notification: false}))
       .then(() => this.props.fetchData())
+      .then(getColumnsForResults)
       .then((data) => this.props.getAllResults(data))
       .then(() => this.props.setAppState(2));
   }

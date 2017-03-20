@@ -164,6 +164,10 @@ export const defColumnParameters = {
   }]
 };
 
+export const getColumnsForResults = (data) => {
+  return data.find((item) => item && item.type === GET_COLUMNS).payload.map(({id, data, open}) => ({id, data, open}));
+}
+
 export const decomposeColumnSort = (sort = defColumnData.sort) => {
   let prefix = find(defColumnSorting.sortPrefix, (pref) => sort.indexOf(pref.value) > -1);
   let property = find(defColumnSorting.sortProperty, (prop) => sort.indexOf(prop.value) > -1);

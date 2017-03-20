@@ -2,7 +2,7 @@
 // ===========================================================================
 import classNames from 'classnames';
 import { inject, updateArrayWithValue } from '../../helpers/functions';
-import { reject, includes, reduce, concat, bindAll } from 'lodash';
+import { reject, includes, reduce, concat, find, bindAll } from 'lodash';
 import deletable from '../../helpers/deletable';
 
 // Import React related stuff
@@ -37,12 +37,12 @@ export default class EditSet extends EditForm {
     };
   }
 
-  getSourceIds(id) {
-    return (id instanceof Array) ? concat(this.state.source_ids, id) : updateArrayWithValue(this.state.source_ids, id);
+  getSourceIds(type, id) {
+    return (type === 'set') ? concat(this.state.source_ids, find(this.props.sets, {id}).source_ids) : updateArrayWithValue(this.state.source_ids, id);
   }
 
   makeStateUpdater(id) {
-    return () => this.updateState('source_ids', 'getSourceIds')(id);
+    return () => this.updateState('source_ids', 'getSourceIds')('source', id);
   }
 
   renderSource (acc, source) {

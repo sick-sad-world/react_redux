@@ -44,8 +44,8 @@ export default class EditForm extends React.Component {
   }
   
   updateState (name, getter) {
-    return (e) => this.stateUpdater({
-      [name]: (this[getter] instanceof Function) ? this[getter].call(this, e) : this.getValue(e)
+    return (...args) => this.stateUpdater({
+      [name]: (this[getter] instanceof Function) ? this[getter].call(this, ...args) : this.getValue.call(this, ...args)
     });
   }
 
