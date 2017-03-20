@@ -2,33 +2,6 @@ import { GET_SETS, ADD_SET, EDIT_SET, REMOVE_SET, SET_SET_STATE, UPDATE_UNIQ } f
 import createReducer, { mergeArrayById } from '../helpers/reducer-factory';
 import createAction from '../helpers/action-factory';
 
-// Create hash of all Sources [id] where value is a number of occurances
-// ===========================================================================
-export const calcFeedOccurance = (sets) => {
-  let feeds = {};
-  sets.forEach((set) => {
-    set.source_ids.forEach((source) => {
-      if (feeds.hasOwnProperty(source)) {
-        ++feeds[source]
-      } else {
-        feeds[source] = 1;
-      }
-    });
-  });
-  return feeds;
-}
-
-// Loop over Set [source_ids] and push uniqe ones to [uniq_ids]
-// ===========================================================================
-export const setUniqFeeds = (set, feeds) => {
-  set.uniq_ids = [];
-  set.source_ids.forEach((source) => {
-    if (feeds[source] === 1) {
-      set.uniq_ids.push(source);
-    }
-  });
-}
-
 export const defaultSet = {
   id: 0,
   order: null,
@@ -37,6 +10,7 @@ export const defaultSet = {
 };
 
 export default createReducer({
+  GET: GET_SETS,
   ADD: ADD_SET,
   REMOVE: REMOVE_SET,
   STATE: SET_SET_STATE,
@@ -44,12 +18,7 @@ export default createReducer({
     action.sources = undefined;
     return mergeArrayById(state, action);
   },
-  [GET_SETS]: (state, action) => {
-    let feeds = calcFeedOccurance(action);
-    action.forEach((set) => setUniqFeeds(set, feeds));
-    return action;
-  },
-  [UPDATE_UNIQ]: (state, action) => mergeArrayById(state, action),
+  [UPDATE_UNIQ]: (state, action) => state.map((set, i) => ({...set, uniq_ids: action[i].uniq_ids}))
 });
 
 export const setSetsState = (state) => ({
@@ -89,7 +58,6 @@ export const deleteSet = createAction({
   successMessage: 'Set was deleted.'
 });
 
-export const updateUniq = (id, data) => (dispatch) => dispatch({
-  type: UPDATE_UNIQ,
-  payload: {id, uniq_ids: data}
+export const updateUniq = () => (dispatch) => dispatch({
+  type: UPDATE_UNIQ
 })

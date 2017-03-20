@@ -4,6 +4,7 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { routerReducer } from 'react-router-redux';
 import splitResultText from '../middlewares/splitResultText';
+import updateUniq from '../middlewares/updateUniq';
 
 import app from './app';
 import user from './user';
@@ -23,5 +24,5 @@ let composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 // ===========================================================================
 export default createStore(
   combineReducers({ app, user, notifications, results, columns, sets, sources, alerts, reports, routing: routerReducer }),
-  composeEnhancers(applyMiddleware(thunk, splitResultText))
+  composeEnhancers(applyMiddleware(thunk, splitResultText, updateUniq))
 );
