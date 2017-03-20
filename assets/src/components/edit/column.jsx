@@ -44,9 +44,6 @@ export default class EditColumn extends EditForm {
       advanced_filters,
       ...defColumn.data,
       ...columnData
-      //...omit(data.data, this.props.advRegExp),
-      //advanced_filters: pick(data.data, this.props.advRegExp)
-      //advanced_filters: pick(data.data, (v, k) => this.props.advRegExp.test(k) && v !== undefined)
     };
   }
 
@@ -87,7 +84,7 @@ export default class EditColumn extends EditForm {
   }
 
   getAutoreload (e) {
-    return (e) ? e.value : 0;
+    return (e) ? e : 0;
   }
 
   render () {
