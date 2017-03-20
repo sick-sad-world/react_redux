@@ -1,5 +1,5 @@
-import { GET_SETS, ADD_SET, EDIT_SET, REMOVE_SET, SET_SET_STATE } from '../helpers/types';
-import createReducer from '../helpers/reducer-factory';
+import { GET_SETS, ADD_SET, EDIT_SET, REMOVE_SET, SET_SET_STATE, UPDATE_UNIQ } from '../helpers/types';
+import createReducer, { mergeArrayById } from '../helpers/reducer-factory';
 import createAction from '../helpers/action-factory';
 
 // Create hash of all Sources [id] where value is a number of occurances
@@ -40,12 +40,16 @@ export default createReducer({
   ADD: ADD_SET,
   REMOVE: REMOVE_SET,
   STATE: SET_SET_STATE,
-  [EDIT_SET]: (state, action) => state.map((item) => (item.id === action.id) ? {...item, ...action, sources: undefined} : {...item}),
+  [EDIT_SET]: (state, action) => {
+    action.sources = undefined;
+    return mergeArrayById(state, action);
+  },
   [GET_SETS]: (state, action) => {
     let feeds = calcFeedOccurance(action);
     action.forEach((set) => setUniqFeeds(set, feeds));
     return action;
-  }
+  },
+  [UPDATE_UNIQ]: (state, action) => mergeArrayById(state, action),
 });
 
 export const setSetsState = (state) => ({
@@ -84,3 +88,8 @@ export const deleteSet = createAction({
   pendingMessage: 'Deleting set...',
   successMessage: 'Set was deleted.'
 });
+
+export const updateUniq = (id, data) => (dispatch) => dispatch({
+  type: UPDATE_UNIQ,
+  payload: {id, uniq_ids: data}
+})

@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 // Import actions
 // ===========================================================================
 import { notification } from '../redux/notifications';
-import { createSet, editSet, deleteSet } from '../redux/sets';
+import { createSet, editSet, deleteSet, updateUniq } from '../redux/sets';
 import { createSource, deleteSource } from '../redux/sources';
 
 // Import Child components
@@ -51,13 +51,13 @@ class Sourcesets extends React.Component {
   }
 
   createFeed (feeds) {
-    let source_ids = [];
+    let new_ids = [...this.props.chosen.uniq_ids];
     Promise
-      .all(feeds.map((feed) => this.props.createSource(feed)
-      .then(({payload}) => source_ids.push(payload.id))))
+      .all(feeds.map((feed) => this.props.createSource(feed).then(({payload}) => new_ids.push(payload.id))))
+      .then(() => this.props.updateUniq(this.props.curId, new_ids))
       .then(() => this.updateItem({
         id: this.props.curId,
-        source_ids: concat(this.props.chosen.source_ids, source_ids)
+        source_ids: concat(this.props.chosen.source_ids, new_ids)
       }))
       .then(() => this.props.router.goBack());
   }
@@ -142,6 +142,7 @@ const mapDispatchToProps = (dispatch) => (bindActionCreators({
   createSource,
   editSet,
   deleteSet,
+  updateUniq,
   notification,
   deleteSource
 }, dispatch))

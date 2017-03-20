@@ -28,6 +28,7 @@ export const ADD_SET = 'ADD_SET';
 export const EDIT_SET = 'EDIT_SET';
 export const REMOVE_SET = 'REMOVE_SET';
 export const SET_SET_STATE = 'SET_SET_STATE';
+export const UPDATE_UNIQ = 'UPDATE_UNIQ';
 
 export const GET_SOURCES = 'GET_SOURCES';
 export const ADD_SOURCE = 'ADD_SOURCE';
