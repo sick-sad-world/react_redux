@@ -31,7 +31,7 @@ class Auth extends React.Component {
       .then(() => this.props.getUser(null, { notification: false}))
       .then(() => this.props.fetchData())
       .then(getColumnsForResults)
-      .then((data) => this.props.getAllResults(data))
+      .then(this.props.getAllResults)
       .then(() => this.props.setAppState(2));
   }
 

@@ -1,6 +1,5 @@
 // Import utility stuff
 // ===========================================================================
-import { forOwn } from 'lodash';
 import classNames from 'classnames';
 import { updateArrayWithValue } from '../../helpers/functions';
 

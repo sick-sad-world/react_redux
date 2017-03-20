@@ -27,7 +27,8 @@ export default function createAction (config) {
     // ===========================================================================
     if (options.state && config.state_type) dispatch({
       type: config.state_type,
-      state: 3
+      state: 3,
+      entity: options.id
     });
 
     // Create notification of process beginning
