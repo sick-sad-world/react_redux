@@ -13,6 +13,11 @@ export const defaultApp = {
 
 export default function reducer (state = {...defaultApp}, action) {
   switch (action.type) {
+    case ACTIONS.LOGOUT:
+      return {
+        ...state,
+        loadingStep: defaultApp.loadingStep
+      }
     case ACTIONS.GET_ALERTS:
     case ACTIONS.GET_REPORTS:
     case ACTIONS.GET_SETS:
