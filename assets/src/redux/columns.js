@@ -6,14 +6,14 @@ import createAction from '../helpers/action-factory';
 export const defDisplaySettings = ['title', 'found', 'url', 'image', 'description', 'likes', 'tweets', 'shares'];
 
 export const defDashboardData = {
-  autoreload: 0,
-  infinite: 1,
-  sort: 'rate_likes',
-  direction: 'desc'
+  
 };
 
 export const defColumnData = {
-  ...defDashboardData,
+  autoreload: 0,
+  infinite: 1,
+  sort: 'rate_likes',
+  direction: 'desc',
   show_favorites: 0,
   show_ignored: 0,
   limit: 30,

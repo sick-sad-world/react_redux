@@ -12,9 +12,7 @@ export default class Sorting extends React.Component {
   }
 
   componentWillReceiveProps (newProps) {
-    if (this.props.value !== newProps.value && this.props.direction !== newProps.direction) {
-      this.setState(this.mapDataToState(newProps));
-    }
+    this.setState(this.mapDataToState(newProps));
   }
 
   mapDataToState ({value, direction}) {

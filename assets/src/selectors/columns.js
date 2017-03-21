@@ -26,10 +26,5 @@ export const makeDashboardSelector = () => createSelector(
   getColumns,
   (state, payload) => ({
     state,
-    payload: payload.filter(({open}) => !!open).map(({id, name, data, display_settings}) => ({
-      id,
-      name,
-      data: {...defDashboardData, ...data},
-      display_settings: (display_settings) ? display_settings : defDisplaySettings
-    }))
+    payload: payload.filter(({open}) => !!open)
   }));

@@ -3,7 +3,7 @@
 import { includes, forOwn} from 'lodash';
 import classNames from 'classnames';
 import { updateArrayWithValue } from '../../helpers/functions';
-import { defColumnParameters, defColumn } from '../../redux/columns';
+import { defColumnParameters } from '../../redux/columns';
 
 // Import React related stuff
 // ===========================================================================
@@ -25,7 +25,6 @@ import AdvFilters from '../forms/adv-filters';
 export default class EditColumn extends EditForm {
 
   mapDataToState (data) {
-    let display_settings =  data.display_settings || defColumn.display_settings;
     let advanced_filters = {};
     let columnData = {};
 
@@ -40,9 +39,8 @@ export default class EditColumn extends EditForm {
     return {
       name: data.name,
       changed: [],
-      display_settings: (typeof display_settings === 'string') ? display_settings.split(',') : display_settings,
       advanced_filters,
-      ...defColumn.data,
+      display_settings: data.display_settings,
       ...columnData
     };
   }

@@ -23,7 +23,7 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     //console.log('Dashboard mount');
-    bindAll(this, 'updateItem', 'refreshResults', 'pushResults', 'deleteItem');
+    bindAll(this, 'updateItem', 'refreshResults', 'pushResults', 'deleteItem', 'renderItem');
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -74,28 +74,32 @@ class Dashboard extends React.Component {
     this.props.deleteColumn({id});
   }
 
+  renderItem (column) {
+    return (
+      <Column
+        key={column.id}
+        id={column.id}
+        name={column.name}
+        open={column.open}
+        display_settings={column.display_settings}
+        infinite={column.data.infinite}
+        autoreload={column.data.autoreload}
+        direction={column.data.direction}
+        sort={column.data.sort}
+        state={this.props.state}
+        onChange={this.updateItem}
+        onScroll={this.pushResults(column.id)}
+        onClick={this.refreshResults(column.id)}
+        deleteItem={this.deleteItem}
+      />
+    );
+  }
+
   render () {
     console.log('Dashboard render');
     return (
       <div className='mod-dashboard'>
-        {this.createList((acc, column) => (
-          <Column
-            key={column.id}
-            id={column.id}
-            name={column.name}
-            open={column.open}
-            display_settings={column.display_settings}
-            infinite={column.data.infinite}
-            autoreload={column.data.autoreload}
-            direction={column.data.direction}
-            sort={column.data.sort}
-            state={this.props.state}
-            onChange={this.updateItem}
-            onScroll={this.pushResults(column.id)}
-            onClick={this.refreshResults(column.id)}
-            deleteItem={this.deleteItem}
-          />
-        ))}
+        {this.createList(this.renderItem)}
       </div>
     )
   }

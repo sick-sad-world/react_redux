@@ -32,7 +32,7 @@ export const splitText = (result) => {
 
 export default ({dispatch, getState}) => (next) => (action) => {
   if (action.type === GET_RESULTS || action.type === ADD_RESULTS) {
-    action.payload.map(splitText);
+    action.payload.forEach(splitText);
   } else if (action.type === GET_RESULT) {
     splitText(action.payload);
   }
