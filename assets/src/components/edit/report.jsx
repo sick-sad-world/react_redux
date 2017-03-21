@@ -14,7 +14,7 @@ import EditForm from './edit-form';
 import TextInput from '../forms/input-text';
 import Dropdown from '../forms/dropdown';
 import Toggler from '../forms/toggler';
-import Emails from '../../containers/emails';
+import Emails from '../../injectables/emails';
 
 // Edit Report
 // ===========================================================================

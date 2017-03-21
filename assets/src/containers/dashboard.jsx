@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, find, defaultsDeep, isEqual } from 'lodash';
+import { bindAll, find, defaultsDeep } from 'lodash';
 
 
 // Import React related stuff
@@ -8,6 +8,7 @@ import { bindAll, find, defaultsDeep, isEqual } from 'lodash';
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { makeDashboardSelector } from '../selectors/columns';
 
 // Import Child components
 // ===========================================================================
@@ -16,7 +17,7 @@ import Column from '../components/column';
 // Import actions
 // ===========================================================================
 import { getResults, addResults } from '../redux/results';
-import { editColumn, deleteColumn, defColumn } from '../redux/columns';
+import { editColumn, deleteColumn } from '../redux/columns';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -26,14 +27,14 @@ class Dashboard extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return !isEqual(this.props.payload, nextProps.payload) || nextProps.location.pathname === '/';
+    return nextProps.location.pathname === '/';
   }
 
   createList (func) {
     if (this.props.state === 1) {
       return this.props.loadingTpl;
     } else {
-      return (this.props.payload.length) ? this.props.payload.reduce(func, []) : this.props.emptyTpl;
+      return (this.props.payload.length) ? this.props.payload.map(func) : this.props.emptyTpl;
     }
   }
 
@@ -74,31 +75,27 @@ class Dashboard extends React.Component {
   }
 
   render () {
-    //console.log('Dashboard render');
+    console.log('Dashboard render');
     return (
       <div className='mod-dashboard'>
-        {this.createList((acc, column) => {
-          let item = (
-            <Column
-              key={column.id}
-              id={column.id}
-              name={column.name}
-              open={column.open}
-              display_settings={column.display_settings}
-              infinite={column.data.infinite}
-              autoreload={column.data.autoreload}
-              direction={column.data.direction}
-              sort={column.data.sort}
-              state={this.props.state}
-              onChange={this.updateItem}
-              onScroll={this.pushResults(column.id)}
-              onClick={this.refreshResults(column.id)}
-              deleteItem={this.deleteItem}
-            />
-          );
-          if (item) acc.push(item);
-          return acc;
-        })}
+        {this.createList((acc, column) => (
+          <Column
+            key={column.id}
+            id={column.id}
+            name={column.name}
+            open={column.open}
+            display_settings={column.display_settings}
+            infinite={column.data.infinite}
+            autoreload={column.data.autoreload}
+            direction={column.data.direction}
+            sort={column.data.sort}
+            state={this.props.state}
+            onChange={this.updateItem}
+            onScroll={this.pushResults(column.id)}
+            onClick={this.refreshResults(column.id)}
+            deleteItem={this.deleteItem}
+          />
+        ))}
       </div>
     )
   }
@@ -112,17 +109,10 @@ Dashboard.defaultProps = {
 // Connect our Container to State
 // @ deps -> Columns
 // ===========================================================================
-const mapStateToProps = ({columns}) => ({
-  state: columns.state,
-  payload: columns.payload.reduce((acc, col) => {
-    if (col.open) {
-      let item = defaultsDeep({}, col, defColumn);
-      if (!item.display_settings) item.display_settings = defColumn.display_settings;
-      acc.push(item);
-    }
-    return acc;
-  }, [])
-});
+const mapStateToProps = () => {
+  const selector = makeDashboardSelector();
+  return (state, props) => selector(state, props)
+}
 
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
   editColumn,
@@ -131,4 +121,4 @@ const mapDispatchToProps = (dispatch) => (bindActionCreators({
   addResults
 }, dispatch))
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default connect(mapStateToProps(), mapDispatchToProps)(Dashboard);

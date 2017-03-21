@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, debounce, pick } from 'lodash';
+import { bindAll, debounce, pick, isEqual } from 'lodash';
 import { inject } from '../helpers/functions';
 import deletable from '../helpers/deletable';
 import { numOrString } from '../helpers/functions';
@@ -33,7 +33,7 @@ export default class Column extends React.Component {
 
   componentWillReceiveProps (newProps) {
     this.setState(this.mapDataToState(newProps));
-  } 
+  }
 
   mapDataToState(data) {
     let expanded = this.state && this.state.expanded || false;
@@ -57,6 +57,13 @@ export default class Column extends React.Component {
       expanded: expanded,
       ...pick(data, 'name', 'open', 'direction', 'infinite', 'autoreload', 'sort')
     }
+  }
+
+  shouldComponentUpdate (nextProps, nextState) {
+    return !isEqual(
+      pick(this.props, 'name', 'open', 'direction', 'infinite', 'autoreload', 'sort'),
+      pick(nextProps, 'name', 'open', 'direction', 'infinite', 'autoreload', 'sort')
+    )
   }
 
   expandedStateToggler() {
@@ -94,9 +101,7 @@ export default class Column extends React.Component {
 
   renderEditForm () {
     let running = this.props.state > 2;
-    let open = this.props.open;
-    let visIconData = this.props.visIconData;
-    //console.log('Column render');
+    console.log('Column render');
     return (
       <form className='column-settings'>
         <Sorting
@@ -131,7 +136,7 @@ export default class Column extends React.Component {
           value={this.state.autoreload}
         />
         <div className='column-subnav'>
-          <a onClick={this.hideColumn} title={visIconData[open].title}><Icon icon={visIconData[open].icon} />Hide</a>
+          <a onClick={this.hideColumn} title='Hide this column'><Icon icon='eye-with-line' />Hide</a>
           <Link to={`/columns/${this.props.id}`} title='Column setting screen'>
             <Icon icon='cog' />Settings
           </Link>
@@ -163,8 +168,4 @@ export default class Column extends React.Component {
       </section>
     );
   }
-}
-
-Column.defaultProps = {
-  visIconData: [{icon: 'eye', title: 'Show this column'}, {icon: 'eye-with-line', title: 'Hide this column'}]
 }

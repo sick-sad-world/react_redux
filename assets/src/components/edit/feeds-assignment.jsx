@@ -10,7 +10,7 @@ import React from 'react';
 // Import Child components
 // ===========================================================================
 import EditForm from './edit-form';
-import Feeds from '../../containers/feeds';
+import Feeds from '../../injectables/feeds';
 
 // Edit Column
 // ===========================================================================

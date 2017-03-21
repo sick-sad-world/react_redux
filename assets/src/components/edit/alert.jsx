@@ -9,7 +9,7 @@ import React from 'react';
 // Import Child components
 // ===========================================================================
 import EditForm from './edit-form';
-import Emails from '../../containers/emails';
+import Emails from '../../injectables/emails';
 import Dropdown from '../forms/dropdown';
 import TextInput from '../forms/input-text';
 import Toggler from '../forms/toggler';

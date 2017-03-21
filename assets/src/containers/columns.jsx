@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 // Import actions
 // ===========================================================================
 import { getResults } from '../redux/results';
+import { makeContainerSelector } from '../selectors/columns';
 import { createColumn, editColumn, deleteColumn } from '../redux/columns';
 
 // Import Child components
@@ -28,13 +29,12 @@ class Columns extends React.Component {
   }
 
   createItem (value) {
-    this.props.createColumn({ name: value })
-      .then(({payload}) => {
-        this.props.router.push(`${this.props.route.path}/${payload.id}`);
-        if (payload.open) {
-          return this.props.getResults(payload.data, {id: payload.id});
-        }
-      });
+    this.props.createColumn({ name: value }).then(({payload}) => {
+      this.props.router.push(`${this.props.route.path}/${payload.id}`);
+      if (payload.open) {
+        return this.props.getResults(payload.data, {id: payload.id});
+      }
+    });
   }
 
   updateItem(data, changed) {
@@ -60,7 +60,8 @@ class Columns extends React.Component {
   }
 
   render () {
-    
+    console.log('render');
+    let Edit = null;
     let listData = {
       curId: this.props.curId,
       payload: this.props.payload,
@@ -69,9 +70,6 @@ class Columns extends React.Component {
       deleteItem: this.deleteItem,
       ...this.props.listProps
     }
-
-    let Edit = null;
-    
     
     if (this.props.chosen && this.props.curId) {
       if (this.props.params.assignment) {
@@ -122,14 +120,9 @@ Columns.defaultProps = {
 // Connect our Container to State
 // @ deps -> Columns
 // ===========================================================================
-const mapStateToProps = ({columns}, ownProps) => {
-  let curId = parseInt(ownProps.params.id);
-  return {
-    curId,
-    state: columns.state,
-    payload: columns.payload.map(({id, name, open}) => ({id, name, open})),
-    chosen: find(columns.payload, {id: curId}),
-  }
+const mapStateToProps = () => {
+  const selector = makeContainerSelector();
+  return (state, props) => selector(state, props)
 }
 
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
@@ -139,4 +132,4 @@ const mapDispatchToProps = (dispatch) => (bindActionCreators({
   getResults
 }, dispatch))
 
-export default connect(mapStateToProps, mapDispatchToProps)(Columns);
+export default connect(mapStateToProps(), mapDispatchToProps)(Columns);
