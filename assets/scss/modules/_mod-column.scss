@@ -9,6 +9,7 @@
 		align-items: stretch;
 		flex: 0 0 $entity-unit;
 		border-bottom: $bd;
+    background-color: $c-element;
 		position: relative;
 		.drag-handle {
 			cursor: move;
@@ -30,8 +31,8 @@
 		}
 	}
 	.column-settings {
+    display: none;
 		border-bottom: $bd;
-		display: block;
 		flex: 0 1 auto;
 		background-color: $c-element;
 		padding: 0 baseUnit();
@@ -81,6 +82,9 @@
 		.column-header nav a.btn-settings {
 			color: $c-accent;
 		}
+    .column-settings {
+      display: block;
+    }
 	}
 	&.is-loading {
 		animation: shadow-pulse 1.5s linear 0s infinite;

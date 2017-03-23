@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { includes, without, concat, bindAll, omit, capitalize, isEqual, forOwn } from 'lodash';
+import { includes, without, concat, bindAll, isEqual, forOwn } from 'lodash';
 import { numOrString } from '../../helpers/functions';
 
 // Import React related stuff
@@ -64,7 +64,8 @@ export default class EditForm extends React.Component {
 
   updateHandler (e) {
     e.preventDefault();
-    return this.props.update(omit(this.state, 'changed'), this.state.changed);
+    let {changed, ...state} = this.state;
+    return this.props.update(state, changed);
   }
 
   resetState () {
@@ -88,7 +89,7 @@ export default class EditForm extends React.Component {
 
     let text = this.props.texts.confirmation;
     if (text.indexOf('{data}') > -1) {
-      text = text.replace('{data}', this.state.changed.map((change => capitalize(change).replace('_', ' '))).join(', '));
+      text = text.replace('{data}', this.state.changed.map((change => change.replace('_', ' '))).join(', '));
     }
 
     return (

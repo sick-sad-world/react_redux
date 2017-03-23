@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, find } from 'lodash';
+import { bindAll, find, includes } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
@@ -15,6 +15,7 @@ import { editAlert, deleteAlert, createAlert, defaultAlert } from '../redux/aler
 
 // Import Child components
 // ===========================================================================
+import DeleteConfirmation from '../components/delete-confirm';
 import ListSection from '../components/list/section';
 import ListItem from '../components/list/item';
 import EditAlert from '../components/edit/alert';
@@ -22,7 +23,18 @@ import EditAlert from '../components/edit/alert';
 class Alerts extends React.Component {
   constructor(props) {
     super(props);
-    bindAll(this, 'createItem', 'deleteItem', 'updateItem');
+    this.state = {
+      deleting: null
+    }
+    bindAll(this, 'createItem', 'updateItem', 'deleteItem', 'deleteConfirm', 'deleteReset');
+  }
+
+  deleteConfirm (deleting = null) {
+    return () => this.setState({deleting});
+  }
+
+  deleteReset () {
+    this.setState({deleting: null})
   }
 
   createItem (value) {
@@ -30,10 +42,6 @@ class Alerts extends React.Component {
       pathname: `${this.props.route.path}/new`,
       query: {name: value}
     });
-  }
-
-  deleteItem (id) {
-    return this.props.deleteAlert({id});
   }
 
   updateItem (data) {
@@ -47,12 +55,26 @@ class Alerts extends React.Component {
     }
   }
 
+  deleteItem (id) {
+    return () => this.props.deleteAlert({id}).then(this.deleteReset);
+  }
+
+  renderConfirmation (deleting) {
+    let columns = this.props.columns.filter(({value}) => includes(deleting.columns, value)).map(({name}) => name);
+    return (
+      <dl>
+        <dt>Trendolizer alert</dt>
+        <dd>{`ID: ${deleting.id} - ${deleting.name}. Watching: ${(columns.length) ? columns.join(', ') : 'none'}`}</dd>
+      </dl>
+    );
+  }
+
   render () {
     let listData = {
       payload: this.props.payload,
       state: this.props.state,
       createItem: this.createItem,
-      deleteItem: this.deleteItem,
+      deleteItem: this.deleteConfirm,
       ...this.props.listProps
     }
     return (
@@ -69,6 +91,11 @@ class Alerts extends React.Component {
             update={this.updateItem}
             backPath={this.props.route.path}
           />
+        ) : null}
+        {(this.state.deleting) ? (
+          <DeleteConfirmation close={this.deleteReset} accept={this.deleteItem(this.state.deleting.id)}>
+            {this.renderConfirmation(this.state.deleting)}
+          </DeleteConfirmation>
         ) : null}
       </div>
     )

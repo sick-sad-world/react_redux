@@ -1,9 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, reduce } from 'lodash';
-import { inject } from '../../helpers/functions';
-import deletable from '../../helpers/deletable';
-
+import { bindAll, isEqual } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
@@ -17,9 +14,7 @@ export default class ListSection extends React.Component {
   // ===========================================================================
   constructor (props) {
     super(props);
-    inject(this, deletable);
     this.state = {
-      deleting: 0,
       payload: props.payload
     };
     bindAll(this, 'createListItem', 'createHandler');
@@ -29,20 +24,20 @@ export default class ListSection extends React.Component {
     if (newProps.state === 2) this.setState({payload: newProps.payload});
   }
 
+  // shouldComponentUpdate (nextProps, nextState) {
+  //   return !isEqual(nextState.payload, this.state.payload)
+  // }
+
   // Create list item component
   // @ used in data mapping
   // ===========================================================================
-  createListItem (acc, item) {
-    acc.push(React.cloneElement(this.props.children, Object.assign({
+  createListItem (item) {
+    return React.cloneElement(this.props.children, Object.assign({
       key: item.id,
       order: item.order,
       sortable: this.props.sortable,
-      deleteAction: (this.props.deletable) ? this.makeDeleteToggler(item.id) : null
-    }, item)));
-    if (this.state.deleting > 0 && this.state.deleting === item.id) {
-      acc.push(this.renderDeleteDialog());
-    }
-    return acc;
+      deleteAction: (this.props.deletable && this.props.deleteItem) ? this.props.deleteItem(item) : null
+    }, item));
   }
 
   createHandler (e) {
@@ -67,7 +62,7 @@ export default class ListSection extends React.Component {
         <ul className='subsection-content entity-list'>
           {
             (this.props.children && this.state.payload.length) ? 
-              reduce(this.state.payload, this.createListItem, []) : 
+              this.state.payload.map(this.createListItem) : 
                 (<li className='state-empty'><Icon icon='emoji-sad' />{this.props.texts.empty}</li>) 
           }
         </ul>

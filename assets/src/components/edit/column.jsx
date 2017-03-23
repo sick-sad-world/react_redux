@@ -3,7 +3,7 @@
 import { includes, forOwn} from 'lodash';
 import classNames from 'classnames';
 import { updateArrayWithValue } from '../../helpers/functions';
-import { defColumnParameters } from '../../redux/columns';
+import { defColumnParameters, availableColumnData } from '../../redux/columns';
 
 // Import React related stuff
 // ===========================================================================
@@ -26,7 +26,7 @@ export default class EditColumn extends EditForm {
 
   mapDataToState (data) {
     let advanced_filters = {};
-    let columnData = {};
+    let columnData = {...availableColumnData};
 
     forOwn(data.data, (v, k) => {
       if (this.props.advRegExp.test(k)) {
@@ -66,10 +66,10 @@ export default class EditColumn extends EditForm {
     forOwn(this.state, (v, k) => {
       if (
         v === '' ||                       // Not empty
-        data.hasOwnProperty(k) ||         // Already in data
+        data.data.hasOwnProperty(k) ||         // Already in data
         k === 'display_settings' ||       // Not display_settings
         k === 'changed' ||                // Not changed
-        k === 'advanced_filters' ||             // Not advanced filters
+        k === 'advanced_filters' ||       // Not advanced filters
         (v instanceof Array && !v.length) // Not empty Array
       ) return;
       data.data[k] = v;

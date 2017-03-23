@@ -1,8 +1,4 @@
-import { createSelectorCreator, defaultMemoize } from 'reselect';
-import { isEqual } from 'lodash';
-import { defDisplaySettings, defDashboardData } from '../redux/columns';
-
-const createSelector = createSelectorCreator(defaultMemoize, isEqual);
+import createSelector from '../helpers/selectorCreator';
 
 const getColumnState = ({columns}) => columns.state;
 

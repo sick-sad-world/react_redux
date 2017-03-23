@@ -1,7 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, find, defaultsDeep } from 'lodash';
-
+import { bindAll, find } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
@@ -12,7 +11,10 @@ import { makeDashboardSelector } from '../selectors/columns';
 
 // Import Child components
 // ===========================================================================
-import Column from '../components/column';
+import Header from '../components/dashboard/header';
+import Settings from '../components/dashboard/settings';
+import DeleteConfirmation from '../components/delete-confirm';
+import Results from './results';
 
 // Import actions
 // ===========================================================================
@@ -22,84 +24,133 @@ import { editColumn, deleteColumn } from '../redux/columns';
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
-    //console.log('Dashboard mount');
-    bindAll(this, 'updateItem', 'refreshResults', 'pushResults', 'deleteItem', 'renderItem');
+    this.state = {
+      deleting: null,
+      payload: props.payload
+    }
+    bindAll(this, 'refreshResults', 'renderItem', 'updateItem', 'deleteConfirm', 'deleteReset');
+  }
+
+  deleteConfirm (deleting = null) {
+    return () => this.setState({deleting});
+  }
+
+  deleteReset () {
+    this.setState({deleting: null})
+  }
+
+  deleteItem (id) {
+    return () => this.props.deleteColumn({id}).then(this.deleteReset);
+  }
+
+  isRootPath (props) {
+    return props.location.pathname === '/';
+  }
+
+  componentWillReceiveProps(newProps) {
+    let isRoot = this.isRootPath(newProps);
+    this.setState({
+      deleting: (isRoot) ? this.state.deleting : 0,
+      expanded: (isRoot) ? this.state.expanded : 0,
+      payload: newProps.payload
+    });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.location.pathname === '/';
+    return this.isRootPath(nextProps);
   }
 
-  createList (func) {
-    if (this.props.state === 1) {
-      return this.props.loadingTpl;
-    } else {
-      return (this.props.payload.length) ? this.props.payload.map(func) : this.props.emptyTpl;
+  updateItem(changes) {
+    let column = find(this.props.payload, {id: changes.id});
+    if (column) {
+      changes.data = {...column.data, ...changes.data};
+      this.props.editColumn(changes);
     }
   }
 
-  updateItem(data) {
-    let column = find(this.props.payload, {id: data.id});
-    if (!column) return;
-    let shouldRefresh = data.data.sort !== column.data.sort || data.data.direction !== column.data.direction;
-    return this.props.editColumn(defaultsDeep(data, column)).then(({payload}) => {
-      if (payload.open && shouldRefresh) {
-        return this.props.getResults(payload.data, {id: payload.id});
-      }
-    });
+  hideItem(id) {
+    return () => this.props.editColumn({id, open: 0});
   }
 
   refreshResults(id) {
     return (e) => {
-      let column = find(this.props.payload, {id: id});
+      let column = find(this.props.payload, {id});
       if (column) return this.props.getResults(column.data, {id: column.id});
     }
   }
 
-  pushResults(id) {
+  fetchResults(id) {
     return (offset) => {
-      let column = find(this.props.payload, {id: id});
-      if (column) return this.props.addResults({
-        ...column.data,
-        offset
-      }, {
-        id: column.id,
-        state: false,
-        notification: false
-      });
+      let column = find(this.props.payload, {id});
+      if (column) {
+        if (offset) {
+          return this.props.addResults({...column.data, offset}, {id, state: false})
+        } else {
+          return this.props.getResults({...column.data}, {id})
+        }
+      } else {
+        return new Promise().resolve();
+      }
     }
   }
 
-  deleteItem(id) {
-    this.props.deleteColumn({id});
+  toggleEditing(e) {
+    let target = e.target;
+    while (!target.classList.contains('mod-column')) {
+      target = target.parentElement;
+    }
+    target.classList.toggle('is-expanded');
+  }
+
+  renderConfirmation (deleting) {
+    return (
+      <dl>
+        <dt>Trendolizer Column</dt>
+        <dd>{`ID: ${deleting.id} - ${deleting.name}.`}</dd>
+      </dl>
+    );
   }
 
   renderItem (column) {
     return (
-      <Column
-        key={column.id}
-        id={column.id}
-        name={column.name}
-        open={column.open}
-        display_settings={column.display_settings}
-        infinite={column.data.infinite}
-        autoreload={column.data.autoreload}
-        direction={column.data.direction}
-        sort={column.data.sort}
-        state={this.props.state}
-        onChange={this.updateItem}
-        onScroll={this.pushResults(column.id)}
-        onClick={this.refreshResults(column.id)}
-        deleteItem={this.deleteItem}
-      />
+      <section key={column.id} className='mod-column'>
+        <Header name={column.name} refresh={this.refreshResults(column.id)} settings={this.toggleEditing} />
+        <Settings
+          id={column.id}
+          running={this.props.state > 2}
+          onChange={this.updateItem}
+          hideItem={this.hideItem(column.id)}
+          deleteItem={this.deleteConfirm(column)}
+          sort={column.data.sort}
+          direction={column.data.direction}
+          infinite={column.data.infinite}
+          autoreload={column.data.autoreload}
+        />
+        <Results
+          id={column.id}
+          infinite={column.data.infinite}
+          autoreload={column.data.autoreload}
+          display_settings={column.display_settings}
+          sort={column.data.sort}
+          getResults={this.fetchResults(column.id)}
+        />
+      </section>
     );
   }
 
   render () {
-    console.log('Dashboard render');
     return (
       <div className='mod-dashboard'>
-        {this.createList(this.renderItem)}
+        {(this.props.state === 1) ? 
+          this.props.loadingTpl : 
+            (this.state.payload.length) ? 
+              this.state.payload.map(this.renderItem) : 
+                this.props.emptyTpl }
+        {(this.state.deleting) ? (
+          <DeleteConfirmation close={this.deleteReset} accept={this.deleteItem(this.state.deleting.id)}>
+            {this.renderConfirmation(this.state.deleting)}
+          </DeleteConfirmation>
+        ) : null}
       </div>
     )
   }
@@ -118,11 +169,11 @@ const mapStateToProps = () => {
   return (state, props) => selector(state, props)
 }
 
-const mapDispatchToProps = (dispatch) => (bindActionCreators({
-  editColumn,
+const mapDispatchToProps = (dispatch) => bindActionCreators({
   deleteColumn,
+  editColumn,
   getResults,
   addResults
-}, dispatch))
+}, dispatch);
 
 export default connect(mapStateToProps(), mapDispatchToProps)(Dashboard);

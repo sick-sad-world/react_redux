@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, pick } from 'lodash';
+import { bindAll } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { makeUserSelector } from '../selectors/user';
 
 // Import actions
 // ===========================================================================
@@ -17,7 +18,7 @@ import { logout } from '../redux/user';
 // ===========================================================================
 import MainNav from '../components/main-nav';
 import UserBlock from '../components/brief-info';
-import Dashboard from './dashboard';
+import Dashboard from '../containers/dashboard';
 
 // Main app screen - where all fun is taking place
 // ===========================================================================
@@ -35,7 +36,7 @@ class Workspace extends React.Component {
 
     // Bind handlers to our component
     // ===========================================================================
-    bindAll(this, 'handlerSidebar', 'handlerLogout');
+    bindAll(this, 'sidebarHandler', 'logoutHandler');
   }
 
   // Redirect to auth if user is unauthentificated
@@ -52,13 +53,13 @@ class Workspace extends React.Component {
 
   // Handler for toggling sidebar state
   // ===========================================================================
-  handlerSidebar() {
+  sidebarHandler() {
     this.setState({ sidebar: !this.state.sidebar });
   }
 
   // Handler for logout operation
   // ===========================================================================
-  handlerLogout() {
+  logoutHandler() {
     this.props.logout();
   }
 
@@ -67,7 +68,6 @@ class Workspace extends React.Component {
   render() {
     let { payload } = this.props;
     let routes = this.props.route.childRoutes.map(({label, path, icon}) => ({label, path, icon}));
-
     // Return JSX layout of a component
     // ===========================================================================
     return (
@@ -77,7 +77,7 @@ class Workspace extends React.Component {
           'is-expanded': this.state.sidebar
         })}>
           <UserBlock fullname={payload.fullname} position={payload.position} image={payload.image} />
-          <MainNav routes={routes} toggle={this.handlerSidebar} logout={this.handlerLogout} />
+          <MainNav routes={routes} toggle={this.sidebarHandler} logout={this.logoutHandler} />
         </aside>
         <div className='screen-content'>
           <Dashboard location={this.props.location} />
@@ -91,8 +91,11 @@ class Workspace extends React.Component {
 // Connect our Container to State
 // @ deps -> App, (User in future)
 // ===========================================================================
-const mapStateToProps = ({user}) =>({...user});
+const mapStateToProps = () => {
+  const selector = makeUserSelector();
+  return (state, props) => selector(state, props);
+};
 
 const mapDispatchToProps = (dispatch) => (bindActionCreators({ logout }, dispatch));
 
-export default connect(mapStateToProps, mapDispatchToProps)(Workspace);
+export default connect(mapStateToProps(), mapDispatchToProps)(Workspace);

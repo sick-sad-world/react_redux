@@ -10,7 +10,7 @@ import React from 'react';
 // ===========================================================================
 import TextInput from '../forms/input-text';
 import EditForm from './edit-form';
-import EmailList from '../list/emails';
+import EmailList from '../emails';
 
 export default class EditUser extends EditForm {
   mapDataToState (data) {
@@ -63,7 +63,7 @@ export default class EditUser extends EditForm {
               className='row'
               name='email'
               type='email'
-              fullname='Email'
+              label='Email'
               disabled={running}
               value={this.state.email}
               onChange={this.updateState('email')}

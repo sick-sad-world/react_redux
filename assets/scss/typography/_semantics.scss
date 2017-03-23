@@ -88,8 +88,8 @@ blockquote {}
 } 
 
 .small-popup {
-  position: relative;
-  padding: baseUnit();
+  display: flex;
+  flex-direction: column;
   border: $bd;
   background-color: $c-element;
   box-shadow: 0 5px 10px rgba(0,0,0,.45);
@@ -97,9 +97,38 @@ blockquote {}
   z-index: map-get($layers, overlay) + 1;
 }
 .confirmation-dialog {
-  h4 {
-    display: block;
-    margin-bottom: baseUnit();
+  width: map-get($layout, buffer) * 1.25;
+  header {
+    border-bottom: $bd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: $entity-unit;
+    padding: 0 baseUnit();
+  }
+  .close {
+    margin-right: baseUnit(-1);
+    width: $entity-unit;
+    align-self: stretch;
+    display: flex;
+    svg {
+      margin: auto;
+    }
+  }
+  main {
+    flex: 1 1 auto;
+    padding: baseUnit();
+    li {
+      @include ellipsis();
+    }
+    .badge {
+      vertical-align: 1px;
+    }
+  }
+  footer {
+    border-top: $bd;
+    display: flex;
+    padding: baseUnit();
   }
   .buttons {
     display: flex;

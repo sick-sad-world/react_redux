@@ -1,7 +1,7 @@
 // Import utility stuff
 // ===========================================================================
 import classNames from 'classnames';
-import { includes, without, concat, bindAll, omit, capitalize, isEqual, forOwn } from 'lodash';
+import { includes, without, concat, bindAll, isEqual, forOwn } from 'lodash';
 import { numOrString } from '../../helpers/functions';
 
 // Import React related stuff
@@ -63,7 +63,8 @@ export default function EditForm(Form, defaultProps) {
 
     updateHandler (e) {
       e.preventDefault();
-      return this.props.update(omit(this.state, 'changed'), this.state.changed);
+      let {changed, ...state} = this.state;
+      return this.props.update(state, changed);
     }
 
     resetState () {

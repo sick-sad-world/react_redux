@@ -17,6 +17,7 @@ import { createColumn, editColumn, deleteColumn } from '../redux/columns';
 // Import Child components
 // ===========================================================================
 import Icon from '../components/icon';
+import DeleteConfirmation from '../components/delete-confirm';
 import ListSection from '../components/list/section';
 import ListItem from '../components/list/item';
 import EditColumn from '../components/edit/column';
@@ -25,7 +26,16 @@ import AssignFeedsToColumn from '../components/edit/feeds-assignment';
 class Columns extends React.Component {
   constructor(props) {
     super(props);
-    bindAll(this, 'createItem', 'deleteItem', 'updateItem', 'makeItemIcon');
+    this.state = { deleting: null }
+    bindAll(this, 'createItem', 'deleteItem', 'updateItem', 'makeItemIcon', 'deleteConfirm', 'deleteReset');
+  }
+
+  deleteConfirm (deleting = null) {
+    return () => this.setState({deleting});
+  }
+
+  deleteReset () {
+    this.setState({deleting: null})
   }
 
   createItem (value) {
@@ -46,7 +56,7 @@ class Columns extends React.Component {
   }
 
   deleteItem (id) {
-    return this.props.deleteColumn({id});
+    return () => this.props.deleteColumn({id}).then(this.deleteReset);
   }
 
   makeItemIcon (props) {
@@ -59,15 +69,24 @@ class Columns extends React.Component {
     );
   }
 
+  renderConfirmation (deleting) {
+    return (
+      <dl>
+        <dt>Trendolizer Column</dt>
+        <dd>{`ID: ${deleting.id} - ${deleting.name}.`}</dd>
+      </dl>
+    );
+  }
+
   render () {
-    console.log('render');
+
     let Edit = null;
     let listData = {
       curId: this.props.curId,
       payload: this.props.payload,
       state: this.props.state,
       createItem: this.createItem,
-      deleteItem: this.deleteItem,
+      deleteItem: this.deleteConfirm,
       ...this.props.listProps
     }
     
@@ -96,6 +115,11 @@ class Columns extends React.Component {
           <ListItem url={this.props.route.path} customIcon={this.makeItemIcon} current={this.props.curId} deleteText='Delete this column' />
         </ListSection>
         {Edit}
+        {(this.state.deleting) ? (
+          <DeleteConfirmation close={this.deleteReset} accept={this.deleteItem(this.state.deleting.id)}>
+            {this.renderConfirmation(this.state.deleting)}
+          </DeleteConfirmation>
+        ) : null}
       </div>
     )
   }

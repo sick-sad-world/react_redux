@@ -2,12 +2,13 @@
 // ===========================================================================
 import React from 'react';
 import { connect } from 'react-redux';
+import { makeAppSelector } from '../selectors/app';
 
 // Import Child components
 // ===========================================================================
 import ProgressTracker from '../components/progress-tracker';
 import ClientError from '../components/client-error';
-import Notifications from './notifications';
+import Notifications from '../containers/notifications';
 
 // Import all required actions
 // ===========================================================================
@@ -40,7 +41,10 @@ class App extends React.Component {
 // Transform app state to component props
 // @ deps -> App
 // ===========================================================================
-const mapStateToProps = ({app}) => ({...app});
+const mapStateToProps = () => {
+  const selector = makeAppSelector();
+  return (state, props) => selector(state, props);
+};
 
 const mapDispatchToProps = (dispatch) => ({
   getInitialData () {
@@ -53,4 +57,4 @@ const mapDispatchToProps = (dispatch) => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps(), mapDispatchToProps)(App);

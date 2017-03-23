@@ -1,12 +1,13 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, find } from 'lodash';
+import { bindAll, find, includes } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import containerUtility from './container-hoc';
 
 // Import actions
 // ===========================================================================
@@ -14,6 +15,7 @@ import { editReport, deleteReport, defaultReport, createReport } from '../redux/
 
 // Import Child components
 // ===========================================================================
+import DeleteConfirmation from '../components/delete-confirm';
 import ListSection from '../components/list/section';
 import ListItem from '../components/list/item';
 import EditReport from '../components/edit/report';
@@ -21,7 +23,10 @@ import EditReport from '../components/edit/report';
 class Reports extends React.Component {
   constructor(props) {
     super(props);
-    bindAll(this, 'createItem', 'deleteItem', 'updateItem');
+    this.state = {
+      deleting: null
+    }
+    bindAll(this, 'createItem', 'updateItem', 'deleteConfirm', 'deleteReset', 'deleteItem');
   }
 
   createItem (value) {
@@ -31,8 +36,12 @@ class Reports extends React.Component {
     });
   }
 
-  deleteItem (id) {
-    return this.props.deleteReport({id});
+  deleteConfirm (deleting = null) {
+    return () => this.setState({deleting});
+  }
+
+  deleteReset () {
+    this.setState({deleting: null})
   }
 
   updateItem (data) {
@@ -46,13 +55,27 @@ class Reports extends React.Component {
     }
   }
 
+  deleteItem (id) {
+    return () => this.props.deleteReport({id}).then(this.deleteReset);
+  }
+
+  renderConfirmation (deleting) {
+    let columns = this.props.columns.filter(({value}) => includes(deleting.columns, value)).map(({name}) => name);
+    return (
+      <dl>
+        <dt>Trendolizer report</dt>
+        <dd>{`ID: ${deleting.id} - ${deleting.name}. Watching: ${(columns.length) ? columns.join(', ') : 'none'}`}</dd>
+      </dl>
+    )
+  }
+
   render () {
 
     let listData = {
       payload: this.props.payload,
       state: this.props.state,
       createItem: this.createItem,
-      deleteItem: this.deleteItem,
+      deleteItem: this.deleteConfirm,
       ...this.props.listProps
     };
 
@@ -71,6 +94,11 @@ class Reports extends React.Component {
             update={this.updateItem}
             backPath={this.props.route.path}
           />
+        ) : null}
+        {(this.state.deleting) ? (
+          <DeleteConfirmation close={this.deleteReset} accept={this.deleteItem(this.state.deleting.id)}>
+            {this.renderConfirmation(this.state.deleting)}
+          </DeleteConfirmation>
         ) : null}
       </div>
     )

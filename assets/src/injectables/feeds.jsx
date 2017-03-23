@@ -10,9 +10,9 @@ import { connect } from 'react-redux';
 // Import child components
 // ===========================================================================
 import Icon from '../components/icon';
-import Source from '../components/list/source';
-import FeedsList from '../components/list/feeds';
-import Sourceset from '../components/list/sourceset';
+import Source from '../components/feeds/source';
+import FeedsList from '../components/feeds/list';
+import Sourceset from '../components/feeds/sourceset';
 
 // Email injectable Component - provide list of user Emails whatever it need
 // ===========================================================================

@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 
 // Import child components
 // ===========================================================================
-import EmailList from '../components/list/emails';
+import EmailList from '../components/emails';
 
 // Import actions
 // ===========================================================================

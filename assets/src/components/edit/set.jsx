@@ -1,9 +1,8 @@
 // Import utility stuff
 // ===========================================================================
 import classNames from 'classnames';
-import { inject, updateArrayWithValue } from '../../helpers/functions';
+import { updateArrayWithValue } from '../../helpers/functions';
 import { reject, includes, reduce, concat, find, bindAll } from 'lodash';
-import deletable from '../../helpers/deletable';
 
 // Import React related stuff
 // ===========================================================================
@@ -15,15 +14,13 @@ import { Link } from 'react-router';
 import TextInput from '../forms/input-text';
 import EditForm from './edit-form';
 import Icon from '../icon';
-import FeedsList from '../list/feeds';
-import Source from '../list/source';
+import FeedsList from '../feeds/list';
+import Source from '../feeds/source';
 
 export default class EditSet extends EditForm {
 
   constructor (props) {
     super(props);
-    inject(this, deletable);
-    this.state.deleting = 0;
     bindAll(this, 'renderSource');
   }
 
@@ -49,7 +46,7 @@ export default class EditSet extends EditForm {
     let btn = null;
     if (includes(this.state.source_ids, source.id)) {
       if (includes(this.state.uniq_ids, source.id)) {
-        btn = <a onClick={this.makeDeleteToggler(source.id)} title='Delete this source'><Icon icon='trash' /></a>;
+        btn = <a onClick={this.props.deleteItem(source)} title='Delete this source'><Icon icon='trash' /></a>;
       } else {
         btn = <a onClick={this.makeStateUpdater(source.id)} title='Remove this source from set'><Icon icon='forward' /></a>;
       }

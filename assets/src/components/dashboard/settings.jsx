@@ -1,5 +1,5 @@
 import React from 'react';
-import { numOrString } from '../helpers/functions';
+import { numOrString } from '../../helpers/functions';
 import { Link } from 'react-router';
 import Icon from '../icon';
 import Sorting from '../forms/sorting';
@@ -7,18 +7,18 @@ import Toggler from '../forms/toggler';
 
 // Column quick settings on Dashboard
 // ===========================================================================
-export default class QuickSettings extends React.Component {
+export default class Settings extends React.Component {
   constructor(props) {
     super(props)
-    this.state = this.mapDataToState(this.props.data);
+    this.state = this.mapDataToState(this.props);
   }
 
-  componentWillRecieveProps (newProps) {
-    this.setState(this.mapDataToState(newProps.data))
+  componentWillReceiveProps (newProps) {
+    this.setState(this.mapDataToState(newProps))
   }
 
-  mapDataToState(data) {
-
+  mapDataToState({sort, direction, infinite, autoreload}) {
+    return {sort, direction, infinite, autoreload}
   }
 
   updateValue(name) {
@@ -29,13 +29,12 @@ export default class QuickSettings extends React.Component {
       } else if (e.target) {
         newState = {[name]: numOrString(e.target.value)};
       }
-      if (newState === undefined) return;
-      return this.setState(newState, () => {
-        return this.props.onChange({
+      if (newState) {
+        return this.setState(newState, () => this.props.onChange({
           id: this.props.id,
-          data: { ...this.props.data, ...newState }
-        });
-      })
+          data: newState
+        }));
+      }
     }
   }
 
@@ -74,9 +73,9 @@ export default class QuickSettings extends React.Component {
           value={this.state.autoreload}
         />
         <div className='column-subnav'>
-          <a onClick={this.hideColumn} title='Hide this column'><Icon icon='eye-with-line'/>Hide</a>
+          <a onClick={this.props.hideItem} title='Hide this column'><Icon icon='eye-with-line'/>Hide</a>
           <Link to={`/columns/${this.props.id}`} title='Column setting screen'><Icon icon='cog'/>Settings</Link>
-          <a onClick={this.makeDeleteToggler(this.props.id)} title='Delete this column'><Icon icon='trash'/>Delete</a>
+          <a onClick={this.props.deleteItem} title='Delete this column'><Icon icon='trash'/>Delete</a>
         </div>
       </form>
     );

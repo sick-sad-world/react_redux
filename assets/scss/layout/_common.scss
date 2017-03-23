@@ -31,6 +31,13 @@ section[class^="screen"] {
 
 .overlay {
 	@include overlay();
+  display: flex;
+  .close-handler {
+    @include pos();
+  }
+  [class*='popup'] {
+    margin: auto;
+  }
 }
 
 .sys-notifications {

@@ -1,15 +1,16 @@
 import { GET_COLUMNS, ADD_COLUMN, EDIT_COLUMN } from '../helpers/types';
-import { defaultsDeep } from 'lodash';
-import { defColumn } from '../redux/columns';
+import { defColumnData, defDisplaySettings } from '../redux/columns';
 
 export const composeColumnData = (column) => {
-  let result = defaultsDeep(column, defColumn);
-  if (!result.display_settings) {
-    result.display_settings = defColumn.display_settings;
-  } else if (typeof result.display_settings === 'string') {
-    result.display_settings = result.display_settings.split(',');
+  if (!Object.keys(column.data).length) {
+    column.data = {...defColumnData, ...column.data};
   }
-  return result;
+  if (!column.display_settings) {
+    column.display_settings = defDisplaySettings;
+  } else if (typeof column.display_settings === 'string') {
+    column.display_settings = column.display_settings.split(',');
+  }
+  delete column.ID;
 }
 
 export default ({dispatch, getState}) => (next) => (action) => {

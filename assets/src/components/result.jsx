@@ -35,7 +35,6 @@ class Result extends React.Component {
   render() {
     let props = this.props;
     let display = props.display_settings;
-    let isWideImage = includes(display, 'wide_image');
     let tableRows = filter(this.props.tableStats, this.checkDisplay);
     //console.log('Result render');
     return (
@@ -66,11 +65,10 @@ class Result extends React.Component {
               </small>
             </header>
             { (this.checkDisplay('image')) ? (
-              <figure className={(isWideImage) ? 'is-wide' : null}>
+              <figure className={(includes(display, 'wide_image')) ? 'is-wide' : null}>
                 <LazyLoad>
                   <img src={props.image} />
                 </LazyLoad>
-                { (isWideImage) ? <figcaption>{props.title}</figcaption> : null }
               </figure>
             ) : null }
             { (this.checkDisplay('description')) ? (

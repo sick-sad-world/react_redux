@@ -13,7 +13,10 @@ export const defColumnData = {
   autoreload: 0,
   infinite: 1,
   sort: 'rate_likes',
-  direction: 'desc',
+  direction: 'desc'
+}
+
+export const availableColumnData = {
   show_favorites: 0,
   show_ignored: 0,
   limit: 30,
@@ -39,7 +42,6 @@ export const defColumn = {
   order: null,
   open: 1,
   name: '',
-  display_settings: defDisplaySettings,
   data: defColumnData
 };
 
