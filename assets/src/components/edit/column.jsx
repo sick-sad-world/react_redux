@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { includes, forOwn} from 'lodash';
+import { includes, forOwn, isEqual } from 'lodash';
 import classNames from 'classnames';
 import { updateArrayWithValue } from '../../helpers/functions';
 import { defColumnParameters, availableColumnData } from '../../redux/columns';
@@ -43,6 +43,10 @@ export default class EditColumn extends EditForm {
       display_settings: data.display_settings,
       ...columnData
     };
+  }
+
+  compareValue (k, v) {
+    return isEqual(v, (k !== 'name' || k !== 'display_settings') ? this.props.data.data[k] : this.props.data[k]);
   }
 
   updateSorting () {
