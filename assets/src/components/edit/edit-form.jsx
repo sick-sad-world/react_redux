@@ -48,11 +48,15 @@ export default class EditForm extends React.Component {
       [name]: (this[getter] instanceof Function) ? this[getter].call(this, ...args) : this.getValue.call(this, ...args)
     });
   }
+  
+  compareValue (k, v) {
+    return isEqual(v, this.props.data[k]);
+  }
 
   stateUpdater (newState = {}) {
     let changed = [...this.state.changed]
     forOwn(newState, (v, k) => {
-      if (isEqual(v, this.props.data[k])) {
+      if (this.compareValue(k, v)) {
         if (includes(this.state.changed, k)) changed = without(changed, k);
       } else {
         if (!includes(this.state.changed, k)) changed = concat(changed, k);

@@ -1,6 +1,5 @@
 import React from 'react';
 import Icon from './icon';
-import Modal from 'react-modal';
 
 // Delete confirmation simple dialog
 // ===========================================================================
