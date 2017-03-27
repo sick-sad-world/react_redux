@@ -100,6 +100,8 @@ export const favoriteResult = createAction({
 
 export const getAllResults = (data) => (dispatch) => {
   let ids = {};
+  let LIMIT = 3;
+  let DELAY = 1200;
   let notificationId = moment().unix();
 
   // Create our [Top-level] Promise chain
@@ -112,7 +114,7 @@ export const getAllResults = (data) => (dispatch) => {
 
       // Define time delay and set id to hash of columns being fetched
       // ===========================================================================
-      let delay = (i > 4) ? i * 1200 : 0;
+      let delay = (i > LIMIT) ? (i - LIMIT) * DELAY : 0;
       ids[column.id] = true;
 
       // Promise wrapper around timeout

@@ -7,11 +7,12 @@ import { bindAll, find, includes } from 'lodash';
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import containerUtility from './container-hoc';
+import { makeContainerSelector } from '../selectors/reports';
+import { makeDropdownSelector } from '../selectors/columns';
 
 // Import actions
 // ===========================================================================
-import { editReport, deleteReport, defaultReport, createReport } from '../redux/reports';
+import { editReport, deleteReport, createReport } from '../redux/reports';
 
 // Import Child components
 // ===========================================================================
@@ -123,26 +124,13 @@ Reports.defaultProps = {
 // Connect our Container to State
 // @ deps -> Reports
 // ===========================================================================
-const mapStateToProps = ({reports, columns}, ownProps) => {
-  let curId, chosen;
-  if (ownProps.params.id === 'new') {
-    curId = ownProps.params.id;
-    chosen = {
-      ...defaultReport,
-      name: ownProps.location.query.name,
-      order: reports.payload.length
-    };
-  } else {
-    curId = parseInt(ownProps.params.id);
-    chosen = find(reports.payload, {id: curId});
-  }
-  return {
-    curId,
-    state: reports.state,
-    payload: reports.payload.map(({id, name}) => ({id, name})),
-    columns: columns.payload.map(({id, name}) => ({value: id, label: name})),
-    chosen
-  }
+const mapStateToProps = () => {
+  let selector = makeContainerSelector();
+  let columns = makeDropdownSelector();
+  return (state, props) => ({
+    ...selector(state, props),
+    columns: columns(state, props)
+  });
 }
 
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
@@ -151,4 +139,4 @@ const mapDispatchToProps = (dispatch) => (bindActionCreators({
   deleteReport
 }, dispatch))
 
-export default connect(mapStateToProps, mapDispatchToProps)(Reports);
+export default connect(mapStateToProps(), mapDispatchToProps)(Reports);

@@ -118,6 +118,7 @@ blockquote {}
   main {
     flex: 1 1 auto;
     padding: baseUnit();
+    overflow: hidden;
     li {
       @include ellipsis();
     }

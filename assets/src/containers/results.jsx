@@ -1,4 +1,4 @@
-import { bindAll, debounce, isEqual } from 'lodash';
+import { bindAll, debounce } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
@@ -28,10 +28,6 @@ class Results extends React.Component {
 
   componentWillReceiveProps(newProps) {
     this.applyAutoReload(newProps);
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return !isEqual(this.props, nextProps);
   }
 
   makeScrollHandler() {
@@ -124,20 +120,16 @@ class Results extends React.Component {
 
   render () {
     return (
-      <ul className='entity-list' ref='root' onScroll={this.applyScrollHandler()}>
+      <ul className='entity-list' onScroll={this.applyScrollHandler()}>
         {this.renderResultList()}
       </ul>
     );
   }
 
-  componentDidUpdate () {
-    if (this.refs.clientHeight) {
-      this.refs.root.dispatchEvent(new Event('scroll'));
-    }
-  }
 }
 
 Results.defaultProps = {
+  state: 1,
   statePending: 'Wait a second results are in quene...',
   stateLoading: 'Content is being loaded, please stand by...',
   stateEmpty: 'It seems we could not find any items matching your query at this time. <br />Try again later or modify the filter settings for this column.',

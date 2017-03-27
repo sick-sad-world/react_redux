@@ -105,7 +105,7 @@ class Sourcesets extends React.Component {
         <dd>
           {`ID: ${deleting.id} `}
           <em className='badge' data-type={deleting.type}>{deleting.type}</em>
-          {` ${deleting.feedurl}`}
+          <div className='t-ellipsis'>{` ${deleting.feedurl}`}</div>
         </dd>
       </dl>
     )

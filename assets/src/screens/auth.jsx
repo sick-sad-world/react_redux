@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 // Import actions
 // ===========================================================================
 import { setAppState, fetchData } from '../redux/app';
-import { getUser, login } from '../redux/user';
+import { getUser, login, addUser } from '../redux/user';
 import { getColumnsForResults } from '../redux/columns';
 import { getAllResults } from '../redux/results';
 
@@ -27,7 +27,6 @@ class Auth extends React.Component {
         username: e.target.elements.username.value,
         password: e.target.elements.password.value
       })
-      .then(() => this.props.setAppState(1))
       .then(() => this.props.getUser(null, { notification: false}))
       .then(() => this.props.fetchData())
       .then(getColumnsForResults)
@@ -39,6 +38,17 @@ class Auth extends React.Component {
   // ===========================================================================
   handleReg(e) {
     e.preventDefault();
+    let { name, email, password } = e.target.elements;
+    this.props.addUser({
+      name: name.value,
+      email: email.value,
+      password: password.value,
+      redirect: window.location.host
+    }).then(() => {
+      name.value = '';
+      email.value = '';
+      password.value = '';
+    })
   }
 
   // Redirect to auth if user is unauthentificated
@@ -99,6 +109,7 @@ const mapStateToProps = ({user}) => ({...user});
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
   login,
   getUser,
+  addUser,
   fetchData,
   getAllResults,
   setAppState

@@ -24,3 +24,8 @@ export const makeDashboardSelector = () => createSelector(
     state,
     payload: payload.filter(({open}) => !!open)
   }));
+
+export const makeDropdownSelector = () => createSelector(
+  getColumns,
+  (columns) => columns.map(({id, name}) => ({value: id, label: name}))
+)

@@ -14,7 +14,7 @@ import { makeDashboardSelector } from '../selectors/columns';
 import Header from '../components/dashboard/header';
 import Settings from '../components/dashboard/settings';
 import DeleteConfirmation from '../components/delete-confirm';
-import Results from './results';
+import Results from '../components/dashboard/results';
 
 // Import actions
 // ===========================================================================
@@ -64,7 +64,11 @@ class Dashboard extends React.Component {
     let column = find(this.props.payload, {id: changes.id});
     if (column) {
       changes.data = {...column.data, ...changes.data};
-      this.props.editColumn(changes);
+      this.props.editColumn(changes).then(({payload}) => {
+        if (changes.data.sort || changes.data.direction) {
+          return this.props.getResults(payload.data, {id: changes.id});
+        }
+      });
     }
   }
 

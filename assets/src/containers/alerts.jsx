@@ -1,17 +1,19 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, find, includes } from 'lodash';
+import { bindAll, includes } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { makeContainerSelector } from '../selectors/alerts';
+import { makeDropdownSelector } from '../selectors/columns';
 
 // Import actions
 // ===========================================================================
 import { notification } from '../redux/notifications';
-import { editAlert, deleteAlert, createAlert, defaultAlert } from '../redux/alerts';
+import { editAlert, deleteAlert, createAlert } from '../redux/alerts';
 
 // Import Child components
 // ===========================================================================
@@ -120,26 +122,13 @@ Alerts.defaultProps = {
 // Connect our Container to State
 // @ deps -> Alerts
 // ===========================================================================
-const mapStateToProps = ({alerts, columns}, ownProps) => {
-  let curId, chosen;
-  if (ownProps.params.id === 'new') {
-    curId = ownProps.params.id;
-    chosen = {
-      ...defaultAlert,
-      name: ownProps.location.query.name,
-      order: alerts.payload.length
-    };
-  } else {
-    curId = parseInt(ownProps.params.id);
-    chosen = find(alerts.payload, {id: curId});
-  }
-  return {
-    curId,
-    state: alerts.state,
-    payload: alerts.payload.map(({id, name}) => ({id, name})),
-    columns: columns.payload.map(({id, name}) => ({value: id, label: name})),
-    chosen
-  }
+const mapStateToProps = () => {
+  let selector = makeContainerSelector();
+  let columns = makeDropdownSelector();
+  return (state, props) => ({
+    ...selector(state, props),
+    columns: columns(state, props)
+  });
 }
 
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
@@ -149,4 +138,4 @@ const mapDispatchToProps = (dispatch) => (bindActionCreators({
   notification
 }, dispatch))
 
-export default connect(mapStateToProps, mapDispatchToProps)(Alerts);
+export default connect(mapStateToProps(), mapDispatchToProps)(Alerts);

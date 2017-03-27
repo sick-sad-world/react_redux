@@ -20,6 +20,7 @@ export default function createAction (config) {
     options = {
       notification: true,
       state: true,
+      id: (data) ? data.id : null,
       ...options
     };
 

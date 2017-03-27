@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, GET_USER, EDIT_USER, SET_USER_STATE } from '../helpers/types';
+import { LOGIN, LOGOUT, GET_USER, ADD_USER, EDIT_USER, SET_USER_STATE } from '../helpers/types';
 import createAction from '../helpers/action-factory';
 
 export const defaultUser = {
@@ -25,10 +25,11 @@ export default function reducer (state = {...defaultUser}, action) {
       }
     case EDIT_USER:
     case GET_USER:
+    case ADD_USER:
       return {
         ...state,
         state: 2,
-        payload: action.payload
+        payload: {...state.payload, ...action.payload, image: 'img/ph_user.png'}
       }
     case LOGOUT:
       return {
@@ -58,6 +59,14 @@ export const logout = createAction({
   url: 'logout',
   pendingMessage: 'Shutting down session...',
   successMessage: 'Logged out.'
+});
+
+export const addUser = createAction({
+  type: ADD_USER,
+  state_type: SET_USER_STATE,
+  url: 'add_user',
+  pendingMessage: 'Registering new user...',
+  successMessage: 'New user has been created.'
 });
 
 export const getUser = createAction({
