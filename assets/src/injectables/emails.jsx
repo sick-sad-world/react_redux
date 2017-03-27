@@ -6,6 +6,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { makeEmailsSelector } from '../selectors/user';
 
 // Import child components
 // ===========================================================================
@@ -38,15 +39,14 @@ class Emails extends React.Component {
 // Connect our Container to State
 // @ deps -> User
 // ===========================================================================
-const mapStateToProps = ({user}) => ({
-  state: user.state,
-  email: user.payload.email,
-  data: user.payload.email_bcc
-});
+const mapStateToProps = () => {
+  const selector = makeEmailsSelector();
+  return (state, props) => selector(state, props);
+};
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   editUser,
   notification
 }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Emails);
+export default connect(mapStateToProps(), mapDispatchToProps)(Emails);

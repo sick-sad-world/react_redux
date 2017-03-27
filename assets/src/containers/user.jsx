@@ -7,6 +7,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { makeContainerSelector } from '../selectors/user';
 
 // Import actions
 // ===========================================================================
@@ -38,8 +39,11 @@ class User extends React.Component {
 // Connect our Container to State
 // @ deps -> User
 // ===========================================================================
-const mapStateToProps = ({user}) => ({...user});
+const mapStateToProps = () => {
+  const selector = makeContainerSelector();
+  return (state, props) => selector(state, props);
+};
 
 const mapDispatchToProps = (dispatch) => (bindActionCreators({ editUser }, dispatch))
 
-export default connect(mapStateToProps, mapDispatchToProps)(User);
+export default connect(mapStateToProps(), mapDispatchToProps)(User);

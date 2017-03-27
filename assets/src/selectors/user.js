@@ -3,9 +3,24 @@ import createSelector from '../helpers/selectorCreator';
 const getUserState = ({user}) => user.state;
 const getUserData = ({user}) => user.payload;
 
-export const makeUserSelector = () => createSelector(
+export const makeWorkspaceSelector = () => createSelector(
+  getUserData,
+  ({id, image, fullname, position}) => ({
+    user:{id, image, fullname, position}
+  }));
+
+export const makeContainerSelector = () => createSelector(
   getUserState,
   getUserData,
   (state, payload) => ({
     state, payload
+  }));
+
+export const makeEmailsSelector = () => createSelector(
+  getUserState,
+  getUserData,
+  (state, payload) => ({
+    state,
+    email: payload.email,
+    data: payload.email_bcc
   }));

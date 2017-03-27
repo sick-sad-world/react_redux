@@ -8,7 +8,7 @@ import classNames from 'classnames';
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { makeUserSelector } from '../selectors/user';
+import { makeWorkspaceSelector } from '../selectors/user';
 
 // Import actions
 // ===========================================================================
@@ -42,13 +42,13 @@ class Workspace extends React.Component {
   // Redirect to auth if user is unauthentificated
   // ===========================================================================
   componentWillMount() {
-    !this.props.payload.id && this.props.router.push('/auth');
+    !this.props.user.id && this.props.router.push('/auth');
   }
 
   // Redirect to auth if user is unauthentificated
   // ===========================================================================
   componentWillUpdate(newProps) {
-    !newProps.payload.id && this.props.router.push('/auth');
+    !newProps.user.id && this.props.router.push('/auth');
   }
 
   // Handler for toggling sidebar state
@@ -66,7 +66,6 @@ class Workspace extends React.Component {
   // Render our screen
   // ===========================================================================
   render() {
-    let { payload } = this.props;
     let routes = this.props.route.childRoutes.map(({label, path, icon}) => ({label, path, icon}));
     // Return JSX layout of a component
     // ===========================================================================
@@ -76,7 +75,7 @@ class Workspace extends React.Component {
           'sidebar': true,
           'is-expanded': this.state.sidebar
         })}>
-          <UserBlock fullname={payload.fullname} position={payload.position} image={payload.image} />
+          <UserBlock fullname={this.props.user.fullname} position={this.props.user.position} image={this.props.user.image} />
           <MainNav routes={routes} toggle={this.sidebarHandler} logout={this.logoutHandler} />
         </aside>
         <div className='screen-content'>
@@ -92,7 +91,7 @@ class Workspace extends React.Component {
 // @ deps -> App, (User in future)
 // ===========================================================================
 const mapStateToProps = () => {
-  const selector = makeUserSelector();
+  const selector = makeWorkspaceSelector();
   return (state, props) => selector(state, props);
 };
 
