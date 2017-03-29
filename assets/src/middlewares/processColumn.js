@@ -17,7 +17,7 @@ export default ({dispatch, getState}) => (next) => (action) => {
 
   if (action.type === GET_COLUMNS) {
     action.payload.forEach(composeColumnData);
-  } else if (action.type === ADD_COLUMN || action.type === EDIT_COLUMN) {
+  } else if (action.type === ADD_COLUMN) {
     composeColumnData(action.payload);
   }
 
