@@ -60,15 +60,17 @@ class Dashboard extends React.Component {
     return this.isRootPath(nextProps);
   }
 
-  updateItem(changes) {
-    let column = find(this.props.payload, {id: changes.id});
-    if (column) {
-      changes.data = {...column.data, ...changes.data};
-      this.props.editColumn(changes).then(({payload}) => {
-        if (changes.data.sort || changes.data.direction) {
-          return this.props.getResults(payload.data, {id: changes.id});
-        }
-      });
+  updateItem(id) {
+    return (changes) => {
+      let column = find(this.props.payload, {id});
+      if (column) {
+        changes.data = {...column.data, ...changes.data};
+        this.props.editColumn(changes).then(({payload}) => {
+          if (changes.data.sort || changes.data.direction) {
+            return this.props.getResults(payload.data, {id: changes.id});
+          }
+        });
+      }
     }
   }
 
@@ -122,7 +124,7 @@ class Dashboard extends React.Component {
         <Settings
           id={column.id}
           running={this.props.state > 2}
-          onChange={this.updateItem}
+          onChange={this.updateItem(column.id)}
           hideItem={this.hideItem(column.id)}
           deleteItem={this.deleteConfirm(column)}
           sort={column.data.sort}

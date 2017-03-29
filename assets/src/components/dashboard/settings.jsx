@@ -52,7 +52,7 @@ export default class Settings extends React.Component {
           disabled={this.props.running}
           label='Infinite scroll'
           className='row-flex'
-          name='infinite'
+          name={`infinite-${this.props.id}`}
           options={{
             'Yes': 1,
             'No': 0
@@ -64,7 +64,7 @@ export default class Settings extends React.Component {
           disabled={this.props.running}
           label='Autoreloading'
           className='row-flex'
-          name='autoreload'
+          name={`autoreload-${this.props.id}`}
           options={{
             'On': this.state.autoreload || 30,
             'Off': 0
