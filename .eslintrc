@@ -5,7 +5,7 @@
     "es6": true,
     "jest": true
   },
-  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "extends": ["airbnb-base", "plugin:react/recommended"],
   "parserOptions": {
     "ecmaVersion": 7,
     "sourceType": "module",
@@ -17,7 +17,15 @@
   "plugins": ["react", "babel"],
   "rules": {
     "no-unused-vars": 1,
-    "quotes": [1, "single"],
-    "react/prop-types": 0
+    "no-param-reassign": 1,
+    "max-len": [1, 150],
+    "import/no-extraneous-dependencies": 0,
+    "comma-dangle": ["error", {
+        "arrays": "never",
+        "objects": "never",
+        "imports": "never",
+        "exports": "never",
+        "functions": "never",
+    }]
   }
 }

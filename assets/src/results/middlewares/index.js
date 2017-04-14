@@ -1,0 +1,1 @@
+export { splitResultText } from './splitResultText';
