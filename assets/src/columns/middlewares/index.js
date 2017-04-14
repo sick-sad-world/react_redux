@@ -1,1 +1,3 @@
-export  { processColumn } from './processColumn';
+import processColumn from './processColumn';
+
+export { processColumn };

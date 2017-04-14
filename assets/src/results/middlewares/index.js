@@ -1,1 +1,3 @@
-export { splitResultText } from './splitResultText';
+import splitResultText from './splitResultText';
+
+export { splitResultText };

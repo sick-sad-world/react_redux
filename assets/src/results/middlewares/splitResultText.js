@@ -1,6 +1,6 @@
 import types from '../types';
 
-export const splitText = (result) => {
+export function splitText(result) {
   const limit = 120;
   const index = {
     max: Math.round(limit * 1.25),
@@ -28,7 +28,7 @@ export const splitText = (result) => {
     }
   }
   return result;
-};
+}
 
 export default ({ dispatch, getState }) => next => (action) => {
   if (action.type === types.READ || action.type === types.PUSH) {

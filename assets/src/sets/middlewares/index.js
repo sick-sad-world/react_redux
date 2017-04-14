@@ -1,2 +1,4 @@
-export { updateUniq } from './updateUniq';
-export { clearFeeds } from './clearFeeds';
+import updateUniq from './updateUniq';
+import clearFeeds from './clearFeeds';
+
+export { updateUniq, clearFeeds };

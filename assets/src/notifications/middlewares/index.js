@@ -1,1 +1,3 @@
-import { sendMessage } from './middlewares/send-message';
+import sendMessage from './send-message';
+
+export { sendMessage };

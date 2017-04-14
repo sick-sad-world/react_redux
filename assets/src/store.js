@@ -2,12 +2,13 @@
 // ===========================================================================
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { routerReducer } from 'react-router-redux';
+import thunk from 'redux-thunk';
 
 // Import module middlewares
 // ===========================================================================
-import sendRequest from 'common/send-request';
+// import sendRequest from 'common/send-request';
 import { splitResultText } from 'src/results/middlewares';
-import { sendMessage } from 'src/notifications/middlewares';
+// import { sendMessage } from 'src/notifications/middlewares';
 import { updateUniq, clearFeeds } from 'src/sets/middlewares';
 import { processColumn } from 'src/columns/middlewares';
 
@@ -26,10 +27,10 @@ import reports from 'src/reports/reduser';
 // Compose reducers
 // ===========================================================================
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
+console.log(splitResultText, updateUniq, clearFeeds, processColumn);
 // Create actual store
 // ===========================================================================
 export default createStore(
   combineReducers({ app, user, notifications, columns, results, sets, feeds, alerts, reports, routing: routerReducer }),
-  composeEnhancers(applyMiddleware(sendMessage('before'), sendRequest, sendMessage('after'), processColumn, updateUniq, clearFeeds, splitResultText))
+  composeEnhancers(applyMiddleware(thunk, processColumn, updateUniq, clearFeeds, splitResultText))
 );
