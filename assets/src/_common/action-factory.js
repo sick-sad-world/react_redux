@@ -1,7 +1,5 @@
 import moment from 'moment';
 import fetch from '../communication';
-import notification from 'src/notifications/actions';
-// import { clientError } from 'src/application/actions';
 
 export default function createAction(conf) {
   const config = {
@@ -14,7 +12,7 @@ export default function createAction(conf) {
     ...conf
   };
 
-  return (data, opts) => (dispatch) => {
+  return (data, opts) => (dispatch, getState, appActions) => {
     const notificationId = moment().unix();
     const options = {
       notification: true,
@@ -36,7 +34,7 @@ export default function createAction(conf) {
     // Create notification of process beginning
     // ===========================================================================
     if (options.notification && config.pendingMessage) {
-      dispatch(notification({
+      dispatch(appActions.notification({
         id: notificationId,
         type: 'loading',
         text: config.pendingMessage.replace('$id', options.id)
@@ -58,7 +56,7 @@ export default function createAction(conf) {
         // Create notification of process successfull ending
         // ===========================================================================
         if (options.notification) {
-          dispatch(notification({
+          dispatch(appActions.notification({
             id: notificationId,
             type: 'success',
             text: payload.success || config.successMessage.replace('$id', options.id)
@@ -72,34 +70,34 @@ export default function createAction(conf) {
           payload: (payload.success || payload.message) ? data : payload,
           entity: options.id
         });
+      })
+      .catch((error) => {
+        if (error instanceof Error) {
+          // Dispatch global app Error
+          // ===========================================================================
+          dispatch(appActions.clientError(error.trace));
+        } else {
+          // Dispatch error notification
+          // ===========================================================================
+          if (options.notification) {
+            dispatch(appActions.notification({
+              id: notificationId,
+              type: 'error',
+              text: (error.event) ? `Network error: ${error.url}` : error.text
+            }));
+          }
+
+          // Set entity state to IDLE
+          // ===========================================================================
+          if (options.state && config.state_type) {
+            dispatch({
+              type: config.state_type,
+              state: 2
+            });
+          }
+        }
+
+        throw error;
       });
-      // .catch((error) => {
-      //   if (error instanceof Error) {
-      //     // Dispatch global app Error
-      //     // ===========================================================================
-      //     dispatch(clientError(error.trace));
-      //   } else {
-      //     // Dispatch error notification
-      //     // ===========================================================================
-      //     if (options.notification) {
-      //       dispatch(notification({
-      //         id: notificationId,
-      //         type: 'error',
-      //         text: (error.event) ? `Network error: ${error.url}` : error.text
-      //       }));
-      //     }
-
-      //     // Set entity state to IDLE
-      //     // ===========================================================================
-      //     if (options.state && config.state_type) {
-      //       dispatch({
-      //         type: config.state_type,
-      //         state: 2
-      //       });
-      //     }
-      //   }
-
-      //   throw error;
-      // });
   };
 }

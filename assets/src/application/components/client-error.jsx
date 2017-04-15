@@ -13,6 +13,8 @@ export default function ClientError({ error }) {
   );
 }
 
+// Proptypes validation
+// ===========================================================================
 ClientError.propTypes = {
   error: PropTypes.oneOfType([
     PropTypes.string,

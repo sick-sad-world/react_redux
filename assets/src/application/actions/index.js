@@ -1,6 +1,7 @@
 import types from '../types';
+import fetchData from './fetch-data';
 
-export { fetchData } from './fetchData';
+export { fetchData };
 
 export const clientError = error => dispatch => dispatch({
   type: types.ERROR,

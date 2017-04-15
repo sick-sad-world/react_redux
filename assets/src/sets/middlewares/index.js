@@ -1,4 +1,4 @@
-import updateUniq from './updateUniq';
-import clearFeeds from './clearFeeds';
+import updateUniq from './update-uniq';
+import clearFeeds from './clear-feeds';
 
 export { updateUniq, clearFeeds };

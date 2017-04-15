@@ -1,3 +1,3 @@
-import processColumn from './processColumn';
+import processColumn from './process-column';
 
 export { processColumn };

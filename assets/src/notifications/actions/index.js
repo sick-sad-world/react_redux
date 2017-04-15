@@ -1,7 +1,7 @@
 import moment from 'moment';
 import types from '../types';
 
-export default note => dispatch => dispatch({
+export const notification = note => dispatch => dispatch({
   type: types.NOTIFICATION,
   payload: {
     id: moment().unix(),

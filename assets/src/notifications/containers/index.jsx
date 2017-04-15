@@ -14,7 +14,7 @@ import Notification from '../components/notification';
 
 // Import Actions
 // ===========================================================================
-import notification from '../actions';
+import { notification } from '../actions';
 
 class Notifications extends React.Component {
   // Create timeouts hash and bind handler

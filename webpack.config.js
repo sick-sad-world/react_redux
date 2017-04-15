@@ -55,8 +55,11 @@ const sassLoader = {
     use: [{
       loader: 'css-loader',
       options: {
-        sourceMap: isDevelopment
+        sourceMap: isDevelopment,
+        importLoaders: 1
       }
+    }, {
+      loader: 'postcss-loader'
     }, {
       loader: 'sass-loader',
       options: {

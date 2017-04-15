@@ -15,7 +15,7 @@ import ProgressTracker from '../components/progress-tracker';
 // ===========================================================================
 import { getUser } from 'src/user/actions';
 import { getAllResults } from 'src/results/actions';
-import { getColumnsForResults } from 'src/columns/reduser';
+import { getColumnsForResults } from 'src/columns/helpers';
 import { setAppState, fetchData } from '../actions';
 
 // This is CORE APP Component
@@ -39,11 +39,15 @@ class App extends React.Component {
   }
 }
 
+// Default props
+// ===========================================================================
 App.defaultProps = {
   state: 1,
   loadingStep: 1
 };
 
+// Proptypes validation
+// ===========================================================================
 App.propTypes = {
   error: PropTypes.string,
   state: PropTypes.number.isRequired,

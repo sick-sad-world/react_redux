@@ -4,6 +4,11 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import thunk from 'redux-thunk';
 
+// Import application actions
+// ===========================================================================
+import { notification } from 'src/notifications/actions';
+import { clientError } from 'src/application/actions';
+
 // Import module middlewares
 // ===========================================================================
 // import sendRequest from 'common/send-request';
@@ -27,10 +32,10 @@ import reports from 'src/reports/reduser';
 // Compose reducers
 // ===========================================================================
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-console.log(splitResultText, updateUniq, clearFeeds, processColumn);
+
 // Create actual store
 // ===========================================================================
 export default createStore(
   combineReducers({ app, user, notifications, columns, results, sets, feeds, alerts, reports, routing: routerReducer }),
-  composeEnhancers(applyMiddleware(thunk, processColumn, updateUniq, clearFeeds, splitResultText))
+  composeEnhancers(applyMiddleware(thunk.withExtraArgument({ notification, clientError }), processColumn, updateUniq, clearFeeds, splitResultText))
 );

@@ -1,8 +1,6 @@
 import createAction from 'common/action-factory';
 import types from '../types';
 
-console.log(createAction);
-
 export const getColumns = createAction({
   type: types.READ,
   state_type: types.STATE,

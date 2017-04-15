@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { getResults } from '../actions';
-import notification from 'src/notifications/actions';
+import { notification } from 'src/notifications/actions';
 
 export default data => (dispatch) => {
   const ids = {};
