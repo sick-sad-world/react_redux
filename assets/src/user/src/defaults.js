@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { email, id } from 'common/typecheck';
+import { email, numBool } from 'common/typecheck';
 
 export const defaultData = {
   state: 1,
@@ -19,10 +19,11 @@ export const defaultData = {
 export const defaultInterface = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
-  fullname: PropTypes.string.isRequired,
-  position: PropTypes.string.isRequired,
-  status: PropTypes.string.isRequired,
-  image: PropTypes.string.isRequired,
-  email: PropTypes.string.isRequired,
-  email_bcc: PropTypes.arrayOf(PropTypes.string).isRequired
+  fullname: PropTypes.string,
+  position: PropTypes.string,
+  status: PropTypes.string,
+  image: PropTypes.string,
+  is_admin: numBool,
+  email,
+  email_bcc: PropTypes.arrayOf(email)
 };

@@ -6,7 +6,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
-const alias = ['/img', '/icon', '/scss', '/src', '/src/_common'];
+const alias = ['/img', '/icon', '/scss', '/src', '/src/_common', '/src/common/functions'];
 
 const PLUGINS = [
   new ExtractTextPlugin({
