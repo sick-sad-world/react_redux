@@ -7,7 +7,7 @@ import makeAppSelector from '../selectors';
 
 // Import Child components
 // ===========================================================================
-import Notifications from 'src/notifications/containers';
+import { Container as Notifications } from 'src/notifications';
 import ClientError from '../components/client-error';
 import ProgressTracker from '../components/progress-tracker';
 

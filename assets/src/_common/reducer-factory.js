@@ -1,5 +1,5 @@
 import { reject, uniqBy, has } from 'lodash';
-import types from '../application/types';
+import { LOGIN, LOGOUT } from './type-factory';
 
 export const mergeArrayById = (arr, obj) => {
   let changed = false;
@@ -20,8 +20,8 @@ export const updateObjectById = (state, id, updater) => ({
 export default function createReducer(config) {
   return function reducer(state = { state: 1, payload: [] }, action) {
     switch (action.type) {
-      case types.LOGOUT:
-      case types.LOGIN:
+      case LOGOUT:
+      case LOGIN:
         return { state: 1, payload: [] };
       case config.STATE:
         return {

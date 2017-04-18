@@ -31,6 +31,17 @@ export function stateNum(props, propName, componentName) {
   return undefined;
 }
 
+export function directionString(props, propName, componentName) {
+  if (props[propName] !== 'asc' && props[propName] !== 'desc') {
+    return new Error(`
+      Invalid prop "${propName}" supplied to "${componentName}".
+      Direction of column results should be a string "asc" or "desc"
+      Validation failed.
+    `);
+  }
+  return undefined;
+}
+
 export function numBool(props, propName, componentName) {
   if ([0, 1].find(code => code === props[propName])) {
     return new Error(`
@@ -40,4 +51,18 @@ export function numBool(props, propName, componentName) {
     `);
   }
   return undefined;
+}
+
+export function oneOfValues(values) {
+  const arrayOfValues = values.map(({ value }) => value);
+  return (props, propName, componentName) => {
+    if (arrayOfValues.find(code => code === props[propName])) {
+      return new Error(`
+        Invalid prop "${propName}" supplied to "${componentName}".
+        Value should be equal to one of thoose ${arrayOfValues.join(', ')}
+        Validation failed.
+      `);
+    }
+    return undefined;
+  };
 }

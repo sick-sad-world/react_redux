@@ -4,11 +4,11 @@ import { ERROR, STATE } from 'common/type-factory';
 
 // Import all required fetch methods from other modules (optional)
 // ===========================================================================
-import { getColumns } from 'src/columns/actions';
-import { getSets } from 'src/sets/actions';
-import { getSources } from 'src/feeds/actions';
-import { getAlerts } from 'src/alerts/actions';
-import { getReports } from 'src/reports/actions';
+import { getColumns } from 'src/columns';
+import { getSets } from 'src/sets';
+import { getSources } from 'src/feeds';
+import { getAlerts } from 'src/alerts';
+import { getReports } from 'src/reports';
 
 // Set global app JS error
 // ===========================================================================

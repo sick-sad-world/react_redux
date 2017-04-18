@@ -4,30 +4,17 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { routerReducer as routing } from 'react-router-redux';
 import thunk from 'redux-thunk';
 
-// Import application actions
-// ===========================================================================
-import { notification } from 'src/notifications/actions';
-import { actions as appActions } from 'src/application';
-
-// Import module middlewares
-// ===========================================================================
-// import sendRequest from 'common/send-request';
-import { splitResultText } from 'src/results/middlewares';
-// import { sendMessage } from 'src/notifications/middlewares';
-import { updateUniq, clearFeeds } from 'src/sets/middlewares';
-import { processColumn } from 'src/columns/middlewares';
-
 // Import module store data
 // ===========================================================================
-import columns from 'src/columns/reduser';
-import results from 'src/results/reduser';
-import notifications from 'src/notifications/reduser';
-import { reduser as app } from 'src/application/reduser';
+import { reduser as columns, processColumn } from 'src/columns';
+import { reduser as results, splitResultText } from 'src/results';
+import { reduser as notifications, notification } from 'src/notifications';
+import { reduser as app, clientError } from 'src/application';
 import { reduser as user } from 'src/user';
-import sets from 'src/sets/reduser';
-import feeds from 'src/feeds/reduser';
-import alerts from 'src/alerts/reduser';
-import reports from 'src/reports/reduser';
+import { reduser as sets, updateUniq, clearFeeds } from 'src/sets';
+import { reduser as feeds } from 'src/feeds';
+import { reduser as alerts } from 'src/alerts';
+import { reduser as reports } from 'src/reports';
 
 // Compose reducers
 // ===========================================================================
@@ -49,10 +36,10 @@ export default createStore(
     routing
   }),
   composeEnhancers(applyMiddleware(
-    thunk.withExtraArgument({ notification, clientError: appActions.clientError }),
+    thunk.withExtraArgument({ notification, clientError }),
     processColumn,
     updateUniq,
     clearFeeds,
-    splitResultText)
-  )
+    splitResultText
+  ))
 );

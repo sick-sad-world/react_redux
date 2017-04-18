@@ -20,7 +20,7 @@ import { logout } from '../actions';
 // ===========================================================================
 import MainNav from '../components/main-nav';
 import UserBlock from '../components/info-block';
-// import Dashboard from '../containers/dashboard';
+// import { Dashboard } from 'src/columns';
 
 // Main app screen - where all fun is taking place
 // ===========================================================================
