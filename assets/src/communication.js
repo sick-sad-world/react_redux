@@ -26,7 +26,7 @@ export default function fetch(url, data) {
         const responce = { ...payload };
         delete responce.callback;
         resolve(responce);
-      },
+      }
     });
   });
 }

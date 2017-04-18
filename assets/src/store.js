@@ -23,7 +23,7 @@ import columns from 'src/columns/reduser';
 import results from 'src/results/reduser';
 import notifications from 'src/notifications/reduser';
 import app from 'src/application/reduser';
-import user from 'src/user/reduser';
+import { reduser as user } from 'src/user';
 import sets from 'src/sets/reduser';
 import feeds from 'src/feeds/reduser';
 import alerts from 'src/alerts/reduser';

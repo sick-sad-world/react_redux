@@ -12,7 +12,7 @@ export default function createAction(conf) {
     ...conf
   };
 
-  return (data, opts) => (dispatch, getState, appActions) => {
+  return (data, opts) => (dispatch, getState, { notification, clientError }) => {
     const notificationId = moment().unix();
     const options = {
       notification: true,
@@ -33,8 +33,8 @@ export default function createAction(conf) {
 
     // Create notification of process beginning
     // ===========================================================================
-    if (options.notification && config.pendingMessage) {
-      dispatch(appActions.notification({
+    if (notification && options.notification && config.pendingMessage) {
+      dispatch(notification({
         id: notificationId,
         type: 'loading',
         text: config.pendingMessage.replace('$id', options.id)
@@ -55,8 +55,8 @@ export default function createAction(conf) {
       .then((payload) => {
         // Create notification of process successfull ending
         // ===========================================================================
-        if (options.notification) {
-          dispatch(appActions.notification({
+        if (notification && options.notification) {
+          dispatch(notification({
             id: notificationId,
             type: 'success',
             text: payload.success || config.successMessage.replace('$id', options.id)
@@ -75,12 +75,14 @@ export default function createAction(conf) {
         if (error instanceof Error) {
           // Dispatch global app Error
           // ===========================================================================
-          dispatch(appActions.clientError(error.trace));
+          if (clientError) {
+            dispatch(clientError(error.trace));
+          }
         } else {
           // Dispatch error notification
           // ===========================================================================
-          if (options.notification) {
-            dispatch(appActions.notification({
+          if (notification && options.notification) {
+            dispatch(notification({
               id: notificationId,
               type: 'error',
               text: (error.event) ? `Network error: ${error.url}` : error.text

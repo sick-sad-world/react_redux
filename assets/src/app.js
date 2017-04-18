@@ -12,10 +12,15 @@ import { syncHistoryWithStore } from 'react-router-redux';
 // Import store
 // ===========================================================================
 import TrendolizerStore from './store';
+import { clientError } from 'src/application/actions';
 
 // Import App route Scheme
 // ===========================================================================
 import Scheme from './router';
+
+window.onerror = function errorLogger(text, url, line, col, error) {
+  TrendolizerStore.dispatch(clientError(error));
+};
 
 // Render an actual App
 // ===========================================================================

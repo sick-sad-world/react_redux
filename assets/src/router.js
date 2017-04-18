@@ -8,7 +8,7 @@ import Columns from './columns/containers';
 import Sourcesets from './sets/containers';
 import Alerts from './alerts/containers';
 import Reports from './reports/containers';
-import { User, Workspace } from './user/containers';
+import { Route as User, Workspace } from './user';
 
 export default (
   <Route components={App}>
@@ -30,7 +30,7 @@ export default (
       <Route path='/reports' component={Reports} label='Reports' icon='news'>
         <Route path=':id' component={Reports} />
       </Route>
-      <Route path='/settings' component={User} label='Settings' icon='cog' />
+      <User/>
     </Route>
     <Redirect from='*' to='/' />
   </Route>
