@@ -9,7 +9,18 @@ export function email(props, propName, componentName) {
   return undefined;
 }
 
-export function state(props, propName, componentName) {
+export function imageUrl(props, propName, componentName) {
+  if (!/\.(png|jpe?g|gif)$/.test(props[propName])) {
+    return new Error(`
+      Invalid prop "${propName}" supplied to "${componentName}".
+      Should be an URL leading to image (ending with .jpeg, .gif, .png, .jpg)
+      Validation failed.
+    `);
+  }
+  return undefined;
+}
+
+export function stateNum(props, propName, componentName) {
   if ([0, 1, 2, 3].find(code => code === props[propName])) {
     return new Error(`
       Invalid prop "${propName}" supplied to "${componentName}".

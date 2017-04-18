@@ -2,6 +2,7 @@
 // ===========================================================================
 import { bindAll, without, includes } from 'lodash';
 import classNames from 'classnames';
+import { emailStr } from 'common/typecheck';
 
 // Import React related stuff
 // ===========================================================================
@@ -18,9 +19,14 @@ export default class EmailList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      error: null,
       new: ''
     };
     bindAll(this, 'makeListItem', 'addEmail', 'makeActionHandler');
+  }
+
+  componentWillReceiveProps() {
+    this.setState({ error: null });
   }
 
   // Create list item DOM element -> used in render method
@@ -35,7 +41,7 @@ export default class EmailList extends React.Component {
           'is-disabled': this.props.disabled,
           'is-selected': isActive
         })}
-        onClick={this.makeActionHandler(email, isActive)}
+        onClick={(this.props.onClick) ? () => this.props.onClick((isActive ? this.props.email : email)) : null}
       >
         {email}
         <a onClick={() => this.props.onChange(without(this.props.data, email))}><Icon icon='cross'/></a>
@@ -43,18 +49,17 @@ export default class EmailList extends React.Component {
     );
   }
 
-  makeActionHandler(email, isActive) {
-    return (this.props.onClick) ? () => this.props.onClick((isActive ? this.props.email : email)) : null;
-  }
-
   addEmail(e) {
     e.preventDefault();
     if (includes(this.props.data, this.state.new)) {
-      if (this.props.onError instanceof Function) this.props.onError('You already have this email in list, try another one.');
+      const error = 'You already have this email in list, try another one.';
+      this.setState({ error }, () => {
+        if (this.props.onError) this.props.onError(error);
+      });
     } else {
       this.props.onChange([...this.props.data, this.state.new]);
     }
-    this.setState({ new: '' });
+    this.setState({ new: '', error: null });
   }
 
   render() {
@@ -73,6 +78,7 @@ export default class EmailList extends React.Component {
           />
           <a disabled={this.props.disabled} className='button is-accent size-90' onClick={this.addEmail}>Add new</a>
         </div>
+        {(this.state.error) ? (<span className='error'><Icon icon='error' />{this.state.error}</span>) : null }
         <div className='form-description'>{this.props.description.replace('{email}', this.props.email)}</div>
       </div>
     );
@@ -92,15 +98,17 @@ EmailList.defaultProps = {
   emptyTpl: <li className='is-default'>No email bcc created yet. All alerts/reports will be sended to main email.</li>
 };
 
+// Prop type check
+// ===========================================================================
 EmailList.propTypes = {
   onChange: PropTypes.func.isRequired,
   onError: PropTypes.func,
   onClick: PropTypes.func,
-  email: PropTypes.string.isRequired,
+  email: emailStr,
   disabled: PropTypes.bool.isRequired,
-  active: PropTypes.string,
+  active: emailStr,
   description: PropTypes.string,
-  data: PropTypes.arrayOf(PropTypes.string).isRequired,
+  data: PropTypes.arrayOf(emailStr).isRequired,
   emailValidator: PropTypes.instanceOf(RegExp).isRequired,
   emptyTpl: PropTypes.element.isRequired
 };

@@ -1,7 +1,7 @@
 import reduser from './src/reduser';
-import EmailBcc from './src/containers/email-bcc.jsx';
-import Container from './src/containers/container.jsx';
-import Workspace from './src/containers/workspace.jsx';
+import EmailBcc from './src/containers/email-bcc';
+import Container from './src/containers/container';
+import Workspace from './src/containers/workspace';
 import * as actions from './src/actions';
 import Route from './src/route';
 

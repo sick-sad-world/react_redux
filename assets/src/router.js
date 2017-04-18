@@ -3,7 +3,7 @@ import { Route, Redirect } from 'react-router';
 
 // Import Containers
 // ===========================================================================
-import { App, Auth } from './application/containers';
+import { App, Auth } from './application';
 import Columns from './columns/containers';
 import Sourcesets from './sets/containers';
 import Alerts from './alerts/containers';

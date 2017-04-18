@@ -1,18 +1,18 @@
 import createAction from 'common/action-factory';
-import app from 'src/application/types';
-import types from '../types';
+import types from './types';
+import { LOGIN, LOGOUT } from 'common/type-factory';
 
 export const login = createAction({
-  type: app.LOGIN,
-  state_type: null,
+  type: LOGIN,
+  state_type: types.STATE,
   url: 'login',
   pendingMessage: 'Check auth credentials...',
   successMessage: 'Logged in.'
 });
 
 export const logout = createAction({
-  type: app.LOGOUT,
-  state_type: null,
+  type: LOGOUT,
+  state_type: types.STATE,
   url: 'logout',
   pendingMessage: 'Shutting down session...',
   successMessage: 'Logged out.'

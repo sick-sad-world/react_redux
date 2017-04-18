@@ -1,4 +1,4 @@
-import app from '../application/types';
+import { LOGOUT } from 'common/type-factory';
 import types from './types';
 import defaultUser from './defaults';
 
@@ -18,10 +18,10 @@ export default (state = { ...defaultUser }, action) => {
         payload: {
           ...state.payload,
           ...action.payload,
-          image: 'img/ph_user.png'
+          image: '/img/ph_user.png'
         }
       };
-    case app.LOGOUT:
+    case LOGOUT:
       return {
         ...defaultUser
       };

@@ -1,9 +1,9 @@
-import types from './types';
+import { LOGIN, LOGOUT, ERROR, STATE } from 'common/type-factory';
 import defaultApp from './defaults';
 
 export default (state = { ...defaultApp }, action) => {
   switch (action.type) {
-    case types.LOGIN:
+    case LOGIN:
       return {
         ...state,
         loadingStep: defaultApp.loadingStep,
@@ -15,13 +15,13 @@ export default (state = { ...defaultApp }, action) => {
     // case ACTIONS.GET_SOURCES:
     // case ACTIONS.GET_COLUMNS:
     //   return {...state, loadingStep: state.loadingStep + 1 }
-    case types.ERROR:
+    case ERROR:
       return {
         ...state,
         state: 0,
         error: action.error
       };
-    case types.STATE:
+    case STATE:
       return {
         ...state,
         state: action.state

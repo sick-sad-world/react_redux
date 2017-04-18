@@ -1,15 +1,19 @@
+import { bindAll } from 'lodash';
+
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+
+// Import data related stuff
+// ===========================================================================
 import { makeContainerSelector } from '../selectors';
+import { defaultInterface } from '../defaults';
 
 // Import actions
 // ===========================================================================
 import { editUser } from '../actions';
-import { notification } from 'src/notifications/actions';
 
 // Import Child components
 // ===========================================================================
@@ -18,36 +22,37 @@ import EditUser from '../components/edit';
 class User extends React.Component {
   constructor(props) {
     super(props);
-    this.updateItem = this.updateItem.bind(this);
+    bindAll(this, 'updateItem', 'onEmailBccError');
   }
 
   updateItem(data) {
     this.props.editUser(data);
   }
 
+  onEmailBccError(error) {
+    if (this.props.notification instanceof Function) {
+      this.props.notification({ type: 'error', text: error });
+    } else {
+      // some fallback
+    }
+  }
+
   render() {
     return (
       <div className='mod-page'>
-        <EditUser data={this.props.payload} state={this.props.state} update={this.updateItem} notification={this.props.notification} />
+        <EditUser data={this.props.payload} state={this.props.state} update={this.updateItem} onEmailBccError={this.onEmailBccError} />
       </div>
     );
   }
 }
 
+// Prop type check
+// ===========================================================================
 User.propTypes = {
   editUser: PropTypes.func.isRequired,
-  notification: PropTypes.func.isRequired,
+  notification: PropTypes.func,
   state: PropTypes.number.isRequired,
-  payload: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    fullname: PropTypes.string.isRequired,
-    position: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    email_bcc: PropTypes.arrayOf(PropTypes.string).isRequired
-  }).isRequired
+  payload: PropTypes.shape(defaultInterface).isRequired
 };
 
 // Connect our Container to State
@@ -58,6 +63,10 @@ const mapStateToProps = () => {
   return (state, props) => selector(state, props);
 };
 
-const mapDispatchToProps = dispatch => (bindActionCreators({ editUser, notification }, dispatch));
+const mapDispatchToProps = dispatch => ({
+  editUser(...args) {
+    return dispatch(editUser(...args));
+  }
+});
 
 export default connect(mapStateToProps(), mapDispatchToProps)(User);

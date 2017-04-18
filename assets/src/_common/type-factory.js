@@ -10,6 +10,11 @@ export default function createTypes(module, actions) {
     UPDATE: 'UPDATE',
     DELETE: 'DELETE',
     STATE: 'STATE',
-    ...actions,
+    ...actions
   }, v => `@@${module}/${v}`));
 }
+
+export const LOGIN = '@@application/LOGIN';
+export const LOGOUT = '@@application/LOGOUT';
+export const ERROR = '@@application/ERROR';
+export const STATE = '@@application/STATE';

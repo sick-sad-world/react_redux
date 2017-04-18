@@ -1,6 +1,7 @@
 // Import utility stuff
 // ===========================================================================
 import classNames from 'classnames';
+import { defaultData, defaultInterface } from '../defaults';
 
 // Import React related stuff
 // ===========================================================================
@@ -9,9 +10,9 @@ import PropTypes from 'prop-types';
 
 // Import Child components
 // ===========================================================================
-import TextInput from 'common/components/forms/input-text.jsx';
-import EditForm from 'common/components/edit-form.jsx';
-import EmailList from './email-list.jsx';
+import TextInput from 'common/components/forms/input-text';
+import EditForm from 'common/components/edit-form';
+import EmailList from './email-list';
 
 export default class EditUser extends EditForm {
   mapDataToState(data) {
@@ -27,7 +28,6 @@ export default class EditUser extends EditForm {
   render() {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
-    if (!this.props.data) return null;
     const running = this.props.state > 2;
 
     return (
@@ -75,7 +75,7 @@ export default class EditUser extends EditForm {
                 email={this.state.email}
                 data={this.state.email_bcc}
                 onChange={this.updateState('email_bcc')}
-                onError={err => this.props.notification({ type: 'error', text: err })}
+                onError={this.props.onEmailBccError}
                 />
             </div>
           </div>
@@ -85,10 +85,19 @@ export default class EditUser extends EditForm {
   }
 }
 
+// Edit profile form default props
+// ===========================================================================
 EditUser.defaultProps = {
   texts: {
     title: 'Profile settings',
     description: 'Tell us a bit about yourself...',
     confirmation: '{data} was changed. Save changes?'
-  }
+  },
+  data: { ...defaultData }
+};
+
+// Edit profile form prop types checks
+// ===========================================================================
+EditUser.propTypes = {
+  data: PropTypes.shape(defaultInterface).isRequired
 };

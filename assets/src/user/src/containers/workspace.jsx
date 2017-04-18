@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll } from 'lodash';
+import { bindAll, pick } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
@@ -9,6 +9,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { defaultInterface } from '../defaults';
 import { makeWorkspaceSelector } from '../selectors';
 
 // Import actions
@@ -97,12 +98,7 @@ class Workspace extends React.Component {
 // ===========================================================================
 Workspace.propTypes = {
   children: PropTypes.element,
-  user: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    image: PropTypes.string.isRequired,
-    fullname: PropTypes.string.isRequired,
-    position: PropTypes.string.isRequired
-  }).isRequired,
+  user: PropTypes.shape(pick(defaultInterface, 'id', 'image', 'fullname', 'position')).isRequired,
   location: PropTypes.object.isRequired,
   logout: PropTypes.func.isRequired,
   route: PropTypes.shape({

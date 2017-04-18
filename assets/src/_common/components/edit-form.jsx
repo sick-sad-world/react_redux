@@ -8,7 +8,7 @@ import { numOrString } from 'common/functions';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
-import Icon from './icon.jsx';
+import Icon from './icon';
 
 // Edit form high-order component - all basic interactions
 // ===========================================================================
