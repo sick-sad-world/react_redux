@@ -1,57 +1,61 @@
-export function email(props, propName, componentName) {
-  if (!/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(props[propName])) {
-    return new Error(`
+export default function createOptionableValidator(validator) {
+  function validate(isRequired, props, propName, componentName, location) {
+    if (props[propName] === null || props[propName] === undefined) {
+      return (!isRequired) ? undefined : new Error(`
+        Required prop "${propName}" is not supplied to "${componentName}".
+        Should be not "null" and not "undefined"
+        Validation failed.
+      `);
+    }
+    const result = validator(props, propName, componentName, location);
+    return (result) ? new Error(`
       Invalid prop "${propName}" supplied to "${componentName}".
-      Should be an email like: "blablabla-okay@gmail.com"
+      ${result}
+      Passed: ${props[propName]}
       Validation failed.
-    `);
+    `) : result;
   }
-  return undefined;
+
+  const chainedValidate = validate.bind(null, false);
+  chainedValidate.isRequired = validate.bind(null, true);
+
+  return chainedValidate;
 }
 
-export function imageUrl(props, propName, componentName) {
+export const emailStr = createOptionableValidator((props, propName) => {
+  if (!/\S+@\S+\.\S+/.test(props[propName])) {
+    return new Error('Should be an email like: "blablabla-okay@gmail.com"');
+  }
+  return undefined;
+});
+
+export const imageUrl = createOptionableValidator((props, propName) => {
   if (!/\.(png|jpe?g|gif)$/.test(props[propName])) {
-    return new Error(`
-      Invalid prop "${propName}" supplied to "${componentName}".
-      Should be an URL leading to image (ending with .jpeg, .gif, .png, .jpg)
-      Validation failed.
-    `);
+    return new Error('Should be an URL leading to image (ending with .jpeg, .gif, .png, .jpg)');
   }
   return undefined;
-}
+});
 
-export function stateNum(props, propName, componentName) {
+export const stateNum = createOptionableValidator((props, propName) => {
   if ([0, 1, 2, 3].find(code => code === props[propName])) {
-    return new Error(`
-      Invalid prop "${propName}" supplied to "${componentName}".
-      Status is a number from 0 to 3. Where 0 - error, 1 - initial, 2 - idle, 3 - loading.
-      Validation failed.
-    `);
+    return new Error('Status is a number from 0 to 3. Where 0 - error, 1 - initial, 2 - idle, 3 - loading.');
   }
   return undefined;
-}
+});
 
-export function directionString(props, propName, componentName) {
+export const directionString = createOptionableValidator((props, propName) => {
   if (props[propName] !== 'asc' && props[propName] !== 'desc') {
-    return new Error(`
-      Invalid prop "${propName}" supplied to "${componentName}".
-      Direction of column results should be a string "asc" or "desc"
-      Validation failed.
-    `);
+    return new Error('Direction of column results should be a string "asc" or "desc"');
   }
   return undefined;
-}
+});
 
-export function numBool(props, propName, componentName) {
+export const numBool = createOptionableValidator((props, propName) => {
   if ([0, 1].find(code => code === props[propName])) {
-    return new Error(`
-      Invalid prop "${propName}" supplied to "${componentName}".
-      Number boolean means that value should be 1 for "true" and 0 for "false"
-      Validation failed.
-    `);
+    return new Error('Number boolean means that value should be 1 for "true" and 0 for "false"');
   }
   return undefined;
-}
+});
 
 export function oneOfValues(values) {
   const arrayOfValues = values.map(({ value }) => value);
@@ -60,6 +64,7 @@ export function oneOfValues(values) {
       return new Error(`
         Invalid prop "${propName}" supplied to "${componentName}".
         Value should be equal to one of thoose ${arrayOfValues.join(', ')}
+        Passed: ${props[propName]}
         Validation failed.
       `);
     }

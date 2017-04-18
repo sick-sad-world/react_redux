@@ -1,6 +1,6 @@
 // Create hash of all Sources [id] where value is a number of occurances
 // ===========================================================================
-export const calcFeedOccurance = function calcFeedOccurance(sets) {
+export function calcFeedOccurance(sets) {
   const feeds = {};
   sets.forEach((set) => {
     set.source_ids.forEach((source) => {
@@ -12,11 +12,11 @@ export const calcFeedOccurance = function calcFeedOccurance(sets) {
     });
   });
   return feeds;
-};
+}
 
 // Loop over Set [source_ids] and push uniqe ones to [uniq_ids]
 // ===========================================================================
-export const setUniqFeeds = function setUniqFeeds(set, feeds) {
+export function setUniqFeeds(set, feeds) {
   set.uniq_ids = [];
   set.source_ids.forEach((source) => {
     if (feeds[source] === 1) {
@@ -24,4 +24,4 @@ export const setUniqFeeds = function setUniqFeeds(set, feeds) {
     }
   });
   return set;
-};
+}

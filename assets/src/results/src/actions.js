@@ -1,9 +1,7 @@
 import createAction from 'common/action-factory';
 import types from './types';
 import moment from 'moment';
-import { notification } from 'src/notifications/actions';
-
-export { getAllResults } from './getAllResults';
+import { notification } from 'src/notifications';
 
 export const getResults = createAction({
   type: types.READ,
@@ -45,75 +43,77 @@ export const favoriteResult = createAction({
   successMessage: 'Result favor changed.'
 });
 
-export default data => (dispatch) => {
-  const ids = {};
-  const LIMIT = 3;
-  const DELAY = 1200;
-  const notificationId = moment().unix();
+export function getAllResults(data) {
+  return (dispatch) => {
+    const ids = {};
+    const LIMIT = 3;
+    const DELAY = 1200;
+    const notificationId = moment().unix();
 
-  // Create our [Top-level] Promise chain
-  // ===========================================================================
-  Promise.all(
-    data.map((column, i) => {
-      // If column hidden - do nothing
-      // ===========================================================================
-      if (!column.open) return null;
+    // Create our [Top-level] Promise chain
+    // ===========================================================================
+    Promise.all(
+      data.map((column, i) => {
+        // If column hidden - do nothing
+        // ===========================================================================
+        if (!column.open) return null;
 
-      // Define time delay and set id to hash of columns being fetched
-      // ===========================================================================
-      const delay = (i > LIMIT) ? (i - LIMIT) * DELAY : 0;
-      ids[column.id] = true;
+        // Define time delay and set id to hash of columns being fetched
+        // ===========================================================================
+        const delay = (i > LIMIT) ? (i - LIMIT) * DELAY : 0;
+        ids[column.id] = true;
 
-      // Promise wrapper around timeout
+        // Promise wrapper around timeout
+        // ===========================================================================
+        return new Promise((resolve, reject) => {
+          // Run our call and simple forward results to [Upper-level] promise chain
+          // ===========================================================================
+          setTimeout(() => dispatch(getResults(column.data, {
+            id: column.id,
+            notification: false
+          })).then(resolve).catch(reject), delay);
+        }).catch((error) => {
+          // Show error message if something went wrong
+          // ===========================================================================
+          if (notification) {
+            dispatch(notification({
+              type: 'error',
+              text: `Results for column ${ids[column.id]} ended with error: ${(error.event) ? error.url : error.text}`
+            }));
+          }
+        }).then(() => {
+          // When code is done - update our message by removing [ID] of column
+          // wich result loading is done from list
+          // ===========================================================================
+          delete ids[column.id];
+          if (notification) {
+            dispatch(notification({
+              id: notificationId,
+              type: 'loading',
+              text: `Results for columns ${Object.keys(ids).join(',')} downloading now...`
+            }));
+          }
+        });
+      })
+    ).then(() => {
+      // Hide message when all columns are loaded
       // ===========================================================================
-      return new Promise((resolve, reject) => {
-        // Run our call and simple forward results to [Upper-level] promise chain
-        // ===========================================================================
-        setTimeout(() => dispatch(getResults(column.data, {
-          id: column.id,
-          notification: false
-        })).then(resolve).catch(reject), delay);
-      }).catch((error) => {
-        // Show error message if something went wrong
-        // ===========================================================================
-        if (notification) {
-          dispatch(notification({
-            type: 'error',
-            text: `Results for column ${ids[column.id]} ended with error: ${(error.event) ? error.url : error.text}`
-          }));
-        }
-      }).then(() => {
-        // When code is done - update our message by removing [ID] of column
-        // wich result loading is done from list
-        // ===========================================================================
-        delete ids[column.id];
-        if (notification) {
-          dispatch(notification({
-            id: notificationId,
-            type: 'loading',
-            text: `Results for columns ${Object.keys(ids).join(',')} downloading now...`
-          }));
-        }
-      });
-    })
-  ).then(() => {
-    // Hide message when all columns are loaded
+      if (notification) {
+        dispatch(notification({
+          id: notificationId,
+          visible: false
+        }));
+      }
+    });
+
+    // Send message at a start
     // ===========================================================================
     if (notification) {
       dispatch(notification({
         id: notificationId,
-        visible: false
+        type: 'loading',
+        text: `Results for columns ${Object.keys(ids).join(',')} downloading now...`
       }));
     }
-  });
-
-  // Send message at a start
-  // ===========================================================================
-  if (notification) {
-    dispatch(notification({
-      id: notificationId,
-      type: 'loading',
-      text: `Results for columns ${Object.keys(ids).join(',')} downloading now...`
-    }));
-  }
-};
+  };
+}

@@ -5,7 +5,7 @@ export const defaultData = {
   state: 1,
   payload: {
     id: 0,
-    email: '',
+    email: 'some@gmail.com',
     email_bcc: [],
     name: '',
     fullname: '',

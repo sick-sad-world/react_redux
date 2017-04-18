@@ -1,7 +1,7 @@
-import types from '../types';
+import types from './types';
 import { composeColumnData } from './helpers';
 
-export const processColumn = function processColumn({ dispatch, getState }) {
+export function processColumn({ dispatch, getState }) {
   return next => (action) => {
     if (action.type === types.READ) {
       action.payload.forEach(composeColumnData);
@@ -11,4 +11,4 @@ export const processColumn = function processColumn({ dispatch, getState }) {
 
     return next(action);
   };
-};
+}

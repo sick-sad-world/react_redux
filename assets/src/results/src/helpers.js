@@ -1,4 +1,4 @@
-export const splitText = function splitText(result) {
+export function splitText(result) {
   const limit = 120;
   const index = {
     max: Math.round(limit * 1.25),
@@ -27,4 +27,4 @@ export const splitText = function splitText(result) {
   }
   return result;
 }
-;
+

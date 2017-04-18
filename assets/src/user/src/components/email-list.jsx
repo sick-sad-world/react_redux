@@ -22,7 +22,7 @@ export default class EmailList extends React.Component {
       error: null,
       new: ''
     };
-    bindAll(this, 'makeListItem', 'addEmail', 'makeActionHandler');
+    bindAll(this, 'makeListItem', 'addEmail');
   }
 
   componentWillReceiveProps() {
@@ -104,7 +104,7 @@ EmailList.propTypes = {
   onChange: PropTypes.func.isRequired,
   onError: PropTypes.func,
   onClick: PropTypes.func,
-  email: emailStr,
+  email: emailStr.isRequired,
   disabled: PropTypes.bool.isRequired,
   active: emailStr,
   description: PropTypes.string,

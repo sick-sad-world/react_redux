@@ -1,8 +1,8 @@
 import { LOGOUT } from 'common/type-factory';
 import types from './types';
-import defaultUser from './defaults';
+import { defaultData } from './defaults';
 
-export default (state = { ...defaultUser }, action) => {
+export default (state = { ...defaultData }, action) => {
   switch (action.type) {
     case types.STATE:
       return {
@@ -22,9 +22,7 @@ export default (state = { ...defaultUser }, action) => {
         }
       };
     case LOGOUT:
-      return {
-        ...defaultUser
-      };
+      return { ...defaultData };
     default:
       return state;
   }

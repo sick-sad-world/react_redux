@@ -1,5 +1,5 @@
 import types from './types';
-import { defColumnSorting, defColumnData, defDisplaySettings } from '../defaults';
+import { defColumnSorting, defColumnData, defDisplaySettings } from './defaults';
 
 export function getColumnsForResults(payload) {
   return payload.find(item => (item && item.type === types.READ)).payload.map(({ id, data, open }) => ({ id, data, open }));

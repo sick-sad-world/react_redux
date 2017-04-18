@@ -14,11 +14,11 @@ export default (
   <Route components={App}>
     <Route path='/auth' component={Auth} />
     <Route path='/' component={Workspace}>
-      <Columns/>
-      <Sets/>
-      <Alerts/>
-      <Reports/>
-      <User/>
+      {Columns}
+      {Sets}
+      {Alerts}
+      {Reports}
+      {User}
     </Route>
     <Redirect from='*' to='/' />
   </Route>

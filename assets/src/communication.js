@@ -23,9 +23,8 @@ export default function fetch(url, data) {
       data: transformRequestData(data),
       error: reject,
       success(payload) {
-        const responce = { ...payload };
-        delete responce.callback;
-        resolve(responce);
+        delete payload.callback;
+        resolve(payload);
       }
     });
   });

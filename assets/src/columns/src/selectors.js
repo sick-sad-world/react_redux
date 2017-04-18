@@ -6,7 +6,7 @@ const getColumns = ({ columns }) => columns.payload;
 
 const getCurrentId = ({ columns }, props) => parseInt(props.params.id, 10) || 0;
 
-export const makeContainerSelector = function makeContainerSelector() {
+export function makeContainerSelector() {
   return createSelector(
     getColumnState,
     getColumns,
@@ -17,9 +17,9 @@ export const makeContainerSelector = function makeContainerSelector() {
       payload: payload.map(({ id, name, open }) => ({ id, name, open })),
       chosen: payload.find(({ id }) => id === curId)
     }));
-};
+}
 
-export const makeDashboardSelector = function makeDashboardSelector() {
+export function makeDashboardSelector() {
   return createSelector(
     getColumnState,
     getColumns,
@@ -27,13 +27,13 @@ export const makeDashboardSelector = function makeDashboardSelector() {
       state,
       payload: payload.filter(({ open }) => !!open)
     }));
-};
+}
 
-export const makeDropdownSelector = function makeDropdownSelector() {
+export function makeDropdownSelector() {
   return createSelector(
     getColumns,
     columns => columns.map(({ id, name }) => ({
       value: id,
       label: name
     })));
-};
+}

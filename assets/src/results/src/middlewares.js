@@ -2,7 +2,7 @@ import types from './types';
 import { splitText } from './helpers';
 
 
-export const splitResultText = function splitResultText({ dispatch, getState }) {
+export function splitResultText({ dispatch, getState }) {
   return next => (action) => {
     if (action.type === types.READ || action.type === types.PUSH) {
       action.payload.forEach(splitText);
@@ -11,4 +11,4 @@ export const splitResultText = function splitResultText({ dispatch, getState }) 
     }
     return next(action);
   };
-};
+}

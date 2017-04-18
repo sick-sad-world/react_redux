@@ -13,9 +13,9 @@ import ProgressTracker from '../components/progress-tracker';
 
 // Import all required actions
 // ===========================================================================
-import { getUser } from 'src/user/actions';
-import { getAllResults } from 'src/results/actions';
-import { getColumnsForResults } from 'src/columns/helpers';
+import { getUser } from 'src/user';
+import { getAllResults } from 'src/results';
+import { getColumnsForResults } from 'src/columns';
 import { setAppState, fetchData } from '../actions';
 
 // This is CORE APP Component

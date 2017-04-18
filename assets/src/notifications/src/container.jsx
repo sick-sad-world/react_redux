@@ -22,18 +22,17 @@ class Notifications extends React.Component {
   constructor(props) {
     super(props);
     this.timeouts = {};
+    this.hideHandler = this.hideHandler.bind(this);
   }
 
   // Handler uset to set Notification visibility to [false]
   // ===========================================================================
   hideHandler(id) {
-    return () => {
-      if (this.timeouts[id]) {
-        clearTimeout(this.timeouts[id]);
-        delete this.timeouts[id];
-      }
-      this.props.hideNotification(id);
-    };
+    if (this.timeouts[id]) {
+      clearTimeout(this.timeouts[id]);
+      delete this.timeouts[id];
+    }
+    this.props.hideNotification(id);
   }
 
   render() {
@@ -46,7 +45,7 @@ class Notifications extends React.Component {
       <ul className='sys-notifications'>
         {notifications.filter(message => message.visible).filter((message, i) => i <= listLimit).map((message) => {
           if (message.type !== 'loading' && !this.timeouts[message.id]) ids.push(message.id);
-          return <Notification onClick={this.hideHandler(message.id)} key={message.id} {...message} />;
+          return <Notification onClick={() => this.hideHandler(message.id)} key={message.id} {...message} />;
         })}
       </ul>
     );

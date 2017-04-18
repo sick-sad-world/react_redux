@@ -1,5 +1,5 @@
 import createAction from 'common/action-factory';
-import types from '../types';
+import types from './types';
 
 export const setAlertsState = state => ({
   type: types.STATE,

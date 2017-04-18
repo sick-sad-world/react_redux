@@ -1,7 +1,7 @@
 import moment from 'moment';
 import types from './types';
 
-export const notification = function notification(note) {
+export function notification(note) {
   return dispatch => dispatch({
     type: types.NOTIFICATION,
     payload: {
@@ -11,4 +11,4 @@ export const notification = function notification(note) {
       ...note
     }
   });
-};
+}

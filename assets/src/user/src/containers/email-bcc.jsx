@@ -39,7 +39,7 @@ class Emails extends React.Component {
 // Prop types check
 // ===========================================================================
 Emails.propTypes = {
-  email: emailStr,
+  email: emailStr.isRequired,
   active: emailStr,
   onClick: PropTypes.func,
   disabled: PropTypes.bool.isRequired,

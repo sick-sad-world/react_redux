@@ -28,7 +28,6 @@ export default class EditForm extends React.Component {
 
   getValue(e) {
     let value;
-    console.log(a);
     if (e) {
       if (e.target) {
         value = e.target.value;

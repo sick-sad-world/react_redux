@@ -7,9 +7,9 @@ import { connect } from 'react-redux';
 // Import actions
 // ===========================================================================
 import { setAppState, fetchData } from '../actions';
-import { getUser, login, addUser } from 'src/user/actions';
-import { getColumnsForResults } from 'src/columns/helpers';
-import { getAllResults } from 'src/results/actions';
+import { getUser, login, addUser } from 'src/user';
+import { getColumnsForResults } from 'src/columns';
+import { getAllResults } from 'src/results';
 
 // Import Child components
 // ===========================================================================
@@ -130,7 +130,7 @@ const mapDispatchToProps = dispatch => ({
       .then(() => dispatch(getUser(null, { notification: false })))
       .then(() => dispatch(fetchData()))
       .then(getColumnsForResults)
-      .then(dispatch(getAllResults))
+      .then(() => dispatch(getAllResults))
       .then(() => dispatch(setAppState(2)));
   },
   addUser(data) {
