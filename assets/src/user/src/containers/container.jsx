@@ -5,6 +5,7 @@ import { bindAll } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { numState } from 'common/typecheck';
 
 // Import data related stuff
 // ===========================================================================
@@ -51,7 +52,7 @@ class User extends React.Component {
 User.propTypes = {
   editUser: PropTypes.func.isRequired,
   notification: PropTypes.func,
-  state: PropTypes.number.isRequired,
+  state: numState.isRequired,
   payload: PropTypes.shape(defaultInterface).isRequired
 };
 

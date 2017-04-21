@@ -59,7 +59,7 @@ export const numBool = createOptionableValidator((props, propName) => {
 
 export function oneOfValues(values) {
   const arrayOfValues = values.map(({ value }) => value);
-  return (props, propName, componentName) => {
+  return createOptionableValidator((props, propName, componentName) => {
     if (arrayOfValues.find(code => code === props[propName])) {
       return new Error(`
         Invalid prop "${propName}" supplied to "${componentName}".
@@ -69,5 +69,5 @@ export function oneOfValues(values) {
       `);
     }
     return undefined;
-  };
+  });
 }
