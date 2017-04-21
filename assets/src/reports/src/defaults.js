@@ -24,8 +24,8 @@ export const defaultInterface = {
   name: PropTypes.string.isRequired,
   columns: PropTypes.arrayOf(PropTypes.number).isRequired,
   next_send: PropTypes.string,
-  active: numBool,
-  frequency: oneOfValues(defaultFrequency),
+  active: numBool.isRequired,
+  frequency: oneOfValues(defaultFrequency).isRequired,
   recipient: emailStr,
   order: PropTypes.number
 };
