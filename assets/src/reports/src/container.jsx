@@ -5,9 +5,12 @@ import { bindAll, find, includes } from 'lodash';
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { stateNum } from 'common/typecheck';
 import { makeContainerSelector } from './selectors';
+import { defaultInterface } from './defaults';
 
 // Import actions
 // ===========================================================================
@@ -15,7 +18,7 @@ import { editReport, deleteReport, createReport } from './actions';
 
 // Import Child components
 // ===========================================================================
-import DeleteConfirmation from 'common/components/delete-confirm';
+import DeleteConfirmation from 'common/components/delete-confirmation';
 import { ListSection, ListItem } from 'common/components/list-section';
 import EditReport from './components/edit';
 
@@ -49,8 +52,8 @@ class Reports extends React.Component {
     }
     delete data.id;
     return this.props.createReport(data).then(({ payload }) => {
-        this.props.router.push(`${this.props.route.path}/${payload.id}`);
-      });
+      this.props.router.push(`${this.props.route.path}/${payload.id}`);
+    });
   }
 
   deleteItem(id) {
@@ -105,7 +108,6 @@ class Reports extends React.Component {
 Reports.defaultProps = {
   listProps: {
     sortable: false,
-    deletable: true,
     texts: {
       title: 'Reports Management',
       description: 'Create, edit and delete reports that will be sent to you when specific columns get new items.',
@@ -115,6 +117,27 @@ Reports.defaultProps = {
       empty: 'No reports created yet. Use form above to create one.'
     }
   }
+};
+
+Reports.propTypes = {
+  curId: PropTypes.number,
+  state: stateNum.isRequired,
+  columns: PropTypes.shape({
+    value: PropTypes.number.isRequired,
+    label: PropTypes.string.isRequired
+  }),
+  payload: PropTypes.arrayOf(PropTypes.shape(defaultInterface)).isRequired,
+  chosen: PropTypes.shape(defaultInterface),
+  listProps: PropTypes.object,
+  router: PropTypes.shape({
+    push: PropTypes.func.isRequired
+  }).isRequired,
+  route: PropTypes.shape({
+    path: PropTypes.string.isRequired
+  }).isRequired,
+  createReport: PropTypes.func.isRequired,
+  editReport: PropTypes.func.isRequired,
+  deleteReport: PropTypes.func.isRequired
 };
 
 // Connect our Container to State

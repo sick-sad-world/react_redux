@@ -2,6 +2,7 @@
 // ===========================================================================
 import { includes, without, concat, bindAll, isEqual, forOwn } from 'lodash';
 import { numOrString } from 'common/functions';
+import { stateNum } from 'common/typecheck';
 
 // Import React related stuff
 // ===========================================================================
@@ -115,7 +116,7 @@ EditForm.propTypes = {
     confirmation: PropTypes.string.isRequired
   }).isRequired,
   current: PropTypes.number,
-  state: PropTypes.number.isRequired,
+  state: stateNum.isRequired,
   data: PropTypes.object.isRequired,
   update: PropTypes.func.isRequired
 };

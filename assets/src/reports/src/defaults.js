@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import { emailStr, numBool, oneOfValues } from 'common/typecheck';
 
+export const defaultTimeFormat = 'YYYY-MM-DD HH:mm:ss';
+
 export const defaultFrequency = [
   { value: 15, label: '15 min' },
   { value: 60, label: 'Hourly' },
