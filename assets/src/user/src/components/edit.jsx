@@ -2,6 +2,7 @@
 // ===========================================================================
 import classNames from 'classnames';
 import { defaultData, defaultInterface } from '../defaults';
+import { stateNum } from 'common/typecheck';
 
 // Import React related stuff
 // ===========================================================================
@@ -99,5 +100,6 @@ EditUser.defaultProps = {
 // Edit profile form prop types checks
 // ===========================================================================
 EditUser.propTypes = {
+  state: stateNum.isRequired,
   data: PropTypes.shape(defaultInterface).isRequired
 };

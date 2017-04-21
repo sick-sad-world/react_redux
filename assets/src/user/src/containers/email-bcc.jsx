@@ -43,7 +43,7 @@ Emails.propTypes = {
   active: emailStr,
   onClick: PropTypes.func,
   disabled: PropTypes.bool.isRequired,
-  state: stateNum,
+  state: stateNum.isRequired,
   data: PropTypes.arrayOf(emailStr).isRequired,
   onError: PropTypes.func,
   editUser: PropTypes.func.isRequired
