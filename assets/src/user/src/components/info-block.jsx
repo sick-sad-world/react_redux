@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { imageStr } from 'common/typecheck';
+import { imageUrl } from 'common/typecheck';
 
 // Small block used to represent current user brief data
 // ===========================================================================
@@ -19,7 +19,7 @@ export default function UserBlock({ image, fullname, position }) {
 // Proptypes validation
 // ===========================================================================
 UserBlock.propTypes = {
-  image: imageStr.isRequired,
+  image: imageUrl.isRequired,
   fullname: PropTypes.string.isRequired,
   position: PropTypes.string.isRequired
 };

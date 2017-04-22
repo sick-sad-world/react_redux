@@ -9,7 +9,7 @@ import { stateNum } from 'common/typecheck';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
-import Icon from '../icon';
+import Icon from './icon';
 
 // Abstract Page list component
 // ===========================================================================
@@ -36,12 +36,13 @@ export class ListSection extends React.Component {
   // @ used in data mapping
   // ===========================================================================
   createListItem(item) {
-    return React.cloneElement(this.props.children, Object.assign({
+    return React.cloneElement(this.props.children, {
       key: item.id,
       order: item.order,
       sortable: this.props.sortable,
-      deleteAction: (this.props.deletable && this.props.deleteItem) ? this.props.deleteItem(item) : null
-    }, item));
+      deleteAction: (this.props.deletable && this.props.deleteItem) ? this.props.deleteItem(item) : null,
+      ...item
+    });
   }
 
   createHandler(e) {
@@ -134,7 +135,9 @@ export class ListItem extends React.PureComponent {
 
     // Make delete button if item deletable
     // ===========================================================================
-    const deleteBtn = (this.props.deleteAction) ? (<a onClick={this.props.deleteAction} title={this.props.deleteText}><Icon icon='trash' /></a>) : null;
+    const deleteBtn = (this.props.deleteAction) ? (
+      <a onClick={this.props.deleteAction} title={this.props.deleteText}><Icon icon='trash' /></a>
+    ) : null;
 
     return (
       <li className={classNames({
@@ -160,12 +163,12 @@ export class ListItem extends React.PureComponent {
 }
 
 ListItem.propTypes = {
-  id: PropTypes.num.isRequired,
-  name: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired,
-  sortable: PropTypes.bool.isRequired,
-  disabled: PropTypes.bool.isRequired,
-  current: PropTypes.bool.isRequired,
+  id: PropTypes.number,
+  name: PropTypes.string,
+  url: PropTypes.string,
+  sortable: PropTypes.bool,
+  disabled: PropTypes.bool,
+  current: PropTypes.number,
   counter: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   order: PropTypes.number,
   deleteText: PropTypes.string,

@@ -17,16 +17,20 @@ export const defaultData = {
   next_send: null,
   active: 1,
   frequency: 1440,
-  recipient: '',
+  recipient: null,
   order: null
 };
 
-export const defaultInterface = {
+export const coreInterface = {
   id: PropTypes.number,
   name: PropTypes.string.isRequired,
   columns: PropTypes.arrayOf(PropTypes.number).isRequired,
+  active: numBool.isRequired
+};
+
+export const defaultInterface = {
+  ...coreInterface,
   next_send: PropTypes.string,
-  active: numBool.isRequired,
   frequency: oneOfValues(defaultFrequency).isRequired,
   recipient: emailStr,
   order: PropTypes.number

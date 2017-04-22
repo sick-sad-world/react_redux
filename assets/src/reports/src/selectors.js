@@ -9,7 +9,7 @@ const getCurrentId = ({ reports }, props) => parseInt(props.params.id, 10) || 0;
 
 const getNewName = ({ reports }, props) => props.location.query.name;
 
-export default function makeReportSelector() {
+export function makeContainerSelector() {
   return createSelector(
     getReportsState,
     getReports,
@@ -18,7 +18,7 @@ export default function makeReportSelector() {
     (state, payload, curId, newName) => ({
       state,
       curId,
-      payload: payload.map(({ id, name }) => ({ id, name })),
-      chosen: (name) ? { ...defaultData, name: newName, order: payload.length } : payload.find(({ id }) => id === curId)
+      payload: payload.map(({ id, name, columns }) => ({ id, name, columns })),
+      chosen: (newName) ? { ...defaultData, name: newName, order: payload.length } : payload.find(({ id }) => id === curId)
     }));
 }

@@ -62,7 +62,7 @@ Dropdown.propTypes = {
   id: PropTypes.string,
   label: PropTypes.string.isRequired,
   name: PropTypes.string,
-  desc: PropTypes.string,
+  desc: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   options: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.any.isRequired,
     label: PropTypes.string.isRequired

@@ -37,7 +37,7 @@ export const imageUrl = createOptionableValidator((props, propName) => {
 });
 
 export const stateNum = createOptionableValidator((props, propName) => {
-  if ([0, 1, 2, 3].find(code => code === props[propName])) {
+  if ([0, 1, 2, 3].find(code => code === props[propName]) === undefined) {
     return new Error('Status is a number from 0 to 3. Where 0 - error, 1 - initial, 2 - idle, 3 - loading.');
   }
   return undefined;
@@ -51,7 +51,7 @@ export const directionString = createOptionableValidator((props, propName) => {
 });
 
 export const numBool = createOptionableValidator((props, propName) => {
-  if ([0, 1].find(code => code === props[propName])) {
+  if ([0, 1].find(code => code === props[propName]) === undefined) {
     return new Error('Number boolean means that value should be 1 for "true" and 0 for "false"');
   }
   return undefined;
@@ -60,7 +60,7 @@ export const numBool = createOptionableValidator((props, propName) => {
 export function oneOfValues(values) {
   const arrayOfValues = values.map(({ value }) => value);
   return createOptionableValidator((props, propName, componentName) => {
-    if (arrayOfValues.find(code => code === props[propName])) {
+    if (arrayOfValues.find(code => code === props[propName]) === undefined) {
       return new Error(`
         Invalid prop "${propName}" supplied to "${componentName}".
         Value should be equal to one of thoose ${arrayOfValues.join(', ')}

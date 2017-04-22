@@ -11,7 +11,6 @@ import PropTypes from 'prop-types';
 
 // Import Child components
 // ===========================================================================
-import Datetime from 'react-datetime';
 import EditForm from 'common/components/edit-form';
 import TextInput from 'common/components/forms/input-text';
 import Dropdown from 'common/components/forms/dropdown';
@@ -20,7 +19,7 @@ import { EmailBcc } from 'src/user';
 
 // Edit Report
 // ===========================================================================
-export default class EditReport extends EditForm {
+export default class EditAlert extends EditForm {
 
   mapDataToState(data) {
     return {
@@ -57,7 +56,7 @@ export default class EditReport extends EditForm {
             <TextInput
               className='row'
               name='name'
-              label='Report name'
+              label='Alert name'
               disabled={running}
               value={this.state.name}
               onChange={this.updateState('name')}
@@ -86,20 +85,6 @@ export default class EditReport extends EditForm {
               value={this.state.frequency}
               desc={<span>Check column(s) for new items every <i>x</i> minutes</span>}
             />
-            <div className='row-flex'>
-              <label htmlFor='funReportNextSend'>Next send:</label>
-              <Datetime
-                value={this.state.next_send}
-                onChange={this.updateState('next_send', 'getNextSend')}
-                dateFormat='YYYY-MM-DD'
-                timeFormat=' HH:mm:ss'
-                inputProps={{
-                  className: 'size-180',
-                  disabled: running,
-                  name: 'next_send'
-                }}
-              />
-            </div>
             <Dropdown
               label='Columns assigment'
               disabled={running}
@@ -124,7 +109,7 @@ export default class EditReport extends EditForm {
   }
 }
 
-EditReport.defaultProps = {
+EditAlert.defaultProps = {
   texts: {
     title: 'Edit report',
     description: 'Pick the columns to send. Set time to send, e-mail recipient and report name here.',
@@ -134,7 +119,7 @@ EditReport.defaultProps = {
   frequencyOptions: defaultFrequency
 };
 
-EditReport.propTypes = {
+EditAlert.propTypes = {
   data: PropTypes.shape(defaultInterface).isRequired,
   columns: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.number.isRequired,

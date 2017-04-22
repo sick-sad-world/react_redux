@@ -10,7 +10,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { stateNum } from 'common/typecheck';
 import { makeContainerSelector } from './selectors';
-import { defaultInterface } from './defaults';
+import { makeDropdownSelector } from 'src/columns';
+import { coreInterface } from './defaults';
 
 // Import actions
 // ===========================================================================
@@ -61,7 +62,7 @@ class Reports extends React.Component {
   }
 
   renderConfirmation(deleting) {
-    const columns = this.props.columns.filter(({ value }) => includes(deleting.columns, value)).map(({ name }) => name);
+    const columns = this.props.columns.filter(({ value }) => includes(deleting.columns, value)).map(({ label }) => label);
     return (
       <dl>
         <dt>Trendolizer report</dt>
@@ -122,12 +123,12 @@ Reports.defaultProps = {
 Reports.propTypes = {
   curId: PropTypes.number,
   state: stateNum.isRequired,
-  columns: PropTypes.shape({
+  columns: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.number.isRequired,
     label: PropTypes.string.isRequired
-  }),
-  payload: PropTypes.arrayOf(PropTypes.shape(defaultInterface)).isRequired,
-  chosen: PropTypes.shape(defaultInterface),
+  })).isRequired,
+  payload: PropTypes.arrayOf(PropTypes.shape(coreInterface)).isRequired,
+  chosen: PropTypes.object,
   listProps: PropTypes.object,
   router: PropTypes.shape({
     push: PropTypes.func.isRequired
@@ -145,7 +146,11 @@ Reports.propTypes = {
 // ===========================================================================
 const mapStateToProps = () => {
   const selector = makeContainerSelector();
-  return (state, props) => selector(state, props);
+  const columns = makeDropdownSelector();
+  return (state, props) => ({
+    columns: columns(state, props),
+    ...selector(state, props)
+  });
 };
 
 const mapDispatchToProps = dispatch => (bindActionCreators({

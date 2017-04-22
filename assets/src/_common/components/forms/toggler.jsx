@@ -1,7 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { forOwn } from 'lodash';
 
 export default function Toggler({ name, label, disabled, value, onChange, options, className, togglerClassName }) {
   function setRootFocusClass(e) {
@@ -12,33 +11,32 @@ export default function Toggler({ name, label, disabled, value, onChange, option
     }
   }
 
-  const opts = [];
-  forOwn(options, (val, key) => {
-    const id = `fun-${name}-${key}-${val}`;
-    opts.push(<input
-                    disabled={disabled}
-                    type='radio'
-                    id={id}
-                    key={`${name}-${val}`}
-                    checked={val === value}
-                    onChange={onChange}
-                    onFocus={setRootFocusClass}
-                    onBlur={setRootFocusClass}
-                    name={name}
-                    value={val} />);
-    opts.push(<label htmlFor={id} key={key}>{key}</label>);
-  });
-
   return (
     <div className={className}>
       <span className='form-label'>{label}:</span>
       <div className={classNames({
         [togglerClassName]: true,
         toggler: true,
-        'is-triple': opts.length === 6,
+        'is-triple': options.length === 3,
         'is-disabled': disabled
       })}>
-        {opts}
+        {options.reduce((acc, option) => {
+          const id = `fun-${name}-${option.label}-${option.value}`;
+          acc.push(<input
+                    disabled={disabled}
+                    type='radio'
+                    id={id}
+                    key={`${name}-${option.value}`}
+                    checked={option.value === value}
+                    onChange={onChange}
+                    onFocus={setRootFocusClass}
+                    onBlur={setRootFocusClass}
+                    name={name}
+                    value={option.value}
+                  />);
+          acc.push(<label htmlFor={id} key={option.label}>{option.label}</label>);
+          return acc;
+        }, [])}
         <em></em>
         <span></span>
       </div>
