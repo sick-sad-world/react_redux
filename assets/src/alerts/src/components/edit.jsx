@@ -2,7 +2,7 @@
 // ===========================================================================
 import classNames from 'classnames';
 import moment from 'moment';
-import { defaultFrequency, defaultInterface, defaultTimeFormat } from '../defaults';
+import { defaultFrequency, defaultInterface } from '../defaults';
 
 // Import React related stuff
 // ===========================================================================
@@ -29,13 +29,8 @@ export default class EditAlert extends EditForm {
       active: data.active,
       frequency: data.frequency,
       columns: data.columns,
-      recipient: data.recipient,
-      next_send: data.next_send || moment().add(1, 'hours').format(this.props.timeFormat)
+      recipient: data.recipient
     };
-  }
-
-  getNextSend(value) {
-    return (typeof value === 'string') ? value : value.format(this.props.timeFormat);
   }
 
   render() {
@@ -115,7 +110,6 @@ EditAlert.defaultProps = {
     description: 'Pick the columns to send. Set time to send, e-mail recipient and report name here.',
     confirmation: '{data} was changed. Save changes?'
   },
-  timeFormat: defaultTimeFormat,
   frequencyOptions: defaultFrequency
 };
 
@@ -124,6 +118,6 @@ EditAlert.propTypes = {
   columns: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.number.isRequired,
     label: PropTypes.string.isRequired
-  })).isRequired,
+  })),
   create: PropTypes.func.isRequired
 };

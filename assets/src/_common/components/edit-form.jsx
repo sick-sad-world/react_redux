@@ -1,8 +1,8 @@
 // Import utility stuff
 // ===========================================================================
 import { includes, without, concat, bindAll, isEqual, forOwn } from 'lodash';
-import { numOrString } from 'common/functions';
-import { stateNum } from 'common/typecheck';
+import { numOrString } from '../functions';
+import { stateNum } from '../typecheck';
 
 // Import React related stuff
 // ===========================================================================

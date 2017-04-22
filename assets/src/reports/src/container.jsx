@@ -5,16 +5,19 @@ import { bindAll, find, includes } from 'lodash';
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
-import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+
+// Import selectors and typecheck
+// ===========================================================================
+import PropTypes from 'prop-types';
 import { stateNum } from 'common/typecheck';
-import { makeContainerSelector } from './selectors';
-import { makeDropdownSelector } from 'src/columns';
 import { coreInterface } from './defaults';
+import { makeDropdownSelector } from 'src/columns';
+import { makeContainerSelector } from './selectors';
 
 // Import actions
 // ===========================================================================
+import { bindActionCreators } from 'redux';
 import { editReport, deleteReport, createReport } from './actions';
 
 // Import Child components
@@ -62,11 +65,15 @@ class Reports extends React.Component {
   }
 
   renderConfirmation(deleting) {
-    const columns = this.props.columns.filter(({ value }) => includes(deleting.columns, value)).map(({ label }) => label);
+    let text = '';
+    if (this.props.columns) {
+      const columns = this.props.columns.filter(({ value }) => includes(deleting.columns, value)).map(({ label }) => label);
+      text = `Watching: ${(columns.length) ? columns.join(', ') : 'none'}`;
+    }
     return (
       <dl>
         <dt>Trendolizer report</dt>
-        <dd>{`ID: ${deleting.id} - ${deleting.name}. Watching: ${(columns.length) ? columns.join(', ') : 'none'}`}</dd>
+        <dd>{`ID: ${deleting.id} - ${deleting.name}. ${text}`}</dd>
       </dl>
     );
   }
@@ -126,7 +133,7 @@ Reports.propTypes = {
   columns: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.number.isRequired,
     label: PropTypes.string.isRequired
-  })).isRequired,
+  })),
   payload: PropTypes.arrayOf(PropTypes.shape(coreInterface)).isRequired,
   chosen: PropTypes.object,
   listProps: PropTypes.object,
@@ -144,19 +151,24 @@ Reports.propTypes = {
 // Connect our Container to State
 // @ deps -> Reports
 // ===========================================================================
-const mapStateToProps = () => {
+function mapStateToProps() {
   const selector = makeContainerSelector();
-  const columns = makeDropdownSelector();
-  return (state, props) => ({
-    columns: columns(state, props),
-    ...selector(state, props)
-  });
-};
+  if (makeDropdownSelector instanceof Function) {
+    const columns = makeDropdownSelector();
+    return (state, props) => ({
+      columns: columns(state, props),
+      ...selector(state, props)
+    });
+  }
+  return (state, props) => selector(state, props);
+}
 
-const mapDispatchToProps = dispatch => (bindActionCreators({
-  createReport,
-  editReport,
-  deleteReport
-}, dispatch));
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    createReport,
+    editReport,
+    deleteReport
+  }, dispatch);
+}
 
 export default connect(mapStateToProps(), mapDispatchToProps)(Reports);

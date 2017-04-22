@@ -139,6 +139,6 @@ EditReport.propTypes = {
   columns: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.number.isRequired,
     label: PropTypes.string.isRequired
-  })).isRequired,
+  })),
   create: PropTypes.func.isRequired
 };
