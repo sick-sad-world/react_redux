@@ -56,7 +56,7 @@ class Auth extends React.Component {
 
   // Redirect to auth if user is unauthentificated
   // ===========================================================================
-  componentWillUpdate(newProps) {
+  componentWillReceiveProps(newProps) {
     if (newProps.auth) {
       this.props.router.push('/');
     }

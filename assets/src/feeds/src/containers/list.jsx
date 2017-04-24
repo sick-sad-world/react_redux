@@ -12,12 +12,12 @@ import { connect } from 'react-redux';
 // ===========================================================================
 import PropTypes from 'prop-types';
 import { stateNum } from 'common/typecheck';
-import { defaultInterface } from './defaults';
-import { makeContainerSelector } from './selectors';
+import { defaultInterface } from '../defaults';
+import { makeContainerSelector } from '../selectors';
 
 // Import actions
 // ===========================================================================
-import { deleteFeed } from './actions';
+import { deleteFeed } from '../actions';
 
 
 // Import child components

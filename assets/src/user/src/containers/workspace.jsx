@@ -51,7 +51,7 @@ class Workspace extends React.Component {
 
   // Redirect to auth if user is unauthentificated
   // ===========================================================================
-  componentWillUpdate(newProps) {
+  componentWillReceiveProps(newProps) {
     if (!newProps.user.id) {
       this.props.router.push('/auth');
     }

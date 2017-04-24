@@ -15,8 +15,8 @@ import { Link } from 'react-router';
 // ===========================================================================
 import TextInput from 'common/components/forms/input-text';
 import EditForm from 'common/components/edit-form';
-import Sourceset from './sourceset';
 import { FeedsList } from 'src/feeds';
+import SetsWithContents from './list';
 
 export default class EditSet extends EditForm {
 
@@ -43,13 +43,6 @@ export default class EditSet extends EditForm {
         updateArrayWithValue(this.state.source_ids, id);
   }
 
-  updateExpanded(id) {
-    this.setState({ expanded: (this.state.expanded === id) ? null : id });
-  }
-
-  updateSearch(e) {
-    this.setState({ search: e.target.value || '' });
-  }
 
   makeStateUpdater(type) {
     return id => () => this.updateState('source_ids', 'getSourceIds')(type, id);
@@ -100,31 +93,7 @@ export default class EditSet extends EditForm {
                     empty='This set does not contain any feeds. Add some.'
                   />
                 </div>
-                <div className={classNames({
-                  list: true,
-                  'state-disabled': running
-                })}>
-                  <div className='header'>
-                    <input type='text' name='search' defaultValue={this.state.search} onChange={this.updateSearch} placeholder='Search for...' />
-                  </div>
-                  <ul className='entity-list'>
-                    {(this.state.search > this.props.treshold) ? (
-                      <FeedsList criterea={{ search: this.state.search }} onClick={this.makeStateUpdater('source')} />
-                    ) : (
-                      this.props.sets.map(set => (
-                        <Sourceset key={set.id} {...set} onClick={this.makeStateUpdater('set')} onExpand={this.updateExpanded(set.id)}>
-                          {(this.state.expanded === set.id) ? (
-                            <FeedsList
-                              criterea={{ source_ids: set.source_ids }}
-                              onClick={this.makeStateUpdater('source')}
-                              empty='This set does not contain any feeds. Add some.'
-                            />
-                          ) : null}
-                        </Sourceset>
-                      ))
-                    )}
-                  </ul>
-                </div>
+                <SetsWithContents onClick={this.makeStateUpdater} />
               </section>
             </div>
           ) : null}
