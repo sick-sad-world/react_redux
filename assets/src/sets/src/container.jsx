@@ -103,6 +103,8 @@ class Sourcesets extends React.Component {
   }
 }
 
+// Sourcesets container default props
+// ===========================================================================
 Sourcesets.defaultProps = {
   listProps: {
     sortable: false,
@@ -117,6 +119,8 @@ Sourcesets.defaultProps = {
   }
 };
 
+// Prop type check
+// ===========================================================================
 Sourcesets.propTypes = {
   curId: PropTypes.number,
   state: stateNum.isRequired,

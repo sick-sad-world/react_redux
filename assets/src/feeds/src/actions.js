@@ -1,12 +1,12 @@
 import createAction from 'common/action-factory';
 import types from './types';
 
-export const setSourcesState = state => ({
+export const setFeedesState = state => ({
   type: types.STATE,
   state
 });
 
-export const getSources = createAction({
+export const getFeedes = createAction({
   type: types.READ,
   state_type: types.STATE,
   url: 'sources',
@@ -14,7 +14,7 @@ export const getSources = createAction({
   successMessage: 'Sources data has been read.'
 });
 
-export const createSource = createAction({
+export const createFeed = createAction({
   type: types.CREATE,
   state_type: types.STATE,
   url: 'add_source',
@@ -22,7 +22,7 @@ export const createSource = createAction({
   successMessage: 'Source succesfully created.'
 });
 
-export const deleteSource = createAction({
+export const deleteFeed = createAction({
   type: types.DELETE,
   state_type: types.STATE,
   url: 'remove_source',
