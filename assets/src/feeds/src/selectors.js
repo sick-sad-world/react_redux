@@ -1,3 +1,4 @@
+import { includes } from 'lodash';
 import createSelector from 'common/selector-creator';
 
 const getFeedsState = ({ feeds }) => feeds.state;
@@ -6,7 +7,7 @@ const getFeeds = ({ feeds }) => feeds.payload;
 
 const getCriterea = ({ feeds }, props) => props.criterea;
 
-export function makeCritereaSelector() {
+export function makeContainerSelector() {
   return createSelector(
     getFeedsState,
     getFeeds,
@@ -15,7 +16,20 @@ export function makeCritereaSelector() {
       let result = payload;
 
       if (criterea) {
-        result = payload.filter((feed) => criterea.source_ids.indexOf(feed.id) > -1);
+        if (criterea.source_ids) {
+          result = payload.filter(feed => includes(criterea.source_ids, feed.id));
+        } else if (criterea.search) {
+          const search = new RegExp(criterea.search, 'i');
+          result = payload.filter(feed => search.test(feed.name));
+        } else {
+          result = [...payload];
+        }
+
+        if (criterea.uniq_ids) {
+          result.forEach((feed) => {
+            feed.uniq = includes(criterea.uniq_ids, feed.id);
+          });
+        }
       }
 
       return {
@@ -23,11 +37,4 @@ export function makeCritereaSelector() {
         payload: result
       };
     });
-}
-
-export function makeContainerSelector() {
-  return createSelector(
-    getFeedsState,
-    getFeeds,
-    (state, payload) => ({ state, payload }));
 }

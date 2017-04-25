@@ -57,17 +57,20 @@ export const numBool = createOptionableValidator((props, propName) => {
   return undefined;
 });
 
-export function oneOfValues(values) {
-  const arrayOfValues = values.map(({ value }) => value);
+export function oneOfArray(values) {
   return createOptionableValidator((props, propName, componentName) => {
-    if (arrayOfValues.find(code => code === props[propName]) === undefined) {
+    if (values.find(code => code === props[propName]) === undefined) {
       return new Error(`
         Invalid prop "${propName}" supplied to "${componentName}".
-        Value should be equal to one of thoose ${arrayOfValues.join(', ')}
+        Value should be equal to one of thoose ${values.join(', ')}
         Passed: ${props[propName]}
         Validation failed.
       `);
     }
     return undefined;
   });
+}
+
+export function oneOfValues(values) {
+  return oneOfArray(values.map(({ value }) => value));
 }

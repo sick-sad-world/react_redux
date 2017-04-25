@@ -27,7 +27,7 @@ export default class SetsWithContents extends React.Component {
   }
 
   updateExpanded(id) {
-    this.setState({ expanded: (this.state.expanded === id) ? null : id });
+    return () => this.setState({ expanded: (this.state.expanded === id) ? null : id });
   }
 
   updateSearch(e) {
@@ -35,6 +35,12 @@ export default class SetsWithContents extends React.Component {
   }
 
   render() {
+    const feedAction = {
+      name: 'select',
+      title: 'Add this source to selection',
+      handler: this.props.onClick('source')
+    };
+
     return (
       <div className={classNames(...this.props.className.split(' '), {
         'state-disabled': this.props.disabled
@@ -42,23 +48,39 @@ export default class SetsWithContents extends React.Component {
         <div className='header'>
           <input type='text' name='search' value={this.state.search} onChange={this.updateSearch} placeholder='Search for...' />
         </div>
-        <ul className='entity-list'>
           {(this.state.search > this.props.treshold) ? (
-            <FeedsList criterea={{ search: this.state.search }} onClick={this.props.onClick('source')} />
+            <FeedsList
+              className='entity-list'
+              criterea={{ search: this.state.search }}
+              action={feedAction}
+            />
           ) : (
-            this.props.data.map(set => (
-              <Sourceset key={set.id} {...set} onClick={this.props.onClick('set')(set.id)} onExpand={this.updateExpanded(set.id)}>
-                {(this.state.expanded === set.id) ? (
-                  <FeedsList
-                    criterea={{ source_ids: set.source_ids }}
-                    onClick={this.props.onClick('source')}
-                    empty='This set does not contain any feeds. Add some.'
-                  />
-                ) : null}
-              </Sourceset>
-            ))
+            <ul className='entity-list'>
+              {this.props.data.map(set => (
+                <Sourceset
+                  key={set.id}
+                  name={set.name}
+                  counter={set.source_ids.length}
+                  sortable={false}
+                  onExpand={this.updateExpanded(set.id)}
+                  action={{
+                    name: 'select-all',
+                    title: 'Add this set contents to selection',
+                    handler: this.props.onClick('set')(set.id),
+                    ...this.props.setAction
+                  }}
+                >
+                  {(this.state.expanded === set.id) ? (
+                    <FeedsList
+                      criterea={{ source_ids: set.source_ids }}
+                      action={feedAction}
+                      empty='This set does not contain any feeds. Add some.'
+                    />
+                  ) : null}
+                </Sourceset>
+              ))}
+            </ul>
           )}
-        </ul>
       </div>
     );
   }

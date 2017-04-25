@@ -11,19 +11,19 @@ import { connect } from 'react-redux';
 // ===========================================================================
 import PropTypes from 'prop-types';
 import { stateNum } from 'common/typecheck';
-import { defaultInterface } from './defaults';
-import { makeContainerSelector } from './selectors';
+import { defaultInterface } from '../defaults';
+import { makeContainerSelector } from '../selectors';
 
 // Import actions
 // ===========================================================================
 import { bindActionCreators } from 'redux';
-import { createSet, editSet, deleteSet, forseUpdateUniq } from './actions';
+import { createSet, editSet, deleteSet, forseUpdateUniq } from '../actions';
 
 // Import Child components
 // ===========================================================================
 import DeleteConfirmation from 'common/components/delete-confirmation';
 import { ListSection, ListItem } from 'common/components/list-section';
-import EditSet from './components/edit';
+import EditSet from '../components/edit';
 
 class Sourcesets extends React.Component {
   constructor(props) {

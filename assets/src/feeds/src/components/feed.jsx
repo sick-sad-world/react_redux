@@ -11,7 +11,7 @@ import classNames from 'classnames';
 // Agnostinc list item component
 // @using by: ListView and Management views
 // ===========================================================================
-export default function Feed({ disabled, url, type, sortable, button, name }) {
+export default function Feed({ disabled, url, type, sortable, children, name }) {
   return (
     <li className={classNames({
       'mod-entity': true,
@@ -30,11 +30,18 @@ export default function Feed({ disabled, url, type, sortable, button, name }) {
             <a href={url} title={url} target='_blank'>{url}</a>
           </span>
         </div>
-        { (button) ? (<nav className='nav-links'>{button}</nav>) : null }
+        { (children) ? (
+          <nav className='nav-links'>{children}</nav>
+        ) : null }
       </div>
     </li>
   );
 }
+
+Feed.defaultProps = {
+  sortable: true,
+  disabled: false
+};
 
 Feed.propTypes = {
   type: PropTypes.string.isRequired,
@@ -42,5 +49,5 @@ Feed.propTypes = {
   url: PropTypes.string.isRequired,
   sortable: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
-  button: PropTypes.element
+  children: PropTypes.element
 };

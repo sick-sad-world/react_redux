@@ -6,7 +6,7 @@ export const setFeedesState = state => ({
   state
 });
 
-export const getFeedes = createAction({
+export const getFeeds = createAction({
   type: types.READ,
   state_type: types.STATE,
   url: 'sources',

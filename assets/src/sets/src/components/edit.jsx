@@ -2,7 +2,7 @@
 // ===========================================================================
 import classNames from 'classnames';
 import { updateArrayWithValue } from 'functions';
-import { concat, find, bindAll } from 'lodash';
+import { concat, find } from 'lodash';
 import { defaultInterface } from '../defaults';
 
 // Import React related stuff
@@ -24,7 +24,6 @@ export default class EditSet extends EditForm {
     super(props);
     this.state.seach = '';
     this.state.expanded = null;
-    bindAll(this, 'updateSearch');
   }
 
   mapDataToState(data) {
@@ -53,7 +52,6 @@ export default class EditSet extends EditForm {
     // ===========================================================================
     if (!this.props.data) return null;
     const running = this.props.state > 2;
-
     return (
       <section className={classNames({
         'mod-subsection-edit': true,
@@ -88,12 +86,17 @@ export default class EditSet extends EditForm {
                     <span>Sourceset has {this.state.source_ids.length} sources total.</span>
                   </div>
                   <FeedsList
+                    set_id={this.props.data.id}
                     criterea={{ source_ids: this.state.source_ids, uniq_ids: this.state.uniq_ids }}
-                    onClick={this.makeStateUpdater('source')}
+                    action={{
+                      name: 'select',
+                      title: 'Add this set contents to selection',
+                      handler: this.makeStateUpdater('source')
+                    }}
                     empty='This set does not contain any feeds. Add some.'
                   />
                 </div>
-                <SetsWithContents onClick={this.makeStateUpdater} />
+                <SetsWithContents data={this.props.sets} onClick={this.makeStateUpdater} />
               </section>
             </div>
           ) : null}

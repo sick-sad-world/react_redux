@@ -6,7 +6,7 @@ import { ERROR, STATE } from 'common/type-factory';
 // ===========================================================================
 import { getColumns } from 'src/columns';
 import { getSets } from 'src/sets';
-import { getSources } from 'src/feeds';
+import { getFeeds } from 'src/feeds';
 import { getAlerts } from 'src/alerts';
 import { getReports } from 'src/reports';
 
@@ -40,7 +40,7 @@ export function fetchData(opts) {
   return dispatch => Promise.all([
     (getColumns instanceof Function) ? dispatch(getColumns({ data: 1 }, options)) : null,
     (getSets instanceof Function) ? dispatch(getSets(null, options)) : null,
-    (getSources instanceof Function) ? dispatch(getSources(null, options)) : null,
+    (getFeeds instanceof Function) ? dispatch(getFeeds(null, options)) : null,
     (getAlerts instanceof Function) ? dispatch(getAlerts(null, options)) : null,
     (getReports instanceof Function) ? dispatch(getReports(null, options)) : null
   ]);
