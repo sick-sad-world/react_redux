@@ -114,7 +114,7 @@ ListSection.propTypes = {
 };
 
 // Agnostinc list item component
-// @using by: ListView and Management views
+// @using by: ListView
 // ===========================================================================
 export class ListItem extends React.PureComponent {
   render() {
@@ -174,4 +174,18 @@ ListItem.propTypes = {
   deleteText: PropTypes.string,
   customIcon: PropTypes.func,
   deleteAction: PropTypes.func
+};
+
+
+// Agnostinc list item action button component
+// @using by: ListView and Management views
+// ===========================================================================
+export function ListItemButton({ title, handler, icon }) {
+  return <a onClick={handler} title={title}><Icon icon={icon} /></a>;
+}
+
+ListItemButton.propTypes = {
+  title: PropTypes.string,
+  handler: PropTypes.func.isRequired,
+  icon: PropTypes.string.isRequired
 };

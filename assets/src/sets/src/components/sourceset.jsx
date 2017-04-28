@@ -3,6 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from 'common/components/icon';
+import { ExpandSet, CollapseSet, SelectSet } from './buttons';
 
 // Import utility stuff
 // ===========================================================================
@@ -11,7 +12,16 @@ import classNames from 'classnames';
 // Agnostinc list item component
 // @using by: ListView and Management views
 // ===========================================================================
-export default function Sourceset({ sortable, name, counter, buttons, disabled, children, action, onExpand }) {
+export default function Sourceset({ sortable, name, counter, disabled, children, select, onExpand }) {
+  let Toggler = null;
+  if (onExpand) {
+    if (children) {
+      Toggler = <CollapseSet handler={onExpand} />;
+    } else {
+      Toggler = <ExpandSet handler={onExpand} />;
+    }
+  }
+
   return (
     <li className={classNames({
       'mod-entity': true,
@@ -26,13 +36,12 @@ export default function Sourceset({ sortable, name, counter, buttons, disabled, 
             <em className='counter'>{counter}</em> { name }
           </span>
         </div>
-        {(action || onExpand) ? (
+        {(select || Toggler) ? (
           <nav className='nav-links'>
-            { (action) ? <a onClick={action.handler} title={action.title}><Icon icon={action.name} /></a> : null }
-            { (onExpand) ? <a onClick={onExpand} title='View contents'><Icon icon={(children) ? 'chevron-up' : 'chevron-down'} /></a> : null }
+            { (select) ? <SelectSet handler={select} /> : null }
+            { Toggler }
           </nav>
         ) : null}
-        { (buttons && buttons.length) ? <nav className='nav-links'>{buttons}</nav> : null }
       </div>
       {children}
     </li>
@@ -48,14 +57,9 @@ Sourceset.propTypes = {
   name: PropTypes.string.isRequired,
   counter: PropTypes.number,
   sortable: PropTypes.bool.isRequired,
-  expanded: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
   children: PropTypes.element,
-  buttons: PropTypes.oneOfType([PropTypes.element, PropTypes.arrayOf(PropTypes.element)]),
-  action: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    handler: PropTypes.func.isRequired
-  }),
+  select: PropTypes.func,
+  deselect: PropTypes.func,
   onExpand: PropTypes.func
 };

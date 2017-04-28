@@ -22,7 +22,7 @@ import { createSet, editSet, deleteSet, forseUpdateUniq } from '../actions';
 // Import Child components
 // ===========================================================================
 import DeleteConfirmation from 'common/components/delete-confirmation';
-import { ListSection, ListItem } from 'common/components/list-section';
+import { ListSection, ListItem } from 'common/components/list';
 import EditSet from '../components/edit';
 
 class Sourcesets extends React.Component {

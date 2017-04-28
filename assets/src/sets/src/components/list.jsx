@@ -35,12 +35,6 @@ export default class SetsWithContents extends React.Component {
   }
 
   render() {
-    const feedAction = {
-      name: 'select',
-      title: 'Add this source to selection',
-      handler: this.props.onClick('source')
-    };
-
     return (
       <div className={classNames(...this.props.className.split(' '), {
         'state-disabled': this.props.disabled
@@ -49,11 +43,7 @@ export default class SetsWithContents extends React.Component {
           <input type='text' name='search' value={this.state.search} onChange={this.updateSearch} placeholder='Search for...' />
         </div>
           {(this.state.search > this.props.treshold) ? (
-            <FeedsList
-              className='entity-list'
-              criterea={{ search: this.state.search }}
-              action={feedAction}
-            />
+            <FeedsList className='entity-list' criterea={{ search: this.state.search }} action={this.props.onFeedClick} />
           ) : (
             <ul className='entity-list'>
               {this.props.data.map(set => (
@@ -63,17 +53,13 @@ export default class SetsWithContents extends React.Component {
                   counter={set.source_ids.length}
                   sortable={false}
                   onExpand={this.updateExpanded(set.id)}
-                  action={{
-                    name: 'select-all',
-                    title: 'Add this set contents to selection',
-                    handler: this.props.onClick('set')(set.id),
-                    ...this.props.setAction
-                  }}
+                  select={this.props.onSetClick(set.id)}
                 >
                   {(this.state.expanded === set.id) ? (
                     <FeedsList
+                      disabled={this.props.dis_sources}
                       criterea={{ source_ids: set.source_ids }}
-                      action={feedAction}
+                      select={this.props.onFeedClick}
                       empty='This set does not contain any feeds. Add some.'
                     />
                   ) : null}
@@ -93,9 +79,11 @@ SetsWithContents.defaultProps = {
 };
 
 SetsWithContents.propTypes = {
+  dis_sources: PropTypes.arrayOf(PropTypes.number),
   className: PropTypes.string,
   disabled: PropTypes.bool.isRequired,
   treshold: PropTypes.number.isRequired,
   data: PropTypes.arrayOf(PropTypes.shape(defaultInterface)).isRequired,
-  onClick: PropTypes.func.isRequired
+  onSetClick: PropTypes.func.isRequired,
+  onFeedClick: PropTypes.func.isRequired
 };

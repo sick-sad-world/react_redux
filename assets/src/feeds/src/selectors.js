@@ -27,7 +27,7 @@ export function makeContainerSelector() {
 
         if (criterea.uniq_ids) {
           result.forEach((feed) => {
-            feed.uniq = includes(criterea.uniq_ids, feed.id);
+            feed.deletable = includes(criterea.uniq_ids, feed.id);
           });
         }
       }

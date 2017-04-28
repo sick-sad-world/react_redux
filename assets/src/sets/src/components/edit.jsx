@@ -50,7 +50,6 @@ export default class EditSet extends EditForm {
   render() {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
-    if (!this.props.data) return null;
     const running = this.props.state > 2;
     return (
       <section className={classNames({
@@ -88,15 +87,16 @@ export default class EditSet extends EditForm {
                   <FeedsList
                     set_id={this.props.data.id}
                     criterea={{ source_ids: this.state.source_ids, uniq_ids: this.state.uniq_ids }}
-                    action={{
-                      name: 'select',
-                      title: 'Add this set contents to selection',
-                      handler: this.makeStateUpdater('source')
-                    }}
+                    deselect={this.makeStateUpdater('source')}
                     empty='This set does not contain any feeds. Add some.'
                   />
                 </div>
-                <SetsWithContents data={this.props.sets} onClick={this.makeStateUpdater} />
+                <SetsWithContents
+                  data={this.props.sets}
+                  dis_sources={this.state.source_ids}
+                  onSetClick={this.makeStateUpdater('set')}
+                  onFeedClick={this.makeStateUpdater('source')}
+                />
               </section>
             </div>
           ) : null}
