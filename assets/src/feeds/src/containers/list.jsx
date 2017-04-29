@@ -22,6 +22,7 @@ import { deleteFeed } from '../actions';
 
 // Import child components
 // ===========================================================================
+import DeleteConfirmation from 'common/components/delete-confirmation';
 import { DeleteFeed, SelectFeed, DeselectFeed } from '../components/buttons';
 import Feed from '../components/feed';
 
@@ -29,13 +30,24 @@ class FeedsList extends React.Component {
 
   constructor(props) {
     super(props);
-    bindAll(this, 'renderFeed');
+    this.state = {
+      deleting: null
+    };
+    bindAll(this, 'renderFeed', 'deletingReset');
+  }
+
+  setDeleting(feed) {
+    return () => this.setState({ deleting: feed });
+  }
+
+  deletingReset() {
+    this.setState({ deleting: null });
   }
 
   renderFeed(feed) {
     let Button = null;
     if (feed.deletable && this.props.set_id) {
-      Button = <DeleteFeed handler={null} />;
+      Button = <DeleteFeed handler={this.setDeleting(feed)} />;
     } else if (this.props.select) {
       Button = <SelectFeed handler={this.props.select(feed.id)} />;
     } else if (this.props.deselect) {
@@ -50,6 +62,14 @@ class FeedsList extends React.Component {
     return (
       <ul className={this.props.className}>
         {(this.props.payload.length) ? this.props.payload.map(this.renderFeed) : <li className='state-empty'>{this.props.emptyTpl}</li>}
+        {(this.state.deleting) ? (
+          <DeleteConfirmation close={this.deletingReset} accept={this.props.deleteFeed(this.state.deleting.id)} >
+            <dl>
+              <dt>Trendolizer Feed</dt>
+              <dd>{`ID: ${this.state.deleting.id} - ${this.state.deleting.name}`}</dd>
+            </dl>
+          </DeleteConfirmation>
+        ) : null}
       </ul>
     );
   }
@@ -93,7 +113,7 @@ function mapStateToProps() {
 function mapDispatchToProps(dispatch) {
   return {
     deleteFeed(id) {
-      return dispatch(deleteFeed({ id }));
+      return () => dispatch(deleteFeed({ id }));
     }
   };
 }
