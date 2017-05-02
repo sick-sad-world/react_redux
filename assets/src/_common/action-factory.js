@@ -58,8 +58,9 @@ export default function createAction(conf) {
         if (notification && options.notification) {
           dispatch(notification({
             id: notificationId,
-            type: 'success',
-            text: payload.success || config.successMessage.replace('$id', options.id)
+            visible: false
+            //type: 'success',
+            //text: payload.success || config.successMessage.replace('$id', options.id)
           }));
         }
 

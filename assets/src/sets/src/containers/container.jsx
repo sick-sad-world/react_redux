@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, includes } from 'lodash';
+import { bindAll, union } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
@@ -32,7 +32,7 @@ class Sourcesets extends React.Component {
     this.state = {
       deleting: null
     };
-    bindAll(this, 'createItem', 'deleteConfirm', 'updateItem', 'deleteReset');
+    bindAll(this, 'createItem', 'deleteConfirm', 'updateItem', 'deleteReset', 'updateOnNewFeeds');
   }
 
   createItem(value) {
@@ -41,6 +41,13 @@ class Sourcesets extends React.Component {
     }).then(({ payload }) => {
       this.props.router.push(`${this.props.route.path}/${payload.id}`);
     });
+  }
+
+  updateOnNewFeeds(data) {
+    return this.updateItem({
+      id: this.props.chosen.id,
+      source_ids: union(this.props.chosen.source_ids, data)
+    }).then(() => this.props.router.push(`${this.props.route.path}/${this.props.chosen.id}`));
   }
 
   updateItem(data) {
@@ -56,7 +63,10 @@ class Sourcesets extends React.Component {
   }
 
   deleteItem(id) {
-    return () => this.props.deleteSet({ id }).then(this.props.forseUpdateUniq).then(this.deleteReset);
+    return () => this.props.deleteSet({ id })
+      .then(this.props.forseUpdateUniq)
+      .then(this.deleteReset)
+      .then(() => this.props.router.push(this.props.route.path));
   }
 
   render() {
@@ -89,7 +99,7 @@ class Sourcesets extends React.Component {
               id: this.props.chosen.id,
               name: this.props.chosen.name
             }}
-            onCreate={this.updateItem}
+            onCreate={this.updateOnNewFeeds}
             backPath={this.props.route.path}
           />
         ) : null}

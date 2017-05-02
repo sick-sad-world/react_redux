@@ -1,10 +1,10 @@
+import moment from 'moment';
 import createAction from 'common/action-factory';
 import fetch from 'src/communication';
-import { notification } from 'src/notifications';
 import types from './types';
 import { testUrls } from './defaults';
 
-export const setFeedesState = state => ({
+export const setFeedsState = state => ({
   type: types.STATE,
   state
 });
@@ -33,17 +33,40 @@ export const deleteFeed = createAction({
   successMessage: 'Source was deleted.'
 });
 
-export const testUrl = (tests, url) => new Promise((resolve, reject) => {
+export const testUrl = ([...tests], url) => (dispatch, getState, { notification, clientError }) => new Promise((resolve, reject) => {
   if (!tests || !tests.length) {
     reject('Test should be an Array with any of this values: "RSS", "HTML", "Facebook"');
   }
   if (!url || !url.length) {
     reject('Provide reasonable URL to run tests');
   }
+
+  const noteId = moment().unix();
+
+  dispatch(notification({
+    id: noteId,
+    type: 'loading',
+    text: `Testing url as ${tests.join(', ')} feed...`
+  }));
+
   return Promise.all(
     tests.map(type => fetch(testUrls[type], { url }).then((payload) => {
       if (payload.length > 50) payload.length = 50;
+      if (tests.length > 1) {
+        tests.splice(tests.indexOf(type), 1);
+        dispatch(notification({
+          id: noteId,
+          type: 'loading',
+          text: `Testing url as ${tests.join(', ')} feed...`
+        }));
+      }
       return { [type]: payload };
     })
-  )).then(results => results.reduce((acc, result) => ({ ...acc, ...result }), {})).then(resolve);
+  )).then(results => results.reduce((acc, result) => ({ ...acc, ...result }), {})).then((results) => {
+    dispatch(notification({
+      id: noteId,
+      visible: false
+    }));
+    return results;
+  }).then(resolve);
 });

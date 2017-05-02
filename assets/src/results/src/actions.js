@@ -48,7 +48,7 @@ export function getAllResults(data) {
     const ids = {};
     const LIMIT = 3;
     const DELAY = 1200;
-    const notificationId = moment().unix();
+    const noteId = moment().unix();
 
     // Create our [Top-level] Promise chain
     // ===========================================================================
@@ -88,7 +88,7 @@ export function getAllResults(data) {
           delete ids[column.id];
           if (notification) {
             dispatch(notification({
-              id: notificationId,
+              id: noteId,
               type: 'loading',
               text: `Results for columns ${Object.keys(ids).join(',')} downloading now...`
             }));
@@ -100,7 +100,7 @@ export function getAllResults(data) {
       // ===========================================================================
       if (notification) {
         dispatch(notification({
-          id: notificationId,
+          id: noteId,
           visible: false
         }));
       }
@@ -110,7 +110,7 @@ export function getAllResults(data) {
     // ===========================================================================
     if (notification) {
       dispatch(notification({
-        id: notificationId,
+        id: noteId,
         type: 'loading',
         text: `Results for columns ${Object.keys(ids).join(',')} downloading now...`
       }));

@@ -16,7 +16,7 @@ import { stateNum } from 'common/typecheck';
 // Import actions
 // ===========================================================================
 import { feedTypes } from '../defaults';
-import { createFeed, testUrl } from '../actions';
+import { setFeedsState, createFeed, testUrl } from '../actions';
 
 // Import Child components
 // ===========================================================================
@@ -47,7 +47,7 @@ class FeedCreate extends React.Component {
       }
     };
 
-    bindAll(this, ['setUrl', 'checkFeed', 'chooseFeedType', 'chooseAutodetect', 'selectFeed', 'setFacebookFeed', 'setSingleFeed', 'setError']);
+    bindAll(this, ['setUrl', 'checkFeed', 'chooseFeedType', 'chooseAutodetect', 'selectFeed', 'setFacebookFeed', 'setSingleFeed', 'setError', 'createFeeds']);
   }
 
   createFeeds(e) {
@@ -69,6 +69,7 @@ class FeedCreate extends React.Component {
       }, []);
     }
     this.props.testUrl(tests, this.state.url).then(results => this.setState({
+      feeds: (results.HTML && results.HTML.length) ? [this.createFeed({ type: 'HTML' })] : [],
       results: {
         ...this.state.results,
         ...results
@@ -76,23 +77,35 @@ class FeedCreate extends React.Component {
     })).catch(this.setError);
   }
 
+  createFeed(data) {
+    return {
+      type: this.state.type,
+      url: this.state.url,
+      set_id: this.props.set.id,
+      feed: this.state.url,
+      ...data
+    };
+  }
+
   getFeedsUri() {
     return this.state.feeds.map(({ feed }) => feed);
   }
 
   chooseFeedType(type, test, checked) {
+    const newResults = mapValues(this.state.results, (v, k) => {
+      if (type === k) {
+        return true;
+      } else if (type === 'autodetect') {
+        return ((test === k) ? checked : (this.state.type === 'autodetect') ? v : true);
+      }
+      return false;
+    });
+
     this.setState({
       type,
-      feeds: [],
+      feeds: ((newResults.HTML instanceof Array) && newResults.HTML.length) ? [this.createFeed({ type: 'HTML' })] : [],
       url: (test) ? this.state.url : '',
-      results: mapValues(this.state.results, (v, k) => {
-        if (type === k) {
-          return true;
-        } else if (type === 'autodetect') {
-          return ((test === k) ? checked : v);
-        }
-        return false;
-      })
+      results: newResults
     });
   }
 
@@ -105,7 +118,7 @@ class FeedCreate extends React.Component {
       if (this.state.feeds.find(v => v.feed === feed)) {
         this.setState({ feeds: filter(this.state.feeds, v => v.feed !== feed) });
       } else {
-        this.setState({ feeds: concat({ set_id: this.props.set.id, feed, type, url: this.state.url }, this.state.feeds) });
+        this.setState({ feeds: concat(this.createFeed({ type, feed }), this.state.feeds) });
       }
     };
   }
@@ -113,30 +126,15 @@ class FeedCreate extends React.Component {
   setSingleFeed(e) {
     return this.setState({
       url: e.target.value,
-      feeds: [{
-        url: e.target.value,
-        set_id: this.props.set.id,
-        type: this.state.type,
-        feed: e.target.value
-      }]
+      feeds: [this.createFeed()]
     });
   }
 
   setFacebookFeed(e) {
-    const newState = {
-      feeds: [(this.state.feeds[0]) ? this.state.feeds[0] : {}]
-    };
-    newState.feeds[0].set_id = this.props.set.id;
-    newState.feeds[0].type = this.state.type;
-    if (e.target.name === 'url') {
-      newState.feeds[0].url = e.target.value;
-      newState.url = e.target.value;
-    }
-    if (e.target.name === 'feed') {
-      newState.feeds[0].feed = e.target.value;
-    }
-
-    return this.setState(newState);
+    return this.setState({
+      url: (e.target.name === 'url') ? e.target.value : this.state.url,
+      feeds: [this.createFeed({ [e.target.name]: e.target.value })]
+    });
   }
 
   setUrl(e) {
@@ -332,12 +330,16 @@ function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    testUrl(...args) {
-      return testUrl.apply(this, args);
+    testUrl(tests, url) {
+      dispatch(setFeedsState(3));
+      return dispatch(testUrl(tests, url)).then((results) => {
+        dispatch(setFeedsState(2));
+        return results;
+      });
     },
 
     createFeed(data) {
-      return Promise.all(data.map(feed => dispatch(createFeed(feed)).then(({ payload }) => payload.id)));
+      return Promise.all(data.map(feed => dispatch(createFeed(feed, { state: false })).then(({ payload }) => payload.id)));
     }
   };
 }

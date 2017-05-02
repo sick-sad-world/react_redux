@@ -61,7 +61,7 @@ class Alerts extends React.Component {
   }
 
   deleteItem(id) {
-    return () => this.props.deleteAlert({ id }).then(this.deleteReset);
+    return () => this.props.deleteAlert({ id }).then(this.deleteReset).then(() => this.props.router.push(this.props.route.path));
   }
 
   renderConfirmation(deleting) {

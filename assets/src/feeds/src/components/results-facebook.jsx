@@ -9,7 +9,7 @@ export default function ResultsFacebook({ className, texts, data, loading, chose
   let DOM = null;
 
   if (loading) {
-    DOM = <li className='state-empty'>{texts.loading}</li>;
+    DOM = <li className='state-loading'><img src='/img/loading.svg' />{texts.loading}</li>;
   } else if (!data) {
     DOM = <li className='state-empty'>{texts.initial}</li>;
   } else if (data) {

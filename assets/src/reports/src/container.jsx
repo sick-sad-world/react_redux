@@ -61,7 +61,7 @@ class Reports extends React.Component {
   }
 
   deleteItem(id) {
-    return () => this.props.deleteReport({ id }).then(this.deleteReset);
+    return () => this.props.deleteReport({ id }).then(this.deleteReset).then(() => this.props.router.push(this.props.route.path));
   }
 
   renderConfirmation(deleting) {

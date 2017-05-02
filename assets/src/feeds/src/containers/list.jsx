@@ -44,6 +44,10 @@ class FeedsList extends React.Component {
     this.setState({ deleting: null });
   }
 
+  deleteFeed(id) {
+    return () => this.props.deleteFeed({ id, set_id: this.props.set_id }).then(this.deletingReset);
+  }
+
   renderFeed(feed) {
     let Button = null;
     if (feed.deletable && this.props.set_id) {
@@ -63,7 +67,7 @@ class FeedsList extends React.Component {
       <ul className={this.props.className}>
         {(this.props.payload.length) ? this.props.payload.map(this.renderFeed) : <li className='state-empty'>{this.props.emptyTpl}</li>}
         {(this.state.deleting) ? (
-          <DeleteConfirmation close={this.deletingReset} accept={this.props.deleteFeed(this.state.deleting.id)} >
+          <DeleteConfirmation close={this.deletingReset} accept={this.deleteFeed(this.state.deleting.id)} >
             <dl>
               <dt>Trendolizer Feed</dt>
               <dd>{`ID: ${this.state.deleting.id} - ${this.state.deleting.name}`}</dd>
@@ -112,8 +116,8 @@ function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    deleteFeed(id) {
-      return () => dispatch(deleteFeed({ id }));
+    deleteFeed(data) {
+      return dispatch(deleteFeed(data));
     }
   };
 }

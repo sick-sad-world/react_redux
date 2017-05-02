@@ -9,7 +9,7 @@ export default function ResultsRss({ texts, data, loading, chosen, onClick, clas
   let DOM = null;
 
   if (loading) {
-    DOM = <li className='state-empty'>{texts.loading}</li>;
+    DOM = <li className='state-loading'><img src='/img/loading.svg' />{texts.loading}</li>;
   } else if (!data) {
     DOM = <li className='state-empty'>{texts.initial}</li>;
   } else if (data) {
@@ -28,7 +28,7 @@ export default function ResultsRss({ texts, data, loading, chosen, onClick, clas
         </li>
       ));
     } else {
-      DOM = <li className='state-empty'>{ texts.empty}</li>;
+      DOM = <li className='state-empty'>{texts.empty}</li>;
     }
   }
 
