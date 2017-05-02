@@ -17,7 +17,7 @@ export default function ResultsFacebook({ className, texts, data, loading, chose
       DOM = data.map((url, i) => (
         <li className={classNames('mod-entity', { 'is-selected': includes(chosen, url) })} onClick={onClick(url)} key={`${url}_${i}`}>
           <div>
-            <a href={url} target='_blank' className='text'>
+            <a className='text'>
               <span className='url'>
                 <em className='badge' data-type='Facebook'>Facebook</em> {url}
               </span>
@@ -26,7 +26,7 @@ export default function ResultsFacebook({ className, texts, data, loading, chose
         </li>
       ));
     } else {
-      DOM = <li className='state-empty'>{ texts.empty}</li>;
+      DOM = <li className='state-empty'>{ texts.empty }</li>;
     }
   }
 
@@ -47,6 +47,7 @@ ResultsFacebook.defaultProps = {
     initial: 'Enter a URL and click "Test URL" to check if a Facebook page can be found.',
     loading: 'Testing if URL is related to a Facebook page, please wait...'
   },
+  success: true,
   data: null,
   loading: false
 };

@@ -21,8 +21,7 @@ export default function Checkbox({ name, disabled, value, checked, onChange, tit
           disabled={disabled}
         />
         <Icon icon='check' />
-      </span>
-      {label || value}
+      </span> {label || value}
     </label>
   );
 }

@@ -8,14 +8,23 @@
 		align-items: stretch;
 	}
 	.input-area {
-		flex: 0 1 40%;
+		flex: 0 0 40%;
 		padding: baseUnit() baseUnit(2);
 		border-right: $bd;
 		overflow-y: auto;
 		overflow-x: hidden;
 	}
 	.result-area {
-		flex: 0 1 60%;
+		flex: 0 0 60%;
+    width: 60%;
+	}
+
+  .result-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+		flex-direction: column;
+		overflow-x: hidden;
 		h3 {
 			display: block;
 			flex: 0 0 $entity-unit;
@@ -24,13 +33,6 @@
 			padding: baseUnit();
 			border-bottom: $bd;
 		}
-	}
-
-  .result-container {
-    height: 100%;
-    display: flex;
-		flex-direction: column;
-		overflow: hidden;
   }
 
   .result-autodetect li[class*='state-'] {

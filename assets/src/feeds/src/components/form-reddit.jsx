@@ -19,7 +19,7 @@ export default function FormReddit({ texts, value, running, onChange, onSubmit }
         desc={texts.description}
       />
       <div className='row'>
-        <input className='button is-accent size-half' type='button' value='Create' onClick={onSubmit} />
+        <input disabled={running} className='button is-accent size-half' type='button' value='Create' onClick={onSubmit} />
       </div>
     </form>
   );

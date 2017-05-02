@@ -1,14 +1,12 @@
 // Import utility stuff
 // ===========================================================================
-import { transform, bindAll, mapValues, isArray, concat, filter, find, without } from 'lodash';
+import { transform, bindAll, mapValues, concat, filter } from 'lodash';
 import classNames from 'classnames';
-import moment from 'moment';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 
 // Import selectors and typecheck
 // ===========================================================================
@@ -17,8 +15,8 @@ import { stateNum } from 'common/typecheck';
 
 // Import actions
 // ===========================================================================
-import { notification } from 'src/notifications';
-import { createFeed } from '../actions';
+import { feedTypes } from '../defaults';
+import { createFeed, testUrl } from '../actions';
 
 // Import Child components
 // ===========================================================================
@@ -38,9 +36,10 @@ class FeedCreate extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      error: null,
       type: 'autodetect',
       url: '',
-      feed: [],
+      feeds: [],
       results: {
         RSS: true,
         HTML: true,
@@ -48,28 +47,49 @@ class FeedCreate extends React.Component {
       }
     };
 
-    bindAll(this, ['setUrl', 'chooseFeedType', 'chooseAutodetect', 'selectFeed', 'setFacebookFeed', 'setSingleFeed']);
+    bindAll(this, ['setUrl', 'checkFeed', 'chooseFeedType', 'chooseAutodetect', 'selectFeed', 'setFacebookFeed', 'setSingleFeed', 'setError']);
   }
 
   createFeeds(e) {
     e.preventDefault();
-    this.props.createFeed(this.state.feed).then(this.props.onCreate);
+    this.props.createFeed(this.state.feeds).then(this.props.onCreate);
+  }
+
+  setError(error) {
+    this.setState({ error });
+  }
+
+  checkFeed(e) {
+    e.preventDefault();
+    let tests = [this.state.type];
+    if (this.state.type === 'autodetect') {
+      tests = transform(this.state.results, (acc, v, k) => {
+        if (v === true) acc.push(k);
+        return acc;
+      }, []);
+    }
+    this.props.testUrl(tests, this.state.url).then(results => this.setState({
+      results: {
+        ...this.state.results,
+        ...results
+      }
+    })).catch(this.setError);
   }
 
   getFeedsUri() {
-    return this.state.feed.map(({ url }) => url);
+    return this.state.feeds.map(({ feed }) => feed);
   }
 
-  chooseFeedType(type, check, val) {
+  chooseFeedType(type, test, checked) {
     this.setState({
       type,
-      feed: [],
-      url: (check) ? this.state.url : '',
+      feeds: [],
+      url: (test) ? this.state.url : '',
       results: mapValues(this.state.results, (v, k) => {
         if (type === k) {
           return true;
         } else if (type === 'autodetect') {
-          return (check) ? !!((check === k) ? val : v) : true;
+          return ((test === k) ? checked : v);
         }
         return false;
       })
@@ -81,11 +101,11 @@ class FeedCreate extends React.Component {
   }
 
   selectFeed(type) {
-    return (feed) => {
-      if (this.inFeeds(feed)) {
-        this.setState({ feed: filter(this.state.feed, v => v.feed !== feed) });
+    return feed => () => {
+      if (this.state.feeds.find(v => v.feed === feed)) {
+        this.setState({ feeds: filter(this.state.feeds, v => v.feed !== feed) });
       } else {
-        this.setState({ feed: concat({ set_id: this.props.set.id, feed, type, url: this.state.url }, this.state.feed) });
+        this.setState({ feeds: concat({ set_id: this.props.set.id, feed, type, url: this.state.url }, this.state.feeds) });
       }
     };
   }
@@ -93,7 +113,7 @@ class FeedCreate extends React.Component {
   setSingleFeed(e) {
     return this.setState({
       url: e.target.value,
-      feed: [{
+      feeds: [{
         url: e.target.value,
         set_id: this.props.set.id,
         type: this.state.type,
@@ -103,16 +123,20 @@ class FeedCreate extends React.Component {
   }
 
   setFacebookFeed(e) {
-    if (e.target.name === 'feed') {
-      this.setState({
-        feed: [{
-          ...(this.state.feed[0] || {}),
-          feed: e.target.value
-        }]
-      });
-    } else {
-      this.setSingleFeed(e);
+    const newState = {
+      feeds: [(this.state.feeds[0]) ? this.state.feeds[0] : {}]
+    };
+    newState.feeds[0].set_id = this.props.set.id;
+    newState.feeds[0].type = this.state.type;
+    if (e.target.name === 'url') {
+      newState.feeds[0].url = e.target.value;
+      newState.url = e.target.value;
     }
+    if (e.target.name === 'feed') {
+      newState.feeds[0].feed = e.target.value;
+    }
+
+    return this.setState(newState);
   }
 
   setUrl(e) {
@@ -140,7 +164,7 @@ class FeedCreate extends React.Component {
           <div className='input-area'>
             <Dropdown
               className='switcher-row'
-              label='Type of source:'
+              label='Type of source'
               name='feed_type'
               options={this.props.types}
               disabled={running}
@@ -163,11 +187,11 @@ class FeedCreate extends React.Component {
         return <FormAutodetect
             running={running}
             activeTypes={transform(this.state.results, (acc, v, k) => {
-              if (v === true) acc.push(k);
+              if (v) acc.push(k);
               return acc;
             }, [])}
             value={this.state.url}
-            success={!!this.state.feed.length}
+            success={!!this.state.feeds.length}
             testHandler={this.checkFeed}
             onChange={this.setUrl}
             onSubmit={this.createFeeds}
@@ -177,7 +201,7 @@ class FeedCreate extends React.Component {
         return <FormRss
             running={running}
             value={this.state.url}
-            success={!!this.state.feed.length}
+            success={!!this.state.feeds.length}
             onChange={this.setUrl}
             onSubmit={this.createFeeds}
             testHandler={this.checkFeed}
@@ -186,7 +210,7 @@ class FeedCreate extends React.Component {
         return <FormHtml
             running={running}
             value={this.state.url}
-            success={!!this.state.feed.length}
+            success={!!this.state.feeds.length}
             onChange={this.setUrl}
             onSubmit={this.createFeeds}
             testHandler={this.checkFeed}
@@ -195,8 +219,7 @@ class FeedCreate extends React.Component {
         return <FormFacebook
             running={running}
             url={this.state.url}
-            feed={(this.state.feed[0]) ? this.state.feed[0].feed : ''}
-            success={!!this.state.url.length}
+            feed={(this.state.feeds[0]) ? this.state.feeds[0].feed : ''}
             onChange={this.setFacebookFeed}
             onSubmit={this.createFeeds}
           />;
@@ -204,7 +227,6 @@ class FeedCreate extends React.Component {
         return <FormTwitter
             running={running}
             value={this.state.url}
-            success={!!this.state.url.length}
             onChange={this.setSingleFeed}
             onSubmit={this.createFeeds}
           />;
@@ -212,7 +234,6 @@ class FeedCreate extends React.Component {
         return <FormReddit
             running={running}
             value={this.state.url}
-            success={!!this.state.url.length}
             onChange={this.setSingleFeed}
             onSubmit={this.createFeeds}
           />;
@@ -247,22 +268,22 @@ class FeedCreate extends React.Component {
           />;
       case 'autodetect':
         return <div className='result-container result-autodetect'>
-          <ResultsFacebook
+          {(this.state.results.Facebook) ? <ResultsFacebook
             data={(this.state.results.Facebook.length) ? this.state.results.Facebook : []}
             chosen={this.getFeedsUri()}
             loading={running}
             onClick={this.selectFeed('Facebook')}
-          />
-          <ResultsRss
+          /> : null}
+          {(this.state.results.RSS) ? <ResultsRss
             data={(this.state.results.RSS.length) ? this.state.results.RSS : []}
             chosen={this.getFeedsUri()}
             loading={running}
             onClick={this.selectFeed('RSS')}
-          />
-          <ResultsHtml
+          /> : null}
+          {(this.state.results.HTML) ? <ResultsHtml
             data={(this.state.results.HTML.length) ? this.state.results.HTML : []}
             loading={running}
-          />
+          /> : null}
         </div>;
       default:
         return null;
@@ -271,19 +292,7 @@ class FeedCreate extends React.Component {
 }
 
 FeedCreate.defaultProps = {
-  types: [
-    { value: 'autodetect', label: 'Autodetect' },
-    { value: 'RSS', label: 'RSS/XML/ATOM Feed' },
-    { value: 'HTML', label: 'HTML Scraping' },
-    { value: 'Facebook', label: 'Facebook Page' },
-    { value: 'Twitter', label: 'Twitter Search' },
-    { value: 'Reddit', label: '(Sub)Reddit' }
-  ],
-  checkUrls: {
-    RSS: 'find_feeds',
-    HTML: 'find_urls',
-    Facebook: 'find_facebook'
-  },
+  types: feedTypes,
   texts: {
     title: 'Create new feeds for:',
     description: 'Feed creation dialog',
@@ -310,7 +319,8 @@ FeedCreate.propTypes = {
   }).isRequired,
   createFeed: PropTypes.func.isRequired,
   backPath: PropTypes.string.isRequired,
-  onCreate: PropTypes.func.isRequired
+  onCreate: PropTypes.func.isRequired,
+  testUrl: PropTypes.func.isRequired
 };
 
 // Connect our Container to State
@@ -322,6 +332,10 @@ function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
+    testUrl(...args) {
+      return testUrl.apply(this, args);
+    },
+
     createFeed(data) {
       return Promise.all(data.map(feed => dispatch(createFeed(feed)).then(({ payload }) => payload.id)));
     }

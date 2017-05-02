@@ -19,7 +19,7 @@ export default function ResultsRss({ texts, data, loading, chosen, onClick, clas
           'is-selected': includes(chosen, item.uri)
         })} onClick={onClick(item.uri)} key={`${item.uri}_${i}`} >
           <div>
-            <a href={item.uri} target='_blank' className='text'>
+            <a className='text'>
               <span className='url'>
                 <em className='badge' data-type='RSS'>{item.format}</em> {item.title}
               </span>
@@ -61,7 +61,7 @@ ResultsRss.propTypes = {
     initial: PropTypes.string.isRequired,
     loading: PropTypes.string.isRequired
   }),
-  data: PropTypes.arrayOf(PropTypes.string),
+  data: PropTypes.arrayOf(PropTypes.object),
   chosen: PropTypes.arrayOf(PropTypes.string).isRequired,
   loading: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired

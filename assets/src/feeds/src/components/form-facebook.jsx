@@ -4,7 +4,7 @@ import TextInput from 'common/components/forms/input-text';
 
 // Form to run RSS feed testing
 // ===========================================================================
-export default function FormFacebook({ texts, feed, url, running, success, onChange, onSubmit, testHandler }) {
+export default function FormFacebook({ texts, feed, url, running, success, onChange, onSubmit }) {
   return (
     <form name='RSS'>
       <div className='row'>{texts.heading}</div>
@@ -29,8 +29,7 @@ export default function FormFacebook({ texts, feed, url, running, success, onCha
         desc={texts.description}
       />
       <div className='row button-group'>
-        <input type='submit' value='Test URL' onClick={testHandler} className='button is-accent size-half' />
-        <input className='button is-accent size-half' disabled={running || !success} type='button' value='Create' onClick={onSubmit} />
+        <input className='button is-accent size-half' disabled={running} type='button' value='Create' onClick={onSubmit} />
       </div>
       <div className='form-description'>{ texts.description }</div>
     </form>
@@ -52,11 +51,9 @@ FormFacebook.propTypes = {
     url: PropTypes.string,
     description: PropTypes.string
   }),
-  success: PropTypes.bool.isRequired,
   running: PropTypes.bool.isRequired,
   feed: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
-  testHandler: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired
 };
