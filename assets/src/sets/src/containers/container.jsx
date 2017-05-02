@@ -23,6 +23,7 @@ import { createSet, editSet, deleteSet, forseUpdateUniq } from '../actions';
 // ===========================================================================
 import DeleteConfirmation from 'common/components/delete-confirmation';
 import { ListSection, ListItem } from 'common/components/list';
+import { FeedCreate } from 'src/feeds';
 import EditSet from '../components/edit';
 
 class Sourcesets extends React.Component {
@@ -58,17 +59,6 @@ class Sourcesets extends React.Component {
     return () => this.props.deleteSet({ id }).then(this.props.forseUpdateUniq).then(this.deleteReset);
   }
 
-  renderConfirmation(deleting) {
-    return (
-      <dl>
-        <dt>Trendolizer sourceset</dt>
-        <dd>
-          <p>{`ID: ${deleting.id} - ${deleting.name}. Containing: ${deleting.source_ids.length} sources`}</p>
-        </dd>
-      </dl>
-    );
-  }
-
   render() {
     const listData = {
       payload: this.props.payload,
@@ -83,7 +73,7 @@ class Sourcesets extends React.Component {
         <ListSection {...listData} >
           <ListItem url={this.props.route.path} current={this.props.curId} deleteText='Delete this set' />
         </ListSection>
-        {(this.props.chosen) ? (
+        {(this.props.chosen && !this.props.params.create) ? (
           <EditSet
             data={this.props.chosen}
             state={this.props.state}
@@ -93,9 +83,24 @@ class Sourcesets extends React.Component {
             backPath={this.props.route.path}
           />
         ) : null}
+        {(FeedCreate && this.props.chosen && this.props.params.create) ? (
+          <FeedCreate
+            set={{
+              id: this.props.chosen.id,
+              name: this.props.chosen.name
+            }}
+            onCreate={this.updateItem}
+            backPath={this.props.route.path}
+          />
+        ) : null}
         {(this.state.deleting) ? (
           <DeleteConfirmation close={this.deleteReset} accept={this.deleteItem(this.state.deleting.id)} >
-          {this.renderConfirmation(this.state.deleting)}
+            <dl>
+              <dt>Trendolizer sourceset</dt>
+              <dd>
+                <p>{`ID: ${this.state.deleting.id} - ${this.state.deleting.name}. Containing: ${this.state.deleting.source_ids.length} sources`}</p>
+              </dd>
+            </dl>
           </DeleteConfirmation>
         ) : null}
       </div>
@@ -133,6 +138,7 @@ Sourcesets.propTypes = {
   route: PropTypes.shape({
     path: PropTypes.string.isRequired
   }).isRequired,
+  params: PropTypes.object.isRequired,
   createSet: PropTypes.func.isRequired,
   editSet: PropTypes.func.isRequired,
   deleteSet: PropTypes.func.isRequired,

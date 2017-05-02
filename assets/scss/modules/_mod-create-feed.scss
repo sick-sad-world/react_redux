@@ -16,9 +16,6 @@
 	}
 	.result-area {
 		flex: 0 1 60%;
-		display: flex;
-		flex-direction: column;
-		overflow: hidden;
 		h3 {
 			display: block;
 			flex: 0 0 $entity-unit;
@@ -29,12 +26,17 @@
 		}
 	}
 
-  .subtitle {
-    & + li[class*='state-'] {
-      position: static;
-      height: 20vh;
-      border-bottom: $bd;
-    }
+  .result-container {
+    height: 100%;
+    display: flex;
+		flex-direction: column;
+		overflow: hidden;
+  }
+
+  .result-autodetect li[class*='state-'] {
+    position: static;
+    height: 20vh;
+    border-bottom: $bd;
   }
 
   .simple-link {
