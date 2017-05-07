@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, find, includes } from 'lodash';
+import { bindAll, includes } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { stateNum, optionShape } from 'common/typecheck';
+import { optionShape } from 'common/typecheck';
 import { coreInterface } from './defaults';
 import { makeDropdownSelector } from 'src/columns';
 import { makeContainerSelector } from './selectors';
@@ -22,49 +22,16 @@ import { editReport, deleteReport, createReport } from './actions';
 
 // Import Child components
 // ===========================================================================
-import DeleteConfirmation from 'common/components/delete-confirmation';
-import { ListSection, ListItem } from 'common/components/list';
+import Container from 'common/components/container';
 import EditReport from './components/edit';
 
 class Reports extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      deleting: null
-    };
-    bindAll(this, 'createItem', 'updateItem', 'deleteConfirm', 'deleteReset', 'deleteItem');
+    bindAll(this, 'confText');
   }
 
-  createItem(value) {
-    this.props.router.push({
-      pathname: `${this.props.route.path}/new`,
-      query: { name: value }
-    });
-  }
-
-  deleteConfirm(deleting = null) {
-    return () => this.setState({ deleting });
-  }
-
-  deleteReset() {
-    this.setState({ deleting: null });
-  }
-
-  updateItem(data) {
-    if (data.id) {
-      return this.props.editReport(data);
-    }
-    delete data.id;
-    return this.props.createReport(data).then(({ payload }) => {
-      this.props.router.push(`${this.props.route.path}/${payload.id}`);
-    });
-  }
-
-  deleteItem(id) {
-    return () => this.props.deleteReport({ id }).then(this.deleteReset).then(() => this.props.router.push(this.props.route.path));
-  }
-
-  renderConfirmation(deleting) {
+  confText(deleting) {
     let text = '';
     if (this.props.columns) {
       const columns = this.props.columns.filter(({ value }) => includes(deleting.columns, value)).map(({ label }) => label);
@@ -79,42 +46,19 @@ class Reports extends React.Component {
   }
 
   render() {
-    const listData = {
-      payload: this.props.payload,
-      state: this.props.state,
-      createItem: this.createItem,
-      deleteItem: this.deleteConfirm,
-      ...this.props.listProps
-    };
-
     return (
-      <div className='mod-page'>
-        <ListSection {...listData} >
-          <ListItem url={this.props.route.path} current={this.props.curId} deleteText='Delete this report' />
-        </ListSection>
-        {(this.props.chosen) ? (
-          <EditReport
-            data={this.props.chosen}
-            state={this.props.state}
-            current={this.props.curId}
-            columns={this.props.columns}
-            create={this.createItem}
-            update={this.updateItem}
-            backPath={this.props.route.path}
-          />
-        ) : null}
-        {(this.state.deleting) ? (
-          <DeleteConfirmation close={this.deleteReset} accept={this.deleteItem(this.state.deleting.id)}>
-            {this.renderConfirmation(this.state.deleting)}
-          </DeleteConfirmation>
-        ) : null}
-      </div>
+      <Container {...this.props} callOnCreate={false} confText={this.confText}>
+        {(this.props.chosen) ? props => <EditReport {...props} columns={this.props.columns} /> : null}
+      </Container>
     );
   }
 }
 
 Reports.defaultProps = {
-  listProps: {
+  listItemOpts: {
+    deleteText: 'Delete this report'
+  },
+  listSectionOpts: {
     sortable: false,
     texts: {
       title: 'Reports Management',
@@ -128,21 +72,9 @@ Reports.defaultProps = {
 };
 
 Reports.propTypes = {
-  curId: PropTypes.number,
-  state: stateNum.isRequired,
   columns: optionShape('number'),
   payload: PropTypes.arrayOf(PropTypes.shape(coreInterface)).isRequired,
-  chosen: PropTypes.object,
-  listProps: PropTypes.object,
-  router: PropTypes.shape({
-    push: PropTypes.func.isRequired
-  }).isRequired,
-  route: PropTypes.shape({
-    path: PropTypes.string.isRequired
-  }).isRequired,
-  createReport: PropTypes.func.isRequired,
-  editReport: PropTypes.func.isRequired,
-  deleteReport: PropTypes.func.isRequired
+  chosen: PropTypes.object
 };
 
 // Connect our Container to State
@@ -162,9 +94,9 @@ function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    createReport,
-    editReport,
-    deleteReport
+    actionCreate: createReport,
+    actionEdit: editReport,
+    actionDelete: deleteReport
   }, dispatch);
 }
 
