@@ -1,6 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
+import { optionShape } from 'common/typecheck';
 
 // Dropdown form input wrapper
 // ===========================================================================
@@ -63,10 +64,7 @@ Dropdown.propTypes = {
   label: PropTypes.string.isRequired,
   name: PropTypes.string,
   desc: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  options: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.any.isRequired,
-    label: PropTypes.string.isRequired
-  })).isRequired,
+  options: optionShape('any').isRequired,
   clearable: PropTypes.bool,
   searchable: PropTypes.bool,
   multi: PropTypes.bool,

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { numBool, directionString } from 'common/typecheck';
 
-export const defDisplaySettings = ['title', 'found', 'url', 'image', 'description', 'likes', 'tweets', 'shares'];
+export const defaultDisplay = ['title', 'found', 'url', 'image', 'description', 'likes', 'tweets', 'shares'];
 
 export const defDashboardData = {
 
@@ -41,10 +41,10 @@ export const defColumn = {
   open: 1,
   name: '',
   data: defColumnData,
-  display_settings: defDisplaySettings
+  display_settings: defaultDisplay
 };
 
-export const defColumnSorting = {
+export const sortingOptions = {
   sortPrefix: [
     {
       label: 'rate',
@@ -92,26 +92,27 @@ export const defColumnSorting = {
   ]
 };
 
-export const defColumnParameters = {
+export const displayOptions = [
+  'title',
+  'url',
+  'author',
+  'found',
+  'image',
+  'wide_image',
+  'description',
+  'graphs',
+  'likes',
+  'tweets',
+  'pins',
+  'shares',
+  'comments',
+  'votes_video',
+  'views_video',
+  'comments_video'
+];
+
+export const editOptions = {
   advRegExp: /MIN|MAX|LIKE/,
-  displaySettings: [
-    'title',
-    'url',
-    'author',
-    'found',
-    'image',
-    'wide_image',
-    'description',
-    'graphs',
-    'likes',
-    'tweets',
-    'pins',
-    'shares',
-    'comments',
-    'votes_video',
-    'views_video',
-    'comments_video'
-  ],
   language: [
     {
       label: 'English',
@@ -178,10 +179,10 @@ export const defColumnParameters = {
 };
 
 export const defaultDataInterface = {
-  autoreload: numBool,
-  infinite: numBool,
+  autoreload: numBool.isRequired,
+  infinite: numBool.isRequired,
   sort: PropTypes.string.isRequired,
-  direction: directionString,
+  direction: directionString.isRequired,
   show_favorites: numBool,
   show_ignored: numBool,
   limit: PropTypes.number,
@@ -189,8 +190,8 @@ export const defaultDataInterface = {
   search: PropTypes.string,
   exclude_search: PropTypes.string,
   url: PropTypes.string,
-  since: PropTypes.string,
-  before: PropTypes.string,
+  since: PropTypes.number,
+  before: PropTypes.number,
   language: PropTypes.string,
   source: PropTypes.arrayOf(PropTypes.number),
   set: PropTypes.arrayOf(PropTypes.number),
@@ -202,12 +203,16 @@ export const defaultDataInterface = {
   is_gallery: PropTypes.oneOfType([PropTypes.string, numBool])
 };
 
-export const defaultInterface = {
+export const coreInterface = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   order: PropTypes.number,
-  open: numBool,
-  display_settings: PropTypes.arrayOf(PropTypes.string).isRequired,
-  data: PropTypes.shape(defaultDataInterface).isRequired
+  open: numBool
+};
+
+export const defaultInterface = {
+  ...coreInterface,
+  display_settings: PropTypes.arrayOf(PropTypes.string),
+  data: PropTypes.shape(defaultDataInterface)
 };
 

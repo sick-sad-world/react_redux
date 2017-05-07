@@ -8,6 +8,7 @@ import { defaultFrequency, defaultInterface } from '../defaults';
 // ===========================================================================
 import React from 'react';
 import PropTypes from 'prop-types';
+import { optionShape } from 'common/typecheck';
 
 // Import Child components
 // ===========================================================================
@@ -115,9 +116,6 @@ EditAlert.defaultProps = {
 
 EditAlert.propTypes = {
   data: PropTypes.shape(defaultInterface).isRequired,
-  columns: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.number.isRequired,
-    label: PropTypes.string.isRequired
-  })),
+  columns: optionShape('number'),
   create: PropTypes.func.isRequired
 };

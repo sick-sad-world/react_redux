@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 export default function createOptionableValidator(validator) {
   function validate(isRequired, props, propName, componentName, location) {
     if (props[propName] === null || props[propName] === undefined) {
@@ -21,6 +23,11 @@ export default function createOptionableValidator(validator) {
 
   return chainedValidate;
 }
+
+export const optionShape = (type = 'string') => PropTypes.arrayOf(PropTypes.shape({
+  value: PropTypes[type].isRequired,
+  label: PropTypes.string.isRequired
+}));
 
 export const emailStr = createOptionableValidator((props, propName) => {
   if (!/\S+@\S+\.\S+/.test(props[propName])) {

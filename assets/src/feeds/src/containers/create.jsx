@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { stateNum } from 'common/typecheck';
+import { stateNum, optionShape } from 'common/typecheck';
 
 // Import actions
 // ===========================================================================
@@ -307,10 +307,7 @@ FeedCreate.propTypes = {
     autodetectHeading: PropTypes.string.isRequired,
     autodetectDefault: PropTypes.string.isRequired
   }).isRequired,
-  types: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired
-  })).isRequired,
+  types: optionShape('string').isRequired,
   set: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired

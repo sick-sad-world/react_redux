@@ -25,9 +25,10 @@
     fieldset {
       .row-flex {
         margin-bottom: baseUnit();
-      }
-      input[name='adv_val'] {
-        flex: 1 1 auto;
+        >*:not(.button) {
+          flex-grow: 1;
+          flex-shrink: 1;
+        }
       }
     }
   }

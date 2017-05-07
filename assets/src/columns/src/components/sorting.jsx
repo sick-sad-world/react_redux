@@ -1,7 +1,11 @@
 import React from 'react';
 import Select from 'react-select';
-import Icon from '../icon';
-import { defColumnSorting, decomposeColumnSort, composeColumnSort } from '../../redux/columns';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import Icon from 'common/components/icon';
+import { optionShape, directionString } from 'common/typecheck';
+import { sortingOptions, defColumnData } from '../defaults';
+import { decomposeColumnSort, composeColumnSort } from '../helpers';
 
 // Sorting dropdonws and direction toggler
 // ===========================================================================
@@ -25,11 +29,13 @@ export default class Sorting extends React.Component {
   updateState(name) {
     return v => this.setState({
       [name]: (name === 'direction') ? v.target.value : (v && v.value) ? v.value : v
-    }, () => {
-      this.props.onChange({
-        direction: this.state.direction,
-        sort: composeColumnSort(this.state.sort_pref, this.state.sort_prop)
-      });
+    }, this.runOnChangeHandler);
+  }
+
+  runOnChangeHandler() {
+    this.props.onChange({
+      direction: this.state.direction,
+      sort: composeColumnSort(this.state.sort_pref, this.state.sort_prop)
     });
   }
 
@@ -61,7 +67,7 @@ export default class Sorting extends React.Component {
           searchable={false}
           value={sort_prop}
         />
-        <span className={`switcher-direction${(disabled) ? ' is-disabled' : ''}`}>
+        <span className={classNames('switcher-direction', { 'is-disabled': disabled })}>
           <input
             type='checkbox'
             disabled={disabled}
@@ -78,5 +84,18 @@ export default class Sorting extends React.Component {
 }
 
 Sorting.defaultProps = {
-  ...defColumnSorting
+  disabled: false,
+  direction: defColumnData.direction,
+  sort: defColumnData.sort,
+  ...sortingOptions
 };
+
+Sorting.propTypes = {
+  disabled: PropTypes.bool.isRequired,
+  className: PropTypes.string.isRequired,
+  sortPrefix: optionShape('string').isRequired,
+  sortProperty: optionShape('string').isRequired,
+  onChange: PropTypes.func.isRequired,
+  direction: directionString.isRequired
+};
+

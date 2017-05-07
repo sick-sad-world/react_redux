@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import { optionShape } from 'common/typecheck';
 
 export default function Toggler({ name, label, disabled, value, onChange, options, className, togglerClassName }) {
   function setRootFocusClass(e) {
@@ -54,10 +55,7 @@ Toggler.propTypes = {
   disabled: PropTypes.bool,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]).isRequired,
   onChange: PropTypes.func.isRequired,
-  options: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.any.isRequired,
-    label: PropTypes.string.isRequired
-  })).isRequired,
+  options: optionShape('any').isRequired,
   className: PropTypes.string,
   togglerClassName: PropTypes.string
 };

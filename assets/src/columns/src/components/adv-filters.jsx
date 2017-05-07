@@ -1,8 +1,10 @@
 import { bindAll, map, isEqual } from 'lodash';
-import { defColumnSorting } from '../../redux/columns';
+import { sortingOptions } from '../defaults';
 import React from 'react';
-import Icon from '../icon';
+import PropTypes from 'prop-types';
+import { optionShape } from 'common/typecheck';
 import Select from 'react-select';
+import Icon from 'common/components/icon';
 
 // Advanced filters form Component
 // ===========================================================================
@@ -19,10 +21,10 @@ export default class AdvFilters extends React.Component {
 
   mapDataToState(data) {
     return {
-      adv_type: 'MIN',
-      adv_pref: '',
-      adv_prop: 'likes',
-      adv_val: ''
+      advType: 'MIN',
+      advPref: '',
+      advProp: 'likes',
+      advVal: ''
     };
   }
 
@@ -31,20 +33,20 @@ export default class AdvFilters extends React.Component {
   }
 
   updateAmount(e) {
-    return this.setState({ adv_val: (e.target.value.length) ? parseFloat(e.target.value) : 0 });
+    return this.setState({ advVal: (e.target.value.length) ? parseFloat(e.target.value) : 0 });
   }
 
   createValueKey() {
-    const { adv_type, adv_pref, adv_prop } = this.state;
-    return `${adv_type}(${(adv_pref) ? `${adv_pref}_${adv_prop}` : adv_prop})`;
+    const { advType, advPref, advProp } = this.state;
+    return `${advType}(${(advPref) ? `${advPref}_${advProp}` : advProp})`;
   }
 
   createValue(e) {
     e.preventDefault();
-    if (this.state.adv_val > 0) {
+    if (this.state.advVal > 0) {
       this.props.onChange({
         ...this.props.value,
-        [this.createValueKey()]: this.state.adv_val
+        [this.createValueKey()]: this.state.advVal
       });
     }
   }
@@ -61,7 +63,7 @@ export default class AdvFilters extends React.Component {
     return (
       <div className='form-block adv-filters'>
         <ul className='tag-list row'>
-          { (Object.keys(this.props.value).length) ? map(this.props.value, this.renderValue) : this.props.tplAdvFiltersEmpty }
+          { (Object.keys(this.props.value).length) ? map(this.props.value, this.renderValue) : this.props.tplEmpty }
         </ul>
         <fieldset>
           <legend>Advanced filtering options:</legend>
@@ -69,46 +71,46 @@ export default class AdvFilters extends React.Component {
             <Select
               disabled={this.props.disabled}
               className='size-90'
-              name='adv_type'
+              name='advType'
               options={[{ value: 'MIN', label: 'MIN' }, { value: 'MAX', label: 'MAX' }]}
-              onChange={this.updateProp('adv_type')}
+              onChange={this.updateProp('advType')}
               autosize={false}
               clearable={false}
               searchable={false}
-              value={this.state.adv_type}
+              value={this.state.advType}
             />
             <Select
               disabled={this.props.disabled}
               className='size-120'
-              name='adv_pref'
+              name='advPref'
               placeholder='Prefix...'
               options={this.props.sortPrefix}
-              onChange={this.updateProp('adv_pref')}
+              onChange={this.updateProp('advPref')}
               autosize={false}
               clearable={true}
               searchable={false}
-              value={this.state.adv_pref}
+              value={this.state.advPref}
             />
             <Select
               disabled={this.props.disabled}
               className='size-180'
-              name='adv_prop'
+              name='advProp'
               options={this.props.sortProperty}
-              onChange={this.updateProp('adv_prop')}
+              onChange={this.updateProp('advProp')}
               autosize={false}
               clearable={false}
               searchable={false}
-              value={this.state.adv_prop}
+              value={this.state.advProp}
             />
             <input
               disabled={this.props.disabled}
               className='size-120'
               onChange={this.updateAmount}
-              value={this.state.adv_val}
+              value={this.state.advVal}
               type='number'
               step='0.001'
               placeholder='Amount...'
-              name='adv_val'
+              name='advVal'
             />
             <a onClick={this.createValue} disabled={this.props.disabled} className='button is-accent size-60'>Add</a>
           </div>
@@ -131,5 +133,17 @@ export default class AdvFilters extends React.Component {
 
 AdvFilters.defaultProps = {
   tplEmpty: (<li className='is-default'><i>No advanced filters configured for this column. Click below to add one or more.</i></li>),
-  ...defColumnSorting
+  disabled: false,
+  value: {},
+  ...sortingOptions
+};
+
+AdvFilters.propTypes = {
+  disabled: PropTypes.bool.isRequired,
+  className: PropTypes.string,
+  tplEmpty: PropTypes.element.isRequired,
+  sortPrefix: optionShape('string').isRequired,
+  sortProperty: optionShape('string').isRequired,
+  value: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired
 };
