@@ -116,6 +116,5 @@ EditAlert.defaultProps = {
 
 EditAlert.propTypes = {
   data: PropTypes.shape(defaultInterface).isRequired,
-  columns: optionShape('number'),
-  create: PropTypes.func.isRequired
+  columns: optionShape('number')
 };
