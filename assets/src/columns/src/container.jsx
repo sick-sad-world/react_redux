@@ -11,20 +11,20 @@ import { connect } from 'react-redux';
 // ===========================================================================
 import PropTypes from 'prop-types';
 import { stateNum } from 'common/typecheck';
-import { coreInterface } from '../defaults';
-import { makeContainerSelector } from '../selectors';
+import { coreInterface } from './defaults';
+import { makeContainerSelector } from './selectors';
 
 // Import actions
 // ===========================================================================
 import { bindActionCreators } from 'redux';
-import { createColumn, editColumn, deleteColumn } from '../actions';
+import { createColumn, editColumn, deleteColumn } from './actions';
 
 // Import Child components
 // ===========================================================================
 import Container from 'common/components/container';
-import { ToggleVisibility } from '../components/buttons';
-import EditColumn from '../components/edit';
-import ColumnFeedsAssignment from '../components/assignment';
+import { ToggleVisibility } from './components/buttons';
+import EditColumn from './components/edit';
+import ColumnFeedsAssignment from './components/assignment';
 
 class Columns extends React.Component {
   constructor(props) {
@@ -51,7 +51,7 @@ class Columns extends React.Component {
       <Container {...this.props} listItemOpts={{
         deleteText: 'Delete this column',
         customIcon: this.makeItemIcon
-      }} callOnCreate={false} confText={this.confText}>
+      }} confText={this.confText}>
         {(this.props.chosen && !this.props.params.assignment) ? props => <EditColumn {...props} /> : null}
         {/* (this.props.chosen && this.props.params.assignment) ? (
           <ColumnFeedsAssignment
@@ -83,7 +83,10 @@ Columns.defaultProps = {
 Columns.propTypes = {
   payload: PropTypes.arrayOf(PropTypes.shape(coreInterface)).isRequired,
   params: PropTypes.object.isRequired,
-  chosen: PropTypes.object
+  chosen: PropTypes.object,
+  actionCreate: PropTypes.func.isRequired,
+  actionEdit: PropTypes.func.isRequired,
+  actionDelete: PropTypes.func.isRequired
 };
 
 // Connect our Container to State

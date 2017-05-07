@@ -21,10 +21,9 @@ import { createSet, editSet, deleteSet, forseUpdateUniq } from '../actions';
 
 // Import Child components
 // ===========================================================================
-import DeleteConfirmation from 'common/components/delete-confirmation';
-import { ListSection, ListItem } from 'common/components/list';
-import { FeedCreate } from 'src/feeds';
+import Container from 'common/components/container';
 import EditSet from '../components/edit';
+import { FeedCreate } from 'src/feeds';
 
 class Sourcesets extends React.Component {
   constructor(props) {
@@ -32,88 +31,46 @@ class Sourcesets extends React.Component {
     this.state = {
       deleting: null
     };
-    bindAll(this, 'createItem', 'deleteConfirm', 'updateItem', 'deleteReset', 'updateOnNewFeeds');
-  }
-
-  createItem(value) {
-    this.props.createSet({
-      name: value
-    }).then(({ payload }) => {
-      this.props.router.push(`${this.props.route.path}/${payload.id}`);
-    });
+    bindAll(this, 'confText', 'updateOnNewFeeds', 'renderChildren');
   }
 
   updateOnNewFeeds(data) {
-    return this.updateItem({
+    return this.props.actionEdit({
       id: this.props.chosen.id,
       source_ids: union(this.props.chosen.source_ids, data)
     }).then(() => this.props.router.push(`${this.props.route.path}/${this.props.chosen.id}`));
   }
 
-  updateItem(data) {
-    return this.props.editSet(data);
+  confText(deleting) {
+    return (
+      <dl>
+        <dt>Trendolizer sourceset</dt>
+        <dd>
+          <p>{`ID: ${deleting.id} - ${deleting.name}. Containing: ${deleting.source_ids.length} sources`}</p>
+        </dd>
+      </dl>
+    );
   }
 
-  deleteConfirm(deleting) {
-    return () => this.setState({ deleting });
-  }
-
-  deleteReset() {
-    this.setState({ deleting: null });
-  }
-
-  deleteItem(id) {
-    return () => this.props.deleteSet({ id })
-      .then(this.props.forseUpdateUniq)
-      .then(this.deleteReset)
-      .then(() => this.props.router.push(this.props.route.path));
+  renderChildren(props) {
+    const { chosen, params, payload, curId } = this.props;
+    if (chosen) {
+      if (FeedCreate && params.create) {
+        return (
+          <FeedCreate set={{ id: chosen.id, name: chosen.name }} onCreate={this.updateOnNewFeeds} backPath={this.props.route.path} />
+        );
+      } 
+        return <EditSet {...props} sets={payload.filter(({ id }) => id !== curId)} />;
+      
+    }
+    return null;
   }
 
   render() {
-    const listData = {
-      payload: this.props.payload,
-      state: this.props.state,
-      createItem: this.createItem,
-      deleteItem: this.deleteConfirm,
-      ...this.props.listProps
-    };
-
     return (
-      <div className='mod-page'>
-        <ListSection {...listData} >
-          <ListItem url={this.props.route.path} current={this.props.curId} deleteText='Delete this set' />
-        </ListSection>
-        {(this.props.chosen && !this.props.params.create) ? (
-          <EditSet
-            data={this.props.chosen}
-            state={this.props.state}
-            current={this.props.curId}
-            sets={this.props.payload.filter(({ id }) => id !== this.props.curId)}
-            update={this.updateItem}
-            backPath={this.props.route.path}
-          />
-        ) : null}
-        {(FeedCreate && this.props.chosen && this.props.params.create) ? (
-          <FeedCreate
-            set={{
-              id: this.props.chosen.id,
-              name: this.props.chosen.name
-            }}
-            onCreate={this.updateOnNewFeeds}
-            backPath={this.props.route.path}
-          />
-        ) : null}
-        {(this.state.deleting) ? (
-          <DeleteConfirmation close={this.deleteReset} accept={this.deleteItem(this.state.deleting.id)} >
-            <dl>
-              <dt>Trendolizer sourceset</dt>
-              <dd>
-                <p>{`ID: ${this.state.deleting.id} - ${this.state.deleting.name}. Containing: ${this.state.deleting.source_ids.length} sources`}</p>
-              </dd>
-            </dl>
-          </DeleteConfirmation>
-        ) : null}
-      </div>
+      <Container {...this.props} confText={this.confText}>
+        {this.renderChildren}
+    </Container>
     );
   }
 }
@@ -121,7 +78,10 @@ class Sourcesets extends React.Component {
 // Sourcesets container default props
 // ===========================================================================
 Sourcesets.defaultProps = {
-  listProps: {
+  listItemOpts: {
+    deleteText: 'Delete this sourceset'
+  },
+  listSectionOpts: {
     sortable: false,
     texts: {
       title: 'Sources Management',
@@ -137,11 +97,9 @@ Sourcesets.defaultProps = {
 // Prop type check
 // ===========================================================================
 Sourcesets.propTypes = {
-  curId: PropTypes.number,
-  state: stateNum.isRequired,
   payload: PropTypes.arrayOf(PropTypes.shape(defaultInterface)).isRequired,
+  curId: PropTypes.number,
   chosen: PropTypes.object,
-  listProps: PropTypes.object,
   router: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired,
@@ -149,10 +107,10 @@ Sourcesets.propTypes = {
     path: PropTypes.string.isRequired
   }).isRequired,
   params: PropTypes.object.isRequired,
-  createSet: PropTypes.func.isRequired,
-  editSet: PropTypes.func.isRequired,
-  deleteSet: PropTypes.func.isRequired,
-  forseUpdateUniq: PropTypes.func.isRequired
+  forseUpdateUniq: PropTypes.func.isRequired,
+  actionCreate: PropTypes.func.isRequired,
+  actionEdit: PropTypes.func.isRequired,
+  actionDelete: PropTypes.func.isRequired
 };
 
 // Connect our Container to State
@@ -164,12 +122,17 @@ function mapStateToProps() {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    createSet,
-    editSet,
-    deleteSet,
-    forseUpdateUniq
-  }, dispatch);
+  return {
+    ...bindActionCreators({
+      actionCreate: createSet,
+      actionEdit: editSet,
+      actionDelete: deleteSet,
+      forseUpdateUniq
+    }, dispatch),
+    actionDelete(data) {
+      return dispatch(data).then(this.props.forseUpdateUniq);
+    }
+  };
 }
 
 export default connect(mapStateToProps(), mapDispatchToProps)(Sourcesets);

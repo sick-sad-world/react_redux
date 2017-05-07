@@ -1,6 +1,5 @@
 import reduser from './src/reduser';
-import Container from './src/containers/container';
-import ColumnList from './src/containers/column-list';
+import Container from './src/container';
 import Route from './src/route';
 import types from './src/types';
 
@@ -12,4 +11,3 @@ export { types };
 export { reduser };
 export { Route };
 export { Container };
-export { ColumnList };

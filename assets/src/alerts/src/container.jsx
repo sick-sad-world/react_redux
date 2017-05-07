@@ -74,7 +74,10 @@ Alerts.defaultProps = {
 Alerts.propTypes = {
   payload: PropTypes.arrayOf(PropTypes.shape(coreInterface)).isRequired,
   columns: optionShape('number'),
-  chosen: PropTypes.object
+  chosen: PropTypes.object,
+  actionCreate: PropTypes.func.isRequired,
+  actionEdit: PropTypes.func.isRequired,
+  actionDelete: PropTypes.func.isRequired
 };
 
 // Connect our Container to State

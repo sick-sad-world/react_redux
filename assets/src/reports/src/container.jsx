@@ -74,7 +74,10 @@ Reports.defaultProps = {
 Reports.propTypes = {
   columns: optionShape('number'),
   payload: PropTypes.arrayOf(PropTypes.shape(coreInterface)).isRequired,
-  chosen: PropTypes.object
+  chosen: PropTypes.object,
+  actionCreate: PropTypes.func.isRequired,
+  actionEdit: PropTypes.func.isRequired,
+  actionDelete: PropTypes.func.isRequired
 };
 
 // Connect our Container to State

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router';
-import Container from './containers/container';
+import Container from './container';
 
 export default (
   <Route path='/columns' component={Container} label='Columns' icon='archive'>
