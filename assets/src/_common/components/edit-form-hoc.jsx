@@ -7,7 +7,7 @@ import classNames from 'classnames';
 // ===========================================================================
 import React from 'react';
 import PropTypes from 'prop-types';
-import { stateNum } from '../typecheck';
+import { stateNum, textShape } from '../typecheck';
 
 // Import child components
 // ===========================================================================
@@ -152,11 +152,7 @@ export default function MakeEditForm(Form) {
   EditForm.propTypes = {
     backPath: PropTypes.string,
     className: PropTypes.string,
-    texts: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      confirmation: PropTypes.string.isRequired
-    }).isRequired,
+    texts: PropTypes.shape(textShape).isRequired,
     formProps: PropTypes.object.isRequired,
     current: PropTypes.number,
     state: stateNum.isRequired,

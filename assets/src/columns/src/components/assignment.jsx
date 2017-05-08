@@ -9,7 +9,7 @@ import { editOptions, availableColumnData, defaultInterface } from '../defaults'
 // ===========================================================================
 import React from 'react';
 import PropTypes from 'prop-types';
-import { stateNum } from 'common/typecheck';
+import { stateNum, textShape } from 'common/typecheck';
 
 // Import Child components
 // ===========================================================================
@@ -75,11 +75,7 @@ Assignment.defaultProps = {
 
 Assignment.propTypes = {
   backPath: PropTypes.string,
-  texts: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    confirmation: PropTypes.string.isRequired
-  }).isRequired,
+  texts: PropTypes.shape(textShape).isRequired,
   state: stateNum.isRequired,
   data: PropTypes.shape(defaultInterface).isRequired
 };

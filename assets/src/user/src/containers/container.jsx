@@ -5,7 +5,7 @@ import { bindAll } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { stateNum } from 'common/typecheck';
+import { stateNum, textShape } from 'common/typecheck';
 
 // Import data related stuff
 // ===========================================================================
@@ -60,11 +60,7 @@ User.defaultProps = {
 // Prop type check
 // ===========================================================================
 User.propTypes = {
-  texts: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    confirmation: PropTypes.string.isRequired
-  }).isRequired,
+  texts: PropTypes.shape(textShape).isRequired,
   editUser: PropTypes.func.isRequired,
   notification: PropTypes.func,
   state: stateNum.isRequired,
