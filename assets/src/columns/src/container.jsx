@@ -10,13 +10,12 @@ import { connect } from 'react-redux';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { stateNum } from 'common/typecheck';
-import { coreInterface } from './defaults';
+import { coreInterface, editOptions } from './defaults';
+import { unflatternColumnData } from './helpers';
 import { makeContainerSelector } from './selectors';
 
 // Import actions
 // ===========================================================================
-import { bindActionCreators } from 'redux';
 import { createColumn, editColumn, deleteColumn } from './actions';
 
 // Import Child components
@@ -30,7 +29,7 @@ class Columns extends React.Component {
   constructor(props) {
     super(props);
     this.state = { deleting: null };
-    bindAll(this, 'confText', 'makeItemIcon', 'renderContent');
+    bindAll(this, 'confText', 'makeItemIcon', 'renderChildren');
   }
 
   makeItemIcon({ id, open }) {
@@ -46,12 +45,15 @@ class Columns extends React.Component {
     );
   }
 
-  renderContent(props) {
+  renderChildren(props) {
     if (this.props.chosen) {
       if (this.props.params.assignment) {
         return <ColumnFeedsAssignment {...props} />;
       }
-      return <EditColumn {...props} assignment={!!ColumnFeedsAssignment} />;
+      return <EditColumn {...props} className='mod-column-edit' formProps={{
+        path: `${this.props.route.path}/${this.props.curId}`,
+        ...editOptions
+      }} />;
     }
     return null;
   }
@@ -62,7 +64,7 @@ class Columns extends React.Component {
         deleteText: 'Delete this column',
         customIcon: this.makeItemIcon
       }} confText={this.confText}>
-        {this.renderContent}
+        {this.renderChildren}
       </Container>
     );
   }
@@ -79,13 +81,27 @@ Columns.defaultProps = {
       deleting: 'Are you sure want to delete this Column?',
       empty: 'No columns created yet. Use form above to create one.'
     }
+  },
+  editOpts: {
+    texts: {
+      title: 'Edit column',
+      description: 'Select the type of items to show in this column and how to display them.',
+      confirmation: '{data} was changed. Save changes?'
+    }
   }
 };
 
 Columns.propTypes = {
   payload: PropTypes.arrayOf(PropTypes.shape(coreInterface)).isRequired,
   params: PropTypes.object.isRequired,
+  curId: PropTypes.number,
   chosen: PropTypes.object,
+  router: PropTypes.shape({
+    push: PropTypes.func.isRequired
+  }).isRequired,
+  route: PropTypes.shape({
+    path: PropTypes.string.isRequired
+  }).isRequired,
   actionCreate: PropTypes.func.isRequired,
   actionEdit: PropTypes.func.isRequired,
   actionDelete: PropTypes.func.isRequired
@@ -100,11 +116,17 @@ const mapStateToProps = () => {
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    actionCreate: createColumn,
-    actionEdit: editColumn,
-    actionDelete: deleteColumn
-  }, dispatch);
+  return {
+    actionEdit(data, changed) {
+      return dispatch(editColumn((changed) ? unflatternColumnData(data) : data));
+    },
+    actionCreate(data) {
+      return dispatch(createColumn(data));
+    },
+    actionDelete(data) {
+      return dispatch(deleteColumn(data));
+    }
+  };
 }
 
 export default connect(mapStateToProps(), mapDispatchToProps)(Columns);

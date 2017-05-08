@@ -63,38 +63,44 @@ EditFormConfirmation.propTypes = {
   cancel: PropTypes.func.isRequired
 };
 
-export function MakeEditForm(Form, mapDataToState, getters = {}) {
+export default function MakeEditForm(Form) {
   class EditForm extends React.Component {
     constructor(props) {
       super(props);
-      this.state = mapDataToState(this.props.data);
-      forOwn(getters, (f, k) => {
-        if (!(this[k] instanceof Function) && k.indexOf('get') === 0) {
-          this[k] = f.bind(this);
-        }
-      });
-      bindAll(this, 'resetState', 'updateHandler', 'updateState');
+      this.state = this.composeState(this.props.data);
+      bindAll(this, 'resetState', 'updateHandler', 'updateState', 'stateUpdater');
     }
 
     componentWillReceiveProps(newProps) {
       if ((newProps.state === 2 && this.props.state !== newProps.state) || this.props.current !== newProps.current) {
-        this.setState(mapDataToState(newProps.data));
+        this.setState(this.composeState(newProps.data));
       }
     }
 
-    updateState(name, getter) {
-      return (value, ...args) => {
-        const newValue = (this[getter] instanceof Function) ? getters[getter](value, ...args) : value;
-        this.stateUpdater({
-          [name]: (newValue) || ''
-        });
+    composeState(data) {
+      return {
+        changed: [],
+        ...Form.mapDataToState(data, this.props.formProps)
       };
+    }
+
+    updateState(name, getter) {
+      return value => this.stateUpdater({
+        [name]: (Form[getter] instanceof Function) ? Form[getter](value, this.props.formProps, this.state) : value || ''
+      });
+    }
+
+    compareValue(v, k) {
+      if (Form.compareValue) {
+        return Form.compareValue(v, k, this.props.data);
+      }
+      return isEqual(v, this.props.data[k]);
     }
 
     stateUpdater(newState = {}) {
       let changed = [...this.state.changed];
       forOwn(newState, (v, k) => {
-        if (isEqual(v, this.props.data[k])) {
+        if (this.compareValue(v, k)) {
           if (includes(this.state.changed, k)) changed = without(changed, k);
         } else if (!includes(this.state.changed, k)) changed = concat(changed, k);
       });
@@ -108,27 +114,41 @@ export function MakeEditForm(Form, mapDataToState, getters = {}) {
     }
 
     resetState() {
-      return this.setState(this.mapDataToState(this.props.data));
+      return this.setState(this.composeState(this.props.data));
     }
 
     render() {
       const running = this.props.state > 2;
       const { texts, backPath } = this.props;
+      const title = (this.state.name) ? `${texts.title} "${this.state.name}"` : texts.title;
       return (
         <section className={classNames('mod-subsection-edit', this.props.className, { 'state-loading': running })}>
-          <EditFormHeader title={`${texts.title} "${this.state.name}"`} description={texts.description} url={backPath} />
-          <EditFormConfirmation text={texts.confirmation} changed={this.state.changed} apply={this.updateHandler} cancel={this.resetState} />
+          <EditFormHeader title={title} description={texts.description} url={backPath} />
+          {(this.state.changed.length) ? (
+            <EditFormConfirmation text={texts.confirmation} changed={this.state.changed} apply={this.updateHandler} cancel={this.resetState} />
+          ) : null}
           <Form
             running={running}
             formValues={this.state}
             updateState={this.updateState}
+            stateUpdater={this.stateUpdater}
+            {...this.props.formProps}
           />
         </section>
       );
     }
   }
 
-  const dataShape = (Form.getDataShape) ? Form.getDataShape() : {};
+  EditForm.defaultProps = {
+    state: 2,
+    texts: {
+      title: 'Edit form',
+      description: 'Default form to modify things',
+      confirmation: '{data} was changed. Save changes?'
+    },
+    formProps: {}
+  };
+
   EditForm.propTypes = {
     backPath: PropTypes.string,
     className: PropTypes.string,
@@ -137,11 +157,19 @@ export function MakeEditForm(Form, mapDataToState, getters = {}) {
       description: PropTypes.string.isRequired,
       confirmation: PropTypes.string.isRequired
     }).isRequired,
+    formProps: PropTypes.object.isRequired,
     current: PropTypes.number,
     state: stateNum.isRequired,
-    data: PropTypes.shape(dataShape).isRequired,
-    update: PropTypes.func.isRequired
+    data: PropTypes.object.isRequired,
+    update: PropTypes.func.isRequired,
+    ...((Form.getDataShape) ? Form.getDataShape() : {})
   };
 
   return EditForm;
 }
+
+export const injectedPropsType = {
+  running: PropTypes.bool.isRequired,
+  formValues: PropTypes.object.isRequired,
+  updateState: PropTypes.func.isRequired
+};

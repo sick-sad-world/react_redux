@@ -14,19 +14,27 @@ import { Link } from 'react-router';
 // Import Child components
 // ===========================================================================
 import TextInput from 'common/components/forms/input-text';
-import EditForm from 'common/components/edit-form';
+import MakeEditForm, { injectedPropsType } from 'common/components/edit-form-hoc';
 import { FeedsList } from 'src/feeds';
 import SetsWithContents from './list';
 
-export default class EditSet extends EditForm {
+class EditSet extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state.seach = '';
-    this.state.expanded = null;
+    this.state = {
+      search: '',
+      expanded: null
+    };
   }
 
-  mapDataToState(data) {
+  static getTypeCheck() {
+    return {
+      data: PropTypes.shape(defaultInterface).isRequired
+    };
+  }
+
+  static mapDataToState(data) {
     return {
       changed: [],
       id: data.id,
@@ -36,72 +44,62 @@ export default class EditSet extends EditForm {
     };
   }
 
-  getSourceIds(type, id) {
+  static getSourceIds({ type, id }, props, state) {
     return (type === 'set') ?
-      concat(this.state.source_ids, find(this.props.sets, { id }).source_ids) :
-        updateArrayWithValue(this.state.source_ids, id);
+      concat(state.source_ids, find(props.sets, { id }).source_ids) :
+        updateArrayWithValue(state.source_ids, id);
   }
 
 
   makeStateUpdater(type) {
-    return id => () => this.updateState('source_ids', 'getSourceIds')(type, id);
+    return id => () => this.props.updateState('source_ids', 'getSourceIds')({ type, id });
   }
 
   render() {
-    // Do not render at all if [ITEM] is not provided
-    // ===========================================================================
-    const running = this.props.state > 2;
+    const { running, formValues, updateState } = this.props;
     return (
-      <section className={classNames({
-        'mod-subsection-edit': true,
-        'mod-sourceset-edit': true,
-        'state-loading': running
-      })}>
-        { this.renderFormHeader() }
-        { this.renderConfirmation() }
-        <form className='subsection-content columned'>
-          <div className='form-block'>
-            <TextInput
-              className='row'
-              name='name'
-              label='Sourceset name'
-              disabled={running}
-              value={this.state.name}
-              onChange={this.updateState('name')}
-            />
-            <div className='row'>
-              <Link to={`${this.props.backPath}/${this.props.data.id}/create`} className='button is-accent'>Create new feeds</Link>
-            </div>
+      <form className='subsection-content columned'>
+        <div className='form-block'>
+          <TextInput
+            className='row'
+            name='name'
+            label='Sourceset name'
+            disabled={running}
+            value={formValues.name}
+            onChange={updateState('name')}
+          />
+          <div className='row'>
+            <Link to={`${this.props.path}/create`} className='button is-accent'>Create new feeds</Link>
           </div>
-          {(FeedsList) ? (
-            <div className='form-block'>
-              <h4 className='row'>Feeds management</h4>
-              <section className='mod-submanagement'>
-                <div className={classNames({
-                  selected: true,
-                  'state-disabled': running
-                })}>
-                  <div className='header'>
-                    <span>Sourceset has {this.state.source_ids.length} sources total.</span>
-                  </div>
-                  <FeedsList
-                    set_id={this.props.data.id}
-                    criterea={{ source_ids: this.state.source_ids, uniq_ids: this.state.uniq_ids }}
-                    deselect={this.makeStateUpdater('source')}
-                    empty='This set does not contain any feeds. Add some.'
-                  />
+        </div>
+        {(FeedsList) ? (
+          <div className='form-block'>
+            <h4 className='row'>Feeds management</h4>
+            <section className='mod-submanagement'>
+              <div className={classNames({
+                selected: true,
+                'state-disabled': running
+              })}>
+                <div className='header'>
+                  <span>Sourceset has {formValues.source_ids.length} sources total.</span>
                 </div>
-                <SetsWithContents
-                  data={this.props.sets}
-                  dis_sources={this.state.source_ids}
-                  onSetClick={this.makeStateUpdater('set')}
-                  onFeedClick={this.makeStateUpdater('source')}
+                <FeedsList
+                  set_id={formValues.id}
+                  criterea={{ source_ids: formValues.source_ids, uniq_ids: formValues.uniq_ids }}
+                  deselect={this.makeStateUpdater('source')}
+                  empty='This set does not contain any feeds. Add some.'
                 />
-              </section>
-            </div>
-          ) : null}
-        </form>
-      </section>
+              </div>
+              <SetsWithContents
+                data={this.props.sets}
+                dis_sources={formValues.source_ids}
+                onSetClick={this.makeStateUpdater('set')}
+                onFeedClick={this.makeStateUpdater('source')}
+              />
+            </section>
+          </div>
+        ) : null}
+      </form>
     );
   }
 }
@@ -109,17 +107,15 @@ export default class EditSet extends EditForm {
 // Edit sourceset form default props
 // ===========================================================================
 EditSet.defaultProps = {
-  treshold: 3,
-  texts: {
-    title: 'Edit form',
-    description: 'Simple edit form to manipulate entity props',
-    confirmation: '{data} was changed. Save changes?'
-  }
+  treshold: 3
 };
 
 // Prop type check
 // ===========================================================================
 EditSet.propTypes = {
-  data: PropTypes.shape(defaultInterface).isRequired,
-  sets: PropTypes.arrayOf(PropTypes.shape(defaultInterface)).isRequired
+  sets: PropTypes.arrayOf(PropTypes.shape(defaultInterface)).isRequired,
+  path: PropTypes.string,
+  ...injectedPropsType
 };
+
+export default MakeEditForm(EditSet);

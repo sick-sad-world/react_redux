@@ -55,12 +55,15 @@ class Sourcesets extends React.Component {
   renderChildren(props) {
     const { chosen, params, payload, curId } = this.props;
     if (chosen) {
-      if (FeedCreate && params.create) {
+      if (params.create) {
         return (
           <FeedCreate set={{ id: chosen.id, name: chosen.name }} onCreate={this.updateOnNewFeeds} backPath={this.props.route.path} />
         );
       }
-      return <EditSet {...props} sets={payload.filter(({ id }) => id !== curId)} />;
+      return <EditSet {...props} className='mod-sourceset-edit' formProps={{
+        sets: payload.filter(({ id }) => id !== curId),
+        path: `${this.props.route.path}/${curId}`
+      }} />;
     }
     return null;
   }
@@ -89,6 +92,13 @@ Sourcesets.defaultProps = {
       placeholder: 'Enter name',
       deleting: 'Are you sure want to delete this Sourceset?',
       empty: 'No sourcesets created yet. Use form above to create one.'
+    }
+  },
+  editOpts: {
+    texts: {
+      title: 'Edit form',
+      description: 'Simple edit form to manipulate entity props',
+      confirmation: '{data} was changed. Save changes?'
     }
   }
 };

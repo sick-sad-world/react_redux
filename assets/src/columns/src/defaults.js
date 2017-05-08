@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import { numBool, directionString } from 'common/typecheck';
 
+export const notDataProps = ['id', 'name', 'display_settings', 'advancedFilters', 'changed'];
+
 export const defaultDisplay = ['title', 'found', 'url', 'image', 'description', 'likes', 'tweets', 'shares'];
 
 export const defDashboardData = {

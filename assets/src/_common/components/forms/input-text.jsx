@@ -26,7 +26,6 @@ export default function TextInput({ id, name, disabled, value, type, onChange, l
 }
 
 TextInput.defaultProps = {
-  label: 'Text input',
   value: '',
   type: 'text',
   onChange: null

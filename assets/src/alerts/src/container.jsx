@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 // ===========================================================================
 import PropTypes from 'prop-types';
 import { optionShape } from 'common/typecheck';
-import { coreInterface } from './defaults';
+import { defaultFrequency, coreInterface } from './defaults';
 import { makeContainerSelector } from './selectors';
 import { makeDropdownSelector } from 'src/columns';
 
@@ -48,7 +48,10 @@ class Alerts extends React.Component {
   render() {
     return (
       <Container {...this.props} callOnCreate={false} confText={this.confText}>
-        {(this.props.chosen) ? props => <EditAlert {...props} columns={this.props.columns} /> : null}
+        {(this.props.chosen) ? props => <EditAlert {...props} formProps={{
+          columns: this.props.columns,
+          frequencyOptions: defaultFrequency
+        }} /> : null}
       </Container>
     );
   }
@@ -67,6 +70,13 @@ Alerts.defaultProps = {
       placeholder: 'Enter name',
       deleting: 'Are you sure want to delete this Alert?',
       empty: 'No alerts created yet. Use form above to create one.'
+    }
+  },
+  editOpts: {
+    texts: {
+      title: 'Edit report',
+      description: 'Pick the columns to send. Set time to send, e-mail recipient and report name here.',
+      confirmation: '{data} was changed. Save changes?'
     }
   }
 };

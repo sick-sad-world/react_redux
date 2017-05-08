@@ -24,8 +24,8 @@ export default class Container extends React.Component {
     bindAll(this, 'createItem', 'deleteItem', 'editItem', 'deleteConfirm', 'deleteReset');
   }
 
-  createWrapper(data) {
-    this.props.actionCreate(data).then(({ payload }) => {
+  createWrapper(data, ...rest) {
+    this.props.actionCreate(data, ...rest).then(({ payload }) => {
       this.props.router.push(`${this.props.route.path}/${payload.id}`);
     });
   }
@@ -41,11 +41,11 @@ export default class Container extends React.Component {
     }
   }
 
-  editItem(data) {
+  editItem(data, ...rest) {
     if (!this.props.callOnCreate && !data.id) {
-      return this.createWrapper(omit(data, 'id'));
+      return this.createWrapper(omit(data, 'id'), ...rest);
     }
-    return this.props.actionEdit(data);
+    return this.props.actionEdit(data, ...rest);
   }
 
   deleteConfirm(deleting = null) {
@@ -77,7 +77,8 @@ export default class Container extends React.Component {
           state: this.props.state,
           current: this.props.curId,
           update: this.editItem,
-          backPath: this.props.route.path
+          backPath: this.props.route.path,
+          ...this.props.editOpts
         }) : null }
         {(this.state.deleting) ? (
           <DeleteConfirmation close={this.deleteReset} accept={this.deleteItem(this.state.deleting.id)}>
@@ -94,7 +95,8 @@ Container.defaultProps = {
   state: 1,
   payload: [],
   listSectionOpts: {},
-  listItemOpts: {}
+  listItemOpts: {},
+  editOpts: {}
 };
 
 Container.propTypes = {
@@ -112,6 +114,7 @@ Container.propTypes = {
   chosen: PropTypes.object,
   listSectionOpts: PropTypes.object.isRequired,
   listItemOpts: PropTypes.object.isRequired,
+  editOpts: PropTypes.object.isRequired,
   confText: PropTypes.func.isRequired,
   actionCreate: PropTypes.func.isRequired,
   actionEdit: PropTypes.func.isRequired,

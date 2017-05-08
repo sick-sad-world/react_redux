@@ -1,5 +1,6 @@
 import types from './types';
-import { sortingOptions, defColumnData, defaultDisplay } from './defaults';
+import { pickBy } from 'lodash';
+import { sortingOptions, defColumnData, defaultDisplay, notDataProps } from './defaults';
 
 export function getColumnsForResults(payload) {
   return payload.find(item => (item && item.type === types.READ)).payload.map(({ id, data, open }) => ({ id, data, open }));
@@ -28,4 +29,16 @@ export function decomposeColumnSort(sort = defColumnData.sort) {
 
 export function composeColumnSort(pref, prop) {
   return pref && prop !== 'found' ? `${pref}_${prop}` : prop;
+}
+
+export function unflatternColumnData(data) {
+  return {
+    id: data.id,
+    name: data.name,
+    display_settings: data.display_settings,
+    data: {
+      ...pickBy(data, (v, k) => notDataProps.indexOf(k) < 0 && ((v instanceof Array) ? v.length : v !== '')),
+      ...data.advancedFilters
+    }
+  };
 }

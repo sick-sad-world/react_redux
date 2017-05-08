@@ -41,15 +41,30 @@ class User extends React.Component {
   render() {
     return (
       <div className='mod-page'>
-        <EditUser data={this.props.payload} state={this.props.state} update={this.updateItem} onEmailBccError={this.onEmailBccError} />
+        <EditUser data={this.props.payload} state={this.props.state} update={this.updateItem} texts={this.props.texts} formProps={{
+          onEmailBccError: this.onEmailBccError
+        }} />
       </div>
     );
   }
 }
 
+User.defaultProps = {
+  texts: {
+    title: 'Profile settings',
+    description: 'Tell us a bit about yourself...',
+    confirmation: '{data} was changed. Save changes?'
+  }
+};
+
 // Prop type check
 // ===========================================================================
 User.propTypes = {
+  texts: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    confirmation: PropTypes.string.isRequired
+  }).isRequired,
   editUser: PropTypes.func.isRequired,
   notification: PropTypes.func,
   state: stateNum.isRequired,

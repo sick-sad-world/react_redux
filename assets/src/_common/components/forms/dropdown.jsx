@@ -21,9 +21,16 @@ export default class Dropdown extends React.Component {
   }
 
   updateState(v) {
-    this.setState({
-      value: (v && v.value) ? v.value : v
-    }, () => this.props.onChange(this.state.value));
+    let value = v;
+    if (v) {
+      if (v instanceof Array) {
+        value = v.map(item => item.value);
+      } else if (v.value) {
+        value = v.value;
+      }
+    }
+
+    this.setState({ value }, () => this.props.onChange(this.state.value));
   }
 
   render() {
