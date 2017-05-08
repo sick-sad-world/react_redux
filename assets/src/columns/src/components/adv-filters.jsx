@@ -1,4 +1,4 @@
-import { bindAll, map, isEqual } from 'lodash';
+import { bindAll, map, isEqual, omit } from 'lodash';
 import { sortingOptions } from '../defaults';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -52,7 +52,7 @@ export default class AdvFilters extends React.Component {
   }
 
   removeValue(key) {
-    return () => this.props.onChange({ ...this.props.value, [key]: undefined });
+    return () => this.props.onChange(omit(this.props.value, key));
   }
 
   renderValue(v, k) {

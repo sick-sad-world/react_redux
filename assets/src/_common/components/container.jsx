@@ -102,7 +102,7 @@ Container.propTypes = {
   curId: PropTypes.number,
   state: stateNum.isRequired,
   payload: PropTypes.arrayOf(PropTypes.object).isRequired,
-  children: PropTypes.element,
+  children: PropTypes.func,
   router: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired,

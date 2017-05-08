@@ -1,7 +1,7 @@
 // Import utility stuff
 // ===========================================================================
 import classNames from 'classnames';
-import { bindAll } from 'lodash';
+import { bindAll, includes } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
@@ -36,13 +36,13 @@ export default class SetsWithContents extends React.Component {
 
   render() {
     return (
-      <div className={classNames(...this.props.className.split(' '), {
+      <div className={classNames(this.props.className, {
         'state-disabled': this.props.disabled
       })}>
         <div className='header'>
           <input type='text' name='search' value={this.state.search} onChange={this.updateSearch} placeholder='Search for...' />
         </div>
-          {(this.state.search > this.props.treshold) ? (
+          {(this.state.search.length > this.props.treshold) ? (
             <FeedsList className='entity-list' criterea={{ search: this.state.search }} action={this.props.onFeedClick} />
           ) : (
             <ul className='entity-list'>
@@ -52,6 +52,7 @@ export default class SetsWithContents extends React.Component {
                   name={set.name}
                   counter={set.source_ids.length}
                   sortable={false}
+                  disabled={this.props.dis_sets && includes(this.props.dis_sets, set.id)}
                   onExpand={this.updateExpanded(set.id)}
                   select={this.props.onSetClick(set.id)}
                 >
@@ -80,6 +81,7 @@ SetsWithContents.defaultProps = {
 
 SetsWithContents.propTypes = {
   dis_sources: PropTypes.arrayOf(PropTypes.number),
+  dis_sets: PropTypes.arrayOf(PropTypes.number),
   className: PropTypes.string,
   disabled: PropTypes.bool.isRequired,
   treshold: PropTypes.number.isRequired,

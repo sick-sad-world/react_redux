@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import { normalizeValue } from 'functions';
 import { optionShape } from 'common/typecheck';
 
 export default function Toggler({ name, label, disabled, value, onChange, options, className, togglerClassName }) {
@@ -29,7 +30,7 @@ export default function Toggler({ name, label, disabled, value, onChange, option
                     id={id}
                     key={`${name}-${option.value}`}
                     checked={option.value === value}
-                    onChange={onChange}
+                    onChange={e => onChange(normalizeValue(e.target.value))}
                     onFocus={setRootFocusClass}
                     onBlur={setRootFocusClass}
                     name={name}

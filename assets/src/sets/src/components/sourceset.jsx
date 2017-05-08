@@ -3,7 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from 'common/components/icon';
-import { ExpandSet, CollapseSet, SelectSet } from './buttons';
+import { ExpandSet, CollapseSet, SelectSet, DeselectSet } from './buttons';
 
 // Import utility stuff
 // ===========================================================================
@@ -12,7 +12,7 @@ import classNames from 'classnames';
 // Agnostinc list item component
 // @using by: ListView and Management views
 // ===========================================================================
-export default function Sourceset({ sortable, name, counter, disabled, children, select, onExpand }) {
+export default function Sourceset({ sortable, name, counter, disabled, children, select, deselect, onExpand }) {
   let Toggler = null;
   if (onExpand) {
     if (children) {
@@ -39,6 +39,7 @@ export default function Sourceset({ sortable, name, counter, disabled, children,
         {(select || Toggler) ? (
           <nav className='nav-links'>
             { (select) ? <SelectSet handler={select} /> : null }
+            { (deselect) ? <DeselectSet handler={deselect} /> : null }
             { Toggler }
           </nav>
         ) : null}

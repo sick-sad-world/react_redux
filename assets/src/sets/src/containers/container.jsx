@@ -59,9 +59,8 @@ class Sourcesets extends React.Component {
         return (
           <FeedCreate set={{ id: chosen.id, name: chosen.name }} onCreate={this.updateOnNewFeeds} backPath={this.props.route.path} />
         );
-      } 
-        return <EditSet {...props} sets={payload.filter(({ id }) => id !== curId)} />;
-      
+      }
+      return <EditSet {...props} sets={payload.filter(({ id }) => id !== curId)} />;
     }
     return null;
   }
@@ -70,7 +69,7 @@ class Sourcesets extends React.Component {
     return (
       <Container {...this.props} confText={this.confText}>
         {this.renderChildren}
-    </Container>
+      </Container>
     );
   }
 }

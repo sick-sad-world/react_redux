@@ -48,3 +48,19 @@ export const sortParamToShort = (param = '') => {
   }
   return stat;
 };
+
+export const normalizeValue = (v, base = 10) => {
+  const intVal = parseFloat(v, base);
+  if (intVal === intVal) {
+    return intVal;
+  } else if (v === 'true') {
+    return true;
+  } else if (v === 'false') {
+    return false;
+  } else if (v === 'undefined') {
+    return undefined;
+  } else if (v === '') {
+    return null;
+  }
+  return v;
+};

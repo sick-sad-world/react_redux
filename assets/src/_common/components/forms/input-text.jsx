@@ -2,6 +2,7 @@
 // ===========================================================================
 import React from 'react';
 import PropTypes from 'prop-types';
+import { normalizeValue } from 'functions';
 
 // Text input Component
 // ===========================================================================
@@ -9,11 +10,11 @@ export default function TextInput({ id, name, disabled, value, type, onChange, l
   const domId = id || `fun-${type}-${name}`;
   return (
     <div className={className}>
-      <label htmlFor={domId}>{label}:</label>
+      { (label) ? <label htmlFor={domId}>{label}:</label> : null }
       <input
         className={inputClassName}
         disabled={disabled}
-        onChange={onChange}
+        onChange={e => onChange(normalizeValue(e.target.value))}
         id={domId}
         type={type}
         name={name}
@@ -38,7 +39,7 @@ TextInput.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]),
   type: PropTypes.string,
   onChange: PropTypes.func,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   desc: PropTypes.string,
   className: PropTypes.string,
   inputClassName: PropTypes.string

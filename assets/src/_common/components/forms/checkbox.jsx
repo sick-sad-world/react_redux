@@ -3,6 +3,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import { normalizeValue } from 'functions';
 import Icon from '../icon';
 
 // Checkbox Component
@@ -17,7 +18,7 @@ export default function Checkbox({ name, disabled, value, checked, onChange, tit
           title={title}
           value={value}
           checked={checked}
-          onChange={onChange}
+          onChange={e => onChange(normalizeValue(e.target.value))}
           disabled={disabled}
         />
         <Icon icon='check' />

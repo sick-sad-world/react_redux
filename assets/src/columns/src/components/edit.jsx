@@ -3,7 +3,7 @@
 import { forOwn, isEqual } from 'lodash';
 import classNames from 'classnames';
 import { updateArrayWithValue } from 'functions';
-import { editOptions, defColumn, availableColumnData, defaultInterface } from '../defaults';
+import { editOptions, availableColumnData, defaultInterface } from '../defaults';
 
 // Import React related stuff
 // ===========================================================================
@@ -114,10 +114,12 @@ export default class EditColumn extends EditForm {
               value={this.state.name}
               onChange={this.updateState('name')}
             />
-            <fieldset className='row'>
-              <legend>Feeds assigned:</legend>
-              <Link to={`${this.props.backPath}/${this.props.data.id}/assignment`} className='is-button is-accent'>Assign feeds</Link>
-            </fieldset>
+            {(this.props.assignment) ? (
+              <fieldset className='row'>
+                <legend>Feeds assigned:</legend>
+                <Link to={`${this.props.backPath}/${this.props.data.id}/assignment`} className='is-button is-accent'>Assign feeds</Link>
+              </fieldset>
+            ) : null }
             <h4 className='form-subtitle'>Display options:</h4>
             <Toggler
               disabled={running}
@@ -297,25 +299,21 @@ export default class EditColumn extends EditForm {
             <div className='row-flex'>
               <span className='form-label'>Found since/before <i><b>n</b></i> hours ago:</span>
               <div className='row-time-gap'>
-                <input
+                <TextInput
+                  name='since'
+                  inputClassName='size-120'
+                  placeholder='Since...'
                   disabled={running}
                   value={this.state.since}
                   onChange={this.updateState('since')}
-                  placeholder='Since...'
-                  className='size-120'
-                  id='funColumnSince'
-                  type='text'
-                  name='since'
                 />
-                <input
+                <TextInput
+                  name='before'
+                  inputClassName='size-120'
+                  placeholder='Before...'
                   disabled={running}
                   value={this.state.before}
                   onChange={this.updateState('before')}
-                  placeholder='Before...'
-                  className='size-120'
-                  id='funColumnBefore'
-                  type='text'
-                  name='before'
                 />
               </div>
             </div>

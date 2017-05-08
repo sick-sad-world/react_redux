@@ -30,7 +30,7 @@ class Columns extends React.Component {
   constructor(props) {
     super(props);
     this.state = { deleting: null };
-    bindAll(this, 'confText', 'makeItemIcon');
+    bindAll(this, 'confText', 'makeItemIcon', 'renderContent');
   }
 
   makeItemIcon({ id, open }) {
@@ -46,21 +46,23 @@ class Columns extends React.Component {
     );
   }
 
+  renderContent(props) {
+    if (this.props.chosen) {
+      if (this.props.params.assignment) {
+        return <ColumnFeedsAssignment {...props} />;
+      }
+      return <EditColumn {...props} assignment={!!ColumnFeedsAssignment} />;
+    }
+    return null;
+  }
+
   render() {
     return (
       <Container {...this.props} listItemOpts={{
         deleteText: 'Delete this column',
         customIcon: this.makeItemIcon
       }} confText={this.confText}>
-        {(this.props.chosen && !this.props.params.assignment) ? props => <EditColumn {...props} /> : null}
-        {/* (this.props.chosen && this.props.params.assignment) ? (
-          <ColumnFeedsAssignment
-            data={this.props.chosen}
-            state={this.props.state}
-            update={this.updateItem}
-            backPath={`${this.props.route.path}/${this.props.curId}`}
-          />
-        ) : null}*/}
+        {this.renderContent}
       </Container>
     );
   }
