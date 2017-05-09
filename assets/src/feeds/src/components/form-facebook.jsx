@@ -15,7 +15,7 @@ export default function FormFacebook({ texts, feed, url, running, success, onCha
         placeholder='https://www.facebook.com/....'
         disabled={running}
         value={feed}
-        onChange={onChange}
+        onChange={onChange('feed')}
         desc={texts.feed}
       />
       <TextInput
@@ -25,7 +25,7 @@ export default function FormFacebook({ texts, feed, url, running, success, onCha
         placeholder='http://something.com'
         disabled={running}
         value={url}
-        onChange={onChange}
+        onChange={onChange('url')}
         desc={texts.description}
       />
       <div className='row button-group'>

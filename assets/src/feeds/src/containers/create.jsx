@@ -91,12 +91,13 @@ class FeedCreate extends React.Component {
     return this.state.feeds.map(({ feed }) => feed);
   }
 
-  chooseFeedType(type, test, checked) {
+  chooseFeedType(type, test) {
+    console.log(type, test);
     const newResults = mapValues(this.state.results, (v, k) => {
       if (type === k) {
         return true;
       } else if (type === 'autodetect') {
-        return ((test === k) ? checked : (this.state.type === 'autodetect') ? v : true);
+        return (test === k) ? !v : true;
       }
       return false;
     });
@@ -109,8 +110,8 @@ class FeedCreate extends React.Component {
     });
   }
 
-  chooseAutodetect(e) {
-    return this.chooseFeedType('autodetect', e.target.value, e.target.checked);
+  chooseAutodetect(value) {
+    return this.chooseFeedType('autodetect', value);
   }
 
   selectFeed(type) {
@@ -130,15 +131,15 @@ class FeedCreate extends React.Component {
     });
   }
 
-  setFacebookFeed(e) {
-    return this.setState({
-      url: (e.target.name === 'url') ? e.target.value : this.state.url,
-      feeds: [this.createFeed({ [e.target.name]: e.target.value })]
+  setFacebookFeed(name) {
+    return value => this.setState({
+      url: (name === 'url') ? value : this.state.url,
+      feeds: [this.createFeed({ [name]: value })]
     });
   }
 
-  setUrl(e) {
-    this.setState({ url: e.target.value });
+  setUrl(url) {
+    this.setState({ url });
   }
 
   render() {
