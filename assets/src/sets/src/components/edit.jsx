@@ -14,7 +14,7 @@ import { Link } from 'react-router';
 // Import Child components
 // ===========================================================================
 import TextInput from 'common/components/forms/input-text';
-import { Select, Deselect } from 'common/components/buttons';
+import { Select, Deselect, SelectAll } from 'common/components/buttons';
 import MakeEditForm, { injectedPropsType } from 'common/components/edit-form-hoc';
 import { FeedsList } from 'src/feeds';
 import SetsWithContents from './list';
@@ -91,7 +91,7 @@ class EditSet extends React.Component {
               <SetsWithContents
                 payload={this.props.sets}
                 disabled_sources={formValues.source_ids}
-                setAction={<Select handler={this.makeStateUpdater('set')} />}
+                setAction={<SelectAll handler={this.makeStateUpdater('set')} />}
                 feedAction={<Select handler={this.makeStateUpdater('source')} />}
               />
             </section>

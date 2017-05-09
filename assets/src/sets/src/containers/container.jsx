@@ -10,7 +10,6 @@ import { connect } from 'react-redux';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { stateNum } from 'common/typecheck';
 import { defaultInterface } from '../defaults';
 import { makeContainerSelector } from '../selectors';
 
@@ -141,7 +140,7 @@ function mapDispatchToProps(dispatch) {
       return dispatch(forseUpdateUniq(...args));
     },
     actionDelete(data) {
-      return dispatch(data).then(this.props.forseUpdateUniq);
+      return dispatch(deleteSet(data)).then(this.props.forseUpdateUniq);
     }
   };
 }

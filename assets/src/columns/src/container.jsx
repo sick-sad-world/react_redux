@@ -52,7 +52,7 @@ class Columns extends React.Component {
   renderChildren(props) {
     if (this.props.chosen) {
       if (this.props.params.assignment) {
-        return <ColumnFeedsAssignment {...props} />;
+        return <ColumnFeedsAssignment {...props} formProps={{ ...props.assignmentOpts }} />;
       }
       return <EditColumn {...props} className='mod-column-edit' formProps={{
         path: `${this.props.route.path}/${this.props.curId}`,
@@ -90,6 +90,13 @@ Columns.defaultProps = {
     texts: {
       title: 'Edit column',
       description: 'Select the type of items to show in this column and how to display them.',
+      confirmation: '{data} was changed. Save changes?'
+    }
+  },
+  assignmentOpts: {
+    texts: {
+      title: 'Assign feeds to column',
+      description: 'Pick the sourcesets and sources this column to watch here.',
       confirmation: '{data} was changed. Save changes?'
     }
   }

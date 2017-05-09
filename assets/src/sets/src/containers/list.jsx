@@ -34,7 +34,7 @@ class SetsList extends React.Component {
     return (
       <ul className={this.props.className}>
         {(this.props.payload.length) ? this.props.payload.map(set => (
-          <Sourceset key={set.id} name={name} counter={set.source_ids.length} disabled={set.disabled} sortable={this.props.sortable}>
+          <Sourceset key={set.id} name={set.name} counter={set.source_ids.length} disabled={set.disabled} sortable={this.props.sortable}>
             {this.renderActions(set)}
           </Sourceset>
         )) : <li className='state-empty'>{this.props.emptyTpl}</li>}
