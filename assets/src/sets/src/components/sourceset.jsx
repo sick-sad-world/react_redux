@@ -3,7 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from 'common/components/icon';
-import { ExpandSet, CollapseSet, SelectSet, DeselectSet } from './buttons';
+import { Expand, Collapse, Select, Deselect } from 'common/components/buttons';
 
 // Import utility stuff
 // ===========================================================================
@@ -16,9 +16,9 @@ export default function Sourceset({ sortable, name, counter, disabled, children,
   let Toggler = null;
   if (onExpand) {
     if (children) {
-      Toggler = <CollapseSet handler={onExpand} />;
+      Toggler = <Collapse handler={onExpand} />;
     } else {
-      Toggler = <ExpandSet handler={onExpand} />;
+      Toggler = <Expand handler={onExpand} />;
     }
   }
 
@@ -38,8 +38,8 @@ export default function Sourceset({ sortable, name, counter, disabled, children,
         </div>
         {(select || Toggler) ? (
           <nav className='nav-links'>
-            { (select) ? <SelectSet handler={select} /> : null }
-            { (deselect) ? <DeselectSet handler={deselect} /> : null }
+            { (select) ? <Select handler={select} /> : null }
+            { (deselect) ? <Deselect handler={deselect} /> : null }
             { Toggler }
           </nav>
         ) : null}

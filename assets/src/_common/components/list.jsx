@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, isEqual } from 'lodash';
+import { bindAll } from 'lodash';
 import classNames from 'classnames';
 import { stateNum } from 'common/typecheck';
 
@@ -10,6 +10,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import Icon from './icon';
+import { Delete } from './buttons';
 
 // Abstract Page list component
 // ===========================================================================
@@ -28,13 +29,6 @@ export class ListSection extends React.Component {
     if (newProps.state === 2) this.setState({ payload: newProps.payload });
   }
 
-  // shouldComponentUpdate (nextProps, nextState) {
-  //   return !isEqual(nextState.payload, this.state.payload)
-  // }
-
-  // Create list item component
-  // @ used in data mapping
-  // ===========================================================================
   createListItem(item) {
     return React.cloneElement(this.props.children, {
       key: item.id,
@@ -133,27 +127,21 @@ export class ListItem extends React.PureComponent {
     // ===========================================================================
     const badge = (counter >= 0) ? <em className='counter'>{counter}</em> : null;
 
-    // Make delete button if item deletable
-    // ===========================================================================
-    const deleteBtn = (this.props.deleteAction) ? (
-      <a onClick={this.props.deleteAction} title={this.props.deleteText}><Icon icon='trash' /></a>
-    ) : null;
-
     return (
       <li className={classNames({
         'mod-entity': true,
         'is-selected': current === id && !disabled,
         'is-disabled': disabled && current !== id
-      })} data-order={order}>
+      })}>
         <div>
           { dragHandle }
           <div className='text'>
             <Link to={ (current === id) ? url : `${url}/${id}` }>{ badge } { name }</Link>
           </div>
-          {(customIcon || deleteBtn) ? (
+          {(customIcon || this.props.deleteAction) ? (
             <nav className='nav-links'>
             { customIcon }
-            { deleteBtn }
+            { (this.props.deleteAction) ? <Delete onClick={this.props.deleteAction} title={this.props.deleteText} /> : null }
             </nav>
           ) : null }
         </div>
@@ -174,18 +162,4 @@ ListItem.propTypes = {
   deleteText: PropTypes.string,
   customIcon: PropTypes.func,
   deleteAction: PropTypes.func
-};
-
-
-// Agnostinc list item action button component
-// @using by: ListView and Management views
-// ===========================================================================
-export function ListItemButton({ title, handler, icon }) {
-  return <a onClick={handler} title={title}><Icon icon={icon} /></a>;
-}
-
-ListItemButton.propTypes = {
-  title: PropTypes.string,
-  handler: PropTypes.func.isRequired,
-  icon: PropTypes.string.isRequired
 };

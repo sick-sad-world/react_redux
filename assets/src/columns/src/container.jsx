@@ -21,7 +21,7 @@ import { createColumn, editColumn, deleteColumn } from './actions';
 // Import Child components
 // ===========================================================================
 import Container from 'common/components/container';
-import { ToggleVisibility } from './components/buttons';
+import { Show, Hide } from 'common/components/buttons';
 import EditColumn from './components/edit';
 import ColumnFeedsAssignment from './components/assignment';
 
@@ -32,8 +32,12 @@ class Columns extends React.Component {
     bindAll(this, 'confText', 'makeItemIcon', 'renderChildren');
   }
 
-  makeItemIcon({ id, open }) {
-    return <ToggleVisibility open={open} handler={() => this.props.actionEdit({ id, open: (open) ? 0 : 1 })} />;
+  changeColumnVis({ id, open }) {
+    return () => this.props.actionEdit({ id, open: (open) ? 0 : 1 });
+  }
+
+  makeItemIcon(data) {
+    return (data.open) ? <Hide handler={this.changeColumnVis(data)} /> : <Show handler={this.changeColumnVis(data)} />;
   }
 
   confText(deleting) {

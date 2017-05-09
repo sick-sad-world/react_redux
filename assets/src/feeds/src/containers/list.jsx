@@ -23,7 +23,7 @@ import { deleteFeed } from '../actions';
 // Import child components
 // ===========================================================================
 import DeleteConfirmation from 'common/components/delete-confirmation';
-import { DeleteFeed, SelectFeed, DeselectFeed } from '../components/buttons';
+import { Delete, Select, Deselect } from 'common/components/buttons';
 import Feed from '../components/feed';
 
 class FeedsList extends React.Component {
@@ -51,11 +51,11 @@ class FeedsList extends React.Component {
   renderFeed(feed) {
     let Button = null;
     if (feed.deletable && this.props.set_id) {
-      Button = <DeleteFeed handler={this.setDeleting(feed)} />;
+      Button = <Delete handler={this.setDeleting(feed)} />;
     } else if (this.props.select) {
-      Button = <SelectFeed handler={this.props.select(feed.id)} />;
+      Button = <Select handler={this.props.select(feed.id)} />;
     } else if (this.props.deselect) {
-      Button = <DeselectFeed handler={this.props.deselect(feed.id)} />;
+      Button = <Deselect handler={this.props.deselect(feed.id)} />;
     }
     return (
       <Feed key={feed.id} {...feed} disabled={this.props.disabled && includes(this.props.disabled, feed.id)} sortable={false}>{Button}</Feed>
