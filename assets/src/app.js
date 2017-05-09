@@ -22,16 +22,20 @@ window.onerror = (...args) => TrendolizerStore.dispatch(clientError(args[args.le
 
 // Render an actual App
 // ===========================================================================
-function renderApp() {
+function renderApp(scheme) {
   render(
     <AppContainer>
       <Provider store={TrendolizerStore}>
-        <Router key={Math.random()} routes={Scheme} history={syncHistoryWithStore(browserHistory, TrendolizerStore)} />
+        <Router key={Math.random()} routes={scheme} history={syncHistoryWithStore(browserHistory, TrendolizerStore)} />
       </Provider>
     </AppContainer>,
     document.getElementById('root')
   );
 }
 
-renderApp();
-if (module.hot) module.hot.accept('./router', () => renderApp());
+renderApp(Scheme);
+if (module.hot) {
+  module.hot.accept('./router', () => {
+    renderApp(require('./router').default);
+  });
+}
