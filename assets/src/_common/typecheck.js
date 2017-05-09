@@ -35,6 +35,8 @@ export const textShape = {
   confirmation: PropTypes.string.isRequired
 };
 
+export const childrenShape = PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element]);
+
 export const emailStr = createOptionableValidator((props, propName) => {
   if (!/\S+@\S+\.\S+/.test(props[propName])) {
     return new Error('Should be an email like: "blablabla-okay@gmail.com"');

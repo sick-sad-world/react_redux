@@ -11,7 +11,7 @@ import { defaultInterface } from '../defaults';
 
 // Import Child components
 // ===========================================================================
-import { Select } from 'common/components/buttons';
+import { Expand, Collapse } from 'common/components/buttons';
 import { FeedsList } from 'src/feeds';
 import Sourceset from './sourceset';
 
@@ -35,6 +35,28 @@ export default class SetsWithContents extends React.Component {
     this.setState({ search: e.target.value || '' });
   }
 
+  renderSourceset({ id, name, source_ids, disabled }, isOpened) {
+    const onExpand = this.updateExpanded(id);
+    return (
+      <Sourceset key={id} name={name} counter={source_ids.length} sortable={this.props.sortable} disabled={disabled} >
+        {(this.props.setAction) ? React.cloneElement(this.props.setAction, {
+          handler: this.props.setAction.props.handler(id)
+        }) : null}
+        {(isOpened) ? <Collapse handler={onExpand} /> : <Expand handler={onExpand} /> }
+      </Sourceset>
+    );
+  }
+
+  renderSetFeeds(source_ids) {
+    return (
+      <li key='list' className='sublist'>
+        <FeedsList criterea={{ source_ids, disabled: this.props.disabled_sources }} empty={this.props.feedsEmpty} >
+          {this.props.feedAction}
+        </FeedsList>
+      </li>
+    );
+  }
+
   render() {
     return (
       <div className={classNames(this.props.className, {
@@ -45,27 +67,18 @@ export default class SetsWithContents extends React.Component {
         </div>
           {(this.state.search.length > this.props.treshold) ? (
             <FeedsList className='entity-list' criterea={{ search: this.state.search }}>
-              <Select handler={this.props.onFeedClick} />
+              {this.props.feedAction}
             </FeedsList>
           ) : (
             <ul className='entity-list'>
-              {this.props.data.map(set => (
-                <Sourceset
-                  key={set.id}
-                  name={set.name}
-                  counter={set.source_ids.length}
-                  sortable={false}
-                  disabled={this.props.dis_sets && includes(this.props.dis_sets, set.id)}
-                  onExpand={this.updateExpanded(set.id)}
-                  select={this.props.onSetClick(set.id)}
-                >
-                  {(this.state.expanded === set.id) ? (
-                    <FeedsList criterea={{ source_ids: set.source_ids, disabled: this.props.dis_sources }} empty='This set does not contain any feeds. Add some.'>
-                      <Select handler={this.props.onFeedClick} />
-                    </FeedsList>
-                  ) : null}
-                </Sourceset>
-              ))}
+              {this.props.payload.reduce((acc, set) => {
+                const isOpened = this.state.expanded === set.id;
+                acc.push(this.renderSourceset(set, isOpened));
+                if (isOpened) {
+                  acc.push(this.renderSetFeeds(set.source_ids));
+                }
+                return acc;
+              }, [])}
             </ul>
           )}
       </div>
@@ -76,16 +89,20 @@ export default class SetsWithContents extends React.Component {
 SetsWithContents.defaultProps = {
   className: 'list',
   treshold: 3,
-  disabled: false
+  disabled: false,
+  sortable: false,
+  feedsEmpty: 'This set does not contain any feeds. Add some.'
 };
 
 SetsWithContents.propTypes = {
-  dis_sources: PropTypes.arrayOf(PropTypes.number),
-  dis_sets: PropTypes.arrayOf(PropTypes.number),
+  disabled_sources: PropTypes.arrayOf(PropTypes.number),
+  disabled_sets: PropTypes.arrayOf(PropTypes.number),
   className: PropTypes.string,
+  sortable: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
   treshold: PropTypes.number.isRequired,
-  data: PropTypes.arrayOf(PropTypes.shape(defaultInterface)).isRequired,
-  onSetClick: PropTypes.func.isRequired,
-  onFeedClick: PropTypes.func.isRequired
+  payload: PropTypes.arrayOf(PropTypes.shape(defaultInterface)).isRequired,
+  setAction: PropTypes.element,
+  feedAction: PropTypes.element,
+  feedsEmpty: PropTypes.string.isRequired
 };

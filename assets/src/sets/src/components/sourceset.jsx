@@ -2,49 +2,34 @@
 // ===========================================================================
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from 'common/components/icon';
-import { Expand, Collapse, Select, Deselect } from 'common/components/buttons';
+import DragHandle from 'common/components/drag-handle';
 
 // Import utility stuff
 // ===========================================================================
 import classNames from 'classnames';
+import { childrenShape } from 'common/typecheck';
 
 // Agnostinc list item component
 // @using by: ListView and Management views
 // ===========================================================================
-export default function Sourceset({ sortable, name, counter, disabled, children, select, deselect, onExpand }) {
-  let Toggler = null;
-  if (onExpand) {
-    if (children) {
-      Toggler = <Collapse handler={onExpand} />;
-    } else {
-      Toggler = <Expand handler={onExpand} />;
-    }
-  }
-
+export default function Sourceset({ sortable, name, counter, disabled, children }) {
   return (
     <li className={classNames({
       'mod-entity': true,
       'mod-sourceset': true,
-      'is-disabled': disabled,
-      'is-expanded': !!children
+      'is-disabled': disabled
     })}>
       <div>
-        { (sortable) ? <Icon className='drag-handle' icon='dots-three-vertical' /> : null }
+        { (sortable) ? <DragHandle /> : null }
         <div className='text'>
           <span className='title'>
             <em className='counter'>{counter}</em> { name }
           </span>
         </div>
-        {(select || Toggler) ? (
-          <nav className='nav-links'>
-            { (select) ? <Select handler={select} /> : null }
-            { (deselect) ? <Deselect handler={deselect} /> : null }
-            { Toggler }
-          </nav>
+        {(children) ? (
+          <nav className='nav-links'>{children}</nav>
         ) : null}
       </div>
-      {children}
     </li>
   );
 }
@@ -59,8 +44,5 @@ Sourceset.propTypes = {
   counter: PropTypes.number,
   sortable: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
-  children: PropTypes.element,
-  select: PropTypes.func,
-  deselect: PropTypes.func,
-  onExpand: PropTypes.func
+  children: childrenShape
 };

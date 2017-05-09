@@ -89,10 +89,10 @@ class EditSet extends React.Component {
                 </FeedsList>
               </div>
               <SetsWithContents
-                data={this.props.sets}
-                dis_sources={formValues.source_ids}
-                onSetClick={this.makeStateUpdater('set')}
-                onFeedClick={this.makeStateUpdater('source')}
+                payload={this.props.sets}
+                disabled_sources={formValues.source_ids}
+                setAction={<Select handler={this.makeStateUpdater('set')} />}
+                feedAction={<Select handler={this.makeStateUpdater('source')} />}
               />
             </section>
           </div>

@@ -2,11 +2,12 @@
 // ===========================================================================
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from 'common/components/icon';
+import DragHandle from 'common/components/drag-handle';
 
 // Import utility stuff
 // ===========================================================================
 import classNames from 'classnames';
+import { childrenShape } from 'common/typecheck';
 
 // Agnostinc list item component
 // @using by: ListView and Management views
@@ -18,7 +19,7 @@ export default function Feed({ disabled, url, type, sortable, children, name }) 
       'is-disabled': disabled
     })}>
       <div>
-        { (sortable) ? <Icon className='drag-handle' icon='dots-three-vertical' /> : null }
+        { (sortable) ? <DragHandle /> : null }
         <div className='text'>
           <span className='title'>
             <b>Name: </b>
@@ -30,9 +31,9 @@ export default function Feed({ disabled, url, type, sortable, children, name }) 
             <a href={url} title={url} target='_blank'>{url}</a>
           </span>
         </div>
-        { (children) ? (
+        {(children) ? (
           <nav className='nav-links'>{children}</nav>
-        ) : null }
+        ) : null}
       </div>
     </li>
   );
@@ -49,5 +50,5 @@ Feed.propTypes = {
   url: PropTypes.string.isRequired,
   sortable: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element])
+  children: childrenShape
 };

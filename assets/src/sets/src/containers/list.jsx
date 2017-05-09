@@ -21,23 +21,23 @@ import Sourceset from '../components/sourceset';
 
 class SetsList extends React.Component {
 
-  renderSet(set) {
-    return (
-      <Sourceset
-        {...set}
-        key={set.id}
-        select={this.props.select}
-        deselect={this.props.deselect}
-        disabled={this.props.disabled && includes(this.props.disabled, set.id)}
-        sortable={false}
-      />
-    );
+  renderActions(set) {
+    if (this.props.children) {
+      return React.Children.map(this.props.children, child => React.cloneElement(child, {
+        handler: child.props.handler(set.id)
+      }));
+    }
+    return null;
   }
 
   render() {
     return (
       <ul className={this.props.className}>
-        {(this.props.payload.length) ? this.props.payload.map(this.renderSet) : <li className='state-empty'>{this.props.emptyTpl}</li>}
+        {(this.props.payload.length) ? this.props.payload.map(set => (
+          <Sourceset key={set.id} name={name} counter={set.source_ids.length} disabled={set.disabled} sortable={this.props.sortable}>
+            {this.renderActions(set)}
+          </Sourceset>
+        )) : <li className='state-empty'>{this.props.emptyTpl}</li>}
       </ul>
     );
   }
@@ -47,21 +47,18 @@ class SetsList extends React.Component {
 SetsList.defaultProps = {
   className: 'entity-list',
   emptyTpl: 'No sets found.',
-  select: null,
-  deselect: null
+  sortable: false
 };
 
 
 SetsList.propTypes = {
   criterea: PropTypes.shape({
-    source_ids: PropTypes.arrayOf(PropTypes.number),
-    uniq_ids: PropTypes.arrayOf(PropTypes.number),
+    disabled: PropTypes.arrayOf(PropTypes.number),
+    set_ids: PropTypes.arrayOf(PropTypes.number),
     seach: PropTypes.string
   }),
-  disabled: PropTypes.arrayOf(PropTypes.number),
+  sortable: PropTypes.bool.isRequired,
   children: PropTypes.element,
-  select: PropTypes.func,
-  deselect: PropTypes.func,
   className: PropTypes.string,
   state: stateNum.isRequired,
   emptyTpl: PropTypes.string.isRequired,

@@ -10,6 +10,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import Icon from './icon';
+import DragHandle from 'common/components/drag-handle';
 import { Delete } from './buttons';
 
 // Abstract Page list component
@@ -112,11 +113,7 @@ ListSection.propTypes = {
 // ===========================================================================
 export class ListItem extends React.PureComponent {
   render() {
-    const { disabled, current, url, sortable, name, id, counter, order } = this.props;
-
-    // Drag handle
-    // ===========================================================================
-    const dragHandle = (sortable) ? <Icon className='drag-handle' icon='dots-three-vertical' /> : null;
+    const { disabled, current, url, sortable, name, id, counter } = this.props;
 
     // Make custom icon
     // @show/hide column for example
@@ -134,7 +131,7 @@ export class ListItem extends React.PureComponent {
         'is-disabled': disabled && current !== id
       })}>
         <div>
-          { dragHandle }
+          { (sortable) ? <DragHandle /> : null }
           <div className='text'>
             <Link to={ (current === id) ? url : `${url}/${id}` }>{ badge } { name }</Link>
           </div>
