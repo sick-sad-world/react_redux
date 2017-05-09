@@ -41,6 +41,10 @@ class EditReport extends React.Component {
     };
   }
 
+  static mapStateToData(state, data, changed, props) {
+    return state;
+  }
+
   static getNextSend(value, props) {
     return (typeof value === 'string') ? value : value.format(props.timeFormat);
   }

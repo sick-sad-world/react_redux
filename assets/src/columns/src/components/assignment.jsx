@@ -36,6 +36,19 @@ class Assignment extends React.Component {
     };
   }
 
+  static mapStateToData(state, data, changed, props) {
+    return {
+      id: state.id,
+      name: state.name,
+      display_settings: data.display_settings,
+      data: {
+        ...data.data,
+        set: state.set,
+        source: state.source
+      }
+    };
+  }
+
   static getset(value, props, state) {
     return updateArrayWithValue(state.set, value);
   }

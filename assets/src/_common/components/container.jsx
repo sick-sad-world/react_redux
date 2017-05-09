@@ -41,11 +41,11 @@ export default class Container extends React.Component {
     }
   }
 
-  editItem(data, ...rest) {
+  editItem(data) {
     if (!this.props.callOnCreate && !data.id) {
-      return this.createWrapper(omit(data, 'id'), ...rest);
+      return this.createWrapper(omit(data, 'id'));
     }
-    return this.props.actionEdit(data, ...rest);
+    return this.props.actionEdit(data);
   }
 
   deleteConfirm(deleting = null) {

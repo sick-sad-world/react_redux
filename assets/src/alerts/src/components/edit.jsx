@@ -36,6 +36,10 @@ class EditAlert extends React.Component {
     };
   }
 
+  static mapStateToData(state, data, changed, props) {
+    return state;
+  }
+
   render() {
     const { running, formValues, updateState, columns, frequencyOptions } = this.props;
     return (

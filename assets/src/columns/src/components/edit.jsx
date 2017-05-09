@@ -1,8 +1,8 @@
 // Import utility stuff
 // ===========================================================================
-import { forOwn, isEqual } from 'lodash';
+import { forOwn, isEqual, pickBy } from 'lodash';
 import { updateArrayWithValue } from 'functions';
-import { availableColumnData, defaultInterface } from '../defaults';
+import { availableColumnData, defaultInterface, notDataProps } from '../defaults';
 
 // Import React related stuff
 // ===========================================================================
@@ -50,6 +50,18 @@ class EditColumn extends React.Component {
       advancedFilters,
       display_settings: data.display_settings,
       ...columnData
+    };
+  }
+
+  static mapStateToData(state, data, changed, props) {
+    return {
+      id: state.id,
+      name: state.name,
+      display_settings: state.display_settings,
+      data: {
+        ...pickBy(state, (v, k) => notDataProps.indexOf(k) < 0 && ((v instanceof Array) ? v.length : v !== '')),
+        ...state.advancedFilters
+      }
     };
   }
 

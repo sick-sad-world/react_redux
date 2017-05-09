@@ -45,6 +45,10 @@ class EditSet extends React.Component {
     };
   }
 
+  static mapStateToData(state, data, changed, props) {
+    return state;
+  }
+
   static getSourceIds({ type, id }, props, state) {
     return (type === 'set') ?
       concat(state.source_ids, find(props.sets, { id }).source_ids) :

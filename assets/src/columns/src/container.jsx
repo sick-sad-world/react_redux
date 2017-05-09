@@ -11,7 +11,6 @@ import { connect } from 'react-redux';
 // ===========================================================================
 import PropTypes from 'prop-types';
 import { coreInterface, editOptions } from './defaults';
-import { unflatternColumnData } from './helpers';
 import { makeContainerSelector } from './selectors';
 
 // Import actions
@@ -126,18 +125,8 @@ const mapStateToProps = () => {
   return (state, props) => selector(state, props);
 };
 
-function mapDispatchToProps(dispatch) {
-  return {
-    actionEdit(data, changed) {
-      return dispatch(editColumn((changed) ? unflatternColumnData(data) : data));
-    },
-    actionCreate(data) {
-      return dispatch(createColumn(data));
-    },
-    actionDelete(data) {
-      return dispatch(deleteColumn(data));
-    }
-  };
-}
-
-export default connect(mapStateToProps(), mapDispatchToProps)(Columns);
+export default connect(mapStateToProps(), {
+  actionEdit: editColumn,
+  actionCreate: createColumn,
+  actionDelete: deleteColumn
+})(Columns);

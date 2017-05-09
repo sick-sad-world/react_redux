@@ -110,7 +110,7 @@ export default function MakeEditForm(Form) {
 
     updateHandler() {
       const { changed, ...state } = this.state;
-      return this.props.update(state, changed);
+      return this.props.update(Form.mapStateToData(state, this.props.data, changed, this.props.formProps));
     }
 
     resetState() {
