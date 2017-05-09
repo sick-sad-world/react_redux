@@ -92,7 +92,6 @@ class FeedCreate extends React.Component {
   }
 
   chooseFeedType(type, test) {
-    console.log(type, test);
     const newResults = mapValues(this.state.results, (v, k) => {
       if (type === k) {
         return true;
