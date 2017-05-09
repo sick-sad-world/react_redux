@@ -14,6 +14,7 @@ import { Link } from 'react-router';
 // Import Child components
 // ===========================================================================
 import TextInput from 'common/components/forms/input-text';
+import { Select, Deselect } from 'common/components/buttons';
 import MakeEditForm, { injectedPropsType } from 'common/components/edit-form-hoc';
 import { FeedsList } from 'src/feeds';
 import SetsWithContents from './list';
@@ -56,7 +57,7 @@ class EditSet extends React.Component {
   }
 
   render() {
-    const { running, formValues, updateState } = this.props;
+    const { running, formValues, updateState, emptyFeeds } = this.props;
     return (
       <form className='subsection-content columned'>
         <div className='form-block'>
@@ -83,12 +84,9 @@ class EditSet extends React.Component {
                 <div className='header'>
                   <span>Sourceset has {formValues.source_ids.length} sources total.</span>
                 </div>
-                <FeedsList
-                  set_id={formValues.id}
-                  criterea={{ source_ids: formValues.source_ids, uniq_ids: formValues.uniq_ids }}
-                  deselect={this.makeStateUpdater('source')}
-                  empty='This set does not contain any feeds. Add some.'
-                />
+                <FeedsList set_id={formValues.id} criterea={{ source_ids: formValues.source_ids, uniq_ids: formValues.uniq_ids }} empty={emptyFeeds} >
+                  <Deselect handler={this.makeStateUpdater('source')} />
+                </FeedsList>
               </div>
               <SetsWithContents
                 data={this.props.sets}
@@ -107,7 +105,8 @@ class EditSet extends React.Component {
 // Edit sourceset form default props
 // ===========================================================================
 EditSet.defaultProps = {
-  treshold: 3
+  treshold: 3,
+  emptyFeeds: 'This set does not contain any feeds. Add some.'
 };
 
 // Prop type check

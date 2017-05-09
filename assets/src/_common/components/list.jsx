@@ -141,7 +141,7 @@ export class ListItem extends React.PureComponent {
           {(customIcon || this.props.deleteAction) ? (
             <nav className='nav-links'>
             { customIcon }
-            { (this.props.deleteAction) ? <Delete onClick={this.props.deleteAction} title={this.props.deleteText} /> : null }
+            { (this.props.deleteAction) ? <Delete handler={this.props.deleteAction} title={this.props.deleteText} /> : null }
             </nav>
           ) : null }
         </div>

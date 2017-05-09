@@ -13,7 +13,7 @@ export function makeContainerSelector() {
     getFeeds,
     getCriterea,
     (state, payload, criterea) => {
-      let result = payload;
+      let result = [];
 
       if (criterea) {
         if (criterea.source_ids) {
@@ -21,20 +21,16 @@ export function makeContainerSelector() {
         } else if (criterea.search) {
           const search = new RegExp(criterea.search, 'i');
           result = payload.filter(feed => search.test(feed.name));
-        } else {
-          result = [...payload];
-        }
-
-        if (criterea.uniq_ids) {
-          result.forEach((feed) => {
-            feed.deletable = includes(criterea.uniq_ids, feed.id);
-          });
         }
       }
 
       return {
         state,
-        payload: result
+        payload: (criterea) ? result.map(feed => ({
+          ...feed,
+          deletable: (criterea.uniq_ids) && includes(criterea.uniq_ids, feed.id),
+          disabled: (criterea.disabled) && includes(criterea.disabled, feed.id)
+        })) : payload
       };
     });
 }

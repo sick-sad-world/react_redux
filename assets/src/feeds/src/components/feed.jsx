@@ -49,5 +49,5 @@ Feed.propTypes = {
   url: PropTypes.string.isRequired,
   sortable: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
-  children: PropTypes.element
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element])
 };

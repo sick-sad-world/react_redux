@@ -11,8 +11,9 @@ import { defaultInterface } from '../defaults';
 
 // Import Child components
 // ===========================================================================
-import Sourceset from './sourceset';
+import { Select } from 'common/components/buttons';
 import { FeedsList } from 'src/feeds';
+import Sourceset from './sourceset';
 
 export default class SetsWithContents extends React.Component {
   constructor(props) {
@@ -57,12 +58,9 @@ export default class SetsWithContents extends React.Component {
                   select={this.props.onSetClick(set.id)}
                 >
                   {(this.state.expanded === set.id) ? (
-                    <FeedsList
-                      disabled={this.props.dis_sources}
-                      criterea={{ source_ids: set.source_ids }}
-                      select={this.props.onFeedClick}
-                      empty='This set does not contain any feeds. Add some.'
-                    />
+                    <FeedsList criterea={{ source_ids: set.source_ids, disabled: this.props.dis_sources }} empty='This set does not contain any feeds. Add some.'>
+                      <Select handler={this.props.onFeedClick} />
+                    </FeedsList>
                   ) : null}
                 </Sourceset>
               ))}

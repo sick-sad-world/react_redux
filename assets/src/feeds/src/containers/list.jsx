@@ -1,6 +1,5 @@
 // Import utility stuff
 // ===========================================================================
-import classNames from 'classnames';
 import { includes, bindAll } from 'lodash';
 
 // Import React related stuff
@@ -23,7 +22,7 @@ import { deleteFeed } from '../actions';
 // Import child components
 // ===========================================================================
 import DeleteConfirmation from 'common/components/delete-confirmation';
-import { Delete, Select, Deselect } from 'common/components/buttons';
+import { Delete } from 'common/components/buttons';
 import Feed from '../components/feed';
 
 class FeedsList extends React.Component {
@@ -33,7 +32,7 @@ class FeedsList extends React.Component {
     this.state = {
       deleting: null
     };
-    bindAll(this, 'renderFeed', 'deletingReset');
+    bindAll(this, 'renderActions', 'deletingReset');
   }
 
   setDeleting(feed) {
@@ -48,24 +47,24 @@ class FeedsList extends React.Component {
     return () => this.props.deleteFeed({ id, set_id: this.props.set_id }).then(this.deletingReset);
   }
 
-  renderFeed(feed) {
-    let Button = null;
-    if (feed.deletable && this.props.set_id) {
-      Button = <Delete handler={this.setDeleting(feed)} />;
-    } else if (this.props.select) {
-      Button = <Select handler={this.props.select(feed.id)} />;
-    } else if (this.props.deselect) {
-      Button = <Deselect handler={this.props.deselect(feed.id)} />;
+  renderActions(feed) {
+    if (this.props.children) {
+      return React.Children.map(this.props.children, child => React.cloneElement(child, {
+        handler: child.props.handler(feed.id)
+      }));
     }
-    return (
-      <Feed key={feed.id} {...feed} disabled={this.props.disabled && includes(this.props.disabled, feed.id)} sortable={false}>{Button}</Feed>
-    );
+    return null;
   }
 
   render() {
+    const { payload, deletable, sortable } = this.props;
     return (
       <ul className={this.props.className}>
-        {(this.props.payload.length) ? this.props.payload.map(this.renderFeed) : <li className='state-empty'>{this.props.emptyTpl}</li>}
+        {(payload.length) ? payload.map(feed => (
+          <Feed key={feed.id} {...feed} sortable={sortable}>
+            {(deletable && feed.deletable && this.props.set_id) ? <Delete handler={this.setDeleting(feed)} /> : this.renderActions(feed)}
+          </Feed>
+        )) : <li className='state-empty'>{this.props.emptyTpl}</li>}
         {(this.state.deleting) ? (
           <DeleteConfirmation close={this.deletingReset} accept={this.deleteFeed(this.state.deleting.id)} >
             <dl>
@@ -83,8 +82,8 @@ class FeedsList extends React.Component {
 FeedsList.defaultProps = {
   className: 'entity-list',
   emptyTpl: 'No feeds found.',
-  select: null,
-  deselect: null
+  deletable: true,
+  sortable: false
 };
 
 
@@ -92,13 +91,13 @@ FeedsList.propTypes = {
   criterea: PropTypes.shape({
     source_ids: PropTypes.arrayOf(PropTypes.number),
     uniq_ids: PropTypes.arrayOf(PropTypes.number),
+    disabled: PropTypes.arrayOf(PropTypes.number),
     seach: PropTypes.string
   }),
-  disabled: PropTypes.arrayOf(PropTypes.number),
   set_id: PropTypes.number,
+  deletable: PropTypes.bool.isRequired,
+  sortable: PropTypes.bool.isRequired,
   children: PropTypes.element,
-  select: PropTypes.func,
-  deselect: PropTypes.func,
   className: PropTypes.string,
   state: stateNum.isRequired,
   emptyTpl: PropTypes.string.isRequired,
