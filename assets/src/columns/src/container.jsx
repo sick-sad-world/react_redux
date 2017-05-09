@@ -51,7 +51,9 @@ class Columns extends React.Component {
   renderChildren(props) {
     if (this.props.chosen) {
       if (this.props.params.assignment) {
-        return <ColumnFeedsAssignment {...props} formProps={{ ...props.assignmentOpts }} />;
+        return <ColumnFeedsAssignment {...props} backPath={`${props.backPath}/${this.props.curId}`} formProps={{
+          ...props.assignmentOpts
+        }} />;
       }
       return <EditColumn {...props} className='mod-column-edit' formProps={{
         path: `${this.props.route.path}/${this.props.curId}`,

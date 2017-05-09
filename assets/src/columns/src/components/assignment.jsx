@@ -70,13 +70,15 @@ class Assignment extends React.Component {
           <div className='header'>
             <span>Column has {formValues.set.length} sets and {formValues.source.length} sources assigned.</span>
           </div>
-          <ul>
-            <li>
+          <ul className='entity-list'>
+            <li className='list-title'><h4>Sets selected</h4></li>
+            <li className='mod-entity'>
               <SetsList criterea={{ set_ids: formValues.set }} disabled={running} empty='No sets assigned'>
                 <Deselect handler={this.updateData('set')} />
               </SetsList>
             </li>
-            <li>
+            <li className='list-title'><h4>Sources selected</h4></li>
+            <li className='mod-entity'>
               <FeedsList criterea={{ source_ids: formValues.source }} disabled={running} empty='No feeds assigned'>
                 <Deselect handler={this.updateData('source')} />
               </FeedsList>

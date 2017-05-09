@@ -64,10 +64,6 @@ in sub-managent like sources in set, sources/sets in column or column within ale
 		}
 	}
 	ul:last-child {
-		display: none;
-		> .mod-entity:first-child {
-			border-top: $bd;
-		}
 		> .mod-entity:last-child {
 			border-bottom: 0;
 		}
