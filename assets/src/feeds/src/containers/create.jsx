@@ -123,9 +123,9 @@ class FeedCreate extends React.Component {
     };
   }
 
-  setSingleFeed(e) {
+  setSingleFeed(url) {
     return this.setState({
-      url: e.target.value,
+      url,
       feeds: [this.createFeed()]
     });
   }

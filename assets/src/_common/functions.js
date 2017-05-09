@@ -59,8 +59,6 @@ export const normalizeValue = (v, base = 10) => {
     return false;
   } else if (v === 'undefined') {
     return undefined;
-  } else if (v === '') {
-    return null;
   }
   return v;
 };

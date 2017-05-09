@@ -66,7 +66,14 @@ class EditColumn extends React.Component {
   }
 
   static compareValue(v, k, data) {
-    return isEqual(v, (k !== 'name' || k !== 'display_settings') ? data.data[k] : data[k]);
+    switch (k) {
+      case 'name':
+        return v === data[k];
+      case 'display_settings':
+        return isEqual(data[k].sort(), v.sort());
+      default:
+        return isEqual(data.data[k], (v === '') ? undefined : v);
+    }
   }
 
   static getDisplaySettings(value, props, state) {
