@@ -44,7 +44,9 @@ export default class SetsWithContents extends React.Component {
           <input type='text' name='search' value={this.state.search} onChange={this.updateSearch} placeholder='Search for...' />
         </div>
           {(this.state.search.length > this.props.treshold) ? (
-            <FeedsList className='entity-list' criterea={{ search: this.state.search }} action={this.props.onFeedClick} />
+            <FeedsList className='entity-list' criterea={{ search: this.state.search }}>
+              <Select handler={this.props.onFeedClick} />
+            </FeedsList>
           ) : (
             <ul className='entity-list'>
               {this.props.data.map(set => (
