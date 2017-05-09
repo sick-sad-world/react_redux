@@ -16,7 +16,6 @@ import { makeContainerSelector } from '../selectors';
 
 // Import actions
 // ===========================================================================
-import { bindActionCreators } from 'redux';
 import { createSet, editSet, deleteSet, forseUpdateUniq } from '../actions';
 
 // Import Child components
@@ -132,12 +131,15 @@ function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    ...bindActionCreators({
-      actionCreate: createSet,
-      actionEdit: editSet,
-      actionDelete: deleteSet,
-      forseUpdateUniq
-    }, dispatch),
+    actionCreate(...args) {
+      return dispatch(createSet(...args));
+    },
+    actionEdit(...args) {
+      return dispatch(editSet(...args));
+    },
+    forseUpdateUniq(...args) {
+      return dispatch(forseUpdateUniq(...args));
+    },
     actionDelete(data) {
       return dispatch(data).then(this.props.forseUpdateUniq);
     }

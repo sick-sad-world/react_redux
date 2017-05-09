@@ -7,7 +7,6 @@ import classNames from 'classnames';
 // ===========================================================================
 import React from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { defaultInterface } from '../defaults';
 import { makeWorkspaceSelector } from '../selectors';
@@ -117,6 +116,5 @@ const mapStateToProps = () => {
   return (state, props) => selector(state, props);
 };
 
-const mapDispatchToProps = dispatch => (bindActionCreators({ logout }, dispatch));
 
-export default connect(mapStateToProps(), mapDispatchToProps)(Workspace);
+export default connect(mapStateToProps(), { logout })(Workspace);

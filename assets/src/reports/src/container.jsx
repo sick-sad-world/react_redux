@@ -17,7 +17,6 @@ import { makeContainerSelector } from './selectors';
 
 // Import actions
 // ===========================================================================
-import { bindActionCreators } from 'redux';
 import { editReport, deleteReport, createReport } from './actions';
 
 // Import Child components
@@ -106,12 +105,8 @@ function mapStateToProps() {
   return (state, props) => selector(state, props);
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    actionCreate: createReport,
-    actionEdit: editReport,
-    actionDelete: deleteReport
-  }, dispatch);
-}
-
-export default connect(mapStateToProps(), mapDispatchToProps)(Reports);
+export default connect(mapStateToProps(), {
+  actionCreate: createReport,
+  actionEdit: editReport,
+  actionDelete: deleteReport
+})(Reports);

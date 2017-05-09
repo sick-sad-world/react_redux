@@ -17,7 +17,6 @@ import { makeDropdownSelector } from 'src/columns';
 
 // Import actions
 // ===========================================================================
-import { bindActionCreators } from 'redux';
 import { editAlert, deleteAlert, createAlert } from './actions';
 
 // Import Child components
@@ -105,12 +104,8 @@ function mapStateToProps() {
   return (state, props) => selector(state, props);
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    actionCreate: createAlert,
-    actionEdit: editAlert,
-    actionDelete: deleteAlert
-  }, dispatch);
-}
-
-export default connect(mapStateToProps(), mapDispatchToProps)(Alerts);
+export default connect(mapStateToProps(), {
+  actionCreate: createAlert,
+  actionEdit: editAlert,
+  actionDelete: deleteAlert
+})(Alerts);
