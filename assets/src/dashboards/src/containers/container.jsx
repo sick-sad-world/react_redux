@@ -12,7 +12,7 @@ import { makeContainerSelector } from '../selectors';
 function Dashboard({ payload, emptyTpl }) {
   return (
     <section className='mod-dashboard'>
-    {(!payload) ? <emptyTpl/> : JSON.stringify(payload)}
+    {(!payload) ? emptyTpl : JSON.stringify(payload)}
     </section>
   );
 }
@@ -22,7 +22,7 @@ Dashboard.defaultProps = {
 };
 
 Dashboard.propTypes = {
-  payload: PropTypes.shape(defaultInterface).isRequired,
+  payload: PropTypes.shape(defaultInterface),
   emptyTpl: PropTypes.element.isRequired
 };
 

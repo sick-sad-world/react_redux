@@ -76,10 +76,10 @@ const mapDispatchToProps = dispatch => ({
       .then(getColumnsForResults)
       .then(data => dispatch(getAllResults(data)))
       .catch((err) => {
-        if (err) {
+        if (err instanceof Error) {
           throw err;
         } else {
-          console.log('Not logged in', err);
+          console.log('Not logged in');
         }
       })
       .then(() => dispatch(setAppState(2)));

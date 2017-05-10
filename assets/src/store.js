@@ -6,7 +6,7 @@ import thunk from 'redux-thunk';
 
 // Import module store data
 // ===========================================================================
-import { reducer as dashboards } from 'src/dashboards';
+import { reducer as dashboards, ensureDashboardUrl } from 'src/dashboards';
 import { reducer as columns, processColumn } from 'src/columns';
 import { reducer as results, splitResultText } from 'src/results';
 import { reducer as notifications, notification } from 'src/notifications';
@@ -39,6 +39,7 @@ export default createStore(
   }),
   composeEnhancers(applyMiddleware(
     thunk.withExtraArgument({ notification, clientError }),
+    ensureDashboardUrl,
     processColumn,
     updateUniq,
     clearFeeds,

@@ -44,7 +44,7 @@ class Workspace extends React.Component {
     if (!props.user.id) {
       this.props.router.push('/auth');
     } else if (props.location.pathname === '/') {
-      this.props.router.replace('/d/1');
+      this.props.router.replace('/dashboard');
     }
   }
 

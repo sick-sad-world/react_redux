@@ -15,12 +15,12 @@ export default (
   <Route components={App}>
     <Route path='/auth' component={Auth} />
     <Route path='/' component={Workspace}>
-      {Dashboard}
       {Columns}
       {Sets}
       {Alerts}
       {Reports}
       {User}
+      {Dashboard}
     </Route>
     <Redirect from='*' to='/' />
   </Route>

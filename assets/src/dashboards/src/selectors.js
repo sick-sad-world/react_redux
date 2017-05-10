@@ -6,11 +6,13 @@ const getDashboards = ({ dashboards }) => dashboards.payload;
 
 const getCurrentId = ({ dashboards }, props) => parseInt(props.params.id, 10) || 0;
 
+const getTargetUrl = ({ dashboards }, props) => props.params.name;
+
 export function makeNavSelector() {
   return createSelector(
     getDashboards,
     dashboards => ({
-      payload: dashboards.map(({ id, name, column_ids }) => ({ id, name, counter: column_ids.length }))
+      payload: dashboards.map(({ id, name, column_ids, url }) => ({ id, name, counter: column_ids.length, url }))
     })
   );
 }
@@ -18,8 +20,8 @@ export function makeNavSelector() {
 export function makeContainerSelector() {
   return createSelector(
     getDashboards,
-    getCurrentId,
-    (dashboards, curId) => ({
-      payload: dashboards.find(({ id }) => id === curId)
+    getTargetUrl,
+    (dashboards, target) => ({
+      payload: dashboards.find(({ url }) => url === target)
     }));
 }
