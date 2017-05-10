@@ -11,7 +11,7 @@ import { makeContainerSelector } from '../selectors';
 
 function Dashboard({ payload, emptyTpl }) {
   return (
-    <section className='dashboard'>
+    <section className='mod-dashboard'>
     {(!payload) ? <emptyTpl/> : JSON.stringify(payload)}
     </section>
   );

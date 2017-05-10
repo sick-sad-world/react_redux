@@ -24,6 +24,12 @@ reports and feeds in columns
 		max-width: 45%;
 		border-right: $bd;
     position: relative;
+    .mod-entity > .entity-list {
+      li[class*="state-"] {
+        position: static;
+        height: 20vh;
+      }
+    }
 	}
 	.list {
 		flex: 0 0 55%;
