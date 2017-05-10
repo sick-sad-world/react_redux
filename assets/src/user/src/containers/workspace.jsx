@@ -40,20 +40,24 @@ class Workspace extends React.Component {
     bindAll(this, 'sidebarHandler', 'logoutHandler');
   }
 
-  // Redirect to auth if user is unauthentificated
-  // ===========================================================================
-  componentWillMount() {
-    if (!this.props.user.id) {
+  redirectHandler(props) {
+    if (!props.user.id) {
       this.props.router.push('/auth');
+    } else if (props.location.pathname === '/') {
+      this.props.router.replace('/d/1');
     }
   }
 
   // Redirect to auth if user is unauthentificated
   // ===========================================================================
+  componentWillMount() {
+    this.redirectHandler(this.props);
+  }
+
+  // Redirect to auth if user is unauthentificated
+  // ===========================================================================
   componentWillReceiveProps(newProps) {
-    if (!newProps.user.id) {
-      this.props.router.push('/auth');
-    }
+    this.redirectHandler(newProps);
   }
 
   // Handler for toggling sidebar state
@@ -104,6 +108,7 @@ Workspace.propTypes = {
     childRoutes: PropTypes.array.isRequired
   }).isRequired,
   router: PropTypes.shape({
+    replace: PropTypes.func.isRequired,
     push: PropTypes.func.isRequired
   }).isRequired
 };
