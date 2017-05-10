@@ -6,6 +6,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
+const CONTEXT = 'assets';
 const alias = ['/img', '/icon', '/scss', '/src', '/src/_common', '/src/_common/functions'];
 
 const PLUGINS = [
@@ -118,7 +119,7 @@ const fontLoader = {
 
 module.exports = {
   devtool: (isDevelopment) ? 'source-map' : false,
-  context: path.resolve(__dirname, 'assets'),
+  context: path.resolve(__dirname, CONTEXT),
   entry: {
     vendor: Object.keys(packageJSON.dependencies),
     app: ['babel-polyfill', './src/app.js']
@@ -129,7 +130,7 @@ module.exports = {
   },
   resolve: {
     alias: Array.prototype.reduce.call(alias, (acc, v) => {
-      acc[v.split(/\/_?/).pop()] = path.join(__dirname, 'assets', v);
+      acc[v.split(/\/_?/).pop()] = path.join(__dirname, CONTEXT, v);
       return acc;
     }, {}),
     extensions: ['.js', '.jsx']
