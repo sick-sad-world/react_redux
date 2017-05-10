@@ -2,7 +2,7 @@
 // ===========================================================================
 import { bindAll } from 'lodash';
 import classNames from 'classnames';
-import { stateNum } from 'common/typecheck';
+import { stateNum, listShape } from 'common/typecheck';
 
 // Import React related stuff
 // ===========================================================================
@@ -101,11 +101,7 @@ ListSection.propTypes = {
   createItem: PropTypes.func.isRequired,
   deleteItem: PropTypes.func.isRequired,
   state: stateNum.isRequired,
-  payload: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    order: PropTypes.number
-  })).isRequired
+  payload: PropTypes.arrayOf(PropTypes.shape(listShape)).isRequired
 };
 
 // Agnostinc list item component
@@ -149,13 +145,12 @@ export class ListItem extends React.PureComponent {
 
 ListItem.propTypes = {
   id: PropTypes.number,
+  counter: PropTypes.number,
   name: PropTypes.string,
   url: PropTypes.string,
   sortable: PropTypes.bool,
   disabled: PropTypes.bool,
   current: PropTypes.number,
-  counter: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  order: PropTypes.number,
   deleteText: PropTypes.string,
   customIcon: PropTypes.func,
   deleteAction: PropTypes.func

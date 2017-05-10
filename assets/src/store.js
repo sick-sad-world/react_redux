@@ -6,15 +6,16 @@ import thunk from 'redux-thunk';
 
 // Import module store data
 // ===========================================================================
-import { reduser as columns, processColumn } from 'src/columns';
-import { reduser as results, splitResultText } from 'src/results';
-import { reduser as notifications, notification } from 'src/notifications';
-import { reduser as app, clientError } from 'src/application';
-import { reduser as user } from 'src/user';
-import { reduser as sets, updateUniq, clearFeeds } from 'src/sets';
-import { reduser as feeds } from 'src/feeds';
-import { reduser as alerts } from 'src/alerts';
-import { reduser as reports } from 'src/reports';
+import { reducer as dashboards } from 'src/dashboards';
+import { reducer as columns, processColumn } from 'src/columns';
+import { reducer as results, splitResultText } from 'src/results';
+import { reducer as notifications, notification } from 'src/notifications';
+import { reducer as app, clientError } from 'src/application';
+import { reducer as user } from 'src/user';
+import { reducer as sets, updateUniq, clearFeeds } from 'src/sets';
+import { reducer as feeds } from 'src/feeds';
+import { reducer as alerts } from 'src/alerts';
+import { reducer as reports } from 'src/reports';
 
 // Compose reducers
 // ===========================================================================
@@ -27,6 +28,7 @@ export default createStore(
     app,
     user,
     notifications,
+    dashboards,
     columns,
     results,
     sets,

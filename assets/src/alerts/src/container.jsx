@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { optionShape } from 'common/typecheck';
+import { optionShape, listShape } from 'common/typecheck';
 import { defaultFrequency, coreInterface } from './defaults';
 import { makeContainerSelector } from './selectors';
 import { makeDropdownSelector } from 'src/columns';
@@ -81,9 +81,9 @@ Alerts.defaultProps = {
 };
 
 Alerts.propTypes = {
-  payload: PropTypes.arrayOf(PropTypes.shape(coreInterface)).isRequired,
+  payload: PropTypes.arrayOf(PropTypes.shape(listShape)).isRequired,
   columns: optionShape('number'),
-  chosen: PropTypes.object,
+  chosen: PropTypes.shape(coreInterface),
   actionCreate: PropTypes.func.isRequired,
   actionEdit: PropTypes.func.isRequired,
   actionDelete: PropTypes.func.isRequired

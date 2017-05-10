@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { defaultInterface } from '../defaults';
 import { makeContainerSelector } from '../selectors';
+import { listShape } from 'common/typecheck';
 
 // Import actions
 // ===========================================================================
@@ -104,9 +105,9 @@ Sourcesets.defaultProps = {
 // Prop type check
 // ===========================================================================
 Sourcesets.propTypes = {
-  payload: PropTypes.arrayOf(PropTypes.shape(defaultInterface)).isRequired,
+  payload: PropTypes.arrayOf(PropTypes.shape(listShape)).isRequired,
   curId: PropTypes.number,
-  chosen: PropTypes.object,
+  chosen: PropTypes.shape(defaultInterface),
   router: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired,

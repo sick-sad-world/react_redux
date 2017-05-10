@@ -19,7 +19,7 @@ import { logout } from '../actions';
 // ===========================================================================
 import MainNav from '../components/main-nav';
 import UserBlock from '../components/info-block';
-// import { Dashboard } from 'src/columns';
+import { DashboardNav } from 'src/dashboards';
 
 // Main app screen - where all fun is taking place
 // ===========================================================================
@@ -71,8 +71,8 @@ class Workspace extends React.Component {
   // Render our screen
   // ===========================================================================
   render() {
-    const { user, children, route, location } = this.props;
-    const routes = route.childRoutes.map(({ label, path, icon }) => ({ label, path, icon }));
+    const { user, children, route } = this.props;
+    const routes = route.childRoutes.filter(({ omit }) => !omit).map(({ label, path, icon }) => ({ label, path, icon }));
     // Return JSX layout of a component
     // ===========================================================================
     return (
@@ -82,10 +82,11 @@ class Workspace extends React.Component {
           'is-expanded': this.state.sidebar
         })}>
           <UserBlock fullname={user.fullname} position={user.position} image={user.image} />
-          <MainNav routes={routes} toggle={this.sidebarHandler} logout={this.logoutHandler} />
+          <MainNav routes={routes} toggle={this.sidebarHandler} logout={this.logoutHandler}>
+            <DashboardNav />
+          </MainNav>
         </aside>
         <div className='screen-content'>
-          {/* <Dashboard location={location} />*/}
           {children}
         </div>
       </section>
@@ -98,7 +99,6 @@ class Workspace extends React.Component {
 Workspace.propTypes = {
   children: PropTypes.element,
   user: PropTypes.shape(pick(defaultInterface, 'id', 'image', 'fullname', 'position')).isRequired,
-  location: PropTypes.object.isRequired,
   logout: PropTypes.func.isRequired,
   route: PropTypes.shape({
     childRoutes: PropTypes.array.isRequired

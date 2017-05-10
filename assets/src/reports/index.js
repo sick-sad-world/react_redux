@@ -1,9 +1,7 @@
-import reduser from './src/reduser';
-import Container from './src/container';
+import reducer from './src/reducer';
 import Route from './src/route';
 
 export * from './src/actions';
 export * from './src/selectors';
-export { reduser };
+export { reducer };
 export { Route };
-export { Container };

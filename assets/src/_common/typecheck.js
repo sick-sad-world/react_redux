@@ -35,6 +35,13 @@ export const textShape = {
   confirmation: PropTypes.string.isRequired
 };
 
+export const listShape = {
+  id: PropTypes.number,
+  name: PropTypes.string.isRequired,
+  order: PropTypes.number,
+  counter: PropTypes.number
+};
+
 export const childrenShape = PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element]);
 
 export const emailStr = createOptionableValidator((props, propName) => {

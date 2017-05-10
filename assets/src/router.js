@@ -4,6 +4,7 @@ import { Route, Redirect } from 'react-router';
 // Import Containers
 // ===========================================================================
 import { App, Auth } from './application';
+import { Route as Dashboard } from './dashboards';
 import { Route as Columns } from './columns';
 import { Route as Sets } from './sets';
 import { Route as Alerts } from './alerts';
@@ -14,6 +15,7 @@ export default (
   <Route components={App}>
     <Route path='/auth' component={Auth} />
     <Route path='/' component={Workspace}>
+      {Dashboard}
       {Columns}
       {Sets}
       {Alerts}

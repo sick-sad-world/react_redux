@@ -1,19 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link, IndexLink } from 'react-router';
+import { Link } from 'react-router';
 import Icon from 'common/components/icon';
 
-export default function MainNav({ toggle, logout, routes }) {
+export default function MainNav({ toggle, logout, routes, children }) {
   return (
     <nav className='mod-main-nav' id='funMainNav'>
       <a onClick={toggle} title='Toggle sidebar'>
         <Icon icon='menu' />
       </a>
       <span className='separator'></span>
-      <IndexLink to='/' activeClassName='is-current' title='Dashboard'>
-        <Icon icon='home' />
-        <span className='t-ellipsis'>Dashboard</span>
-      </IndexLink>
+      {children}
       { routes.map(({ icon, path, label }) => (
           <Link key={path} to={path} activeClassName='is-current' title={label}>
             <Icon icon={icon} />
@@ -38,5 +35,6 @@ MainNav.propTypes = {
     icon: PropTypes.string.isRequired,
     path: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired
-  })).isRequired
+  })).isRequired,
+  children: PropTypes.element
 };
