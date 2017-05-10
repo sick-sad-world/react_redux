@@ -9,19 +9,21 @@ import PropTypes from 'prop-types';
 import { defaultInterface } from '../defaults';
 import { makeContainerSelector } from '../selectors';
 
-function Dashboard() {
+function Dashboard({ payload, emptyTpl }) {
   return (
     <section className='dashboard'>
-
+    {(!payload) ? <emptyTpl/> : JSON.stringify(payload)}
     </section>
   );
 }
 
 Dashboard.defaultProps = {
+  emptyTpl: <div className='state-empty'>Oups... Dashboard not found</div>
 };
 
 Dashboard.propTypes = {
-  payload: PropTypes.arrayOf(PropTypes.shape(defaultInterface)).isRequired
+  payload: PropTypes.shape(defaultInterface).isRequired,
+  emptyTpl: PropTypes.element.isRequired
 };
 
 // Connect our Container to State

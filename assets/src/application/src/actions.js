@@ -9,6 +9,7 @@ import { getSets } from 'src/sets';
 import { getFeeds } from 'src/feeds';
 import { getAlerts } from 'src/alerts';
 import { getReports } from 'src/reports';
+import { getDashboards } from 'src/dashboards';
 
 // Set global app JS error
 // ===========================================================================
@@ -38,6 +39,7 @@ export function fetchData(opts) {
   };
 
   return dispatch => Promise.all([
+    (getDashboards instanceof Function) ? dispatch(getDashboards(null, options)) : null,
     (getColumns instanceof Function) ? dispatch(getColumns({ data: 1 }, options)) : null,
     (getSets instanceof Function) ? dispatch(getSets(null, options)) : null,
     (getFeeds instanceof Function) ? dispatch(getFeeds(null, options)) : null,

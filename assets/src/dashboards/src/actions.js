@@ -6,22 +6,26 @@ export const setDashboardsState = state => ({
   state
 });
 
-// export const getDashboards = (columns = []) => Promise.resolve({
-//   type: types.READ,
-//   payload: [{
-//     id: 1,
-//     name: 'Dashboard',
-//     columns_ids: columns
-//   }]
-// });
+export const getDashboards = () => (dispatch) => {
+  const data = {
+    type: types.READ,
+    payload: [{
+      id: 1,
+      name: 'Dashboard',
+      column_ids: []
+    }]
+  };
+  dispatch(data);
+  return Promise.resolve(data);
+};
 
-export const getDashboards = createAction({
-  type: types.READ,
-  state_type: types.STATE,
-  url: 'dashboards',
-  pendingMessage: 'Reading dashboards data...',
-  successMessage: 'Ddashboard data has been read.'
-});
+// export const getDashboards = createAction({
+//   type: types.READ,
+//   state_type: types.STATE,
+//   url: 'dashboards',
+//   pendingMessage: 'Reading dashboards data...',
+//   successMessage: 'Dashboard data has been read.'
+// });
 
 export const createDashboard = createAction({
   type: types.CREATE,

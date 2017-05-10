@@ -16,7 +16,7 @@ import ProgressTracker from '../components/progress-tracker';
 import { getUser } from 'src/user';
 import { getAllResults } from 'src/results';
 import { getColumnsForResults } from 'src/columns';
-import { setAppState, fetchData } from '../actions';
+import { setAppState, fetchData, clientError } from '../actions';
 
 // This is CORE APP Component
 // It renders app if state > 1 or Progressbar if not
@@ -24,6 +24,7 @@ import { setAppState, fetchData } from '../actions';
 class App extends React.Component {
 
   componentWillMount() {
+    window.onerror = this.props.clientError;
     this.props.getInitialData();
   }
 
@@ -53,7 +54,8 @@ App.propTypes = {
   state: PropTypes.number.isRequired,
   loadingStep: PropTypes.number,
   children: PropTypes.element.isRequired,
-  getInitialData: PropTypes.func.isRequired
+  getInitialData: PropTypes.func.isRequired,
+  clientError: PropTypes.func.isRequired
 };
 
 // Transform app state to component props
@@ -65,12 +67,21 @@ const mapStateToProps = () => {
 };
 
 const mapDispatchToProps = dispatch => ({
+  clientError(...args) {
+    return dispatch(clientError(...args));
+  },
   getInitialData() {
     return dispatch(getUser(null, { state: false, notification: false }))
       .then(() => dispatch(fetchData()))
       .then(getColumnsForResults)
       .then(data => dispatch(getAllResults(data)))
-      .catch(() => { console.log('Not logged in'); })
+      .catch((err) => {
+        if (err) {
+          throw err;
+        } else {
+          console.log('Not logged in', err);
+        }
+      })
       .then(() => dispatch(setAppState(2)));
   }
 });

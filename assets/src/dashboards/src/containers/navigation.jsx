@@ -16,7 +16,9 @@ function DashboardNav({ payload, base }) {
     <div className='nav-dashboards'>
       {payload.map(({ id, name, counter }) => (
         <Link key={id} to={`${base}/${id}`} activeClassName='is-current' title={name}>
-          <em className='counter'>{counter}</em>
+          <div className='counter-holder'>
+            <em className='counter'>{counter}</em>
+          </div>
           <span className='t-ellipsis'>{name}</span>
         </Link>
       ))}

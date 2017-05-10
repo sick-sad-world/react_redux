@@ -10,7 +10,7 @@ export function makeNavSelector() {
   return createSelector(
     getDashboards,
     dashboards => ({
-      payload: dashboards.map(({ id, name, column_ids }) => ({ id, name, counter: column_ids }))
+      payload: dashboards.map(({ id, name, column_ids }) => ({ id, name, counter: column_ids.length }))
     })
   );
 }
