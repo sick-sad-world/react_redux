@@ -2,6 +2,7 @@
 // ===========================================================================
 import React from 'react';
 import { connect } from 'react-redux';
+import { AutoSizer, CellMeasurer, Grid } from 'react-virtualized';
 
 // Import selectors and typecheck
 // ===========================================================================
@@ -12,6 +13,28 @@ import { makeContainerSelector } from '../selectors';
 function Dashboard({ payload, emptyTpl }) {
   return (
     <section className='mod-dashboard'>
+      <AutoSizer>
+        {({ height, width }) => (
+          <CellMeasurer
+            cellRenderer={yourCellRenderer}
+            columnCount={numColumns}
+            rowCount={numRows}
+            width={800}
+          >
+            {({ getRowHeight }) => (
+              <Grid
+                cellRenderer={({ columnIndex, isScrolling, rowIndex }) => <div/>}
+                columnCount={numColumns}
+                columnWidth={100}
+                height={height}
+                rowCount={1}
+                rowHeight={height}
+                width={800}
+              />
+            )}
+          </CellMeasurer>
+        )}
+      </AutoSizer>
     {(!payload) ? emptyTpl : JSON.stringify(payload)}
     </section>
   );

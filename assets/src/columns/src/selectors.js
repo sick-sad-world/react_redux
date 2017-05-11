@@ -1,10 +1,13 @@
 import createSelector from 'common/selector-creator';
+import { includes } from 'lodash';
 
 const getColumnState = ({ columns }) => columns.state;
 
 const getColumns = ({ columns }) => columns.payload;
 
 const getCurrentId = ({ columns }, props) => parseInt(props.params.id, 10) || 0;
+
+const getCriterea = ({ columns }, props) => props.criterea;
 
 export function makeContainerSelector() {
   return createSelector(
@@ -19,14 +22,31 @@ export function makeContainerSelector() {
     }));
 }
 
-export function makeDashboardSelector() {
+export function makeListSelector() {
   return createSelector(
     getColumnState,
     getColumns,
-    (state, payload) => ({
-      state,
-      payload: payload.filter(({ open }) => !!open)
-    }));
+    getCriterea,
+    (state, payload, criterea) => {
+      let result = [];
+
+      if (criterea) {
+        if (criterea.column_ids) {
+          result = payload.filter(set => includes(criterea.column_ids, set.id));
+        } else if (criterea.search) {
+          const search = new RegExp(criterea.search, 'i');
+          result = payload.filter(set => search.test(set.name));
+        }
+      }
+
+      return {
+        state,
+        payload: (criterea) ? result.map(set => ({
+          ...set,
+          disabled: (criterea.disabled) && includes(criterea.disabled, set.id)
+        })) : payload
+      };
+    });
 }
 
 export function makeDropdownSelector() {

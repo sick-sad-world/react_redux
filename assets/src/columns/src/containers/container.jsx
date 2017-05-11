@@ -10,12 +10,12 @@ import { connect } from 'react-redux';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { coreInterface, editOptions } from './defaults';
-import { makeContainerSelector } from './selectors';
+import { coreInterface, editOptions } from '../defaults';
+import { makeContainerSelector } from '../selectors';
 
 // Import actions
 // ===========================================================================
-import { createColumn, editColumn, deleteColumn } from './actions';
+import { createColumn, editColumn, deleteColumn } from '../actions';
 
 // Import Child components
 // ===========================================================================
