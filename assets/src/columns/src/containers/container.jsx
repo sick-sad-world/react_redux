@@ -21,8 +21,8 @@ import { createColumn, editColumn, deleteColumn } from '../actions';
 // ===========================================================================
 import Container from 'common/components/container';
 import { Show, Hide } from 'common/components/buttons';
-import EditColumn from './components/edit';
-import ColumnFeedsAssignment from './components/assignment';
+import EditColumn from '../components/edit';
+import ColumnFeedsAssignment from '../components/assignment';
 
 class Columns extends React.Component {
   constructor(props) {

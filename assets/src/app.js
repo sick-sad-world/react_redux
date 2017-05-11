@@ -1,3 +1,4 @@
+import 'style-loader!css-loader!react-virtualized/styles.css';
 import style from 'scss/app.scss';
 
 // Import packages

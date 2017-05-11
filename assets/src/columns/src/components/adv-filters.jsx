@@ -1,8 +1,16 @@
+// Import utility stuff
+// ===========================================================================
 import { bindAll, map, isEqual, omit } from 'lodash';
 import { sortingOptions } from '../defaults';
+
+// Import React related stuff
+// ===========================================================================
 import React from 'react';
 import PropTypes from 'prop-types';
 import { optionShape } from 'common/typecheck';
+
+// Import Child components
+// ===========================================================================
 import Select from 'react-select';
 import Icon from 'common/components/icon';
 

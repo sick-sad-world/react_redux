@@ -1,7 +1,5 @@
 // Import utility stuff
 // ===========================================================================
-import { forOwn, isEqual } from 'lodash';
-import classNames from 'classnames';
 import { updateArrayWithValue } from 'functions';
 import { availableColumnData, defaultInterface } from '../defaults';
 

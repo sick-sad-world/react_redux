@@ -2,8 +2,8 @@
 ========================================================================== */
 .mod-dashboard {
 	padding: baseUnit();
-	overflow-x: auto;
-  display: flex;
+	overflow: hidden;
+  display: block;
 	.mod-column, .sortable-placeholder {
 		display: flex;
 		flex: 0 0 auto;

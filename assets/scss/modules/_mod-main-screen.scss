@@ -36,17 +36,8 @@
 		position: relative;
 	}
 
-  .mod-page {
+  .mod-page, .mod-dashboard {
     @include pos();
     width: 100%;
   }
-
-	.mod-dashboard {
-    display: none;
-		@include pos();
-		align-items: stretch;
-    &:last-child {
-      display: flex;
-    }
-	}
 }
