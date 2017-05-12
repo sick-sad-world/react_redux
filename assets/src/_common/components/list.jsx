@@ -23,21 +23,11 @@ export class ListSection extends React.Component {
     this.state = {
       payload: props.payload
     };
-    bindAll(this, 'createListItem', 'createHandler');
+    bindAll(this, 'createHandler');
   }
 
   componentWillReceiveProps(newProps) {
     if (newProps.state === 2) this.setState({ payload: newProps.payload });
-  }
-
-  createListItem(item) {
-    return React.cloneElement(this.props.children, {
-      key: item.id,
-      order: item.order,
-      sortable: this.props.sortable,
-      deleteAction: (this.props.deletable && this.props.deleteItem) ? this.props.deleteItem(item) : null,
-      ...item
-    });
   }
 
   createHandler(e) {
@@ -47,23 +37,30 @@ export class ListSection extends React.Component {
   }
 
   render() {
+    const { texts, children } = this.props;
     return (
       <section className='mod-subsection-list'>
         <header className='subsection-header'>
           <div className='text'>
-            <h1>{this.props.texts.title}</h1>
-            <p>{this.props.texts.description}</p>
+            <h1>{texts.title}</h1>
+            <p>{texts.description}</p>
             <form onSubmit={this.createHandler}>
-              <input type='text' name='name' required placeholder={this.props.texts.placeholder} />
-              <button className='button is-accent size-90' title={this.props.texts.btn}>Add</button>
+              <input type='text' name='name' required placeholder={texts.placeholder} />
+              <button className='button is-accent size-90' title={texts.btn}>Add</button>
             </form>
           </div>
         </header>
         <ul className='subsection-content entity-list'>
           {
-            (this.props.children && this.state.payload.length) ?
-              this.state.payload.map(this.createListItem) :
-                (<li className='state-empty'><Icon icon='emoji-sad' />{this.props.texts.empty}</li>)
+            (children && this.state.payload.length) ?
+              this.state.payload.map(item => children({
+                key: item.id,
+                order: item.order,
+                sortable: this.props.sortable,
+                deleteAction: (this.props.deletable && this.props.deleteItem) ? this.props.deleteItem(item) : null,
+                ...item
+              })
+            ) : (<li className='state-empty'><Icon icon='emoji-sad' />{texts.empty}</li>)
           }
         </ul>
       </section>
@@ -87,7 +84,7 @@ ListSection.defaultProps = {
 };
 
 ListSection.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.func.isRequired,
   texts: PropTypes.shape({
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
@@ -144,10 +141,10 @@ export class ListItem extends React.PureComponent {
 }
 
 ListItem.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.number.isRequired,
   counter: PropTypes.number,
-  name: PropTypes.string,
-  url: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
   sortable: PropTypes.bool,
   disabled: PropTypes.bool,
   current: PropTypes.number,

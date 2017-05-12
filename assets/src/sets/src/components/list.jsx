@@ -35,13 +35,11 @@ export default class SetsWithContents extends React.Component {
     this.setState({ search: e.target.value || '' });
   }
 
-  renderSourceset({ id, name, source_ids, disabled }, isOpened) {
+  renderSourceset({ id, name, source_ids, disabled, ...set }, isOpened) {
     const onExpand = this.updateExpanded(id);
     return (
       <Sourceset key={id} name={name} counter={source_ids.length} sortable={this.props.sortable} disabled={disabled} >
-        {(this.props.setAction) ? React.cloneElement(this.props.setAction, {
-          handler: this.props.setAction.props.handler(id)
-        }) : null}
+        {(this.props.setAction) ? this.props.setAction({ id, name, source_ids, disabled, ...set, isOpened }) : null}
         {(isOpened) ? <Collapse handler={onExpand} /> : <Expand handler={onExpand} /> }
       </Sourceset>
     );
@@ -102,7 +100,7 @@ SetsWithContents.propTypes = {
   disabled: PropTypes.bool.isRequired,
   treshold: PropTypes.number.isRequired,
   payload: PropTypes.arrayOf(PropTypes.shape(defaultInterface)).isRequired,
-  setAction: PropTypes.element,
-  feedAction: PropTypes.element,
+  setAction: PropTypes.func,
+  feedAction: PropTypes.func,
   feedsEmpty: PropTypes.string.isRequired
 };

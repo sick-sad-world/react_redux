@@ -19,7 +19,6 @@ import { makeListSelector } from '../selectors';
 import DataContainer from 'common/components/data-container';
 
 function ColumnsContainer({ children, ...props }) {
-  console.log(children, props);
   return children(props);
   /* return (
     <DataContainer {...props}

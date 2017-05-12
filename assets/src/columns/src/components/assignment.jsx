@@ -72,13 +72,13 @@ class Assignment extends React.Component {
             <li className='list-title'><h4>Sets selected</h4></li>
             <li className='mod-entity'>
               <SetsList criterea={{ set_ids: formValues.set }} disabled={running} empty='No sets assigned'>
-                <Deselect handler={this.updateData('set')} />
+                {({ id }) => <Deselect handler={this.updateData('set')(id)} />}
               </SetsList>
             </li>
             <li className='list-title'><h4>Sources selected</h4></li>
             <li className='mod-entity'>
               <FeedsList criterea={{ source_ids: formValues.source }} disabled={running} empty='No feeds assigned'>
-                <Deselect handler={this.updateData('source')} />
+                {({ id }) => <Deselect handler={this.updateData('source')(id)} />}
               </FeedsList>
             </li>
           </ul>
@@ -87,8 +87,8 @@ class Assignment extends React.Component {
           disabled={running}
           disabled_sets={formValues.set}
           disabled_sources={formValues.source}
-          setAction={<SelectAll handler={this.updateData('set')} />}
-          feedAction={<Select handler={this.updateData('source')} />}
+          setAction={({ id }) => <SelectAll handler={this.updateData('set')(id)} />}
+          feedAction={({ id }) => <Select handler={this.updateData('source')(id)} />}
         />
       </form>
     );

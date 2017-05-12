@@ -70,7 +70,7 @@ export default class Container extends React.Component {
           deleteItem={this.deleteConfirm}
           {...this.props.listSectionOpts}
         >
-          <ListItem url={this.props.route.path} current={this.props.curId} {...this.props.listItemOpts} />
+          {props => <ListItem {...props} url={this.props.route.path} current={this.props.curId} {...this.props.listItemOpts} />}
         </ListSection>
         { (this.props.children) ? this.props.children({
           data: this.props.chosen,

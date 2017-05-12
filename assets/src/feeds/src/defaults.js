@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { oneOfValues } from 'common/typecheck';
 
 export const feedTypes = [
   { value: 'autodetect', label: 'Autodetect' },
@@ -25,7 +24,7 @@ export const defaultInterface = {
   feedurl: PropTypes.string.isRequired,
   frequency: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
-  type: oneOfValues(feedTypes).isRequired,
+  type: PropTypes.oneOf(feedTypes.map(({ value }) => value)).isRequired,
   nextupdate: PropTypes.string,
   lastfound: PropTypes.string
 };

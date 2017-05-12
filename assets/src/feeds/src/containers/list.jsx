@@ -48,22 +48,20 @@ class FeedsList extends React.Component {
   }
 
   renderActions(feed) {
-    if (this.props.children) {
-      return React.Children.map(this.props.children, child => React.cloneElement(child, {
-        handler: child.props.handler(feed.id)
-      }));
+    if (this.props.deletable && feed.deletable && this.props.set_id) {
+      return <Delete handler={this.setDeleting(feed)} />;
+    } else if (this.props.children) {
+      return this.props.children(feed);
     }
     return null;
   }
 
   render() {
-    const { payload, deletable, sortable } = this.props;
+    const { payload, sortable } = this.props;
     return (
       <ul className={this.props.className}>
         {(payload.length) ? payload.map(feed => (
-          <Feed key={feed.id} {...feed} sortable={sortable}>
-            {(deletable && feed.deletable && this.props.set_id) ? <Delete handler={this.setDeleting(feed)} /> : this.renderActions(feed)}
-          </Feed>
+          <Feed key={feed.id} {...feed} sortable={sortable}>{this.renderActions(feed)}</Feed>
         )) : <li className='state-empty'>{this.props.emptyTpl}</li>}
         {(this.state.deleting) ? (
           <DeleteConfirmation close={this.deletingReset} accept={this.deleteFeed(this.state.deleting.id)} >

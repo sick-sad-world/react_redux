@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { emailStr, numBool, oneOfValues } from 'common/typecheck';
+import { emailStr, numBool } from 'common/typecheck';
 
 export const defaultTimeFormat = 'YYYY-MM-DD HH:mm:ss';
 
@@ -31,7 +31,7 @@ export const coreInterface = {
 export const defaultInterface = {
   ...coreInterface,
   next_send: PropTypes.string,
-  frequency: oneOfValues(defaultFrequency).isRequired,
+  frequency: PropTypes.oneOf(defaultFrequency.map(({ value }) => value)).isRequired,
   recipient: emailStr,
   order: PropTypes.number
 };

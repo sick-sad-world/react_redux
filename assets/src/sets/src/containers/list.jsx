@@ -21,21 +21,12 @@ import Sourceset from '../components/sourceset';
 
 class SetsList extends React.Component {
 
-  renderActions(set) {
-    if (this.props.children) {
-      return React.Children.map(this.props.children, child => React.cloneElement(child, {
-        handler: child.props.handler(set.id)
-      }));
-    }
-    return null;
-  }
-
   render() {
     return (
       <ul className={this.props.className}>
         {(this.props.payload.length) ? this.props.payload.map(set => (
           <Sourceset key={set.id} name={set.name} counter={set.source_ids.length} disabled={set.disabled} sortable={this.props.sortable}>
-            {this.renderActions(set)}
+            {(this.props.children) ? this.props.children(set) : null}
           </Sourceset>
         )) : <li className='state-empty'>{this.props.emptyTpl}</li>}
       </ul>
@@ -58,7 +49,7 @@ SetsList.propTypes = {
     seach: PropTypes.string
   }),
   sortable: PropTypes.bool.isRequired,
-  children: PropTypes.element,
+  children: PropTypes.func,
   className: PropTypes.string,
   state: stateNum.isRequired,
   emptyTpl: PropTypes.string.isRequired,
