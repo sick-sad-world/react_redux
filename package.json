@@ -14,7 +14,7 @@
     "test": "jest --watch",
     "start": "node webpack.server.js",
     "prebundle": "rimraf ./demo",
-    "bundle": "cross-env NODE_ENV=development CSS=true PLATFORM=web webpack",
+    "bundle": "cross-env NODE_ENV=development BUNDLE=true PLATFORM=web webpack",
     "prebuild": "rimraf ./build",
     "build": "cross-env NODE_ENV=production PLATFORM=web webpack"
   },

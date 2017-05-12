@@ -15,6 +15,7 @@ import { getAllResults } from 'src/results';
 // ===========================================================================
 import FormLogin from '../components/form-login';
 import FormRegister from '../components/form-register';
+import Logotype from 'img/logo.svg';
 
 // Authentification screen containing both of auth forms
 // ===========================================================================
@@ -74,7 +75,7 @@ class Auth extends React.Component {
     return (
       <section className='screen-auth mod-authentification' id='funAuthScreen'>
         <article className='welcome-text'>
-          <img className='logotype' src='img/logo.svg' title='Trendolier pro' alt='Trendolizer pro' />
+          <img className='logotype' src={Logotype} title='Trendolier pro' alt='Trendolizer pro' />
           <hgroup className='t-rhythm'>
             <h1 className='t-gutter'>{ texts.title }</h1>
             <h2 className='t-gutter'>{ texts.subtitle }</h2>

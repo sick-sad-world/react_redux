@@ -12,7 +12,7 @@ const alias = ['/img', '/icon', '/scss', '/src', '/src/_common', '/src/_common/f
 const PLUGINS = [
   new ExtractTextPlugin({
     filename: (isDevelopment) ? '[name].css' : '[hash:12].css',
-    disable: isDevelopment && !process.env.CSS
+    disable: isDevelopment && !process.env.BUNDLE
   }),
   new webpack.DefinePlugin({
     NODE_ENV: JSON.stringify(process.env.NODE_ENV)
@@ -71,27 +71,27 @@ const sassLoader = {
   })
 };
 
-const svgLoader = {
-  test: /\.svg?$/,
-  include: /(icon|img)/,
-  exclude: /node_modules/,
-  use: {
-    loader: 'svg-inline-loader',
-    options: {
-      removingTagAttrs: ['fill']
-    }
-  }
-};
+// const svgLoader = {
+//   test: /\.svg?$/,
+//   include: /(icon|img)/,
+//   exclude: /node_modules/,
+//   use: {
+//     loader: 'svg-inline-loader',
+//     options: {
+//       removingTagAttrs: ['fill']
+//     }
+//   }
+// };
 
 const imageLoader = {
-  test: /\.(png|jpe?g|gif)?$/,
+  test: /\.(png|jpe?g|gif|svg)?$/,
+  include: /img|icons/,
   exclude: /node_modules/,
   use: [{
     loader: 'url-loader',
     options: {
-      outputPath: (!isDevelopment) ? 'img/' : '',
-      limit: 10000,
-      name: (isDevelopment) ? '[path][name].[ext]' : '[hash:12].[ext]'
+      limit: 8192,
+      name: (isDevelopment) ? 'img/[name].[ext]' : 'img/[hash:12].[ext]'
     }
   }]
 };
@@ -109,10 +109,10 @@ const fontLoader = {
   include: /font/,
   exclude: /(node_modules|img)/,
   use: {
-    loader: 'file-loader',
+    loader: 'url-loader',
     options: {
-      outputPath: (!isDevelopment) ? 'font/' : '',
-      name: (isDevelopment) ? '[path][name].[ext]' : '[hash:12].[ext]'
+      limit: 8192,
+      name: (isDevelopment) ? 'font/[name].[ext]' : 'font/[hash:12].[ext]'
     }
   }
 };
@@ -126,6 +126,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, (isDevelopment) ? 'demo' : 'build'),
+    publicPath: '',
     filename: (isDevelopment) ? '[name].js' : '[chunkhash:12].js'
   },
   resolve: {
@@ -137,6 +138,6 @@ module.exports = {
   },
   plugins: PLUGINS,
   module: {
-    loaders: [jsLoader, sassLoader, svgLoader, imageLoader, fontLoader]
+    loaders: [jsLoader, sassLoader, imageLoader, fontLoader]
   }
 };
