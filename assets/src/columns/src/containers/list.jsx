@@ -19,7 +19,9 @@ import { makeListSelector } from '../selectors';
 import DataContainer from 'common/components/data-container';
 
 function ColumnsContainer({ children, ...props }) {
-  return (
+  console.log(children, props);
+  return children(props);
+  /* return (
     <DataContainer {...props}
       renderConfirmation={deleting => (
         <dl>
@@ -27,10 +29,8 @@ function ColumnsContainer({ children, ...props }) {
           <dd>{`ID: ${deleting.id} - ${deleting.name}`}</dd>
         </dl>
       )
-    }>
-      {children}
-    </DataContainer>
-  );
+    }/>
+  );*/
 }
 
 ColumnsContainer.propTypes = {
@@ -39,7 +39,7 @@ ColumnsContainer.propTypes = {
     column_ids: PropTypes.arrayOf(PropTypes.number),
     seach: PropTypes.string
   }),
-  children: PropTypes.element.isRequired,
+  // children: PropTypes.func.isRequired,
   state: stateNum.isRequired,
   payload: PropTypes.arrayOf(PropTypes.shape(defaultInterface)).isRequired
 };

@@ -1,7 +1,8 @@
 /* Column - main item on main dashboard
 ========================================================================== */
 .mod-column {
-	display: inline-flex;
+  @include pos(baseUnit(0.5) baseUnit(0.5) baseUnit(0.5) baseUnit(0.5));
+	display: flex;
 	flex-direction: column;
 	border: $bd;
 	.column-header {

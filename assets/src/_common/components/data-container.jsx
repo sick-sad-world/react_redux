@@ -32,7 +32,8 @@ class DataContainer extends React.Component {
   }
 
   render() {
-    return React.cloneElement(this.props.children, {
+    console.log(this.props);
+    return this.props.children({
       ...this.props,
       deleteItem: this.setDeleting,
       deletingPopup: (this.state.deleting) ? (
@@ -45,7 +46,7 @@ class DataContainer extends React.Component {
 }
 
 DataContainer.propTypes = {
-  children: PropTypes.element,
+  children: PropTypes.func.isRequired,
   state: stateNum.isRequired,
   payload: PropTypes.arrayOf(PropTypes.object).isRequired,
   deleteItem: PropTypes.func.isRequired,

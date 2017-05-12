@@ -10,18 +10,17 @@ import { AutoSizer, Grid } from 'react-virtualized';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { stateNum } from 'common/typecheck';
 
-export default function DashboardList({ payload, state, deleteItem, cellRenderer }) {
+export default function DashboardList({ payload, deleteItem, refreshResults, updateItem, children }) {
   return (
      <AutoSizer>
       {({ height, width }) => (
         <Grid
-          cellRenderer={({ columnIndex, key, rowIndex, style }) => cellRenderer({
-            columnIndex, key, style, payload, state, deleteItem
+          cellRenderer={({ columnIndex, key, rowIndex, style }) => children({
+            columnIndex, key, style, payload: payload[columnIndex], deleteItem, refreshResults, updateItem
           })}
           columnCount={payload.length}
-          columnWidth={400}
+          columnWidth={378}
           height={height}
           rowCount={1}
           rowHeight={height - scrollbarSize()}
@@ -33,8 +32,9 @@ export default function DashboardList({ payload, state, deleteItem, cellRenderer
 }
 
 DashboardList.propTypes = {
-  state: stateNum.isRequired,
   payload: PropTypes.arrayOf(PropTypes.object).isRequired,
   deleteItem: PropTypes.func.isRequired,
-  cellRenderer: PropTypes.func.isRequired
+  refreshResults: PropTypes.func.isRequired,
+  updateItem: PropTypes.func.isRequired,
+  children: PropTypes.func.isRequired
 };

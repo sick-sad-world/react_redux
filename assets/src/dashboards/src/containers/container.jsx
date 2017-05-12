@@ -9,15 +9,24 @@ import PropTypes from 'prop-types';
 import { defaultInterface } from '../defaults';
 import { makeContainerSelector } from '../selectors';
 
+// Import child Components
+// ===========================================================================
+import { ColumnsContainer } from 'src/columns';
+import DashboardList from '../components/list';
+import DashboardItem from '../components/item';
+
 function Dashboard({ payload, emptyTpl }) {
   return (
     <section className='mod-dashboard'>
-      <ColumnsContainer>
-        <DashboardList>
-          {({ key, ...props }) => <DashboardItem key={key} {...props}/>}
-        </DashboardList>
-      </ColumnsContainer>
-    {/* {(!payload) ? emptyTpl : JSON.stringify(payload)}*/}
+      {(payload) ? (
+        <ColumnsContainer criterea={{ column_ids: payload.column_ids, open: 1 }}>
+          {props => (
+            <DashboardList {...props}>
+              {({ key, ...itemProps }) => <DashboardItem key={key} {...itemProps}/>}
+            </DashboardList>
+          )}
+        </ColumnsContainer>
+      ) : emptyTpl }
     </section>
   );
 }

@@ -4,6 +4,9 @@
 	padding: baseUnit();
 	overflow: hidden;
   display: block;
+  .ReactVirtualized__Grid:focus {
+    outline: 0;
+  }
 	.mod-column, .sortable-placeholder {
 		display: flex;
 		flex: 0 0 auto;

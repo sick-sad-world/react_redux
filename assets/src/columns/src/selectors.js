@@ -28,23 +28,38 @@ export function makeListSelector() {
     getColumns,
     getCriterea,
     (state, payload, criterea) => {
-      let result = [];
+      let result = [...payload];
 
       if (criterea) {
-        if (criterea.column_ids) {
-          result = payload.filter(set => includes(criterea.column_ids, set.id));
-        } else if (criterea.search) {
-          const search = new RegExp(criterea.search, 'i');
-          result = payload.filter(set => search.test(set.name));
-        }
+        result = payload.filter((column) => {
+          let success = false;
+          if (criterea.column_ids) {
+            if (includes(criterea.column_ids, column.id)) {
+              success = true;
+            } else {
+              success = false;
+            }
+          }
+          if (criterea.search) {
+            if (includes(criterea.search, column.name)) {
+              success = true;
+            } else {
+              success = false;
+            }
+          }
+          if (criterea.open) {
+            success = criterea.open === column.open;
+          }
+          return success;
+        }).map(set => ({
+          ...set,
+          disabled: (criterea.disabled) && includes(criterea.disabled, set.id)
+        }));
       }
 
       return {
         state,
-        payload: (criterea) ? result.map(set => ({
-          ...set,
-          disabled: (criterea.disabled) && includes(criterea.disabled, set.id)
-        })) : payload
+        payload: result
       };
     });
 }
