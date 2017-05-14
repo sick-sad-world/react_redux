@@ -6,7 +6,7 @@ import scrollbarSize from 'dom-helpers/util/scrollbarSize';
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
-import { AutoSizer, Grid } from 'react-virtualized';
+import { AutoSizer, Grid, ArrowKeyStepper } from 'react-virtualized';
 import DeleteConfirmation from 'common/components/delete-confirmation';
 
 // Import selectors and typecheck
@@ -47,19 +47,24 @@ export default class DashboardList extends React.Component {
   }
 
   render() {
-    return (this.props.payload.length) ? (
+    const colCount = this.props.payload.length;
+    return (colCount) ? (
       <div className='list-container'>
         <AutoSizer>
           {({ height, width }) => (
-            <Grid
-              cellRenderer={this.cellRenderer}
-              columnCount={this.props.payload.length}
-              columnWidth={378}
-              height={height}
-              rowCount={1}
-              rowHeight={height - scrollbarSize()}
-              width={width}
-            />
+            <ArrowKeyStepper columnCount={colCount} rowCount={1}>
+              {({ onSectionRendered, scrollToColumn }) => (<Grid
+                cellRenderer={this.cellRenderer}
+                onSectionRendered={onSectionRendered}
+                scrollToColumn={scrollToColumn}
+                columnCount={colCount}
+                columnWidth={378}
+                height={height}
+                rowCount={1}
+                rowHeight={height - scrollbarSize()}
+                width={width}
+              />)}
+            </ArrowKeyStepper>
           )}
         </AutoSizer>
         {(this.state.deleting) ? (
