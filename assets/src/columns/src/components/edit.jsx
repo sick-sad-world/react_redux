@@ -92,8 +92,21 @@ class EditColumn extends React.Component {
     return data => this.props.stateUpdater({ advancedFilters: data });
   }
 
+  updateContentOptions(name) {
+    return (value) => {
+      if (value === 1) {
+        return this.props.stateUpdater({
+          ...this.props.contentTypeDef,
+          [name]: 1
+        });
+      } 
+        return this.props.stateUpdater({ [name]: value });
+      
+    };
+  }
+
   render() {
-    const { running, formValues, updateState } = this.props;
+    const { running, formValues, updateState, contentTypeOpts } = this.props;
     return (
       <form className='subsection-content columned'>
         <div className='form-block'>
@@ -192,12 +205,8 @@ class EditColumn extends React.Component {
             togglerClassName='size-180'
             disabled={running}
             name='is_image'
-            options={[
-              { value: 1, label: 'Only' },
-              { value: '', label: 'Include' },
-              { value: 0, label: 'Omit' }
-            ]}
-            onChange={updateState('is_image')}
+            options={contentTypeOpts}
+            onChange={this.updateContentOptions('is_image')}
             value={formValues.is_image}
           />
           <Toggler
@@ -206,12 +215,8 @@ class EditColumn extends React.Component {
             togglerClassName='size-180'
             disabled={running}
             name='is_video'
-            options={[
-              { value: 1, label: 'Only' },
-              { value: '', label: 'Include' },
-              { value: 0, label: 'Omit' }
-            ]}
-            onChange={updateState('is_video')}
+            options={contentTypeOpts}
+            onChange={this.updateContentOptions('is_video')}
             value={formValues.is_video}
           />
           <Toggler
@@ -220,12 +225,8 @@ class EditColumn extends React.Component {
             togglerClassName='size-180'
             disabled={running}
             name='is_facebook'
-            options={[
-              { value: 1, label: 'Only' },
-              { value: '', label: 'Include' },
-              { value: 0, label: 'Omit' }
-            ]}
-            onChange={updateState('is_facebook')}
+            options={contentTypeOpts}
+            onChange={this.updateContentOptions('is_facebook')}
             value={formValues.is_facebook}
           />
           <Toggler
@@ -234,12 +235,8 @@ class EditColumn extends React.Component {
             togglerClassName='size-180'
             disabled={running}
             name='is_gallery'
-            options={[
-              { value: 1, label: 'Only' },
-              { value: '', label: 'Include' },
-              { value: 0, label: 'Omit' }
-            ]}
-            onChange={updateState('is_gallery')}
+            options={contentTypeOpts}
+            onChange={this.updateContentOptions('is_gallery')}
             value={formValues.is_gallery}
           />
           <Dropdown
@@ -318,8 +315,29 @@ class EditColumn extends React.Component {
   }
 }
 
+EditColumn.defaultProps = {
+  contentTypeDef: {
+    is_image: '',
+    is_video: '',
+    is_gallery: '',
+    is_facebook: ''
+  },
+  contentTypeOpts: [
+    { value: 1, label: 'Only' },
+    { value: '', label: 'Include' },
+    { value: 0, label: 'Omit' }
+  ]
+};
+
 EditColumn.propTypes = {
   path: PropTypes.string.isRequired,
+  contentTypeOpts: optionShape().isRequired,
+  contentTypeDef: PropTypes.shape({
+    is_image: PropTypes.string.isRequired,
+    is_video: PropTypes.string.isRequired,
+    is_gallery: PropTypes.string.isRequired,
+    is_facebook: PropTypes.string.isRequired
+  }).isRequired,
   language: optionShape('string').isRequired,
   autoReloadOptions: optionShape('number').isRequired,
   advRegExp: PropTypes.instanceOf(RegExp).isRequired,
