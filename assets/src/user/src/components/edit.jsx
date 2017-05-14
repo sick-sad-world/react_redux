@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 // Import Child components
 // ===========================================================================
 import TextInput from 'common/components/forms/input-text';
-import MakeEditForm, { injectedPropsType } from 'common/components/edit-form-hoc';
+import MakeEditForm, { injectedPropsType } from 'common/hocs/edit-form';
 import EmailList from './email-list';
 
 class EditUser extends React.Component {

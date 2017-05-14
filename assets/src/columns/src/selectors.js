@@ -9,6 +9,8 @@ const getCurrentId = ({ columns }, props) => parseInt(props.params.id, 10) || 0;
 
 const getCriterea = ({ columns }, props) => props.criterea;
 
+const getColumnIds = ({ columns }, props) => props.column_ids || [];
+
 export function makeContainerSelector() {
   return createSelector(
     getColumnState,
@@ -22,46 +24,13 @@ export function makeContainerSelector() {
     }));
 }
 
-export function makeListSelector() {
+export function makeDashboardSelector() {
   return createSelector(
-    getColumnState,
     getColumns,
-    getCriterea,
-    (state, payload, criterea) => {
-      let result = [...payload];
-
-      if (criterea) {
-        result = payload.filter((column) => {
-          let success = false;
-          if (criterea.column_ids) {
-            if (includes(criterea.column_ids, column.id)) {
-              success = true;
-            } else {
-              success = false;
-            }
-          }
-          if (criterea.search) {
-            if (includes(criterea.search, column.name)) {
-              success = true;
-            } else {
-              success = false;
-            }
-          }
-          if (criterea.open) {
-            success = criterea.open === column.open;
-          }
-          return success;
-        }).map(set => ({
-          ...set,
-          disabled: (criterea.disabled) && includes(criterea.disabled, set.id)
-        }));
-      }
-
-      return {
-        state,
-        payload: result
-      };
-    });
+    getColumnIds,
+    (payload, column_ids) => ({
+      payload: payload.filter(({ id, open }) => open && includes(column_ids, id))
+    }));
 }
 
 export function makeDropdownSelector() {

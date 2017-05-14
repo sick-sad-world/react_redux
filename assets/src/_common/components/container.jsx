@@ -21,7 +21,7 @@ export default class Container extends React.Component {
     this.state = {
       deleting: null
     };
-    bindAll(this, 'createItem', 'deleteItem', 'editItem', 'deleteConfirm', 'deleteReset');
+    bindAll(this, 'createItem', 'deleteItem', 'editItem', 'deleteConfirm');
   }
 
   createWrapper(data, ...rest) {
@@ -52,12 +52,8 @@ export default class Container extends React.Component {
     return () => this.setState({ deleting });
   }
 
-  deleteReset() {
-    this.setState({ deleting: null });
-  }
-
   deleteItem(id) {
-    return () => this.props.actionDelete({ id }).then(this.deleteReset).then(() => this.props.router.push(this.props.route.path));
+    return () => this.props.actionDelete({ id }).then(this.deleteConfirm()).then(() => this.props.router.push(this.props.route.path));
   }
 
   render() {
@@ -81,7 +77,7 @@ export default class Container extends React.Component {
           ...this.props.editOpts
         }) : null }
         {(this.state.deleting) ? (
-          <DeleteConfirmation close={this.deleteReset} accept={this.deleteItem(this.state.deleting.id)}>
+          <DeleteConfirmation close={this.deleteConfirm()} accept={this.deleteItem(this.state.deleting.id)}>
             {this.props.confText(this.state.deleting)}
           </DeleteConfirmation>
         ) : null}

@@ -15,7 +15,7 @@ import { Link } from 'react-router';
 // ===========================================================================
 import TextInput from 'common/components/forms/input-text';
 import { Select, Deselect, SelectAll } from 'common/components/buttons';
-import MakeEditForm, { injectedPropsType } from 'common/components/edit-form-hoc';
+import MakeEditForm, { injectedPropsType } from 'common/hocs/edit-form';
 import { FeedsList } from 'src/feeds';
 import SetsWithContents from './list';
 

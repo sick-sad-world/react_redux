@@ -12,7 +12,7 @@ import { stateNum, textShape } from '../typecheck';
 // Import child components
 // ===========================================================================
 import { Link } from 'react-router';
-import Icon from './icon';
+import Icon from '../components/icon';
 
 // Edit form generic header component
 // ===========================================================================

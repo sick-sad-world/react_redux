@@ -4,9 +4,9 @@ import Icon from './icon';
 
 // Delete confirmation simple dialog
 // ===========================================================================
-export default function DeleteConfirmation({ children, accept, close }) {
+export default function DeleteConfirmation({ key, children, accept, close }) {
   return (
-    <div className='overlay'>
+    <div className='overlay' key={key}>
       <span onClick={close} className='close-handler'></span>
       <section className='small-popup confirmation-dialog'>
         <header>
@@ -27,7 +27,12 @@ export default function DeleteConfirmation({ children, accept, close }) {
   );
 }
 
+DeleteConfirmation.defaultProps = {
+  key: 'deleting'
+};
+
 DeleteConfirmation.propTypes = {
+  key: PropTypes.string.isRequired,
   children: PropTypes.element.isRequired,
   accept: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired

@@ -13,7 +13,7 @@ import { optionShape } from 'common/typecheck';
 // Import Child components
 // ===========================================================================
 import { Link } from 'react-router';
-import MakeEditForm, { injectedPropsType } from 'common/components/edit-form-hoc';
+import MakeEditForm, { injectedPropsType } from 'common/hocs/edit-form';
 import TextInput from 'common/components/forms/input-text';
 import Dropdown from 'common/components/forms/dropdown';
 import Toggler from 'common/components/forms/toggler';

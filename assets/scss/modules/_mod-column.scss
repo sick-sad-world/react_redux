@@ -32,7 +32,6 @@
 		}
 	}
 	.column-settings {
-    display: none;
 		border-bottom: $bd;
 		flex: 0 1 auto;
 		background-color: $c-element;
@@ -83,9 +82,6 @@
 		.column-header nav a.btn-settings {
 			color: $c-accent;
 		}
-    .column-settings {
-      display: block;
-    }
 	}
 	&.is-loading {
 		animation: shadow-pulse 1.5s linear 0s infinite;

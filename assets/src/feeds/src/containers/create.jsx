@@ -21,7 +21,7 @@ import { setFeedsState, createFeed, testUrl } from '../actions';
 // Import Child components
 // ===========================================================================
 import Dropdown from 'common/components/forms/dropdown';
-import { EditFormHeader } from 'common/components/edit-form-hoc';
+import { EditFormHeader } from 'common/hocs/edit-form';
 import FormAutodetect from '../components/form-autodetect';
 import FormFacebook from '../components/form-facebook';
 import FormRss from '../components/form-rss';

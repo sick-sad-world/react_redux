@@ -11,21 +11,20 @@ import { makeContainerSelector } from '../selectors';
 
 // Import child Components
 // ===========================================================================
-import { ColumnsContainer } from 'src/columns';
+import { DashboardColumns, DashboardItem } from 'src/columns';
 import DashboardList from '../components/list';
-import DashboardItem from '../components/item';
 
 function Dashboard({ payload, emptyTpl }) {
   return (
     <section className='mod-dashboard'>
       {(payload) ? (
-        <ColumnsContainer criterea={{ column_ids: payload.column_ids, open: 1 }}>
+        <DashboardColumns column_ids={payload.column_ids}>
           {props => (
             <DashboardList {...props}>
-              {({ key, ...itemProps }) => <DashboardItem key={key} {...itemProps}/>}
+              {({ key, ...itemProps }) => <DashboardItem {...itemProps}/>}
             </DashboardList>
           )}
-        </ColumnsContainer>
+        </DashboardColumns>
       ) : emptyTpl }
     </section>
   );

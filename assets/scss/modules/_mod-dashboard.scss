@@ -4,6 +4,10 @@
   padding: baseUnit(0.5) 0 0 baseUnit(0.5);
 	overflow: hidden;
   display: block;
+  .list-container {
+    width: 100%;
+    height: 100%;
+  }
   .ReactVirtualized__Grid:focus {
     outline: 0;
   }

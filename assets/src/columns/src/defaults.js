@@ -180,11 +180,15 @@ export const editOptions = {
   ]
 };
 
-export const defaultDataInterface = {
+export const defaultDashboardInterface = {
   autoreload: numBool.isRequired,
   infinite: numBool.isRequired,
   sort: PropTypes.string.isRequired,
-  direction: directionString.isRequired,
+  direction: directionString.isRequired
+};
+
+export const defaultDataInterface = {
+  ...defaultDashboardInterface,
   show_favorites: numBool,
   show_ignored: numBool,
   limit: PropTypes.number,

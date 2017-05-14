@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 
 // Import Child components
 // ===========================================================================
-import MakeEditForm, { injectedPropsType } from 'common/components/edit-form-hoc';
+import MakeEditForm, { injectedPropsType } from 'common/hocs/edit-form';
 import { Select, Deselect, SelectAll } from 'common/components/buttons';
 import { FeedsList } from 'src/feeds';
 import { CompleteList, SetsList } from 'src/sets';

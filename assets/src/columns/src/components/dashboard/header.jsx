@@ -9,14 +9,14 @@ import Icon from 'common/components/icon';
 
 // Main app screen - Dashboard
 // ===========================================================================
-export default function ItemHeader({ name, refresh, settings }) {
+export default function ItemHeader({ name, refresh, toggle }) {
   return (
     <header className='column-header'>
       <Icon className='drag-handle' icon='dots-three-vertical' />
       <h1 className='funName'>{name}</h1>
       <nav className='nav-links'>
-        <a title='Refresh column' onClick={refresh}><Icon icon='cw' /></a>
-        <a onClick={settings} title='Column settings'><Icon icon='cog' /></a>
+        {(refresh) ? <a title='Refresh column' onClick={refresh}><Icon icon='cw' /></a> : null }
+        {(toggle) ? <a onClick={toggle} title='Column settings'><Icon icon='cog' /></a> : null }
       </nav>
     </header>
   );
@@ -24,6 +24,6 @@ export default function ItemHeader({ name, refresh, settings }) {
 
 ItemHeader.propTypes = {
   name: PropTypes.string.isRequired,
-  refresh: PropTypes.func.isRequired,
-  settings: PropTypes.func.isRequired
+  refresh: PropTypes.func,
+  toggle: PropTypes.func
 };
