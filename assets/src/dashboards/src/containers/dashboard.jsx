@@ -14,13 +14,13 @@ import { makeContainerSelector } from '../selectors';
 import { DashboardColumns, DashboardItem } from 'src/columns';
 import DashboardList from '../components/list';
 
-function Dashboard({ payload, emptyTpl }) {
+function Dashboard({ payload, emptyTpl, column }) {
   return (
     <section className='mod-dashboard'>
       {(payload) ? (
         <DashboardColumns column_ids={payload.column_ids}>
           {props => (
-            <DashboardList {...props}>
+            <DashboardList column={column} {...props}>
               {({ key, ...itemProps }) => <DashboardItem {...itemProps}/>}
             </DashboardList>
           )}
@@ -36,6 +36,7 @@ Dashboard.defaultProps = {
 
 Dashboard.propTypes = {
   payload: PropTypes.shape(defaultInterface),
+  column: PropTypes.number,
   emptyTpl: PropTypes.element.isRequired
 };
 

@@ -4,5 +4,5 @@ import Dashboard from './containers/dashboard';
 import { path } from './defaults';
 
 export default (
-  <Route omit path={'/:name'} component={Dashboard}></Route>
+  <Route omit path={'/:name(/:column)'} component={Dashboard}></Route>
 );

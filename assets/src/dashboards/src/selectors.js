@@ -8,6 +8,8 @@ const getCurrentId = ({ dashboards }, props) => parseInt(props.params.id, 10) ||
 
 const getTargetUrl = ({ dashboards }, props) => props.params.name;
 
+const getColumnId = ({ dashboards }, props) => parseInt(props.params.column, 10) || null;
+
 export function makeNavSelector() {
   return createSelector(
     getDashboards,
@@ -21,7 +23,9 @@ export function makeContainerSelector() {
   return createSelector(
     getDashboards,
     getTargetUrl,
-    (dashboards, target) => ({
-      payload: dashboards.find(({ url }) => url === target)
+    getColumnId,
+    (dashboards, target, column) => ({
+      payload: dashboards.find(({ url }) => url === target),
+      column
     }));
 }

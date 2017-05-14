@@ -1,6 +1,6 @@
 // Import helper stuff
 // ===========================================================================
-import { bindAll } from 'lodash';
+import { bindAll, findIndex } from 'lodash';
 import scrollbarSize from 'dom-helpers/util/scrollbarSize';
 
 // Import React related stuff
@@ -52,7 +52,7 @@ export default class DashboardList extends React.Component {
       <div className='list-container'>
         <AutoSizer>
           {({ height, width }) => (
-            <ArrowKeyStepper columnCount={colCount} rowCount={1}>
+            <ArrowKeyStepper columnCount={colCount} rowCount={1} scrollToColumn={findIndex(this.props.payload, { id: this.props.column })}>
               {({ onSectionRendered, scrollToColumn }) => (<Grid
                 cellRenderer={this.cellRenderer}
                 onSectionRendered={onSectionRendered}
@@ -86,6 +86,7 @@ DashboardList.defaultProps = {
 
 DashboardList.propTypes = {
   payload: PropTypes.arrayOf(PropTypes.object).isRequired,
+  column: PropTypes.number,
   deleteColumn: PropTypes.func.isRequired,
   refreshResults: PropTypes.func,
   editColumn: PropTypes.func.isRequired,
