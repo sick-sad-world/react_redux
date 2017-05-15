@@ -1,6 +1,7 @@
 import { LOGOUT } from 'common/type-factory';
 import types from './types';
 import { defaultData } from './defaults';
+import UserImg from 'img/ph_user.png';
 
 export default (state = { ...defaultData }, action) => {
   switch (action.type) {
@@ -18,7 +19,7 @@ export default (state = { ...defaultData }, action) => {
         payload: {
           ...state.payload,
           ...action.payload,
-          image: '/img/ph_user.png'
+          image: UserImg
         }
       };
     case LOGOUT:

@@ -7,7 +7,7 @@
 	.sidebar {
 		flex: 0 0 $entity-unit;
 		//transition: flex $dur;
-		@include gradient($c-main, right);
+		@include gradient($c-main, to left);
 		color: $c-alt;
 		text-shadow: $sh-text;
 		overflow-x: hidden;

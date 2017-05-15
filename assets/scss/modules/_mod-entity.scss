@@ -44,9 +44,12 @@ in sub-managent like sources in set, sources/sets in column or column within ale
     }
 		.drag-handle {
 			flex: 0 0 $pointer-unit;
-			+ .text > * {
-				margin-left: 0;
-			}
+			+ .text {
+        padding-left: 0;
+        > * {
+          margin-left: 0;
+        }
+      }
 		}
     .nav-links {
       flex: 0 0 auto;
