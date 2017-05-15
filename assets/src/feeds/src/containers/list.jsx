@@ -95,7 +95,7 @@ FeedsList.propTypes = {
   set_id: PropTypes.number,
   deletable: PropTypes.bool.isRequired,
   sortable: PropTypes.bool.isRequired,
-  children: PropTypes.element,
+  children: PropTypes.func,
   className: PropTypes.string,
   state: stateNum.isRequired,
   emptyTpl: PropTypes.string.isRequired,

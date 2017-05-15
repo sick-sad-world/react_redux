@@ -99,9 +99,8 @@ class EditColumn extends React.Component {
           ...this.props.contentTypeDef,
           [name]: 1
         });
-      } 
-        return this.props.stateUpdater({ [name]: value });
-      
+      }
+      return this.props.stateUpdater({ [name]: value });
     };
   }
 
@@ -331,7 +330,7 @@ EditColumn.defaultProps = {
 
 EditColumn.propTypes = {
   path: PropTypes.string.isRequired,
-  contentTypeOpts: optionShape().isRequired,
+  contentTypeOpts: optionShape('any').isRequired,
   contentTypeDef: PropTypes.shape({
     is_image: PropTypes.string.isRequired,
     is_video: PropTypes.string.isRequired,

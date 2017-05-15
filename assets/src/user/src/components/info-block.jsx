@@ -19,7 +19,7 @@ export default function UserBlock({ image, fullname, position }) {
 // Proptypes validation
 // ===========================================================================
 UserBlock.propTypes = {
-  image: imageUrl.isRequired,
+  image: PropTypes.string.isRequired,
   fullname: PropTypes.string.isRequired,
   position: PropTypes.string.isRequired
 };

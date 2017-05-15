@@ -91,7 +91,7 @@ const imageLoader = {
     loader: 'url-loader',
     options: {
       limit: 8192,
-      name: (isDevelopment) ? 'img/[name].[ext]' : 'img/[hash:12].[ext]'
+      name: (isDevelopment) ? '[path][name].[ext]' : 'img/[hash:12].[ext]'
     }
   }]
 };
@@ -112,7 +112,7 @@ const fontLoader = {
     loader: 'url-loader',
     options: {
       limit: 8192,
-      name: (isDevelopment) ? 'font/[name].[ext]' : 'font/[hash:12].[ext]'
+      name: (isDevelopment) ? '[path][name].[ext]' : 'font/[hash:12].[ext]'
     }
   }
 };
