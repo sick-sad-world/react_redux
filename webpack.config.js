@@ -131,7 +131,7 @@ module.exports = {
   },
   resolve: {
     alias: Array.prototype.reduce.call(alias, (acc, v) => {
-      acc[v.split(/\/_?/).pop()] = path.resolve(__dirname, CONTEXT, v);
+      acc[v.split(/\/_?/).pop()] = path.join(__dirname, CONTEXT, v);
       return acc;
     }, {}),
     extensions: ['.js', '.jsx']
