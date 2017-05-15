@@ -23,7 +23,7 @@ export const defaultInterface = {
   fullname: PropTypes.string,
   position: PropTypes.string,
   status: PropTypes.string,
-  image: imageUrl.isRequired,
+  image: PropTypes.string.isRequired,
   is_admin: numBool.isRequired,
   email: emailStr.isRequired,
   email_bcc: PropTypes.arrayOf(emailStr)
