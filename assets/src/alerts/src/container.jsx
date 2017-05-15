@@ -17,7 +17,7 @@ import { makeDropdownSelector } from 'src/columns';
 
 // Import actions
 // ===========================================================================
-import { editAlert, deleteAlert, createAlert } from './actions';
+import { editAlert, deleteAlert, createAlert, sortAlerts } from './actions';
 
 // Import Child components
 // ===========================================================================
@@ -61,7 +61,6 @@ Alerts.defaultProps = {
     deleteText: 'Delete this alert'
   },
   listSectionOpts: {
-    sortable: false,
     texts: {
       title: 'Alerts Management',
       description: 'Create, edit and delete alerts that will be sent to you when specific columns get new items.',
@@ -105,6 +104,7 @@ function mapStateToProps() {
 }
 
 export default connect(mapStateToProps(), {
+  actionSort: sortAlerts,
   actionCreate: createAlert,
   actionEdit: editAlert,
   actionDelete: deleteAlert

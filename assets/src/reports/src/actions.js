@@ -14,6 +14,14 @@ export const getReports = createAction({
   successMessage: 'Reports data has been read.'
 });
 
+export const sortReports = createAction({
+  type: types.SORT,
+  state_type: types.STATE,
+  url: 'sort_reports',
+  pendingMessage: 'Saving new Reports order...',
+  successMessage: 'Reports order has been read.'
+});
+
 export const createReport = createAction({
   type: types.CREATE,
   state_type: types.STATE,

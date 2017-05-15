@@ -16,7 +16,7 @@ import { listShape } from 'common/typecheck';
 
 // Import actions
 // ===========================================================================
-import { createSet, editSet, deleteSet, forseUpdateUniq } from '../actions';
+import { createSet, editSet, deleteSet, forseUpdateUniq, sortSets } from '../actions';
 
 // Import Child components
 // ===========================================================================
@@ -83,7 +83,6 @@ Sourcesets.defaultProps = {
     deleteText: 'Delete this sourceset'
   },
   listSectionOpts: {
-    sortable: false,
     texts: {
       title: 'Sources Management',
       description: 'Create, edit and delete sets of sources. Drag to reorder list. Open set to edit the sources in it.',
@@ -131,6 +130,9 @@ function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
+    actionSort(...args) {
+      return dispatch(sortSets(...args));
+    },
     actionCreate(...args) {
       return dispatch(createSet(...args));
     },

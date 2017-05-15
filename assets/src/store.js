@@ -3,6 +3,7 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { routerReducer as routing } from 'react-router-redux';
 import thunk from 'redux-thunk';
+import { sortMiddleware } from 'common/reducer-factory';
 
 // Import module store data
 // ===========================================================================
@@ -39,6 +40,7 @@ export default createStore(
   }),
   composeEnhancers(applyMiddleware(
     thunk.withExtraArgument({ notification, clientError }),
+    sortMiddleware,
     ensureDashboardUrl,
     processColumn,
     updateUniq,

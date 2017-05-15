@@ -19,7 +19,7 @@ export function makeContainerSelector() {
     (state, payload, curId) => ({
       state,
       curId,
-      payload: payload.map(({ id, name, open }) => ({ id, name, open })),
+      payload: payload.map(({ id, name, open, order }) => ({ id, name, open, order })),
       chosen: payload.find(({ id }) => id === curId)
     }));
 }

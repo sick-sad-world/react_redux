@@ -11,7 +11,7 @@ import { stateNum } from 'common/typecheck';
 // Import Child components
 // ===========================================================================
 import DeleteConfirmation from 'common/components/delete-confirmation';
-import { ListSection, ListItem } from 'common/components/list';
+import { ListSection, ListItem } from 'common/list';
 
 // Default
 // ===========================================================================
@@ -64,6 +64,7 @@ export default class Container extends React.Component {
           state={this.props.state}
           createItem={this.createItem}
           deleteItem={this.deleteConfirm}
+          sortItems={this.props.actionSort}
           {...this.props.listSectionOpts}
         >
           {props => <ListItem {...props} url={this.props.route.path} current={this.props.curId} {...this.props.listItemOpts} />}
@@ -112,6 +113,7 @@ Container.propTypes = {
   listItemOpts: PropTypes.object.isRequired,
   editOpts: PropTypes.object.isRequired,
   confText: PropTypes.func.isRequired,
+  actionSort: PropTypes.func.isRequired,
   actionCreate: PropTypes.func.isRequired,
   actionEdit: PropTypes.func.isRequired,
   actionDelete: PropTypes.func.isRequired

@@ -13,9 +13,7 @@
     background-color: $c-element;
 		position: relative;
 		.drag-handle {
-			cursor: move;
 			flex: 0 0 $pointer-unit;
-			fill: $c-icon;
 		}
 		h1 {
 			font-size: 1.25em;

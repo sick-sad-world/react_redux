@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { deleteColumn, editColumn } from '../actions';
+import { deleteColumn, editColumn, sortColumns } from '../actions';
 
 // Import React related stuff
 // ===========================================================================
@@ -30,4 +30,4 @@ function mapStateToProps() {
   const selector = makeDashboardSelector();
   return (state, props) => selector(state, props);
 }
-export default connect(mapStateToProps(), { deleteColumn, editColumn })(DashboardColumns);
+export default connect(mapStateToProps(), { deleteColumn, editColumn, sortColumns })(DashboardColumns);

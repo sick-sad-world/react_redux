@@ -14,6 +14,14 @@ export const getSets = createAction({
   successMessage: 'Sourceset data has been read.'
 });
 
+export const sortSets = createAction({
+  type: types.SORT,
+  state_type: types.STATE,
+  url: 'sort_sets',
+  pendingMessage: 'Saving new Sets order...',
+  successMessage: 'Sets order has been read.'
+});
+
 export const createSet = createAction({
   type: types.CREATE,
   state_type: types.STATE,

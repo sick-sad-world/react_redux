@@ -15,7 +15,7 @@ import { makeContainerSelector } from '../selectors';
 
 // Import actions
 // ===========================================================================
-import { createColumn, editColumn, deleteColumn } from '../actions';
+import { createColumn, editColumn, deleteColumn, sortColumns } from '../actions';
 
 // Import Child components
 // ===========================================================================
@@ -77,7 +77,6 @@ class Columns extends React.Component {
 
 Columns.defaultProps = {
   listSectionOpts: {
-    sortable: false,
     texts: {
       title: 'Columns Management',
       description: 'Create, edit or delete dashboard columns. Drag to reorder, use the eye icon to hide/unhide them (tip: hidden columns can still be used for alerts/reports).',
@@ -128,6 +127,7 @@ const mapStateToProps = () => {
 };
 
 export default connect(mapStateToProps(), {
+  actionSort: sortColumns,
   actionEdit: editColumn,
   actionCreate: createColumn,
   actionDelete: deleteColumn

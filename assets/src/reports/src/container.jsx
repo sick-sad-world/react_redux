@@ -17,7 +17,7 @@ import { makeContainerSelector } from './selectors';
 
 // Import actions
 // ===========================================================================
-import { editReport, deleteReport, createReport } from './actions';
+import { editReport, deleteReport, createReport, sortReports } from './actions';
 
 // Import Child components
 // ===========================================================================
@@ -62,7 +62,6 @@ Reports.defaultProps = {
     deleteText: 'Delete this report'
   },
   listSectionOpts: {
-    sortable: false,
     texts: {
       title: 'Reports Management',
       description: 'Create, edit and delete reports that will be sent to you when specific columns get new items.',
@@ -106,6 +105,7 @@ function mapStateToProps() {
 }
 
 export default connect(mapStateToProps(), {
+  actionSort: sortReports,
   actionCreate: createReport,
   actionEdit: editReport,
   actionDelete: deleteReport

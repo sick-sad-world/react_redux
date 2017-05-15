@@ -14,6 +14,14 @@ export const getAlerts = createAction({
   successMessage: 'Alerts data has been read.'
 });
 
+export const sortAlerts = createAction({
+  type: types.SORT,
+  state_type: types.STATE,
+  url: 'sort_alerts',
+  pendingMessage: 'Saving new Alerts order...',
+  successMessage: 'Alerts order has been read.'
+});
+
 export const createAlert = createAction({
   type: types.CREATE,
   state_type: types.STATE,

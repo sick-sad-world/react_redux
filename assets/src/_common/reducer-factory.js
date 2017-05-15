@@ -1,4 +1,4 @@
-import { reject, uniqBy, has } from 'lodash';
+import { reject, uniqBy, has, sortBy } from 'lodash';
 import { LOGIN, LOGOUT } from './type-factory';
 
 export const mergeArrayById = (arr, obj) => {
@@ -17,6 +17,13 @@ export const updateObjectById = (state, id, updater) => ({
   [id]: updater(state[id])
 });
 
+export const sortMiddleware = store => next => (action) => {
+  if (action.payload && action.payload.length && action.payload[0].order) {
+    action.payload = sortBy(action.payload, 'order');
+  }
+  return next(action);
+};
+
 export default function createReducer(config) {
   return function reducer(state = { state: 1, payload: [] }, action) {
     switch (action.type) {
@@ -32,6 +39,14 @@ export default function createReducer(config) {
         return {
           state: 2,
           payload: uniqBy(action.payload, 'id')
+        };
+      case config.SORT:
+        return {
+          state: 2,
+          payload: action.payload.list.map(item => ({
+            ...state.payload.find(({ id }) => id === item.id),
+            ...item
+          }))
         };
       case config.CREATE:
       case config.UPDATE:

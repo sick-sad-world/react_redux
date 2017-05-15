@@ -9,6 +9,14 @@ export const getColumns = createAction({
   successMessage: 'Column data has been read.'
 });
 
+export const sortColumns = createAction({
+  type: types.SORT,
+  state_type: types.STATE,
+  url: 'sort_columns',
+  pendingMessage: 'Saving new Columns order...',
+  successMessage: 'Columns order has been read.'
+});
+
 export const createColumn = createAction({
   type: types.CREATE,
   state_type: types.STATE,

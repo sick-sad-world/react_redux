@@ -10,6 +10,7 @@ export default function createTypes(module, actions) {
     UPDATE: 'UPDATE',
     DELETE: 'DELETE',
     STATE: 'STATE',
+    SORT: 'SORT',
     ...actions
   }, v => `@@${module}/${v}`));
 }

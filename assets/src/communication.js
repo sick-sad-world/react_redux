@@ -1,11 +1,12 @@
 import jsonp from 'browser-jsonp';
 import { reduce, isPlainObject, isNull, isUndefined } from 'lodash';
 
+
 // Transform data for serialization function
 // Nested objects - to string, exclude [null, undefined]
 // ===========================================================================
 export const transformRequestData = data => reduce(data, (acc, v, k) => {
-  if (isPlainObject(v)) {
+  if (isPlainObject(v) || v instanceof Array) {
     acc[k] = JSON.stringify(v);
   } else if (!isNull(v) && !isUndefined(v) && v !== '') {
     acc[k] = v;

@@ -3,7 +3,8 @@ in sub-managent like sources in set, sources/sets in column or column within ale
 ========================================================================== */
 .mod-entity {
 	position: relative;
-	>div:first-child {
+  list-style: none;
+	>div {
 		display: flex;
 		align-items: stretch;
 		height: $entity-unit;
@@ -42,8 +43,6 @@ in sub-managent like sources in set, sources/sets in column or column within ale
       padding-left: 0;
     }
 		.drag-handle {
-			cursor: move;
-			fill: $c-icon;
 			flex: 0 0 $pointer-unit;
 			+ .text > * {
 				margin-left: 0;
@@ -63,12 +62,7 @@ in sub-managent like sources in set, sources/sets in column or column within ale
 			}
 		}
 	}
-	ul:last-child {
-		> .mod-entity:last-child {
-			border-bottom: 0;
-		}
-	}
-	&.is-selected > div:first-child {
+	&.is-selected > div {
 		@include gradient(lighten($c-accent-alt, 20%));
 		box-shadow: $sh-base;
 		.text {
@@ -88,7 +82,7 @@ in sub-managent like sources in set, sources/sets in column or column within ale
 			}
 		}
 	}
-	&.is-disabled > div:first-child {
+	&.is-disabled > div {
 		@include style-disabled;
 		background-color: transparent;
 		a {

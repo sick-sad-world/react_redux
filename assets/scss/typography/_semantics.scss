@@ -63,6 +63,17 @@ blockquote {}
 
 /* Small elements
 ========================================================================== */
+
+.drag-handle {
+  cursor: move;
+  width: $pointer-unit;
+  display: flex;
+  svg {
+    fill: $c-icon;
+    margin: auto;
+  }
+}
+
 .counter, .badge {
   display: inline-block;
 	border-radius: $bdrs;

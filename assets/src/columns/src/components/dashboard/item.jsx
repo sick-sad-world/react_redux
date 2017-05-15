@@ -76,4 +76,3 @@ DashboardItem.propTypes = {
   editColumn: PropTypes.func.isRequired,
   deleteColumn: PropTypes.func.isRequired
 };
-
