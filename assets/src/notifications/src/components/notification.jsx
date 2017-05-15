@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Icon from 'common/components/icon';
 import { capitalize } from 'lodash';
 import { defaultData, defaultInterface } from '../defaults';
+import Loading from 'img/loading2.svg';
 
 export default function Notification({ type, text, onClick }) {
   return (
@@ -12,7 +13,7 @@ export default function Notification({ type, text, onClick }) {
       [`is-${type}`]: true
     })}>
       <div className='icon'>
-        { (type === 'loading') ? (<img src='/img/loading2.svg' />) : (<Icon viewBox='0 0 24 24' icon={type} />) }
+        { (type === 'loading') ? (<img src={Loading} />) : (<Icon viewBox='0 0 24 24' icon={type} />) }
       </div>
       <div>
         <h5>{capitalize(type)}</h5>
