@@ -36,11 +36,6 @@ DashboardNav.propTypes = {
 };
 
 // Connect our Container to State
-// @ deps -> Dashboard
+// @ deps -> Dashboards
 // ===========================================================================
-function mapStateToProps() {
-  const selector = makeNavSelector();
-  return (state, props) => selector(state, props);
-}
-
-export default connect(mapStateToProps())(DashboardNav);
+export default connect(makeNavSelector())(DashboardNav);

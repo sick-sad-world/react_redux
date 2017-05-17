@@ -27,6 +27,10 @@ export default class DashboardItem extends React.Component {
     bindAll(this, 'toggleState', 'editColumn', 'hideColumn');
   }
 
+  componentWillReceiveProps() {
+    this.setState({ edit: false });
+  }
+
   toggleState(type) {
     return () => this.setState({ [type]: !this.state[type] });
   }
@@ -49,7 +53,7 @@ export default class DashboardItem extends React.Component {
   }
 
   render() {
-    const { payload } = this.props;
+    const { payload, children } = this.props;
     return (
         <section className={classNames({
           'mod-column': true,
@@ -66,12 +70,16 @@ export default class DashboardItem extends React.Component {
               deleteColumn={this.props.deleteColumn}
             />
           ) : null }
+          <div className='content'>
+            { children }
+          </div>
         </section>
     );
   }
 }
 
 DashboardItem.propTypes = {
+  children: PropTypes.element,
   payload: PropTypes.shape(defaultInterface).isRequired,
   editColumn: PropTypes.func.isRequired,
   deleteColumn: PropTypes.func.isRequired

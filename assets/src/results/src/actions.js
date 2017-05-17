@@ -90,7 +90,7 @@ export function getAllResults(data) {
             dispatch(notification({
               id: noteId,
               type: 'loading',
-              text: `Results for columns ${Object.keys(ids).join(',')} downloading now...`
+              text: `Results for columns ${Object.keys(ids).join(', ')} downloading now...`
             }));
           }
         });

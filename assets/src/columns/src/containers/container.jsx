@@ -121,12 +121,7 @@ Columns.propTypes = {
 // Connect our Container to State
 // @ deps -> Columns
 // ===========================================================================
-const mapStateToProps = () => {
-  const selector = makeContainerSelector();
-  return (state, props) => selector(state, props);
-};
-
-export default connect(mapStateToProps(), {
+export default connect(makeContainerSelector(), {
   actionSort: sortColumns,
   actionEdit: editColumn,
   actionCreate: createColumn,

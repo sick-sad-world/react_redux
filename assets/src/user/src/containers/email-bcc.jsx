@@ -52,15 +52,4 @@ Emails.propTypes = {
 // Connect our Container to State
 // @ deps -> User
 // ===========================================================================
-const mapStateToProps = () => {
-  const selector = makeEmailsSelector();
-  return (state, props) => selector(state, props);
-};
-
-const mapDispatchToProps = dispatch => ({
-  editUser(...args) {
-    return dispatch(editUser(...args));
-  }
-});
-
-export default connect(mapStateToProps(), mapDispatchToProps)(Emails);
+export default connect(makeEmailsSelector(), { editUser })(Emails);

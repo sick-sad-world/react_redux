@@ -4,7 +4,6 @@ import { updateObjectById } from 'common/reducer-factory';
 import { LOGIN, LOGOUT } from 'common/type-factory';
 
 import types from './types';
-import { types as columns } from 'src/columns';
 
 export default (state = {}, action) => {
   switch (action.type) {
@@ -51,8 +50,6 @@ export default (state = {}, action) => {
         }),
         state: 2
       }));
-    case columns.DELETE:
-      return { ...state, [action.payload.id]: undefined };
     default:
       return state;
   }

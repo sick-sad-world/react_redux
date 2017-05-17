@@ -11,21 +11,24 @@ const getTargetUrl = ({ dashboards }, props) => props.params.name;
 const getColumnId = ({ dashboards }, props) => parseInt(props.params.column, 10) || null;
 
 export function makeNavSelector() {
-  return createSelector(
+  const selector = createSelector(
     getDashboards,
     dashboards => ({
       payload: dashboards.map(({ id, name, column_ids, url }) => ({ id, name, counter: column_ids.length, url }))
     })
   );
+  return (state, props) => selector(state, props);
 }
 
 export function makeContainerSelector() {
-  return createSelector(
+  const selector = createSelector(
     getDashboards,
     getTargetUrl,
     getColumnId,
     (dashboards, target, column) => ({
       payload: dashboards.find(({ url }) => url === target),
       column
-    }));
+    })
+  );
+  return (state, props) => selector(state, props);
 }

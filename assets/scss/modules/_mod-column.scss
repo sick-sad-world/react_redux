@@ -66,15 +66,8 @@
       width: $form-unit;
     }
 	}
-	> ul {
+	> .content {
 		flex: 1 1 auto;
-		padding: baseUnit() 0;
-		list-style-type: none;
-		overflow-x: hidden;
-		overflow-y: auto;
-		li:not(:first-child) {
-			margin-top: 1rem;
-		}
 	}
 	&.is-expanded {
 		.column-header nav a.btn-settings {

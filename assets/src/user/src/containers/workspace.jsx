@@ -116,10 +116,4 @@ Workspace.propTypes = {
 // Connect our Container to State
 // @ deps -> App, (User in future)
 // ===========================================================================
-const mapStateToProps = () => {
-  const selector = makeWorkspaceSelector();
-  return (state, props) => selector(state, props);
-};
-
-
-export default connect(mapStateToProps(), { logout })(Workspace);
+export default connect(makeWorkspaceSelector(), { logout })(Workspace);

@@ -14,7 +14,7 @@ export default createReducer({
     ...state[0],
     column_ids: updateArrayWithValue(state[0].column_ids, action.id)
   }],
-  [columns.CREATE]: (state, action) => [{
+  [columns.DELETE]: (state, action) => [{
     ...state[0],
     column_ids: updateArrayWithValue(state[0].column_ids, action.id)
   }]

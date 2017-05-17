@@ -12,7 +12,7 @@ const getCriterea = ({ columns }, props) => props.criterea;
 const getColumnIds = ({ columns }, props) => props.column_ids || [];
 
 export function makeContainerSelector() {
-  return createSelector(
+  const selector = createSelector(
     getColumnState,
     getColumns,
     getCurrentId,
@@ -21,7 +21,10 @@ export function makeContainerSelector() {
       curId,
       payload: payload.map(({ id, name, open, order }) => ({ id, name, open, order })),
       chosen: payload.find(({ id }) => id === curId)
-    }));
+    })
+  );
+
+  return (state, props) => selector(state, props);
 }
 
 export function makeDashboardSelector() {
@@ -34,10 +37,13 @@ export function makeDashboardSelector() {
 }
 
 export function makeDropdownSelector() {
-  return createSelector(
+  const selector = createSelector(
     getColumns,
     columns => columns.map(({ id, name }) => ({
       value: id,
       label: name
-    })));
+    }))
+  );
+
+  return (state, props) => selector(state, props);
 }

@@ -30,12 +30,16 @@ export default class DashboardList extends React.Component {
     bindAll(this, 'cellRenderer', 'runSortHandler', 'updateSortState');
   }
 
+  componentWillReceiveProps({ payload }) {
+    this.setState({ payload });
+  }
+
   deleteConfirm(deleting = null) {
     return () => this.setState({ deleting });
   }
 
   deleteColumn(id) {
-    return () => this.props.deleteColumn({ id: this.state.deleting.id });
+    return () => this.props.deleteColumn({ id }).then(this.deleteConfirm());
   }
 
   runSortHandler() {
@@ -75,23 +79,27 @@ export default class DashboardList extends React.Component {
         <AutoSizer>
           {({ height, width }) => (
             <ArrowKeyStepper columnCount={colCount} rowCount={1} scrollToColumn={findIndex(this.state.payload, { id: this.props.column })}>
-              {({ onSectionRendered, scrollToColumn }) => (<DashboardGrid
-              ref={(instance) => { this.SortableGrid = instance; }}
-                cellRenderer={this.cellRenderer}
-                onSectionRendered={onSectionRendered}
-                scrollToColumn={scrollToColumn}
-                columnCount={colCount}
-                columnWidth={378}
-                height={height}
-                rowCount={1}
-                rowHeight={height - scrollbarSize()}
-                width={width}
-                onSortEnd={this.updateSortState}
-                lockAxis='x'
-                axis='x'
-                helperClass='mod-column sortable-ghost'
-                useDragHandle
-              />)}
+              {({ onSectionRendered, scrollToColumn }) => (
+                <DashboardGrid
+                  ref={(instance) => { this.SortableGrid = instance; }}
+                  width={width}
+                  height={height}
+                  cellRenderer={this.cellRenderer}
+                  onSectionRendered={onSectionRendered}
+                  scrollToColumn={scrollToColumn}
+                  columnCount={colCount}
+                  columnWidth={this.props.width}
+                  overscanColumnCount={Math.ceil(window.innerWidth / (this.props.width * 1.5))}
+                  rowCount={1}
+                  overscanRowCount={1}
+                  rowHeight={height - scrollbarSize()}
+                  onSortEnd={this.updateSortState}
+                  lockAxis='x'
+                  axis='x'
+                  helperClass='mod-column sortable-ghost'
+                  useDragHandle
+                />
+              )}
             </ArrowKeyStepper>
           )}
         </AutoSizer>
@@ -109,10 +117,12 @@ export default class DashboardList extends React.Component {
 }
 
 DashboardList.defaultProps = {
+  width: 400,
   emptyTpl: <div className='state-empty'>No columns visible on a Dashboard</div>
 };
 
 DashboardList.propTypes = {
+  width: PropTypes.number.isRequired,
   payload: PropTypes.arrayOf(PropTypes.object).isRequired,
   column: PropTypes.number,
   sortColumns: PropTypes.func.isRequired,

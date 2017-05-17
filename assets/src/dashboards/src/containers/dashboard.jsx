@@ -6,12 +6,13 @@ import { connect } from 'react-redux';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { defaultInterface } from '../defaults';
+import { defaultInterface, width } from '../defaults';
 import { makeContainerSelector } from '../selectors';
 
 // Import child Components
 // ===========================================================================
 import { DashboardColumns, DashboardItem } from 'src/columns';
+import { ResultsContainer } from 'src/results';
 import DashboardList from '../components/list';
 
 function Dashboard({ payload, emptyTpl, column }) {
@@ -20,8 +21,12 @@ function Dashboard({ payload, emptyTpl, column }) {
       {(payload) ? (
         <DashboardColumns column_ids={payload.column_ids}>
           {props => (
-            <DashboardList column={column} {...props}>
-              {({ key, ...itemProps }) => <DashboardItem {...itemProps}/>}
+            <DashboardList width={width} column={column} {...props}>
+              {({ key, payload, editColumn, deleteColumn }) => (
+                <DashboardItem payload={payload} editColumn={editColumn} deleteColumn={deleteColumn}>
+                  <ResultsContainer width={width} data={payload.data} id={payload.id} displaySettings={payload.display_settings} />
+                </DashboardItem>
+              )}
             </DashboardList>
           )}
         </DashboardColumns>
@@ -43,9 +48,4 @@ Dashboard.propTypes = {
 // Connect our Container to State
 // @ deps -> Dashboards
 // ===========================================================================
-function mapStateToProps() {
-  const selector = makeContainerSelector();
-  return (state, props) => selector(state, props);
-}
-
-export default connect(mapStateToProps())(Dashboard);
+export default connect(makeContainerSelector())(Dashboard);
