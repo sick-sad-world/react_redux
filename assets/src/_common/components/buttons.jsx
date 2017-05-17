@@ -50,3 +50,15 @@ export function SelectAll(props) {
 export function DeselectAll(props) {
   return <ListItemButton {...props} icon='deselect' />;
 }
+
+export function Refresh(props) {
+  return <ListItemButton {...props} icon='cw' />;
+}
+
+export function Favorite(props) {
+  return <ListItemButton {...props} icon='star-outlined' />;
+}
+
+export function Unfavorite(props) {
+  return <ListItemButton {...props} icon='star' />;
+}

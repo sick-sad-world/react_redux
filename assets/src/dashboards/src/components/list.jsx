@@ -57,11 +57,11 @@ export default class DashboardList extends React.Component {
     }
   }
 
-  cellRenderer({ columnIndex, key, rowIndex, style }) {
+  cellRenderer({ columnIndex, style }) {
     const { children, refreshResults, editColumn } = this.props;
     const column = this.state.payload[columnIndex];
     return (
-      <DashboardItemContainer key={columnIndex} style={style} index={(typeof column.order === 'number') ? column.order : columnIndex}>
+      <DashboardItemContainer key={columnIndex} style={style} index={columnIndex}>
         {children({
           payload: column,
           deleteColumn: this.deleteConfirm({ id: column.id, name: column.name }),

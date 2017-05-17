@@ -20,9 +20,6 @@
 	header, h1 {
 		margin-bottom: baseUnit(0.5);
 	}
-	header, .descr > div {
-		padding-right: baseUnit(0.5);
-	}
 	h1, small {
 		line-height: 1;
 	}
@@ -134,4 +131,46 @@
 			}
 		}
 	}
+  &.is-placeholder {
+    user-select: none;
+    * {
+      user-select: none;
+    }
+    h1, small, p, figure, span, a, td, th {
+      background-color: lighten($c-border, 10%);
+      color: lighten($c-border, 10%);
+      text-shadow: none;
+      margin: 2px 0;
+      padding: 2px;
+    }
+    h1 {
+      color: $c-border;
+    }
+    .comparator {
+      height: $entity-unit;
+      color: $c-border;
+    }
+    aside {
+      a {
+        height: $entity-unit - 4px;
+      }
+    }
+    .descr {
+      p {
+        margin: 0;
+      }
+      p:last-child {
+        width: 65%;
+      }
+    }
+    footer {
+      margin-top: 4px;
+    }
+    table {
+      td, th {
+        border: 0;
+        outline: 1px solid $c-alt;
+      }
+    }
+  }
 }

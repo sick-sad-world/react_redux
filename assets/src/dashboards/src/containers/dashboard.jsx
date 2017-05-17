@@ -22,7 +22,7 @@ function Dashboard({ payload, emptyTpl, column }) {
         <DashboardColumns column_ids={payload.column_ids}>
           {props => (
             <DashboardList width={width} column={column} {...props}>
-              {({ key, payload, editColumn, deleteColumn }) => (
+              {({ payload, editColumn, deleteColumn }) => (
                 <DashboardItem payload={payload} editColumn={editColumn} deleteColumn={deleteColumn}>
                   <ResultsContainer width={width} data={payload.data} id={payload.id} displaySettings={payload.display_settings} />
                 </DashboardItem>
