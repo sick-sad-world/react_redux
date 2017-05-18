@@ -1,6 +1,8 @@
 // Import helpers
 // ===========================================================================
 import { includes, filter } from 'lodash';
+import classNames from 'classnames';
+import { formatNumber, sortParamToShort } from '../helpers';
 
 // Import react stuff
 // ===========================================================================
@@ -14,49 +16,58 @@ import { defaultInterface } from '../defaults';
 // Import child components
 // ===========================================================================
 import { Favorite, Unfavorite, Refresh, Show, Hide } from 'common/components/buttons';
-import ResultAside from './result-aside';
+import { Link } from 'react-router';
+import { ResultHeader } from './result-header';
 
 // description
 // ===========================================================================
 export default class Result extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      fulltext: false
-    };
+  // constructor(props) {
+  //   super(props);
+  // }
+
+  renderFavoriteBtn() {
+    return (this.props.payload.favorite) ? (
+      <Unfavorite handler={() => this.props.favoriteResult('favorite', { hash: this.props.payload.hash, unfavorite: true })} title='Unfavorite this result' />
+    ) : (
+      <Favorite handler={() => this.props.favoriteResult('favorite', { hash: this.props.payload.hash, unfavorite: false })} title='Favorite this result' />
+    );
   }
 
-  inc(t) {
-    return includes(this.props.displaySettings, t);
+  renderIgnoreBtn() {
+    return (this.props.payload.ignore) ? (
+      <Show handler={() => this.props.ignoreResult('ignore', { hash: this.props.payload.hash, unignore: true })} title='Unignore this result' />
+    ) : (
+      <Hide handler={() => this.props.ignoreResult('ignore', { hash: this.props.payload.hash, unignore: false })} title='Ignore this result' />
+    );
   }
 
   render() {
-    const { sort, payload, refreshResult, favoriteResult, ignoreResult } = this.props;
+    const { type, location, sort, payload, refreshResult, favoriteResult, ignoreResult, isPlaceholder } = this.props;
     return (
-      <article className='mod-result'>
-        <ResultAside sortParam={sort} sort={payload[sort]}>
-          <Refresh handler={() => refreshResult('refresh', { hash: payload.hash })} title='Refresh this result' />
-          {(payload.favorite) ? (
-            <Unfavorite handler={() => favoriteResult('favorite', { hash: payload.hash, unfavorite: true })} title='Unfavorite this result' />
-          ) : (
-            <Favorite handler={() => favoriteResult('favorite', { hash: payload.hash, unfavorite: false })} title='Favorite this result' />
-          )}
-          {(payload.ignore) ? (
-            <Show handler={() => ignoreResult('ignore', { hash: payload.hash, unignore: true })} title='Unignore this result' />
-          ) : (
-            <Hide handler={() => ignoreResult('ignore', { hash: payload.hash, unignore: false })} title='Ignore this result' />
-          )}
-        </ResultAside>
-        <div className='content'>
-          <header>
-            { (this.inc('title')) ? <h1><a href={payload.url} target='_blank'>{payload.title}</a></h1> : null }
-            { (this.inc('url')) ? <small className='t-ellipsis'>Found at: <a target='_blank' href={payload.url}>{payload.url}</a></small> : null }
-            <small className='t-ellipsis'>
-              { (this.inc('found')) ? <span>On: <b><time dateTime={payload.found}>{payload.found}</time></b></span> : null }
-              { (this.inc('author')) ? <span>by: <b>{payload.Author}</b></span> : null }
-            </small>
-          </header>
-        </div>
+      <article className={classNames('mod-result', { 'is-placeholder': isPlaceholder })}>
+        <aside>
+          <span className='badge comparator'>
+            <b>{(sort === 'found') ? 'Found' : formatNumber(payload[sort])}</b>
+            { (sort !== 'found') ? sortParamToShort(sort) : null }
+          </span>
+          {(refreshResult) ? <Refresh handler={() => refreshResult('refresh', { hash: payload.hash })} title='Refresh this result' /> : null}
+          {(favoriteResult) ? this.renderFavoriteBtn() : null }
+          {(ignoreResult) ? this.renderIgnoreBtn() : null }
+        </aside>
+        {(type === 'image') ? (
+          <figure className='content'>
+            <Link to={`${location}/${payload.hash}`}>
+              <img src={payload.image} alt={payload.title}/>
+              <ResultHeader title={payload.title} url={payload.url} domain={payload.domain} found={payload.found} />
+            </Link>
+          </figure>
+        ) : (
+          <div className='content'>
+            <ResultHeader title={payload.title} url={payload.url} domain={payload.domain} found={payload.found} />
+            <div className='description'>{payload.descr}</div>
+          </div>
+        )}
       </article>
     );
   }
@@ -64,14 +75,19 @@ export default class Result extends React.Component {
 
 Result.defaultProps = {
   sort: '',
-  payload: null
+  location: '',
+  type: 'image',
+  payload: null,
+  isPlaceholder: true
 };
 
 Result.propTypes = {
-  displaySettings: PropTypes.arrayOf(PropTypes.string).isRequired,
+  isPlaceholder: PropTypes.bool.isRequired,
   sort: PropTypes.string.isRequired,
-  refreshResult: PropTypes.func.isRequired,
-  favoriteResult: PropTypes.func.isRequired,
-  ignoreResult: PropTypes.func.isRequired,
-  payload: PropTypes.shape(defaultInterface).isRequired
+  type: PropTypes.string.isRequired,
+  refreshResult: PropTypes.func,
+  favoriteResult: PropTypes.func,
+  ignoreResult: PropTypes.func,
+  location: PropTypes.string.isRequired,
+  payload: PropTypes.shape(defaultInterface)
 };
