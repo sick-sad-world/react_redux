@@ -3,173 +3,145 @@
 .mod-result {
 	line-height: 1;
 	font-size: 14px;
-	clear: both;
 	width: 100%;
-	$aside: baseUnit(6);
-  &:after {
-    content: '';
-    display: block;
-    clear: both;
-  }
-  .content {
-    margin: 0 baseUnit(0.5);
-  }
-	aside + .content {
-		margin-left: $aside + baseUnit();
-	}
-	header, h1 {
-		margin-bottom: baseUnit(0.5);
-	}
-	h1, small {
-		line-height: 1;
-	}
-	h1 {
-		font-size: 1.25em;
-	}
-	small {
-		display: inline-block;
-		width: 100%;
-	}
-  img {
-    margin: auto;
-    display: block;
-    position: relative;
-    &:after {
-      content: '';
-      display: block;
-      margin-top: -22px;
-      background: url('../img/ph_content.png') center no-repeat;
-      background-size: cover;
-      height: 120px;
-    }
-  }
-	figure {
-    position: relative;
-    background-color: $c-main;
-    &:not(.is-wide) {
-      float: left;
-      width: 45%;
-      margin-right: baseUnit();
-    }
-	}
-  figcaption {
-    @include pos(false 0 0 0);
-    background-color: rgba(#000, .75);
-    font-size: 1.25em;
-    color: $c-alt;
-    padding: baseUnit();
-  }
+  height: 100%;
+  position: relative;
+	$aside: baseUnit(4);
+  $comp: baseUnit(5);
+  $z-img: 2;
 	aside {
-		float: left;
 		width: $aside;
-		margin: 0 baseUnit(0.5) baseUnit(0.5);
-		position: relative;
-		>a {
+		@include pos(0 auto 0 baseUnit(.5));
+	}
+  .content {
+    @include pos(0 0 0 $aside + baseUnit());
+	}
+  .btn-holder {
+    border-top: $bd;
+    border-bottom: $bd;
+    @include pos($comp 0 0 0)
+    a {
 			display: flex;
-			width: 100%;
-			height: $entity-unit;
+			width: $aside;
+			height: $aside;
 			&:hover, &:focus {
 				svg {
 					fill: $c-accent;
 				}
 			}
 		}
+  }
+  img {
+    margin: auto;
+    display: block;
+    font-size: 0;
+    img {
+      display: none !important;
+    }
+    &:after {
+      content: '';
+      display: block;
+      margin-top: -22px;
+      background: url('../img/ph_content.png') center no-repeat;
+      background-size: cover;
+      @include pos();
+      z-index: 2;
+    }
+  }
+  h1 {
+    font: 1.125em / 1.125 $base-font-family;
+    margin-bottom: baseUnit();
+  }
+	figure {
+    background-color: $c-main;
+    color: $c-alt;
+    overflow: hidden;
+    a {
+      color: $c-alt;
+    }
+    header {
+      @include pos(auto 0 0 0);
+      padding: baseUnit(.5);
+      background-color: rgba(darken($c-accent, 30%), .95);
+      border-top: 1px solid rgba(255,255,255,.4);
+    }
 	}
-	&:hover aside, aside.is-expanded {
-		a {
-			transform: translate3d(0, 0, 0);
-		}
-	}
+  .stats {
+    display: flex;
+    justify-content: space-between;
+  }
 	.comparator {
-		display: block;
-		padding: baseUnit(0.5) round(baseUnit(0.5)/2);
-		border-radius: $bdrs;
+    position: relative;
+    z-index: $z-img + 2;
+		display: flex;
 		font: 0.875em / 1 $heading-font-family;
-		text-align: center;
-		text-shadow: $sh-text;
 		cursor: pointer;
+    height: $comp;
+    &:after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border: round($comp * 0.5) solid transparent;
+      @include pos(0 false false 100%);
+      border-top-color: $c-alt;
+      border-left-color: $c-alt;
+      z-index: -1;
+    }
 		b {
 			display: block;
-			font-size: 1.125em;
+			font-size: 1.75em;
 		}
 	}
-	.descr {
-		line-height: 1.25;
-		.btn-toggle-text {
-			display: block;
-			text-align: center;
-			&:before {
-				color: inherit;
-			}
-		}
-	}
-	table {
-		font-size: 0.75em;
-		line-height: 1;
-		a {
-			font-weight: bold;
-		}
-		th, td {
-			padding: baseUnit(0.5);
-			border-bottom: $bd;
-		}
-		tr td:last-child {
-			padding: 0;
-			div {
-				position: relative;
-				padding: baseUnit(0.5) baseUnit(0.5) baseUnit();
-			}
-		}
-		.color-bar {
-			display: block;
-			height: baseUnit() - 4px;
-			@include pos(false 0 0 0);
-			background-clip: content-box;
-			background-image: linear-gradient(to left, nth($c-scale, 1), nth($c-scale, 2), nth($c-scale, 3));
-			&.is-new {
-				background: $c-accent;
-			}
-		}
-	}
+  .result-link {
+    display: block;
+    @include pos();
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: $z-img + 1;
+  }
   &.is-placeholder {
+    $c: lighten($c-border, 10%);
     user-select: none;
     * {
       user-select: none;
     }
     h1, small, p, figure, span, a, td, th {
-      background-color: lighten($c-border, 10%);
-      color: lighten($c-border, 10%);
-      text-shadow: none;
-      margin: 2px 0;
-      padding: 2px;
+      background-color: $c;
+      color: $c;
     }
-    h1 {
-      color: $c-border;
+    header {
+      height: 25%;
+      background-color: $c;
+      border-color: $c-alt;
+      border-width: 4px
     }
     .comparator {
-      height: $entity-unit;
-      color: $c-border;
+      span {
+        background-color: transparent;
+      }
+      &:before {
+        content: '';
+        display: block;
+        width: 0;
+        height: 0;
+        border: round(($comp - 4px) * 0.5) solid transparent;
+        @include pos(0 false false 100%);
+        border-top-color: $c;
+        border-left-color: $c;
+      }
     }
-    aside {
+    .btn-holder {
+      border: 0;
       a {
-        height: $entity-unit - 4px;
-      }
-    }
-    .descr {
-      p {
-        margin: 0;
-      }
-      p:last-child {
-        width: 65%;
-      }
-    }
-    footer {
-      margin-top: 4px;
-    }
-    table {
-      td, th {
-        border: 0;
-        outline: 1px solid $c-alt;
+        border-radius: 50%;
+        width: $aside - baseUnit();
+        height: $aside - baseUnit();
+        margin: baseUnit() auto;
+        svg {
+          display: none;
+        }
       }
     }
   }

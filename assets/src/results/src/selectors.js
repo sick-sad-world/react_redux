@@ -1,6 +1,7 @@
 import createSelector from 'common/selector-creator';
+import { defaultResults } from './defaults';
 
-const getResultsById = ({ results }, props) => results[props.id];
+const getResultsById = ({ results }, props) => results[props.id] || { ...defaultResults };
 
 const getSortParam = ({ results }, props) => props.sort;
 

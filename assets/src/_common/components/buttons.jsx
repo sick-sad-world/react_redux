@@ -5,60 +5,64 @@ import Icon from './icon';
 // Agnostinc list item action button component
 // @using by: ListView and Management views
 // ===========================================================================
-export default function ListItemButton({ title, handler, icon }) {
-  return <a onClick={handler} title={title}><Icon icon={icon} /></a>;
+export default function IconBtn({ title, handler, icon, ...props }) {
+  return <a onClick={handler} title={title} {...props}><Icon icon={icon} /></a>;
 }
 
-ListItemButton.propTypes = {
+IconBtn.propTypes = {
   title: PropTypes.string,
-  handler: PropTypes.func.isRequired,
+  handler: PropTypes.func,
   icon: PropTypes.string.isRequired
 };
 
+export function GoTo(props) {
+  return <IconBtn {...props} icon='export' />;
+}
+
 export function Show(props) {
-  return <ListItemButton {...props} icon='eye-with-line' />;
+  return <IconBtn {...props} icon='eye-with-line' />;
 }
 
 export function Hide(props) {
-  return <ListItemButton {...props} icon='eye' />;
+  return <IconBtn {...props} icon='eye' />;
 }
 
 export function Expand(props) {
-  return <ListItemButton {...props} icon='chevron-down' />;
+  return <IconBtn {...props} icon='chevron-down' />;
 }
 
 export function Collapse(props) {
-  return <ListItemButton {...props} icon='chevron-up' />;
+  return <IconBtn {...props} icon='chevron-up' />;
 }
 
 export function Delete(props) {
-  return <ListItemButton {...props} icon='trash' />;
+  return <IconBtn {...props} icon='trash' />;
 }
 
 export function Select(props) {
-  return <ListItemButton {...props} icon='select' />;
+  return <IconBtn {...props} icon='select' />;
 }
 
 export function Deselect(props) {
-  return <ListItemButton {...props} icon='deselect' />;
+  return <IconBtn {...props} icon='deselect' />;
 }
 
 export function SelectAll(props) {
-  return <ListItemButton {...props} icon='select-all' />;
+  return <IconBtn {...props} icon='select-all' />;
 }
 
 export function DeselectAll(props) {
-  return <ListItemButton {...props} icon='deselect' />;
+  return <IconBtn {...props} icon='deselect' />;
 }
 
 export function Refresh(props) {
-  return <ListItemButton {...props} icon='cw' />;
+  return <IconBtn {...props} icon='cw' />;
 }
 
 export function Favorite(props) {
-  return <ListItemButton {...props} icon='star-outlined' />;
+  return <IconBtn {...props} icon='star-outlined' />;
 }
 
 export function Unfavorite(props) {
-  return <ListItemButton {...props} icon='star' />;
+  return <IconBtn {...props} icon='star' />;
 }

@@ -7,8 +7,8 @@ export default function ResultHeader({ title, url, domain, found }) {
   return (
     <header>
       <h1>{title}</h1>
-      <small className='t-ellipsis'>
-        <a target='_blank' href={url}>{domain}</a>
+      <small className='stats'>
+        <span className='domain'>{domain}</span>
         <time dateTime={found}>{found}</time>
       </small>
     </header>

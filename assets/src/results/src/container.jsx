@@ -12,7 +12,7 @@ import { AutoSizer, List } from 'react-virtualized';
 // ===========================================================================
 import PropTypes from 'prop-types';
 import { stateNum } from 'common/typecheck';
-import { } from '../defaults';
+import { } from './defaults';
 
 // Import connection
 // ===========================================================================
@@ -43,7 +43,7 @@ class ResultsContainer extends React.Component {
           sort={this.props.data.sort}
           type={this.props.type}
           location={this.props.location}
-          isPlaceholder={(result && isVisible)}
+          isPlaceholder={!result}
           refreshResult={this.props.refreshResult}
           favoriteResult={this.props.favoriteResult}
           ignoreResult={this.props.ignoreResult}
@@ -62,8 +62,8 @@ class ResultsContainer extends React.Component {
             rowRenderer={this.rowRenderer}
             height={height}
             rowCount={rowCount}
-            rowHeight={Math.round((width * 9) / 16)}
-            overscanRowCount={5}
+            rowHeight={Math.round((width * 9) / 18)}
+            overscanRowCount={3}
             width={width}
           />
         )}
@@ -73,6 +73,7 @@ class ResultsContainer extends React.Component {
 }
 
 ResultsContainer.defaultProps = {
+  type: 'image',
   location: '',
   ...defaultResults
 };
@@ -83,7 +84,6 @@ ResultsContainer.propTypes = {
   data: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired,
-  displaySettings: PropTypes.arrayOf(PropTypes.string).isRequired,
   state: stateNum.isRequired,
   payload: PropTypes.arrayOf(PropTypes.object).isRequired,
   refreshResult: PropTypes.func.isRequired,

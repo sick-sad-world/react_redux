@@ -11,20 +11,17 @@ import React from 'react';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { defaultInterface } from '../defaults';
+import { defaultInterface, defaultResult, proptocolRegExp } from '../defaults';
 
 // Import child components
 // ===========================================================================
-import { Favorite, Unfavorite, Refresh, Show, Hide } from 'common/components/buttons';
+import { Favorite, Unfavorite, Refresh, Show, Hide, GoTo } from 'common/components/buttons';
 import { Link } from 'react-router';
-import { ResultHeader } from './result-header';
+import ResultHeader from './result-header';
 
 // description
 // ===========================================================================
-export default class Result extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  // }
+export default class Result extends React.PureComponent {
 
   renderFavoriteBtn() {
     return (this.props.payload.favorite) ? (
@@ -47,24 +44,29 @@ export default class Result extends React.Component {
     return (
       <article className={classNames('mod-result', { 'is-placeholder': isPlaceholder })}>
         <aside>
-          <span className='badge comparator'>
-            <b>{(sort === 'found') ? 'Found' : formatNumber(payload[sort])}</b>
-            { (sort !== 'found') ? sortParamToShort(sort) : null }
+          <span className='comparator'>
+            <span>
+              <b>{(sort === 'found') ? 'Found' : formatNumber(payload[sort])}</b>
+              { (sort !== 'found') ? sortParamToShort(sort) : null }
+            </span>
           </span>
-          {(refreshResult) ? <Refresh handler={() => refreshResult('refresh', { hash: payload.hash })} title='Refresh this result' /> : null}
-          {(favoriteResult) ? this.renderFavoriteBtn() : null }
-          {(ignoreResult) ? this.renderIgnoreBtn() : null }
+          <div className='btn-holder'>
+            {(refreshResult) ? <Refresh handler={() => refreshResult('refresh', { hash: payload.hash })} title='Refresh this result' /> : null}
+            {(favoriteResult) ? this.renderFavoriteBtn() : null }
+            {(ignoreResult) ? this.renderIgnoreBtn() : null }
+            <GoTo target='_blank' title='Visit original' href={payload.url} />
+          </div>
         </aside>
         {(type === 'image') ? (
           <figure className='content'>
-            <Link to={`${location}/${payload.hash}`}>
-              <img src={payload.image} alt={payload.title}/>
-              <ResultHeader title={payload.title} url={payload.url} domain={payload.domain} found={payload.found} />
+            <Link to={`${location}/${payload.hash}`} className='result-link' style={{ backgroundImage: `url(${payload.image})` }}>
+              <ResultHeader title={payload.title} url={payload.url} domain={payload.domain.replace(proptocolRegExp, '')} found={payload.found} />
             </Link>
+            <img src={payload.image} alt={payload.title}/>
           </figure>
         ) : (
           <div className='content'>
-            <ResultHeader title={payload.title} url={payload.url} domain={payload.domain} found={payload.found} />
+            <ResultHeader title={payload.title} url={payload.url} domain={payload.domain.replace(proptocolRegExp, '')} found={payload.found} />
             <div className='description'>{payload.descr}</div>
           </div>
         )}
@@ -77,12 +79,16 @@ Result.defaultProps = {
   sort: '',
   location: '',
   type: 'image',
-  payload: null,
+  proptocolRegExp,
+  payload: {
+    ...defaultResult
+  },
   isPlaceholder: true
 };
 
 Result.propTypes = {
   isPlaceholder: PropTypes.bool.isRequired,
+  proptocolRegExp: PropTypes.instanceOf(RegExp).isRequired,
   sort: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   refreshResult: PropTypes.func,

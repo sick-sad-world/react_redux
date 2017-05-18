@@ -5,6 +5,19 @@ export const defaultResults = {
   payload: []
 };
 
+export const proptocolRegExp = /^http?s:\/\//;
+
+export const defaultResult = {
+  title: '',
+  hash: '',
+  image: '',
+  url: '',
+  author: '',
+  domain: '',
+  descr: '',
+  found: ''
+};
+
 export const tableStats = ['tweets', 'likes', 'shares', 'pins', 'comments', 'votes_video', 'views_video', 'comments_video'];
 
 export const availableStats = ['title', 'url', 'author', 'found', 'image', 'wide_image', 'description', 'graphs', ...tableStats];
