@@ -25,7 +25,7 @@ export default class ItemSettings extends React.Component {
   }
 
   updateHandler(type) {
-    return value => this.setState({ [type]: value }, () => this.props.editColumn({ [type]: value }));
+    return value => this.setState({ [type]: value }, () => this.props.editColumn({ [type]: value }, type));
   }
 
   updateSorting(sorting) {

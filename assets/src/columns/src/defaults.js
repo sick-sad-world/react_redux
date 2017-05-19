@@ -181,7 +181,7 @@ export const editOptions = {
 };
 
 export const defaultDashboardInterface = {
-  autoreload: numBool.isRequired,
+  autoreload: PropTypes.oneOf([0, ...editOptions.autoReloadOptions.map(({ value }) => value)]).isRequired,
   infinite: numBool.isRequired,
   sort: PropTypes.string.isRequired,
   direction: directionString.isRequired

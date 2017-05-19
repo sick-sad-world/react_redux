@@ -34,11 +34,11 @@ export const formatNumber = (num, gap = 1) => {
   } else if (num < 1000) {
     return `${num}`;
   } else if (num >= 1000 && num < 1000000) {
-    return `${Math.round(num / 1000).toFixed(gap)}K`;
+    return `${(num / 1000).toFixed(gap)}K`;
   } else if (num >= 1000000 && num < 1000000000) {
-    return `${Math.round(num / 1000000).toFixed(gap)}M`;
+    return `${(num / 1000000).toFixed(gap)}M`;
   } else if (num >= 1000000000) {
-    return `${Math.round(num / 1000000000).toFixed(gap)}B`;
+    return `${(num / 1000000000).toFixed(gap)}B`;
   }
   return num;
 };

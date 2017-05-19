@@ -22,21 +22,6 @@ export const updateArrayWithValue = (arr, val) => {
   return result;
 };
 
-export const formatNumber = (num, gap = 1) => {
-  if (typeof num !== 'number') {
-    return false;
-  } else if (num < 1000) {
-    return `${num}`;
-  } else if (num >= 1000 && num < 1000000) {
-    return `${Math.round(num / 1000).toFixed(gap)}K`;
-  } else if (num >= 1000000 && num < 1000000000) {
-    return `${Math.round(num / 1000000).toFixed(gap)}M`;
-  } else if (num >= 1000000000) {
-    return `${Math.round(num / 1000000000).toFixed(gap)}B`;
-  }
-  return num;
-};
-
 export const sortParamToShort = (param = '') => {
   let stat = param.replace('_views', '');
   if (stat.indexOf('rate_') === 0) {

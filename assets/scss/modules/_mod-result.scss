@@ -138,6 +138,12 @@
       background-color: $c;
       border-top: 4px solid $c-alt;
     }
+    img {
+      opacity: 0;
+    }
+    .result-link {
+      background-image: none !important;
+    }
     .comparator {
       span {
         background-color: transparent;

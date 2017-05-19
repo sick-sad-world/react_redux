@@ -24,25 +24,21 @@ export default class DashboardItem extends React.Component {
       running: false,
       edit: false
     };
-    bindAll(this, 'toggleState', 'editColumn', 'hideColumn');
-  }
-
-  componentWillReceiveProps() {
-    this.setState({ edit: false });
+    bindAll(this, 'toggleState', 'editColumn', 'hideColumn', 'getResults');
   }
 
   toggleState(type) {
     return () => this.setState({ [type]: !this.state[type] });
   }
 
-  editColumn(changed) {
-    return this.setState({ running: true }, () => this.props.editColumn({
-      id: this.props.payload.id,
-      data: {
-        ...this.props.payload.data,
-        ...changed
-      }
-    }).then(this.toggleState('running')));
+  editColumn(value, changed) {
+    return this.setState({ running: true }, () => {
+      const data = { ...this.props.payload.data, ...value };
+      return this.props.editColumn({ id: this.props.payload.id, data }).then((resp) => {
+        if (changed === 'infinite' || changed === 'autoreload') return resp;
+        return this.getResults(data);
+      }).then(this.toggleState('running'));
+    });
   }
 
   hideColumn() {
@@ -52,6 +48,10 @@ export default class DashboardItem extends React.Component {
     });
   }
 
+  getResults(data) {
+    return this.props.getResults((data) || this.props.payload.data, { id: this.props.payload.id });
+  }
+
   render() {
     const { payload, children } = this.props;
     return (
@@ -59,7 +59,7 @@ export default class DashboardItem extends React.Component {
           'mod-column': true,
           'is-expanded': this.state.edit
         })}>
-          <ItemHeader name={payload.name} toggle={this.toggleState('edit')}/>
+          <ItemHeader name={payload.name} toggle={this.toggleState('edit')} refresh={this.getResults}/>
           {(this.state.edit) ? (
             <ItemSettings
               id={payload.id}
@@ -81,6 +81,7 @@ export default class DashboardItem extends React.Component {
 DashboardItem.propTypes = {
   children: PropTypes.element,
   payload: PropTypes.shape(defaultInterface).isRequired,
+  getResults: PropTypes.func,
   editColumn: PropTypes.func.isRequired,
   deleteColumn: PropTypes.func.isRequired
 };

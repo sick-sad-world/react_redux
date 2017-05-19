@@ -30,8 +30,10 @@ export function makeContainerSelector() {
 export function makeDashboardSelector() {
   return createSelector(
     getColumns,
+    getColumnState,
     getColumnIds,
-    (payload, column_ids) => ({
+    (payload, state, column_ids) => ({
+      state,
       payload: payload.filter(({ id, open }) => open && includes(column_ids, id))
     }));
 }

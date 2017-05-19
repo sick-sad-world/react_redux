@@ -43,7 +43,7 @@ class ResultsContainer extends React.Component {
           sort={this.props.data.sort}
           type={this.props.type}
           location={this.props.location}
-          isPlaceholder={!result}
+          isPlaceholder={this.props.state === 3 || !result}
           refreshResult={this.props.refreshResult}
           favoriteResult={this.props.favoriteResult}
           ignoreResult={this.props.ignoreResult}
@@ -60,6 +60,8 @@ class ResultsContainer extends React.Component {
         {({ height, width }) => (
           <List
             length={payload.length}
+            state={state}
+            sort={data.sort}
             rowRenderer={this.rowRenderer}
             height={height}
             rowCount={rowCount}
