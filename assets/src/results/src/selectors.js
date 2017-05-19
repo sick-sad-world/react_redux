@@ -11,7 +11,7 @@ export function makeContainerSelector() {
     getSortParam,
     ({ state, payload }, sort) => ({
       state,
-      payload: payload.map(({ hash, title, image, url, domain, found, author, ...rest }) => ({ hash, title, image, url, domain, found, author, [sort]: rest[sort] }))
+      payload: payload.map(({ hash, title, image, url, domain, description, found, author, ...rest }) => ({ hash, title, image, url, domain, description, found, author, [sort]: rest[sort] }))
     })
   );
   return (state, props) => selector(state, props);

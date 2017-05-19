@@ -6,9 +6,9 @@ export function getColumnsForResults(payload) {
 }
 
 export function composeColumnData(column) {
-  if (!Object.keys(column.data).length) {
-    column.data = { ...defColumnData, ...column.data };
-  }
+  // if (!Object.keys(column.data).length) {
+  column.data = { ...defColumnData, ...column.data };
+  // }
   if (!column.display_settings) {
     column.display_settings = defaultDisplay;
   } else if (typeof column.display_settings === 'string') {

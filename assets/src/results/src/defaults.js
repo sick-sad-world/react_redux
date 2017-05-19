@@ -7,7 +7,7 @@ export const defaultResults = {
 
 export const proptocolRegExp = /^http?s:\/\//;
 
-export const defaultResult = {
+export const defaultDashboardResult = {
   title: '',
   hash: '',
   image: '',
@@ -17,6 +17,8 @@ export const defaultResult = {
   descr: '',
   found: ''
 };
+
+export const affectingProps = ['sort', 'direction', 'show_favorites', 'show_ignored', 'limit', 'author', 'search', 'exclude_search', 'url', 'since', 'before', 'language', 'source', 'set', 'ignore_source', 'ignore_set', 'is_image', 'is_video', 'is_facebook', 'is_gallery'];
 
 export const tableStats = ['tweets', 'likes', 'shares', 'pins', 'comments', 'votes_video', 'views_video', 'comments_video'];
 

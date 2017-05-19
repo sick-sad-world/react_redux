@@ -19,6 +19,11 @@ export const addResults = createAction({
   successMessage: 'Results added successfully.'
 });
 
+export const clearResults = id => dispatch => dispatch({
+  type: types.DELETE,
+  entity: id
+});
+
 export const refreshResult = createAction({
   type: types.UPDATE,
   state_type: types.STATE,
@@ -70,7 +75,8 @@ export function getAllResults(data) {
           // ===========================================================================
           setTimeout(() => dispatch(getResults(column.data, {
             id: column.id,
-            notification: false
+            notification: false,
+            state: false
           })).then(resolve).catch(reject), delay);
         }).catch((error) => {
           // Show error message if something went wrong

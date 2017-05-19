@@ -11,7 +11,7 @@ import React from 'react';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { defaultInterface, defaultResult, proptocolRegExp } from '../defaults';
+import { defaultInterface, defaultDashboardResult, proptocolRegExp } from '../defaults';
 
 // Import child components
 // ===========================================================================
@@ -44,7 +44,10 @@ export default class Result extends React.PureComponent {
     return (
       <article className={classNames('mod-result', { 'is-placeholder': isPlaceholder })}>
         <aside>
-          <span className='comparator'>
+          <span
+            title={(sort !== 'found') ? `${sort} - ${payload[sort]}` : null}
+            className={classNames('comparator', { 'with-arrow': type === 'image' })}
+          >
             <span>
               <b>{(sort === 'found') ? 'Found' : formatNumber(payload[sort])}</b>
               { (sort !== 'found') ? sortParamToShort(sort) : null }
@@ -66,8 +69,10 @@ export default class Result extends React.PureComponent {
           </figure>
         ) : (
           <div className='content'>
-            <ResultHeader title={payload.title} url={payload.url} domain={payload.domain.replace(proptocolRegExp, '')} found={payload.found} />
-            <div className='description'>{payload.descr}</div>
+            <Link to={`${location}/${payload.hash}`} className='result-link'>
+              <ResultHeader title={payload.title} url={payload.url} domain={payload.domain.replace(proptocolRegExp, '')} found={payload.found} />
+              <div className='description'>{payload.description}</div>
+            </Link>
           </div>
         )}
       </article>
@@ -81,7 +86,7 @@ Result.defaultProps = {
   type: 'image',
   proptocolRegExp,
   payload: {
-    ...defaultResult
+    ...defaultDashboardResult
   },
   isPlaceholder: true
 };

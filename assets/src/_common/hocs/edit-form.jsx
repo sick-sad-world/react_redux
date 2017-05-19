@@ -86,7 +86,7 @@ export default function MakeEditForm(Form) {
 
     updateState(name, getter) {
       return value => this.stateUpdater({
-        [name]: (Form[getter] instanceof Function) ? Form[getter](value, this.props.formProps, this.state) : value || ''
+        [name]: (Form[getter] instanceof Function) ? Form[getter](value, this.props.formProps, this.state) : (value !== undefined) ? value : ''
       });
     }
 
@@ -110,7 +110,7 @@ export default function MakeEditForm(Form) {
 
     updateHandler() {
       const { changed, ...state } = this.state;
-      return this.props.update(Form.mapStateToData(state, this.props.data, changed, this.props.formProps));
+      return this.props.update(Form.mapStateToData(state, this.props.data, changed, this.props.formProps), changed);
     }
 
     resetState() {

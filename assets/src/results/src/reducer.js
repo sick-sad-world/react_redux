@@ -30,6 +30,11 @@ export default (state = {}, action) => {
         payload: [...prevState.payload, ...action.payload],
         state: 2
       }));
+    case types.DELETE:
+      return {
+        ...state,
+        [action.entity]: undefined
+      };
     case types.FAVORITE:
       return updateObjectById(state, action.entity, prevState => ({
         payload: prevState.payload.map((link) => {

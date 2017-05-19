@@ -59,6 +59,7 @@ class ResultsContainer extends React.Component {
       <AutoSizer>
         {({ height, width }) => (
           <List
+            length={payload.length}
             rowRenderer={this.rowRenderer}
             height={height}
             rowCount={rowCount}

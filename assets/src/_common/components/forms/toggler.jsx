@@ -16,9 +16,7 @@ export default function Toggler({ name, label, disabled, value, onChange, option
   return (
     <div className={className}>
       <span className='form-label'>{label}:</span>
-      <div className={classNames({
-        [togglerClassName]: true,
-        toggler: true,
+      <div className={classNames(togglerClassName, 'toggler', {
         'is-triple': options.length === 3,
         'is-disabled': disabled
       })}>
@@ -47,7 +45,8 @@ export default function Toggler({ name, label, disabled, value, onChange, option
 }
 
 Toggler.defaultProps = {
-  disabled: false
+  disabled: false,
+  togglerClassName: ''
 };
 
 Toggler.propTypes = {

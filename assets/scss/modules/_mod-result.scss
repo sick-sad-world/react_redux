@@ -16,6 +16,13 @@
   .content {
     @include pos(0 0 0 $aside + baseUnit());
 	}
+  .result-link {
+    color: inherit;
+    @include pos();
+    &:hover, &:focus {
+      text-decoration: none;
+    }
+  }
   .btn-holder {
     border-top: $bd;
     border-bottom: $bd;
@@ -50,7 +57,9 @@
   }
   h1 {
     font: 1.125em / 1.125 $base-font-family;
+    color: darken($c-accent, 10%);
     margin-bottom: baseUnit();
+    padding-left: baseUnit(2);
   }
 	figure {
     background-color: $c-main;
@@ -65,7 +74,24 @@
       background-color: rgba(darken($c-accent, 30%), .95);
       border-top: 1px solid rgba(255,255,255,.4);
     }
+    h1 {
+      color: inherit;
+      padding: 0;
+    }
+    .result-link {
+      display: block;
+      @include pos();
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: $z-img + 1;
+    }
 	}
+  div.content {
+    header {
+      margin-bottom: baseUnit();
+    }
+  }
   .stats {
     display: flex;
     justify-content: space-between;
@@ -77,7 +103,7 @@
 		font: 0.875em / 1 $heading-font-family;
 		cursor: pointer;
     height: $comp;
-    &:after {
+    &.with-arrow:after {
       content: '';
       display: block;
       width: 0;
@@ -93,14 +119,6 @@
 			font-size: 1.75em;
 		}
 	}
-  .result-link {
-    display: block;
-    @include pos();
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    z-index: $z-img + 1;
-  }
   &.is-placeholder {
     $c: lighten($c-border, 10%);
     user-select: none;
@@ -111,17 +129,20 @@
       background-color: $c;
       color: $c;
     }
-    header {
+    div.content header {
+      height: 25%;
+      border-bottom: 4px solid $c-alt;
+    }
+    figure header {
       height: 25%;
       background-color: $c;
-      border-color: $c-alt;
-      border-width: 4px
+      border-top: 4px solid $c-alt;
     }
     .comparator {
       span {
         background-color: transparent;
       }
-      &:before {
+      &.with-arrow:before {
         content: '';
         display: block;
         width: 0;

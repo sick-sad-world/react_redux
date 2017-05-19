@@ -131,7 +131,7 @@ const mapDispatchToProps = dispatch => ({
       .then(() => dispatch(getUser(null, { notification: false })))
       .then(() => dispatch(fetchData()))
       .then(getColumnsForResults)
-      .then(() => dispatch(getAllResults))
+      .then(data => dispatch(getAllResults(data)))
       .then(() => dispatch(setAppState(2)));
   },
   addUser(data) {

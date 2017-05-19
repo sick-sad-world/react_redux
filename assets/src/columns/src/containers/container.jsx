@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll } from 'lodash';
+import { bindAll, intersection } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
@@ -16,6 +16,7 @@ import { makeContainerSelector } from '../selectors';
 // Import actions
 // ===========================================================================
 import { createColumn, editColumn, deleteColumn, sortColumns } from '../actions';
+import { getResults, affectingProps, clearResults } from 'src/results';
 
 // Import Child components
 // ===========================================================================
@@ -121,9 +122,27 @@ Columns.propTypes = {
 // Connect our Container to State
 // @ deps -> Columns
 // ===========================================================================
-export default connect(makeContainerSelector(), {
-  actionSort: sortColumns,
-  actionEdit: editColumn,
-  actionCreate: createColumn,
-  actionDelete: deleteColumn
-})(Columns);
+export default connect(makeContainerSelector(), dispatch => ({
+  actionSort(...args) {
+    return dispatch(sortColumns(...args));
+  },
+  actionEdit(data, changed) {
+    return dispatch(editColumn(data)).then((resp) => {
+      if (getResults && (data.open === 1 || intersection(affectingProps, changed).length)) {
+        return dispatch(getResults(data.data, { id: data.id }));
+      }
+      return resp;
+    });
+  },
+  actionCreate(...args) {
+    return dispatch(createColumn(...args));
+  },
+  actionDelete({ id }) {
+    return dispatch(deleteColumn({ id })).then((resp) => {
+      if (clearResults) {
+        return dispatch(clearResults(id));
+      }
+      return resp;
+    });
+  }
+}))(Columns);
