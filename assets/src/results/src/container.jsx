@@ -31,7 +31,8 @@ class ResultsContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    bindAll(this, 'rowRenderer');
+    this.infiniteRunning = false;
+    bindAll(this, 'rowRenderer', 'onRowsRendered');
   }
 
   rowRenderer({ index, isScrolling, isVisible, key, parent, style }) {
@@ -52,9 +53,23 @@ class ResultsContainer extends React.Component {
     );
   }
 
+  onRowsRendered(rowCount) {
+    return ({ stopIndex }) => {
+      if (stopIndex > (rowCount - this.props.data.limit) && !this.infiniteRunning) {
+        this.infiniteRunning = true;
+        this.props.addResults({ ...this.props.data, offset: this.props.payload.length }, { id: this.props.id }).then(() => {
+          this.infiniteRunning = false;
+        });
+      }
+    };
+  }
+
   render() {
     const { state, payload, data } = this.props;
-    const rowCount = (state > 1) ? payload.length : data.limit || 30;
+    let rowCount = (state > 1) ? payload.length : data.limit || 30;
+    if (data.infinite) {
+      rowCount += data.limit;
+    }
     return (
       <AutoSizer>
         {({ height, width }) => (
@@ -68,6 +83,7 @@ class ResultsContainer extends React.Component {
             rowHeight={Math.round((width * 9) / 18)}
             overscanRowCount={3}
             width={width}
+            onRowsRendered={(data.infinite) ? this.onRowsRendered(rowCount) : undefined}
           />
         )}
       </AutoSizer>
@@ -89,6 +105,7 @@ ResultsContainer.propTypes = {
   location: PropTypes.string.isRequired,
   state: stateNum.isRequired,
   payload: PropTypes.arrayOf(PropTypes.object).isRequired,
+  addResults: PropTypes.func.isRequired,
   refreshResult: PropTypes.func.isRequired,
   favoriteResult: PropTypes.func.isRequired,
   ignoreResult: PropTypes.func.isRequired

@@ -13,13 +13,13 @@ export const defColumnData = {
   autoreload: 0,
   infinite: 1,
   sort: 'rate_likes',
+  limit: 30,
   direction: 'desc'
 };
 
 export const availableColumnData = {
   show_favorites: 0,
   show_ignored: 0,
-  limit: 30,
   author: '',
   search: '',
   exclude_search: '',
@@ -184,14 +184,14 @@ export const defaultDashboardInterface = {
   autoreload: PropTypes.oneOf([0, ...editOptions.autoReloadOptions.map(({ value }) => value)]).isRequired,
   infinite: numBool.isRequired,
   sort: PropTypes.string.isRequired,
-  direction: directionString.isRequired
+  direction: directionString.isRequired,
+  limit: PropTypes.number.isRequired
 };
 
 export const defaultDataInterface = {
   ...defaultDashboardInterface,
   show_favorites: numBool,
   show_ignored: numBool,
-  limit: PropTypes.number,
   author: PropTypes.string,
   search: PropTypes.string,
   exclude_search: PropTypes.string,

@@ -63,7 +63,7 @@ export default class DashboardItem extends React.Component {
           {(this.state.edit) ? (
             <ItemSettings
               id={payload.id}
-              data={pick(payload.data, 'infinite', 'autoreload', 'sort', 'direction')}
+              data={pick(payload.data, 'infinite', 'autoreload', 'sort', 'direction', 'limit')}
               running={this.state.running}
               editColumn={this.editColumn}
               hideColumn={this.hideColumn}

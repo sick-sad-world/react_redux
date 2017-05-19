@@ -130,6 +130,10 @@ export default connect(makeContainerSelector(), dispatch => ({
     return dispatch(editColumn(data)).then((resp) => {
       if (getResults && (data.open === 1 || intersection(affectingProps, changed).length)) {
         return dispatch(getResults(data.data, { id: data.id }));
+      } else if (data.open === 0) {
+        if (clearResults) {
+          return dispatch(clearResults(data.id));
+        }
       }
       return resp;
     });
