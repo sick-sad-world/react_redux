@@ -32,7 +32,26 @@ class ResultsContainer extends React.Component {
     super(props);
     this.state = {};
     this.infiniteRunning = false;
-    bindAll(this, 'rowRenderer', 'onRowsRendered');
+    this.interval = null;
+    this.entity = { id: props.id };
+    bindAll(this, 'rowRenderer', 'onRowsRendered', 'autoreloadInitialize');
+    if (props.data.autoreload > 0) {
+      this.interval = this.autoreloadInitialize(props.data);
+    }
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.data.autoreload > 0 && !this.interval) {
+      this.interval = this.autoreloadInitialize(newProps.data);
+    } else if (newProps.data.autoreload === 0 && this.interval) {
+      this.interval();
+    }
+  }
+
+  autoreloadInitialize(data) {
+    this.props.getResults(data, this.entity);
+    const interval = setInterval(this.props.getResults, data.autoreload * 1000, this.props.data, this.entity);
+    return () => clearInterval(interval);
   }
 
   rowRenderer({ index, isScrolling, isVisible, key, parent, style }) {
@@ -57,7 +76,7 @@ class ResultsContainer extends React.Component {
     return ({ stopIndex }) => {
       if (stopIndex > (rowCount - this.props.data.limit) && !this.infiniteRunning) {
         this.infiniteRunning = true;
-        this.props.addResults({ ...this.props.data, offset: this.props.payload.length }, { id: this.props.id }).then(() => {
+        this.props.addResults({ ...this.props.data, offset: this.props.payload.length }, this.entity).then(() => {
           this.infiniteRunning = false;
         });
       }
@@ -105,6 +124,7 @@ ResultsContainer.propTypes = {
   location: PropTypes.string.isRequired,
   state: stateNum.isRequired,
   payload: PropTypes.arrayOf(PropTypes.object).isRequired,
+  getResults: PropTypes.func.isRequired,
   addResults: PropTypes.func.isRequired,
   refreshResult: PropTypes.func.isRequired,
   favoriteResult: PropTypes.func.isRequired,
