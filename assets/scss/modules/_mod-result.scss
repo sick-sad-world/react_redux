@@ -1,32 +1,41 @@
 /* Result - main item on main dashboard result
 ========================================================================== */
 .mod-result {
-	line-height: 1;
-	font-size: 14px;
-	width: 100%;
-  height: 100%;
-  position: relative;
-	$aside: baseUnit(4);
-  $comp: baseUnit(5);
-  $z-img: 2;
-	aside {
-		width: $aside;
-		@include pos(0 auto 0 baseUnit(.5));
-	}
-  .content {
-    @include pos(0 0 0 $aside + baseUnit());
-	}
-  .result-link {
-    color: inherit;
-    @include pos();
-    &:hover, &:focus {
-      text-decoration: none;
+  $aside: baseUnit(4);
+  $header: 30%;
+  .fixed {
+    position: relative;
+  }
+  header {
+    display: flex;
+    @include pos(0 0 false 0);
+    height: $header;
+    overflow: hidden;
+    align-items: stretch;
+  }
+  h1 {
+    flex: 1 1 82%;
+    font: 1em / 1.125 $base-font-family;
+    color: darken($c-accent, 10%);
+    letter-spacing: -1px;
+  }
+  .comparator {
+    flex: 0 0 18%;
+    font: 0.875em / 1 $heading-font-family;
+    cursor: pointer;
+    b {
+      display: block;
+      font-size: 1.75em;
     }
   }
-  .btn-holder {
+  aside {
+    @include pos($header false 0 2px);
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    width: $aside;
     border-top: $bd;
     border-bottom: $bd;
-    @include pos($comp 0 0 0)
     a {
 			display: flex;
 			width: $aside;
@@ -38,138 +47,156 @@
 			}
 		}
   }
-  img {
-    margin: auto;
-    display: block;
-    font-size: 0;
-    img {
-      display: none !important;
-    }
-    &:after {
-      content: '';
-      display: block;
-      margin-top: -22px;
-      background: url('../img/ph_content.png') center no-repeat;
-      background-size: cover;
-      @include pos();
-      z-index: 2;
-    }
-  }
-  h1 {
-    font: 1.125em / 1.125 $base-font-family;
-    color: darken($c-accent, 10%);
-    margin-bottom: baseUnit();
-    padding-left: baseUnit(2);
-  }
-	figure {
-    background-color: $c-main;
-    color: $c-alt;
+  .content {
     overflow: hidden;
-    a {
-      color: $c-alt;
-    }
-    header {
-      @include pos(auto 0 0 0);
-      padding: baseUnit(.5);
-      background-color: rgba(darken($c-accent, 30%), .95);
-      border-top: 1px solid rgba(255,255,255,.4);
-    }
-    h1 {
-      color: inherit;
-      padding: 0;
-    }
-    .result-link {
-      display: block;
-      @include pos();
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      z-index: $z-img + 1;
-    }
-	}
-  div.content {
-    header {
-      margin-bottom: baseUnit();
-    }
-  }
-  .stats {
-    display: flex;
-    justify-content: space-between;
-  }
-	.comparator {
-    position: relative;
-    z-index: $z-img + 2;
-		display: flex;
-		font: 0.875em / 1 $heading-font-family;
-		cursor: pointer;
-    height: $comp;
-    &.with-arrow:after {
-      content: '';
-      display: block;
-      width: 0;
-      height: 0;
-      border: round($comp * 0.5) solid transparent;
-      @include pos(0 false false 100%);
-      border-top-color: $c-alt;
-      border-left-color: $c-alt;
-      z-index: -1;
-    }
-		b {
-			display: block;
-			font-size: 1.75em;
-		}
-	}
-  &.is-placeholder {
-    $c: lighten($c-border, 10%);
-    user-select: none;
-    * {
-      user-select: none;
-    }
-    h1, small, p, figure, span, a, td, th {
-      background-color: $c;
-      color: $c;
-    }
-    div.content header {
-      height: 25%;
-      border-bottom: 4px solid $c-alt;
-    }
-    figure header {
-      height: 25%;
-      background-color: $c;
-      border-top: 4px solid $c-alt;
-    }
-    img {
-      opacity: 0;
-    }
-    .result-link {
-      background-image: none !important;
-    }
-    .comparator {
-      span {
-        background-color: transparent;
-      }
-      &.with-arrow:before {
-        content: '';
-        display: block;
-        width: 0;
-        height: 0;
-        border: round(($comp - 4px) * 0.5) solid transparent;
-        @include pos(0 false false 100%);
-        border-top-color: $c;
-        border-left-color: $c;
-      }
-    }
-    .btn-holder {
-      border: 0;
-      a {
-        border-radius: 50%;
-        width: $aside - baseUnit();
-        height: $aside - baseUnit();
-        margin: baseUnit() auto;
-        svg {
-          display: none;
-        }
-      }
-    }
+    background-color: #fcc;
+    @include pos($header 0 0 ($aside + 4px))
   }
 }
+// .mod-result {
+// 	line-height: 1;
+// 	font-size: 14px;
+// 	width: 100%;
+//   height: 100%;
+//   position: relative;
+// 	$aside: baseUnit(4);
+//   $comp: baseUnit(5);
+//   $z-img: 2;
+// 	aside {
+// 		width: $aside;
+// 		@include pos(0 auto 0 baseUnit(.5));
+// 	}
+//   .content {
+//     @include pos(0 0 0 $aside + baseUnit());
+// 	}
+//   .result-link {
+//     color: inherit;
+//     @include pos();
+//     &:hover, &:focus {
+//       text-decoration: none;
+//     }
+//   }
+//   .btn-holder {
+//     border-top: $bd;
+//     border-bottom: $bd;
+//     @include pos($comp 0 0 0)
+//     a {
+// 			display: flex;
+// 			width: $aside;
+// 			height: $aside;
+// 			&:hover, &:focus {
+// 				svg {
+// 					fill: $c-accent;
+// 				}
+// 			}
+// 		}
+//   }
+//   img {
+//     margin: auto;
+//     display: block;
+//     font-size: 0;
+//     img {
+//       display: none !important;
+//     }
+//     &:after {
+//       content: '';
+//       display: block;
+//       margin-top: -22px;
+//       background: url('../img/ph_content.png') center no-repeat;
+//       background-size: cover;
+//       @include pos();
+//       z-index: 2;
+//     }
+//   }
+
+// 	figure {
+//     background-color: $c-main;
+//     color: $c-alt;
+//     overflow: hidden;
+//     a {
+//       color: $c-alt;
+//     }
+//     header {
+//       @include pos(auto 0 0 0);
+//       padding: baseUnit(.5);
+//       background-color: rgba(darken($c-accent, 30%), .95);
+//       border-top: 1px solid rgba(255,255,255,.4);
+//     }
+//     h1 {
+//       color: inherit;
+//       padding: 0;
+//     }
+//     .result-link {
+//       display: block;
+//       @include pos();
+//       background-size: cover;
+//       background-position: center;
+//       background-repeat: no-repeat;
+//       z-index: $z-img + 1;
+//     }
+// 	}
+//   div.content {
+//     header {
+//       margin-bottom: baseUnit();
+//     }
+//   }
+//   .stats {
+//     display: flex;
+//     justify-content: space-between;
+//   }
+// 	.comparator {
+//     position: relative;
+//     z-index: $z-img + 2;
+// 		display: flex;
+// 		font: 0.875em / 1 $heading-font-family;
+// 		cursor: pointer;
+//     height: $comp;
+// 		b {
+// 			display: block;
+// 			font-size: 1.75em;
+// 		}
+// 	}
+//   &.is-placeholder {
+//     $c: lighten($c-border, 10%);
+//     user-select: none;
+//     * {
+//       user-select: none;
+//     }
+//     h1, small, p, figure, span, a, td, th {
+//       background-color: $c;
+//       color: $c;
+//     }
+//     div.content header {
+//       height: 25%;
+//       border-bottom: 4px solid $c-alt;
+//     }
+//     figure header {
+//       height: 25%;
+//       background-color: $c;
+//       border-top: 4px solid $c-alt;
+//     }
+//     img {
+//       opacity: 0;
+//     }
+//     .result-link {
+//       background-image: none !important;
+//     }
+//     .comparator {
+//       span {
+//         background-color: transparent;
+//       }
+//     }
+//     .btn-holder {
+//       border: 0;
+//       a {
+//         border-radius: 50%;
+//         width: $aside - baseUnit();
+//         height: $aside - baseUnit();
+//         margin: baseUnit() auto;
+//         svg {
+//           display: none;
+//         }
+//       }
+//     }
+//   }
+// }

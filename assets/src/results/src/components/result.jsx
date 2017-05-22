@@ -1,8 +1,6 @@
 // Import helpers
 // ===========================================================================
 import { includes, filter } from 'lodash';
-import classNames from 'classnames';
-import { formatNumber, sortParamToShort } from '../helpers';
 
 // Import react stuff
 // ===========================================================================
@@ -11,70 +9,65 @@ import React from 'react';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { defaultInterface, defaultDashboardResult, proptocolRegExp } from '../defaults';
+import { defaultInterface, defaultDashboardResult } from '../defaults';
 
 // Import child components
 // ===========================================================================
-import { Favorite, Unfavorite, Refresh, Show, Hide, GoTo } from 'common/components/buttons';
+
 import { Link } from 'react-router';
 import ResultHeader from './result-header';
+import ResultAside from './result-aside';
+import ResultStats from './result-stats';
 
 // description
 // ===========================================================================
 export default class Result extends React.PureComponent {
 
-  renderFavoriteBtn() {
-    return (this.props.payload.favorite) ? (
-      <Unfavorite handler={() => this.props.favoriteResult({ hash: this.props.payload.hash, unfavorite: true })} title='Unfavorite this result' />
-    ) : (
-      <Favorite handler={() => this.props.favoriteResult({ hash: this.props.payload.hash })} title='Favorite this result' />
-    );
-  }
-
-  renderIgnoreBtn() {
-    return (this.props.payload.ignore) ? (
-      <Show handler={() => this.props.ignoreResult({ hash: this.props.payload.hash, unignore: true })} title='Unignore this result' />
-    ) : (
-      <Hide handler={() => this.props.ignoreResult({ hash: this.props.payload.hash })} title='Ignore this result' />
-    );
+  inc(stat = '') {
+    return includes(this.props.displaySettings, stat);
   }
 
   render() {
-    const { type, location, sort, payload, refreshResult, favoriteResult, ignoreResult, isPlaceholder } = this.props;
+    const { location, sort, payload, style } = this.props;
     return (
-      <article className={classNames('mod-result', { 'is-placeholder': isPlaceholder })}>
-        <aside>
-          <span
-            title={(sort !== 'found') ? `${sort} - ${payload[sort]}` : null}
-            className={classNames('comparator', { 'with-arrow': type === 'image' })}
-          >
-            <span>
-              <b>{(sort === 'found') ? 'Found' : formatNumber(payload[sort])}</b>
-              { (sort !== 'found') ? sortParamToShort(sort) : null }
-            </span>
-          </span>
-          <div className='btn-holder'>
-            {(refreshResult) ? <Refresh handler={() => refreshResult({ hash: payload.hash })} title='Refresh this result' /> : null}
-            {(favoriteResult) ? this.renderFavoriteBtn() : null }
-            {(ignoreResult) ? this.renderIgnoreBtn() : null }
-            <GoTo target='_blank' title='Visit original' href={payload.url} />
-          </div>
-        </aside>
-        {(type === 'image') ? (
-          <figure className='content'>
-            <Link to={`${location}/${payload.hash}`} className='result-link' style={{ backgroundImage: `url(${payload.image})` }}>
-              <ResultHeader title={payload.title} url={payload.url} domain={payload.domain.replace(proptocolRegExp, '')} found={payload.found} />
-            </Link>
-            <img src={payload.image} alt={payload.title}/>
-          </figure>
-        ) : (
+      <article className='mod-result'>
+        <div className='fixed' style={style}>
+          <ResultHeader sort={sort} value={payload[sort]} title={payload.title} url={payload.url} />
+          <ResultAside
+            url={payload.url}
+            hash={payload.hash}
+            favorite={payload.favorite}
+            ignore={payload.ignore}
+            favoriteResult={this.props.favoriteResult}
+            ignoreResult={this.props.ignoreResult}
+            refreshResult={this.props.refreshResult}
+          />
           <div className='content'>
             <Link to={`${location}/${payload.hash}`} className='result-link'>
-              <ResultHeader title={payload.title} url={payload.url} domain={payload.domain.replace(proptocolRegExp, '')} found={payload.found} />
-              <div className='description'>{payload.description}</div>
+              {(this.inc('wide_image')) ? (
+                <div className='gallery'>
+                  <span className='image' style={{ backgroundImage: `url(${payload.image})` }}>
+                    <img src={payload.image} alt={payload.title}/>
+                  </span>
+                  <ResultStats domain={payload.domain} found={payload.found} />
+                </div>
+              ) : (
+                <div className='description'>
+                  <ResultStats domain={payload.domain} found={payload.found} />
+                  {(this.inc('image')) ? (
+                    <span className='image' style={{ backgroundImage: `url(${payload.image})` }}>
+                      <img src={payload.image} alt={payload.title}/>
+                    </span>
+                  ) : null }
+                  {payload.description}
+                </div>
+              )}
             </Link>
           </div>
-        )}
+        </div>
+        {/* <footer>
+
+        </footer>*/}
       </article>
     );
   }
@@ -83,8 +76,6 @@ export default class Result extends React.PureComponent {
 Result.defaultProps = {
   sort: '',
   location: '',
-  type: 'image',
-  proptocolRegExp,
   payload: {
     ...defaultDashboardResult
   },
@@ -93,12 +84,14 @@ Result.defaultProps = {
 
 Result.propTypes = {
   isPlaceholder: PropTypes.bool.isRequired,
-  proptocolRegExp: PropTypes.instanceOf(RegExp).isRequired,
   sort: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
+  displaySettings: PropTypes.arrayOf(PropTypes.string).isRequired,
   refreshResult: PropTypes.func,
   favoriteResult: PropTypes.func,
   ignoreResult: PropTypes.func,
   location: PropTypes.string.isRequired,
+  style: PropTypes.shape({
+    height: PropTypes.number.isRequired
+  }).isRequired,
   payload: PropTypes.shape(defaultInterface)
 };

@@ -8,6 +8,8 @@ export const defaultResults = {
 
 export const limit = 30;
 
+export const gutter = 18;
+
 export const proptocolRegExp = /^http?s:\/\//;
 
 export const defaultDashboardResult = {

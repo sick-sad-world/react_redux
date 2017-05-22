@@ -1,6 +1,6 @@
 // Import helper stuff
 // ===========================================================================
-import { bindAll } from 'lodash';
+import { bindAll, intersection } from 'lodash';
 import { defaultResults } from './defaults';
 
 // Import React related stuff
@@ -12,7 +12,7 @@ import { AutoSizer, List } from 'react-virtualized';
 // ===========================================================================
 import PropTypes from 'prop-types';
 import { stateNum } from 'common/typecheck';
-import { limit } from './defaults';
+import { limit, gutter } from './defaults';
 
 // Import connection
 // ===========================================================================
@@ -23,6 +23,7 @@ import { addResults, getResults, resultError, favoriteResult, ignoreResult, refr
 // Import child Components
 // ===========================================================================
 import Result from './components/result';
+import Placeholder from './components/placeholder';
 import Icon from 'common/components/icon';
 
 // description
@@ -36,6 +37,7 @@ class ResultsContainer extends React.Component {
     };
     this.infiniteRunning = false;
     this.interval = null;
+    this.baseHeight = 0;
     bindAll(this, 'rowRenderer', 'onRowsRendered', 'autoreloadInitialize', 'noRowsRenderer');
     if (props.data.autoreload > 0) {
       this.interval = this.autoreloadInitialize(props.data);
@@ -77,20 +79,24 @@ class ResultsContainer extends React.Component {
     return () => clearInterval(interval);
   }
 
-  rowRenderer({ index, isScrolling, isVisible, key, parent, style }) {
+  rowRenderer({ index, isScrolling, isVisible, key, style }) {
     const result = this.props.payload[index];
     return (
-      <div key={key} style={{ ...style, padding: '0.5rem 0' }}>
-        <Result
-          payload={result}
-          sort={this.props.data.sort}
-          type={this.props.type}
-          location={this.props.location}
-          isPlaceholder={this.props.state === 3 || !result}
-          refreshResult={this.props.refreshResult({ id: this.props.id, state: false })}
-          favoriteResult={this.props.favoriteResult({ id: this.props.id, state: false })}
-          ignoreResult={this.props.ignoreResult({ id: this.props.id, state: false })}
-        />
+      <div key={key} style={style}>
+        {(this.props.state === 3 || !result) ? (
+          <Placeholder sort={this.props.data.sort} displaySettings={this.props.displaySettings} />
+        ) : (
+          <Result
+            style={{ height: this.baseHeight, margin: `${this.props.gutter}px 0` }}
+            payload={result}
+            sort={this.props.data.sort}
+            location={this.props.location}
+            displaySettings={this.props.displaySettings}
+            refreshResult={this.props.refreshResult({ id: this.props.id, state: false })}
+            favoriteResult={this.props.favoriteResult({ id: this.props.id, state: false })}
+            ignoreResult={this.props.ignoreResult({ id: this.props.id, state: false })}
+          />
+        )}
       </div>
     );
   }
@@ -128,29 +134,30 @@ class ResultsContainer extends React.Component {
     const rowCount = this.countRows();
     return (
       <AutoSizer>
-        {({ height, width }) => (
-          <List
+        {({ height, width }) => {
+          this.baseHeight = Math.round((width * 9) / 18);
+          return (<List
             length={payload.length}
             state={state}
             sort={data.sort}
             rowRenderer={this.rowRenderer}
             height={height}
             rowCount={rowCount}
-            rowHeight={Math.round((width * 9) / 18)}
+            rowHeight={this.baseHeight + this.props.gutter * 2}
             overscanRowCount={3}
             width={width}
             noRowsRenderer={this.noRowsRenderer}
             onRowsRendered={(data.infinite) ? this.onRowsRendered(rowCount) : undefined}
-          />
-        )}
+          />);
+        }}
       </AutoSizer>
     );
   }
 }
 
 ResultsContainer.defaultProps = {
-  type: 'image',
   location: '',
+  gutter,
   stateEmpty: 'It seems we could not find any items matching your query at this time. Try again later or modify the filter settings for this column.',
   defaultLimit: limit,
   ...defaultResults
@@ -158,14 +165,14 @@ ResultsContainer.defaultProps = {
 
 ResultsContainer.propTypes = {
   id: PropTypes.number.isRequired,
+  gutter: PropTypes.number.isRequired,
   defaultLimit: PropTypes.number.isRequired,
-  width: PropTypes.number.isRequired,
   data: PropTypes.object.isRequired,
-  type: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired,
   state: stateNum.isRequired,
   error: PropTypes.string,
   stateEmpty: PropTypes.string.isRequired,
+  displaySettings: PropTypes.arrayOf(PropTypes.string).isRequired,
   payload: PropTypes.arrayOf(PropTypes.object).isRequired,
   getResults: PropTypes.func.isRequired,
   refreshResult: PropTypes.func.isRequired,

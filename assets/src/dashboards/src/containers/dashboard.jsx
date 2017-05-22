@@ -24,7 +24,13 @@ function Dashboard({ payload, emptyTpl, column, location, getResults }) {
             <DashboardList width={width} column={column} {...props}>
               {({ payload, editColumn, deleteColumn }) => (
                 <DashboardItem payload={payload} editColumn={editColumn} deleteColumn={deleteColumn} getResults={getResults}>
-                  <ResultsContainer location={location.pathname} width={width} data={payload.data} id={payload.id} sort={payload.data.sort} />
+                  <ResultsContainer
+                    id={payload.id}
+                    sort={payload.data.sort}
+                    data={payload.data}
+                    location={location.pathname}
+                    displaySettings={payload.display_settings}
+                  />
                 </DashboardItem>
               )}
             </DashboardList>
