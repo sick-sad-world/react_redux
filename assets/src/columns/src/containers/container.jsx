@@ -16,7 +16,7 @@ import { makeContainerSelector } from '../selectors';
 // Import actions
 // ===========================================================================
 import { createColumn, editColumn, deleteColumn, sortColumns } from '../actions';
-import { getResults, affectingProps, clearResults } from 'src/results';
+import { getResults, displaySettings, clearResults } from 'src/results';
 
 // Import Child components
 // ===========================================================================
@@ -58,6 +58,7 @@ class Columns extends React.Component {
       }
       return <EditColumn {...props} className='mod-column-edit' formProps={{
         path: `${this.props.route.path}/${this.props.curId}`,
+        notAffecting: [...displaySettings.notAffecting],
         ...editOptions
       }} />;
     }
@@ -93,6 +94,7 @@ Columns.defaultProps = {
       description: 'Select the type of items to show in this column and how to display them.',
       confirmation: '{data} was changed. Save changes?'
     }
+
   },
   assignmentOpts: {
     texts: {
@@ -128,7 +130,7 @@ export default connect(makeContainerSelector(), dispatch => ({
   },
   actionEdit(data, changed) {
     return dispatch(editColumn(data)).then((resp) => {
-      if (getResults && (data.open === 1 || intersection(affectingProps, changed).length)) {
+      if (getResults && (data.open === 1 || intersection(displaySettings.affectingProps, changed).length)) {
         return dispatch(getResults(data.data, { id: data.id }));
       } else if (data.open === 0) {
         if (clearResults) {

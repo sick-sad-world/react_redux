@@ -1,14 +1,6 @@
 import PropTypes from 'prop-types';
 import { numBool, directionString } from 'common/typecheck';
 
-export const notDataProps = ['id', 'name', 'display_settings', 'advancedFilters', 'changed'];
-
-export const defaultDisplay = ['title', 'found', 'url', 'image', 'description', 'likes', 'tweets', 'shares'];
-
-export const defDashboardData = {
-
-};
-
 export const defColumnData = {
   autoreload: 0,
   infinite: 1,
@@ -43,7 +35,7 @@ export const defColumn = {
   open: 1,
   name: '',
   data: defColumnData,
-  display_settings: defaultDisplay
+  display_settings: undefined
 };
 
 export const sortingOptions = {
@@ -93,25 +85,6 @@ export const sortingOptions = {
     }
   ]
 };
-
-export const displayOptions = [
-  'title',
-  'url',
-  'author',
-  'found',
-  'image',
-  'wide_image',
-  'description',
-  'graphs',
-  'likes',
-  'tweets',
-  'pins',
-  'shares',
-  'comments',
-  'votes_video',
-  'views_video',
-  'comments_video'
-];
 
 export const editOptions = {
   advRegExp: /MIN|MAX|LIKE/,

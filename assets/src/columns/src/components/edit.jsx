@@ -2,7 +2,7 @@
 // ===========================================================================
 import { forOwn, isEqual, pickBy } from 'lodash';
 import { updateArrayWithValue } from 'functions';
-import { availableColumnData, defaultInterface, notDataProps } from '../defaults';
+import { availableColumnData, defaultInterface } from '../defaults';
 
 // Import React related stuff
 // ===========================================================================
@@ -59,7 +59,7 @@ class EditColumn extends React.Component {
       name: state.name,
       display_settings: state.display_settings,
       data: {
-        ...pickBy(state, (v, k) => notDataProps.indexOf(k) < 0 && ((v instanceof Array) ? v.length : v !== '')),
+        ...pickBy(state, (v, k) => props.notAffecting.indexOf(k) < 0 && ((v instanceof Array) ? v.length : v !== '')),
         ...state.advancedFilters
       }
     };

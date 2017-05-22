@@ -2,17 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { includes } from 'lodash';
-import { displayOptions, defaultDisplay } from '../defaults';
+import { displaySettings } from 'src/results';
 import Checkbox from 'common/components/forms/checkbox';
 
 // Display options choosing
 // ===========================================================================
 export default function DisplayOptions({ data, value, onChange, disabled, title, className }) {
-  const displaySettings = [];
-  let displaySettingsRow = [];
+  const DOM = [];
+  let ROW = [];
   data.forEach((setting, i) => {
     const disablence = disabled || (setting === 'wide_image' && !includes(value, 'image'));
-    displaySettingsRow.push((
+    ROW.push((
       <td key={`cell${i}`}>
         <Checkbox
           className={classNames('switcher-checkbox', { 'is-disabled': disablence })}
@@ -25,8 +25,8 @@ export default function DisplayOptions({ data, value, onChange, disabled, title,
       </td>
     ));
     if (i % 3 === 2 && (i + 1) !== data.length) {
-      displaySettings.push(<tr key={`row${i}`}>{displaySettingsRow}</tr>);
-      displaySettingsRow = [];
+      DOM.push(<tr key={`row${i}`}>{ROW}</tr>);
+      ROW = [];
     }
   });
 
@@ -34,7 +34,7 @@ export default function DisplayOptions({ data, value, onChange, disabled, title,
     <fieldset className={className}>
       <legend>{title}</legend>
       <table className='is-slim'>
-        <tbody>{displaySettings}</tbody>
+        <tbody>{DOM}</tbody>
       </table>
     </fieldset>
   );
@@ -43,8 +43,8 @@ export default function DisplayOptions({ data, value, onChange, disabled, title,
 DisplayOptions.defaultProps = {
   title: 'Select what to display for each item',
   disabled: false,
-  data: [...displayOptions],
-  value: [...defaultDisplay]
+  data: [...displaySettings.all],
+  value: [...displaySettings.default]
 };
 
 DisplayOptions.propTypes = {
