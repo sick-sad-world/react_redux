@@ -18,7 +18,7 @@ import { limit } from './defaults';
 // ===========================================================================
 import { connect } from 'react-redux';
 import { makeContainerSelector } from './selectors';
-import { addResults, getResults, resultError } from './actions';
+import { addResults, getResults, resultError, favoriteResult, ignoreResult, refreshResult } from './actions';
 
 // Import child Components
 // ===========================================================================
@@ -36,7 +36,6 @@ class ResultsContainer extends React.Component {
     };
     this.infiniteRunning = false;
     this.interval = null;
-    this.entity = { id: props.id };
     bindAll(this, 'rowRenderer', 'onRowsRendered', 'autoreloadInitialize', 'noRowsRenderer');
     if (props.data.autoreload > 0) {
       this.interval = this.autoreloadInitialize(props.data);
@@ -73,8 +72,8 @@ class ResultsContainer extends React.Component {
   }
 
   autoreloadInitialize(data) {
-    this.props.getResults(data, this.entity);
-    const interval = setInterval(this.props.getResults, data.autoreload * 1000, this.props.data, this.entity);
+    this.props.getResults(data, { id: this.props.id });
+    const interval = setInterval(this.props.getResults, data.autoreload * 1000, this.props.data, { id: this.props.id });
     return () => clearInterval(interval);
   }
 
@@ -88,9 +87,9 @@ class ResultsContainer extends React.Component {
           type={this.props.type}
           location={this.props.location}
           isPlaceholder={this.props.state === 3 || !result}
-          refreshResult={this.props.refreshResult}
-          favoriteResult={this.props.favoriteResult}
-          ignoreResult={this.props.ignoreResult}
+          refreshResult={this.props.refreshResult({ id: this.props.id, state: false })}
+          favoriteResult={this.props.favoriteResult({ id: this.props.id, state: false })}
+          ignoreResult={this.props.ignoreResult({ id: this.props.id, state: false })}
         />
       </div>
     );
@@ -117,7 +116,7 @@ class ResultsContainer extends React.Component {
     return ({ stopIndex }) => {
       if (rowCount > 0 && stopIndex > (rowCount - this.props.data.limit) && !this.infiniteRunning) {
         this.infiniteRunning = true;
-        this.props.getResults({ ...this.props.data, offset: this.props.payload.length }, { ...this.entity, state: false }).then(() => {
+        this.props.getResults({ ...this.props.data, offset: this.props.payload.length }, { id: this.props.id, state: false }).then(() => {
           this.infiniteRunning = false;
         });
       }
@@ -168,14 +167,23 @@ ResultsContainer.propTypes = {
   error: PropTypes.string,
   stateEmpty: PropTypes.string.isRequired,
   payload: PropTypes.arrayOf(PropTypes.object).isRequired,
-  getResults: PropTypes.func.isRequired
-  // refreshResult: PropTypes.func.isRequired,
-  // favoriteResult: PropTypes.func.isRequired,
-  // ignoreResult: PropTypes.func.isRequired
+  getResults: PropTypes.func.isRequired,
+  refreshResult: PropTypes.func.isRequired,
+  favoriteResult: PropTypes.func.isRequired,
+  ignoreResult: PropTypes.func.isRequired
 };
 
 export default connect(makeContainerSelector(), dispatch => ({
   getResults(data, opts) {
     return dispatch((data.offset) ? addResults(data, opts) : getResults(data, opts)).catch(err => dispatch(resultError(err)));
+  },
+  favoriteResult(opts) {
+    return params => dispatch(favoriteResult(params, opts));
+  },
+  ignoreResult(opts) {
+    return params => dispatch(ignoreResult(params, opts));
+  },
+  refreshResult(opts) {
+    return params => dispatch(refreshResult(params, opts));
   }
 }))(ResultsContainer);

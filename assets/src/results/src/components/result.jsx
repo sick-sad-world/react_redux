@@ -25,17 +25,17 @@ export default class Result extends React.PureComponent {
 
   renderFavoriteBtn() {
     return (this.props.payload.favorite) ? (
-      <Unfavorite handler={() => this.props.favoriteResult('favorite', { hash: this.props.payload.hash, unfavorite: true })} title='Unfavorite this result' />
+      <Unfavorite handler={() => this.props.favoriteResult({ hash: this.props.payload.hash, unfavorite: true })} title='Unfavorite this result' />
     ) : (
-      <Favorite handler={() => this.props.favoriteResult('favorite', { hash: this.props.payload.hash, unfavorite: false })} title='Favorite this result' />
+      <Favorite handler={() => this.props.favoriteResult({ hash: this.props.payload.hash })} title='Favorite this result' />
     );
   }
 
   renderIgnoreBtn() {
     return (this.props.payload.ignore) ? (
-      <Show handler={() => this.props.ignoreResult('ignore', { hash: this.props.payload.hash, unignore: true })} title='Unignore this result' />
+      <Show handler={() => this.props.ignoreResult({ hash: this.props.payload.hash, unignore: true })} title='Unignore this result' />
     ) : (
-      <Hide handler={() => this.props.ignoreResult('ignore', { hash: this.props.payload.hash, unignore: false })} title='Ignore this result' />
+      <Hide handler={() => this.props.ignoreResult({ hash: this.props.payload.hash })} title='Ignore this result' />
     );
   }
 
@@ -54,7 +54,7 @@ export default class Result extends React.PureComponent {
             </span>
           </span>
           <div className='btn-holder'>
-            {(refreshResult) ? <Refresh handler={() => refreshResult('refresh', { hash: payload.hash })} title='Refresh this result' /> : null}
+            {(refreshResult) ? <Refresh handler={() => refreshResult({ hash: payload.hash })} title='Refresh this result' /> : null}
             {(favoriteResult) ? this.renderFavoriteBtn() : null }
             {(ignoreResult) ? this.renderIgnoreBtn() : null }
             <GoTo target='_blank' title='Visit original' href={payload.url} />
