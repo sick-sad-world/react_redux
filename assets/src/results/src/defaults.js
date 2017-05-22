@@ -2,8 +2,11 @@ import PropTypes from 'prop-types';
 
 export const defaultResults = {
   state: 1,
+  error: null,
   payload: []
 };
+
+export const limit = 30;
 
 export const proptocolRegExp = /^http?s:\/\//;
 

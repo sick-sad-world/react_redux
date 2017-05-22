@@ -19,9 +19,15 @@ export const addResults = createAction({
   successMessage: 'Results added successfully.'
 });
 
-export const clearResults = id => dispatch => dispatch({
+export const clearResults = entity => dispatch => dispatch({
   type: types.DELETE,
-  entity: id
+  entity
+});
+
+export const resultError = (error, entity) => dispatch => dispatch({
+  type: types.ERROR,
+  entity,
+  error
 });
 
 export const refreshResult = createAction({
@@ -79,14 +85,16 @@ export function getAllResults(data) {
             state: false
           })).then(resolve).catch(reject), delay);
         }).catch((error) => {
+          const text = `Results for column ${column.id} ended with error: ${(error.event) ? error.url : error.text}`;
           // Show error message if something went wrong
           // ===========================================================================
           if (notification) {
             dispatch(notification({
               type: 'error',
-              text: `Results for column ${ids[column.id]} ended with error: ${(error.event) ? error.url : error.text}`
+              text
             }));
           }
+          dispatch(resultError(text, column.id));
         }).then(() => {
           // When code is done - update our message by removing [ID] of column
           // wich result loading is done from list

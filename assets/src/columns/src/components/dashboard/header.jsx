@@ -16,7 +16,7 @@ export default function ItemHeader({ name, refresh, toggle }) {
       <DragHandle />
       <h1 className='funName'>{name}</h1>
       <nav className='nav-links'>
-        {(refresh) ? <a onClick={refresh} title='Refresh column'><Icon icon='cw' /></a> : null }
+        {(refresh) ? <a onClick={() => refresh()} title='Refresh column'><Icon icon='cw' /></a> : null }
         {(toggle) ? <a onClick={toggle} title='Column settings'><Icon icon='cog' /></a> : null }
       </nav>
     </header>

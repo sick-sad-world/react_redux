@@ -12,7 +12,7 @@ import { makeContainerSelector } from '../selectors';
 // Import child Components
 // ===========================================================================
 import { DashboardColumns, DashboardItem } from 'src/columns';
-import { ResultsContainer, getResults } from 'src/results';
+import { ResultsContainer, getResults, resultError } from 'src/results';
 import DashboardList from '../components/list';
 
 function Dashboard({ payload, emptyTpl, column, location, getResults }) {
@@ -52,4 +52,8 @@ Dashboard.propTypes = {
 // Connect our Container to State
 // @ deps -> Dashboards
 // ===========================================================================
-export default connect(makeContainerSelector(), { getResults })(Dashboard);
+export default connect(makeContainerSelector(), dispatch => ({
+  getResults(...args) {
+    return dispatch(getResults(...args)).catch(err => dispatch(resultError(err)));
+  }
+}))(Dashboard);

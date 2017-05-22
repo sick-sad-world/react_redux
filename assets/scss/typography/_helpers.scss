@@ -75,3 +75,34 @@
   border: 1px solid lighten($c-accent-alt, 25%);
   background: lighten($c-accent-alt, 40%);
 }
+
+.state-default {
+  $c: map-get($states, info);
+  color: $c;
+  svg {
+    fill: $c;
+    opacity: 0.75;
+  }
+}
+.state-empty {
+  $c: map-get($states, info);
+  color: $c;
+  svg {
+    fill: $c;
+    opacity: 0.75;
+  }
+}
+.state-error {
+  $c: map-get($states, error);
+  color: $c;
+  svg {
+    fill: $c;
+  }
+}
+.state-loading {
+  $c: darken($c-border, 18%);
+  color: $c;
+  svg {
+    fill: $c;
+  }
+}

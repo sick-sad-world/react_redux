@@ -12,17 +12,18 @@ import { AutoSizer, List } from 'react-virtualized';
 // ===========================================================================
 import PropTypes from 'prop-types';
 import { stateNum } from 'common/typecheck';
-import { } from './defaults';
+import { limit } from './defaults';
 
 // Import connection
 // ===========================================================================
 import { connect } from 'react-redux';
 import { makeContainerSelector } from './selectors';
-import * as actions from './actions';
+import { addResults, getResults, resultError } from './actions';
 
 // Import child Components
 // ===========================================================================
 import Result from './components/result';
+import Icon from 'common/components/icon';
 
 // description
 // ===========================================================================
@@ -30,14 +31,37 @@ class ResultsContainer extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      error: null
+    };
     this.infiniteRunning = false;
     this.interval = null;
     this.entity = { id: props.id };
-    bindAll(this, 'rowRenderer', 'onRowsRendered', 'autoreloadInitialize');
+    bindAll(this, 'rowRenderer', 'onRowsRendered', 'autoreloadInitialize', 'noRowsRenderer');
     if (props.data.autoreload > 0) {
       this.interval = this.autoreloadInitialize(props.data);
     }
+  }
+
+  countRows() {
+    const { data, payload } = this.props;
+    let result = this.props.defaultLimit;
+    switch (this.props.state) {
+      case 0:
+        result = 0;
+        break;
+      case 1:
+      case 3:
+        result = data.limit;
+        break;
+      default:
+        result = payload.length;
+        if (data.infinite && payload.length) {
+          result += data.limit;
+        }
+        break;
+    }
+    return result;
   }
 
   componentWillReceiveProps(newProps) {
@@ -72,11 +96,28 @@ class ResultsContainer extends React.Component {
     );
   }
 
+  noRowsRenderer() {
+    if (this.props.error) {
+      return (
+        <div className='state-error'>
+          <Icon icon='error' viewBox='0 0 24 24' />
+          {this.props.error}
+        </div>
+      );
+    }
+    return (
+        <div className='state-empty'>
+          <Icon icon='warning' viewBox='0 0 24 24' />
+          {this.props.stateEmpty}
+        </div>
+    );
+  }
+
   onRowsRendered(rowCount) {
     return ({ stopIndex }) => {
-      if (stopIndex > (rowCount - this.props.data.limit) && !this.infiniteRunning) {
+      if (rowCount > 0 && stopIndex > (rowCount - this.props.data.limit) && !this.infiniteRunning) {
         this.infiniteRunning = true;
-        this.props.addResults({ ...this.props.data, offset: this.props.payload.length }, this.entity).then(() => {
+        this.props.getResults({ ...this.props.data, offset: this.props.payload.length }, { ...this.entity, state: false }).then(() => {
           this.infiniteRunning = false;
         });
       }
@@ -85,10 +126,7 @@ class ResultsContainer extends React.Component {
 
   render() {
     const { state, payload, data } = this.props;
-    let rowCount = (state > 1) ? payload.length : data.limit || 30;
-    if (data.infinite) {
-      rowCount += data.limit;
-    }
+    const rowCount = this.countRows();
     return (
       <AutoSizer>
         {({ height, width }) => (
@@ -102,6 +140,7 @@ class ResultsContainer extends React.Component {
             rowHeight={Math.round((width * 9) / 18)}
             overscanRowCount={3}
             width={width}
+            noRowsRenderer={this.noRowsRenderer}
             onRowsRendered={(data.infinite) ? this.onRowsRendered(rowCount) : undefined}
           />
         )}
@@ -113,22 +152,30 @@ class ResultsContainer extends React.Component {
 ResultsContainer.defaultProps = {
   type: 'image',
   location: '',
+  stateEmpty: 'It seems we could not find any items matching your query at this time. Try again later or modify the filter settings for this column.',
+  defaultLimit: limit,
   ...defaultResults
 };
 
 ResultsContainer.propTypes = {
   id: PropTypes.number.isRequired,
+  defaultLimit: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
   data: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired,
   state: stateNum.isRequired,
+  error: PropTypes.string,
+  stateEmpty: PropTypes.string.isRequired,
   payload: PropTypes.arrayOf(PropTypes.object).isRequired,
-  getResults: PropTypes.func.isRequired,
-  addResults: PropTypes.func.isRequired,
-  refreshResult: PropTypes.func.isRequired,
-  favoriteResult: PropTypes.func.isRequired,
-  ignoreResult: PropTypes.func.isRequired
+  getResults: PropTypes.func.isRequired
+  // refreshResult: PropTypes.func.isRequired,
+  // favoriteResult: PropTypes.func.isRequired,
+  // ignoreResult: PropTypes.func.isRequired
 };
 
-export default connect(makeContainerSelector(), { ...actions })(ResultsContainer);
+export default connect(makeContainerSelector(), dispatch => ({
+  getResults(data, opts) {
+    return dispatch((data.offset) ? addResults(data, opts) : getResults(data, opts)).catch(err => dispatch(resultError(err)));
+  }
+}))(ResultsContainer);

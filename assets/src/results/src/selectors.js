@@ -9,9 +9,10 @@ export function makeContainerSelector() {
   const selector = createSelector(
     getResultsById,
     getSortParam,
-    ({ state, payload }, sort) => ({
+    ({ state, payload, error }, sort) => ({
       state,
-      payload: payload.map(({ hash, title, image, url, domain, description, found, author, ...rest }) => ({ hash, title, image, url, domain, description, found, author, [sort]: rest[sort] }))
+      payload: payload.map(({ hash, title, image, url, domain, description, found, author, ...rest }) => ({ hash, title, image, url, domain, description, found, author, [sort]: rest[sort] })),
+      error
     })
   );
   return (state, props) => selector(state, props);

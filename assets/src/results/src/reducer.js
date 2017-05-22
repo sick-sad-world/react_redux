@@ -10,6 +10,12 @@ export default (state = {}, action) => {
     case LOGOUT:
     case LOGIN:
       return {};
+    case types.ERROR:
+      return updateObjectById(state, action.entity, prevState => ({
+        payload: [],
+        state: 0,
+        error: action.error
+      }));
     case types.STATE:
       return updateObjectById(state, action.entity, prevState => ({
         payload: (prevState) ? prevState.payload : [],
