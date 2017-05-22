@@ -26,10 +26,7 @@ export const defaultDashboardResult = {
 export const displaySettings = {
   all: ['title', 'url', 'author', 'found', 'image', 'wide_image', 'description', 'graphs', 'likes', 'tweets', 'pins', 'shares', 'comments', 'votes_video', 'views_video', 'comments_video'],
   table: ['tweets', 'likes', 'shares', 'pins', 'comments', 'votes_video', 'views_video', 'comments_video'],
-  default: ['title', 'found', 'url', 'image', 'description', 'likes', 'tweets', 'shares'],
-  disabled: ['title', 'url'],
-  notAffecting: ['id', 'name', 'display_settings', 'advancedFilters', 'changed'],
-  affectingProps: ['sort', 'direction', 'show_favorites', 'show_ignored', 'limit', 'author', 'search', 'exclude_search', 'url', 'since', 'before', 'language', 'source', 'set', 'ignore_source', 'ignore_set', 'is_image', 'is_video', 'is_facebook', 'is_gallery']
+  default: ['title', 'found', 'url', 'image', 'description', 'likes', 'tweets', 'shares']
 };
 
 

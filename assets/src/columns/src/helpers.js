@@ -1,5 +1,5 @@
 import types from './types';
-import { sortingOptions, defColumnData, defaultDisplay } from './defaults';
+import { sortingOptions, defColumnData } from './defaults';
 
 export function getColumnsForResults(payload) {
   return payload.find(item => (item && item.type === types.READ)).payload.map(({ id, data, open }) => ({ id, data, open }));
@@ -9,9 +9,10 @@ export function composeColumnData(column) {
   // if (!Object.keys(column.data).length) {
   column.data = { ...defColumnData, ...column.data };
   // }
-  if (!column.display_settings) {
-    column.display_settings = defaultDisplay;
-  } else if (typeof column.display_settings === 'string') {
+  // if (!column.display_settings) {
+  //   column.display_settings = defaultDisplay;
+  // } else
+  if (typeof column.display_settings === 'string') {
     column.display_settings = column.display_settings.split(',');
   }
   delete column.ID;

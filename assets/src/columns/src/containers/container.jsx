@@ -10,13 +10,13 @@ import { connect } from 'react-redux';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { coreInterface, editOptions } from '../defaults';
+import { coreInterface, editOptions, notAffecting, affectingProps } from '../defaults';
 import { makeContainerSelector } from '../selectors';
 
 // Import actions
 // ===========================================================================
 import { createColumn, editColumn, deleteColumn, sortColumns } from '../actions';
-import { getResults, displaySettings, clearResults } from 'src/results';
+import { getResults, clearResults } from 'src/results';
 
 // Import Child components
 // ===========================================================================
@@ -58,7 +58,7 @@ class Columns extends React.Component {
       }
       return <EditColumn {...props} className='mod-column-edit' formProps={{
         path: `${this.props.route.path}/${this.props.curId}`,
-        notAffecting: [...displaySettings.notAffecting],
+        notAffecting: [...notAffecting],
         ...editOptions
       }} />;
     }
@@ -130,7 +130,7 @@ export default connect(makeContainerSelector(), dispatch => ({
   },
   actionEdit(data, changed) {
     return dispatch(editColumn(data)).then((resp) => {
-      if (getResults && (data.open === 1 || intersection(displaySettings.affectingProps, changed).length)) {
+      if (getResults && (data.open === 1 || intersection(affectingProps, changed).length)) {
         return dispatch(getResults(data.data, { id: data.id }));
       } else if (data.open === 0) {
         if (clearResults) {
