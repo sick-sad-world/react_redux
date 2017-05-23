@@ -117,7 +117,7 @@ span.switcher-direction {
 		border-radius: $bdrs;
 		@include gradient($c-accent);
 		border: $bd-darken;
-		transition: left $dur linear;
+		//transition: left $dur linear;
 	}
 	label {
 		float: left;
@@ -129,7 +129,7 @@ span.switcher-direction {
 		cursor: pointer;
 		text-align: center;
 		font-size: 0.875em;
-		transition: color $dur ease;
+		//transition: color $dur ease;
 		&:before {
 			margin-right: baseUnit();
 		}
