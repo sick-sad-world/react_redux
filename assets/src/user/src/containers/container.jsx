@@ -70,4 +70,4 @@ User.propTypes = {
 // Connect our Container to State
 // @ deps -> User
 // ===========================================================================
-export default connect(makeContainerSelector(), { editUser })(User);
+export default connect(makeContainerSelector, { editUser })(User);

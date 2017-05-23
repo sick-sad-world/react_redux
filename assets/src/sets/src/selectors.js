@@ -12,7 +12,7 @@ const getCriterea = ({ sets }, props) => props.criterea;
 const getDisabled = ({ sets }, props) => props.disabled_sets;
 
 export function makeContainerSelector() {
-  return createSelector(
+  const selector = createSelector(
     getSetsState,
     getSets,
     getCurrentId,
@@ -21,11 +21,14 @@ export function makeContainerSelector() {
       curId,
       payload: payload.map(({ id, name, source_ids }) => ({ id, name, source_ids, counter: source_ids.length })),
       chosen: payload.find(({ id }) => id === curId)
-    }));
+    })
+  );
+
+  return (state, props) => selector(state, props);
 }
 
 export function makeFullListSelector() {
-  return createSelector(
+  const selector = createSelector(
     getSetsState,
     getSets,
     getDisabled,
@@ -37,10 +40,12 @@ export function makeFullListSelector() {
       })) : payload
     })
   );
+
+  return (state, props) => selector(state, props);
 }
 
 export function makeListSelector() {
-  return createSelector(
+  const selector = createSelector(
     getSetsState,
     getSets,
     getCriterea,
@@ -65,4 +70,6 @@ export function makeListSelector() {
       };
     }
   );
+
+  return (state, props) => selector(state, props);
 }

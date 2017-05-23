@@ -59,8 +59,4 @@ SetsList.propTypes = {
 // Connect our Container to State
 // @ deps -> Feeds
 // ===========================================================================
-function mapStateToProps() {
-  const selector = makeListSelector();
-  return (state, props) => selector(state, props);
-}
-export default connect(mapStateToProps())(SetsList);
+export default connect(makeListSelector)(SetsList);

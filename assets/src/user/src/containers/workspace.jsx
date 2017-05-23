@@ -116,4 +116,4 @@ Workspace.propTypes = {
 // Connect our Container to State
 // @ deps -> App, (User in future)
 // ===========================================================================
-export default connect(makeWorkspaceSelector(), { logout })(Workspace);
+export default connect(makeWorkspaceSelector, { logout })(Workspace);

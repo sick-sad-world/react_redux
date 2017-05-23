@@ -8,9 +8,4 @@ import { makeFullListSelector } from '../selectors';
 // ===========================================================================
 import SetsWithContents from '../components/list';
 
-function mapStateToProps() {
-  const selector = makeFullListSelector();
-  return (state, props) => selector(state, props);
-}
-
-export default connect(mapStateToProps())(SetsWithContents);
+export default connect(makeFullListSelector)(SetsWithContents);

@@ -124,7 +124,7 @@ Columns.propTypes = {
 // Connect our Container to State
 // @ deps -> Columns
 // ===========================================================================
-export default connect(makeContainerSelector(), dispatch => ({
+export default connect(makeContainerSelector, dispatch => ({
   actionSort(...args) {
     return dispatch(sortColumns(...args));
   },

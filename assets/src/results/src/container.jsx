@@ -112,6 +112,7 @@ class ResultsContainer extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
+    console.log(newProps.id);
     this.heightConfig = this.pickElementHeights(newProps.displaySettings);
     this.rowHeight = this.countRowHeight(newProps.displaySettings);
     this.gallery = this.isGallery(newProps.displaySettings);
@@ -244,7 +245,7 @@ ResultsContainer.propTypes = {
   ignoreResult: PropTypes.func.isRequired
 };
 
-export default connect(makeContainerSelector(), dispatch => ({
+export default connect(makeContainerSelector, dispatch => ({
   getResults(data, opts) {
     return dispatch((data.offset) ? addResults(data, opts) : getResults(data, opts)).catch(err => dispatch(resultError(err)));
   },

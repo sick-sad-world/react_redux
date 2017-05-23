@@ -28,14 +28,17 @@ export function makeContainerSelector() {
 }
 
 export function makeDashboardSelector() {
-  return createSelector(
+  const selector = createSelector(
     getColumns,
     getColumnState,
     getColumnIds,
     (payload, state, column_ids) => ({
       state,
       payload: payload.filter(({ id, open }) => open && includes(column_ids, id))
-    }));
+    })
+  );
+
+  return (state, props) => selector(state, props);
 }
 
 export function makeDropdownSelector() {

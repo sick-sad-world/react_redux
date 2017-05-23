@@ -26,8 +26,4 @@ DashboardColumns.propTypes = {
 // Connect our Container to State
 // @ deps -> Columns
 // ===========================================================================
-function mapStateToProps() {
-  const selector = makeDashboardSelector();
-  return (state, props) => selector(state, props);
-}
-export default connect(mapStateToProps(), { deleteColumn, editColumn, sortColumns })(DashboardColumns);
+export default connect(makeDashboardSelector, { deleteColumn, editColumn, sortColumns })(DashboardColumns);

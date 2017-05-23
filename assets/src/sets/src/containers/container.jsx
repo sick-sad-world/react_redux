@@ -123,11 +123,6 @@ Sourcesets.propTypes = {
 // Connect our Container to State
 // @ deps -> Sourcesets
 // ===========================================================================
-function mapStateToProps() {
-  const selector = makeContainerSelector();
-  return (state, props) => selector(state, props);
-}
-
 function mapDispatchToProps(dispatch) {
   return {
     actionSort(...args) {
@@ -148,4 +143,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps(), mapDispatchToProps)(Sourcesets);
+export default connect(makeContainerSelector, mapDispatchToProps)(Sourcesets);

@@ -3,8 +3,6 @@ import { defaultResults } from './defaults';
 
 const getResultsById = ({ results }, props) => results[props.id] || { ...defaultResults };
 
-const getSortParam = ({ results }, props) => props.sort;
-
 const getFavoriteValue = ({ results }, props) => props.data.show_favorites;
 
 const getIgnoredValue = ({ results }, props) => props.data.show_ignored;
@@ -12,10 +10,9 @@ const getIgnoredValue = ({ results }, props) => props.data.show_ignored;
 export function makeContainerSelector() {
   const selector = createSelector(
     getResultsById,
-    getSortParam,
     getFavoriteValue,
     getIgnoredValue,
-    ({ state, payload, error }, sort, fav, ign) => {
+    ({ payload, state, error }, fav, ign) => {
       let results = payload.filter(({ ignore }) => !ignore);
       if (fav === 1) {
         results = payload.filter(({ favorite }) => !!favorite);

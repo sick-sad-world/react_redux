@@ -52,4 +52,4 @@ Emails.propTypes = {
 // Connect our Container to State
 // @ deps -> User
 // ===========================================================================
-export default connect(makeEmailsSelector(), { editUser })(Emails);
+export default connect(makeEmailsSelector, { editUser })(Emails);
