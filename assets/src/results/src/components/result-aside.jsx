@@ -1,3 +1,7 @@
+// Import helpers
+// ===========================================================================
+import { formatNumber, sortParamToShort } from '../helpers';
+
 // Import react stuff
 // ===========================================================================
 import React from 'react';
@@ -10,7 +14,7 @@ import { Favorite, Unfavorite, Refresh, Show, Hide, GoTo } from 'common/componen
 
 // Result aside
 // ===========================================================================
-export default function ResultAside({ hash, url, favorite, ignore, refreshResult, favoriteResult, ignoreResult }) {
+export default function ResultAside({ style, sort, value, hash, url, favorite, ignore, refreshResult, favoriteResult, ignoreResult }) {
   let favoriteBtn = null;
   if (favoriteResult) {
     favoriteBtn = (favorite) ? (
@@ -30,11 +34,17 @@ export default function ResultAside({ hash, url, favorite, ignore, refreshResult
   }
 
   return (
-    <aside>
-      {(refreshResult) ? <Refresh handler={() => refreshResult({ hash })} title='Refresh this result' /> : null}
-      {favoriteBtn}
-      {ignoreBtn}
-      <GoTo target='_blank' title='Visit original' href={url} />
+    <aside style={style}>
+      <span title={(sort !== 'found') ? `${sort} - ${value}` : null} className='badge comparator'>
+        <b>{(sort === 'found') ? 'Found' : formatNumber(value)} </b>
+        { (sort !== 'found') ? sortParamToShort(sort) : null }
+      </span>
+      <div>
+        {(refreshResult) ? <Refresh handler={() => refreshResult({ hash })} title='Refresh this result' /> : null}
+        {favoriteBtn}
+        {ignoreBtn}
+        <GoTo target='_blank' title='Visit original' href={url} />
+      </div>
     </aside>
   );
 }
@@ -45,11 +55,14 @@ ResultAside.defaultProps = {
 };
 
 ResultAside.propTypes = {
+  style: PropTypes.object,
   hash: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
   favorite: numBool.isRequired,
   ignore: numBool.isRequired,
   refreshResult: PropTypes.func,
   favoriteResult: PropTypes.func,
-  ignoreResult: PropTypes.func
+  ignoreResult: PropTypes.func,
+  sort: PropTypes.string.isRequired,
+  value: PropTypes.number.isRequired
 };

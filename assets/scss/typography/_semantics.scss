@@ -64,6 +64,24 @@ blockquote {}
 /* Small elements
 ========================================================================== */
 
+.line {
+  @include ph-bg();
+  border-radius: baseUnit();
+  height: baseUnit(1.5);
+  display: block;
+  width: 100%;
+  margin: 4px 0;
+  &:first-child {
+    margin-top: 0;
+  }
+  &.short {
+    width: 66%;
+  }
+  &.very-short {
+    width: 33%;
+  }
+}
+
 .drag-handle {
   cursor: move;
   width: $pointer-unit;

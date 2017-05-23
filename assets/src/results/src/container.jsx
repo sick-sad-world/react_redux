@@ -1,6 +1,6 @@
 // Import helper stuff
 // ===========================================================================
-import { bindAll, intersection } from 'lodash';
+import { bindAll, includes } from 'lodash';
 import { defaultResults } from './defaults';
 
 // Import React related stuff
@@ -12,7 +12,7 @@ import { AutoSizer, List } from 'react-virtualized';
 // ===========================================================================
 import PropTypes from 'prop-types';
 import { stateNum } from 'common/typecheck';
-import { limit, gutter } from './defaults';
+import { limit, gutter, displaySettings } from './defaults';
 
 // Import connection
 // ===========================================================================
@@ -37,7 +37,10 @@ class ResultsContainer extends React.Component {
     };
     this.infiniteRunning = false;
     this.interval = null;
-    this.baseHeight = 0;
+    this.rowHeight = this.countRowHeight(props.displaySettings);
+    this.heightConfig = this.pickElementHeights(props.displaySettings);
+    this.gallery = this.isGallery(props.displaySettings);
+    this.text = this.isText(props.displaySettings);
     bindAll(this, 'rowRenderer', 'onRowsRendered', 'autoreloadInitialize', 'noRowsRenderer');
     if (props.data.autoreload > 0) {
       this.interval = this.autoreloadInitialize(props.data);
@@ -65,7 +68,54 @@ class ResultsContainer extends React.Component {
     return result;
   }
 
+  isGallery(settings) {
+    return includes(settings, 'wide_image');
+  }
+
+  isText(settings) {
+    return includes(settings, 'description') && !includes(settings, 'image');
+  }
+
+  countRowHeight(settings) {
+    let exclude = [];
+    return settings.reduce((acc, stat) => {
+      const map = this.props.displaySettingsMap[stat];
+      if (map.table && !includes(exclude, 'table')) {
+        exclude.push('table');
+        acc += (8 + map.height);
+      }
+      if (stat === 'title') {
+        acc += 4;
+      }
+      if (map.sibling) {
+        if (!includes(exclude, stat)) {
+          exclude = exclude.concat(map.sibling);
+          acc += map.height;
+        }
+      } else {
+        acc += map.height;
+      }
+      return acc;
+    }, 26);
+  }
+
+  pickElementHeights(settings) {
+    return settings.reduce((acc, stat) => {
+      acc[stat] = `${this.props.displaySettingsMap[stat].height}px`;
+      if (!acc.table && this.props.displaySettingsMap[stat].table) {
+        acc.table = acc[stat];
+      }
+      return acc;
+    }, {
+      aside: '26px'
+    });
+  }
+
   componentWillReceiveProps(newProps) {
+    this.heightConfig = this.pickElementHeights(newProps.displaySettings);
+    this.rowHeight = this.countRowHeight(newProps.displaySettings);
+    this.gallery = this.isGallery(newProps.displaySettings);
+    this.text = this.isText(newProps.displaySettings);
     if (newProps.data.autoreload > 0 && !this.interval) {
       this.interval = this.autoreloadInitialize(newProps.data);
     } else if (newProps.data.autoreload === 0 && this.interval) {
@@ -81,23 +131,26 @@ class ResultsContainer extends React.Component {
 
   rowRenderer({ index, isScrolling, isVisible, key, style }) {
     const result = this.props.payload[index];
+    let DOM = null;
+    if (this.props.state === 3 || !result) {
+      DOM = <Placeholder displaySettings={this.props.displaySettings} heights={this.heightConfig} />;
+    } else {
+      DOM = (
+        <Result
+          payload={result}
+          sort={this.props.data.sort}
+          location={this.props.location}
+          displaySettings={this.props.displaySettings}
+          heights={this.heightConfig}
+          refreshResult={this.props.refreshResult({ id: this.props.id, state: false })}
+          favoriteResult={this.props.favoriteResult({ id: this.props.id, state: false })}
+          ignoreResult={this.props.ignoreResult({ id: this.props.id, state: false })}
+        />
+      );
+    }
+
     return (
-      <div key={key} style={style}>
-        {(this.props.state === 3 || !result) ? (
-          <Placeholder sort={this.props.data.sort} displaySettings={this.props.displaySettings} />
-        ) : (
-          <Result
-            style={{ height: this.baseHeight, margin: `${this.props.gutter}px 0` }}
-            payload={result}
-            sort={this.props.data.sort}
-            location={this.props.location}
-            displaySettings={this.props.displaySettings}
-            refreshResult={this.props.refreshResult({ id: this.props.id, state: false })}
-            favoriteResult={this.props.favoriteResult({ id: this.props.id, state: false })}
-            ignoreResult={this.props.ignoreResult({ id: this.props.id, state: false })}
-          />
-        )}
-      </div>
+      <div key={key} style={{ ...style, padding: `${this.props.gutter}px 0` }}>{DOM}</div>
     );
   }
 
@@ -134,22 +187,28 @@ class ResultsContainer extends React.Component {
     const rowCount = this.countRows();
     return (
       <AutoSizer>
-        {({ height, width }) => {
-          this.baseHeight = Math.round((width * 9) / 18);
-          return (<List
+        {({ height, width }) => (
+          <List
             length={payload.length}
             state={state}
             sort={data.sort}
             rowRenderer={this.rowRenderer}
             height={height}
             rowCount={rowCount}
-            rowHeight={this.baseHeight + this.props.gutter * 2}
+            rowHeight={({ index }) => {
+              const result = this.props.payload[index];
+              let rowHeight = this.rowHeight;
+              if (this.props.state === 2 && result && this.text && !result.description.length) {
+                rowHeight -= this.props.displaySettingsMap.description.height;
+              }
+              return rowHeight + (this.props.gutter * 2);
+            }}
             overscanRowCount={3}
             width={width}
             noRowsRenderer={this.noRowsRenderer}
             onRowsRendered={(data.infinite) ? this.onRowsRendered(rowCount) : undefined}
-          />);
-        }}
+          />
+        )}
       </AutoSizer>
     );
   }
@@ -160,6 +219,9 @@ ResultsContainer.defaultProps = {
   gutter,
   stateEmpty: 'It seems we could not find any items matching your query at this time. Try again later or modify the filter settings for this column.',
   defaultLimit: limit,
+  tableStats: [...displaySettings.table],
+  displaySettings: [...displaySettings.default],
+  displaySettingsMap: { ...displaySettings.map },
   ...defaultResults
 };
 
@@ -172,7 +234,9 @@ ResultsContainer.propTypes = {
   state: stateNum.isRequired,
   error: PropTypes.string,
   stateEmpty: PropTypes.string.isRequired,
+  tableStats: PropTypes.arrayOf(PropTypes.string).isRequired,
   displaySettings: PropTypes.arrayOf(PropTypes.string).isRequired,
+  displaySettingsMap: PropTypes.object.isRequired,
   payload: PropTypes.arrayOf(PropTypes.object).isRequired,
   getResults: PropTypes.func.isRequired,
   refreshResult: PropTypes.func.isRequired,

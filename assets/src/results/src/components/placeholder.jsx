@@ -1,64 +1,82 @@
 import { includes } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { displaySettings as defs } from '../defaults';
+import { displaySettings as settings } from '../defaults';
 
 // Result placeholder component
 // ===========================================================================
-export default function Placeholder({ sort, displaySettings }) {
+export default function Placeholder({ displaySettings, tableStats, heights }) {
+  const tableRows = tableStats.filter(stat => includes(displaySettings, stat));
   return (
     <article className='mod-result is-placeholder'>
-      <aside></aside>
       <div className="content">
-        <header>
-          <span className='comparator'>{sort}</span>
-          <h1>
-            <span className='line'></span>
-            <span className='line'></span>
-            <span className='line short'></span>
-          </h1>
-        </header>
+        <h1 style={{ maxHeight: heights.title }}>
+          <span className='line'></span>
+          <span className='line short'></span>
+        </h1>
+        {(includes(displaySettings, 'found') || includes(displaySettings, 'domain') || includes(displaySettings, 'author')) ? (
+          <small style={{ height: heights.found || heights.domain || heights.author }}>
+            <span className='line very-short'></span>
+            <span className='line very-short'></span>
+            <span className='line very-short'></span>
+          </small>
+        ) : null}
         {(includes(displaySettings, 'wide_image')) ? (
-          <div className='gallery'>
-            <span className='image'></span>
-            <small>
-              <span className='line short'></span>
-              <span className='line short'></span>
-            </small>
-          </div>
+          <figure className='image' style={{ height: heights.wide_image }}>
+          </figure>
         ) : (
-          <div className='description'>
-            <small>
-              <span className='line short'></span>
-              <span className='line short'></span>
-            </small>
+          <div className='text' style={{ maxHeight: heights.description || heights.image }}>
             {(includes(displaySettings, 'image')) ? (
-              <span className='image'></span>
+              <figure className='image'></figure>
             ) : null }
-            <p>
-              <span className='line'></span>
-              <span className='line'></span>
-              <span className='line'></span>
-              <span className='line'></span>
-              <span className='line'></span>
-              <span className='line'></span>
-              <span className='line'></span>
-              <span className='line'></span>
-              <span className='line short'></span>
-            </p>
+            {(includes(displaySettings, 'description')) ? (
+              <div className='content'>
+                <span className='line'></span>
+                <span className='line'></span>
+                <span className='line'></span>
+                <span className='line'></span>
+                <span className='line'></span>
+                <span className='line'></span>
+                <span className='line'></span>
+                <span className='line short'></span>
+              </div>
+            ) : null }
           </div>
         )}
+        {(tableRows && tableRows.length) ? (
+          <table className='placeholder-table'>
+            <tbody>
+              <tr>
+                <th style={{ height: heights.table }}></th>
+                <th style={{ height: heights.table }}></th>
+                <th style={{ height: heights.table }}></th>
+                <th style={{ height: heights.table }}></th>
+                <th style={{ height: heights.table }}></th>
+              </tr>
+              {tableRows.map((s, i) => (
+                <tr key={i}>
+                  <td style={{ height: heights.table }}></td>
+                  <td style={{ height: heights.table }}></td>
+                  <td style={{ height: heights.table }}></td>
+                  <td style={{ height: heights.table }}></td>
+                  <td style={{ height: heights.table }}></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : null}
       </div>
     </article>
   );
 }
 
 Placeholder.defaultProps = {
-  sort: 'Found',
-  displaySettings: [...defs.default]
+  displaySettings: [...settings.default],
+  tableStats: [...settings.table]
 };
 
 Placeholder.propTypes = {
-  sort: PropTypes.string.isRequired,
-  displaySettings: PropTypes.arrayOf(PropTypes.string).isRequired
+  heights: PropTypes.objectOf(PropTypes.string).isRequired,
+  displaySettings: PropTypes.arrayOf(PropTypes.string).isRequired,
+  tableStats: PropTypes.arrayOf(PropTypes.string).isRequired
 };

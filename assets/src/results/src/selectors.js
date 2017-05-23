@@ -25,9 +25,7 @@ export function makeContainerSelector() {
 
       return {
         state,
-        payload: results.map(({ hash, title, image, url, domain, description, found, author, favorite, ignore, ...rest }) => ({
-          hash, title, image, url, domain, description, found, author, favorite, ignore, [sort]: rest[sort]
-        })),
+        payload: results,
         error
       };
     }

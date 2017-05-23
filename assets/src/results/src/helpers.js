@@ -1,5 +1,5 @@
 export function splitText(result) {
-  const limit = 120;
+  const limit = 128;
   const index = {
     max: Math.round(limit * 1.25),
     min: Math.round(limit * 0.75),

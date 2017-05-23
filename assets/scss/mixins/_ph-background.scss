@@ -1,0 +1,3 @@
+@mixin ph-bg() {
+  background: lighten($c-border, 10%);
+}
