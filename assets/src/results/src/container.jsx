@@ -112,7 +112,6 @@ class ResultsContainer extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    console.log(newProps.id);
     this.heightConfig = this.pickElementHeights(newProps.displaySettings);
     this.rowHeight = this.countRowHeight(newProps.displaySettings);
     this.gallery = this.isGallery(newProps.displaySettings);

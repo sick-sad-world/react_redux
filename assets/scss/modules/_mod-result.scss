@@ -28,6 +28,7 @@
   .comparator {
     font: 1em / 1 $heading-font-family;
     cursor: pointer;
+    text-shadow: 0 0 2px #000;
     b {
       font-size: 1.25em;
     }
@@ -98,6 +99,7 @@
   .hotness {
     position: relative;
     font-weight: bold;
+    text-shadow: 0 0 4px #fff;
   }
   .color-bar {
     display: block;
