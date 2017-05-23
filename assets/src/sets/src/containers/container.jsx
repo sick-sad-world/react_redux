@@ -114,7 +114,6 @@ Sourcesets.propTypes = {
     path: PropTypes.string.isRequired
   }).isRequired,
   params: PropTypes.object.isRequired,
-  forseUpdateUniq: PropTypes.func.isRequired,
   actionCreate: PropTypes.func.isRequired,
   actionEdit: PropTypes.func.isRequired,
   actionDelete: PropTypes.func.isRequired
@@ -132,13 +131,10 @@ function mapDispatchToProps(dispatch) {
       return dispatch(createSet(...args));
     },
     actionEdit(...args) {
-      return dispatch(editSet(...args));
-    },
-    forseUpdateUniq(...args) {
-      return dispatch(forseUpdateUniq(...args));
+      return dispatch(editSet(...args)).then(() => dispatch(forseUpdateUniq));
     },
     actionDelete(data) {
-      return dispatch(deleteSet(data)).then(this.props.forseUpdateUniq);
+      return dispatch(deleteSet(data)).then(() => dispatch(forseUpdateUniq));
     }
   };
 }

@@ -46,6 +46,6 @@ export const deleteSet = createAction({
   successMessage: 'Set was deleted.'
 });
 
-export const forseUpdateUniq = () => dispatch => dispatch({
+export const forseUpdateUniq = dispatch => dispatch({
   type: types.UPDATE_UNIQ
 });

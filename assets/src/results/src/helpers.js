@@ -9,7 +9,6 @@ export function splitText(result) {
     }
   };
 
-  result.additional = '';
   if ((typeof result.description === 'string') && result.description.length > Math.round(limit * 1.75)) {
     index.curr = result.description.search(/[\.\?\!]\s/);
     if (!index.isValid()) {
@@ -20,12 +19,13 @@ export function splitText(result) {
     } else {
       index.curr += 2;
     }
-    if (index.curr >= 0) {
-      result.additional = result.description.substring(index.curr, result.description.length);
-      result.description = result.description.substring(0, index.curr);
-    }
   }
-  return result;
+
+  return {
+    ...result,
+    additional: (index.curr >= 0) ? result.description.substring(index.curr, result.description.length) : '',
+    description: (index.curr >= 0) ? result.description.substring(0, index.curr) : result.description
+  };
 }
 
 export const formatNumber = (num, gap = 1) => {

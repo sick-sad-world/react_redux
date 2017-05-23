@@ -1,3 +1,6 @@
 export function makeUrl(dashboard) {
-  dashboard.url = dashboard.name.toLowerCase().replace(' ', '-');
+  return {
+    ...dashboard,
+    url: dashboard.name.toLowerCase().replace(' ', '-')
+  };
 }

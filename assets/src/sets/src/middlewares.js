@@ -6,7 +6,13 @@ import { calcFeedOccurance, setUniqFeeds } from './helpers';
 export function clearFeeds({ dispatch, getState }) {
   return next => (action) => {
     if (action.type === types.UPDATE) {
-      action.payload.sources = undefined;
+      return next({
+        ...action,
+        payload: {
+          ...action.payload,
+          sources: undefined
+        }
+      });
     }
     return next(action);
   };
@@ -18,11 +24,17 @@ export function updateUniq({ dispatch, getState }) {
   return next => (action) => {
     if (action.type === types.READ) {
       const feeds = calcFeedOccurance(action.payload);
-      action.payload.forEach(set => setUniqFeeds(set, feeds));
+      return next({
+        ...action,
+        payload: action.payload.map(set => setUniqFeeds(set, feeds))
+      });
     } else if (action.type === types.UPDATE_UNIQ) {
       const { sets } = getState();
       const feeds = calcFeedOccurance(sets.payload);
-      action.payload = sets.payload.map(set => setUniqFeeds(set, feeds)).map(({ id, uniq_ids }) => ({ id, uniq_ids }));
+      return next({
+        ...action,
+        payload: sets.payload.map(set => setUniqFeeds(set, feeds)).map(({ id, uniq_ids }) => ({ id, uniq_ids }))
+      });
     }
     return next(action);
   };

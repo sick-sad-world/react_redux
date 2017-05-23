@@ -6,16 +6,20 @@ export function getColumnsForResults(payload) {
   return payload.find(item => (item && item.type === types.READ)).payload.map(({ id, data, open }) => ({ id, data, open }));
 }
 
-export function composeColumnData(column) {
-  // if (!Object.keys(column.data).length) {
-  column.data = { ...defColumnData, ...column.data };
-  // }
-  if (!column.display_settings) {
-    column.display_settings = [...displaySettings.default];
-  } else if (typeof column.display_settings === 'string') {
-    column.display_settings = column.display_settings.split(',');
+export function composeColumnData({ id, name, data, display_settings, open }) {
+  let settings = display_settings;
+  if (!settings) {
+    settings = [...displaySettings.default];
+  } else if (typeof settings === 'string') {
+    settings = settings.split(',');
   }
-  delete column.ID;
+  return {
+    id,
+    name,
+    open,
+    display_settings: settings,
+    data: { ...defColumnData, ...data }
+  };
 }
 
 export function decomposeColumnSort(sort = defColumnData.sort) {
