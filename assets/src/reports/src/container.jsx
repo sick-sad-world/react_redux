@@ -10,9 +10,8 @@ import { connect } from 'react-redux';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { optionShape, listShape } from 'common/typecheck';
-import { coreInterface, defaultTimeFormat, defaultFrequency } from './defaults';
-import { makeDropdownSelector } from 'src/columns';
+import { listShape } from 'common/typecheck';
+import { coreInterface, defaultTimeFormat } from './defaults';
 import { makeContainerSelector } from './selectors';
 
 // Import actions
@@ -25,21 +24,12 @@ import Container from 'common/components/container';
 import EditReport from './components/edit';
 
 class Reports extends React.Component {
-  constructor(props) {
-    super(props);
-    bindAll(this, 'confText');
-  }
 
   confText(deleting) {
-    let text = '';
-    if (this.props.columns) {
-      const columns = this.props.columns.filter(({ value }) => includes(deleting.columns, value)).map(({ label }) => label);
-      text = `Watching: ${(columns.length) ? columns.join(', ') : 'none'}`;
-    }
     return (
       <dl>
         <dt>Trendolizer report</dt>
-        <dd>{`ID: ${deleting.id} - ${deleting.name}. ${text}`}</dd>
+        <dd>{`ID: ${deleting.id} - ${deleting.name}.`}</dd>
       </dl>
     );
   }
@@ -47,11 +37,7 @@ class Reports extends React.Component {
   render() {
     return (
       <Container {...this.props} callOnCreate={false} confText={this.confText}>
-        {(this.props.chosen) ? props => <EditReport {...props} formProps={{
-          columns: this.props.columns,
-          timeFormat: defaultTimeFormat,
-          frequencyOptions: defaultFrequency
-        }} /> : null}
+        {(this.props.chosen) ? props => <EditReport {...props} formProps={{ timeFormat: defaultTimeFormat }} /> : null}
       </Container>
     );
   }
@@ -81,7 +67,6 @@ Reports.defaultProps = {
 };
 
 Reports.propTypes = {
-  columns: optionShape('number'),
   payload: PropTypes.arrayOf(PropTypes.shape(listShape)).isRequired,
   chosen: PropTypes.shape(coreInterface),
   actionCreate: PropTypes.func.isRequired,
@@ -92,19 +77,7 @@ Reports.propTypes = {
 // Connect our Container to State
 // @ deps -> Reports
 // ===========================================================================
-function mapStateToProps() {
-  const selector = makeContainerSelector();
-  if (makeDropdownSelector instanceof Function) {
-    const columns = makeDropdownSelector();
-    return (state, props) => ({
-      columns: columns(state, props),
-      ...selector(state, props)
-    });
-  }
-  return (state, props) => selector(state, props);
-}
-
-export default connect(mapStateToProps(), {
+export default connect(makeContainerSelector, {
   actionSort: sortReports,
   actionCreate: createReport,
   actionEdit: editReport,

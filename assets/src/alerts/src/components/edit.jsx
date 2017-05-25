@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { defaultInterface } from '../defaults';
+import { defaultInterface, defaultFrequency } from '../defaults';
 
 // Import React related stuff
 // ===========================================================================
@@ -11,6 +11,7 @@ import { optionShape } from 'common/typecheck';
 // Import Child components
 // ===========================================================================
 import MakeEditForm, { injectedPropsType } from 'common/hocs/edit-form';
+import { ColumnsContainer } from 'src/columns';
 import TextInput from 'common/components/forms/input-text';
 import Dropdown from 'common/components/forms/dropdown';
 import Toggler from 'common/components/forms/toggler';
@@ -77,17 +78,21 @@ class EditAlert extends React.Component {
             value={formValues.frequency}
             desc={<span>Check column(s) for new items every <i>x</i> minutes</span>}
           />
-          <Dropdown
-            label='Columns assigment'
-            disabled={running}
-            className='row'
-            name='columns'
-            options={columns}
-            onChange={updateState('columns')}
-            multi={true}
-            value={formValues.columns}
-            desc='Watched columns (click on columns in the list to watch them too)'
-          />
+          <ColumnsContainer schema={{ value: 'id', label: 'name' }}>
+            {({ payload }) => (
+              <Dropdown
+                label='Columns assigment'
+                disabled={running}
+                className='row'
+                name='columns'
+                options={payload}
+                onChange={updateState('columns')}
+                multi={true}
+                value={formValues.columns}
+                desc='Watched columns (click on columns in the list to watch them too)'
+              />
+            )}
+          </ColumnsContainer>
         </div>
         <div className='form-block'>
           <div className='row'>
@@ -100,8 +105,11 @@ class EditAlert extends React.Component {
   }
 }
 
+EditAlert.defaultProps = {
+  frequencyOptions: defaultFrequency
+};
+
 EditAlert.propTypes = {
-  columns: optionShape('number'),
   frequencyOptions: optionShape('number'),
   ...injectedPropsType
 };

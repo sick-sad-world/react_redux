@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router';
-import Container from './containers/container';
+import Container from './containers/page';
 import CreateFeed from 'src/feeds';
 
 export default (

@@ -1,17 +1,21 @@
 import createSelector from 'common/selector-creator';
 import { includes } from 'lodash';
 
+const checkOpen = val => ({ open }) => open === val;
+
+const checkIds = ids => ({ id }) => includes(ids, id);
+
 const getColumnState = ({ columns }) => columns.state;
 
 const getColumns = ({ columns }) => columns.payload;
 
 const getCurrentId = ({ columns }, props) => parseInt(props.params.id, 10) || 0;
 
-const getCriterea = ({ columns }, props) => props.criterea;
-
 const getColumnIds = ({ columns }, props) => props.column_ids || [];
 
-export function makeContainerSelector() {
+const getOpen = ({ columns }, props) => props.open;
+
+export function makePageSelector() {
   const selector = createSelector(
     getColumnState,
     getColumns,
@@ -27,27 +31,21 @@ export function makeContainerSelector() {
   return (state, props) => selector(state, props);
 }
 
-export function makeDashboardSelector() {
+export function makeContainerSelector() {
   const selector = createSelector(
-    getColumns,
     getColumnState,
-    getColumnIds,
-    (payload, state, column_ids) => ({
-      state,
-      payload: payload.filter(({ id, open }) => open && includes(column_ids, id))
-    })
-  );
-
-  return (state, props) => selector(state, props);
-}
-
-export function makeDropdownSelector() {
-  const selector = createSelector(
     getColumns,
-    columns => columns.map(({ id, name }) => ({
-      value: id,
-      label: name
-    }))
+    getColumnIds,
+    getOpen,
+    (state, payload, ids, open) => {
+      const criterea = [];
+      if (open !== undefined) criterea.push(checkOpen(open));
+      if (ids.length) criterea.push(checkIds(ids));
+      return {
+        state,
+        payload: (criterea.length) ? payload.filter(column => criterea.every(f => f(column))) : payload
+      };
+    }
   );
 
   return (state, props) => selector(state, props);

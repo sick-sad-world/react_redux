@@ -10,10 +10,6 @@ const CONTEXT = 'assets';
 const alias = ['/img', '/icon', '/scss', '/src', '/src/_common', '/src/_common/functions'];
 
 const PLUGINS = [
-  new ExtractTextPlugin({
-    filename: (isDevelopment) ? '[name].css' : '[hash:12].css',
-    disable: isDevelopment && !process.env.BUNDLE
-  }),
   new webpack.DefinePlugin({
     NODE_ENV: JSON.stringify(process.env.NODE_ENV)
   }),
@@ -30,6 +26,10 @@ const PLUGINS = [
 if (isDevelopment) {
   PLUGINS.push(new webpack.NamedModulesPlugin());
 } else {
+  PLUGINS.push(new ExtractTextPlugin({
+    filename: (isDevelopment) ? '[name].css' : '[hash:12].css',
+    disable: isDevelopment && !process.env.BUNDLE
+  }));
   PLUGINS.push(new webpack.optimize.UglifyJsPlugin());
   PLUGINS.push(new webpack.BannerPlugin({
     banner: `
@@ -51,24 +51,23 @@ const jsLoader = {
 const sassLoader = {
   test: /\.scss?$/,
   exclude: /node_modules/,
-  use: PLUGINS[0].extract({
-    fallback: 'style-loader',
-    use: [{
-      loader: 'css-loader',
-      options: {
-        sourceMap: isDevelopment,
-        importLoaders: 1
-      }
-    }, {
-      loader: 'postcss-loader'
-    }, {
-      loader: 'sass-loader',
-      options: {
-        sourceMap: isDevelopment,
-        outputStyle: (isDevelopment) ? 'expanded' : 'compressed'
-      }
-    }]
-  })
+  use: [{
+    loader: 'style-loader'
+  }, {
+    loader: 'css-loader',
+    options: {
+      sourceMap: isDevelopment,
+      importLoaders: 1
+    }
+  }, {
+    loader: 'postcss-loader'
+  }, {
+    loader: 'sass-loader',
+    options: {
+      sourceMap: isDevelopment,
+      outputStyle: (isDevelopment) ? 'expanded' : 'compressed'
+    }
+  }]
 };
 
 // const svgLoader = {

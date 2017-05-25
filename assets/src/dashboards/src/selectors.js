@@ -8,7 +8,7 @@ const getCurrentId = ({ dashboards }, props) => parseInt(props.params.id, 10) ||
 
 const getTargetUrl = ({ dashboards }, props) => props.params.name;
 
-const getColumnId = ({ dashboards }, props) => parseInt(props.params.column, 10) || null;
+const getScrollTo = ({ dashboards }, props) => parseInt(props.params.scrollTo, 10) || null;
 
 export function makeNavSelector() {
   const selector = createSelector(
@@ -24,10 +24,10 @@ export function makeContainerSelector() {
   const selector = createSelector(
     getDashboards,
     getTargetUrl,
-    getColumnId,
-    (dashboards, target, column) => ({
+    getScrollTo,
+    (dashboards, target, scrollTo) => ({
       payload: dashboards.find(({ url }) => url === target),
-      column
+      scrollTo
     })
   );
   return (state, props) => selector(state, props);

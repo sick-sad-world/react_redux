@@ -10,10 +10,9 @@ import { connect } from 'react-redux';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { optionShape, listShape } from 'common/typecheck';
-import { defaultFrequency, coreInterface } from './defaults';
+import { listShape } from 'common/typecheck';
+import { coreInterface } from './defaults';
 import { makeContainerSelector } from './selectors';
-import { makeDropdownSelector } from 'src/columns';
 
 // Import actions
 // ===========================================================================
@@ -25,21 +24,11 @@ import Container from 'common/components/container';
 import EditAlert from './components/edit';
 
 class Alerts extends React.Component {
-  constructor(props) {
-    super(props);
-    bindAll(this, 'confText');
-  }
-
   confText(deleting) {
-    let text = '';
-    if (this.props.columns) {
-      const columns = this.props.columns.filter(({ value }) => includes(deleting.columns, value)).map(({ label }) => label);
-      text = `Watching: ${(columns.length) ? columns.join(', ') : 'none'}`;
-    }
     return (
       <dl>
         <dt>Trendolizer alert</dt>
-        <dd>{`ID: ${deleting.id} - ${deleting.name}. ${text}`}</dd>
+        <dd>{`ID: ${deleting.id} - ${deleting.name}.`}</dd>
       </dl>
     );
   }
@@ -47,10 +36,7 @@ class Alerts extends React.Component {
   render() {
     return (
       <Container {...this.props} callOnCreate={false} confText={this.confText}>
-        {(this.props.chosen) ? props => <EditAlert {...props} formProps={{
-          columns: this.props.columns,
-          frequencyOptions: defaultFrequency
-        }} /> : null}
+        {(this.props.chosen) ? props => <EditAlert {...props} /> : null}
       </Container>
     );
   }
@@ -81,7 +67,6 @@ Alerts.defaultProps = {
 
 Alerts.propTypes = {
   payload: PropTypes.arrayOf(PropTypes.shape(listShape)).isRequired,
-  columns: optionShape('number'),
   chosen: PropTypes.shape(coreInterface),
   actionCreate: PropTypes.func.isRequired,
   actionEdit: PropTypes.func.isRequired,
@@ -91,19 +76,7 @@ Alerts.propTypes = {
 // Connect our Container to State
 // @ deps -> Reports
 // ===========================================================================
-function mapStateToProps() {
-  const selector = makeContainerSelector();
-  if (makeDropdownSelector instanceof Function) {
-    const columns = makeDropdownSelector();
-    return (state, props) => ({
-      columns: columns(state, props),
-      ...selector(state, props)
-    });
-  }
-  return (state, props) => selector(state, props);
-}
-
-export default connect(mapStateToProps(), {
+export default connect(makeContainerSelector, {
   actionSort: sortAlerts,
   actionCreate: createAlert,
   actionEdit: editAlert,

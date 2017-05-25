@@ -11,17 +11,17 @@ import { makeContainerSelector } from '../selectors';
 
 // Import child Components
 // ===========================================================================
-import { DashboardColumns, DashboardItem } from 'src/columns';
+import { ColumnsContainer, DashboardItem } from 'src/columns';
 import { ResultsContainer, getResults, resultError } from 'src/results';
 import DashboardList from '../components/list';
 
-function Dashboard({ payload, emptyTpl, column, location, getResults }) {
+function Dashboard({ payload, emptyTpl, scrollTo, location, getResults }) {
   return (
     <section className='mod-dashboard'>
       {(payload) ? (
-        <DashboardColumns column_ids={payload.column_ids}>
+        <ColumnsContainer column_ids={payload.column_ids} actions={['editColumn', 'deleteColumn', 'sortColumns']}>
           {props => (
-            <DashboardList width={width} column={column} {...props}>
+            <DashboardList width={width} scrollTo={scrollTo} {...props}>
               {({ payload, editColumn, deleteColumn }) => (
                 <DashboardItem payload={payload} editColumn={editColumn} deleteColumn={deleteColumn} getResults={getResults}>
                   <ResultsContainer
@@ -35,7 +35,7 @@ function Dashboard({ payload, emptyTpl, column, location, getResults }) {
               )}
             </DashboardList>
           )}
-        </DashboardColumns>
+        </ColumnsContainer>
       ) : emptyTpl }
     </section>
   );

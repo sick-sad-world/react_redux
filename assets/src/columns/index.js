@@ -1,7 +1,7 @@
 import reducer from './src/reducer';
 import Route from './src/route';
 import types from './src/types';
-import DashboardColumns from './src/containers/dashboard';
+import ColumnsContainer from './src/containers/container';
 import DashboardItem from './src/components/dashboard/item';
 
 export * from './src/actions';
@@ -12,4 +12,4 @@ export { types };
 export { reducer };
 export { Route };
 export { DashboardItem };
-export { DashboardColumns };
+export { ColumnsContainer };

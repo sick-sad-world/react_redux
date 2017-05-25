@@ -1,7 +1,7 @@
 // Import utility stuff
 // ===========================================================================
 import moment from 'moment';
-import { defaultInterface } from '../defaults';
+import { defaultInterface, defaultFrequency } from '../defaults';
 
 // Import React related stuff
 // ===========================================================================
@@ -12,6 +12,7 @@ import { optionShape } from 'common/typecheck';
 // Import Child components
 // ===========================================================================
 import Datetime from 'react-datetime';
+import { ColumnsContainer } from 'src/columns';
 import MakeEditForm, { injectedPropsType } from 'common/hocs/edit-form';
 import TextInput from 'common/components/forms/input-text';
 import Dropdown from 'common/components/forms/dropdown';
@@ -50,7 +51,8 @@ class EditReport extends React.Component {
   }
 
   render() {
-    const { running, formValues, updateState, columns, frequencyOptions } = this.props;
+    const { running, formValues, updateState, frequencyOptions } = this.props;
+    const datePickerFormats = this.props.timeFormat.split(' ');
     return (
       <form className='subsection-content columned'>
         <div className='form-block'>
@@ -91,8 +93,8 @@ class EditReport extends React.Component {
             <Datetime
               value={formValues.next_send}
               onChange={updateState('next_send', 'getNextSend')}
-              dateFormat='YYYY-MM-DD'
-              timeFormat=' HH:mm:ss'
+              dateFormat={datePickerFormats[0]}
+              timeFormat={datePickerFormats[1]}
               inputProps={{
                 className: 'size-180',
                 disabled: running,
@@ -100,17 +102,21 @@ class EditReport extends React.Component {
               }}
             />
           </div>
-          <Dropdown
-            label='Columns assigment'
-            disabled={running}
-            className='row'
-            name='columns'
-            options={columns}
-            onChange={updateState('columns')}
-            multi={true}
-            value={formValues.columns}
-            desc='Watched columns (click on columns in the list to watch them too)'
-          />
+          <ColumnsContainer schema={{ value: 'id', label: 'name' }}>
+            {({ payload }) => (
+              <Dropdown
+                label='Columns assigment'
+                disabled={running}
+                className='row'
+                name='columns'
+                options={payload}
+                onChange={updateState('columns')}
+                multi={true}
+                value={formValues.columns}
+                desc='Watched columns (click on columns in the list to watch them too)'
+              />
+            )}
+          </ColumnsContainer>
         </div>
         <div className='form-block'>
           <div className='row'>
@@ -122,6 +128,10 @@ class EditReport extends React.Component {
     );
   }
 }
+
+EditReport.defaultProps = {
+  frequencyOptions: defaultFrequency
+};
 
 EditReport.propTypes = {
   columns: optionShape('number'),

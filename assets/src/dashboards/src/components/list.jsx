@@ -12,7 +12,6 @@ import { arrayMove } from 'react-sortable-hoc';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { stateNum } from 'common/typecheck';
 
 // Import Child components
 // ===========================================================================
@@ -79,10 +78,9 @@ export default class DashboardList extends React.Component {
       <div className='list-container'>
         <AutoSizer>
           {({ height, width }) => (
-            <ArrowKeyStepper columnCount={colCount} rowCount={1} scrollToColumn={findIndex(this.state.payload, { id: this.props.column })}>
+            <ArrowKeyStepper columnCount={colCount} rowCount={1} scrollToColumn={findIndex(this.state.payload, { id: this.props.scrollTo })}>
               {({ onSectionRendered, scrollToColumn }) => (
                 <DashboardGrid
-                  state={this.props.state}
                   ref={(instance) => { this.SortableGrid = instance; }}
                   width={width}
                   height={height}
@@ -125,9 +123,8 @@ DashboardList.defaultProps = {
 
 DashboardList.propTypes = {
   width: PropTypes.number.isRequired,
-  state: stateNum.isRequired,
   payload: PropTypes.arrayOf(PropTypes.object).isRequired,
-  column: PropTypes.number,
+  scrollTo: PropTypes.number,
   sortColumns: PropTypes.func.isRequired,
   deleteColumn: PropTypes.func.isRequired,
   refreshResults: PropTypes.func,
