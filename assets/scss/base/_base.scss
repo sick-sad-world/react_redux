@@ -112,12 +112,7 @@ $layers: (
  
 ::-webkit-scrollbar-thumb {
   border-radius: baseUnit();
-  opacity: 0.2;
-  transition: opacity .25s;
   background: darken($c-border, 10%);
-  *:hover & {
-    opacity: 1;
-  }
 }
 
 html {
