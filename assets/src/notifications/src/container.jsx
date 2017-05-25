@@ -15,6 +15,7 @@ import Notification from './components/notification';
 // Import Actions
 // ===========================================================================
 import { notification } from './actions';
+import { makeContainerSelector } from './selectors';
 
 class Notifications extends React.Component {
   // Create timeouts hash and bind handler
@@ -76,12 +77,8 @@ Notifications.propTypes = {
 // Transform app state to component props
 // @ deps -> App
 // ===========================================================================
-const mapStateToProps = ({ notifications }) => ({ notifications });
-
-const mapDispatchToProps = dispatch => ({
+export default connect(makeContainerSelector, dispatch => ({
   hideNotification(id) {
     return dispatch(notification({ id, visible: false }));
   }
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Notifications);
+}))(Notifications);

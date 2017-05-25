@@ -190,7 +190,8 @@ export const coreInterface = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   order: PropTypes.number,
-  open: numBool
+  open: numBool,
+  data: PropTypes.object.isRequired
 };
 
 export const defaultInterface = {

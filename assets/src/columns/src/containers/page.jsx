@@ -29,15 +29,15 @@ class Columns extends React.Component {
   constructor(props) {
     super(props);
     this.state = { deleting: null };
-    bindAll(this, 'confText', 'makeItemIcon', 'renderChildren');
+    bindAll(this, 'makeItemIcon', 'renderChildren');
   }
 
-  changeColumnVis({ id, open }) {
-    return () => this.props.actionEdit({ id, open: (open) ? 0 : 1 });
-  }
-
-  makeItemIcon(data) {
-    return (data.open) ? <Hide handler={this.changeColumnVis(data)} /> : <Show handler={this.changeColumnVis(data)} />;
+  makeItemIcon({ id, open }) {
+    return (open) ? (
+      <Hide handler={() => this.props.actionHide(id)} />
+    ) : (
+      <Show handler={() => this.props.actionShow(id, this.props.payload.find(col => col.id === id).data)} />
+    );
   }
 
   confText(deleting) {
@@ -66,8 +66,9 @@ class Columns extends React.Component {
   }
 
   render() {
+    const { payload, ...props } = this.props;
     return (
-      <Container {...this.props} listItemOpts={{
+      <Container payload={payload.map(({ id, name, order, open }) => ({ id, name, order, open }))} {...props} listItemOpts={{
         deleteText: 'Delete this column',
         customIcon: this.makeItemIcon
       }} confText={this.confText}>
@@ -117,6 +118,8 @@ Columns.propTypes = {
     path: PropTypes.string.isRequired
   }).isRequired,
   actionCreate: PropTypes.func.isRequired,
+  actionHide: PropTypes.func.isRequired,
+  actionShow: PropTypes.func.isRequired,
   actionEdit: PropTypes.func.isRequired,
   actionDelete: PropTypes.func.isRequired
 };
@@ -128,14 +131,21 @@ export default connect(makePageSelector, dispatch => ({
   actionSort(...args) {
     return dispatch(sortColumns(...args));
   },
+  actionHide(id) {
+    return dispatch(editColumn({ id, open: 0 })).then(() => dispatch(clearResults(id)));
+  },
+  actionShow(id, data) {
+    return dispatch(editColumn({ id, open: 1 })).then((resp) => {
+      if (getResults && data) {
+        return dispatch(getResults(data, { id }));
+      }
+      return resp;
+    });
+  },
   actionEdit(data, changed) {
     return dispatch(editColumn(data)).then((resp) => {
-      if (getResults && (data.open === 1 || intersection(affectingProps, changed).length)) {
+      if (getResults && data.open && intersection(affectingProps, changed).length) {
         return dispatch(getResults(data.data, { id: data.id }));
-      } else if (data.open === 0) {
-        if (clearResults) {
-          return dispatch(clearResults(data.id));
-        }
       }
       return resp;
     });

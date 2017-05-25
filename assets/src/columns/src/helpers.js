@@ -6,7 +6,7 @@ export function getColumnsForResults(payload) {
   return payload.find(item => (item && item.type === types.READ)).payload.map(({ id, data, open }) => ({ id, data, open }));
 }
 
-export function composeColumnData({ id, name, data, display_settings, open }) {
+export function composeColumnData({ id, name, data, order, display_settings, open }) {
   let settings = display_settings;
   if (!settings) {
     settings = [...displaySettings.default];
@@ -17,6 +17,7 @@ export function composeColumnData({ id, name, data, display_settings, open }) {
     id,
     name,
     open,
+    order,
     display_settings: settings,
     data: { ...defColumnData, ...data }
   };

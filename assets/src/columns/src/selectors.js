@@ -23,7 +23,7 @@ export function makePageSelector() {
     (state, payload, curId) => ({
       state,
       curId,
-      payload: payload.map(({ id, name, open, order }) => ({ id, name, open, order })),
+      payload: payload.map(({ id, name, open, order, data }) => ({ id, name, open, order, data })),
       chosen: payload.find(({ id }) => id === curId)
     })
   );
