@@ -93,6 +93,33 @@ $layers: (
   color: $c-alt;
   background-color: $c-accent; }
 
+::-webkit-scrollbar {
+  width: baseUnit(1.125);
+  height: baseUnit(1.125);
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+ 
+::-webkit-scrollbar-track:vertical {
+  border-left: $bd;
+}
+
+::-webkit-scrollbar-track:horizontal {
+  border-top: $bd;
+}
+ 
+::-webkit-scrollbar-thumb {
+  border-radius: baseUnit();
+  opacity: 0.2;
+  transition: opacity .25s;
+  background: darken($c-border, 10%);
+  *:hover & {
+    opacity: 1;
+  }
+}
+
 html {
   font-size: $base-font-size;
   line-height: $base-line-height;
