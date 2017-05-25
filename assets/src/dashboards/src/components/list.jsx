@@ -27,7 +27,7 @@ export default class DashboardList extends React.Component {
       deleting: null,
       payload: props.payload
     };
-    bindAll(this, 'cellRenderer', 'runSortHandler', 'updateSortState');
+    bindAll(this, 'cellRenderer', 'updateSortState');
   }
 
   componentWillReceiveProps({ payload }) {
@@ -42,16 +42,11 @@ export default class DashboardList extends React.Component {
     return () => this.props.deleteColumn({ id }).then(this.deleteConfirm());
   }
 
-  runSortHandler() {
-    return this.props.sortColumns({ list: this.state.payload.map(({ id }, i) => ({ id, order: i })) });
-  }
-
   updateSortState({ oldIndex, newIndex }) {
     if (oldIndex !== newIndex) {
       this.setState({
         payload: arrayMove(this.state.payload, oldIndex, newIndex)
-      }, this.runSortHandler);
-
+      }, () => this.props.sortColumns({ list: this.state.payload.map(({ id }, i) => ({ id, order: i })) }, { state: false }));
       const instance = this.SortableGrid.getWrappedInstance();
       instance.List.recomputeGridSize({ columnIndex: newIndex, rowIndex: 1 });
     }
