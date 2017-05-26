@@ -7,7 +7,7 @@ import HotnessBar from '../hotness';
 // ===========================================================================
 export default function ResultTable({ data, to, style }) {
   return (
-    <table>
+    <table className='stats-table'>
       <tbody>
         <tr>
           <th>Measure</th>

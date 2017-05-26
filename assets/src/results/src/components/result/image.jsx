@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -6,7 +5,7 @@ import PropTypes from 'prop-types';
 // ===========================================================================
 export default function ResultMedia({ image, title, style }) {
   return (
-    <figure className='image' style={{ ...style, backgroundImage: `url(${image})` }}>
+    <figure className='result-image' style={{ ...style, backgroundImage: `url(${image})` }}>
       <img src={image} alt={title}/>
     </figure>
   );
@@ -15,5 +14,5 @@ export default function ResultMedia({ image, title, style }) {
 ResultMedia.propTypes = {
   image: PropTypes.string,
   title: PropTypes.string.isRequired,
-  style: PropTypes.objectOf(PropTypes.string).isRequired
+  style: PropTypes.objectOf(PropTypes.string)
 };

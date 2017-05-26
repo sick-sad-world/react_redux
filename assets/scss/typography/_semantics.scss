@@ -118,9 +118,9 @@ blockquote {}
 
 .popup {
   display: flex;
+  cursor: default;
   flex-direction: column;
-  border: $bd;
-  background-color: $c-element;
+  overflow: hidden;
   box-shadow: 0 5px 10px rgba(0,0,0,.45);
   border-radius: $bdrs * 2;
   z-index: map-get($layers, overlay) + 1;
@@ -142,6 +142,9 @@ blockquote {}
     }
   }
   main {
+    border-left: $bd;
+    border-right: $bd;
+    border-bottom: $bd;
     flex: 1 1 auto;
     padding: baseUnit();
     overflow: hidden;
@@ -150,6 +153,7 @@ blockquote {}
 
 .confirmation-dialog {
   width: map-get($layout, buffer) * 1.25;
+  background-color: $c-element;
   main {
     li {
       @include ellipsis();

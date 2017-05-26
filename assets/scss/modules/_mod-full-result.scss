@@ -3,14 +3,24 @@
 .mod-full-result {
   width: 80%;
   height: 80%;
+  ::-webkit-scrollbar-track:vertical {
+    border-left: none;
+  }
   header {
+    @include gradient($c-main, to left);
+		color: $c-alt;
+		text-shadow: $sh-text;
     padding-top: baseUnit(.5);
     padding-bottom: baseUnit(.5);
+    svg {
+      fill: $c-alt;
+    }
   }
   main {
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    background-color: $c-alt;
   }
   nav {
     $icon: baseUnit(3);
@@ -29,5 +39,52 @@
         margin: auto;
       }
     }
+  }
+  .tab {
+    overflow: auto;
+  }
+  .alongside {
+    display: flex;
+    .feature {
+      flex: 0 1 50%;
+      &:first-child {
+        margin-right: baseUnit(2);
+      } 
+    }
+  }
+  .feature {
+    margin-bottom: baseUnit(2);
+    margin-top: baseUnit(2);
+    h4 {
+      padding-bottom: baseUnit(.5);
+      border-bottom: $bd;
+      margin-bottom: baseUnit();
+    }
+  }
+  .media {
+    figure {
+      min-height: 144px;
+      max-height: 100%;
+      position: relative;
+    }
+  }
+  .data {
+    ul {
+      padding: 0;
+    }
+    li {
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dotted $c-border;
+      > * {
+        background-color: $c-alt;
+        display: inline-block;
+        margin-bottom: -1px;
+      }
+    }
+  }
+  .result-image {
+    height: 200px;
   }
 }

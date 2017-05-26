@@ -8,6 +8,33 @@ img {
   a & {
     border: 0;
   }
+  &.with-fallback:after {
+    content: '';
+    display: block;
+    @include pos();
+    background: #474747 url('../img/ph_content.png') center no-repeat;
+    background-size: 200px;
+  }
+}
+
+.result-image {
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  width: 100%;
+  &:after {
+    @include pos();
+    content: '';
+    background: url('../img/ph_content.png') center no-repeat;
+    background-size: cover;
+    z-index: -1;
+  }
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+  }
 }
 
 svg:not(:root) {

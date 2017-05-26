@@ -15,8 +15,8 @@ import { defaultInterface, defaultDashboardResult, displaySettings, proptocolReg
 // ===========================================================================
 
 import { Link } from 'react-router';
-import ResultSort from './result-sort';
-import ResultActions from './result-actions';
+import ResultSort from './sort';
+import ResultActions from './actions';
 import ResultTable from './result/table';
 import ResultMedia from './result/image';
 
@@ -94,7 +94,7 @@ export default class Result extends React.PureComponent {
           {(this.isValid('title')) ? <h1 style={{ maxHeight: heights.title }}>{payload.title}</h1> : null}
           {(this.inc('found') || this.inc('domain') || this.inc('author')) ? (
             <small style={{ height: heights.found || heights.domain || heights.author }}>
-              {(this.isValid('found')) ? <span className='found'>{payload.found}</span> : null}
+              {(this.isValid('found')) ? <time dateTime={payload.found} className='found'>{payload.found}</time> : null}
               {(this.isValid('domain')) ? <span className='domain'>{payload.domain.replace(this.props.proptocolRegExp, '')}</span> : null}
               {(this.isValid('author')) ? <span className='author'>{payload.author}</span> : null}
             </small>

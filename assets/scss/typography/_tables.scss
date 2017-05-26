@@ -42,3 +42,32 @@ table {
     }
   }
 }
+
+/* Results stats table
+========================================================================== */
+.stats-table {
+  margin-top: baseUnit();
+  td, th {
+    line-height: 1;
+    font-size: 0.75em;
+    border: $bd;
+  }
+  b {
+    text-transform: capitalize;
+  }
+  .hotness {
+    position: relative;
+    font-weight: bold;
+    text-shadow: 0 0 4px #fff;
+  }
+  .color-bar {
+    display: block;
+    @include pos(0 0 0 0);
+    z-index: -1;
+    background-clip: content-box;
+    background-image: linear-gradient(to left, nth($c-scale, 1), nth($c-scale, 2), nth($c-scale, 3));
+    &.is-new {
+      background: lighten(map-get($states, 'success'), 10%);
+    }
+  }
+}
