@@ -9,7 +9,7 @@ import { sortMiddleware } from 'common/reducer-factory';
 // ===========================================================================
 import { reducer as dashboards, ensureDashboardUrl } from 'src/dashboards';
 import { reducer as columns, processColumn } from 'src/columns';
-import { reducer as results, splitResultText } from 'src/results';
+import { reducer as results, splitResultText, numerizeTabularData } from 'src/results';
 import { reducer as notifications, notification } from 'src/notifications';
 import { reducer as app, clientError } from 'src/application';
 import { reducer as user } from 'src/user';
@@ -45,6 +45,7 @@ export default createStore(
     processColumn,
     updateUniq,
     clearFeeds,
+    numerizeTabularData,
     splitResultText
   ))
 );

@@ -12,6 +12,8 @@ export const gutter = 12;
 
 export const proptocolRegExp = /^https?:\/\/w{0,3}\.?/;
 
+export const tableStatsRegExp = /likes|shares|video|reddit|comments|pins|tweets/;
+
 export const defaultDashboardResult = {
   title: '',
   hash: '',

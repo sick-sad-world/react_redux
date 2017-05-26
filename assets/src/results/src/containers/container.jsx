@@ -1,7 +1,6 @@
 // Import helper stuff
 // ===========================================================================
 import { bindAll, includes } from 'lodash';
-import { defaultResults } from './defaults';
 
 // Import React related stuff
 // ===========================================================================
@@ -12,18 +11,18 @@ import { AutoSizer, List } from 'react-virtualized';
 // ===========================================================================
 import PropTypes from 'prop-types';
 import { stateNum } from 'common/typecheck';
-import { limit, gutter, displaySettings } from './defaults';
+import { limit, gutter, displaySettings, defaultResults } from '../defaults';
 
 // Import connection
 // ===========================================================================
 import { connect } from 'react-redux';
-import { makeContainerSelector } from './selectors';
-import { addResults, getResults, resultError, favoriteResult, ignoreResult, refreshResult } from './actions';
+import { makeContainerSelector } from '../selectors';
+import { addResults, getResults, resultError, favoriteResult, ignoreResult, refreshResult } from '../actions';
 
 // Import child Components
 // ===========================================================================
-import Result from './components/result';
-import Placeholder from './components/placeholder';
+import Result from '../components/result';
+import Placeholder from '../components/placeholder';
 import Icon from 'common/components/icon';
 
 // description
@@ -139,7 +138,7 @@ class ResultsContainer extends React.Component {
         <Result
           payload={result}
           sort={this.props.data.sort}
-          location={this.props.location}
+          location={`${this.props.location}/${this.props.id}`}
           displaySettings={this.props.displaySettings}
           heights={this.heightConfig}
           refreshResult={this.props.refreshResult({ id: this.props.id, state: false })}

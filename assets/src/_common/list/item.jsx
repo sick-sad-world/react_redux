@@ -34,7 +34,7 @@ function ListItem({ disabled, current, url, name, id, counter, customIcon, delet
         {(customIcon || deleteAction) ? (
           <nav className='nav-links'>
           { (customIcon) ? customIcon({ name, id, ...props }) : null }
-          { (deleteAction) ? <Delete handler={deleteAction} title={deleteText} /> : null }
+          { (deleteAction) ? <Delete onClick={deleteAction} title={deleteText} /> : null }
           </nav>
         ) : null }
       </div>

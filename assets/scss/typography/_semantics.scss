@@ -116,7 +116,7 @@ blockquote {}
 	&[data-type="Facebook"] { @include gradient(nth($c-scale, 1)); }
 } 
 
-.small-popup {
+.popup {
   display: flex;
   flex-direction: column;
   border: $bd;
@@ -124,30 +124,33 @@ blockquote {}
   box-shadow: 0 5px 10px rgba(0,0,0,.45);
   border-radius: $bdrs * 2;
   z-index: map-get($layers, overlay) + 1;
-}
-.confirmation-dialog {
-  width: map-get($layout, buffer) * 1.25;
   header {
     border-bottom: $bd;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: $entity-unit;
+    min-height: $entity-unit;
     padding: 0 baseUnit();
-  }
-  .close {
-    margin-right: baseUnit(-1);
-    width: $entity-unit;
-    align-self: stretch;
-    display: flex;
-    svg {
-      margin: auto;
+    .close {
+      margin-right: baseUnit(-1);
+      width: $entity-unit;
+      align-self: stretch;
+      display: flex;
+      svg {
+        margin: auto;
+      }
     }
   }
   main {
     flex: 1 1 auto;
     padding: baseUnit();
     overflow: hidden;
+  }
+}
+
+.confirmation-dialog {
+  width: map-get($layout, buffer) * 1.25;
+  main {
     li {
       @include ellipsis();
     }
@@ -168,6 +171,22 @@ blockquote {}
     flex: 0 1 50%;
     + .button {
       margin-left: baseUnit();
+    }
+  }
+}
+
+.tab-bar {
+  a {
+    display: inline-block;
+    color: $c-main;
+    line-height: baseUnit(4);
+    padding: 0 baseUnit(3);
+    border-bottom: 3px solid transparent;
+    &:hover, &:focus {
+      text-decoration: none;
+    }
+    &.active {
+      border-bottom-color: $c-accent;
     }
   }
 }

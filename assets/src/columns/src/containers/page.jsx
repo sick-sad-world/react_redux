@@ -34,9 +34,9 @@ class Columns extends React.Component {
 
   makeItemIcon({ id, open }) {
     return (open) ? (
-      <Hide handler={() => this.props.actionHide(id)} />
+      <Hide onClick={() => this.props.actionHide(id)} />
     ) : (
-      <Show handler={() => this.props.actionShow(id, this.props.payload.find(col => col.id === id).data)} />
+      <Show onClick={() => this.props.actionShow(id, this.props.payload.find(col => col.id === id).data)} />
     );
   }
 

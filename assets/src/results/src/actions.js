@@ -54,6 +54,8 @@ export const favoriteResult = createAction({
   successMessage: 'Result favor changed.'
 });
 
+export const getGraphMeasurements = hash => dispatch => console.log(hash);
+
 export function getAllResults(data) {
   return (dispatch) => {
     const ids = {};

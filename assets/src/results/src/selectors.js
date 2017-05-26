@@ -3,6 +3,8 @@ import { defaultResults } from './defaults';
 
 const getResultsById = ({ results }, props) => results[props.id] || { ...defaultResults };
 
+const getHash = ({ results }, props) => props.hash;
+
 const getFavoriteValue = ({ results }, props) => props.data.show_favorites;
 
 const getIgnoredValue = ({ results }, props) => props.data.show_ignored;
@@ -27,5 +29,21 @@ export function makeContainerSelector() {
       };
     }
   );
+  return (state, props) => selector(state, props);
+}
+
+export function makeResultSelector() {
+  const selector = createSelector(
+    getResultsById,
+    getHash,
+    ({ payload }, hashId) => {
+      const result = payload.find(({ hash }) => hashId === hash);
+      return {
+        title: result ? result.title : 'Result not found',
+        payload: result
+      };
+    }
+  );
+
   return (state, props) => selector(state, props);
 }

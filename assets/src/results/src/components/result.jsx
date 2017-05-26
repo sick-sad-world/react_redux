@@ -15,11 +15,10 @@ import { defaultInterface, defaultDashboardResult, displaySettings, proptocolReg
 // ===========================================================================
 
 import { Link } from 'react-router';
-import ResultHeader from './result-header';
-import ResultAside from './result-aside';
-import ResultStats from './result-stats';
-import ResultTable from './result-table';
-import ResultMedia from './result-image';
+import ResultSort from './result-sort';
+import ResultActions from './result-actions';
+import ResultTable from './result/table';
+import ResultMedia from './result/image';
 
 // description
 // ===========================================================================
@@ -75,22 +74,22 @@ export default class Result extends React.PureComponent {
 
   render() {
     const { location, sort, payload, heights } = this.props;
-    const browseUrl = `${location}/${payload.hash}`;
+    const browseUrl = `${location}?hash=${payload.hash}`;
     const tableData = this.getTableData();
     return (
       <article className='mod-result'>
-        <ResultAside
-          style={{ height: heights.aside }}
-          url={payload.url}
-          hash={payload.hash}
-          sort={sort}
-          value={payload[sort]}
-          favorite={payload.favorite}
-          ignore={payload.ignore}
-          favoriteResult={this.props.favoriteResult}
-          ignoreResult={this.props.ignoreResult}
-          refreshResult={this.props.refreshResult}
-        />
+        <aside style={{ height: heights.aside }}>
+          <ResultSort sort={sort} value={payload[sort]} />
+          <ResultActions
+            url={payload.url}
+            hash={payload.hash}
+            favorite={payload.favorite}
+            ignore={payload.ignore}
+            favoriteResult={this.props.favoriteResult}
+            ignoreResult={this.props.ignoreResult}
+            refreshResult={this.props.refreshResult}
+          />
+        </aside>
         <Link to={browseUrl} className='result-link'>
           {(this.isValid('title')) ? <h1 style={{ maxHeight: heights.title }}>{payload.title}</h1> : null}
           {(this.inc('found') || this.inc('domain') || this.inc('author')) ? (
@@ -134,8 +133,5 @@ Result.propTypes = {
   ignoreResult: PropTypes.func,
   location: PropTypes.string.isRequired,
   proptocolRegExp: PropTypes.instanceOf(RegExp).isRequired,
-  // style: PropTypes.shape({
-  //   height: PropTypes.number.isRequired
-  // }).isRequired,
   payload: PropTypes.shape(defaultInterface)
 };

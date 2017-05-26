@@ -5,15 +5,20 @@ import Icon from './icon';
 // Agnostinc list item action button component
 // @using by: ListView and Management views
 // ===========================================================================
-export default function IconBtn({ title, handler, icon, ...props }) {
-  return <a onClick={handler} title={title} {...props}><Icon icon={icon} /></a>;
+export default function IconBtn({ icon, ...props }) {
+  return <a {...props}><Icon icon={icon} /></a>;
 }
 
 IconBtn.propTypes = {
   title: PropTypes.string,
-  handler: PropTypes.func,
+  onClick: PropTypes.func,
+  href: PropTypes.string,
   icon: PropTypes.string.isRequired
 };
+
+export function Close(props) {
+  return <IconBtn {...props} icon='cross' />;
+}
 
 export function GoTo(props) {
   return <IconBtn {...props} icon='export' />;

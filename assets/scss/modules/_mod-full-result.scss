@@ -1,0 +1,33 @@
+/* Full result display - where all information and graphs are displayed
+========================================================================== */
+.mod-full-result {
+  width: 80%;
+  height: 80%;
+  header {
+    padding-top: baseUnit(.5);
+    padding-bottom: baseUnit(.5);
+  }
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  nav {
+    $icon: baseUnit(3);
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: space-between;
+    .actions {
+      display: flex;
+      align-items: center;
+      a {
+        width: $icon;
+        height: $icon;
+        display: flex;
+      }
+      svg {
+        margin: auto;
+      }
+    }
+  }
+}

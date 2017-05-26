@@ -8,7 +8,7 @@ const getCurrentId = ({ dashboards }, props) => parseInt(props.params.id, 10) ||
 
 const getTargetUrl = ({ dashboards }, props) => props.params.name;
 
-const getScrollTo = ({ dashboards }, props) => parseInt(props.params.scrollTo, 10) || null;
+const getScrollTo = ({ dashboards }, props) => parseInt(props.params.column, 10) || null;
 
 export function makeNavSelector() {
   const selector = createSelector(

@@ -89,14 +89,14 @@ class EditSet extends React.Component {
                   <span>Sourceset has {formValues.source_ids.length} sources total.</span>
                 </div>
                 <FeedsList set_id={formValues.id} criterea={{ source_ids: formValues.source_ids, uniq_ids: formValues.uniq_ids }} empty={emptyFeeds} >
-                  {({ id }) => <Deselect handler={this.makeStateUpdater('source')(id)} />}
+                  {({ id }) => <Deselect onClick={this.makeStateUpdater('source')(id)} />}
                 </FeedsList>
               </div>
               <SetsWithContents
                 payload={this.props.sets}
                 disabled_sources={formValues.source_ids}
-                setAction={({ id }) => <SelectAll handler={this.makeStateUpdater('set')(id)} />}
-                feedAction={({ id }) => <Select handler={this.makeStateUpdater('source')(id)} />}
+                setAction={({ id }) => <SelectAll onClick={this.makeStateUpdater('set')(id)} />}
+                feedAction={({ id }) => <Select onClick={this.makeStateUpdater('source')(id)} />}
               />
             </section>
           </div>

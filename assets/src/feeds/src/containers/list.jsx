@@ -49,7 +49,7 @@ class FeedsList extends React.Component {
 
   renderActions(feed) {
     if (this.props.deletable && feed.deletable && this.props.set_id) {
-      return <Delete handler={this.setDeleting(feed)} />;
+      return <Delete onClick={this.setDeleting(feed)} />;
     } else if (this.props.children) {
       return this.props.children(feed);
     }

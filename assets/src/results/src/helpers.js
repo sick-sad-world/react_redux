@@ -1,3 +1,6 @@
+import { mapValues } from 'lodash';
+import { tableStatsRegExp } from './defaults';
+
 export function splitText(result) {
   const limit = 128;
   const index = {
@@ -54,3 +57,11 @@ export const sortParamToShort = (stat = '') => {
   }
   return result;
 };
+
+export const numerizeData = result => mapValues(result, (v, k) => {
+  if (tableStatsRegExp.test(k)) {
+    const numV = parseFloat(v, 10);
+    return (!isNaN(numV)) ? numV : v;
+  }
+  return v;
+});

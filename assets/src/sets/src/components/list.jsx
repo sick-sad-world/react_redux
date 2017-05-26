@@ -40,7 +40,7 @@ export default class SetsWithContents extends React.Component {
     return (
       <Sourceset key={id} name={name} counter={source_ids.length} sortable={this.props.sortable} disabled={disabled} >
         {(this.props.setAction) ? this.props.setAction({ id, name, source_ids, disabled, ...set, isOpened }) : null}
-        {(isOpened) ? <Collapse handler={onExpand} /> : <Expand handler={onExpand} /> }
+        {(isOpened) ? <Collapse onClick={onExpand} /> : <Expand onClick={onExpand} /> }
       </Sourceset>
     );
   }
