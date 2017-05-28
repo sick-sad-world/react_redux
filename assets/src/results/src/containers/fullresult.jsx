@@ -13,7 +13,8 @@ import { defaultInterface, displaySettings } from '../defaults';
 // ===========================================================================
 import { connect } from 'react-redux';
 import { makeResultSelector } from '../selectors';
-import { refreshResult, favoriteResult, ignoreResult, getGraphMeasurements } from '../actions';
+import { refreshResult, favoriteResult, ignoreResult } from '../actions';
+import { getResultMeasurements } from 'src/graphs';
 
 // Import child Components
 // ===========================================================================
@@ -31,6 +32,9 @@ class FullResult extends React.Component {
       tab: 1
     };
     bindAll(this, 'switchTab', 'pickResultType');
+    if (this.props.getResultMeasurements) {
+      this.props.getResultMeasurements({ hash: this.props.payload.hash });
+    }
   }
 
   switchTab(tab) {
@@ -135,7 +139,8 @@ FullResult.propTypes = {
   refreshResult: PropTypes.func,
   favoriteResult: PropTypes.func,
   ignoreResult: PropTypes.func,
+  getResultMeasurements: PropTypes.func,
   tableStats: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 
-export default connect(makeResultSelector, { refreshResult, favoriteResult, ignoreResult, getGraphMeasurements })(FullResult);
+export default connect(makeResultSelector, { refreshResult, favoriteResult, ignoreResult, getResultMeasurements })(FullResult);

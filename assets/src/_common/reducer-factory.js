@@ -32,7 +32,7 @@ export default function createReducer(config) {
         return { state: 1, payload: [] };
       case config.STATE:
         return {
-          state: (action.state >= 0) ? action.state : 0,
+          state: (typeof action.state === 'number') ? action.state : 0,
           payload: state.payload
         };
       case config.READ:
