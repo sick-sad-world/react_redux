@@ -17,7 +17,7 @@ export default function createAction(conf) {
     const options = {
       notification: true,
       state: true,
-      id: (data) ? data.id : null,
+      entity: (data && data.id) ? data.id : null,
       ...opts
     };
 
@@ -27,7 +27,7 @@ export default function createAction(conf) {
       dispatch({
         type: config.state_type,
         state: 3,
-        entity: options.id
+        entity: options.entity
       });
     }
 
@@ -37,7 +37,7 @@ export default function createAction(conf) {
       dispatch(notification({
         id: notificationId,
         type: 'loading',
-        text: config.pendingMessage.replace('$id', options.id)
+        text: config.pendingMessage.replace('$id', options.entity)
       }));
     }
 
@@ -47,7 +47,7 @@ export default function createAction(conf) {
       .then((payload) => {
         if (payload.error) {
           throw {
-            text: payload.error || config.errorMessage.replace('$id', options.id)
+            text: payload.error || config.errorMessage.replace('$id', options.entity)
           };
         }
         return payload;
@@ -60,7 +60,7 @@ export default function createAction(conf) {
             id: notificationId,
             visible: false
             // type: 'success',
-            // text: payload.success || config.successMessage.replace('$id', options.id)
+            // text: payload.success || config.successMessage.replace('$id', options.entity)
           }));
         }
 
@@ -69,7 +69,7 @@ export default function createAction(conf) {
         return dispatch({
           type: config.type,
           payload: (payload.success || payload.message) ? data : payload,
-          entity: options.id
+          entity: options.entity
         });
       })
       .catch((error) => {

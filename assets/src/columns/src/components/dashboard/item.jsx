@@ -49,7 +49,7 @@ export default class DashboardItem extends React.Component {
   }
 
   getResults(data) {
-    return this.props.getResults((data) || this.props.payload.data, { id: this.props.payload.id });
+    return this.props.getResults((data) || this.props.payload.data, { entity: this.props.payload.id });
   }
 
   render() {

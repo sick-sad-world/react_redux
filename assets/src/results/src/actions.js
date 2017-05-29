@@ -80,7 +80,7 @@ export function getAllResults(data) {
           // Run our call and simple forward results to [Upper-level] promise chain
           // ===========================================================================
           setTimeout(() => dispatch(getResults(column.data, {
-            id: column.id,
+            entity: column.id,
             notification: false,
             state: false
           })).then(resolve).catch(reject), delay);

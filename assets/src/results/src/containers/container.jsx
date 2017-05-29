@@ -124,7 +124,7 @@ class ResultsContainer extends React.Component {
 
   autoreloadInitialize(data) {
     this.props.getResults(data, { id: this.props.id });
-    const interval = setInterval(this.props.getResults, data.autoreload * 1000, this.props.data, { id: this.props.id });
+    const interval = setInterval(this.props.getResults, data.autoreload * 1000, this.props.data, { entity: this.props.id });
     return () => clearInterval(interval);
   }
 
@@ -141,9 +141,9 @@ class ResultsContainer extends React.Component {
           location={`${this.props.location}/${this.props.id}`}
           displaySettings={this.props.displaySettings}
           heights={this.heightConfig}
-          refreshResult={this.props.refreshResult({ id: this.props.id, state: false })}
-          favoriteResult={this.props.favoriteResult({ id: this.props.id, state: false })}
-          ignoreResult={this.props.ignoreResult({ id: this.props.id, state: false })}
+          refreshResult={this.props.refreshResult({ entity: this.props.id, state: false })}
+          favoriteResult={this.props.favoriteResult({ entity: this.props.id, state: false })}
+          ignoreResult={this.props.ignoreResult({ entity: this.props.id, state: false })}
         />
       );
     }
@@ -174,7 +174,7 @@ class ResultsContainer extends React.Component {
     return ({ stopIndex }) => {
       if (rowCount > 0 && stopIndex > (rowCount - this.props.data.limit) && !this.infiniteRunning) {
         this.infiniteRunning = true;
-        this.props.getResults({ ...this.props.data, offset: this.props.payload.length }, { id: this.props.id, state: false }).then(() => {
+        this.props.getResults({ ...this.props.data, offset: this.props.payload.length }, { entity: this.props.id, state: false }).then(() => {
           this.infiniteRunning = false;
         });
       }

@@ -64,7 +64,7 @@ class FullResult extends React.Component {
   }
 
   render() {
-    const { close, title, payload, className } = this.props;
+    const { close, title, payload, className, id } = this.props;
     return (
       <Modal title={title} className={className} close={close}>
         <main>
@@ -79,9 +79,9 @@ class FullResult extends React.Component {
               hash={payload.hash}
               favorite={payload.favorite}
               ignore={payload.ignore}
-              favoriteResult={this.props.favoriteResult}
-              ignoreResult={this.props.ignoreResult}
-              refreshResult={this.props.refreshResult}
+              refreshResult={this.props.refreshResult({ entity: id, state: false })}
+              favoriteResult={this.props.favoriteResult({ entity: id, state: false })}
+              ignoreResult={this.props.ignoreResult({ entity: id, state: false })}
             />
           </nav>
           {(this.state.tab === 1) ? (
@@ -135,6 +135,7 @@ FullResult.defaultProps = {
 };
 
 FullResult.propTypes = {
+  id: PropTypes.number.isRequired,
   close: PropTypes.func.isRequired,
   className: PropTypes.string,
   title: PropTypes.string.isRequired,
@@ -146,4 +147,14 @@ FullResult.propTypes = {
   tableStats: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 
-export default connect(makeResultSelector, { refreshResult, favoriteResult, ignoreResult })(FullResult);
+export default connect(makeResultSelector, dispatch => ({
+  favoriteResult(opts) {
+    return params => dispatch(favoriteResult(params, opts));
+  },
+  ignoreResult(opts) {
+    return params => dispatch(ignoreResult(params, opts));
+  },
+  refreshResult(opts) {
+    return params => dispatch(refreshResult(params, opts));
+  }
+}))(FullResult);
