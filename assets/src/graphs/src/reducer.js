@@ -6,6 +6,7 @@ export default (state = { ...defaultGraphs }, action) => {
   switch (action.type) {
     case LOGOUT:
     case LOGIN:
+    case types.DELETE:
       return { ...defaultGraphs };
     case types.READ:
       return {

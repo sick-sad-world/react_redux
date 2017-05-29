@@ -13,7 +13,7 @@ import { reducer as results, splitResultText, numerizeTabularData } from 'src/re
 import { reducer as notifications, notification } from 'src/notifications';
 import { reducer as app, clientError } from 'src/application';
 import { reducer as user } from 'src/user';
-import { reducer as graphs } from 'src/graphs';
+import { reducer as graphs, mapGraphData } from 'src/graphs';
 import { reducer as sets, updateUniq, clearFeeds } from 'src/sets';
 import { reducer as feeds } from 'src/feeds';
 import { reducer as alerts } from 'src/alerts';
@@ -48,6 +48,7 @@ export default createStore(
     updateUniq,
     clearFeeds,
     numerizeTabularData,
-    splitResultText
+    splitResultText,
+    mapGraphData
   ))
 );

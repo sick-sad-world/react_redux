@@ -4,7 +4,6 @@ import FullResult from './src/containers/fullresult';
 import { displaySettings } from './src/defaults';
 
 export * from './src/actions';
-export * from './src/helpers';
 export * from './src/middlewares';
 export { displaySettings };
 export { reducer };

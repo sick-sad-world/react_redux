@@ -14,7 +14,7 @@ import { defaultInterface, displaySettings } from '../defaults';
 import { connect } from 'react-redux';
 import { makeResultSelector } from '../selectors';
 import { refreshResult, favoriteResult, ignoreResult } from '../actions';
-import { getResultMeasurements } from 'src/graphs';
+import { GraphsContainer } from 'src/graphs';
 
 // Import child Components
 // ===========================================================================
@@ -32,9 +32,6 @@ class FullResult extends React.Component {
       tab: 1
     };
     bindAll(this, 'switchTab', 'pickResultType');
-    if (this.props.getResultMeasurements) {
-      this.props.getResultMeasurements({ hash: this.props.payload.hash });
-    }
   }
 
   switchTab(tab) {
@@ -120,6 +117,11 @@ class FullResult extends React.Component {
               </div>
             </div>
           ) : null}
+          {(this.state.tab === 2) ? (
+            <div className='tab-graph tab'>
+              <GraphsContainer type={this.props.graphStats} hash={this.props.payload.hash}/>
+            </div>
+          ) : null}
         </main>
       </Modal>
     );
@@ -128,7 +130,8 @@ class FullResult extends React.Component {
 
 FullResult.defaultProps = {
   className: 'popup mod-full-result',
-  tableStats: displaySettings.table
+  tableStats: displaySettings.table,
+  graphStats: displaySettings.graph
 };
 
 FullResult.propTypes = {
@@ -139,8 +142,8 @@ FullResult.propTypes = {
   refreshResult: PropTypes.func,
   favoriteResult: PropTypes.func,
   ignoreResult: PropTypes.func,
-  getResultMeasurements: PropTypes.func,
+  graphStats: PropTypes.arrayOf(PropTypes.string).isRequired,
   tableStats: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 
-export default connect(makeResultSelector, { refreshResult, favoriteResult, ignoreResult, getResultMeasurements })(FullResult);
+export default connect(makeResultSelector, { refreshResult, favoriteResult, ignoreResult })(FullResult);

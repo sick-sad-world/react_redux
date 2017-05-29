@@ -41,7 +41,7 @@ svg:not(:root) {
   overflow: hidden;
 }
 
-svg {
+svg:not(.recharts-surface) {
 	margin: auto;
 	fill: $c-icon;
 	width: $icon-unit;

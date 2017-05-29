@@ -1,5 +1,5 @@
 export const defaultGraphs = {
   state: 2,
-  payload: null,
+  payload: [],
   target: null
 };

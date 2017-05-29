@@ -11,6 +11,7 @@ export default function createTypes(module, actions) {
     DELETE: 'DELETE',
     STATE: 'STATE',
     SORT: 'SORT',
+    ERROR: 'ERROR',
     ...actions
   }, v => `@@${module}/${v}`));
 }

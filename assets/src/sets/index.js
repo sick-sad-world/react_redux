@@ -4,7 +4,6 @@ import SetsList from './src/containers/list';
 import Route from './src/route';
 
 export * from './src/actions';
-export * from './src/helpers';
 export * from './src/middlewares';
 export { reducer };
 export { Route };
