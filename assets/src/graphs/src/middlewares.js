@@ -1,5 +1,5 @@
 import types from './types';
-import { mapGraphData as mapper } from './helpers';
+import { mapGraphData as mapper, typeMapper } from './helpers';
 
 
 export function mapGraphData({ dispatch, getState }) {
@@ -7,7 +7,8 @@ export function mapGraphData({ dispatch, getState }) {
     if (action.type === types.READ) {
       return next({
         ...action,
-        payload: mapper(action.payload)
+        payload: mapper(action.payload, action.entity),
+        config: action.entity
       });
     }
     return next(action);

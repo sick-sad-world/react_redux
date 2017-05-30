@@ -44,6 +44,9 @@
     overflow: auto;
     flex: 1 1 100%;
   }
+  .tab-graph {
+    overflow: visible;
+  }
   .alongside {
     display: flex;
     .feature {

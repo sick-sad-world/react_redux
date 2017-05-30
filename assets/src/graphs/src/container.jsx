@@ -30,12 +30,9 @@ class GraphsContainer extends React.Component {
 
   componentWillMount() {
     this.props.getResultMeasurements({
-      hash: this.props.hash, type: this.props.type.join(',')
-    }, { notification: false }).catch(this.props.graphError);
-  }
-
-  componentWillReceiveProps(newProps) {
-
+      hash: this.props.hash,
+      type: this.props.type.join(',')
+    }, { entity: this.props.type, notification: false }).catch(this.props.graphError);
   }
 
   render() {
@@ -49,13 +46,13 @@ class GraphsContainer extends React.Component {
           {({ height, width }) => (
             <LineChart width={width - 8} height={height - 8} margin={{ top: 0, right: 0, left: 0, bottom: 0 }} data={this.props.payload}>
               <XAxis dataKey='date' />
-              <YAxis />
+              <YAxis type='number' domain={['auto', 'auto']} />
               <CartesianGrid strokeDasharray='3 3' />
-              <Tooltip />
+              <Tooltip itemStyle={{ lineHeight: 1, margin: 0 }}/>
               <Legend verticalAlign='top' />
               {Object.keys(this.props.payload[0])
                 .filter(key => key !== 'date' && key !== 'last')
-                .map(key => <Line key={key} connectNulls={true} name={key} type='monotone' dataKey={key} stroke='#82ca9d' />)
+                .map(key => <Line key={key} connectNulls={true} name={key} type='monotone' dataKey={key} stroke-width={2} />)
               }
             </LineChart>
           )}
