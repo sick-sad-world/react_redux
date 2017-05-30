@@ -1,72 +1,70 @@
-import { mapValues, sortBy } from 'lodash';
+import { mapValues } from 'lodash';
 import { numOrString } from 'functions';
+import { movWindow } from './defaults';
 
 export function typeMapper(types) {
   return types.reduce((acc, type) => {
     acc[type] = 0;
-    acc[`rate_${type}`] = 0;
-    acc[`av_${type}`] = 0;
-    acc[`mov_av_${type}`] = 0;
-    acc[`change_${type}`] = 0;
+    acc[`${type}_rate`] = 0;
+    acc[`${type}_avg`] = 0;
+    acc[`${type}_mov_avg`] = 0;
+    acc[`${type}_change`] = 0;
     return acc;
   }, {});
 }
 
+export function createTypeHash(types, val) {
+  return types.reduce((acc, type) => {
+    acc[type] = val;
+    return acc;
+  }, {});
+}
+
+export function averageCounter(types) {
+  const cache = createTypeHash(types, 0);
+  const sum = createTypeHash(types, 1);
+  return (type, value = 0) => {
+    sum[type] += value;
+    cache[type] += 1;
+    return Math.round(sum[type] / cache[type]);
+  };
+}
+
+export function movingAverageCounter(types) {
+  const cache = createTypeHash(types, []);
+  return (type, value = 0) => {
+    cache[type].push(value);
+    if (cache[type].length > movWindow) {
+      cache[type].shift();
+    }
+
+    const movingsum = cache[type].reduce((mVsum, val) => {
+      mVsum += val;
+      return mVsum;
+    }, 0);
+
+    return Math.round(movingsum / cache[type].length);
+  };
+}
+
 export function mapGraphData(data, types) {
   const typemap = typeMapper(types);
-  let datamap = Object.keys(data).filter(key => key !== '').sort();
+  const avgCounter = averageCounter(types);
+  const movAverage = movingAverageCounter(types);
 
-  const sum = {};
-  const avg_counter = types.reduce((acc, type) => {
-    acc[`rate_${type}`] = [];
-    return acc;
-  }, {});
-  const moving_values = types.reduce((acc, type) => {
-    acc[`rate_${type}`] = [];
-    return acc;
-  }, {});
-  const previous = types.reduce((acc, type) => {
-    acc[`rate_${type}`] = [];
-    return acc;
-  }, {});
-  let movingcount = 0;
-  const movWindow = 24;
-
-  datamap = datamap.map(key => ({ date: key, ...typemap }));
-
-  datamap = datamap.map((measurement) => {
-    const result = { ...typemap, ...mapValues(data[measurement.date], numOrString) };
+  return Object.keys(data).filter(key => key !== '').sort().map((measurement, i, datemap) => {
+    const result = mapValues(data[measurement], numOrString);
 
     return types.reduce((acc, type) => {
       const rate = `rate_${type}`;
-      acc[type] = result[type];
-      acc[rate] = result[rate];
+      acc[type] = result[type] || 0;
+      acc[`${type}_rate`] = result[rate] || 0;
 
-      sum[rate] = sum[rate] ? (sum[rate] + result[rate]) : result[rate];
-      avg_counter[rate] = avg_counter[rate] ? (avg_counter[rate] + 1) : 1;
-      acc[`av_${type}`] = Math.round(sum[rate] / avg_counter[rate]);
-
-      moving_values[rate].push(result[rate] ? result[rate] : 0);
-      movingcount += 1;
-
-      if (movingcount > movWindow) {
-        moving_values[rate].shift();
-        movingcount = movWindow;
-      }
-
-      const movingsum = moving_values[rate].reduce((mVsum, val) => {
-        mVsum += val;
-        return mVsum;
-      }, 0);
-
-      acc[`mov_av_${type}`] = Math.round(movingsum / movingcount);
-
-      acc[`change_${type}`] = result[rate] - previous[rate];
-      previous[rate] = result[rate];
+      acc[`${type}_avg`] = avgCounter(type, result[rate]);
+      acc[`${type}_mov_avg`] = movAverage(type, result[rate]);
+      acc[`${type}_change`] = (i > 0) ? (result[rate] - data[datemap[i - 1]][rate]) || 0 : 0;
 
       return acc;
-    }, { ...measurement });
+    }, { date: measurement, ...typemap });
   });
-
-  return datamap;
 }

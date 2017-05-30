@@ -12,7 +12,7 @@ export default (state = { ...defaultGraphs }, action) => {
       return {
         state: 2,
         payload: action.payload,
-        target: action.entity
+        config: action.config
       };
     case types.STATE:
       return {

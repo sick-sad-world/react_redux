@@ -17,6 +17,7 @@ import { stateNum } from 'common/typecheck';
 import { connect } from 'react-redux';
 import { makeContainerSelector } from './selectors';
 import * as actions from './actions';
+import { variable, colours } from './defaults';
 
 // Import child Components
 // ===========================================================================
@@ -35,6 +36,22 @@ class GraphsContainer extends React.Component {
     }, { entity: this.props.type, notification: false }).catch(this.props.graphError);
   }
 
+  renderLines() {
+    return this.props.config.reduce((acc, item, i) => {
+      this.props.variable.forEach((v) => {
+        const key = (v === 'value') ? item : `${item}_${v}`;
+        acc.push(<Line key={key} name={key} dataKey={key} stroke={this.props.colours[v][i]} {...this.props.lineProps} />);
+      });
+      return acc;
+    }, []);
+  }
+
+  sortToolTip(item1, item2) {
+    const key1 = item1.dataKey.split('_').shift();
+    const key2 = item2.dataKey.split('_').shift();
+    return (key1 === key2) ? 0 : -1;
+  }
+
   render() {
     if (this.props.error) {
       return <GraphError>{this.props.error}</GraphError>;
@@ -48,11 +65,9 @@ class GraphsContainer extends React.Component {
               <XAxis dataKey='date' />
               <YAxis type='number' domain={['auto', 'auto']} />
               <CartesianGrid strokeDasharray='3 3' />
-              <Tooltip itemStyle={{ lineHeight: 1, margin: 0 }}/>
+              <Tooltip itemStyle={{ lineHeight: 1, margin: 0 }} itemSorter={this.sortToolTip}/>
               <Legend verticalAlign='top' />
-              {Object.keys(this.props.payload[0])
-                .filter(key => key !== 'date' && key !== 'last')
-                .map(key => <Line key={key} connectNulls={true} name={key} type='monotone' dataKey={key} stroke-width={2} />)
+              {this.renderLines()}
               }
             </LineChart>
           )}
@@ -71,12 +86,23 @@ class GraphsContainer extends React.Component {
 
 GraphsContainer.defaultProps = {
   state: 1,
-  error: null
+  error: null,
+  colours,
+  variable,
+  lineProps: {
+    connectNulls: true,
+    type: 'monotone',
+    'stroke-width': 4
+  }
 };
 
 GraphsContainer.propTypes = {
   state: stateNum.isRequired,
+  config: PropTypes.arrayOf(PropTypes.string),
+  variable: PropTypes.arrayOf(PropTypes.string).isRequired,
+  colours: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
   payload: PropTypes.arrayOf(PropTypes.object).isRequired,
+  lineProps: PropTypes.object.isRequired,
   hash: PropTypes.string.isRequired,
   type: PropTypes.arrayOf(PropTypes.string).isRequired,
   error: PropTypes.string,

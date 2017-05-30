@@ -1,6 +1,5 @@
 import types from './types';
-import { mapGraphData as mapper, typeMapper } from './helpers';
-
+import { mapGraphData as mapper } from './helpers';
 
 export function mapGraphData({ dispatch, getState }) {
   return next => (action) => {
