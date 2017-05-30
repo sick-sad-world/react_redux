@@ -49,7 +49,14 @@ class GraphsContainer extends React.Component {
   sortToolTip(item1, item2) {
     const key1 = item1.dataKey.split('_').shift();
     const key2 = item2.dataKey.split('_').shift();
-    return (key1 === key2) ? 0 : -1;
+    if (key1 === key2) {
+      return 0;
+    } else if (key2 === 'tweets') {
+      return 1;
+    } else if (key1 !== 'tweets' && key2 === 'shares') {
+      return 1;
+    }
+    return -1;
   }
 
   render() {
