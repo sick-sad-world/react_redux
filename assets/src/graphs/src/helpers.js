@@ -1,6 +1,6 @@
-import { mapValues } from 'lodash';
+import { mapValues, assign } from 'lodash';
 import { numOrString } from 'functions';
-import { movWindow } from './defaults';
+import { movWindow, limit } from './defaults';
 
 export function typeMapper(types) {
   return types.reduce((acc, type) => {
@@ -10,7 +10,7 @@ export function typeMapper(types) {
     acc[`${type}_mov_avg`] = 0;
     acc[`${type}_change`] = 0;
     return acc;
-  }, {});
+  }, { first: undefined, last: undefined });
 }
 
 export function createTypeHash(types, val) {
@@ -48,23 +48,30 @@ export function movingAverageCounter(types) {
 }
 
 export function mapGraphData(data, types) {
-  const typemap = typeMapper(types);
+  const lastCache = typeMapper(types);
+
   const avgCounter = averageCounter(types);
   const movAverage = movingAverageCounter(types);
 
-  return Object.keys(data).filter(key => key !== '').sort().map((measurement, i, datemap) => {
-    const result = mapValues(data[measurement], numOrString);
+  let dateTimes = Object.keys(data).filter(key => key !== '').sort();
+  dateTimes = dateTimes.slice(Math.max(dateTimes.length - limit, 0));
 
-    return types.reduce((acc, type) => {
-      const rate = `rate_${type}`;
-      acc[type] = result[type] || 0;
-      acc[`${type}_rate`] = result[rate] || 0;
+  return dateTimes.map((dateTime, i) => {
+    const { found, ...measurement } = mapValues(data[dateTime], numOrString);
 
-      acc[`${type}_avg`] = avgCounter(type, result[rate]);
-      acc[`${type}_mov_avg`] = movAverage(type, result[rate]);
-      acc[`${type}_change`] = (i > 0) ? (result[rate] - data[datemap[i - 1]][rate]) || 0 : 0;
+    const result = types.reduce((acc, type) => {
+      const rate = measurement[`rate_${type}`] || lastCache[`${type}_rate`];
+      acc[type] = measurement[type] || lastCache[type];
+      acc[`${type}_rate`] = rate;
+
+      acc[`${type}_avg`] = avgCounter(type, rate);
+      acc[`${type}_mov_avg`] = movAverage(type, rate);
+      acc[`${type}_change`] = (i > 0) ? (rate - lastCache[`${type}_rate`]) || 0 : 0;
 
       return acc;
-    }, { date: measurement, ...typemap });
+    }, { date: dateTime, found });
+
+    assign(lastCache, result);
+    return result;
   });
 }

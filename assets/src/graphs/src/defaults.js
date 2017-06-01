@@ -6,7 +6,10 @@ export const defaultGraphs = {
 
 export const movWindow = 24;
 
+export const limit = 50;
+
 export const colours = {
+  found: ['#4F4E53'],
   value: ['#F44336', '#3F51B5', '#4CAF50', '#FFC107'],
   rate: ['#E53935', '#3949AB', '#43A047', '#FFB300'],
   avg: ['#D32F2F', '#303F9F', '#388E3C', '#FFA000'],

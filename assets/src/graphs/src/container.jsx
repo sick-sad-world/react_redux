@@ -23,7 +23,9 @@ import { variable, colours } from './defaults';
 // ===========================================================================
 import GraphError from './components/error';
 import GraphLoading from './components/loading';
+import CustomToolTip from './components/tooltip';
 import { LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Line } from 'recharts';
+
 
 // description
 // ===========================================================================
@@ -46,19 +48,6 @@ class GraphsContainer extends React.Component {
     }, []);
   }
 
-  sortToolTip(item1, item2) {
-    const key1 = item1.dataKey.split('_').shift();
-    const key2 = item2.dataKey.split('_').shift();
-    if (key1 === key2) {
-      return 0;
-    } else if (key2 === 'tweets') {
-      return 1;
-    } else if (key1 !== 'tweets' && key2 === 'shares') {
-      return 1;
-    }
-    return -1;
-  }
-
   render() {
     if (this.props.error) {
       return <GraphError>{this.props.error}</GraphError>;
@@ -72,10 +61,10 @@ class GraphsContainer extends React.Component {
               <XAxis dataKey='date' />
               <YAxis type='number' domain={['auto', 'auto']} />
               <CartesianGrid strokeDasharray='3 3' />
-              <Tooltip itemStyle={{ lineHeight: 1, margin: 0 }} itemSorter={this.sortToolTip}/>
+              <Tooltip content={<CustomToolTip config={this.props.config} variable={this.props.variable}/>} />
               <Legend verticalAlign='top' />
+              <Line key='found' name='found' dataKey='found' stroke={this.props.colours.found[0]} {...this.props.lineProps} />
               {this.renderLines()}
-              }
             </LineChart>
           )}
         </AutoSizer>
