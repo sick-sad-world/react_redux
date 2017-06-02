@@ -1,7 +1,6 @@
 export const defaultGraphs = {
   state: 2,
-  payload: [],
-  config: null
+  payload: []
 };
 
 export const movWindow = 24;

@@ -18,7 +18,7 @@ export default function ResultTable({ data, to, style }) {
         </tr>
         { data.map(({ title, normal, rate, maxrate, hotness }) => (
           <tr key={title}>
-            <td style={style}><Link to={to}><b>{title}</b></Link></td>
+            <td style={style}><Link to={`${to}&init=${title.toLowerCase()}`}><b>{title}</b></Link></td>
             <td style={style}>{ normal }</td>
             <td style={style}>{ rate }</td>
             <td style={style}>{ maxrate }</td>

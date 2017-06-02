@@ -29,9 +29,10 @@ class FullResult extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tab: 1
+      tab: (props.initial) ? 2 : 1,
+      initial: props.initial
     };
-    bindAll(this, 'switchTab', 'pickResultType');
+    bindAll(this, 'switchTab', 'pickResultType', 'toGraphs');
   }
 
   switchTab(tab) {
@@ -61,6 +62,13 @@ class FullResult extends React.Component {
       }
       return acc;
     }, 'undefined');
+  }
+
+  toGraphs(type) {
+    return () => this.setState({
+      tab: 2,
+      initial: type.toLowerCase()
+    });
   }
 
   render() {
@@ -113,13 +121,13 @@ class FullResult extends React.Component {
               ) : null}
               <div className='feature stats'>
                 <h4>Stats:</h4>
-                <FullResultTable data={this.pickTableData()} />
+                <FullResultTable onClick={this.toGraphs} graph={this.props.graphStats} data={this.pickTableData()} />
               </div>
             </div>
           ) : null}
           {(this.state.tab === 2) ? (
             <div className='tab-graph tab'>
-              <GraphsContainer type={this.props.graphStats} hash={this.props.payload.hash}/>
+              <GraphsContainer config={this.props.graphStats} initial={this.state.initial} hash={this.props.payload.hash}/>
             </div>
           ) : null}
         </main>
@@ -129,6 +137,7 @@ class FullResult extends React.Component {
 }
 
 FullResult.defaultProps = {
+  initial: null,
   className: 'popup mod-full-result',
   tableStats: displaySettings.table,
   graphStats: displaySettings.graph
@@ -137,6 +146,7 @@ FullResult.defaultProps = {
 FullResult.propTypes = {
   id: PropTypes.number.isRequired,
   close: PropTypes.func.isRequired,
+  initial: PropTypes.string,
   className: PropTypes.string,
   title: PropTypes.string.isRequired,
   payload: PropTypes.shape(defaultInterface),

@@ -6,8 +6,7 @@ export function mapGraphData({ dispatch, getState }) {
     if (action.type === types.READ) {
       return next({
         ...action,
-        payload: mapper(action.payload, action.entity),
-        config: action.entity
+        payload: mapper(action.payload, action.entity)
       });
     }
     return next(action);

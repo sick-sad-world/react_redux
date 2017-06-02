@@ -51,7 +51,7 @@ class Dashboard extends React.Component {
           </ColumnsContainer>
         ) : emptyTpl }
         {(this.props.location.query.hash) ? (
-          <FullResult id={scrollTo} close={this.closeModal} hash={this.props.location.query.hash} />
+          <FullResult id={scrollTo} close={this.closeModal} initial={this.props.location.query.init} hash={this.props.location.query.hash} />
         ) : null}
       </section>
     );

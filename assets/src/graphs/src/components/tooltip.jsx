@@ -8,18 +8,17 @@ export default function CustomToolTip({ label, payload, viewBox, config, variabl
       <h3>{label}</h3>
       {(found && found.value) ? <h4><b>Found:</b> <span>{found.value}</span></h4> : null}
         {config.reduce((acc, item, i) => {
-          acc.push(
-            <ul key={i}>
-              {variable.map((v) => {
-                const key = (v === 'value') ? item : `${item}_${v}`;
-                const line = payload.find(({ name }) => name === key);
-                if (line && line.value !== undefined) {
-                  return <li key={key} style={{ color: line.stroke }}><b>{line.dataKey}</b> <span>{line.value}</span></li>;
-                }
-                return null;
-              })}
-            </ul>
-          );
+          const DOM = variable.reduce((dom, v) => {
+            const key = (v === 'value') ? item : `${item}_${v}`;
+            const line = payload.find(({ name }) => name === key);
+            if (line && line.value !== undefined) {
+              dom.push(<li key={key} style={{ color: line.stroke }}><b>{line.dataKey}</b> <span>{line.value}</span></li>);
+            }
+            return dom;
+          }, []);
+          if (DOM.length) {
+            acc.push(<ul key={i}>{DOM}</ul>);
+          }
           return acc;
         }, [])}
     </div>

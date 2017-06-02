@@ -1,6 +1,7 @@
 // Import helper stuff
 // ===========================================================================
-import { } from 'lodash';
+import { bindAll } from 'lodash';
+import { updateArrayWithValue } from 'functions';
 
 // Import React related stuff
 // ===========================================================================
@@ -30,22 +31,66 @@ import { LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Line } from 'r
 // description
 // ===========================================================================
 class GraphsContainer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dTypes: [],
+      dVars: [],
+      config: this.mapPropsToState(props)
+    };
+    bindAll(this, 'mapPropsToState', 'legendClickHandler');
+  }
+
+  mapPropsToState(props) {
+    return props.config.reduce((acc, item, i) => {
+      props.variable.forEach((v) => {
+        if (v === 'found') return;
+        acc.push({
+          key: (v === 'value') ? item : `${item}_${v}`,
+          enabled: (props.initial) ? (item.indexOf(props.initial) > -1) : true,
+          val: props.colours[v][i]
+        });
+      });
+      return acc;
+    }, []);
+  }
+
 
   componentWillMount() {
     this.props.getResultMeasurements({
       hash: this.props.hash,
-      type: this.props.type.join(',')
-    }, { entity: this.props.type, notification: false }).catch(this.props.graphError);
+      type: this.props.config.join(',')
+    }, { entity: this.props.config, notification: false }).catch(this.props.graphError);
   }
 
   renderLines() {
-    return this.props.config.reduce((acc, item, i) => {
-      this.props.variable.forEach((v) => {
-        const key = (v === 'value') ? item : `${item}_${v}`;
-        acc.push(<Line key={key} name={key} dataKey={key} stroke={this.props.colours[v][i]} {...this.props.lineProps} />);
-      });
-      return acc;
-    }, []);
+    return this.state.config.filter(({ enabled }) => enabled).map(({ key, val }) => (
+      <Line key={key} name={key} dataKey={key} stroke={val} {...this.props.lineProps} />
+    ));
+  }
+
+  legendClickHandler({ dataKey }) {
+    const dTypes = updateArrayWithValue(this.state.dTypes, dataKey);
+    const dVars = updateArrayWithValue(this.state.dVars, dataKey);
+    this.setState({
+      dTypes,
+      dVars,
+      config: this.state.config.map(({ key, val }) => ({
+        key,
+        val,
+        enabled: !dTypes.find(t => key.indexOf(t) > -1) && !dVars.find(t => key.indexOf(t) > -1)
+      }))
+    });
+  }
+
+  makeLegend(source, color) {
+    return source.map((item, i) => ({
+      id: i,
+      dataKey: item,
+      value: item,
+      color: color || this.props.colours.value[i],
+      type: 'line'
+    }));
   }
 
   render() {
@@ -61,10 +106,18 @@ class GraphsContainer extends React.Component {
               <XAxis dataKey='date' />
               <YAxis type='number' domain={['auto', 'auto']} />
               <CartesianGrid strokeDasharray='3 3' />
-              <Tooltip content={<CustomToolTip config={this.props.config} variable={this.props.variable}/>} />
-              <Legend verticalAlign='top' />
-              <Line key='found' name='found' dataKey='found' stroke={this.props.colours.found[0]} {...this.props.lineProps} />
-              {this.renderLines()}
+              <Tooltip content={<CustomToolTip config={this.props.config} variable={this.props.variable} />} />
+              <Legend
+                verticalAlign='top'
+                onClick={this.legendClickHandler}
+                payload={
+                  this.makeLegend(this.props.config).concat(
+                    this.makeLegend([...this.props.variable].splice(1), this.props.colours.found[0])
+                  )
+                }
+              />
+              <Line key='found' name='found' dataKey='found' legendType='none' stroke={this.props.colours.found[0]} {...this.props.lineProps} />
+              {(this.state.config.length) ? this.renderLines() : null}
             </LineChart>
           )}
         </AutoSizer>
@@ -94,13 +147,13 @@ GraphsContainer.defaultProps = {
 
 GraphsContainer.propTypes = {
   state: stateNum.isRequired,
+  initial: PropTypes.string,
   config: PropTypes.arrayOf(PropTypes.string),
   variable: PropTypes.arrayOf(PropTypes.string).isRequired,
   colours: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
   payload: PropTypes.arrayOf(PropTypes.object).isRequired,
   lineProps: PropTypes.object.isRequired,
   hash: PropTypes.string.isRequired,
-  type: PropTypes.arrayOf(PropTypes.string).isRequired,
   error: PropTypes.string,
   graphError: PropTypes.func.isRequired,
   clearGraphData: PropTypes.func.isRequired,

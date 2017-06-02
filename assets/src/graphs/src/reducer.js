@@ -11,8 +11,7 @@ export default (state = { ...defaultGraphs }, action) => {
     case types.READ:
       return {
         state: 2,
-        payload: action.payload,
-        config: action.config
+        payload: action.payload
       };
     case types.STATE:
       return {
