@@ -62,7 +62,8 @@ export default class AdvFilters extends React.Component {
   }
 
   renderValue(v, k) {
-    return <li key={`${k}=${v}`}>{`${k}=${v}`}<span onClick={this.removeValue(k)} ><Icon icon='cross' /></span></li>;
+    const val = (k.indexOf('hotness') > -1) ? `${(v * 100).toFixed(2)}%` : v;
+    return <li key={`${k}=${val}`}>{`${k}=${val}`}<span onClick={this.removeValue(k)} ><Icon icon='cross' /></span></li>;
   }
 
   render() {
