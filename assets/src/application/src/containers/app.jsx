@@ -32,7 +32,7 @@ class App extends React.Component {
     const { error, state, loadingStep } = this.props;
     return (
       <div>
-        { (error) ? <ClientError error={error} /> : null }
+        { (error) ? <span className='overlay'><ClientError error={error} /></span> : null }
         { (state === 1) ? <ProgressTracker step={loadingStep} /> : this.props.children }
         <Notifications/>
       </div>

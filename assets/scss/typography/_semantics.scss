@@ -315,3 +315,29 @@ blockquote {}
     }
   }
 }
+
+.global-error {
+  $c: map-get($states, 'error');
+  $lc: lighten($c, 20%);
+  margin: auto;
+  position: relative;
+  width: map-get($layout, popup);
+  background-color: $lc;
+  box-shadow: 0 0 20px rgba(#000,.25), 0 0 150px rgba($lc, 1);
+  padding: baseUnit();
+  cursor: default;
+  div {
+    border: 1px solid $c;
+    padding: baseUnit();
+    position: relative;
+    z-index: 1;
+  }
+  svg {
+    @include pos(false 0 0 false);
+    fill: $c;
+    width: baseUnit(10);
+    height: baseUnit(10);
+    opacity: 0.5;
+    z-index: 0;
+  }
+}
