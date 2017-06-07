@@ -77,7 +77,7 @@ class ResultsContainer extends React.Component {
 
   countRowHeight(settings) {
     let exclude = [];
-    return settings.reduce((acc, stat) => {
+    return settings.filter(stat => !!this.props.displaySettingsMap[stat]).reduce((acc, stat) => {
       const map = this.props.displaySettingsMap[stat];
       if (map.table && !includes(exclude, 'table')) {
         exclude.push('table');
@@ -140,6 +140,7 @@ class ResultsContainer extends React.Component {
           sort={this.props.data.sort}
           location={`${this.props.location}/${this.props.id}`}
           displaySettings={this.props.displaySettings}
+          graphSettings={this.props.graphSettings}
           heights={this.heightConfig}
           refreshResult={this.props.refreshResult({ entity: this.props.id, state: false })}
           favoriteResult={this.props.favoriteResult({ entity: this.props.id, state: false })}
@@ -220,6 +221,7 @@ ResultsContainer.defaultProps = {
   defaultLimit: limit,
   tableStats: [...displaySettings.table],
   displaySettings: [...displaySettings.default],
+  graphSettings: [...displaySettings.graph],
   displaySettingsMap: { ...displaySettings.map },
   ...defaultResults
 };
@@ -235,6 +237,7 @@ ResultsContainer.propTypes = {
   stateEmpty: PropTypes.string.isRequired,
   tableStats: PropTypes.arrayOf(PropTypes.string).isRequired,
   displaySettings: PropTypes.arrayOf(PropTypes.string).isRequired,
+  graphSettings: PropTypes.arrayOf(PropTypes.string).isRequired,
   displaySettingsMap: PropTypes.object.isRequired,
   payload: PropTypes.arrayOf(PropTypes.object).isRequired,
   getResults: PropTypes.func.isRequired,

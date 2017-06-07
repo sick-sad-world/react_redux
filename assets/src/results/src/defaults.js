@@ -30,7 +30,7 @@ export const defaultDashboardResult = {
 export const displaySettings = {
   all: ['title', 'url', 'author', 'domain', 'found', 'image', 'wide_image', 'description', 'graphs', 'likes', 'tweets', 'pins', 'shares', 'comments', 'votes_video', 'views_video', 'comments_video'],
   table: ['tweets', 'likes', 'shares', 'comments', 'votes_video', 'views_video', 'comments_video', 'pins', 'ups_reddit', 'downs_reddit'],
-  graph: ['tweets', 'likes', 'shares', 'comments'],
+  graph: ['tweets', 'likes', 'shares', 'comments', 'views_video'],
   default: ['title', 'found', 'url', 'image', 'description', 'likes'],
   map: {
     url: {
@@ -78,6 +78,11 @@ export const displaySettings = {
       height: 18,
       table: true,
       default: true
+    },
+    graphs: {
+      height: 0,
+      table: false,
+      default: false
     },
     tweets: {
       height: 18,

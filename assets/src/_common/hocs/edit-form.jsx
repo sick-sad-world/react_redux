@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { includes, without, concat, bindAll, isEqual, forOwn } from 'lodash';
+import { includes, without, concat, bindAll, isEqual, forOwn, capitalize } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
@@ -42,7 +42,7 @@ EditFormHeader.propTypes = {
 export function EditFormConfirmation({ text, changed, apply, cancel }) {
   let message = text;
   if (text.indexOf('{data}') > -1) {
-    message = text.replace('{data}', changed.map((change => change.replace('_', ' '))).join(', '));
+    message = text.replace('{data}', capitalize(changed.map((change => change.replace('_', ' '))).join(', ')));
   }
 
   return (
@@ -144,7 +144,7 @@ export default function MakeEditForm(Form) {
     texts: {
       title: 'Edit form',
       description: 'Default form to modify things',
-      confirmation: '{data} was changed. Save changes?'
+      confirmation: '{data} was changed. Save changes to apply them'
     },
     formProps: {}
   };

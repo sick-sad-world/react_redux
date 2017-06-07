@@ -1,3 +1,4 @@
+import { includes } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
@@ -5,7 +6,7 @@ import HotnessBar from '../hotness';
 
 // Result table
 // ===========================================================================
-export default function ResultTable({ data, to, style }) {
+export default function ResultTable({ data, to, style, graph }) {
   return (
     <table className='stats-table'>
       <tbody>
@@ -18,7 +19,13 @@ export default function ResultTable({ data, to, style }) {
         </tr>
         { data.map(({ title, normal, rate, maxrate, hotness }) => (
           <tr key={title}>
-            <td style={style}><Link to={`${to}&init=${title.toLowerCase()}`}><b>{title}</b></Link></td>
+            <td>
+              {(includes(graph, title.toLowerCase())) ? (
+                <Link to={`${to}&init=${title.toLowerCase()}`}><b>{title}</b></Link>
+              ) : (
+                <b>{title}</b>
+              )}
+            </td>
             <td style={style}>{ normal }</td>
             <td style={style}>{ rate }</td>
             <td style={style}>{ maxrate }</td>
@@ -34,6 +41,7 @@ export default function ResultTable({ data, to, style }) {
 }
 
 ResultTable.propTypes = {
+  graph: PropTypes.arrayOf(PropTypes.string).isRequired,
   data: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string.isRequired,
     normal: PropTypes.number.isRequired,
