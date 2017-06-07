@@ -24,7 +24,13 @@ export function composeColumnData({ id, name, data, order, display_settings, ope
       if (setting === '_videoviews') return 'views_video';
       return setting.replace(loDashRegExp, '_');
     }),
-    data: { ...defColumnData, ...data, infinite: (data.infinite) ? 1 : 0 }
+    data: {
+      ...defColumnData,
+      ...data,
+      infinite: (data.infinite) ? 1 : 0,
+      set: (typeof data.set === 'number') ? [data.set] : data.set,
+      source: (typeof data.source === 'number') ? [data.source] : data.source
+    }
   };
 }
 
