@@ -8,18 +8,23 @@ export function getColumnsForResults(payload) {
 
 export function composeColumnData({ id, name, data, order, display_settings, open }) {
   let settings = display_settings;
+  const loDashRegExp = /_+/;
   if (!settings) {
     settings = [...displaySettings.default];
   } else if (typeof settings === 'string') {
     settings = settings.split(',');
   }
+
   return {
     id,
     name,
     open,
     order,
-    display_settings: settings,
-    data: { ...defColumnData, ...data }
+    display_settings: settings.map((setting) => {
+      if (setting === '_videoviews') return 'views_video';
+      return setting.replace(loDashRegExp, '_');
+    }),
+    data: { ...defColumnData, ...data, infinite: (data.infinite) ? 1 : 0 }
   };
 }
 

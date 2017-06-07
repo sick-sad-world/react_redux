@@ -21,5 +21,5 @@ export default function UserBlock({ image, fullname, position }) {
 UserBlock.propTypes = {
   image: PropTypes.string.isRequired,
   fullname: PropTypes.string.isRequired,
-  position: PropTypes.string.isRequired
+  position: PropTypes.string
 };

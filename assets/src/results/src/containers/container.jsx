@@ -79,6 +79,7 @@ class ResultsContainer extends React.Component {
     let exclude = [];
     return settings.reduce((acc, stat) => {
       const map = this.props.displaySettingsMap[stat];
+      console.log(stat);
       if (map.table && !includes(exclude, 'table')) {
         exclude.push('table');
         acc += (8 + map.height);

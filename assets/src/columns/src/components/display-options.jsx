@@ -24,12 +24,11 @@ export default function DisplayOptions({ data, value, onChange, disabled, title,
         />
       </td>
     ));
-    if (i % 3 === 2 && (i + 1) !== data.length) {
+    if (i > 0 && (i % 3 === 2 || i === data.length - 1)) {
       DOM.push(<tr key={`row${i}`}>{ROW}</tr>);
       ROW = [];
     }
   });
-
   return (
     <fieldset className={className}>
       <legend>{title}</legend>
