@@ -33,7 +33,7 @@ export default function FullResultTable({ data, onClick, graph }) {
             <td>{acc}</td>
             <td>{first}</td>
             <td className='hotness'>
-              { hotness }
+              { (hotness * 100).toFixed(2) }%
               <HotnessBar value={hotness} />
             </td>
           </tr>

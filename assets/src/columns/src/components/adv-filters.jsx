@@ -32,7 +32,7 @@ export default class AdvFilters extends React.Component {
       advType: 'MIN',
       advPref: '',
       advProp: 'likes',
-      advVal: ''
+      advVal: 0
     };
   }
 
@@ -41,20 +41,18 @@ export default class AdvFilters extends React.Component {
   }
 
   updateAmount(e) {
-    return this.setState({ advVal: (e.target.value.length) ? parseFloat(e.target.value) : 0 });
-  }
-
-  createValueKey() {
-    const { advType, advPref, advProp } = this.state;
-    return `${advType}(${(advPref) ? `${advPref}_${advProp}` : advProp})`;
+    return this.setState({ advVal: e.target.value });
   }
 
   createValue(e) {
     e.preventDefault();
     if (this.state.advVal > 0) {
+      const { advType, advPref, advProp, advVal } = this.state;
+      const valueKey = `${advType}(${(advPref) ? `${advPref}_${advProp}` : advProp})`;
+      const value = parseFloat(advVal) || 0;
       this.props.onChange({
         ...this.props.value,
-        [this.createValueKey()]: this.state.advVal
+        [valueKey]: (advPref === 'hotness') ? (value / 100) : value
       });
     }
   }
@@ -115,8 +113,7 @@ export default class AdvFilters extends React.Component {
               className='size-120'
               onChange={this.updateAmount}
               value={this.state.advVal}
-              type='number'
-              step='0.001'
+              type='text'
               placeholder='Amount...'
               name='advVal'
             />

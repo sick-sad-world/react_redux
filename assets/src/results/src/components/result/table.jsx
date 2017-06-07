@@ -23,7 +23,7 @@ export default function ResultTable({ data, to, style }) {
             <td style={style}>{ rate }</td>
             <td style={style}>{ maxrate }</td>
             <td style={style} className='hotness'>
-              { hotness }
+              { (hotness * 100).toFixed(2) }%
               <HotnessBar value={hotness} />
             </td>
           </tr>
