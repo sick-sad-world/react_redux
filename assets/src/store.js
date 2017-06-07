@@ -16,8 +16,8 @@ import { reducer as user } from 'src/user';
 import { reducer as graphs, mapGraphData } from 'src/graphs';
 import { reducer as sets, updateUniq, clearFeeds } from 'src/sets';
 import { reducer as feeds } from 'src/feeds';
-import { reducer as alerts } from 'src/alerts';
-import { reducer as reports } from 'src/reports';
+import { reducer as alerts, processAlert } from 'src/alerts';
+import { reducer as reports, processReport } from 'src/reports';
 
 // Compose reducers
 // ===========================================================================
@@ -45,6 +45,8 @@ export default createStore(
     sortMiddleware,
     ensureDashboardUrl,
     processColumn,
+    processAlert,
+    processReport,
     updateUniq,
     clearFeeds,
     numerizeTabularData,
