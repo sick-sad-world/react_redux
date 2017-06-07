@@ -44,7 +44,7 @@ export default class EmailList extends React.Component {
         onClick={(this.props.onClick) ? () => this.props.onClick((isActive ? this.props.email : email)) : null}
       >
         {email}
-        <a onClick={() => this.props.onChange(without(this.props.data, email))}><Icon icon='cross'/></a>
+        <a onClick={() => this.props.onChange(without(this.props.data, email), false)}><Icon icon='cross'/></a>
       </li>
     );
   }
@@ -57,7 +57,7 @@ export default class EmailList extends React.Component {
         if (this.props.onError) this.props.onError(error);
       });
     } else {
-      this.props.onChange([...this.props.data, this.state.new]);
+      this.props.onChange([...this.props.data, this.state.new], this.state.new);
     }
     this.setState({ new: '', error: null });
   }

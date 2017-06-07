@@ -1,5 +1,6 @@
 // Import helpers
 // ===========================================================================
+import { bindAll } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
@@ -20,6 +21,17 @@ import { editUser } from '../actions';
 // Email injectable Component - provide list of user Emails whatever it need
 // ===========================================================================
 class Emails extends React.Component {
+  constructor(props) {
+    super(props);
+    bindAll(this, 'updateEmailList');
+  }
+
+  updateEmailList(emails, newEmail) {
+    return this.props.editUser({ email_bcc: emails }).then(() => {
+      if (this.props.onChange) return this.props.onChange(emails, newEmail);
+      return null;
+    }).catch(this.props.onError);
+  }
 
   render() {
     return (
@@ -30,7 +42,7 @@ class Emails extends React.Component {
         disabled={this.props.disabled || this.props.state > 2}
         data={this.props.data}
         onError={this.props.onError}
-        onChange={emails => this.props.editUser({ email_bcc: emails })}
+        onChange={this.updateEmailList}
       />
     );
   }
@@ -46,6 +58,7 @@ Emails.propTypes = {
   state: stateNum.isRequired,
   data: PropTypes.arrayOf(emailStr).isRequired,
   onError: PropTypes.func,
+  onChange: PropTypes.func,
   editUser: PropTypes.func.isRequired
 };
 

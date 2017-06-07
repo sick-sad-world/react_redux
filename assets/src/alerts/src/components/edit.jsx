@@ -20,6 +20,7 @@ import { EmailBcc } from 'src/user';
 // Edit Report
 // ===========================================================================
 class EditAlert extends React.Component {
+
   static getTypeCheck() {
     return {
       data: PropTypes.shape(defaultInterface).isRequired
@@ -39,6 +40,14 @@ class EditAlert extends React.Component {
 
   static mapStateToData(state, data, changed, props) {
     return state;
+  }
+
+  stateUpdater(prop) {
+    return (emails, email) => {
+      if (email) {
+        this.props.stateUpdater({ [prop]: email });
+      }
+    };
   }
 
   render() {
@@ -97,7 +106,7 @@ class EditAlert extends React.Component {
         <div className='form-block'>
           <div className='row'>
             <h3 className='form-subtitle'>Email assigment:</h3>
-            <EmailBcc active={formValues.recipient} disabled={running} onClick={updateState('recipient')} />
+            <EmailBcc active={formValues.recipient} disabled={running} onClick={updateState('recipient')} onChange={this.stateUpdater('recipient')} />
           </div>
         </div>
       </form>

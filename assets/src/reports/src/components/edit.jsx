@@ -50,6 +50,14 @@ class EditReport extends React.Component {
     return (typeof value === 'string') ? value : value.format(props.timeFormat);
   }
 
+  stateUpdater(prop) {
+    return (emails, email) => {
+      if (email) {
+        this.props.stateUpdater({ [prop]: email });
+      }
+    };
+  }
+
   render() {
     const { running, formValues, updateState, frequencyOptions } = this.props;
     const datePickerFormats = this.props.timeFormat.split(' ');
@@ -121,7 +129,7 @@ class EditReport extends React.Component {
         <div className='form-block'>
           <div className='row'>
             <h3 className='form-subtitle'>Email assigment:</h3>
-            <EmailBcc active={formValues.recipient} disabled={running} onClick={updateState('recipient')} />
+            <EmailBcc active={formValues.recipient} disabled={running} onClick={updateState('recipient')} onChange={this.stateUpdater('recipient')} />
           </div>
         </div>
       </form>
