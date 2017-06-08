@@ -32,6 +32,42 @@
       }
     }
   }
+  .brief-list-container {
+    clear: both;
+    display: flex;
+    margin-bottom: baseUnit();
+  }
+  .brief-list {
+    flex: 0 0 50%;
+    padding: 0;
+    list-style: none;
+    padding-right: baseUnit(.5);
+    +.brief-list {
+      padding-left: baseUnit(.5);
+      padding-right: 0;
+    }
+    h4 {
+      font-size: $base-font-size * 1.125;
+    }
+    li {
+      display: block;
+      max-width: 100%;
+      width: 100%;
+      position: relative;
+      height: $base-line-height;
+      overflow: hidden;
+      font-size: 0.875em;
+    }
+    span {
+      display: inline-block;
+      max-width: 100%;
+      @include pos(0 false false 0);
+    }
+    li.state-empty {
+      color: darken($c-border, 18%);
+      font-style: italic;
+    }
+  }
   .sorting-selects,
   .row-time-gap {
     > * {

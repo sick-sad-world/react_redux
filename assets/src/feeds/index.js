@@ -1,6 +1,7 @@
 import reducer from './src/reducer';
 import FeedsList from './src/containers/list';
 import FeedCreate from './src/containers/create';
+import BriefList from './src/containers/brief-list';
 
 export * from './src/actions';
 export * from './src/helpers';
@@ -9,3 +10,4 @@ export * from './src/selectors';
 export { reducer };
 export { FeedsList };
 export { FeedCreate };
+export { BriefList };

@@ -14,6 +14,8 @@ import { optionShape } from 'common/typecheck';
 // ===========================================================================
 import { Link } from 'react-router';
 import MakeEditForm, { injectedPropsType } from 'common/hocs/edit-form';
+import { BriefList as SetList } from 'src/sets';
+import { BriefList as FeedList } from 'src/feeds';
 import TextInput from 'common/components/forms/input-text';
 import Dropdown from 'common/components/forms/dropdown';
 import Toggler from 'common/components/forms/toggler';
@@ -120,8 +122,22 @@ class EditColumn extends React.Component {
             onChange={updateState('name')}
           />
           <fieldset className='row'>
-            <legend>Feeds assigned:</legend>
-            <Link to={`${this.props.path}/assignment`} className='is-button is-accent'>Assign feeds</Link>
+            <legend>Column data sources:</legend>
+            <div className='brief-list-container'>
+              <SetList
+                className='brief-list'
+                title='Sets assigned:'
+                criterea={{ set_ids: formValues.set }}
+                emptyText='No sets assigned to this column'
+              />
+              <FeedList
+                className='brief-list'
+                title='Feeds assigned:'
+                criterea={{ source_ids: formValues.source }}
+                emptyText='No feeds assigned to this column'
+              />
+            </div>
+            <Link to={`${this.props.path}/assignment`} className='button is-accent'>Assign feeds</Link>
           </fieldset>
           <h4 className='form-subtitle'>Display options:</h4>
           <Toggler
