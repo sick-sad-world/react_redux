@@ -12,7 +12,7 @@ export default function ClientError({ error }) {
         <p>{error}</p>
         <small>Please contact us and provide details. So we able to fix it.</small>
       </div>
-      <Icon icon='error' />
+      <Icon icon='error' className='bg' viewBox='0 0 24 24' />
     </div>
   );
 }

@@ -46,11 +46,12 @@ ol ol {
 	margin: 0;
 	li {
 		$size: $pointer-unit + 4px;
-		display: inline-block;
+		display: inline-flex;
 		vertical-align: top;
 		height: $size;
 		line-height: $size - 2px;
 		&:not(.is-default) {
+      max-width: 33%;
 			background-color: $c-element;
 			border-radius: $bdrs;
 			padding: 0 baseUnit();

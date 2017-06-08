@@ -1,5 +1,9 @@
 import PropTypes from 'prop-types';
 
+export const emailRegExp = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+
+export const webHookRegExp = /^https:\/\/hooks.slack.com\/services\/\S*$/;
+
 export default function createOptionableValidator(validator) {
   function validate(isRequired, props, propName, componentName, location) {
     if (props[propName] === null || props[propName] === undefined) {
@@ -45,8 +49,15 @@ export const listShape = {
 export const childrenShape = PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element]);
 
 export const emailStr = createOptionableValidator((props, propName) => {
-  if (!/\S+@\S+\.\S+/.test(props[propName])) {
+  if (!emailRegExp.test(props[propName])) {
     return new Error('Should be an email like: "blablabla-okay@gmail.com"');
+  }
+  return undefined;
+});
+
+export const webHookStr = createOptionableValidator((props, propName) => {
+  if (!webHookRegExp.test(props[propName])) {
+    return new Error('Should be an Slack webhook starting with: "https://hooks.slack.com/services"');
   }
   return undefined;
 });

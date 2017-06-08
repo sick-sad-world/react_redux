@@ -1,0 +1,17 @@
+.mod-email-list {
+  .warning {
+    $c: lighten(map-get($states, 'warning'), 5%);
+    display: block;
+    border: 1px solid $c;
+    background-color: lighten($c, 20%);
+    padding: baseUnit();
+    border-radius: 2px;
+    svg {
+      width: 24px;
+      height: 24px;
+      fill: $c;
+      margin-right: baseUnit();
+      vertical-align: -5px;
+    }
+  }
+}

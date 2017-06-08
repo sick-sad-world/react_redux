@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { emailStr, numBool } from 'common/typecheck';
+import { numBool } from 'common/typecheck';
 
 export const defaultFrequency = [
   { value: 5, label: '5 min' },
@@ -32,7 +32,7 @@ export const coreInterface = {
 export const defaultInterface = {
   ...coreInterface,
   frequency: PropTypes.oneOf(defaultFrequency.map(({ value }) => value)).isRequired,
-  recipient: emailStr,
+  recipient: PropTypes.string,
   order: PropTypes.number,
   via_mail: PropTypes.bool,
   via_twitter: PropTypes.bool

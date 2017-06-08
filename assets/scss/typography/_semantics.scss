@@ -326,14 +326,17 @@ blockquote {}
   box-shadow: 0 0 20px rgba(#000,.25), 0 0 150px rgba($lc, 1);
   padding: baseUnit();
   cursor: default;
+  overflow: hidden;
   div {
     border: 1px solid $c;
     padding: baseUnit();
     position: relative;
     z-index: 1;
   }
-  svg {
-    @include pos(false 0 0 false);
+  svg.bg {
+    position: absolute;
+    bottom: -12px;
+    right: -12px;
     fill: $c;
     width: baseUnit(10);
     height: baseUnit(10);

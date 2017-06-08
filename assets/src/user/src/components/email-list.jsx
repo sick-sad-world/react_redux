@@ -2,7 +2,7 @@
 // ===========================================================================
 import { bindAll, without, includes } from 'lodash';
 import classNames from 'classnames';
-import { emailStr } from 'common/typecheck';
+import { emailRegExp, webHookRegExp } from 'common/typecheck';
 
 // Import React related stuff
 // ===========================================================================
@@ -22,28 +22,30 @@ export default class EmailList extends React.Component {
       error: null,
       new: ''
     };
-    bindAll(this, 'makeListItem', 'addEmail');
+    bindAll(this, 'makeListItem', 'addEmail', 'errorHandler');
   }
 
   componentWillReceiveProps() {
     this.setState({ error: null });
   }
 
+  errorHandler(error) {
+    return this.setState({ error }, () => {
+      if (this.props.onError) this.props.onError(error);
+    });
+  }
+
   // Create list item DOM element -> used in render method
   // ===========================================================================
   makeListItem(email, i) {
     const isActive = email === this.props.active;
-
     return (
       <li
         key={`email_${i}`}
-        className={classNames({
-          'is-disabled': this.props.disabled,
-          'is-selected': isActive
-        })}
+        className={classNames({ 'is-disabled': this.props.disabled, 'is-selected': isActive })}
         onClick={(this.props.onClick) ? () => this.props.onClick((isActive ? this.props.email : email)) : null}
       >
-        {email}
+        <span className='t-ellipsis'>{email}</span>
         <a onClick={() => this.props.onChange(without(this.props.data, email), false)}><Icon icon='cross'/></a>
       </li>
     );
@@ -51,34 +53,41 @@ export default class EmailList extends React.Component {
 
   addEmail(e) {
     e.preventDefault();
-    if (includes(this.props.data, this.state.new)) {
-      const error = 'You already have this email in list, try another one.';
-      this.setState({ error }, () => {
-        if (this.props.onError) this.props.onError(error);
-      });
+    let error = false;
+    const { emailValidator, slackValidator } = this.props;
+    const newItem = this.state.new;
+    if (includes(this.props.data, newItem)) {
+      error = 'You already have this email in list, try another one.';
+    } else if (!emailValidator.test(newItem) && !slackValidator.test(newItem)) {
+      error = 'This is should be an email or Slach webhook starting "https://hooks.slack.com/services"';
     } else {
-      this.props.onChange([...this.props.data, this.state.new], this.state.new);
+      this.props.onChange([...this.props.data, newItem], newItem);
     }
-    this.setState({ new: '', error: null });
+
+    if (error) {
+      this.errorHandler(error);
+    } else {
+      this.setState({ new: '', error: null });
+    }
   }
 
   render() {
     return (
       <div className='mod-email-list'>
-        <ul className='tag-list row'>
-          { (this.props.data.length) ? this.props.data.map(this.makeListItem) : this.props.emptyTpl }
-        </ul>
         <div className='row-flex'>
           <input
             disabled={this.props.disabled}
-            type='email'
-            placeholder='Enter some email'
+            type='text'
+            placeholder='Enter some email or Slach webhook link'
             value={this.state.new}
             onChange={e => this.setState({ new: e.target.value })}
           />
           <a disabled={this.props.disabled} className='button is-accent size-90' onClick={this.addEmail}>Add new</a>
         </div>
-        {(this.state.error) ? (<span className='error'><Icon icon='error' />{this.state.error}</span>) : null }
+        {(this.state.error) ? (<span className='warning'><Icon viewBox='0 0 24 24' icon='warning' />{this.state.error}</span>) : null }
+        <ul className='tag-list row'>
+          { (this.props.data.length) ? this.props.data.map(this.makeListItem) : this.props.emptyTpl }
+        </ul>
         <div className='form-description'>{this.props.description.replace('{email}', this.props.email)}</div>
       </div>
     );
@@ -94,7 +103,8 @@ EmailList.defaultProps = {
   active: null,
   disabled: false,
   description: 'if E-mail list is empty. Use form below to create one. If not - your profile e-mail [{email}] will be used as default.',
-  emailValidator: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+  emailValidator: emailRegExp,
+  slackValidator: webHookRegExp,
   emptyTpl: <li className='is-default'>No email bcc created yet. All alerts/reports will be sended to main email.</li>
 };
 
@@ -104,11 +114,12 @@ EmailList.propTypes = {
   onChange: PropTypes.func.isRequired,
   onError: PropTypes.func,
   onClick: PropTypes.func,
-  email: emailStr.isRequired,
+  email: PropTypes.string.isRequired,
   disabled: PropTypes.bool.isRequired,
-  active: emailStr,
+  active: PropTypes.string,
   description: PropTypes.string,
-  data: PropTypes.arrayOf(emailStr).isRequired,
+  data: PropTypes.arrayOf(PropTypes.string).isRequired,
   emailValidator: PropTypes.instanceOf(RegExp).isRequired,
+  slackValidator: PropTypes.instanceOf(RegExp).isRequired,
   emptyTpl: PropTypes.element.isRequired
 };

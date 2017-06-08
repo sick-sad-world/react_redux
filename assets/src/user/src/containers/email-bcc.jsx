@@ -7,7 +7,7 @@ import { bindAll } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { emailStr, stateNum } from 'common/typecheck';
+import { stateNum } from 'common/typecheck';
 import { makeEmailsSelector } from '../selectors';
 
 // Import child components
@@ -51,12 +51,12 @@ class Emails extends React.Component {
 // Prop types check
 // ===========================================================================
 Emails.propTypes = {
-  email: emailStr.isRequired,
-  active: emailStr,
+  email: PropTypes.string.isRequired,
+  active: PropTypes.string,
   onClick: PropTypes.func,
   disabled: PropTypes.bool.isRequired,
   state: stateNum.isRequired,
-  data: PropTypes.arrayOf(emailStr).isRequired,
+  data: PropTypes.arrayOf(PropTypes.string).isRequired,
   onError: PropTypes.func,
   onChange: PropTypes.func,
   editUser: PropTypes.func.isRequired
