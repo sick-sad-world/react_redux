@@ -1,14 +1,15 @@
 import { reject, uniqBy, has, sortBy } from 'lodash';
 import { LOGIN, LOGOUT } from './type-factory';
 
-export const mergeArrayById = (arr, obj) => {
+export const mergeArrayById = (arr, obj, dir) => {
   let changed = false;
+  const method = (dir) ? 'unshift' : 'push';
   const result = arr.map((item) => {
     if (item.id !== obj.id) return { ...item };
     changed = true;
     return { ...item, ...obj };
   });
-  if (!changed) result.push({ ...obj });
+  if (!changed) result[method]({ ...obj });
   return result;
 };
 
@@ -52,7 +53,7 @@ export default function createReducer(config) {
       case config.UPDATE:
         return {
           state: 2,
-          payload: mergeArrayById(state.payload, action.payload)
+          payload: mergeArrayById(state.payload, action.payload, true)
         };
       case config.DELETE:
         return {
