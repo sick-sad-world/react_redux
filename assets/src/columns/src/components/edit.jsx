@@ -48,7 +48,6 @@ class EditColumn extends React.Component {
     return {
       id: data.id,
       name: data.name,
-      open: data.open,
       changed: [],
       advancedFilters,
       display_settings: data.display_settings,
@@ -61,7 +60,6 @@ class EditColumn extends React.Component {
       id: state.id,
       name: state.name,
       display_settings: state.display_settings,
-      open: state.open,
       data: {
         ...pickBy(state, (v, k) => props.notAffecting.indexOf(k) < 0 && ((v instanceof Array) ? v.length : v !== '')),
         ...state.advancedFilters

@@ -58,7 +58,7 @@ export const displaySettings = {
       default: true
     },
     image: {
-      height: 130,
+      height: 160,
       default: true,
       sibling: ['description', 'wide_image'],
       child: 'wide_image'
@@ -69,7 +69,7 @@ export const displaySettings = {
       opponent: ['description']
     },
     description: {
-      height: 130,
+      height: 160,
       default: true,
       sibling: ['image', 'wide_image'],
       opponent: ['wide_image']
