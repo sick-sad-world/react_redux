@@ -6,6 +6,7 @@ import DashboardItem from './src/components/dashboard/item';
 
 export * from './src/actions';
 export * from './src/middlewares';
+export * from './src/helpers';
 export { types };
 export { reducer };
 export { Route };
