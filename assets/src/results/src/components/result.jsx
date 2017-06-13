@@ -9,7 +9,7 @@ import React from 'react';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { defaultInterface, defaultDashboardResult, displaySettings, proptocolRegExp } from '../defaults';
+import { defaultInterface, defaultDashboardResult, proptocolRegExp } from '../defaults';
 
 // Import child components
 // ===========================================================================
@@ -114,7 +114,6 @@ export default class Result extends React.PureComponent {
 Result.defaultProps = {
   sort: '',
   location: '',
-  tableStats: [...displaySettings.table],
   payload: {
     ...defaultDashboardResult
   },

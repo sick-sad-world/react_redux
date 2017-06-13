@@ -32,6 +32,19 @@
       }
     }
   }
+  .display-settings {
+    ul {
+      clear: both;
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    li {
+      flex: 0 0 33%;
+      margin: 0 0 baseUnit();
+    }
+  }
   .brief-list-container {
     clear: both;
     display: flex;

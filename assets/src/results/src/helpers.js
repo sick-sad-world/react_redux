@@ -1,5 +1,5 @@
 import { mapValues } from 'lodash';
-import { tableStatsRegExp } from './defaults';
+import { tableStatsRegExp } from 'src/display-settings';
 
 export function splitText(result) {
   const limit = 128;

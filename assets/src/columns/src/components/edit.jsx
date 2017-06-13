@@ -7,21 +7,23 @@ import { availableColumnData, defaultInterface } from '../defaults';
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
+import { Link } from 'react-router';
 import PropTypes from 'prop-types';
 import { optionShape } from 'common/typecheck';
 
 // Import Child components
 // ===========================================================================
-import { Link } from 'react-router';
 import MakeEditForm, { injectedPropsType } from 'common/hocs/edit-form';
-import { BriefList as SetList } from 'src/sets';
-import { BriefList as FeedList } from 'src/feeds';
 import TextInput from 'common/components/forms/input-text';
 import Dropdown from 'common/components/forms/dropdown';
 import Toggler from 'common/components/forms/toggler';
+
 import Sorting from './sorting';
 import AdvFilters from './adv-filters';
-import DisplayOptions from './display-options';
+
+import { BriefList as SetList } from 'src/sets';
+import { BriefList as FeedList } from 'src/feeds';
+import { PickDisplaySettings } from 'src/display-settings';
 
 // Edit Column
 // ===========================================================================
@@ -122,20 +124,24 @@ class EditColumn extends React.Component {
           <fieldset className='row'>
             <legend>Column data sources:</legend>
             <div className='brief-list-container'>
-              <SetList
-                className='brief-list'
-                title='Sets assigned:'
-                criterea={{ set_ids: formValues.set }}
-                emptyText='No sets assigned to this column'
-              />
-              <FeedList
-                className='brief-list'
-                title='Feeds assigned:'
-                criterea={{ source_ids: formValues.source }}
-                emptyText='No feeds assigned to this column'
-              />
+              {(SetList) ? (
+                <SetList
+                  className='brief-list'
+                  title='Sets assigned:'
+                  criterea={{ set_ids: formValues.set }}
+                  emptyText='No sets assigned to this column'
+                />
+              ) : null}
+              {(FeedList) ? (
+                <FeedList
+                  className='brief-list'
+                  title='Feeds assigned:'
+                  criterea={{ source_ids: formValues.source }}
+                  emptyText='No feeds assigned to this column'
+                />
+              ) : null}
             </div>
-            <Link to={`${this.props.path}/assignment`} className='button is-accent'>Assign feeds</Link>
+            {(SetList || FeedList) ? <Link to={`${this.props.path}/assignment`} className='button is-accent'>Assign feeds</Link> : null}
           </fieldset>
           <h4 className='form-subtitle'>Display options:</h4>
           <Toggler
@@ -205,8 +211,8 @@ class EditColumn extends React.Component {
               onChange={this.updateSorting()}
             />
           </div>
-          <DisplayOptions
-            className='row'
+          <PickDisplaySettings
+            className='row display-settings'
             disabled={running}
             value={formValues.display_settings}
             onChange={updateState('display_settings', 'getDisplaySettings')}

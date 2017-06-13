@@ -7,7 +7,8 @@ import classNames from 'classnames';
 // ===========================================================================
 import React from 'react';
 import PropTypes from 'prop-types';
-import { defaultInterface, displaySettings } from '../defaults';
+import { defaultInterface } from '../defaults';
+import DisplaySettings from 'src/display-settings';
 
 // Import Redux related stuff
 // ===========================================================================
@@ -139,8 +140,8 @@ class FullResult extends React.Component {
 FullResult.defaultProps = {
   initial: null,
   className: 'popup mod-full-result',
-  tableStats: displaySettings.table,
-  graphStats: displaySettings.graph
+  tableStats: DisplaySettings.getTable(),
+  graphStats: DisplaySettings.getGraphs()
 };
 
 FullResult.propTypes = {

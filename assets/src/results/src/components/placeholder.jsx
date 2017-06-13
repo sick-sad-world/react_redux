@@ -1,7 +1,6 @@
 import { includes } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { displaySettings as settings } from '../defaults';
 
 // Result placeholder component
 // ===========================================================================
@@ -69,11 +68,6 @@ export default function Placeholder({ displaySettings, tableStats, heights }) {
     </article>
   );
 }
-
-Placeholder.defaultProps = {
-  displaySettings: [...settings.default],
-  tableStats: [...settings.table]
-};
 
 Placeholder.propTypes = {
   heights: PropTypes.objectOf(PropTypes.string).isRequired,
