@@ -1,5 +1,5 @@
-import { mapValues } from 'lodash';
-import { tableStatsRegExp } from './defaults';
+import { mapValues, unescape } from 'lodash';
+import { tableStatsRegExp } from 'src/display-settings';
 
 export function splitText(result) {
   const limit = 128;
@@ -26,8 +26,9 @@ export function splitText(result) {
 
   return {
     ...result,
-    additional: (index.curr >= 0) ? result.description.substring(index.curr, result.description.length) : '',
-    description: (index.curr >= 0) ? result.description.substring(0, index.curr) : result.description
+    title: unescape(result.title),
+    additional: (index.curr >= 0) ? unescape(result.description.substring(index.curr, result.description.length)) : '',
+    description: unescape((index.curr >= 0) ? result.description.substring(0, index.curr) : result.description)
   };
 }
 

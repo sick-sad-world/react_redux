@@ -1,29 +1,29 @@
 import types from './types';
-import { sortingOptions, defColumnData } from './defaults';
-import { displaySettings } from 'src/results';
+import { sortingOptions, defColumnData, loDashRegExp } from './defaults';
+import DisplaySettings from 'src/display-settings';
 
 export function getColumnsForResults(payload) {
   return payload.find(item => (item && item.type === types.READ)).payload.map(({ id, data, open }) => ({ id, data, open }));
 }
 
-export function composeColumnData({ id, name, data, order, display_settings, open }) {
-  let settings = display_settings;
-  const loDashRegExp = /_+/;
-  if (!settings) {
-    settings = [...displaySettings.default];
-  } else if (typeof settings === 'string') {
-    settings = settings.split(',');
+export function ensureDisplaySettings(s) {
+  if (!s) {
+    return DisplaySettings.getDefault();
+  } else if (typeof s === 'string') {
+    return s.split(',');
   }
+  return s;
+}
 
+export function normalizeDisplaySettings(s) {
+  if (s === '_videoviews') return 'views_video';
+  return s.replace(loDashRegExp, '_');
+}
+
+export function composeColumnData({ data, display_settings, ...column }) {
   return {
-    id,
-    name,
-    open,
-    order,
-    display_settings: settings.map((setting) => {
-      if (setting === '_videoviews') return 'views_video';
-      return setting.replace(loDashRegExp, '_');
-    }),
+    ...column,
+    display_settings: ensureDisplaySettings(display_settings).map(normalizeDisplaySettings),
     data: {
       ...defColumnData,
       ...data,

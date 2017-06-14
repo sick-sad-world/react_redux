@@ -97,13 +97,11 @@ export function getAllResults(data) {
             }
             resolve(...args);
           }).catch((...args) => {
+            const text = `Results for column ${column.id} ended with error`;
             // Show error message if something went wrong
             // ===========================================================================
             if (notification) {
-              dispatch(notification({
-                type: 'error',
-                text: `Results for column ${column.id} ended with error: ${(error.event) ? error.url : error.text}`
-              }));
+              dispatch(notification({ type: 'error', text }));
             }
             dispatch(resultError(text, column.id));
             reject(...args);
