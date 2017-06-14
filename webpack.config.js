@@ -14,15 +14,14 @@ const alias = ['/img', '/icon', '/scss', '/src', '/src/_common', '/src/_common/f
 
 const extractCss = new ExtractTextPlugin({
   filename: (isDevelopment) ? '[name].css' : '[hash:12].css',
-  disable: !process.env.BUNDLE
+  disable: process.env.SERVER
 });
 
 const PLUGINS = [
   new webpack.DefinePlugin({
-    NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+    NODE_ENV: JSON.stringify(process.env.SERVER)
   }),
   new HtmlWebpackPlugin({
-    title: packageJSON.description,
     template: './index.html',
     favicon: './favicon.ico'
   }),
@@ -33,16 +32,18 @@ const PLUGINS = [
   extractCss
 ];
 
-if (isDevelopment) {
-  PLUGINS.unshift(new webpack.HotModuleReplacementPlugin());
-  PLUGINS.push(new webpack.NamedModulesPlugin());
-  PLUGINS.push(new webpack.NoEmitOnErrorsPlugin());
+if (process.env.SERVER) {
   APP = [
     'react-hot-loader/patch',
     `webpack-dev-server/client?http://${HOST}:${PORT}`,
     'webpack/hot/only-dev-server',
     ...APP
   ];
+}
+if (isDevelopment) {
+  PLUGINS.unshift(new webpack.HotModuleReplacementPlugin());
+  PLUGINS.push(new webpack.NamedModulesPlugin());
+  PLUGINS.push(new webpack.NoEmitOnErrorsPlugin());
 } else {
   PLUGINS.push(new webpack.optimize.UglifyJsPlugin());
   PLUGINS.push(new webpack.BannerPlugin({

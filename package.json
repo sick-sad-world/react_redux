@@ -12,11 +12,11 @@
   "scripts": {
     "clean": "rimraf ./demo ./build",
     "test": "",
-    "start": "cross-env NODE_ENV=development PLATFORM=web webpack-dev-server",
+    "start": "cross-env NODE_ENV=development SERVER=true PLATFORM=web webpack-dev-server",
     "prebundle": "rimraf ./demo",
-    "bundle": "cross-env NODE_ENV=development BUNDLE=true PLATFORM=web webpack",
+    "bundle": "cross-env NODE_ENV=development PLATFORM=web webpack",
     "prebuild": "rimraf ./build",
-    "build": "cross-env NODE_ENV=production BUNDLE=true PLATFORM=web webpack"
+    "build": "cross-env NODE_ENV=production PLATFORM=web webpack"
   },
   "babel": {
     "presets": [
