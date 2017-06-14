@@ -6,30 +6,44 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
+const PORT = 3000;
+const HOST = 'localhost';
 const CONTEXT = 'assets';
+let APP = ['babel-polyfill', './src/app.js'];
 const alias = ['/img', '/icon', '/scss', '/src', '/src/_common', '/src/_common/functions'];
+
+const extractCss = new ExtractTextPlugin({
+  filename: (isDevelopment) ? '[name].css' : '[hash:12].css',
+  disable: !process.env.BUNDLE
+});
 
 const PLUGINS = [
   new webpack.DefinePlugin({
     NODE_ENV: JSON.stringify(process.env.NODE_ENV)
   }),
   new HtmlWebpackPlugin({
+    title: packageJSON.description,
     template: './index.html',
     favicon: './favicon.ico'
   }),
   new webpack.optimize.CommonsChunkPlugin({
     name: 'vendor',
     minChunks: Infinity
-  })
+  }),
+  extractCss
 ];
 
 if (isDevelopment) {
+  PLUGINS.unshift(new webpack.HotModuleReplacementPlugin());
   PLUGINS.push(new webpack.NamedModulesPlugin());
+  PLUGINS.push(new webpack.NoEmitOnErrorsPlugin());
+  APP = [
+    'react-hot-loader/patch',
+    `webpack-dev-server/client?http://${HOST}:${PORT}`,
+    'webpack/hot/only-dev-server',
+    ...APP
+  ];
 } else {
-  PLUGINS.push(new ExtractTextPlugin({
-    filename: (isDevelopment) ? '[name].css' : '[hash:12].css',
-    disable: isDevelopment && !process.env.BUNDLE
-  }));
   PLUGINS.push(new webpack.optimize.UglifyJsPlugin());
   PLUGINS.push(new webpack.BannerPlugin({
     banner: `
@@ -51,36 +65,38 @@ const jsLoader = {
 const sassLoader = {
   test: /\.scss?$/,
   exclude: /node_modules/,
-  use: [{
-    loader: 'style-loader'
-  }, {
-    loader: 'css-loader',
-    options: {
-      sourceMap: isDevelopment,
-      importLoaders: 1
-    }
-  }, {
-    loader: 'postcss-loader'
-  }, {
-    loader: 'sass-loader',
-    options: {
-      sourceMap: isDevelopment,
-      outputStyle: (isDevelopment) ? 'expanded' : 'compressed'
-    }
-  }]
+  use: extractCss.extract({
+    fallback: {
+      loader: 'style-loader',
+      options: {
+        sourceMap: isDevelopment
+      }
+    },
+    use: [{
+      loader: 'css-loader',
+      options: {
+        sourceMap: isDevelopment,
+        importLoaders: 1
+      }
+    }, {
+      loader: 'sass-loader',
+      options: {
+        sourceMap: isDevelopment,
+        outputStyle: (isDevelopment) ? 'expanded' : 'compressed'
+      }
+    }]
+  })
 };
 
-// const svgLoader = {
-//   test: /\.svg?$/,
-//   include: /(icon|img)/,
-//   exclude: /node_modules/,
-//   use: {
-//     loader: 'svg-inline-loader',
+// {
+//     loader: 'postcss-loader',
 //     options: {
-//       removingTagAttrs: ['fill']
+//       sourceMap: isDevelopment,
+//       plugins: [
+//         require('autoprefixer')()
+//       ]
 //     }
-//   }
-// };
+//   },
 
 const imageLoader = {
   test: /\.(png|jpe?g|gif|svg)?$/,
@@ -97,9 +113,7 @@ const imageLoader = {
 if (!isDevelopment) {
   imageLoader.use.push({
     loader: 'image-webpack-loader',
-    options: {
-
-    }
+    options: {}
   });
 }
 
@@ -117,16 +131,31 @@ const fontLoader = {
 };
 
 module.exports = {
-  devtool: (isDevelopment) ? 'source-map' : false,
+  devtool: (isDevelopment) ? 'inline-source-map' : false,
   context: path.resolve(__dirname, CONTEXT),
   entry: {
     vendor: Object.keys(packageJSON.dependencies),
-    app: ['babel-polyfill', './src/app.js']
+    app: APP
   },
   output: {
     path: path.resolve(__dirname, (isDevelopment) ? 'demo' : 'build'),
-    publicPath: '',
+    publicPath: '/',
     filename: (isDevelopment) ? '[name].js' : '[chunkhash:12].js'
+  },
+  devServer: {
+    host: HOST,
+    port: PORT,
+    contentBase: CONTEXT,
+    historyApiFallback: true,
+    hot: true,
+    watchOptions: {
+      ignored: /node_modules/
+    },
+    stats: {
+      chunks: false,
+      modules: false,
+      colors: true
+    }
   },
   resolve: {
     alias: Array.prototype.reduce.call(alias, (acc, v) => {

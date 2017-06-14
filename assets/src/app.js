@@ -32,8 +32,4 @@ function renderApp(scheme) {
 }
 
 renderApp(Scheme);
-if (module.hot) {
-  module.hot.accept('./router', () => {
-    renderApp(require('./router').default);
-  });
-}
+if (module.hot) module.hot.accept('./router', () => render(Scheme));
