@@ -20,18 +20,15 @@ export const transformRequestData = data => reduce(data, (acc, v, k) => {
 // ===========================================================================
 export default function fetch(url, data) {
   return new Promise((resolve, reject) => {
-    jsonp({
+    const { abort } = jsonp({
       url: `${BASEURL}/${url}`,
       data: transformRequestData(data),
       error: reject,
-      success(payload, ...args) {
-        delete payload.callback;
-        resolve(payload);
+      success(payload) {
+        resolve(payload, abort);
       },
       complete(payload, params) {
-        let tag = [...document.querySelectorAll('head script[src]')].find(el => el.src.indexOf(params.computedUrl) > -1);
-        tag.parentElement.removeChild(tag);
-        tag = null;
+        abort();
       }
     });
   });
