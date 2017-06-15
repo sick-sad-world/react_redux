@@ -14,7 +14,7 @@ const alias = ['/img', '/icon', '/scss', '/src', '/src/_common', '/src/_common/f
 
 const extractCss = new ExtractTextPlugin({
   filename: (isDevelopment) ? '[name].css' : '[hash:12].css',
-  disable: process.env.SERVER
+  disable: !!process.env.SERVER
 });
 
 const PLUGINS = [

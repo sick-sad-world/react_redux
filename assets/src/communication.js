@@ -1,6 +1,7 @@
 import jsonp from 'browser-jsonp';
 import { reduce, isPlainObject, isNull, isUndefined } from 'lodash';
 
+export const BASEURL = 'http://api.trendolizer.com/v3';
 
 // Transform data for serialization function
 // Nested objects - to string, exclude [null, undefined]
@@ -20,12 +21,17 @@ export const transformRequestData = data => reduce(data, (acc, v, k) => {
 export default function fetch(url, data) {
   return new Promise((resolve, reject) => {
     jsonp({
-      url: `http://api.trendolizer.com/v3/${url}`,
+      url: `${BASEURL}/${url}`,
       data: transformRequestData(data),
       error: reject,
-      success(payload) {
+      success(payload, ...args) {
         delete payload.callback;
         resolve(payload);
+      },
+      complete(payload, params) {
+        let tag = [...document.querySelectorAll('head script[src]')].find(el => el.src.indexOf(params.computedUrl) > -1);
+        tag.parentElement.removeChild(tag);
+        tag = null;
       }
     });
   });
