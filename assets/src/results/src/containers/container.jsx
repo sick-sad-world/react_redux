@@ -140,7 +140,7 @@ class ResultsContainer extends React.Component {
 
   onRowsRendered(rowCount) {
     return ({ stopIndex }) => {
-      if (stopIndex > 1 && rowCount > 0 && stopIndex > (rowCount - this.props.data.limit) && !this.infiniteRunning) {
+      if (stopIndex > 2 && rowCount > 0 && stopIndex > (rowCount - this.props.data.limit) && !this.infiniteRunning && this.props.state === 2) {
         this.infiniteRunning = true;
         this.props.getResults({ ...this.props.data, offset: this.props.payload.length }, { entity: this.props.id, state: false }).then(() => {
           this.infiniteRunning = false;
