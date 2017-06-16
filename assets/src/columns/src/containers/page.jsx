@@ -16,7 +16,7 @@ import { makePageSelector } from '../selectors';
 // Import actions
 // ===========================================================================
 import { createColumn, editColumn, deleteColumn, sortColumns } from '../actions';
-import { getResults, clearResults, resultError } from 'src/results';
+import { fetchResults, clearResults } from 'src/results';
 
 // Import Child components
 // ===========================================================================
@@ -136,16 +136,16 @@ export default connect(makePageSelector, dispatch => ({
   },
   actionShow(id, order, data) {
     return dispatch(editColumn({ id, open: 1, order })).then((resp) => {
-      if (getResults && data) {
-        return dispatch(getResults(data, { entity: id })).catch(err => dispatch(resultError(`Results for column ${id} ended with error`, id)));
+      if (fetchResults && data) {
+        return dispatch(fetchResults(data, { entity: id }));
       }
       return resp;
     });
   },
   actionEdit(data, changed) {
     return dispatch(editColumn(data)).then((resp) => {
-      if (getResults && data.open && intersection(affectingProps, changed).length) {
-        return dispatch(getResults(data.data, { entity: data.id })).catch(err => dispatch(resultError(`Results for column ${data.id} ended with error`, data.id)));
+      if (fetchResults && data.open && intersection(affectingProps, changed).length) {
+        return dispatch(fetchResults(data, { entity: data.id }));
       }
       return resp;
     });

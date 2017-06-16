@@ -27,7 +27,7 @@ export const clearResults = entity => dispatch => dispatch({
 export const resultError = (error, entity) => dispatch => dispatch({
   type: types.ERROR,
   entity,
-  error
+  error: (typeof error === 'string') ? error : `Results for column ${entity} ended with error`
 });
 
 export const refreshResult = createAction({
@@ -53,6 +53,10 @@ export const favoriteResult = createAction({
   pendingMessage: 'Changing state of result $id...',
   successMessage: 'Result favor changed.'
 });
+
+export function fetchResults(data, entity) {
+  return dispatch => dispatch((data.offset) ? addResults(data, { entity }) : getResults(data, { entity })).catch(() => dispatch(resultError(null, entity)));
+}
 
 export function getAllResults(data) {
   return (dispatch) => {

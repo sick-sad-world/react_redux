@@ -14,7 +14,7 @@ import { makeContainerSelector } from '../selectors';
 // Import child Components
 // ===========================================================================
 import { ColumnsContainer, DashboardItem } from 'src/columns';
-import { ResultsContainer, FullResult, getResults, resultError } from 'src/results';
+import { ResultsContainer, FullResult, fetchResults } from 'src/results';
 import PayloadList from '../components/list';
 
 class Dashboard extends React.Component {
@@ -82,8 +82,4 @@ Dashboard.propTypes = {
 // Connect our Container to State
 // @ deps -> Dashboards
 // ===========================================================================
-export default connect(makeContainerSelector, dispatch => ({
-  fetchResults(data, { entity }) {
-    return dispatch(getResults(data, { entity })).catch(err => dispatch(resultError(`Results for column ${entity} ended with error`, entity)));
-  }
-}))(Dashboard);
+export default connect(makeContainerSelector, { fetchResults })(Dashboard);

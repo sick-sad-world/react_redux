@@ -18,7 +18,7 @@ import DisplaySettings from 'src/display-settings';
 // ===========================================================================
 import { connect } from 'react-redux';
 import { makeContainerSelector } from '../selectors';
-import { addResults, getResults, resultError, favoriteResult, ignoreResult, refreshResult } from '../actions';
+import { fetchResults, favoriteResult, ignoreResult, refreshResult } from '../actions';
 
 // Import child Components
 // ===========================================================================
@@ -213,7 +213,7 @@ ResultsContainer.propTypes = {
 
 export default connect(makeContainerSelector, dispatch => ({
   getResults(data, opts) {
-    return dispatch((data.offset) ? addResults(data, opts) : getResults(data, opts)).catch(err => dispatch(resultError(err)));
+    return dispatch(fetchResults(data, opts));
   },
   favoriteResult(opts) {
     return params => dispatch(favoriteResult(params, opts));
