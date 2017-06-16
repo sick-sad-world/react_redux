@@ -15,7 +15,7 @@ import { makeContainerSelector } from '../selectors';
 // ===========================================================================
 import { ColumnsContainer, DashboardItem } from 'src/columns';
 import { ResultsContainer, FullResult, getResults, resultError } from 'src/results';
-import DashboardList from '../components/list';
+import PayloadList from '../components/list';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -32,9 +32,9 @@ class Dashboard extends React.Component {
     return (
       <section className='mod-dashboard'>
         {(payload) ? (
-          <ColumnsContainer column_ids={payload.column_ids} open={1} actions={['editColumn', 'deleteColumn', 'sortColumns']}>
+          <ColumnsContainer column_ids={payload.column_ids} actions={['editColumn', 'deleteColumn', 'sortColumns']}>
             {props => (
-              <DashboardList width={width} scrollTo={scrollTo} {...props}>
+              <PayloadList width={width} scrollTo={scrollTo} {...props}>
                 {({ payload, editColumn, deleteColumn }) => (
                   <DashboardItem payload={payload} editColumn={editColumn} deleteColumn={deleteColumn} getResults={fetchResults}>
                     <ResultsContainer
@@ -46,7 +46,7 @@ class Dashboard extends React.Component {
                     />
                   </DashboardItem>
                 )}
-              </DashboardList>
+              </PayloadList>
             )}
           </ColumnsContainer>
         ) : emptyTpl }
@@ -83,7 +83,7 @@ Dashboard.propTypes = {
 // @ deps -> Dashboards
 // ===========================================================================
 export default connect(makeContainerSelector, dispatch => ({
-  fetchResults(...args) {
-    return dispatch(getResults(...args)).catch(err => dispatch(resultError(err)));
+  fetchResults(data, { entity }) {
+    return dispatch(getResults(data, { entity })).catch(err => dispatch(resultError(`Results for column ${entity} ended with error`, entity)));
   }
 }))(Dashboard);

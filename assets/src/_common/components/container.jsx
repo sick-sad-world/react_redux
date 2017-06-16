@@ -25,7 +25,7 @@ export default class Container extends React.Component {
   }
 
   createWrapper(data, ...rest) {
-    this.props.actionCreate(data, ...rest).then(({ payload }) => {
+    this.props.actionCreate({ ...data, order: -1 }, ...rest).then(({ payload }) => {
       this.props.router.push(`${this.props.route.path}/${payload.id}`);
     });
   }

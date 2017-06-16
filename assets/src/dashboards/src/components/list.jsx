@@ -17,9 +17,9 @@ import PropTypes from 'prop-types';
 // ===========================================================================
 import DeleteConfirmation from 'common/components/delete-confirmation';
 import DashboardGrid from './grid';
-import DashboardItemContainer from './item';
+import ItemWrapper from './item';
 
-export default class DashboardList extends React.Component {
+export default class PayloadList extends React.Component {
 
   constructor(props) {
     super(props);
@@ -56,14 +56,14 @@ export default class DashboardList extends React.Component {
     const { children, refreshResults, editColumn } = this.props;
     const column = this.state.payload[columnIndex];
     return (
-      <DashboardItemContainer key={columnIndex} style={style} index={columnIndex}>
+      <ItemWrapper key={columnIndex} style={style} index={columnIndex}>
         {children({
           payload: column,
           deleteColumn: this.deleteConfirm({ id: column.id, name: column.name }),
           refreshResults,
           editColumn
         })}
-      </DashboardItemContainer>
+      </ItemWrapper>
     );
   }
 
@@ -85,14 +85,14 @@ export default class DashboardList extends React.Component {
                   columnCount={colCount}
                   columnWidth={this.props.width}
                   overscanColumnCount={Math.ceil(window.innerWidth / (this.props.width * 1.5))}
-                  rowCount={1}
-                  overscanRowCount={1}
                   rowHeight={height - scrollbarSize()}
                   onSortEnd={this.updateSortState}
+                  helperClass='mod-column sortable-ghost'
                   lockAxis='x'
                   axis='x'
-                  helperClass='mod-column sortable-ghost'
                   useDragHandle
+                  rowCount={1}
+                  overscanRowCount={1}
                 />
               )}
             </ArrowKeyStepper>
@@ -111,12 +111,12 @@ export default class DashboardList extends React.Component {
   }
 }
 
-DashboardList.defaultProps = {
+PayloadList.defaultProps = {
   width: 400,
   emptyTpl: <div className='state-empty'>No columns visible on a Dashboard</div>
 };
 
-DashboardList.propTypes = {
+PayloadList.propTypes = {
   width: PropTypes.number.isRequired,
   payload: PropTypes.arrayOf(PropTypes.object).isRequired,
   scrollTo: PropTypes.number,

@@ -16,7 +16,7 @@ import { makePageSelector } from '../selectors';
 // Import actions
 // ===========================================================================
 import { createColumn, editColumn, deleteColumn, sortColumns } from '../actions';
-import { getResults, clearResults } from 'src/results';
+import { getResults, clearResults, resultError } from 'src/results';
 
 // Import Child components
 // ===========================================================================
@@ -32,11 +32,11 @@ class Columns extends React.Component {
     bindAll(this, 'makeItemIcon', 'renderChildren');
   }
 
-  makeItemIcon({ id, open }) {
+  makeItemIcon({ id, open, order }) {
     return (open) ? (
-      <Hide onClick={() => this.props.actionHide(id)} />
+      <Hide onClick={() => this.props.actionHide(id, order)} />
     ) : (
-      <Show onClick={() => this.props.actionShow(id, this.props.payload.find(col => col.id === id).data)} />
+      <Show onClick={() => this.props.actionShow(id, order, this.props.payload.find(col => col.id === id).data)} />
     );
   }
 
@@ -131,13 +131,13 @@ export default connect(makePageSelector, dispatch => ({
   actionSort(...args) {
     return dispatch(sortColumns(...args));
   },
-  actionHide(id) {
-    return dispatch(editColumn({ id, open: 0 })).then(() => dispatch(clearResults(id)));
+  actionHide(id, order) {
+    return dispatch(editColumn({ id, open: 0, order })).then(() => dispatch(clearResults(id)));
   },
-  actionShow(id, data) {
-    return dispatch(editColumn({ id, open: 1 })).then((resp) => {
+  actionShow(id, order, data) {
+    return dispatch(editColumn({ id, open: 1, order })).then((resp) => {
       if (getResults && data) {
-        return dispatch(getResults(data, { id }));
+        return dispatch(getResults(data, { entity: id })).catch(err => dispatch(resultError(`Results for column ${id} ended with error`, id)));
       }
       return resp;
     });
@@ -145,7 +145,7 @@ export default connect(makePageSelector, dispatch => ({
   actionEdit(data, changed) {
     return dispatch(editColumn(data)).then((resp) => {
       if (getResults && data.open && intersection(affectingProps, changed).length) {
-        return dispatch(getResults(data.data, { id: data.id }));
+        return dispatch(getResults(data.data, { entity: data.id })).catch(err => dispatch(resultError(`Results for column ${data.id} ended with error`, data.id)));
       }
       return resp;
     });

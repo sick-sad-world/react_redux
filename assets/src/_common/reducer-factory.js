@@ -19,8 +19,10 @@ export const updateObjectById = (state, id, updater) => ({
 });
 
 export const sortMiddleware = store => next => (action) => {
-  if (action.payload && action.payload.length && action.payload[0].order) {
-    action.payload = sortBy(action.payload, 'order');
+  if (action.payload instanceof Array && action.payload.length && action.payload[0].order && action.type.indexOf('READ') > -1) {
+    action.payload = sortBy(action.payload.map(item => ({ ...item, order: (item.order === null) ? -1 : item.order })), 'order');
+  } else if (action.type.indexOf('SORT') > -1) {
+    action.payload = action.payload.list.map(({ id }) => id);
   }
   return next(action);
 };
@@ -44,10 +46,13 @@ export default function createReducer(config) {
       case config.SORT:
         return {
           state: 2,
-          payload: action.payload.list.map(item => ({
-            ...state.payload.find(({ id }) => id === item.id),
-            ...item
-          }))
+          payload: sortBy(state.payload.map((item) => {
+            const index = action.payload.indexOf(item.id);
+            return {
+              ...item,
+              order: (index === -1) ? item.order : index
+            };
+          }), 'order')
         };
       case config.CREATE:
       case config.UPDATE:
