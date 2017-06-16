@@ -54,8 +54,8 @@ export const favoriteResult = createAction({
   successMessage: 'Result favor changed.'
 });
 
-export function fetchResults(data, entity) {
-  return dispatch => dispatch((data.offset) ? addResults(data, { entity }) : getResults(data, { entity })).catch(() => dispatch(resultError(null, entity)));
+export function fetchResults(data, opts) {
+  return dispatch => dispatch((data.offset) ? addResults(data, opts) : getResults(data, opts)).catch(() => dispatch(resultError(null, opts.entity)));
 }
 
 export function getAllResults(data) {
@@ -112,7 +112,7 @@ export function getAllResults(data) {
           }), delay);
         });
       })
-    ).then(() => {
+    ).catch(console.warn).then(() => {
       // Hide message when all columns are loaded
       // ===========================================================================
       if (notification) {

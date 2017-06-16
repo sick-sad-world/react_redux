@@ -56,12 +56,7 @@ export default function createAction(conf) {
         // Create notification of process successfull ending
         // ===========================================================================
         if (notification && options.notification) {
-          dispatch(notification({
-            id: notificationId,
-            visible: false
-            // type: 'success',
-            // text: payload.success || config.successMessage.replace('$id', options.entity)
-          }));
+          dispatch(notification({ id: notificationId, visible: false }));
         }
 
         // Dispatch actual action with data provided
