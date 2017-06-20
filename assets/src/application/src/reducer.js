@@ -11,6 +11,7 @@ export default (state = { ...defaultApp }, action) => {
     case LOGOUT:
       return {
         ...defaultApp,
+        state: 2,
         loadingSequence: ['Authenticating']
       };
     case types.ERROR:

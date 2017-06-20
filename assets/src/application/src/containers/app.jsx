@@ -26,11 +26,11 @@ class App extends React.Component {
   }
 
   render() {
-    const { error, children } = this.props;
+    const { error, children, state } = this.props;
     return (
       <div>
         { (error) ? <span className='overlay'><ClientError error={error} /></span> : null }
-        {children}
+        {(state) ? children : null}
         <Notifications/>
       </div>
     );

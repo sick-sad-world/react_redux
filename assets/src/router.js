@@ -22,6 +22,5 @@ export default (
       {User}
       {Dashboard}
     </Route>
-    <Redirect from='*' to='/' />
   </Route>
 );
