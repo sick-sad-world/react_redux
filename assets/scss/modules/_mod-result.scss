@@ -58,7 +58,7 @@
     display: flex;
     overflow: hidden;
     align-items: stretch;
-    .image {
+    .result-image {
       flex: 0 0 40%;
     }
     .content {
@@ -73,7 +73,7 @@
         margin: 0;
       }
     }
-    .image {
+    .result-image {
       @include ph-bg();
     }
   }
