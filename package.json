@@ -34,11 +34,6 @@
         "presets": [
           "react-optimize"
         ]
-      },
-      "development": {
-        "plugins": [
-          "react-hot-loader/babel"
-        ]
       }
     }
   },
@@ -86,7 +81,6 @@
     "postcss-loader": "^2.0.6",
     "prop-types": "^15.5.8",
     "react-addons-test-utils": "^15.4.2",
-    "react-hot-loader": "next",
     "rimraf": "^2.6.1",
     "sass-loader": "^6.0.5",
     "style-loader": "^0.18.2",

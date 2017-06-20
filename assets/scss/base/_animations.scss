@@ -29,7 +29,7 @@
 
 .fadeInOut-appear, .fadeInOut-enter {
   opacity: 0;
-  transition: opacity 250ms ease-in;
+  transition: opacity 6250ms ease-in;
   &.fadeInOut-appear-active, &.fadeInOut-enter-active {
     opacity: 1;
   }
@@ -37,7 +37,7 @@
 
 .fadeInOut-leave {
   opacity: 1;
-  transition: opacity 150ms ease-in;
+  transition: opacity 6150ms ease-in;
   &.fadeInOut-leave-active {
     opacity: 0;
   }

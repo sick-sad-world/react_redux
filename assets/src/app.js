@@ -5,7 +5,6 @@ import 'scss/app.scss';
 // ===========================================================================
 import React from 'react';
 import { render } from 'react-dom';
-import { AppContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';
 import { Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -22,14 +21,12 @@ import Scheme from './router';
 // ===========================================================================
 function renderApp(scheme) {
   render(
-    <AppContainer>
-      <Provider store={TrendolizerStore}>
-        <Router key={Math.random()} routes={scheme} history={syncHistoryWithStore(browserHistory, TrendolizerStore)} />
-      </Provider>
-    </AppContainer>,
+    <Provider store={TrendolizerStore}>
+      <Router key={Math.random()} routes={scheme} history={syncHistoryWithStore(browserHistory, TrendolizerStore)} />
+    </Provider>,
     document.getElementById('root')
   );
 }
 
 renderApp(Scheme);
-if (module.hot) module.hot.accept('./router', () => render(Scheme));
+// if (module.hot) module.hot.accept('./router', () => render(Scheme));

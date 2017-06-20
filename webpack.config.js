@@ -9,7 +9,6 @@ const isDevelopment = process.env.NODE_ENV !== 'production';
 const PORT = 3000;
 const HOST = 'localhost';
 const CONTEXT = 'assets';
-let APP = ['babel-polyfill', './src/app.js'];
 const alias = ['/img', '/icon', '/scss', '/src', '/src/_common', '/src/_common/functions'];
 
 const extractCss = new ExtractTextPlugin({
@@ -32,16 +31,7 @@ const PLUGINS = [
   extractCss
 ];
 
-if (process.env.SERVER) {
-  APP = [
-    'react-hot-loader/patch',
-    `webpack-dev-server/client?http://${HOST}:${PORT}`,
-    'webpack/hot/only-dev-server',
-    ...APP
-  ];
-}
 if (isDevelopment) {
-  PLUGINS.unshift(new webpack.HotModuleReplacementPlugin());
   PLUGINS.push(new webpack.NamedModulesPlugin());
   PLUGINS.push(new webpack.NoEmitOnErrorsPlugin());
 } else {
@@ -132,11 +122,11 @@ const fontLoader = {
 };
 
 module.exports = {
-  devtool: (isDevelopment) ? 'inline-source-map' : false,
+  devtool: (isDevelopment) ? 'source-map' : false,
   context: path.resolve(__dirname, CONTEXT),
   entry: {
     vendor: Object.keys(packageJSON.dependencies),
-    app: APP
+    app: ['babel-polyfill', './src/app.js']
   },
   output: {
     path: path.resolve(__dirname, (isDevelopment) ? 'demo' : 'build'),
@@ -148,7 +138,6 @@ module.exports = {
     port: PORT,
     contentBase: CONTEXT,
     historyApiFallback: true,
-    hot: true,
     watchOptions: {
       ignored: /node_modules/
     },
