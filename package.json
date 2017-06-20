@@ -20,16 +20,25 @@
   },
   "babel": {
     "presets": [
-      ["es2015", { "modules": false } ],
+      [
+        "es2015",
+        {
+          "modules": false
+        }
+      ],
       "stage-2",
       "react"
     ],
     "env": {
       "production": {
-        "presets": ["react-optimize"]
+        "presets": [
+          "react-optimize"
+        ]
       },
       "development": {
-        "plugins": ["react-hot-loader/babel"]
+        "plugins": [
+          "react-hot-loader/babel"
+        ]
       }
     }
   },
@@ -48,6 +57,7 @@
     "react-router-redux": "^4.0.7",
     "react-select": "^1.0.0-rc.2",
     "react-sortable-hoc": "^0.6.3",
+    "react-transition-group": "^1.2.0",
     "react-virtualized": "^9.7.5",
     "recharts": "^1.0.0-alpha.0",
     "redux": "^3.6.0",

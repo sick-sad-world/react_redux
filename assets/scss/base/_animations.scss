@@ -26,3 +26,19 @@
   50%{background-position:100% 50%}
   100%{background-position:0% 50%}
 }
+
+.fadeInOut-appear, .fadeInOut-enter {
+  opacity: 0;
+  transition: opacity 250ms ease-in;
+  &.fadeInOut-appear-active, &.fadeInOut-enter-active {
+    opacity: 1;
+  }
+}
+
+.fadeInOut-leave {
+  opacity: 1;
+  transition: opacity 150ms ease-in;
+  &.fadeInOut-leave-active {
+    opacity: 0;
+  }
+}

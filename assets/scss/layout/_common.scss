@@ -9,7 +9,7 @@ html, body, body section[class^="screen"] {
 
 body {
 	display: flex;
-	background: url(../img/bg.png) no-repeat center center;
+  background: url(../img/bg.png) no-repeat center center;
 	background-size: cover;
 	&:before {
 		$c: darken($c-accent,15%);
@@ -17,6 +17,7 @@ body {
 		display: block;
 		@include pos();
 		background-image: linear-gradient(to right, rgba($c,1) 0%,rgba($c,0.75) 12%,rgba($c,0.5) 75%,rgba($c,0.15) 100%);
+    //z-index: -1;
 	}
 }
 

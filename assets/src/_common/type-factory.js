@@ -16,7 +16,5 @@ export default function createTypes(module, actions) {
   }, v => `@@${module}/${v}`));
 }
 
-export const LOGIN = '@@application/LOGIN';
-export const LOGOUT = '@@application/LOGOUT';
-export const ERROR = '@@application/ERROR';
-export const STATE = '@@application/STATE';
+export const LOGIN = '@@system/LOGIN';
+export const LOGOUT = '@@system/LOGOUT';

@@ -6,10 +6,8 @@ import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
-import { setAppState, fetchData } from '../actions';
-import { getUser, login, addUser } from 'src/user';
-import { getColumnsForResults } from 'src/columns';
-import { getAllResults } from 'src/results';
+import { initialLoading } from '../actions';
+import { login, addUser } from 'src/user';
 
 // Import Child components
 // ===========================================================================
@@ -22,29 +20,14 @@ import Logotype from 'img/logo.svg';
 class Auth extends React.Component {
   // Handle authentification with provided credentials
   // ===========================================================================
-  handleAuth(e) {
-    e.preventDefault();
-    this.props.login({
-      username: e.target.elements.username.value,
-      password: e.target.elements.password.value
-    });
+  handleAuth(data) {
+    this.props.login(data, { notification: false }).then(() => this.props.initialLoading(true));
   }
 
   // Handle reaction of a new user
   // ===========================================================================
-  handleReg(e) {
-    e.preventDefault();
-    const { name, email, password } = e.target.elements;
-    this.props.addUser({
-      name: name.value,
-      email: email.value,
-      password: password.value,
-      redirect: window.location.host
-    }).then(() => {
-      name.value = '';
-      email.value = '';
-      password.value = '';
-    });
+  handleReg(data) {
+    this.props.addUser({ ...data, redirect: window.location.host });
   }
 
   // Redirect to auth if user is unauthentificated
@@ -114,29 +97,11 @@ Auth.propTypes = {
   }).isRequired,
   auth: PropTypes.bool.isRequired,
   login: PropTypes.func.isRequired,
+  initialLoading: PropTypes.func.isRequired,
   addUser: PropTypes.func.isRequired,
   router: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired
 };
 
-// Connect our Container to State
-// @ deps -> App
-// ===========================================================================
-const mapStateToProps = ({ user }) => ({ auth: !!user.payload.id });
-
-const mapDispatchToProps = dispatch => ({
-  login(data) {
-    return dispatch(login(data))
-      .then(() => dispatch(getUser(null, { notification: false })))
-      .then(() => dispatch(fetchData()))
-      .then(getColumnsForResults)
-      .then(data => dispatch(getAllResults(data)))
-      .then(() => dispatch(setAppState(2)));
-  },
-  addUser(data) {
-    return dispatch(addUser(data));
-  }
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Auth);
+export default connect(({ user }) => ({ auth: !!user.payload.id }), { login, initialLoading, addUser })(Auth);

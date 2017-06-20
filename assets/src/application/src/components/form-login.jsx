@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 
 export default function FormLogin({ handler }) {
   return (
-    <form action='login' onSubmit={handler}>
+    <form action='login' onSubmit={(e) => {
+      e.preventDefault();
+      handler({
+        username: e.target.elements.username.value,
+        password: e.target.elements.password.value
+      });
+    }}>
       <h3>Log in</h3>
       <div className='row'>
         <input type='text' name='username' placeholder='Your login' required />

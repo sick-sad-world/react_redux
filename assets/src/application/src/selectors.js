@@ -2,14 +2,14 @@ import createSelector from 'common/selector-creator';
 
 const getAppState = ({ app }) => app.state;
 const getAppError = ({ app }) => app.error;
-const getAppLoadingStep = ({ app }) => app.loadingStep;
 
-export default function makeAppSelector() {
-  return createSelector(
+export function makeAppSelector() {
+  const selector = createSelector(
   getAppState,
   getAppError,
-  getAppLoadingStep,
-  (state, error, loadingStep) => ({
-    state, error, loadingStep
+  (state, error) => ({
+    state, error
   }));
+
+  return (state, props) => selector(state, props);
 }

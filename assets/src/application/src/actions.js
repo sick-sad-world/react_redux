@@ -1,6 +1,6 @@
 // Import global app state types
 // ===========================================================================
-import { ERROR, STATE } from 'common/type-factory';
+import types from './types';
 
 // Import all required fetch methods from other modules (optional)
 // ===========================================================================
@@ -10,12 +10,20 @@ import { getFeeds } from 'src/feeds';
 import { getAlerts } from 'src/alerts';
 import { getReports } from 'src/reports';
 import { getDashboards } from 'src/dashboards';
+import { getUser } from 'src/user';
+import { getAllResults } from 'src/results';
+import { getColumnsForResults } from 'src/columns';
+
+function initErrorHandler(err) {
+  if (err instanceof Error) throw err;
+  else console.log('Not logged in');
+}
 
 // Set global app JS error
 // ===========================================================================
 export function clientError(error) {
   return dispatch => dispatch({
-    type: ERROR,
+    type: types.ERROR,
     error: (error instanceof Error) ? error.stack : error
   });
 }
@@ -24,7 +32,7 @@ export function clientError(error) {
 // ===========================================================================
 export function setAppState(state) {
   return dispatch => dispatch({
-    type: STATE,
+    type: types.STATE,
     state
   });
 }
@@ -32,18 +40,23 @@ export function setAppState(state) {
 // Fetch all data (on INIT or on LOGIN)
 // ===========================================================================
 export function fetchData(opts) {
-  const options = {
-    ...opts,
-    state: false,
-    notification: false
-  };
-
   return dispatch => Promise.all([
-    (getDashboards instanceof Function) ? dispatch(getDashboards(null, options)) : null,
-    (getColumns instanceof Function) ? dispatch(getColumns({ data: 1 }, options)) : null,
-    (getSets instanceof Function) ? dispatch(getSets(null, options)) : null,
-    (getFeeds instanceof Function) ? dispatch(getFeeds(null, options)) : null,
-    (getAlerts instanceof Function) ? dispatch(getAlerts(null, options)) : null,
-    (getReports instanceof Function) ? dispatch(getReports(null, options)) : null
+    (getDashboards instanceof Function) ? dispatch(getDashboards(null, opts)) : null,
+    (getColumns instanceof Function) ? dispatch(getColumns({ data: 1 }, opts)) : null,
+    (getSets instanceof Function) ? dispatch(getSets(null, opts)) : null,
+    (getFeeds instanceof Function) ? dispatch(getFeeds(null, opts)) : null,
+    (getAlerts instanceof Function) ? dispatch(getAlerts(null, opts)) : null,
+    (getReports instanceof Function) ? dispatch(getReports(null, opts)) : null
   ]);
+}
+
+export function initialLoading(init, opts) {
+  const options = { ...opts, state: false, notification: false };
+
+  return dispatch => dispatch(getUser(null, options))
+      .then(() => dispatch(fetchData(options)))
+      .then(getColumnsForResults)
+      .then(data => dispatch(getAllResults(data)))
+      .catch((init) ? initErrorHandler : null)
+      .then(() => dispatch(setAppState(2)));
 }
