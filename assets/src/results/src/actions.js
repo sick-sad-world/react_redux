@@ -1,7 +1,6 @@
 import createAction from 'common/action-factory';
 import types from './types';
 import moment from 'moment';
-import { notification } from 'src/notifications';
 
 export const getResults = createAction({
   type: types.READ,
@@ -59,11 +58,33 @@ export function fetchResults(data, opts) {
 }
 
 export function getAllResults(data) {
-  return (dispatch) => {
+  return (dispatch, getState, { notification }) => {
     const ids = {};
     const LIMIT = 3;
     const DELAY = 1200;
     const noteId = moment().unix();
+    const timeouts = [];
+
+    const endSequence = () => {
+      if (notification) {
+        dispatch(notification({
+          id: noteId,
+          visible: false
+        }));
+      }
+      timeouts.forEach(clearTimeout);
+    };
+
+    const stepMessage = (id) => {
+      if (id) delete ids[id];
+      if (notification) {
+        dispatch(notification({
+          id: noteId,
+          type: 'loading',
+          text: `Results for columns ${Object.keys(ids).join(', ')} downloading now...`
+        }));
+      }
+    };
 
     // Create our [Top-level] Promise chain
     // ===========================================================================
@@ -83,54 +104,28 @@ export function getAllResults(data) {
         return new Promise((resolve, reject) => {
           // Run our call and simple forward results to [Upper-level] promise chain
           // ===========================================================================
-          setTimeout(() => dispatch(getResults(column.data, {
-            entity: column.id,
-            notification: false,
-            state: false
-          })).then((...args) => {
-            // When code is done - update our message by removing [ID] of column
-            // wich result loading is done from list
-            // ===========================================================================
-            delete ids[column.id];
-            if (notification) {
-              dispatch(notification({
-                id: noteId,
-                type: 'loading',
-                text: `Results for columns ${Object.keys(ids).join(', ')} downloading now...`
-              }));
-            }
-            resolve(...args);
-          }).catch((...args) => {
-            const text = `Results for column ${column.id} ended with error`;
-            // Show error message if something went wrong
-            // ===========================================================================
-            if (notification) {
-              dispatch(notification({ type: 'error', text }));
-            }
-            dispatch(resultError(text, column.id));
-            reject(...args);
-          }), delay);
+          timeouts.push(setTimeout(() => {
+            if (!getState().user.payload.id) return endSequence();
+            return dispatch(getResults(column.data, {
+              entity: column.id,
+              notification: false,
+              state: false
+            })).then((payload) => {
+              if (!getState().user.payload.id) return null;
+              stepMessage(column.id);
+              resolve(payload);
+            }).catch((...args) => {
+              if (!getState().user.payload.id) return null;
+              const text = `Results for column ${column.id} ended with error`;
+              if (notification) dispatch(notification({ type: 'error', text }));
+              dispatch(resultError(text, column.id));
+              reject(...args);
+            });
+          }, delay));
         });
       })
-    ).catch(console.warn).then(() => {
-      // Hide message when all columns are loaded
-      // ===========================================================================
-      if (notification) {
-        dispatch(notification({
-          id: noteId,
-          visible: false
-        }));
-      }
-    });
+    ).catch(console.warn).then(endSequence);
 
-    // Send message at a start
-    // ===========================================================================
-    if (notification) {
-      dispatch(notification({
-        id: noteId,
-        type: 'loading',
-        text: `Results for columns ${Object.keys(ids).join(',')} downloading now...`
-      }));
-    }
+    stepMessage();
   };
 }

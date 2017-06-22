@@ -42,15 +42,16 @@ class Workspace extends React.Component {
 
   redirectHandler(props) {
     if (!props.user.id) {
-      this.props.router.push('/auth');
+      this.props.router.replace('/auth');
     } else if (props.location.pathname === '/') {
       this.props.router.replace('/dashboard');
     }
   }
 
-  // Redirect to auth if user is unauthentificated
-  // ===========================================================================
+  // // Redirect to auth if user is unauthentificated
+  // // ===========================================================================
   componentWillMount() {
+    console.log('mount');
     this.redirectHandler(this.props);
   }
 
@@ -69,7 +70,7 @@ class Workspace extends React.Component {
   // Handler for logout operation
   // ===========================================================================
   logoutHandler() {
-    this.props.logout();
+    this.props.logout().then(() => this.props.router.replace('/auth'));
   }
 
   // Render our screen
@@ -79,7 +80,7 @@ class Workspace extends React.Component {
     const routes = route.childRoutes.filter(({ omit }) => !omit).map(({ label, path, icon }) => ({ label, path, icon }));
     // Return JSX layout of a component
     // ===========================================================================
-    return (
+    return (this.props.user.id) ? (
       <section className='screen-main mod-screen-main'>
         <aside className={classNames({
           sidebar: true,
@@ -94,7 +95,7 @@ class Workspace extends React.Component {
           {children}
         </div>
       </section>
-    );
+    ) : null;
   }
 }
 
@@ -116,4 +117,4 @@ Workspace.propTypes = {
 // Connect our Container to State
 // @ deps -> App, (User in future)
 // ===========================================================================
-export default connect(makeWorkspaceSelector, { logout })(Workspace);
+export default connect(makeWorkspaceSelector, { logout }, null, { withRef: true })(Workspace);

@@ -151,7 +151,12 @@ export default connect(makePageSelector, dispatch => ({
     });
   },
   actionCreate(...args) {
-    return dispatch(createColumn(...args));
+    return dispatch(createColumn(...args)).then((resp) => {
+      if (fetchResults) {
+        return dispatch(fetchResults(resp.payload.data, { entity: resp.payload.id }));
+      }
+      return resp;
+    });
   },
   actionDelete({ id }) {
     return dispatch(deleteColumn({ id })).then((resp) => {

@@ -23,13 +23,13 @@ export class ListSection extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      payload: props.payload
+      payload: props.payload.map((item, i) => ({ ...item, order: i }))
     };
     bindAll(this, 'createHandler', 'updateSortState', 'renderChildren', 'runSortHandler');
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.state === 2) this.setState({ payload: newProps.payload });
+    if (newProps.state === 2) this.setState({ payload: newProps.payload.map((item, i) => ({ ...item, order: i })) });
   }
 
   createHandler(e) {

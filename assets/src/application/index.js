@@ -4,6 +4,7 @@ import Auth from './src/containers/auth';
 
 
 export * from './src/actions';
+export * from './src/middlewares';
 export { reducer };
 export { App };
 export { Auth };

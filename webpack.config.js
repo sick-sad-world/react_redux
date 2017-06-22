@@ -11,6 +11,21 @@ const HOST = 'localhost';
 const CONTEXT = 'assets';
 const alias = ['/img', '/icon', '/scss', '/src', '/src/_common', '/src/_common/functions'];
 
+// "babel-loader": "^6.4.1",
+// "cross-env": "^4.0.0",
+// "css-loader": "^0.28.4",
+// "extract-text-webpack-plugin": "^2.1.0",
+// "file-loader": "^0.11.0",
+// "html-webpack-plugin": "^2.28.0",
+// "image-webpack-loader": "^3.3.0",
+// "node-sass": "^4.5.2",
+// "postcss-loader": "^2.0.6",
+// "sass-loader": "^6.0.5",
+// "style-loader": "^0.18.2",
+// "url-loader": "^0.5.8",
+// "webpack": "^2.6.1",
+// "webpack-dev-server": "^2.4.5"
+
 const extractCss = new ExtractTextPlugin({
   filename: (isDevelopment) ? '[name].css' : '[hash:12].css',
   disable: !!process.env.SERVER

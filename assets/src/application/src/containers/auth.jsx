@@ -13,7 +13,7 @@ import { login, addUser } from 'src/user';
 // ===========================================================================
 import FormLogin from '../components/form-login';
 import FormRegister from '../components/form-register';
-import Logotype from 'img/logo.svg';
+// import Logotype from 'img/logo.svg';
 
 // Authentification screen containing both of auth forms
 // ===========================================================================
@@ -30,19 +30,19 @@ class Auth extends React.Component {
     this.props.addUser({ ...data, redirect: window.location.host });
   }
 
-  // Redirect to auth if user is unauthentificated
+  // Redirect to auth if user is authentificated
   // ===========================================================================
   componentWillMount() {
     if (this.props.auth) {
-      this.props.router.push('/');
+      this.props.router.replace('/');
     }
   }
 
-  // Redirect to auth if user is unauthentificated
+  // Redirect to auth if user is authentificated
   // ===========================================================================
   componentWillReceiveProps(newProps) {
     if (newProps.auth) {
-      this.props.router.push('/');
+      this.props.router.replace('/');
     }
   }
 
@@ -58,7 +58,7 @@ class Auth extends React.Component {
     return (
       <section className='screen-auth mod-authentification' id='funAuthScreen'>
         <article className='welcome-text'>
-          <img className='logotype' src={Logotype} title='Trendolier pro' alt='Trendolizer pro' />
+          <img className='logotype' src='img/logo.svg' title='Trendolier pro' alt='Trendolizer pro' />
           <hgroup className='t-rhythm'>
             <h1 className='t-gutter'>{ texts.title }</h1>
             <h2 className='t-gutter'>{ texts.subtitle }</h2>
@@ -100,8 +100,9 @@ Auth.propTypes = {
   initialLoading: PropTypes.func.isRequired,
   addUser: PropTypes.func.isRequired,
   router: PropTypes.shape({
-    push: PropTypes.func.isRequired
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired
   }).isRequired
 };
 
-export default connect(({ user }) => ({ auth: !!user.payload.id }), { login, initialLoading, addUser })(Auth);
+export default connect(({ user }) => ({ auth: !!user.payload.id }), { login, initialLoading, addUser }, null, { withRef: true })(Auth);

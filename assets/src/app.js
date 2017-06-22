@@ -1,5 +1,4 @@
-import 'style-loader!css-loader!react-virtualized/styles.css';
-import 'scss/app.scss';
+// import 'style-loader!css-loader!react-virtualized/styles.css';
 
 // Import packages
 // ===========================================================================
@@ -19,14 +18,9 @@ import Scheme from './router';
 
 // Render an actual App
 // ===========================================================================
-function renderApp(scheme) {
-  render(
-    <Provider store={TrendolizerStore}>
-      <Router key={Math.random()} routes={scheme} history={syncHistoryWithStore(browserHistory, TrendolizerStore)} />
-    </Provider>,
-    document.getElementById('root')
-  );
-}
-
-renderApp(Scheme);
-// if (module.hot) module.hot.accept('./router', () => render(Scheme));
+render(
+  <Provider store={TrendolizerStore}>
+    <Router routes={Scheme} history={syncHistoryWithStore(browserHistory, TrendolizerStore)} />
+  </Provider>,
+  document.getElementById('root')
+);

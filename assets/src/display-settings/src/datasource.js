@@ -1,10 +1,11 @@
-import { pickBy, mapValues, transform, includes } from 'lodash';
+import { pickBy, intersection, transform } from 'lodash';
 
 const data = {
   title: {
-    height: 68,
+    height: 72,
     disabled: true,
-    default: true
+    default: true,
+    row: 0
   },
   url: {
     disabled: true,
@@ -13,36 +14,32 @@ const data = {
   },
   author: {
     height: 24,
-    siblings: ['found', 'domain']
+    row: 1
   },
   found: {
     height: 24,
-    siblings: ['author', 'domain'],
-    default: true
+    default: true,
+    row: 1
   },
   domain: {
     height: 24,
-    siblings: ['author', 'found'],
-    default: true
+    default: true,
+    row: 1
   },
   image: {
     height: 160,
     default: true,
-    siblings: ['description', 'wide_image'],
-    opponents: ['wide_image'],
-    childs: ['wide_image']
+    row: 2
   },
   wide_image: {
     height: 160,
-    siblings: ['description', 'image'],
-    opponents: ['description', 'image'],
-    parent: 'image'
+    parent: 'image',
+    row: 2
   },
   description: {
     height: 160,
     default: true,
-    siblings: ['image', 'wide_image'],
-    opponents: ['wide_image']
+    row: 2
   },
   likes: {
     height: 18,
@@ -50,11 +47,11 @@ const data = {
     default: true,
     graphs: true
   },
-  graphs: {
-    height: 0,
-    table: false,
-    default: false
-  },
+  // graphs: {
+  //   height: 0,
+  //   table: false,
+  //   default: false
+  // },
   tweets: {
     height: 18,
     table: true,
@@ -92,7 +89,20 @@ const data = {
 class DisplaySettings {
   constructor(config) {
     this.data = config;
+    this.rows = [];
     this.gutter = 12;
+    this.aside = 26;
+    this.tableHeader = 0;
+    Object.keys(config).forEach((item) => {
+      if (config[item].table) {
+        this.rows.push([item]);
+        if (!this.tableHeader) this.tableHeader = config[item].height + 8;
+      } else if (this.rows[config[item].row] instanceof Array) {
+        this.rows[config[item].row].push(item);
+      } else {
+        this.rows[config[item].row] = [item];
+      }
+    });
   }
 
   static toArray(selection) {
@@ -107,7 +117,13 @@ class DisplaySettings {
   }
 
   getRenderMap() {
-    return mapValues(this.data, ({ siblings, opponents, disabled, table, childs }) => ({ siblings, opponents, disabled, table, childs }));
+    return transform(this.data, (acc, { disabled }, k) => {
+      acc.push({
+        name: k,
+        disabled
+      });
+      return acc;
+    }, []);
   }
 
   getSelection(criterea, array) {
@@ -128,27 +144,18 @@ class DisplaySettings {
   }
 
   calculateHeight(settings) {
-    let exclude = [];
-
-    return settings.filter(stat => !!this.data[stat]).reduce((acc, stat) => {
-      const map = this.data[stat];
-      if (map.table && !includes(exclude, 'table')) {
-        exclude.push('table');
-        acc += (8 + map.height * 2);
-      }
-      if (stat === 'title') {
-        acc += 4;
-      }
-      if (map.siblings) {
-        if (!includes(exclude, stat)) {
-          exclude = exclude.concat(map.siblings);
-          acc += map.height;
+    let table = false;
+    const value = settings.filter(stat => !!this.data[stat]);
+    return this.rows.reduce((acc, row) => {
+      if (intersection(row, value).length) {
+        acc += this.data[row[0]].height;
+        if (!table && this.data[row[0]].table) {
+          acc += this.tableHeader;
+          table = true;
         }
-      } else {
-        acc += map.height;
       }
       return acc;
-    }, this.gutter);
+    }, this.gutter + this.aside);
   }
 
   getHeights(settings) {

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { numBool, imageUrl } from 'common/typecheck';
-import UserImg from 'img/ph_user.png';
+// import UserImg from 'img/ph_user.png';
 
 export const defaultData = {
   state: 1,
@@ -13,7 +13,7 @@ export const defaultData = {
     position: '',
     status: '',
     is_admin: 0,
-    image: UserImg
+    image: '/img/ph_user.png'
   }
 };
 

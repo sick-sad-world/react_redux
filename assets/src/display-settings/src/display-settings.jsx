@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { includes, transform } from 'lodash';
+import { includes, capitalize } from 'lodash';
 import DisplaySettings from './datasource';
 import Checkbox from 'common/components/forms/checkbox';
 
@@ -12,22 +12,22 @@ export default function PickDisplaySettings({ data, value, onChange, disabled, t
     <fieldset className={className}>
       <legend>{title}</legend>
       <ul>
-        {transform(data, (acc, v, k) => {
-          const disablence = v.disabled || disabled || (k === 'wide_image' && !includes(value, 'image'));
-          acc.push(
-            <li key={`opt_${k}`}>
+        {data.map((item) => {
+          const disablence = item.disabled || disabled || (item.name === 'wide_image' && !includes(value, 'image'));
+          return (
+            <li key={`opt_${item.name}`}>
               <Checkbox
                 className={classNames('switcher-checkbox', { 'is-disabled': disablence })}
                 name='display_settings'
-                value={k}
+                value={item.name}
+                label={capitalize(item.name.replace('_', ' '))}
                 disabled={disablence}
-                checked={includes(value, k)}
+                checked={includes(value, item.name)}
                 onChange={onChange}
               />
             </li>
           );
-          return acc;
-        }, [])}
+        })}
       </ul>
     </fieldset>
   );
@@ -43,7 +43,10 @@ PickDisplaySettings.defaultProps = {
 PickDisplaySettings.propTypes = {
   title: PropTypes.string.isRequired,
   className: PropTypes.string,
-  data: PropTypes.object.isRequired,
+  data: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    disabled: PropTypes.bool
+  })).isRequired,
   value: PropTypes.arrayOf(PropTypes.string).isRequired,
   disabled: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired

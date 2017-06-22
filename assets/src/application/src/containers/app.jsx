@@ -26,11 +26,22 @@ class App extends React.Component {
   }
 
   render() {
-    const { error, children, state } = this.props;
+    const { error, children, location, state } = this.props;
     return (
       <div>
         { (error) ? <span className='overlay'><ClientError error={error} /></span> : null }
-        {(state) ? children : null}
+        {(state === 2) ? children : null}
+        {/* {(state === 2) ? (
+          <CSSTransitionGroup
+            transitionName='fadeInOut'
+            transitionAppear={true}
+            transitionAppearTimeout={350}
+            transitionEnterTimeout={350}
+            transitionLeaveTimeout={350}
+          >
+          {(children) ? React.cloneElement(children, { key: location.pathname }) : null}
+          </CSSTransitionGroup>
+        ) : null}*/}
         <Notifications/>
       </div>
     );
