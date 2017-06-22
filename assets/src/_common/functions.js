@@ -47,3 +47,11 @@ export const normalizeValue = (v, base = 10) => {
   }
   return v;
 };
+
+export function decodeHtml() {
+  const txt = document.createElement('textarea');
+  return (html) => {
+    txt.innerHTML = html;
+    return txt.value;
+  };
+}

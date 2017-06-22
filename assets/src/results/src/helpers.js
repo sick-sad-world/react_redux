@@ -1,5 +1,8 @@
-import { mapValues, unescape } from 'lodash';
+import { mapValues } from 'lodash';
 import { tableStatsRegExp } from 'src/display-settings';
+import { decodeHtml } from 'functions';
+
+const decoder = decodeHtml();
 
 export function splitText(result) {
   const limit = 128;
@@ -26,9 +29,9 @@ export function splitText(result) {
 
   return {
     ...result,
-    title: unescape(result.title),
-    additional: (index.curr >= 0) ? unescape(result.description.substring(index.curr, result.description.length)) : '',
-    description: unescape((index.curr >= 0) ? result.description.substring(0, index.curr) : result.description)
+    title: decoder(result.title),
+    additional: (index.curr >= 0) ? decoder(result.description.substring(index.curr, result.description.length)) : '',
+    description: decoder((index.curr >= 0) ? result.description.substring(0, index.curr) : result.description)
   };
 }
 
