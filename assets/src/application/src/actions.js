@@ -10,6 +10,7 @@ import { getFeeds } from 'src/feeds';
 import { getAlerts } from 'src/alerts';
 import { getReports } from 'src/reports';
 import { getDashboards } from 'src/dashboards';
+import { fetchGoogleGraphs } from 'src/graphs';
 import { getUser } from 'src/user';
 import { getAllResults } from 'src/results';
 import { getColumnsForResults } from 'src/columns';
@@ -53,10 +54,13 @@ export function fetchData(opts) {
 export function initialLoading(init, opts) {
   const options = { ...opts, state: false, notification: false };
 
-  return dispatch => dispatch(getUser(null, options))
+  return (dispatch) => {
+    if (!window.google) fetchGoogleGraphs();
+    return dispatch(getUser(null, options))
       .then(() => dispatch(fetchData(options)))
       .then(getColumnsForResults)
       .then(data => dispatch(getAllResults(data)))
       .catch((init) ? initErrorHandler : null)
       .then(() => dispatch(setAppState(2)));
+  };
 }

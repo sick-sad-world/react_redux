@@ -59,7 +59,8 @@ const data = {
   },
   pins: {
     height: 18,
-    table: true
+    table: true,
+    graphs: true
   },
   shares: {
     height: 18,
@@ -73,7 +74,8 @@ const data = {
   },
   votes_video: {
     height: 18,
-    table: true
+    table: true,
+    graphs: true
   },
   views_video: {
     height: 18,
@@ -82,7 +84,8 @@ const data = {
   },
   comments_video: {
     height: 18,
-    table: true
+    table: true,
+    graphs: true
   }
 };
 

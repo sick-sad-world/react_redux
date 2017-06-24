@@ -1,6 +1,6 @@
 // Import helpers
 // ===========================================================================
-import { includes, filter, bindAll } from 'lodash';
+import { includes, bindAll } from 'lodash';
 
 // Import react stuff
 // ===========================================================================
@@ -103,7 +103,7 @@ export default class Result extends React.PureComponent {
         </Link>
         {(tableData && tableData.length) ? (
           <footer>
-            <ResultTable to={browseUrl} style={{ height: heights.table }} graph={this.props.graphSettings} data={tableData} />
+            <ResultTable to={browseUrl} style={{ height: heights.table }} data={tableData} />
           </footer>
         ) : null }
       </article>
@@ -125,7 +125,6 @@ Result.propTypes = {
   isPlaceholder: PropTypes.bool.isRequired,
   sort: PropTypes.string.isRequired,
   displaySettings: PropTypes.arrayOf(PropTypes.string).isRequired,
-  graphSettings: PropTypes.arrayOf(PropTypes.string).isRequired,
   tableStats: PropTypes.arrayOf(PropTypes.string).isRequired,
   heights: PropTypes.objectOf(PropTypes.string).isRequired,
   refreshResult: PropTypes.func,

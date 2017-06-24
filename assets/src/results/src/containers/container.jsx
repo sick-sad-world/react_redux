@@ -106,7 +106,6 @@ class ResultsContainer extends React.Component {
           sort={this.props.data.sort}
           location={`${this.props.location}/${this.props.id}`}
           displaySettings={this.props.displaySettings}
-          graphSettings={this.props.graphSettings}
           tableStats={this.props.tableStats}
           heights={this.heightConfig}
           refreshResult={this.props.refreshResult({ entity: this.props.id, state: false })}
@@ -185,9 +184,9 @@ ResultsContainer.defaultProps = {
   location: '',
   stateEmpty: 'It seems we could not find any items matching your query at this time. Try again later or modify the filter settings for this column.',
   defaultLimit: limit,
+  gutter: DisplaySettings.gutter,
   tableStats: DisplaySettings.getTable(),
   displaySettings: DisplaySettings.getDefault(),
-  graphSettings: DisplaySettings.getGraphs(),
   displaySettingsMap: DisplaySettings.getRaw(),
   ...defaultResults
 };
@@ -195,6 +194,7 @@ ResultsContainer.defaultProps = {
 ResultsContainer.propTypes = {
   id: PropTypes.number.isRequired,
   defaultLimit: PropTypes.number.isRequired,
+  gutter: PropTypes.number.isRequired,
   data: PropTypes.object.isRequired,
   location: PropTypes.string.isRequired,
   state: stateNum.isRequired,
@@ -202,7 +202,6 @@ ResultsContainer.propTypes = {
   stateEmpty: PropTypes.string.isRequired,
   tableStats: PropTypes.arrayOf(PropTypes.string).isRequired,
   displaySettings: PropTypes.arrayOf(PropTypes.string).isRequired,
-  graphSettings: PropTypes.arrayOf(PropTypes.string).isRequired,
   displaySettingsMap: PropTypes.object.isRequired,
   payload: PropTypes.arrayOf(PropTypes.object).isRequired,
   getResults: PropTypes.func.isRequired,

@@ -8,7 +8,7 @@ export function makeContainerSelector() {
   const selector = createSelector(
     getGraphState,
     getGraphData,
-    (state, payload, config) => ({ state, payload })
+    (state, payload) => ({ state, payload })
   );
 
   return (state, props) => selector(state, props);

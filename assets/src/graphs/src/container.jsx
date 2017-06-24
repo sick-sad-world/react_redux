@@ -18,7 +18,7 @@ import { stateNum } from 'common/typecheck';
 import { connect } from 'react-redux';
 import { makeContainerSelector } from './selectors';
 import * as actions from './actions';
-import { variable, colours } from './defaults';
+import { variable, colours, movWindow, limit } from './defaults';
 
 // Import child Components
 // ===========================================================================
@@ -33,6 +33,7 @@ import { LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Line } from 'r
 class GraphsContainer extends React.Component {
   constructor(props) {
     super(props);
+    this.chart = null;
     this.state = {
       dTypes: [],
       dVars: [],
@@ -60,7 +61,16 @@ class GraphsContainer extends React.Component {
     this.props.getResultMeasurements({
       hash: this.props.hash,
       type: this.props.config.join(',')
-    }, { entity: this.props.config, notification: false }).catch(this.props.graphError);
+    }, {
+      entity: {
+        types: this.props.config,
+        opts: {
+          limit,
+          movWindow
+        }
+      },
+      notification: false
+    }).catch(this.props.graphError);
   }
 
   renderLines() {
@@ -98,8 +108,10 @@ class GraphsContainer extends React.Component {
       return <GraphError>{this.props.error}</GraphError>;
     } else if (this.props.state === 3) {
       return <GraphLoading>Graph data is being loaded</GraphLoading>;
-    } else if (this.props.payload.length) {
-      return (
+    } else if (this.props.payload) {
+      return (window.google && window.google.charts) ? (
+        <div id='chartContainer' ref='chartContainer'/>
+      ) : (
         <AutoSizer>
           {({ height, width }) => (
             <LineChart width={width - 8} height={height - 8} margin={{ top: 0, right: 0, left: 0, bottom: 0 }} data={this.props.payload}>
@@ -126,6 +138,19 @@ class GraphsContainer extends React.Component {
     return <span>No graphs can be shown</span>;
   }
 
+  componentDidUpdate() {
+    if (!this.chart && this.refs.chartContainer) {
+      this.chart = new window.google.visualization.LineChart(this.refs.chartContainer);
+    }
+    if (this.chart) {
+      this.chart.draw(this.props.payload, {
+        ...this.props.chartOptions,
+        width: this.refs.chartContainer.parentElement.clientWidth,
+        height: this.refs.chartContainer.parentElement.clientHeight
+      });
+    }
+  }
+
   componentWillUnmount() {
     if (this.props.clearGraphData) {
       this.props.clearGraphData();
@@ -142,6 +167,29 @@ GraphsContainer.defaultProps = {
     connectNulls: true,
     type: 'monotone',
     'stroke-width': 4
+  },
+  chartOptions: {
+    interpolateNulls: true,
+    backgroundColor: 'transparent',
+    explorer: {
+      actions: ['dragToZoom', 'rightClickToReset'],
+      maxZoomIn: 0.01
+    },
+    annotation: {
+      style: 'line'
+    },
+    curveType: 'function',
+    chartArea: {
+      top: 'auto',
+      left: 80,
+      height: '90%',
+      width: 'auto'
+    },
+    pointSize: 3,
+    legend: {
+
+      position: 'right'
+    }
   }
 };
 
@@ -151,13 +199,14 @@ GraphsContainer.propTypes = {
   config: PropTypes.arrayOf(PropTypes.string),
   variable: PropTypes.arrayOf(PropTypes.string).isRequired,
   colours: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-  payload: PropTypes.arrayOf(PropTypes.object).isRequired,
+  payload: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
   lineProps: PropTypes.object.isRequired,
   hash: PropTypes.string.isRequired,
   error: PropTypes.string,
   graphError: PropTypes.func.isRequired,
   clearGraphData: PropTypes.func.isRequired,
-  getResultMeasurements: PropTypes.func.isRequired
+  getResultMeasurements: PropTypes.func.isRequired,
+  chartOptions: PropTypes.object.isRequired
 };
 
 export default connect(makeContainerSelector, { ...actions })(GraphsContainer);

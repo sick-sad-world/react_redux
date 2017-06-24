@@ -1,12 +1,12 @@
 import types from './types';
-import { mapGraphData as mapper } from './helpers';
+import { mapGraphRaw, mapGraphGoogle } from './helpers';
 
 export function mapGraphData({ dispatch, getState }) {
   return next => (action) => {
     if (action.type === types.READ) {
       return next({
         ...action,
-        payload: mapper(action.payload, action.entity)
+        payload: (window.google && window.google.charts) ? mapGraphGoogle(action.payload, action.entity) : mapGraphRaw(action.payload, action.entity)
       });
     }
     return next(action);

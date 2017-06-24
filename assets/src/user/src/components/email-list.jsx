@@ -59,7 +59,7 @@ export default class EmailList extends React.Component {
     if (includes(this.props.data, newItem)) {
       error = 'You already have this email in list, try another one.';
     } else if (!emailValidator.test(newItem) && !slackValidator.test(newItem)) {
-      error = 'This is should be an email or Slach webhook starting "https://hooks.slack.com/services"';
+      error = 'This should be a valid email address or Slack webhook url (starting with "https://hooks.slack.com/services")';
     } else {
       this.props.onChange([...this.props.data, newItem], newItem);
     }
@@ -78,7 +78,7 @@ export default class EmailList extends React.Component {
           <input
             disabled={this.props.disabled}
             type='text'
-            placeholder='Enter some email or Slach webhook link'
+            placeholder='Enter an email address or Slack webhook link'
             value={this.state.new}
             onChange={e => this.setState({ new: e.target.value })}
           />

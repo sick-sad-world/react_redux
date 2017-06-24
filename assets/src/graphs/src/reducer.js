@@ -10,6 +10,7 @@ export default (state = { ...defaultGraphs }, action) => {
       return { ...defaultGraphs };
     case types.READ:
       return {
+        ...state,
         state: 2,
         payload: action.payload
       };

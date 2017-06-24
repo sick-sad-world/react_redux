@@ -46,6 +46,11 @@
   }
   .tab-graph {
     overflow: visible;
+    svg {
+      width: auto !important;
+      height: auto !important;
+      pointer-events: auto;
+    }
   }
   .alongside {
     display: flex;

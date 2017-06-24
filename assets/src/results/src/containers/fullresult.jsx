@@ -78,10 +78,12 @@ class FullResult extends React.Component {
       <Modal title={title} className={className} close={close}>
         <main>
           <nav>
-            <div className='tab-bar'>
-              <a onClick={this.switchTab(1)} className={classNames({ active: this.state.tab === 1 })}>Result data</a>
-              <a onClick={this.switchTab(2)} className={classNames({ active: this.state.tab === 2 })}>Popularity graphs</a>
-            </div>
+            {(window.google && window.google.charts) ? (
+              <div className='tab-bar'>
+                <a onClick={this.switchTab(1)} className={classNames({ active: this.state.tab === 1 })}>Result data</a>
+                <a onClick={this.switchTab(2)} className={classNames({ active: this.state.tab === 2 })}>Popularity graphs</a>
+              </div>
+            ) : null}
             <ResultActions
               className='actions'
               url={payload.url}
@@ -126,7 +128,7 @@ class FullResult extends React.Component {
               </div>
             </div>
           ) : null}
-          {(this.state.tab === 2) ? (
+          {(window.google && window.google.charts && this.state.tab === 2) ? (
             <div className='tab-graph tab'>
               <GraphsContainer config={this.props.graphStats} initial={this.state.initial} hash={this.props.payload.hash}/>
             </div>

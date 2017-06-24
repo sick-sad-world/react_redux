@@ -55,3 +55,5 @@ export function decodeHtml() {
     return txt.value;
   };
 }
+
+export const encodeUrlParams = params => (`?${Object.keys(params).map(prop => [prop, params[prop]].map(encodeURIComponent).join('=')).join('&')}`);

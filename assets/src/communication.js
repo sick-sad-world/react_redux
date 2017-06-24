@@ -1,4 +1,5 @@
 import jsonp from 'browser-jsonp';
+import { encodeUrlParams } from 'functions';
 import { reduce, isPlainObject, isNull, isUndefined } from 'lodash';
 
 export const BASEURL = 'http://api.trendolizer.com/v3';
@@ -39,5 +40,17 @@ export default function fetch(url, data) {
     });
     window.stack[id] = abort;
     counter += 1;
+  });
+}
+
+export function fetchScript(url, opts) {
+  return new Promise((resolve, reject) => {
+    if (!url) return reject({ error: 'Url not provided' });
+    const tag = document.createElement('script');
+    tag.type = 'text/javascript';
+    tag.src = url + ((opts) ? encodeUrlParams(opts) : '');
+    tag.onload = () => resolve({ url, success: true });
+    tag.onerror = err => reject(err);
+    document.body.appendChild(tag);
   });
 }
