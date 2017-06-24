@@ -13,7 +13,7 @@ import { makeContainerSelector } from '../selectors';
 
 // Import child Components
 // ===========================================================================
-import { ColumnsContainer, DashboardItem } from 'src/columns';
+import { SingleColumnContainer, DashboardItem, sortColumns } from 'src/columns';
 import { ResultsContainer, FullResult, fetchResults } from 'src/results';
 import PayloadList from '../components/list';
 
@@ -28,15 +28,15 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const { payload, emptyTpl, scrollTo, location, fetchResults } = this.props;
+    const { payload, emptyTpl, scrollTo, location, width, sortColumns } = this.props;
     return (
       <section className='mod-dashboard'>
         {(payload) ? (
-          <ColumnsContainer column_ids={payload.column_ids} actions={['editColumn', 'deleteColumn', 'sortColumns']}>
-            {props => (
-              <PayloadList width={width} scrollTo={scrollTo} {...props}>
-                {({ payload, editColumn, deleteColumn }) => (
-                  <DashboardItem payload={payload} editColumn={editColumn} deleteColumn={deleteColumn} getResults={fetchResults}>
+          <PayloadList width={width} payload={payload.column_ids} scrollTo={scrollTo} sortColumns={sortColumns}>
+            {({ id }) => (
+              <SingleColumnContainer col_id={id} actions={['deleteColumn', 'editColumn']}>
+                {({ payload, state, deleteColumn, editColumn }) => (
+                  <DashboardItem payload={payload} deleteColumn={deleteColumn} editColumn={editColumn} getResults={this.props.fetchResults}>
                     <ResultsContainer
                       id={payload.id}
                       sort={payload.data.sort}
@@ -46,9 +46,9 @@ class Dashboard extends React.Component {
                     />
                   </DashboardItem>
                 )}
-              </PayloadList>
+              </SingleColumnContainer>
             )}
-          </ColumnsContainer>
+          </PayloadList>
         ) : emptyTpl }
         {(this.props.location.query.hash) ? (
           <FullResult id={scrollTo} close={this.closeModal} initial={this.props.location.query.init} hash={this.props.location.query.hash} />
@@ -59,13 +59,16 @@ class Dashboard extends React.Component {
 }
 
 Dashboard.defaultProps = {
+  width,
   emptyTpl: <div className='state-empty'>Oups... Dashboard not found</div>
 };
 
 Dashboard.propTypes = {
   payload: PropTypes.shape(defaultInterface),
   scrollTo: PropTypes.number,
+  width: PropTypes.number.isRequired,
   fetchResults: PropTypes.func.isRequired,
+  sortColumns: PropTypes.func.isRequired,
   params: PropTypes.shape({
     name: PropTypes.string.isRequired
   }).isRequired,
@@ -82,4 +85,4 @@ Dashboard.propTypes = {
 // Connect our Container to State
 // @ deps -> Dashboards
 // ===========================================================================
-export default connect(makeContainerSelector, { fetchResults })(Dashboard);
+export default connect(makeContainerSelector, { sortColumns, fetchResults })(Dashboard);

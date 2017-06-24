@@ -144,7 +144,7 @@ export default function MakeEditForm(Form) {
     texts: {
       title: 'Edit form',
       description: 'Default form to modify things',
-      confirmation: '{data} was changed. Save changes to apply them'
+      confirmation: '{data} were changed. Save changes to apply them'
     },
     formProps: {}
   };

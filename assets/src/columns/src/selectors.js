@@ -9,6 +9,8 @@ const getColumnState = ({ columns }) => columns.state;
 
 const getColumns = ({ columns }) => columns.payload;
 
+const getColumnById = ({ columns }, { col_id }) => columns.payload.find(({ id }) => id === col_id);
+
 const getCurrentId = ({ columns }, props) => parseInt(props.params.id, 10) || 0;
 
 const getColumnIds = ({ columns }, props) => props.column_ids || [];
@@ -46,6 +48,19 @@ export function makeContainerSelector() {
         payload: (criterea.length) ? payload.filter(column => criterea.every(f => f(column))) : payload
       };
     }
+  );
+
+  return (state, props) => selector(state, props);
+}
+
+export function makeSingleSelector() {
+  const selector = createSelector(
+    getColumnState,
+    getColumnById,
+    (state, payload) => ({
+      state,
+      payload
+    })
   );
 
   return (state, props) => selector(state, props);

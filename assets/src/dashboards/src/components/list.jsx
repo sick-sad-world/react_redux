@@ -15,7 +15,6 @@ import PropTypes from 'prop-types';
 
 // Import Child components
 // ===========================================================================
-import DeleteConfirmation from 'common/components/delete-confirmation';
 import DashboardGrid from './grid';
 import ItemWrapper from './item';
 
@@ -24,7 +23,6 @@ export default class PayloadList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      deleting: null,
       payload: props.payload
     };
     bindAll(this, 'cellRenderer', 'updateSortState');
@@ -34,35 +32,20 @@ export default class PayloadList extends React.Component {
     this.setState({ payload });
   }
 
-  deleteConfirm(deleting = null) {
-    return () => this.setState({ deleting });
-  }
-
-  deleteColumn(id) {
-    return () => this.props.deleteColumn({ id }).then(this.deleteConfirm());
-  }
-
   updateSortState({ oldIndex, newIndex }) {
     if (oldIndex !== newIndex) {
       this.setState({
         payload: arrayMove(this.state.payload, oldIndex, newIndex)
-      }, () => this.props.sortColumns({ list: this.state.payload.map(({ id }, i) => ({ id, order: i })) }, { state: false }));
+      }, () => this.props.sortColumns({ list: this.state.payload.map((id, i) => ({ id, order: i })) }, { state: false }));
       const instance = this.SortableGrid.getWrappedInstance();
       instance.List.recomputeGridSize({ columnIndex: newIndex, rowIndex: 1 });
     }
   }
 
   cellRenderer({ columnIndex, style }) {
-    const { children, refreshResults, editColumn } = this.props;
-    const column = this.state.payload[columnIndex];
     return (
       <ItemWrapper key={columnIndex} style={style} index={columnIndex}>
-        {children({
-          payload: column,
-          deleteColumn: this.deleteConfirm({ id: column.id, name: column.name }),
-          refreshResults,
-          editColumn
-        })}
+        {this.props.children({ id: this.state.payload[columnIndex] })}
       </ItemWrapper>
     );
   }
@@ -98,14 +81,7 @@ export default class PayloadList extends React.Component {
             </ArrowKeyStepper>
           )}
         </AutoSizer>
-        {(this.state.deleting) ? (
-          <DeleteConfirmation close={this.deleteConfirm()} accept={this.deleteColumn(this.state.deleting.id)}>
-            <dl>
-              <dt>Trendolizer Column</dt>
-              <dd>{`ID: ${this.state.deleting.id} - ${this.state.deleting.name}.`}</dd>
-            </dl>
-          </DeleteConfirmation>
-        ) : null}
+
       </div>
     ) : this.props.emptyTpl;
   }
@@ -118,12 +94,9 @@ PayloadList.defaultProps = {
 
 PayloadList.propTypes = {
   width: PropTypes.number.isRequired,
-  payload: PropTypes.arrayOf(PropTypes.object).isRequired,
+  payload: PropTypes.arrayOf(PropTypes.number).isRequired,
   scrollTo: PropTypes.number,
   sortColumns: PropTypes.func.isRequired,
-  deleteColumn: PropTypes.func.isRequired,
-  refreshResults: PropTypes.func,
-  editColumn: PropTypes.func.isRequired,
   children: PropTypes.func.isRequired,
   emptyTpl: PropTypes.element.isRequired
 };

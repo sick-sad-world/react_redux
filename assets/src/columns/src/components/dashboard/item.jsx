@@ -14,6 +14,7 @@ import { defaultInterface } from '../../defaults';
 
 // Import child components
 // ===========================================================================
+import DeleteConfirmation from 'common/components/delete-confirmation';
 import ItemHeader from './header';
 import ItemSettings from './settings';
 
@@ -21,10 +22,11 @@ export default class DashboardItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      deleting: false,
       running: false,
       edit: false
     };
-    bindAll(this, 'toggleState', 'editColumn', 'hideColumn', 'getResults');
+    bindAll(this, 'toggleState', 'editColumn', 'hideColumn', 'getResults', 'deleteColumn');
   }
 
   toggleState(type) {
@@ -48,6 +50,10 @@ export default class DashboardItem extends React.Component {
     });
   }
 
+  deleteColumn() {
+    return this.props.deleteColumn({ id: this.props.payload.id });
+  }
+
   getResults(data) {
     return this.props.getResults((data) || this.props.payload.data, { entity: this.props.payload.id });
   }
@@ -67,12 +73,20 @@ export default class DashboardItem extends React.Component {
               running={this.state.running}
               editColumn={this.editColumn}
               hideColumn={this.hideColumn}
-              deleteColumn={this.props.deleteColumn}
+              deleteColumn={this.toggleState('deleting')}
             />
           ) : null }
           <div className='content'>
             { children }
           </div>
+          {(this.state.deleting) ? (
+          <DeleteConfirmation close={this.toggleState('deleting')} accept={this.deleteColumn}>
+            <dl>
+              <dt>Trendolizer Column</dt>
+              <dd>{`ID: ${this.props.payload.id} - ${this.props.payload.name}.`}</dd>
+            </dl>
+          </DeleteConfirmation>
+        ) : null}
         </section>
     );
   }
