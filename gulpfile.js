@@ -9,7 +9,7 @@ const gutil = require('gulp-util');
 // Define path variables
 // ===========================================================================
 let TIMER = 0;
-const BASE = path.join(__dirname, 'assets');
+const BASE = path.join(__dirname, argv.base || '');
 const DIR = path.join(__dirname, argv.dir || '');
 const SASS = path.join(BASE, 'scss/**/*.scss');
 const ASSETS_TO_COPY = ['index.html', 'favicon.ico', 'font/**/**.*'];

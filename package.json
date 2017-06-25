@@ -14,11 +14,11 @@
     "clean": "rimraf ./demo ./build",
     "postclean": "rimraf ./assets/*.js ./assets/*.css ./assets/*.map",
     "prestart": "rimraf ./assets/*.js ./assets/*.css ./assets/*.map",
-    "start": "cross-env NODE_ENV=development gulp serve",
+    "start": "cross-env NODE_ENV=development gulp serve --base ./assets",
     "prebundle": "rimraf ./demo",
-    "bundle": "cross-env NODE_ENV=development gulp bundle --dir ./demo",
+    "bundle": "cross-env NODE_ENV=development gulp bundle --base ./assets --dir ./demo",
     "prebuild": "rimraf ./build",
-    "build": "cross-env NODE_ENV=production gulp build --dir ./build"
+    "build": "cross-env NODE_ENV=production gulp build --base ./assets --dir ./build"
   },
   "browserify": {
     "transform": [
