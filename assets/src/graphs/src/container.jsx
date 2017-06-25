@@ -171,6 +171,7 @@ GraphsContainer.defaultProps = {
   chartOptions: {
     interpolateNulls: true,
     backgroundColor: 'transparent',
+    theme: 'material',
     explorer: {
       actions: ['dragToZoom', 'rightClickToReset'],
       maxZoomIn: 0.01
