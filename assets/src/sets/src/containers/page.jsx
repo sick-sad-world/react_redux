@@ -96,7 +96,7 @@ Sourcesets.defaultProps = {
     texts: {
       title: 'Edit form',
       description: 'Simple edit form to manipulate entity props',
-      confirmation: '{data} was changed. Save changes?'
+      confirmation: '{data} were changed. Save changes?'
     }
   }
 };

@@ -93,7 +93,7 @@ Columns.defaultProps = {
     texts: {
       title: 'Edit column',
       description: 'Select the type of items to show in this column and how to display them.',
-      confirmation: '{data} was changed. Save changes?'
+      confirmation: '{data} were changed. Save changes?'
     }
 
   },
@@ -101,7 +101,7 @@ Columns.defaultProps = {
     texts: {
       title: 'Assign feeds to column',
       description: 'Pick the sourcesets and sources this column to watch here.',
-      confirmation: '{data} was changed. Save changes?'
+      confirmation: '{data} were changed. Save changes?'
     }
   }
 };

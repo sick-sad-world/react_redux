@@ -61,7 +61,7 @@ Reports.defaultProps = {
     texts: {
       title: 'Edit report',
       description: 'Pick the columns to send. Set time to send, e-mail recipient and report name here.',
-      confirmation: '{data} was changed. Save changes?'
+      confirmation: '{data} were changed. Save changes?'
     }
   }
 };

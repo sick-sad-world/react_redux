@@ -53,7 +53,7 @@ User.defaultProps = {
   texts: {
     title: 'Profile settings',
     description: 'Tell us a bit about yourself...',
-    confirmation: '{data} was changed. Save changes?'
+    confirmation: '{data} were changed. Save changes?'
   }
 };
 
