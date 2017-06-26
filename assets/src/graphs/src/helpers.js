@@ -94,7 +94,7 @@ export function mapGraphGoogle(data, { types, opts }) {
   // Add Columns for each required Mesaurement type
   // ===========================================================================
   types.forEach((type, i) => {
-    const rate = `rate_${type}`;
+    const rate = `Rate ${type}`;
     if (!opts.nocount) {
       result.addColumn('number', type);
       if (i === 0) {
@@ -106,8 +106,10 @@ export function mapGraphGoogle(data, { types, opts }) {
     if (!opts.noaverage) result.addColumn('number', `Average ${rate}`);
     if (!opts.nomovingaverage) result.addColumn('number', `Moving average ${rate}`);
     if (!opts.nochangerate) result.addColumn('number', `Change ${rate}`);
-    movVals[rate] = [];
+    movVals[`rate_${type}`] = [];
   }, this);
+
+  console.log(types, result.toJSON());
 
   datetimes.forEach((dt) => {
     const row = [new Date(`${dt} UTC`)];
@@ -124,7 +126,6 @@ export function mapGraphGoogle(data, { types, opts }) {
       }
 
       if (!opts.norate) row.push(data[dt][rr]);
-
 
       if (!opts.noaverage) {
         if (isNaN(data[dt][rr])) {
@@ -172,7 +173,6 @@ export function mapGraphGoogle(data, { types, opts }) {
       annotation = data[dt].found;
       annotationText = `Found: ${new Date(`${dt} UTC`)}`;
     } else {
-      console.log(row);
       result.addRow(row);
     }
   }, this);

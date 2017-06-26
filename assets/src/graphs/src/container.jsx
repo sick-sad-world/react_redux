@@ -60,10 +60,10 @@ class GraphsContainer extends React.Component {
   componentWillMount() {
     this.props.getResultMeasurements({
       hash: this.props.hash,
-      type: this.props.config.join(',')
+      type: (window.google && this.props.initial) ? this.props.initial : this.props.config.join(',')
     }, {
       entity: {
-        types: this.props.config,
+        types: (window.google && this.props.initial) ? [this.props.initial] : this.props.config,
         opts: {
           limit,
           movWindow
@@ -188,7 +188,6 @@ GraphsContainer.defaultProps = {
     },
     pointSize: 3,
     legend: {
-
       position: 'right'
     }
   }
