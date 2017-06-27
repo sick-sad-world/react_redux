@@ -163,6 +163,7 @@ class DisplaySettings {
 
   getHeights(settings) {
     return settings.reduce((acc, stat) => {
+      if (!this.data[stat]) return acc;
       acc[stat] = `${this.data[stat].height}px`;
       if (!acc.table && this.data[stat].table) {
         acc.table = acc[stat];
