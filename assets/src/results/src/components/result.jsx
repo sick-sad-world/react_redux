@@ -52,19 +52,18 @@ export default class Result extends React.PureComponent {
     }, []) : null;
   }
 
-  renderContent() {
-    const { title, image, description } = this.props.payload;
-    const heights = this.props.heights;
+  renderContent(image, wide_image, description) {
+    const { payload, heights } = this.props;
 
-    if (this.inc('wide_image')) {
-      return <ResultMedia image={image} title={title} style={{ height: heights.wide_image }} />;
-    } else if (this.inc('description') || this.inc('image')) {
+    if (wide_image) {
+      return <ResultMedia image={payload.image} title={payload.title} style={{ height: heights.wide_image }} />;
+    } else if (description || image) {
       return (
         <div className='text' style={{ maxHeight: heights.description || heights.image }}>
-          {(this.inc('image')) ? (
-            <ResultMedia image={image} title={title} style={{ height: heights.image }}/>
+          {(image) ? (
+            <ResultMedia image={payload.image} title={payload.title} style={{ height: heights.image }}/>
           ) : null }
-          {(this.isValid('description')) ? <div className='content'>{description}</div> : null}
+          {(description) ? <div className='content'>{payload.description}</div> : null}
         </div>
       );
     }
@@ -99,7 +98,7 @@ export default class Result extends React.PureComponent {
               {(this.isValid('author')) ? <span className='author'>{payload.author}</span> : null}
             </small>
           ) : null}
-          {this.renderContent()}
+          {this.renderContent(this.inc('image'), this.inc('wide_image'), this.isValid('description'))}
         </Link>
         {(tableData && tableData.length) ? (
           <footer>

@@ -116,7 +116,7 @@ class ResultsContainer extends React.Component {
     }
 
     return (
-      <div key={key} style={{ ...style, padding: `${this.props.gutter}px 0` }}>{DOM}</div>
+      <div key={key} style={{ ...style, paddingBottom: `${this.props.gutter}px` }}>{DOM}</div>
     );
   }
 

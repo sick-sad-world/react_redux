@@ -1,8 +1,12 @@
-import { pickBy, intersection, transform } from 'lodash';
+import { pickBy, intersection, transform, includes } from 'lodash';
+
+const TABLE = 18;
+const CONTENT = 160;
+const DETAIL = 24;
 
 const data = {
   title: {
-    height: 72,
+    height: 64,
     disabled: true,
     default: true,
     row: 0
@@ -13,77 +17,77 @@ const data = {
     height: 0
   },
   author: {
-    height: 24,
+    height: DETAIL,
     row: 1
   },
   found: {
-    height: 24,
+    height: DETAIL,
     default: true,
     row: 1
   },
   domain: {
-    height: 24,
+    height: DETAIL,
     default: true,
     row: 1
   },
   image: {
-    height: 160,
+    height: CONTENT,
     default: true,
     row: 2
   },
   wide_image: {
-    height: 160,
+    height: CONTENT,
     parent: 'image',
     row: 2
   },
   description: {
-    height: 160,
+    height: CONTENT,
     default: true,
     row: 2
-  },
-  likes: {
-    height: 18,
-    table: true,
-    default: true,
-    graphs: true
   },
   // graphs: {
   //   height: 0,
   //   table: false,
   //   default: false
   // },
+  likes: {
+    height: TABLE,
+    table: true,
+    default: true,
+    graphs: true
+  },
   tweets: {
-    height: 18,
+    height: TABLE,
     table: true,
     graphs: true
   },
   pins: {
-    height: 18,
+    height: TABLE,
     table: true,
     graphs: true
   },
   shares: {
-    height: 18,
+    height: TABLE,
     table: true,
     graphs: true
   },
   comments: {
-    height: 18,
+    height: TABLE,
     table: true,
     graphs: true
   },
   votes_video: {
-    height: 18,
+    height: TABLE,
     table: true,
     graphs: true
   },
   views_video: {
-    height: 18,
+    height: TABLE,
     table: true,
     graphs: true
   },
   comments_video: {
-    height: 18,
+    height: TABLE,
     table: true,
     graphs: true
   }
@@ -94,7 +98,7 @@ class DisplaySettings {
     this.data = config;
     this.rows = [];
     this.gutter = 12;
-    this.aside = 26;
+    this.aside = 20;
     this.tableHeader = 0;
     Object.keys(config).forEach((item) => {
       if (config[item].table) {
@@ -149,16 +153,25 @@ class DisplaySettings {
   calculateHeight(settings) {
     let table = false;
     const value = settings.filter(stat => !!this.data[stat]);
-    return this.rows.reduce((acc, row) => {
-      if (intersection(row, value).length) {
-        acc += this.data[row[0]].height;
-        if (!table && this.data[row[0]].table) {
+    console.log('gutter', this.gutter);
+    console.log('aside', this.aside);
+    const res = this.rows.reduce((acc, row) => {
+      const inter = intersection(row, value);
+      const stat = this.data[row[0]];
+      if (inter.length) {
+        console.log(inter, stat.height);
+        acc += stat.height;
+        // acc += (includes(inter, 'wide_image') && includes(inter, 'description')) ? h * 2 : h;
+        if (stat.table && !table && stat) {
+          console.log('th', stat.height);
           acc += this.tableHeader;
           table = true;
         }
       }
       return acc;
     }, this.gutter + this.aside);
+    console.log(res);
+    return res;
   }
 
   getHeights(settings) {
