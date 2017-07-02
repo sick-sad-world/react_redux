@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { defaultInterface, width } from '../defaults';
+import { defaultInterface, width as colWidth } from '../defaults';
 import { makeContainerSelector } from '../selectors';
 
 // Import child Components
@@ -28,11 +28,11 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const { payload, emptyTpl, scrollTo, location, width, sortColumns } = this.props;
+    const { payload, emptyTpl, scrollTo, location, width } = this.props;
     return (
       <section className='mod-dashboard'>
         {(payload) ? (
-          <PayloadList width={width} payload={payload.column_ids} scrollTo={scrollTo} sortColumns={sortColumns}>
+          <PayloadList width={width} payload={payload.column_ids} scrollTo={scrollTo} sortColumns={this.props.sortColumns}>
             {({ id }) => (
               <SingleColumnContainer col_id={id} actions={['deleteColumn', 'editColumn']}>
                 {({ payload, state, deleteColumn, editColumn }) => (
@@ -41,6 +41,7 @@ class Dashboard extends React.Component {
                       id={payload.id}
                       sort={payload.data.sort}
                       data={payload.data}
+                      width={width - 10}
                       location={location.pathname}
                       displaySettings={payload.display_settings}
                     />
@@ -59,7 +60,7 @@ class Dashboard extends React.Component {
 }
 
 Dashboard.defaultProps = {
-  width,
+  width: colWidth,
   emptyTpl: <div className='state-empty'>Oups... Dashboard not found</div>
 };
 

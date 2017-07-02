@@ -69,8 +69,12 @@ export default function Placeholder({ displaySettings, tableStats, heights }) {
   );
 }
 
+Placeholder.defaultProps = {
+  heights: {}
+};
+
 Placeholder.propTypes = {
-  heights: PropTypes.objectOf(PropTypes.string).isRequired,
+  heights: PropTypes.objectOf(PropTypes.string),
   displaySettings: PropTypes.arrayOf(PropTypes.string).isRequired,
   tableStats: PropTypes.arrayOf(PropTypes.string).isRequired
 };

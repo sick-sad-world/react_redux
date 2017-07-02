@@ -153,24 +153,19 @@ class DisplaySettings {
   calculateHeight(settings) {
     let table = false;
     const value = settings.filter(stat => !!this.data[stat]);
-    console.log('gutter', this.gutter);
-    console.log('aside', this.aside);
     const res = this.rows.reduce((acc, row) => {
       const inter = intersection(row, value);
       const stat = this.data[row[0]];
       if (inter.length) {
-        console.log(inter, stat.height);
         acc += stat.height;
         // acc += (includes(inter, 'wide_image') && includes(inter, 'description')) ? h * 2 : h;
         if (stat.table && !table && stat) {
-          console.log('th', stat.height);
           acc += this.tableHeader;
           table = true;
         }
       }
       return acc;
     }, this.gutter + this.aside);
-    console.log(res);
     return res;
   }
 

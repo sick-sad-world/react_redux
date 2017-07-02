@@ -29,7 +29,6 @@ import Icon from 'common/components/icon';
 // description
 // ===========================================================================
 class ResultsContainer extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -96,27 +95,28 @@ class ResultsContainer extends React.Component {
 
   rowRenderer({ index, isScrolling, isVisible, key, style }) {
     const result = this.props.payload[index];
-    let DOM = null;
-    if (this.props.state === 3 || !result) {
-      DOM = <Placeholder displaySettings={this.props.displaySettings} tableStats={this.props.tableStats} heights={this.heightConfig} />;
-    } else {
-      DOM = (
-        <Result
-          payload={result}
-          sort={this.props.data.sort}
-          location={`${this.props.location}/${this.props.id}`}
-          displaySettings={this.props.displaySettings}
-          tableStats={this.props.tableStats}
-          heights={this.heightConfig}
-          refreshResult={this.props.refreshResult({ entity: this.props.id, state: false })}
-          favoriteResult={this.props.favoriteResult({ entity: this.props.id, state: false })}
-          ignoreResult={this.props.ignoreResult({ entity: this.props.id, state: false })}
-        />
-      );
-    }
-
     return (
-      <div key={key} style={{ ...style, paddingBottom: `${this.props.gutter}px` }}>{DOM}</div>
+      <div key={key} style={{ ...style, paddingBottom: `${this.props.gutter}px` }}>
+        {(this.props.state === 3 || !result) ? (
+          <Placeholder
+            displaySettings={this.props.displaySettings}
+            tableStats={this.props.tableStats}
+            heights={this.heightConfig}
+          />
+        ) : (
+          <Result
+            payload={result}
+            sort={this.props.data.sort}
+            location={`${this.props.location}/${this.props.id}`}
+            displaySettings={this.props.displaySettings}
+            tableStats={this.props.tableStats}
+            heights={this.heightConfig}
+            refreshResult={this.props.refreshResult({ entity: this.props.id, state: false })}
+            favoriteResult={this.props.favoriteResult({ entity: this.props.id, state: false })}
+            ignoreResult={this.props.ignoreResult({ entity: this.props.id, state: false })}
+          />
+        )}
+      </div>
     );
   }
 
@@ -149,11 +149,11 @@ class ResultsContainer extends React.Component {
   }
 
   render() {
-    const { state, payload, data } = this.props;
+    const { state, payload, data, width } = this.props;
     const rowCount = this.countRows();
     return (
-      <AutoSizer>
-        {({ height, width }) => (
+      <AutoSizer disableWidth>
+        {({ height }) => (
           <List
             length={payload.length}
             state={state}
@@ -199,6 +199,7 @@ ResultsContainer.propTypes = {
   location: PropTypes.string.isRequired,
   state: stateNum.isRequired,
   error: PropTypes.string,
+  width: PropTypes.number.isRequired,
   stateEmpty: PropTypes.string.isRequired,
   tableStats: PropTypes.arrayOf(PropTypes.string).isRequired,
   displaySettings: PropTypes.arrayOf(PropTypes.string).isRequired,

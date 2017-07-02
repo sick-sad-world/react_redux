@@ -56,12 +56,20 @@ export default class Result extends React.PureComponent {
     const { payload, heights } = this.props;
 
     if (wide_image) {
-      return <ResultMedia image={payload.image} title={payload.title} style={{ height: heights.wide_image }} />;
+      return <ResultMedia
+        image={payload.image}
+        title={payload.title}
+        style={{ height: heights.wide_image }}
+      />;
     } else if (description || image) {
       return (
         <div className='text' style={{ maxHeight: heights.description || heights.image }}>
           {(image) ? (
-            <ResultMedia image={payload.image} title={payload.title} style={{ height: heights.image }}/>
+            <ResultMedia
+              image={payload.image}
+              title={payload.title}
+              style={{ height: heights.image }}
+            />
           ) : null }
           {(description) ? <div className='content'>{payload.description}</div> : null}
         </div>
@@ -116,6 +124,8 @@ Result.defaultProps = {
   payload: {
     ...defaultDashboardResult
   },
+  measure: null,
+  heights: {},
   proptocolRegExp,
   isPlaceholder: true
 };
@@ -125,10 +135,11 @@ Result.propTypes = {
   sort: PropTypes.string.isRequired,
   displaySettings: PropTypes.arrayOf(PropTypes.string).isRequired,
   tableStats: PropTypes.arrayOf(PropTypes.string).isRequired,
-  heights: PropTypes.objectOf(PropTypes.string).isRequired,
+  heights: PropTypes.objectOf(PropTypes.string),
   refreshResult: PropTypes.func,
   favoriteResult: PropTypes.func,
   ignoreResult: PropTypes.func,
+  measure: PropTypes.func,
   location: PropTypes.string.isRequired,
   proptocolRegExp: PropTypes.instanceOf(RegExp).isRequired,
   payload: PropTypes.shape(defaultInterface)

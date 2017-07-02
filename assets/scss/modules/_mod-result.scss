@@ -55,6 +55,9 @@
     margin-bottom: baseUnit(.5);
     border-bottom: $bd;
   }
+  .result-image {
+    height: 160px;
+  }
   .text {
     display: flex;
     overflow: hidden;
