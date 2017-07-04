@@ -201,9 +201,10 @@ class DisplaySettings {
 
   getHeights(settings) {
     return settings.reduce((acc, stat) => {
-      if (!this.data[stat]) return acc;
-      acc[stat] = `${this.data[stat].height}px`;
-      if (!acc.table && this.data[stat].table) {
+      const item = this.data[stat];
+      if (!item) return acc;
+      acc[stat] = `${((item.max)) ? item.line * item.max : item.height}px`;
+      if (!acc.table && item.table) {
         acc.table = acc[stat];
       }
       return acc;
