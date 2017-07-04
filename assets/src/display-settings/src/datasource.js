@@ -47,9 +47,8 @@ const data = {
     max: 5,
     line: 18,
     length: LENGTH,
-    height: CONTENT,
     default: true,
-    row: 2
+    row: 3
   },
   // graphs: {
   //   height: 0,
@@ -109,7 +108,7 @@ class DisplaySettings {
     Object.keys(config).forEach((item) => {
       if (config[item].table) {
         this.rows.push([item]);
-        if (!this.tableHeader) this.tableHeader = config[item].height + 8;
+        if (!this.tableHeader) this.tableHeader = config[item].height + 8 + 1;
       } else if (this.rows[config[item].row] instanceof Array) {
         this.rows[config[item].row].push(item);
       } else {
@@ -178,16 +177,15 @@ class DisplaySettings {
   }
 
   calculateHeight(settings) {
-    let table = false;
+    let table = 0;
     const value = settings.filter(stat => !!this.data[stat]);
     const res = this.rows.reduce((acc, row) => {
       const inter = intersection(row, value);
       const stat = this.data[row[0]];
       if (inter.length) {
         acc[row[0]] = (!stat.height) ? 0 : stat.height;
-        if (stat.table && !table && stat) {
-          acc.tableHeader = this.tableHeader;
-          table = true;
+        if (stat.table && stat) {
+          table += 1;
         }
       }
       return acc;
@@ -195,6 +193,9 @@ class DisplaySettings {
       gutter: (this.gutter * 2.5),
       aside: this.aside
     });
+    if (table > 0) {
+      res.tableHeader = this.tableHeader + table;
+    }
     return this.adjustHeight(res);
   }
 

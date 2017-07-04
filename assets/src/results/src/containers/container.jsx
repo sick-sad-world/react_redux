@@ -38,20 +38,10 @@ class ResultsContainer extends React.Component {
     this.interval = null;
     this.rowHeight = DisplaySettings.calculateHeight(props.displaySettings);
     this.heightConfig = DisplaySettings.getHeights(props.displaySettings);
-    this.gallery = this.isGallery(props.displaySettings);
-    this.text = this.isText(props.displaySettings);
-    bindAll(this, 'rowRenderer', 'onRowsRendered', 'autoreloadInitialize', 'noRowsRenderer');
+    bindAll(this, 'rowRenderer', 'onRowsRendered', 'autoreloadInitialize', 'noRowsRenderer', 'countRowHeight');
     if (props.data.autoreload > 0) {
       this.interval = this.autoreloadInitialize(props.data);
     }
-  }
-
-  isGallery(settings) {
-    return includes(settings, 'wide_image');
-  }
-
-  isText(settings) {
-    return includes(settings, 'description') && !includes(settings, 'image');
   }
 
   countRows() {
@@ -78,8 +68,6 @@ class ResultsContainer extends React.Component {
   componentWillReceiveProps(newProps) {
     this.heightConfig = DisplaySettings.getHeights(newProps.displaySettings);
     this.rowHeight = DisplaySettings.calculateHeight(newProps.displaySettings);
-    this.gallery = this.isGallery(newProps.displaySettings);
-    this.text = this.isText(newProps.displaySettings);
     if (newProps.state === 2) {
       this.List.recomputeRowHeights();
     }
@@ -151,6 +139,17 @@ class ResultsContainer extends React.Component {
     };
   }
 
+  countRowHeight({ index }) {
+    const ds = this.props.displaySettings;
+    const result = this.props.payload[index];
+    const rowHeight = this.rowHeight;
+    const isSolutionCount = includes(ds, 'description') && (includes(ds, 'wide_image') || !includes(ds, 'image'));
+    return rowHeight({
+      title: (result) ? result.title.length : !result,
+      description: (isSolutionCount && result) ? result.description.length : !result
+    });
+  }
+
   render() {
     const { state, payload, data, width } = this.props;
     const rowCount = this.countRows();
@@ -165,16 +164,7 @@ class ResultsContainer extends React.Component {
             rowRenderer={this.rowRenderer}
             height={height}
             rowCount={rowCount}
-            rowHeight={({ index }) => {
-              const { displaySettings } = this.props;
-              const result = this.props.payload[index];
-              const rowHeight = this.rowHeight;
-              const isSolutionCount = includes(displaySettings, 'description') && includes(displaySettings, 'wide_image');
-              return rowHeight({
-                title: (result) ? result.title.length : !result,
-                description: (isSolutionCount && result) ? result.description.length : !result
-              });
-            }}
+            rowHeight={this.countRowHeight}
             overscanRowCount={2}
             width={width}
             noRowsRenderer={this.noRowsRenderer}

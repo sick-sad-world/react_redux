@@ -25,7 +25,7 @@ import ResultMedia from './result/image';
 export default class Result extends React.PureComponent {
   constructor(props) {
     super(props);
-    bindAll(this, 'getTableData', 'inc', 'isValid', 'renderContent');
+    bindAll(this, 'getTableData', 'inc', 'isValid');
   }
 
   inc(stat = '') {
@@ -52,37 +52,12 @@ export default class Result extends React.PureComponent {
     }, []) : null;
   }
 
-  renderContent(image, wide_image, description) {
-    const { payload, heights, emptyText } = this.props;
-
-    if (wide_image) {
-      return <ResultMedia
-        image={payload.image}
-        title={payload.title}
-        style={{ height: heights.wide_image }}
-      />;
-    } else if (description || image) {
-      return (
-        <div className='text' style={{ maxHeight: heights.description || heights.image }}>
-          {(image) ? (
-            <ResultMedia
-              image={payload.image}
-              title={payload.title}
-              style={{ height: heights.image }}
-            />
-          ) : null }
-          {<div className='content'>{payload.description || emptyText}</div>}
-        </div>
-      );
-    }
-
-    return null;
-  }
-
   render() {
     const { location, sort, payload, heights } = this.props;
     const browseUrl = `${location}?hash=${payload.hash}`;
     const tableData = this.getTableData();
+    const isImage = this.inc('image');
+    const isDescr = this.isValid('description');
     return (
       <article className='mod-result'>
         <aside style={{ height: heights.aside }}>
@@ -106,7 +81,19 @@ export default class Result extends React.PureComponent {
               {(this.isValid('author')) ? <span className='author'>{payload.author}</span> : null}
             </small>
           ) : null}
-          {this.renderContent(this.inc('image'), this.inc('wide_image'), this.isValid('description'))}
+          {(isImage || isDescr) ? (
+            <div className='text'>
+              {(this.inc('image')) ? (
+                <ResultMedia
+                  wide={this.inc('wide_image')}
+                  image={payload.image}
+                  title={payload.title}
+                  style={{ height: heights.image }}
+                />
+              ) : null }
+              {(isDescr) ? <div className='content'>{payload.description}</div> : null}
+            </div>
+          ) : null}
         </Link>
         {(tableData && tableData.length) ? (
           <footer>

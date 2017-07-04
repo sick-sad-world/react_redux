@@ -53,19 +53,24 @@
     //margin-bottom: baseUnit(.5);
     border-bottom: $bd;
   }
-  .result-image {
-    height: 160px;
-  }
   .text {
     display: flex;
+    flex-wrap: wrap;
     overflow: hidden;
     align-items: stretch;
+    .content {
+      flex: 1 1 60%;
+      word-break: break-all;
+    }
     .result-image {
       flex: 0 0 40%;
-    }
-    .content {
-      margin-left: baseUnit(.5);
-      flex: 1 1 60%;
+      &.is-wide {
+        flex: 0 0 100%;
+      }
+      &:not(.is-wide)+.content {
+        flex-grow: 0;
+        padding-left: baseUnit(.5);
+      }
     }
   }
   &.is-placeholder {
