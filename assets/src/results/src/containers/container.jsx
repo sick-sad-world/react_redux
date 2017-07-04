@@ -80,6 +80,9 @@ class ResultsContainer extends React.Component {
     this.rowHeight = DisplaySettings.calculateHeight(newProps.displaySettings);
     this.gallery = this.isGallery(newProps.displaySettings);
     this.text = this.isText(newProps.displaySettings);
+    if (newProps.state === 2) {
+      this.List.recomputeRowHeights();
+    }
     if (newProps.data.autoreload > 0 && !this.interval) {
       this.interval = this.autoreloadInitialize(newProps.data);
     } else if (newProps.data.autoreload === 0 && this.interval) {
@@ -96,7 +99,7 @@ class ResultsContainer extends React.Component {
   rowRenderer({ index, isScrolling, isVisible, key, style }) {
     const result = this.props.payload[index];
     return (
-      <div key={key} style={{ ...style, paddingBottom: `${this.props.gutter}px` }}>
+      <div key={key} style={{ ...style, padding: `${this.props.gutter * 1}px 4px ${this.props.gutter * 1.5}px` }}>
         {(this.props.state === 3 || !result) ? (
           <Placeholder
             displaySettings={this.props.displaySettings}
@@ -155,6 +158,7 @@ class ResultsContainer extends React.Component {
       <AutoSizer disableWidth>
         {({ height }) => (
           <List
+            ref={(instance) => { this.List = instance; }}
             length={payload.length}
             state={state}
             sort={data.sort}
@@ -162,12 +166,14 @@ class ResultsContainer extends React.Component {
             height={height}
             rowCount={rowCount}
             rowHeight={({ index }) => {
+              const { displaySettings } = this.props;
               const result = this.props.payload[index];
-              let rowHeight = this.rowHeight;
-              if (this.props.state === 2 && result && this.text && !result.description.length) {
-                rowHeight -= this.props.displaySettingsMap.description.height;
-              }
-              return rowHeight;
+              const rowHeight = this.rowHeight;
+              const isSolutionCount = includes(displaySettings, 'description') && includes(displaySettings, 'wide_image');
+              return rowHeight({
+                title: (result) ? result.title.length : 200
+                // description: (isSolutionCount && result) ? result.description.length : (result) ? 300 : null
+              });
             }}
             overscanRowCount={2}
             width={width}

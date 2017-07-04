@@ -1,8 +1,6 @@
 /* Result - main item on main dashboard result
 ========================================================================== */
 .mod-result {
-  padding: 0 baseUnit(0.5);
-  margin-top: baseUnit();
   line-height: baseUnit(2.25);
   font-size: baseUnit(2);
   $bar: baseUnit(.5);
@@ -52,7 +50,7 @@
     line-height: 1.125;
     overflow: hidden;
     color: darken($c-accent, 10%);
-    margin-bottom: baseUnit(.5);
+    //margin-bottom: baseUnit(.5);
     border-bottom: $bd;
   }
   .result-image {

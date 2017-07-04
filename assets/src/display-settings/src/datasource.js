@@ -1,4 +1,4 @@
-import { pickBy, intersection, transform, includes } from 'lodash';
+import { pickBy, intersection, transform, forOwn } from 'lodash';
 
 const TABLE = 18;
 const CONTENT = 160;
@@ -6,7 +6,9 @@ const DETAIL = 24;
 
 const data = {
   title: {
-    height: 64,
+    max: 3,
+    line: 21,
+    length: 52,
     disabled: true,
     default: true,
     row: 0
@@ -97,8 +99,8 @@ class DisplaySettings {
   constructor(config) {
     this.data = config;
     this.rows = [];
-    this.gutter = 12;
-    this.aside = 20;
+    this.gutter = 8;
+    this.aside = 26;
     this.tableHeader = 0;
     Object.keys(config).forEach((item) => {
       if (config[item].table) {
@@ -150,6 +152,21 @@ class DisplaySettings {
     return this.getSelection('table', array);
   }
 
+  adjustHeight(res) {
+    return (props) => {
+      forOwn(props, (v, k) => {
+        if (!v || res[k] === undefined) return;
+        const stat = this.data[k];
+        const size = Math.ceil(v / stat.length);
+        res[k] = size >= stat.max ? stat.line * stat.max : stat.line * size;
+      });
+      return Object.values(res).reduce((acc, v) => {
+        acc += v;
+        return acc;
+      }, 0);
+    };
+  }
+
   calculateHeight(settings) {
     let table = false;
     const value = settings.filter(stat => !!this.data[stat]);
@@ -157,16 +174,18 @@ class DisplaySettings {
       const inter = intersection(row, value);
       const stat = this.data[row[0]];
       if (inter.length) {
-        acc += stat.height;
-        // acc += (includes(inter, 'wide_image') && includes(inter, 'description')) ? h * 2 : h;
+        acc[row[0]] = (!stat.height) ? 0 : stat.height;
         if (stat.table && !table && stat) {
-          acc += this.tableHeader;
+          acc.tableHeader = this.tableHeader;
           table = true;
         }
       }
       return acc;
-    }, this.gutter + this.aside);
-    return res;
+    }, {
+      gutter: (this.gutter * 2.5),
+      aside: this.aside
+    });
+    return this.adjustHeight(res);
   }
 
   getHeights(settings) {
@@ -178,7 +197,7 @@ class DisplaySettings {
       }
       return acc;
     }, {
-      aside: '26px'
+      aside: `${this.aside}px`
     });
   }
 }
