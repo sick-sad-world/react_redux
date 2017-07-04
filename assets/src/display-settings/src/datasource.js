@@ -1,14 +1,15 @@
 import { pickBy, intersection, transform, forOwn } from 'lodash';
 
 const TABLE = 18;
-const CONTENT = 160;
-const DETAIL = 24;
+const CONTENT = 125;
+const DETAIL = 20;
+const LENGTH = 52;
 
 const data = {
   title: {
     max: 3,
     line: 21,
-    length: 52,
+    length: LENGTH,
     disabled: true,
     default: true,
     row: 0
@@ -43,6 +44,9 @@ const data = {
     row: 2
   },
   description: {
+    max: 5,
+    line: 18,
+    length: LENGTH,
     height: CONTENT,
     default: true,
     row: 2

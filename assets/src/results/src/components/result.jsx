@@ -53,7 +53,7 @@ export default class Result extends React.PureComponent {
   }
 
   renderContent(image, wide_image, description) {
-    const { payload, heights } = this.props;
+    const { payload, heights, emptyText } = this.props;
 
     if (wide_image) {
       return <ResultMedia
@@ -71,7 +71,7 @@ export default class Result extends React.PureComponent {
               style={{ height: heights.image }}
             />
           ) : null }
-          {(description) ? <div className='content'>{payload.description}</div> : null}
+          {<div className='content'>{payload.description || emptyText}</div>}
         </div>
       );
     }
@@ -121,6 +121,7 @@ export default class Result extends React.PureComponent {
 Result.defaultProps = {
   sort: '',
   location: '',
+  emptyText: 'No description found',
   payload: {
     ...defaultDashboardResult
   },
@@ -133,6 +134,7 @@ Result.defaultProps = {
 Result.propTypes = {
   isPlaceholder: PropTypes.bool.isRequired,
   sort: PropTypes.string.isRequired,
+  emptyText: PropTypes.string.isRequired,
   displaySettings: PropTypes.arrayOf(PropTypes.string).isRequired,
   tableStats: PropTypes.arrayOf(PropTypes.string).isRequired,
   heights: PropTypes.objectOf(PropTypes.string),
