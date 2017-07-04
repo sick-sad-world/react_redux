@@ -155,10 +155,16 @@ class DisplaySettings {
   adjustHeight(res) {
     return (props) => {
       forOwn(props, (v, k) => {
-        if (!v || res[k] === undefined) return;
+        if (v === false || res[k] === undefined) return;
+
         const stat = this.data[k];
-        const size = Math.ceil(v / stat.length);
-        res[k] = size >= stat.max ? stat.line * stat.max : stat.line * size;
+
+        if (typeof v === 'number') {
+          const size = Math.ceil(v / stat.length);
+          res[k] = size >= stat.max ? stat.line * stat.max : stat.line * size;
+        } else if (v === true) {
+          res[k] = stat.line * stat.max;
+        }
       });
       return Object.values(res).reduce((acc, v) => {
         acc += v;

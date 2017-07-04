@@ -133,10 +133,10 @@ class ResultsContainer extends React.Component {
       );
     }
     return (
-        <div className='state-empty'>
-          <Icon icon='warning' viewBox='0 0 24 24' />
-          {this.props.stateEmpty}
-        </div>
+      <div className='state-empty'>
+        <Icon icon='warning' viewBox='0 0 24 24' />
+        {this.props.stateEmpty}
+      </div>
     );
   }
 
@@ -171,8 +171,8 @@ class ResultsContainer extends React.Component {
               const rowHeight = this.rowHeight;
               const isSolutionCount = includes(displaySettings, 'description') && includes(displaySettings, 'wide_image');
               return rowHeight({
-                title: (result) ? result.title.length : 200
-                // description: (isSolutionCount && result) ? result.description.length : (result) ? 300 : null
+                title: (result) ? result.title.length : !result,
+                description: (isSolutionCount && result) ? result.description.length : !result
               });
             }}
             overscanRowCount={2}
