@@ -64,8 +64,10 @@
     }
     .result-image {
       flex: 0 0 40%;
+      max-width: 40%;
       &.is-wide {
         flex: 0 0 100%;
+        max-width: 100%;
       }
       &:not(.is-wide)+.content {
         flex-grow: 0;
