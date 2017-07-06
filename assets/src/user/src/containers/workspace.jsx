@@ -28,11 +28,9 @@ class Workspace extends React.Component {
   // ===========================================================================
   constructor(props) {
     super(props);
-
-    // Set initial state
-    // ===========================================================================
+    const sidebarState = window.localStorage.getItem('trzr-sidebar') === `${props.user.id}-true`;
     this.state = {
-      sidebar: true
+      sidebar: sidebarState
     };
 
     // Bind handlers to our component
@@ -51,7 +49,6 @@ class Workspace extends React.Component {
   // // Redirect to auth if user is unauthentificated
   // // ===========================================================================
   componentWillMount() {
-    console.log('mount');
     this.redirectHandler(this.props);
   }
 
@@ -64,7 +61,9 @@ class Workspace extends React.Component {
   // Handler for toggling sidebar state
   // ===========================================================================
   sidebarHandler() {
-    this.setState({ sidebar: !this.state.sidebar });
+    this.setState({ sidebar: !this.state.sidebar }, () => {
+      window.localStorage.setItem('trzr-sidebar', `${this.props.user.id}-${this.state.sidebar}`);
+    });
   }
 
   // Handler for logout operation
