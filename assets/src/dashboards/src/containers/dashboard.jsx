@@ -13,6 +13,7 @@ import { makeContainerSelector } from '../selectors';
 
 // Import child Components
 // ===========================================================================
+import DisplaySettings from 'src/display-settings';
 import { SingleColumnContainer, DashboardItem, sortColumns } from 'src/columns';
 import { ResultsContainer, FullResult, fetchResults } from 'src/results';
 import PayloadList from '../components/list';
@@ -21,6 +22,7 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     bindAll(this, 'closeModal');
+    DisplaySettings.setHeightTesterWidth(props.width);
   }
 
   closeModal() {

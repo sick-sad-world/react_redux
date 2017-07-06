@@ -1,102 +1,6 @@
 import { pickBy, intersection, transform, forOwn } from 'lodash';
+import data from './config';
 
-const TABLE = 18;
-const CONTENT = 125;
-const DETAIL = 20;
-const LENGTH = 52;
-
-const data = {
-  title: {
-    max: 3,
-    line: 21,
-    length: LENGTH,
-    disabled: true,
-    default: true,
-    row: 0
-  },
-  url: {
-    disabled: true,
-    default: true,
-    height: 0
-  },
-  author: {
-    height: DETAIL,
-    row: 1
-  },
-  found: {
-    height: DETAIL,
-    default: true,
-    row: 1
-  },
-  domain: {
-    height: DETAIL,
-    default: true,
-    row: 1
-  },
-  image: {
-    height: CONTENT,
-    default: true,
-    row: 2
-  },
-  wide_image: {
-    height: CONTENT,
-    parent: 'image',
-    row: 2
-  },
-  description: {
-    max: 5,
-    line: 18,
-    length: LENGTH,
-    default: true,
-    row: 3
-  },
-  // graphs: {
-  //   height: 0,
-  //   table: false,
-  //   default: false
-  // },
-  likes: {
-    height: TABLE,
-    table: true,
-    default: true,
-    graphs: true
-  },
-  tweets: {
-    height: TABLE,
-    table: true,
-    graphs: true
-  },
-  pins: {
-    height: TABLE,
-    table: true,
-    graphs: true
-  },
-  shares: {
-    height: TABLE,
-    table: true,
-    graphs: true
-  },
-  comments: {
-    height: TABLE,
-    table: true,
-    graphs: true
-  },
-  votes_video: {
-    height: TABLE,
-    table: true,
-    graphs: true
-  },
-  views_video: {
-    height: TABLE,
-    table: true,
-    graphs: true
-  },
-  comments_video: {
-    height: TABLE,
-    table: true,
-    graphs: true
-  }
-};
 
 class DisplaySettings {
   constructor(config) {
@@ -105,6 +9,12 @@ class DisplaySettings {
     this.gutter = 8;
     this.aside = 26;
     this.tableHeader = 0;
+
+    this.heightTester = document.createElement('div');
+    this.heightTester.classList.add('height-tester');
+    this.heightTester.style.position = 'absolute';
+    document.body.appendChild(this.heightTester);
+
     Object.keys(config).forEach((item) => {
       if (config[item].table) {
         this.rows.push([item]);
@@ -155,6 +65,17 @@ class DisplaySettings {
     return this.getSelection('table', array);
   }
 
+  setHeightTesterWidth(width = 0) {
+    this.heightTester.style.width = `${width}px`;
+  }
+
+  useHeightTester(text) {
+    this.heightTester.innerHTML = text;
+    const height = this.heightTester.clientHeight;
+    this.heightTester.innerHTML = '';
+    return height;
+  }
+
   adjustHeight(res) {
     return (props) => {
       forOwn(props, (v, k) => {
@@ -162,11 +83,11 @@ class DisplaySettings {
 
         const stat = this.data[k];
 
-        if (typeof v === 'number') {
-          const size = Math.ceil(v / stat.length);
-          res[k] = size >= stat.max ? stat.line * stat.max : stat.line * size;
+        if (typeof v === 'string') {
+          const size = this.useHeightTester(v);
+          res[k] = size >= stat.max ? stat.max : size;
         } else if (v === true) {
-          res[k] = stat.line * stat.max;
+          res[k] = stat.max;
         }
       });
       return Object.values(res).reduce((acc, v) => {

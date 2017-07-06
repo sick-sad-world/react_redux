@@ -38,6 +38,7 @@ class ResultsContainer extends React.Component {
     this.interval = null;
     this.rowHeight = DisplaySettings.calculateHeight(props.displaySettings);
     this.heightConfig = DisplaySettings.getHeights(props.displaySettings);
+
     bindAll(this, 'rowRenderer', 'onRowsRendered', 'autoreloadInitialize', 'noRowsRenderer', 'countRowHeight');
     if (props.data.autoreload > 0) {
       this.interval = this.autoreloadInitialize(props.data);
@@ -145,8 +146,8 @@ class ResultsContainer extends React.Component {
     const rowHeight = this.rowHeight;
     const isSolutionCount = includes(ds, 'description') && (includes(ds, 'wide_image') || !includes(ds, 'image'));
     return rowHeight({
-      title: (result) ? result.title.length : !result,
-      description: (isSolutionCount && result) ? result.description.length : !result
+      title: (result) ? result.title : !result,
+      description: (isSolutionCount && result) ? result.description : !result
     });
   }
 
