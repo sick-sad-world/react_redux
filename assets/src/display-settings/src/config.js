@@ -43,11 +43,11 @@ export default {
     default: true,
     row: 3
   },
-  // graphs: {
-  //   height: 0,
-  //   table: false,
-  //   default: false
-  // },
+  graphs: {
+    height: 120,
+    default: false,
+    row: 4
+  },
   likes: {
     height: TABLE,
     table: true,

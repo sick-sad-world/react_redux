@@ -14,6 +14,17 @@ export default (state = { ...defaultGraphs }, action) => {
         state: 2,
         payload: action.payload
       };
+    case types.UPDATE_CACHE:
+      return {
+        ...state,
+        cache: {
+          ...state.cache,
+          [action.entity.id]: {
+            timestamp: action.entity.timestamp,
+            data: action.payload
+          }
+        }
+      };
     case types.STATE:
       return {
         ...state,

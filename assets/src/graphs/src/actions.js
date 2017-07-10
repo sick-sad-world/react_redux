@@ -9,6 +9,13 @@ export const getResultMeasurements = createAction({
   pendingMessage: 'Fetching result data to build graphs'
 });
 
+export const getBriefMeasurements = createAction({
+  type: types.UPDATE_CACHE,
+  state_type: types.STATE,
+  url: 'graphdata',
+  pendingMessage: 'Fetching result data to build graphs'
+});
+
 export const fetchGoogleGraphs = () => fetchScript('https://www.gstatic.com/charts/loader.js')
   .then(() => {
     window.google && window.google.charts.load('current', { packages: ['corechart', 'line'] });

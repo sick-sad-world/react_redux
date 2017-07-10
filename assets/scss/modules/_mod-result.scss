@@ -75,6 +75,13 @@
       }
     }
   }
+  .brief-graph {
+    svg {
+      width: auto;
+      height: auto;
+      pointer-events: all;
+    }
+  }
   &.is-placeholder {
     small {
       margin: baseUnit() 0 0 0;

@@ -1,11 +1,14 @@
 export const defaultGraphs = {
   state: 2,
-  payload: null
+  payload: null,
+  cache: {}
 };
 
 export const movWindow = 24;
 
 export const limit = 50;
+
+export const cacheDur = 900; // seconds
 
 export const colours = {
   found: ['#4F4E53'],

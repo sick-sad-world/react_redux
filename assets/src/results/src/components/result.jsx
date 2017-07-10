@@ -10,6 +10,7 @@ import React from 'react';
 // ===========================================================================
 import PropTypes from 'prop-types';
 import { defaultInterface, defaultDashboardResult, proptocolRegExp } from '../defaults';
+import { BriefGraphs } from 'src/graphs';
 
 // Import child components
 // ===========================================================================
@@ -100,6 +101,11 @@ export default class Result extends React.PureComponent {
             <ResultTable to={browseUrl} style={{ height: heights.table }} data={tableData} />
           </footer>
         ) : null }
+        {this.inc('graphs') ? (
+          <div className='graph-container' style={{ height: heights.graphs }}>
+            <BriefGraphs id={payload.id} hash={payload.hash} type={'likes'} />
+          </div>
+        ) : null}
       </article>
     );
   }

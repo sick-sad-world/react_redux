@@ -30,6 +30,7 @@ class EditReport extends React.Component {
   }
 
   static mapDataToState(data, props) {
+    console.log(moment);
     return {
       changed: [],
       id: data.id,

@@ -109,8 +109,6 @@ export function mapGraphGoogle(data, { types, opts }) {
     movVals[`rate_${type}`] = [];
   }, this);
 
-  console.log(types, result.toJSON());
-
   datetimes.forEach((dt) => {
     const row = [new Date(`${dt} UTC`)];
 

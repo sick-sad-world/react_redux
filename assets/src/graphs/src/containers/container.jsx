@@ -16,15 +16,15 @@ import { stateNum } from 'common/typecheck';
 // Import connection
 // ===========================================================================
 import { connect } from 'react-redux';
-import { makeContainerSelector } from './selectors';
-import * as actions from './actions';
-import { variable, colours, movWindow, limit } from './defaults';
+import { makeContainerSelector } from '../selectors';
+import * as actions from '../actions';
+import { variable, colours, movWindow, limit } from '../defaults';
 
 // Import child Components
 // ===========================================================================
-import GraphError from './components/error';
-import GraphLoading from './components/loading';
-import CustomToolTip from './components/tooltip';
+import GraphError from '../components/error';
+import GraphLoading from '../components/loading';
+import CustomToolTip from '../components/tooltip';
 import { LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Line } from 'recharts';
 
 
