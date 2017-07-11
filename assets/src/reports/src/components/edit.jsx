@@ -130,7 +130,13 @@ class EditReport extends React.Component {
           <div className='row'>
             <h3 className='form-subtitle'>Email assigment:</h3>
             <p>Currently this report going to: <b>{formValues.recipient}</b></p>
-            <EmailBcc active={formValues.recipient} disabled={running} onClick={updateState('recipient')} onChange={this.stateUpdater('recipient')} />
+            <EmailBcc
+              active={formValues.recipient}
+              disabled={running}
+              onClick={updateState('recipient')}
+              onChange={this.stateUpdater('recipient')}
+              description='All reports will be sent to the main email address  [{email}] associated with this account.  Use the form above to add an extra recipient.'
+            />
           </div>
         </div>
       </form>

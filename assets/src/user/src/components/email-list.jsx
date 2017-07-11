@@ -105,7 +105,7 @@ EmailList.defaultProps = {
   description: 'if E-mail list is empty. Use form below to create one. If not - your profile e-mail [{email}] will be used as default.',
   emailValidator: emailRegExp,
   slackValidator: webHookRegExp,
-  emptyTpl: <li className='is-default'>No email bcc created yet. All alerts/reports will be sended to main email.</li>
+  emptyTpl: <li className='is-default'>No extra recipients added to this account yet.</li>
 };
 
 // Prop type check

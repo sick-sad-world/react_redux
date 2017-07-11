@@ -40,6 +40,7 @@ class Emails extends React.Component {
         active={this.props.active}
         onClick={this.props.onClick}
         disabled={this.props.disabled || this.props.state > 2}
+        description={this.props.description}
         data={this.props.data}
         onError={this.props.onError}
         onChange={this.updateEmailList}
@@ -56,6 +57,7 @@ Emails.propTypes = {
   onClick: PropTypes.func,
   disabled: PropTypes.bool.isRequired,
   state: stateNum.isRequired,
+  description: PropTypes.string,
   data: PropTypes.arrayOf(PropTypes.string).isRequired,
   onError: PropTypes.func,
   onChange: PropTypes.func,
