@@ -11,10 +11,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { defaultInterface, defaultDashboardResult, proptocolRegExp } from '../defaults';
 import { BriefGraphs } from 'src/graphs';
+import { decomposeColumnSort } from 'src/columns';
 
 // Import child components
 // ===========================================================================
-
 import { Link } from 'react-router';
 import ResultSort from './sort';
 import ResultActions from './actions';
@@ -59,6 +59,7 @@ export default class Result extends React.PureComponent {
     const tableData = this.getTableData();
     const isImage = this.inc('image');
     const isDescr = this.isValid('description');
+    const graphParam = this.inc('graphs') ? decomposeColumnSort(sort).sort_prop : null;
     return (
       <article className='mod-result'>
         <aside style={{ height: heights.aside }}>
@@ -101,9 +102,9 @@ export default class Result extends React.PureComponent {
             <ResultTable to={browseUrl} style={{ height: heights.table }} data={tableData} />
           </footer>
         ) : null }
-        {this.inc('graphs') ? (
+        {graphParam ? (
           <div className='graph-container' style={{ height: heights.graphs }}>
-            <BriefGraphs id={payload.id} hash={payload.hash} type={'likes'} />
+            <BriefGraphs id={payload.id} hash={payload.hash} type={(graphParam === 'found') ? 'likes' : graphParam} />
           </div>
         ) : null}
       </article>

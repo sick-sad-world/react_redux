@@ -5,6 +5,7 @@ import Route from './src/route';
 
 
 export * from './src/actions';
+export * from './src/middlewares';
 export { reducer };
 export { Route };
 export { EmailBcc };

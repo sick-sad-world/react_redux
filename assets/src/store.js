@@ -12,13 +12,13 @@ import { reducer as dashboards, ensureDashboardUrl } from 'src/dashboards';
 import { reducer as columns, processColumn } from 'src/columns';
 import { reducer as results, splitResultText, numerizeTabularData } from 'src/results';
 import { reducer as notifications, notification } from 'src/notifications';
-import { reducer as app, clientError, cancelAllCallsOnLogout } from 'src/application';
-import { reducer as user } from 'src/user';
+import { reducer as app, clientError } from 'src/application';
+import { reducer as user, fixMissingEmailBcc } from 'src/user';
 import { reducer as graphs, mapGraphData } from 'src/graphs';
 import { reducer as sets, updateUniq, clearFeeds } from 'src/sets';
 import { reducer as feeds } from 'src/feeds';
-import { reducer as alerts, processAlert } from 'src/alerts';
-import { reducer as reports, processReport } from 'src/reports';
+import { reducer as alerts, processAlert, editAlert } from 'src/alerts';
+import { reducer as reports, processReport, editReport } from 'src/reports';
 
 // Compose reducers
 // ===========================================================================
@@ -44,7 +44,8 @@ export default createStore(
   composeEnhancers(applyMiddleware(
     thunk.withExtraArgument({ notification, clientError }),
     // createEpicMiddleware(),
-    // cancelAllCallsOnLogout,
+    fixMissingEmailBcc(({ reports }) => reports.payload, 'recipient', editReport),
+    fixMissingEmailBcc(({ alerts }) => alerts.payload, 'recipient', editAlert),
     sortMiddleware,
     ensureDashboardUrl,
     processColumn,
