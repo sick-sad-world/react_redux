@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { forOwn, isEqual, pickBy } from 'lodash';
+import { forOwn, isEqual, pickBy, includes } from 'lodash';
 import { updateArrayWithValue } from 'functions';
 import { availableColumnData, defaultInterface } from '../defaults';
 
@@ -42,6 +42,8 @@ class EditColumn extends React.Component {
     forOwn(data.data, (v, k) => {
       if (props.advRegExp.test(k)) {
         advancedFilters[k] = v;
+      } else if (k === 'LIKE(url)') {
+        columnData[k] = v.substring(1, v.length - 1);
       } else {
         columnData[k] = v;
       }
@@ -58,12 +60,14 @@ class EditColumn extends React.Component {
   }
 
   static mapStateToData(state, data, changed, props) {
+    const dataProps = pickBy(state, (v, k) => !includes(props.notAffecting, k) && ((v instanceof Array) ? v.length : v !== ''));
+    if (dataProps['LIKE(url)']) dataProps['LIKE(url)'] = `%${dataProps['LIKE(url)']}%`;
     return {
       id: state.id,
       name: state.name,
       display_settings: state.display_settings,
       data: {
-        ...pickBy(state, (v, k) => props.notAffecting.indexOf(k) < 0 && ((v instanceof Array) ? v.length : v !== '')),
+        ...dataProps,
         ...state.advancedFilters
       }
     };
@@ -281,11 +285,11 @@ class EditColumn extends React.Component {
           />
           <TextInput
             className='row'
-            name='url'
+            name='LIKE(url)'
             label='URL contains'
             disabled={running}
-            value={formValues.url}
-            onChange={updateState('url')}
+            value={formValues['LIKE(url)']}
+            onChange={updateState('LIKE(url)')}
           />
           <TextInput
             className='row'

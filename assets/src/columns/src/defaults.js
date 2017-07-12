@@ -13,7 +13,7 @@ export const loDashRegExp = /_+/;
 
 export const notAffecting = ['id', 'name', 'display_settings', 'advancedFilters', 'changed'];
 
-export const affectingProps = ['sort', 'direction', 'show_favorites', 'show_ignored', 'limit', 'author', 'search', 'exclude_search', 'url', 'since', 'before', 'language', 'source', 'set', 'ignore_source', 'ignore_set', 'is_image', 'is_video', 'is_facebook', 'is_gallery'];
+export const affectingProps = ['sort', 'direction', 'show_favorites', 'show_ignored', 'limit', 'author', 'search', 'exclude_search', 'LIKE(url)', 'since', 'before', 'language', 'source', 'set', 'ignore_source', 'ignore_set', 'is_image', 'is_video', 'is_facebook', 'is_gallery'];
 
 export const availableColumnData = {
   show_favorites: 0,
@@ -21,7 +21,7 @@ export const availableColumnData = {
   author: '',
   search: '',
   exclude_search: '',
-  url: '',
+  'LIKE(url)': '',
   since: '',
   before: '',
   language: '',
@@ -93,7 +93,7 @@ export const sortingOptions = {
 };
 
 export const editOptions = {
-  advRegExp: /MIN|MAX|LIKE/,
+  advRegExp: /MIN|MAX/,
   language: [
     {
       label: 'English',
