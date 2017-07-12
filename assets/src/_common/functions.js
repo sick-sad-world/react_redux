@@ -35,10 +35,11 @@ export const sortParamToShort = (param = '') => {
 };
 
 export const normalizeValue = (v, base = 10) => {
-  const intVal = parseFloat(v, base);
-  if (!isNaN(intVal)) {
-    return intVal;
-  } else if (v === 'true') {
+  // const intVal = parseFloat(v, base);
+  // if (!isNaN(intVal)) {
+  //   return intVal;
+  // } else
+  if (v === 'true') {
     return true;
   } else if (v === 'false') {
     return false;
