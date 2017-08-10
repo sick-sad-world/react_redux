@@ -95,7 +95,6 @@ Columns.defaultProps = {
       description: 'Select the type of items to show in this column and how to display them.',
       confirmation: '{data} were changed. Save changes?'
     }
-
   },
   assignmentOpts: {
     texts: {

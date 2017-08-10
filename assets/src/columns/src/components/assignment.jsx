@@ -41,8 +41,8 @@ class Assignment extends React.Component {
       display_settings: data.display_settings,
       data: {
         ...data.data,
-        set: state.set,
-        source: state.source
+        set: (state.set.length) ? state.set : undefined,
+        source: (state.source.length) ? state.source : undefined
       }
     };
   }
