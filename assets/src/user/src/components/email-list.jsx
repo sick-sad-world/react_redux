@@ -88,7 +88,7 @@ export default class EmailList extends React.Component {
         <ul className='tag-list row'>
           { (this.props.data.length) ? this.props.data.map(this.makeListItem) : this.props.emptyTpl }
         </ul>
-        <div className='form-description'>{this.props.description.replace('{email}', this.props.email)}</div>
+        {(this.props.description) ? <div className='form-description'>{this.props.description.replace('{email}', this.props.email)}</div> : null }
       </div>
     );
   }

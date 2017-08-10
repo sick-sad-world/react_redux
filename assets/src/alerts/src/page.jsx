@@ -27,7 +27,7 @@ class Alerts extends React.Component {
   confText(deleting) {
     return (
       <dl>
-        <dt>Trendolizer alert</dt>
+        <dt>Are you sure you want to delete the alert</dt>
         <dd>{`ID: ${deleting.id} - ${deleting.name}.`}</dd>
       </dl>
     );

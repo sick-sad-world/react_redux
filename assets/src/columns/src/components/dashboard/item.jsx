@@ -82,7 +82,7 @@ export default class DashboardItem extends React.Component {
           {(this.state.deleting) ? (
           <DeleteConfirmation close={this.toggleState('deleting')} accept={this.deleteColumn}>
             <dl>
-              <dt>Trendolizer Column</dt>
+              <dt>Are you sure you want to delete the column:</dt>
               <dd>{`ID: ${this.props.payload.id} - ${this.props.payload.name}.`}</dd>
             </dl>
           </DeleteConfirmation>

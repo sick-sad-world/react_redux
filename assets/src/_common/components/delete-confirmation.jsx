@@ -6,7 +6,7 @@ import Modal from './modal';
 // ===========================================================================
 export default function DeleteConfirmation({ children, accept, close }) {
   return (
-    <Modal close={close} title='Confirm deleting?' className='popup confirmation-dialog'>
+    <Modal close={close} title='Please confirm' className='popup confirmation-dialog'>
         <main>
           {children}
         </main>

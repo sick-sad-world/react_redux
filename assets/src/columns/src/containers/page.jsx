@@ -43,7 +43,7 @@ class Columns extends React.Component {
   confText(deleting) {
     return (
       <dl>
-        <dt>Trendolizer Column</dt>
+        <dt>Are you sure you want to delete the column:</dt>
         <dd>{`ID: ${deleting.id} - ${deleting.name}.`}</dd>
       </dl>
     );

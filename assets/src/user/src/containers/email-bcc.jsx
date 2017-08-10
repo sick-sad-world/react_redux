@@ -40,7 +40,7 @@ class Emails extends React.Component {
         active={this.props.active}
         onClick={this.props.onClick}
         disabled={this.props.disabled || this.props.state > 2}
-        description={this.props.description}
+        description={(this.props.email === this.props.active) ? this.props.description : null}
         data={this.props.data}
         onError={this.props.onError}
         onChange={this.updateEmailList}

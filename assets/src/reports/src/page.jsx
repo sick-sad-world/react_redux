@@ -28,7 +28,7 @@ class Reports extends React.Component {
   confText(deleting) {
     return (
       <dl>
-        <dt>Trendolizer report</dt>
+        <dt>Are you sure you want to delete the report</dt>
         <dd>{`ID: ${deleting.id} - ${deleting.name}.`}</dd>
       </dl>
     );

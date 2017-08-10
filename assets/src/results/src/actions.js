@@ -59,14 +59,15 @@ export function fetchResults(data, opts) {
 
 export function getAllResults(data) {
   return (dispatch, getState, { notification }) => {
-    const ids = {};
+    const items = data.filter(({ open }) => open);
+    let count = items.length;
     const LIMIT = 3;
     const DELAY = 1200;
     const noteId = moment().unix();
     const timeouts = [];
 
     const endSequence = () => {
-      if (notification) {
+      if (notification && items.length > LIMIT) {
         dispatch(notification({
           id: noteId,
           visible: false
@@ -75,13 +76,12 @@ export function getAllResults(data) {
       timeouts.forEach(clearTimeout);
     };
 
-    const stepMessage = (id) => {
-      if (id) delete ids[id];
-      if (notification) {
+    const stepMessage = () => {
+      if (notification && items.length > LIMIT) {
         dispatch(notification({
           id: noteId,
           type: 'loading',
-          text: `Results for columns ${Object.keys(ids).join(', ')} downloading now...`
+          text: `Loading data for ${count} columns, stand by...`
         }));
       }
     };
@@ -89,7 +89,7 @@ export function getAllResults(data) {
     // Create our [Top-level] Promise chain
     // ===========================================================================
     Promise.all(
-      data.map((column, i) => {
+      items.map((column, i) => {
         // If column hidden - do nothing
         // ===========================================================================
         if (!column.open) return null;
@@ -97,7 +97,6 @@ export function getAllResults(data) {
         // Define time delay and set id to hash of columns being fetched
         // ===========================================================================
         const delay = (i > LIMIT) ? (i - LIMIT) * DELAY : 0;
-        ids[column.id] = true;
 
         // Promise wrapper around timeout
         // ===========================================================================
@@ -112,10 +111,12 @@ export function getAllResults(data) {
               state: false
             })).then((payload) => {
               if (!getState().user.payload.id) return null;
-              stepMessage(column.id);
+              count -= 1;
+              stepMessage();
               resolve(payload);
             }).catch((...args) => {
               if (!getState().user.payload.id) return null;
+              count -= 1;
               const text = `Results for column ${column.id} ended with error`;
               if (notification) dispatch(notification({ type: 'error', text }));
               dispatch(resultError(text, column.id));
