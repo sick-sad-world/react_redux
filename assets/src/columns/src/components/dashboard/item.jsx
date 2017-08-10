@@ -51,7 +51,7 @@ export default class DashboardItem extends React.Component {
   }
 
   deleteColumn() {
-    return this.props.deleteColumn({ id: this.props.payload.id });
+    return this.props.deleteColumn({ id: this.props.payload.id }).then(this.toggleState('deleting'));
   }
 
   getResults(data) {

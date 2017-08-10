@@ -5,14 +5,9 @@ export const DETAIL = 20;
 export default {
   title: {
     max: 63,
-    disabled: true,
+    disabled: false,
     default: true,
     row: 0
-  },
-  url: {
-    disabled: true,
-    default: true,
-    height: 0
   },
   author: {
     height: DETAIL,
@@ -23,7 +18,7 @@ export default {
     default: true,
     row: 1
   },
-  domain: {
+  url: {
     height: DETAIL,
     default: true,
     row: 1

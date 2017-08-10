@@ -114,22 +114,23 @@ export function mapGraphGoogle(data, { types, opts }) {
 
     types.forEach((rowType, j) => {
       const rr = `rate_${rowType}`;
+      const rV = parseInt(data[dt][rr]);
 
       if (!opts.nocount) {
-        row.push(data[dt][rowType]);
+        row.push(parseInt(data[dt][rowType]));
         if (j === 0) {
           row.push(annotation);
           row.push(annotationText);
         }
       }
 
-      if (!opts.norate) row.push(data[dt][rr]);
+      if (!opts.norate) row.push(rV);
 
       if (!opts.noaverage) {
         if (isNaN(data[dt][rr])) {
           row.push(null);
         } else {
-          sum[rr] = sum[rr] ? (sum[rr] + data[dt][rr]) : data[dt][rr];
+          sum[rr] = sum[rr] ? sum[rr] + rV : rV;
           avgCnt[rr] = avgCnt[rr] ? (avgCnt[rr] + 1) : 1;
           row.push(Math.round(sum[rr] / avgCnt[rr]));
         }
@@ -159,7 +160,7 @@ export function mapGraphGoogle(data, { types, opts }) {
         if (isNaN(data[dt][rr])) {
           row.push(null);
         } else {
-          row.push(data[dt][rr] - previous[rr]);
+          row.push(rV - parseInt(previous[rr]));
           previous[rr] = data[dt][rr];
         }
       }

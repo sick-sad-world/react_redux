@@ -60,6 +60,7 @@ export default class Result extends React.PureComponent {
     const isImage = this.inc('image');
     const isDescr = this.isValid('description');
     const graphParam = this.inc('graphs') ? decomposeColumnSort(sort).sort_prop : null;
+    // payload.domain.replace(this.props.proptocolRegExp, '')
     return (
       <article className='mod-result'>
         <aside style={{ height: heights.aside }}>
@@ -74,12 +75,12 @@ export default class Result extends React.PureComponent {
             refreshResult={this.props.refreshResult}
           />
         </aside>
-        <Link to={browseUrl} className='result-link'>
+         <Link to={browseUrl} className='result-link'>
           {(this.isValid('title')) ? <h1 style={{ maxHeight: heights.title }}>{payload.title}</h1> : null}
           {(this.inc('found') || this.inc('domain') || this.inc('author')) ? (
             <small style={{ height: heights.found || heights.domain || heights.author }}>
               {(this.isValid('found')) ? <time dateTime={payload.found} className='found'>{payload.found}</time> : null}
-              {(this.isValid('domain')) ? <span className='domain'>{payload.domain.replace(this.props.proptocolRegExp, '')}</span> : null}
+              {(this.isValid('domain')) ? <a href={payload.url} target='_blank' className='domain'>{payload.domain}</a> : null}
               {(this.isValid('author')) ? <span className='author'>{payload.author}</span> : null}
             </small>
           ) : null}
@@ -102,7 +103,7 @@ export default class Result extends React.PureComponent {
             <ResultTable to={browseUrl} style={{ height: heights.table }} data={tableData} />
           </footer>
         ) : null }
-        {graphParam ? (
+         {graphParam ? (
           <div className='graph-container' style={{ height: heights.graphs }}>
             <BriefGraphs id={payload.id} hash={payload.hash} type={(graphParam === 'found') ? 'likes' : graphParam} />
           </div>

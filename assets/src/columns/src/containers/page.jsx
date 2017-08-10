@@ -15,7 +15,7 @@ import { makePageSelector } from '../selectors';
 
 // Import actions
 // ===========================================================================
-import { createColumn, editColumn, sortColumns } from '../actions';
+import { createColumn, editColumn, sortColumns, deleteColumn } from '../actions';
 import { fetchResults, clearResults } from 'src/results';
 
 // Import Child components

@@ -38,7 +38,7 @@ export function decomposeColumnSort(sort = defColumnData.sort) {
   const prefix = sortingOptions.sortPrefix.find(pref => sort.indexOf(pref.value) > -1);
   const property = sortingOptions.sortProperty.find(prop => sort.indexOf(prop.value) > -1);
   return {
-    sort_pref: (prefix) ? prefix.value : '',
+    sort_pref: (prefix) ? prefix.value : null,
     sort_prop: (property) ? property.value : ''
   };
 }

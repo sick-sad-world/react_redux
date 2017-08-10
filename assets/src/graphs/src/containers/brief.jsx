@@ -86,8 +86,8 @@ BriefGraphs.defaultProps = {
     chartArea: {
       top: 10,
       left: '15%',
-      height: 100,
-      width: '85%'
+      height: '85%',
+      width: '90%'
     },
     hAxis: { textPosition: 'none' },
     pointSize: 3,
