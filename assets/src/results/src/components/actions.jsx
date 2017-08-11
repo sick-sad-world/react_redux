@@ -2,11 +2,13 @@
 // ===========================================================================
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router';
 import { numBool } from 'common/typecheck';
 
 // Import child components
 // ===========================================================================
-import { Favorite, Unfavorite, Refresh, Show, Hide, GoTo } from 'common/components/buttons';
+import { Favorite, Unfavorite, Refresh, Show, Hide } from 'common/components/buttons';
+import Icon from 'common/components/icon';
 
 // Result aside
 // ===========================================================================
@@ -34,7 +36,7 @@ export default function ResultAside({ hash, url, favorite, ignore, refreshResult
       {(refreshResult) ? <Refresh onClick={() => refreshResult({ hash })} title='Refresh this result' /> : null}
       {favoriteBtn}
       {ignoreBtn}
-      {(url) ? <GoTo target='_blank' title='Visit original' href={url} /> : null}
+      {(url) ? <Link to={url} title='Visit original'><Icon icon='export' /></Link> : null}
     </div>
   );
 }

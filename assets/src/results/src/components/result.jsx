@@ -75,8 +75,8 @@ export default class Result extends React.PureComponent {
             refreshResult={this.props.refreshResult}
           />
         </aside>
-         <Link to={browseUrl} className='result-link'>
-          {(this.isValid('title')) ? <h1 style={{ maxHeight: heights.title }}>{payload.title}</h1> : null}
+         {/* <Link to={browseUrl} className='result-link'> */}
+          {(this.isValid('title')) ? <h1 style={{ maxHeight: heights.title }}><a href={payload.url} target='_blank' >{payload.title}</a></h1> : null}
           {(this.inc('found') || this.inc('domain') || this.inc('author')) ? (
             <small style={{ height: heights.found || heights.domain || heights.author }}>
               {(this.isValid('found')) ? <time dateTime={payload.found} className='found'>{payload.found}</time> : null}
@@ -97,7 +97,7 @@ export default class Result extends React.PureComponent {
               {(isDescr) ? <div className='content'>{payload.description}</div> : null}
             </div>
           ) : null}
-        </Link>
+        {/* </Link> */}
         {(tableData && tableData.length) ? (
           <footer>
             <ResultTable to={browseUrl} style={{ height: heights.table }} data={tableData} />
