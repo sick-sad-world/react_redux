@@ -66,7 +66,7 @@ export default class Result extends React.PureComponent {
         <aside style={{ height: heights.aside }}>
           <ResultSort sort={sort} value={payload[sort]} />
           <ResultActions
-            url={payload.url}
+            url={browseUrl}
             hash={payload.hash}
             favorite={payload.favorite}
             ignore={payload.ignore}
