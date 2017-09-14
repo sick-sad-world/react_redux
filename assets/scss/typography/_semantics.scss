@@ -185,14 +185,22 @@ blockquote {}
     color: $c-main;
     line-height: baseUnit(4);
     padding: 0 baseUnit(3);
-    border-bottom: 3px solid transparent;
+    border: 1px solid transparent;
+    border-bottom: 0;
+    position: relative;
+    bottom: -1px;
     &:hover, &:focus {
       text-decoration: none;
     }
     &.active {
-      border-bottom-color: $c-accent;
+      background-color: $c-alt; 
+      border-color: $c-border;
     }
   }
+}
+
+.tab {
+  border-top: $bd;
 }
 
 .loading-bar {

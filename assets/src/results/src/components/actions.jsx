@@ -31,12 +31,21 @@ export default function ResultAside({ hash, url, favorite, ignore, refreshResult
     );
   }
 
+  let urlBtn = null;
+  if (url) {
+    urlBtn = (url.indexOf('http') === 0) ? (
+      <a href={url} target='_blank' title={`Go to ${url}`}><Icon icon='export' /></a>
+    ) : (
+      <Link to={url} title='Show details'><Icon icon='export' /></Link>
+    );
+  }
+
   return (
     <div className={className}>
       {(refreshResult) ? <Refresh onClick={() => refreshResult({ hash })} title='Refresh this result' /> : null}
       {favoriteBtn}
       {ignoreBtn}
-      {(url) ? <Link to={url} title='Visit original'><Icon icon='export' /></Link> : null}
+      {urlBtn}
     </div>
   );
 }
