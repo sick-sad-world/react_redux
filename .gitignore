@@ -13,3 +13,4 @@ build
 .vscode
 npm-debug.log
 demo
+/package-lock.json
