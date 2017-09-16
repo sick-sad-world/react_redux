@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 // ===========================================================================
 import PropTypes from 'prop-types';
 import { listShape, stateNum } from 'common/typecheck';
-import { coreInterface, defaultTimeFormat } from './defaults';
+import { coreInterface } from './defaults';
 import { makeContainerSelector } from './selectors';
 
 // Import actions
@@ -54,7 +54,6 @@ class Reports extends React.Component {
             update={editItem}
             backPath={route.path}
             texts={editText}
-            formProps={{ timeFormat: defaultTimeFormat }}
           />
         ) : null}
         {(deleting) ? (
