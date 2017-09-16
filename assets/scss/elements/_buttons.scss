@@ -6,7 +6,7 @@
   text-align: center;
   cursor: pointer;
   height: $form-unit;
-  padding: 0 baseUnit();
+  padding: 0 baseUnit(2);
   vertical-align: top;
   text-decoration: none;
   color: $c-main;
@@ -22,7 +22,6 @@
     @include gradient(darken($c-border, 2%), top);
   }
   &:active {
-    border-bottom-width: 0px;
   }
   &.is-accent {
     color: $c-alt;
@@ -47,6 +46,10 @@
   }
   &[disabled] {
     @include style-disabled();
+  }
+  svg {
+    display: block;
+    margin: auto;
   }
 }
 

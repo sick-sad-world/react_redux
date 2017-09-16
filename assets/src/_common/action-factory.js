@@ -55,7 +55,7 @@ export default function createAction(conf) {
       .then((payload) => {
         // Create notification of process successfull ending
         // ===========================================================================
-        if (notification && options.notification) {
+        if (notification && options.notification && config.pendingMessage) {
           dispatch(notification({ id: notificationId, visible: false }));
         }
 

@@ -5,8 +5,10 @@ const getUserData = ({ user }) => user.payload;
 
 export function makeWorkspaceSelector() {
   const selector = createSelector(
+    getUserState,
     getUserData,
-    ({ id, image, fullname, position }) => ({
+    (state, { id, image, fullname, position }) => ({
+      state,
       user: { id, image, fullname, position }
     })
   );

@@ -6,7 +6,6 @@ export const login = createAction({
   type: LOGIN,
   state_type: types.STATE,
   url: 'login',
-  pendingMessage: 'Check auth credentials...',
   successMessage: 'Logged in.'
 });
 

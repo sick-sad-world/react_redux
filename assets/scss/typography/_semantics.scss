@@ -229,6 +229,20 @@ blockquote {}
 	}
 }
 
+
+.spinner {
+  animation: rotator $duration linear infinite;
+  .path {
+    stroke-dasharray: $offset;
+    stroke-dashoffset: 0;
+    transform-origin: center;
+    stroke: $c-alt;
+    animation:
+      dash $duration ease-in-out infinite;
+      //colors ($duration*4) ease-in-out infinite;
+  }
+}
+
 .custom-tooltip {
   border: $bd;
   width: 400px;

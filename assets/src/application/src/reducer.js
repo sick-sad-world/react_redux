@@ -3,16 +3,16 @@ import defaultApp from './defaults';
 
 export default (state = { ...defaultApp }, action) => {
   switch (action.type) {
-    case LOGIN:
-      return {
-        ...defaultApp,
-        loadingSequence: ['Authenticating']
-      };
+    // case LOGIN:
+    //   return {
+    //     ...defaultApp,
+    //     loadingSequence: ['Authenticating']
+    //   };
     case LOGOUT:
       return {
         ...defaultApp,
-        state: 2,
-        loadingSequence: ['Authenticating']
+        state: 2
+        //loadingSequence: ['Authenticating']
       };
     case types.ERROR:
       return {

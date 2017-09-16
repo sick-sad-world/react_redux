@@ -22,16 +22,16 @@ class App extends React.Component {
 
   componentWillMount() {
     window.onerror = this.props.clientError;
-    this.props.initialLoading(true);
+    this.props.initialLoading();
   }
 
   render() {
     const { error, children, location, state } = this.props;
     return (
       <div>
-        { (error) ? <span className='overlay'><ClientError error={error} /></span> : null }
-        {(state === 2) ? children : null}
-        {/* {(state === 2) ? (
+        { (error) ? <span className='overlay'><ClientError error={error} /></span> : children }
+        {/* (state === 2) ? children : null}
+        {{(state === 2) ? (
           <CSSTransitionGroup
             transitionName='fadeInOut'
             transitionAppear={true}
@@ -41,7 +41,7 @@ class App extends React.Component {
           >
           {(children) ? React.cloneElement(children, { key: location.pathname }) : null}
           </CSSTransitionGroup>
-        ) : null}*/}
+        ) : null} */}
         <Notifications/>
       </div>
     );

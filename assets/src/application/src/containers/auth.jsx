@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 // Import actions
 // ===========================================================================
-import { initialLoading } from '../actions';
+import { initialLoading, setAppState } from '../actions';
 import { login, addUser } from 'src/user';
 
 // Import Child components
@@ -21,7 +21,10 @@ class Auth extends React.Component {
   // Handle authentification with provided credentials
   // ===========================================================================
   handleAuth(data) {
-    this.props.login(data, { notification: false }).then(() => this.props.initialLoading(true));
+    this.props.setAppState(3);
+    this.props.login(data).then(() => this.props.initialLoading()).catch((err) => {
+      this.props.setAppState(2);
+    });
   }
 
   // Handle reaction of a new user
@@ -33,15 +36,17 @@ class Auth extends React.Component {
   // Redirect to auth if user is authentificated
   // ===========================================================================
   componentWillMount() {
-    if (this.props.auth) {
-      this.props.router.replace('/');
-    }
+    this.indexRedirect(this.props);
   }
 
   // Redirect to auth if user is authentificated
   // ===========================================================================
   componentWillReceiveProps(newProps) {
-    if (newProps.auth) {
+    this.indexRedirect(newProps);
+  }
+
+  indexRedirect(props) {
+    if (props.auth && !props.loading) {
       this.props.router.replace('/');
     }
   }
@@ -51,7 +56,7 @@ class Auth extends React.Component {
   render() {
     // Set default texts for a page
     // ===========================================================================
-    const { texts } = this.props;
+    const { texts, loading } = this.props;
 
     // Return JSX layout of a component
     // ===========================================================================
@@ -67,7 +72,7 @@ class Auth extends React.Component {
           <small className='copyright'>{ texts.copy }</small>
         </article>
         <div className='auth-forms'>
-          <FormLogin handler={this.handleAuth.bind(this)} />
+          <FormLogin loading={loading} handler={this.handleAuth.bind(this)} />
           <FormRegister handler={this.handleReg.bind(this)} />
         </div>
       </section>
@@ -78,6 +83,7 @@ class Auth extends React.Component {
 // Default props
 // ===========================================================================
 Auth.defaultProps = {
+  loading: false,
   texts: {
     title: 'Welcome to Trendolizer pro.',
     subTitle: 'Best engine for searching viral content.',
@@ -95,8 +101,10 @@ Auth.propTypes = {
     descr: PropTypes.string.isRequired,
     copy: PropTypes.string.isRequired
   }).isRequired,
+  loading: PropTypes.bool.isRequired,
   auth: PropTypes.bool.isRequired,
   login: PropTypes.func.isRequired,
+  setAppState: PropTypes.func.isRequired,
   initialLoading: PropTypes.func.isRequired,
   addUser: PropTypes.func.isRequired,
   router: PropTypes.shape({
@@ -105,4 +113,7 @@ Auth.propTypes = {
   }).isRequired
 };
 
-export default connect(({ user }) => ({ auth: !!user.payload.id }), { login, initialLoading, addUser }, null, { withRef: true })(Auth);
+export default connect(({ user, app }) => ({
+  auth: !!user.payload.id,
+  loading: app.state === 3
+}), { login, initialLoading, addUser, setAppState }, null, { withRef: true })(Auth);

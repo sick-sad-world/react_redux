@@ -36,5 +36,15 @@
 	.copyright {
 		display: block;
 		text-align: center;
-	}
+  }
+  .login {
+    .button {
+      width: 25%;
+    }
+  }
+  .register {
+    .button {
+      width: 38%;
+    }
+  }
 }

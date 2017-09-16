@@ -15,11 +15,6 @@ import { getUser } from 'src/user';
 import { getAllResults } from 'src/results';
 import { getColumnsForResults } from 'src/columns';
 
-function initErrorHandler(err) {
-  if (err instanceof Error) throw err;
-  else console.log('Not logged in');
-}
-
 // Set global app JS error
 // ===========================================================================
 export function clientError(error) {
@@ -51,7 +46,7 @@ export function fetchData(opts) {
   ]);
 }
 
-export function initialLoading(init, opts) {
+export function initialLoading(opts) {
   const options = { ...opts, state: false, notification: false };
 
   return (dispatch) => {
@@ -60,7 +55,13 @@ export function initialLoading(init, opts) {
       .then(() => dispatch(fetchData(options)))
       .then(getColumnsForResults)
       .then(data => dispatch(getAllResults(data)))
-      .catch((init) ? initErrorHandler : null)
-      .then(() => dispatch(setAppState(2)));
+      .then(() => dispatch(setAppState(2)))
+      .catch((err) => {
+        if (err instanceof Error) {
+          dispatch(clientError(err));
+        } else {
+          console.log(err);
+        }
+      });
   };
 }
