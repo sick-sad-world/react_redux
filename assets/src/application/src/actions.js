@@ -47,7 +47,7 @@ export function fetchData(opts) {
 }
 
 export function initialLoading(opts) {
-  const options = { ...opts, state: false, notification: false };
+  const options = { state: false, notification: false, ...opts };
 
   return (dispatch) => {
     if (!window.google) fetchGoogleGraphs();
@@ -55,13 +55,13 @@ export function initialLoading(opts) {
       .then(() => dispatch(fetchData(options)))
       .then(getColumnsForResults)
       .then(data => dispatch(getAllResults(data)))
-      .then(() => dispatch(setAppState(2)))
       .catch((err) => {
         if (err instanceof Error) {
           dispatch(clientError(err));
         } else {
           console.log(err);
         }
-      });
+      })
+      .then(() => dispatch(setAppState(2)));
   };
 }

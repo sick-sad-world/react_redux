@@ -58,7 +58,7 @@ Alerts.defaultProps = {
   },
   editOpts: {
     texts: {
-      title: 'Edit report',
+      title: 'Edit alert',
       description: 'Pick the columns to send. Set time to send, e-mail recipient and report name here.',
       confirmation: '{data} were changed. Save changes?'
     }
