@@ -30,7 +30,7 @@ class App extends React.Component {
     return (
       <div>
         { (error) ? <span className='overlay'><ClientError error={error} /></span> : null }
-        {(state === 2) ? children : null}
+        {(state > 1) ? children : null}
         {/* {(state === 2) ? (
           <CSSTransitionGroup
             transitionName='fadeInOut'
