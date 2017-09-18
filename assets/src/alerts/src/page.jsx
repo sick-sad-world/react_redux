@@ -19,7 +19,7 @@ import { editAlert, deleteAlert, createAlert, sortAlerts } from './actions';
 
 // Import Child components
 // ===========================================================================
-import ContainerAlt from 'common/hocs/container';
+import makePageContainer from 'common/hocs/container';
 import DeleteConfirmation from 'common/components/delete-confirmation';
 import { ListSection, ListItem } from 'common/list';
 import EditAlert from './components/edit';
@@ -109,4 +109,4 @@ export default connect(makeContainerSelector, {
   actionCreate: createAlert,
   actionEdit: editAlert,
   actionDelete: deleteAlert
-})(ContainerAlt({ create: 'edit' }, Alerts));
+})(makePageContainer({ create: 'edit' }, Alerts));

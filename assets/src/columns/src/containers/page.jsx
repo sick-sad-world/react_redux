@@ -21,7 +21,7 @@ import { fetchResults, clearResults } from 'src/results';
 
 // Import Child components
 // ===========================================================================
-import ContainerAlt from 'common/hocs/container';
+import makePageContainer from 'common/hocs/container';
 import DeleteConfirmation from 'common/components/delete-confirmation';
 import { ListSection, ListItem } from 'common/list';
 import { Show, Hide } from 'common/components/buttons';
@@ -199,4 +199,4 @@ export default connect(makePageSelector, dispatch => ({
       return resp;
     });
   }
-}))(ContainerAlt({ create: 'call' }, Columns));
+}))(makePageContainer({ create: 'call' }, Columns));

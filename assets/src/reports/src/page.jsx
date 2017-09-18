@@ -19,7 +19,7 @@ import { editReport, deleteReport, createReport, sortReports } from './actions';
 
 // Import Child components
 // ===========================================================================
-import ContainerAlt from 'common/hocs/container';
+import makePageContainer from 'common/hocs/container';
 import DeleteConfirmation from 'common/components/delete-confirmation';
 import { ListSection, ListItem } from 'common/list';
 import EditReport from './components/edit';
@@ -112,4 +112,4 @@ export default connect(makeContainerSelector, {
   actionCreate: createReport,
   actionEdit: editReport,
   actionDelete: deleteReport
-})(ContainerAlt({ create: 'edit' }, Reports));
+})(makePageContainer({ create: 'edit' }, Reports));

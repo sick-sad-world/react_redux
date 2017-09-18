@@ -1,20 +1,13 @@
 // Import utility stuff
 // ===========================================================================
-import { includes, without, concat, bindAll, isEqual, forOwn, capitalize, omit } from 'lodash';
-import classNames from 'classnames';
+import { bindAll, omit } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
 import PropTypes from 'prop-types';
-import { stateNum, textShape } from '../typecheck';
 
-// Import Child components
-// ===========================================================================
-import DeleteConfirmation from 'common/components/delete-confirmation';
-import { ListSection, ListItem } from 'common/list';
-
-export default function ContainerAlt(opts, Component) {
+export default function makePageContainer(opts, Component) {
   const o = { create: 'call', ...opts };
 
   class ContainerHOC extends React.Component {

@@ -20,7 +20,7 @@ import { createSet, editSet, deleteSet, forseUpdateUniq, sortSets } from '../act
 
 // Import Child components
 // ===========================================================================
-import ContainerAlt from 'common/hocs/container';
+import makePageContainer from 'common/hocs/container';
 import DeleteConfirmation from 'common/components/delete-confirmation';
 import { ListSection, ListItem } from 'common/list';
 import EditSet from '../components/edit';
@@ -164,4 +164,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(makeContainerSelector, mapDispatchToProps)(ContainerAlt({ create: 'call' }, Sourcesets));
+export default connect(makeContainerSelector, mapDispatchToProps)(makePageContainer({ create: 'call' }, Sourcesets));
