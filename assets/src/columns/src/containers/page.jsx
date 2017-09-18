@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
+import { listShape, stateNum } from 'common/typecheck';
 import { coreInterface, editOptions, notAffecting, affectingProps } from '../defaults';
 import { makePageSelector } from '../selectors';
 
@@ -20,7 +21,9 @@ import { fetchResults, clearResults } from 'src/results';
 
 // Import Child components
 // ===========================================================================
-import Container from 'common/components/container';
+import ContainerAlt from 'common/hocs/container';
+import DeleteConfirmation from 'common/components/delete-confirmation';
+import { ListSection, ListItem } from 'common/list';
 import { Show, Hide } from 'common/components/buttons';
 import EditColumn from '../components/edit';
 import ColumnFeedsAssignment from '../components/assignment';
@@ -28,8 +31,7 @@ import ColumnFeedsAssignment from '../components/assignment';
 class Columns extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { deleting: null };
-    bindAll(this, 'makeItemIcon', 'renderChildren');
+    bindAll(this, 'makeItemIcon');
   }
 
   makeItemIcon({ id, open, order }) {
@@ -40,87 +42,119 @@ class Columns extends React.Component {
     );
   }
 
-  confText(deleting) {
+  renderDetails() {
+    const { state, editItem, editText, chosen, route, curId, params, assignmentText } = this.props;
+    if (params.assignment) {
+      return (
+        <ColumnFeedsAssignment
+          data={chosen}
+          state={state}
+          current={curId}
+          update={editItem}
+          backPath={`${route.path}/${curId}`}
+          formProps={{
+            texts: assignmentText
+          }}
+        />
+      );
+    }
     return (
-      <dl>
-        <dt>Are you sure you want to delete the column</dt>
-        <dd>{deleting.name}</dd>
-      </dl>
+      <EditColumn
+        className='mod-column-edit'
+        data={chosen}
+        state={state}
+        current={curId}
+        update={editItem}
+        formProps={{
+          ...editOptions,
+          path: `${route.path}/${curId}`,
+          notAffecting: [...notAffecting],
+          texts: editText
+        }}
+      />
     );
   }
 
-  renderChildren(props) {
-    if (this.props.chosen) {
-      if (this.props.params.assignment) {
-        return <ColumnFeedsAssignment {...props} backPath={`${props.backPath}/${this.props.curId}`} formProps={{
-          ...props.assignmentOpts
-        }} />;
-      }
-      return <EditColumn {...props} className='mod-column-edit' formProps={{
-        path: `${this.props.route.path}/${this.props.curId}`,
-        notAffecting: [...notAffecting],
-        ...editOptions
-      }} />;
-    }
-    return null;
-  }
-
   render() {
-    const { payload, ...props } = this.props;
+    const { listText, state, payload, createItem, deleteConfirm, actionSort, chosen, deleting, route, curId } = this.props;
     return (
-      <Container payload={payload.map(({ id, name, order, open }) => ({ id, name, order, open }))} {...props} listItemOpts={{
-        deleteText: 'Delete this column',
-        customIcon: this.makeItemIcon
-      }} confText={this.confText}>
-        {this.renderChildren}
-      </Container>
+      <div className='mod-page'>
+        <ListSection
+          payload={payload}
+          state={state}
+          createItem={createItem}
+          deleteItem={deleteConfirm}
+          sortItems={actionSort}
+          texts={listText}
+        >
+          {props => (
+            <ListItem
+              {...props}
+              url={route.path}
+              current={curId}
+              customIcon={this.makeItemIcon}
+              deleteText='Delete this column'
+            />
+          )}
+        </ListSection>
+        {(chosen) ? this.renderDetails() : null}
+        {(deleting) ? (
+          <DeleteConfirmation close={deleteConfirm()} accept={deleteConfirm(deleting.id)}>
+            <dl>
+              <dt>Are you sure you want to delete the column</dt>
+              <dd>{deleting.name}</dd>
+            </dl>
+          </DeleteConfirmation>
+        ) : null}
+      </div>
     );
   }
 }
 
+// Columns container default props
+// ===========================================================================
 Columns.defaultProps = {
-  listSectionOpts: {
-    texts: {
-      title: 'Columns Management',
-      description: 'Create, edit or delete dashboard columns. Drag to reorder, use the eye icon to hide/unhide them (tip: hidden columns can still be used for alerts/reports).',
-      btn: 'Create new column',
-      placeholder: 'New column name',
-      deleting: 'Are you sure want to delete this Column?',
-      empty: 'No columns created yet. Use form above to create one.'
-    }
+  listText: {
+    title: 'Columns Management',
+    description: 'Create, edit or delete dashboard columns. Drag to reorder, use the eye icon to hide/unhide them (tip: hidden columns can still be used for alerts/reports).',
+    btn: 'Create new column',
+    placeholder: 'New column name',
+    deleting: 'Are you sure want to delete this Column?',
+    empty: 'No columns created yet. Use form above to create one.'
   },
-  editOpts: {
-    texts: {
-      title: 'Edit column',
-      description: 'Select the type of items to show in this column and how to display them.',
-      confirmation: '{data} were changed. Save changes?'
-    }
+  editText: {
+    title: 'Edit column',
+    description: 'Select the type of items to show in this column and how to display them.',
+    confirmation: '{data} were changed. Save changes?'
   },
-  assignmentOpts: {
-    texts: {
-      title: 'Assign feeds to column',
-      description: 'Pick the sourcesets and sources this column to watch here.',
-      confirmation: '{data} were changed. Save changes?'
-    }
+  assignmentText: {
+    title: 'Assign feeds to column',
+    description: 'Pick the sourcesets and sources this column to watch here.',
+    confirmation: '{data} were changed. Save changes?'
   }
 };
 
+// Prop type check
+// ===========================================================================
 Columns.propTypes = {
-  payload: PropTypes.arrayOf(PropTypes.shape(coreInterface)).isRequired,
-  params: PropTypes.object.isRequired,
-  curId: PropTypes.number,
-  chosen: PropTypes.object,
-  router: PropTypes.shape({
-    push: PropTypes.func.isRequired
-  }).isRequired,
-  route: PropTypes.shape({
-    path: PropTypes.string.isRequired
-  }).isRequired,
-  actionCreate: PropTypes.func.isRequired,
+  curId: PropTypes.number.isRequired,
+  deleting: PropTypes.shape(listShape),
+  listText: PropTypes.objectOf(PropTypes.string).isRequired,
+  editText: PropTypes.objectOf(PropTypes.string).isRequired,
+  assignmentText: PropTypes.objectOf(PropTypes.string).isRequired,
+  payload: PropTypes.arrayOf(PropTypes.shape(listShape)).isRequired,
+  state: stateNum.isRequired,
+  editItem: PropTypes.func.isRequired,
+  deleteConfirm: PropTypes.func.isRequired,
+  createItem: PropTypes.func.isRequired,
+  actionSort: PropTypes.func.isRequired,
   actionHide: PropTypes.func.isRequired,
   actionShow: PropTypes.func.isRequired,
-  actionEdit: PropTypes.func.isRequired,
-  actionDelete: PropTypes.func.isRequired
+  changeLocation: PropTypes.func.isRequired,
+  router: PropTypes.object.isRequired,
+  route: PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired,
+  chosen: PropTypes.shape(coreInterface)
 };
 
 // Connect our Container to State
@@ -165,4 +199,4 @@ export default connect(makePageSelector, dispatch => ({
       return resp;
     });
   }
-}))(Columns);
+}))(ContainerAlt({ create: 'call' }, Columns));

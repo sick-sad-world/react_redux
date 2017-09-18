@@ -134,6 +134,9 @@ ol ol {
     height: $entity-unit * 2 + 2px;
     border-bottom: $bd;
   }
+  .entity-list > li:last-child {
+    border-bottom: 0;
+  }
 }
 
 .feeds-list {

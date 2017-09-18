@@ -42,7 +42,7 @@ class Sourcesets extends React.Component {
   }
 
   renderDetails() {
-    const { state, editItem, editText, chosen, route, curId, params } = this.props;
+    const { state, editItem, editText, chosen, route, curId, params, payload } = this.props;
     if (params.create) {
       return (
         <FeedCreate
@@ -59,7 +59,12 @@ class Sourcesets extends React.Component {
         current={curId}
         update={editItem}
         backPath={route.path}
-        texts={editText}
+        className='mod-sourceset-edit'
+        formProps={{
+          sets: payload.filter(({ id }) => id !== curId),
+          path: `${route.path}/${curId}`,
+          texts: editText
+        }}
       />
     );
   }

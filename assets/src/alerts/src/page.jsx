@@ -53,8 +53,7 @@ class Alerts extends React.Component {
             current={curId}
             update={editItem}
             backPath={route.path}
-            texts={editText}
-            formProps={{ timeFormat: defaultTimeFormat }}
+            formProps={{ texts: editText }}
           />
         ) : null}
         {(deleting) ? (
