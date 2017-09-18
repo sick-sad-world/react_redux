@@ -65,11 +65,11 @@ class Columns extends React.Component {
         state={state}
         current={curId}
         update={editItem}
+        texts={editText}
         formProps={{
           ...editOptions,
           path: `${route.path}/${curId}`,
-          notAffecting: [...notAffecting],
-          texts: editText
+          notAffecting: [...notAffecting]
         }}
       />
     );

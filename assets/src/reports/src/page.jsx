@@ -53,9 +53,9 @@ class Reports extends React.Component {
             current={curId}
             update={editItem}
             backPath={route.path}
+            texts={editText}
             formProps={{
-              timeFormat: defaultTimeFormat,
-              texts: editText
+              timeFormat: defaultTimeFormat
             }}
           />
         ) : null}
