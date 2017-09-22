@@ -1,67 +1,56 @@
 // Import utility stuff
 // ===========================================================================
 import { defaultInterface, defaultFrequency } from '../defaults';
+import { bindAll } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
 import PropTypes from 'prop-types';
-import { optionShape } from 'common/typecheck';
+import { optionShape, stateNum } from 'common/typecheck';
 
 // Import Child components
 // ===========================================================================
-import MakeEditForm, { injectedPropsType } from 'common/hocs/edit-form';
+import statefullForm, { injectedProps } from 'common/hocs/statefull-form';
+import SectionWrapper from 'common/section';
+import Confirmation from 'common/components/confirmation';
 import { ColumnsContainer } from 'src/columns';
 import TextInput from 'common/components/forms/input-text';
 import Dropdown from 'common/components/forms/dropdown';
 import Toggler from 'common/components/forms/toggler';
 import { EmailBcc } from 'src/user';
 
-// Edit Report
-// ===========================================================================
 class EditAlert extends React.Component {
-
-  static getTypeCheck() {
-    return {
-      data: PropTypes.shape(defaultInterface).isRequired
-    };
+  constructor(props) {
+    super(props);
+    bindAll(this, 'submitForm');
   }
 
-  static mapDataToState(data) {
-    return {
-      id: data.id,
-      name: data.name,
-      active: data.active,
-      frequency: data.frequency,
-      columns: data.columns,
-      recipient: data.recipient
-    };
+  submitForm() {
+    this.props.onSubmit(this.props.submit());
   }
 
-  static mapStateToData(state, data, changed, props) {
-    return state;
-  }
-
-  stateUpdater(prop) {
-    return (emails, email) => {
-      if (email) {
-        this.props.stateUpdater({ [prop]: email });
-      }
-    };
+  getEmailRecipient(emails, state, props, newEmail) {
+    return newEmail;
   }
 
   render() {
-    const { running, formValues, updateState, frequencyOptions } = this.props;
+    const { state, changed, values, texts, backUrl, reset, bindInput, frequencyOptions, makeUpdater } = this.props;
+    const running = state === 3;
+    const title = (values.name) ? `${texts.title} "${values.name}"` : texts.title;
     return (
-      <form className='subsection-content columned'>
+      <SectionWrapper title={title} description={texts.description} url={backUrl}>
+        {(changed.length) ? (
+          <Confirmation text={texts.confirmation} changed={changed} apply={this.submitForm} cancel={reset} />
+        ) : null}
+        <form className='subsection-content columned'>
         <div className='form-block'>
           <TextInput
             className='row'
             name='name'
             label='Alert name'
             disabled={running}
-            value={formValues.name}
-            onChange={updateState('name')}
+            {...bindInput('name')}
           />
           <Toggler
             label='Status'
@@ -73,8 +62,7 @@ class EditAlert extends React.Component {
               { label: 'Active', value: 1 },
               { label: 'Inactive', value: 0 }
             ]}
-            value={formValues.active}
-            onChange={updateState('active')}
+            {...bindInput('active')}
           />
           <Dropdown
             label='Frequency'
@@ -83,9 +71,8 @@ class EditAlert extends React.Component {
             selectClassName='size-120'
             name='frequency'
             options={frequencyOptions}
-            onChange={updateState('frequency')}
-            value={formValues.frequency}
             desc={<span>Check column(s) for new items every <i>x</i> minutes</span>}
+            {...bindInput('frequency')}
           />
           <ColumnsContainer schema={{ value: 'id', label: 'name' }}>
             {({ payload }) => (
@@ -95,10 +82,9 @@ class EditAlert extends React.Component {
                 className='row'
                 name='columns'
                 options={payload}
-                onChange={updateState('columns')}
                 multi={true}
-                value={formValues.columns}
                 desc='Watched columns (click on columns in the list to watch them too)'
+                {...bindInput('columns')}
               />
             )}
           </ColumnsContainer>
@@ -106,17 +92,18 @@ class EditAlert extends React.Component {
         <div className='form-block'>
           <div className='row'>
             <h3 className='form-subtitle'>Email assigment:</h3>
-            <p>Currently this alert is going to: <b>{formValues.recipient}</b></p>
+            <p>Currently this alert is going to: <b>{values.recipient}</b></p>
             <EmailBcc
-              active={formValues.recipient}
               disabled={running}
-              onClick={updateState('recipient')}
-              onChange={this.stateUpdater('recipient')}
+              onChange={makeUpdater('recipient', this.getEmailRecipient)}
+              active={values.recipient}
+              onClick={makeUpdater('recipient')}
               description='All alerts will be sent to the main email address  [{email}] associated with this account.  Use the form above to add an extra recipient.'
             />
           </div>
         </div>
       </form>
+      </SectionWrapper>
     );
   }
 }
@@ -126,8 +113,16 @@ EditAlert.defaultProps = {
 };
 
 EditAlert.propTypes = {
+  texts: PropTypes.objectOf(PropTypes.string).isRequired,
+  backUrl: PropTypes.string.isRequired,
+  state: stateNum.isRequired,
   frequencyOptions: optionShape('number'),
-  ...injectedPropsType
+  onSubmit: PropTypes.func.isRequired,
+  ...injectedProps
 };
 
-export default MakeEditForm(EditAlert);
+export default statefullForm({
+  propTypes: {
+    data: PropTypes.shape(defaultInterface).isRequired
+  }
+})(EditAlert);

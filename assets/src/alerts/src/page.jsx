@@ -22,7 +22,7 @@ import { editAlert, deleteAlert, createAlert, sortAlerts } from './actions';
 import makePageContainer from 'common/hocs/container';
 import DeleteConfirmation from 'common/components/delete-confirmation';
 import { ListSection, ListItem } from 'common/list';
-import EditAlert from './components/edit-alt';
+import EditAlert from './components/edit';
 
 class Alerts extends React.Component {
   render() {
