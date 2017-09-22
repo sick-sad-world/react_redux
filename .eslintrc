@@ -22,6 +22,7 @@
     "max-len": [1, 150],
     "import/no-extraneous-dependencies": 0,
     "import/prefer-default-export": 1,
+    "object-curly-newline": 0,
     "comma-dangle": ["error", {
         "arrays": "never",
         "objects": "never",

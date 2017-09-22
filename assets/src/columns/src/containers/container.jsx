@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { mapValues, pick } from 'lodash';
+import { mapValues, pick, get } from 'lodash';
 import * as availableActions from '../actions';
 
 // Import React related stuff
@@ -17,7 +17,7 @@ import { makeContainerSelector } from '../selectors';
 function ColumnsContainer({ children, schema, payload, state, actions, ...props }) {
   return children({
     state,
-    payload: (schema) ? payload.map(column => mapValues(schema, v => column[v])) : payload,
+    payload: (schema) ? payload.map(column => mapValues(schema, v => get(column, v, null))) : payload,
     ...((actions && actions.length) ? pick(props, actions) : {})
   });
 }

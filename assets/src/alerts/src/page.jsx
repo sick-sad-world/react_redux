@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 // ===========================================================================
 import PropTypes from 'prop-types';
 import { listShape, stateNum } from 'common/typecheck';
-import { coreInterface, defaultTimeFormat } from './defaults';
+import { coreInterface } from './defaults';
 import { makeContainerSelector } from './selectors';
 
 // Import actions
@@ -22,7 +22,7 @@ import { editAlert, deleteAlert, createAlert, sortAlerts } from './actions';
 import makePageContainer from 'common/hocs/container';
 import DeleteConfirmation from 'common/components/delete-confirmation';
 import { ListSection, ListItem } from 'common/list';
-import EditAlert from './components/edit';
+import EditAlert from './components/edit-alt';
 
 class Alerts extends React.Component {
   render() {
@@ -50,9 +50,8 @@ class Alerts extends React.Component {
           <EditAlert
             data={chosen}
             state={state}
-            current={curId}
-            update={editItem}
-            backPath={route.path}
+            onSubmit={editItem}
+            backUrl={route.path}
             texts={editText}
           />
         ) : null}
