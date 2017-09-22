@@ -44,65 +44,65 @@ class EditAlert extends React.Component {
           <Confirmation text={texts.confirmation} changed={changed} apply={this.submitForm} cancel={reset} />
         ) : null}
         <form className='subsection-content columned'>
-        <div className='form-block'>
-          <TextInput
-            className='row'
-            name='name'
-            label='Alert name'
-            disabled={running}
-            {...bindInput('name')}
-          />
-          <Toggler
-            label='Status'
-            className='row-flex'
-            togglerClassName='size-180'
-            disabled={running}
-            name='active'
-            options={[
-              { label: 'Active', value: 1 },
-              { label: 'Inactive', value: 0 }
-            ]}
-            {...bindInput('active')}
-          />
-          <Dropdown
-            label='Frequency'
-            disabled={running}
-            className='row-flex-wrap'
-            selectClassName='size-120'
-            name='frequency'
-            options={frequencyOptions}
-            desc={<span>Check column(s) for new items every <i>x</i> minutes</span>}
-            {...bindInput('frequency')}
-          />
-          <ColumnsContainer schema={{ value: 'id', label: 'name' }}>
-            {({ payload }) => (
-              <Dropdown
-                label='Columns assigment'
-                disabled={running}
-                className='row'
-                name='columns'
-                options={payload}
-                multi={true}
-                desc='Watched columns (click on columns in the list to watch them too)'
-                {...bindInput('columns')}
-              />
-            )}
-          </ColumnsContainer>
-        </div>
-        <div className='form-block'>
-          <div className='row'>
-            <h3 className='form-subtitle'>Email assigment:</h3>
-            <p>Currently this alert is going to: <b>{values.recipient}</b></p>
-            <EmailBcc
+          <div className='form-block'>
+            <TextInput
+              className='row'
+              name='name'
+              label='Alert name'
               disabled={running}
-              onChange={makeUpdater('recipient', this.getEmailRecipient)}
-              active={values.recipient}
-              onClick={makeUpdater('recipient')}
-              description='All alerts will be sent to the main email address  [{email}] associated with this account.  Use the form above to add an extra recipient.'
+              {...bindInput('name')}
             />
+            <Toggler
+              label='Status'
+              className='row-flex'
+              togglerClassName='size-180'
+              disabled={running}
+              name='active'
+              options={[
+                { label: 'Active', value: 1 },
+                { label: 'Inactive', value: 0 }
+              ]}
+              {...bindInput('active')}
+            />
+            <Dropdown
+              label='Frequency'
+              disabled={running}
+              className='row-flex-wrap'
+              selectClassName='size-120'
+              name='frequency'
+              options={frequencyOptions}
+              desc={<span>Check column(s) for new items every <i>x</i> minutes</span>}
+              {...bindInput('frequency')}
+            />
+            <ColumnsContainer schema={{ value: 'id', label: 'name' }}>
+              {({ payload }) => (
+                <Dropdown
+                  label='Columns assigment'
+                  disabled={running}
+                  className='row'
+                  name='columns'
+                  options={payload}
+                  multi={true}
+                  desc='Watched columns (click on columns in the list to watch them too)'
+                  {...bindInput('columns')}
+                />
+              )}
+            </ColumnsContainer>
           </div>
-        </div>
-      </form>
+          <div className='form-block'>
+            <div className='row'>
+              <h3 className='form-subtitle'>Email assigment:</h3>
+              <p>Currently this alert is going to: <b>{values.recipient}</b></p>
+              <EmailBcc
+                disabled={running}
+                active={values.recipient}
+                onChange={makeUpdater('recipient', this.getEmailRecipient)}
+                onClick={makeUpdater('recipient')}
+                description='All alerts will be sent to the main email address  [{email}] associated with this account.  Use the form above to add an extra recipient.'
+              />
+            </div>
+          </div>
+        </form>
       </SectionWrapper>
     );
   }

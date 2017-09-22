@@ -3,6 +3,7 @@ import types from './types';
 function processor(user) {
   return report => ({
     ...report,
+    order: parseInt(report.order, 10) || -1,
     recipient: report.recipient || user.email
   });
 }

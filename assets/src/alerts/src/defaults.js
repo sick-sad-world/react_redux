@@ -33,7 +33,7 @@ export const defaultInterface = {
   ...coreInterface,
   frequency: PropTypes.oneOf(defaultFrequency.map(({ value }) => value)).isRequired,
   recipient: PropTypes.string,
-  order: PropTypes.number,
+  order: PropTypes.oneOf([PropTypes.number, PropTypes.string]).isRequired,
   via_mail: PropTypes.bool,
   via_twitter: PropTypes.bool
 };

@@ -50,12 +50,14 @@ export default function statefullForm(settings) {
       }
 
       componentWillReceiveProps(newProps) {
-        this.setState({ values: getStateValues(newProps) });
+        if (newProps.state === 2) {
+          this.reset(newProps);
+        }
       }
 
       checkChanges(changed, value) {
-        const change = without(changed, Object.keys(value));
-        Object.entries(value, (v, k) => {
+        const change = without(changed, ...Object.keys(value));
+        Object.entries(value).forEach(([k, v]) => {
           if (!isEqual(this.props.data[k], v)) {
             change.push(k);
           }
@@ -89,8 +91,8 @@ export default function statefullForm(settings) {
         return opts.mapStateToData(this.state.values, this.props, this.state.chaged);
       }
 
-      reset() {
-        this.setState({ values: getStateValues(this.props) });
+      reset(props = this.props) {
+        this.setState({ values: getStateValues(props), changed: [] });
       }
 
       render() {

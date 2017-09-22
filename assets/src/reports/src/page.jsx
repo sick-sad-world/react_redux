@@ -50,13 +50,10 @@ class Reports extends React.Component {
           <EditReport
             data={chosen}
             state={state}
-            current={curId}
-            update={editItem}
-            backPath={route.path}
+            onSubmit={editItem}
+            backUrl={route.path}
             texts={editText}
-            formProps={{
-              timeFormat: defaultTimeFormat
-            }}
+            timeFormat={defaultTimeFormat}
           />
         ) : null}
         {(deleting) ? (
