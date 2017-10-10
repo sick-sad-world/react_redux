@@ -1,13 +1,13 @@
 // Import utility stuff
 // ===========================================================================
 import classNames from 'classnames';
-import { bindAll, includes } from 'lodash';
+import { bindAll } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
 import PropTypes from 'prop-types';
-import { defaultInterface } from '../defaults';
+import { coreInterface } from '../defaults';
 
 // Import Child components
 // ===========================================================================
@@ -99,7 +99,7 @@ SetsWithContents.propTypes = {
   sortable: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
   treshold: PropTypes.number.isRequired,
-  payload: PropTypes.arrayOf(PropTypes.shape(defaultInterface)).isRequired,
+  payload: PropTypes.arrayOf(PropTypes.shape(coreInterface)).isRequired,
   setAction: PropTypes.func,
   feedAction: PropTypes.func,
   feedsEmpty: PropTypes.string.isRequired

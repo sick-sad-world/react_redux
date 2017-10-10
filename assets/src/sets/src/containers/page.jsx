@@ -56,15 +56,10 @@ class Sourcesets extends React.Component {
       <EditSet
         data={chosen}
         state={state}
-        current={curId}
-        update={editItem}
-        backPath={route.path}
-        className='mod-sourceset-edit'
+        onSubmit={editItem}
+        backUrl={route.path}
         texts={editText}
-        formProps={{
-          sets: payload.filter(({ id }) => id !== curId),
-          path: `${route.path}/${curId}`
-        }}
+        sets={payload.filter(({ id }) => id !== curId)}
       />
     );
   }

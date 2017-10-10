@@ -8,10 +8,16 @@ export const defaultData = {
   source_ids: []
 };
 
+export const coreInterface = {
+  id: PropTypes.number.isRequired,
+  order: PropTypes.number,
+  name: PropTypes.string.isRequired
+};
+
 export const defaultInterface = {
   id: PropTypes.number.isRequired,
   order: PropTypes.number,
   name: PropTypes.string.isRequired,
   source_ids: PropTypes.arrayOf(PropTypes.number).isRequired,
-  counter: PropTypes.number
+  uniq_ids: PropTypes.arrayOf(PropTypes.number).isRequired
 };

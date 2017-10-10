@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 // ===========================================================================
 import PropTypes from 'prop-types';
 import { listShape, stateNum } from 'common/typecheck';
-import { coreInterface, editOptions, notAffecting, affectingProps } from '../defaults';
+import { coreInterface, affectingProps } from '../defaults';
 import { makePageSelector } from '../selectors';
 
 // Import actions
@@ -49,7 +49,6 @@ class Columns extends React.Component {
         <ColumnFeedsAssignment
           data={chosen}
           state={state}
-          current={curId}
           update={editItem}
           backPath={`${route.path}/${curId}`}
           formProps={{
@@ -63,14 +62,9 @@ class Columns extends React.Component {
         className='mod-column-edit'
         data={chosen}
         state={state}
-        current={curId}
         update={editItem}
         texts={editText}
-        formProps={{
-          ...editOptions,
-          path: `${route.path}/${curId}`,
-          notAffecting: [...notAffecting]
-        }}
+        backPath={route.path}
       />
     );
   }

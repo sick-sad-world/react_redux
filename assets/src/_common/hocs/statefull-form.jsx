@@ -17,6 +17,10 @@ function defaultMapStateToData(state) {
   return { ...state };
 }
 
+function defaultComparator(v, k, data) {
+  return isEqual(data[k], v);
+}
+
 export const injectedProps = {
   bindInput: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
@@ -30,6 +34,7 @@ export default function statefullForm(settings) {
   const opts = {
     mapDataToState: defaultMapDataToState,
     mapStateToData: defaultMapStateToData,
+    comparator: defaultComparator,
     propTypes: {},
     ...settings
   };
@@ -58,7 +63,7 @@ export default function statefullForm(settings) {
       checkChanges(changed, value) {
         const change = without(changed, ...Object.keys(value));
         Object.entries(value).forEach(([k, v]) => {
-          if (!isEqual(this.props.data[k], v)) {
+          if (!opts.comparator(v, k, this.props.data)) {
             change.push(k);
           }
         });

@@ -28,7 +28,7 @@ export default function Toggler({ name, label, disabled, value, onChange, option
                     id={id}
                     key={`${name}-${option.value}`}
                     checked={option.value === value}
-                    onChange={e => onChange(normalizeValue(e.target.value))}
+                    onChange={e => onChange(normalizeValue(e.target.value), name)}
                     onFocus={setRootFocusClass}
                     onBlur={setRootFocusClass}
                     name={name}

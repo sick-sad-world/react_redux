@@ -41,7 +41,7 @@ Sourceset.defaultProps = {
 
 Sourceset.propTypes = {
   name: PropTypes.string.isRequired,
-  counter: PropTypes.number,
+  counter: PropTypes.number.isRequired,
   sortable: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
   children: childrenShape
