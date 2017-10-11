@@ -10,6 +10,7 @@
     align-items: stretch;
 		flex-direction: column;
     border: $bd;
+    background-color: #fdfdfd;
     margin: baseUnit() baseUnit() baseUnit() 0;
     .subsection-header {
 			flex: 0 0 auto;

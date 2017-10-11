@@ -8,20 +8,22 @@ function processor(user) {
   });
 }
 
-export function processReport({ dispatch, getState }) {
+export function processReport({ getState }) {
   return next => (action) => {
-    if (action.type === types.READ) {
-      return next({
-        ...action,
-        payload: action.payload.map(processor(getState().user.payload))
-      });
-    } else if (action.type === types.CREATE) {
-      return next({
-        ...action,
-        payload: processor(getState().user.payload)(action.payload)
-      });
+    switch (action.type) {
+      case types.READ:
+        return next({
+          ...action,
+          payload: action.payload.map(processor(getState().user.payload))
+        });
+      case types.CREATE:
+      case types.UPDATE:
+        return next({
+          ...action,
+          payload: processor(getState().user.payload)(action.payload)
+        });
+      default:
+        return next(action);
     }
-
-    return next(action);
   };
 }

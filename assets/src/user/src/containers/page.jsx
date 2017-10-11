@@ -18,16 +18,12 @@ import { editUser } from '../actions';
 
 // Import Child components
 // ===========================================================================
-import EditUser from '../components/edit';
+import EditUser from '../components/edit.jsx';
 
 class User extends React.Component {
   constructor(props) {
     super(props);
-    bindAll(this, 'updateItem', 'onEmailBccError');
-  }
-
-  updateItem(data) {
-    this.props.editUser(data);
+    bindAll(this, 'onEmailBccError');
   }
 
   onEmailBccError(error) {
@@ -44,11 +40,9 @@ class User extends React.Component {
         <EditUser
           data={this.props.payload}
           state={this.props.state}
-          update={this.updateItem}
+          onSubmit={this.props.editUser}
           texts={this.props.texts}
-          formProps={{
-            onEmailBccError: this.onEmailBccError
-          }}
+          onEmailBccError={this.onEmailBccError}
         />
       </div>
     );

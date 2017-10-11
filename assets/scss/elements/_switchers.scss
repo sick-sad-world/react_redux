@@ -139,7 +139,7 @@ span.switcher-direction {
 	}
 	input:checked + label {
 		color: $c-alt;
-		transition-delay: $dur;
+		//transition-delay: $dur;
 	}
 	input:disabled ~ span,
 	input:disabled ~ label,

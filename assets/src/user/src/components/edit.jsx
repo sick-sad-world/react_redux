@@ -1,6 +1,7 @@
 // Import utility stuff
 // ===========================================================================
-import { defaultData, defaultInterface } from '../defaults';
+import { defaultInterface } from '../defaults';
+import { bindAll } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
@@ -10,72 +11,65 @@ import PropTypes from 'prop-types';
 // Import Child components
 // ===========================================================================
 import TextInput from 'common/components/forms/input-text';
-import MakeEditForm, { injectedPropsType } from 'common/hocs/edit-form';
+import SectionWrapper from 'common/section';
+import Confirmation from 'common/components/confirmation';
+import statefullForm, { injectedProps } from 'common/hocs/statefull-form';
 import EmailList from './email-list';
 
 class EditUser extends React.Component {
-
-  static getTypeCheck() {
-    return {
-      data: PropTypes.shape(defaultInterface).isRequired
-    };
+  constructor(props) {
+    super(props);
+    bindAll(this, 'submitForm');
   }
 
-  static mapDataToState(data) {
-    return {
-      changed: [],
-      fullname: data.fullname,
-      email: data.email,
-      position: data.position,
-      email_bcc: data.email_bcc
-    };
-  }
-
-  static mapStateToData(state, data, changed, props) {
-    return state;
+  submitForm() {
+    this.props.onSubmit(this.props.submit());
   }
 
   render() {
-    const { running, formValues, updateState, onEmailBccError } = this.props;
+    const { state, values, changed, texts, bindInput, makeUpdater, onEmailBccError, reset } = this.props;
+    const running = state === 3;
     return (
-      <form className='subsection-content columned'>
-        <div className='form-block'>
-          <TextInput
-            className='row'
-            name='fullname'
-            label='Fullname'
-            disabled={running}
-            value={formValues.fullname}
-            onChange={updateState('fullname')}
-          />
-          <TextInput
-            className='row'
-            name='position'
-            label='Position'
-            disabled={running}
-            value={formValues.position}
-            onChange={updateState('position')}
-          />
-          <TextInput
-            className='row'
-            name='email'
-            type='email'
-            label='Email'
-            disabled={running}
-            value={formValues.email}
-            onChange={updateState('email')}
-          />
-          <div className='row'>
-            <h3 className='form-subtitle'>Email BCC assigment:</h3>
-            <EmailList
-              email={formValues.email}
-              data={formValues.email_bcc}
-              onChange={updateState('email_bcc')}
-              onError={onEmailBccError}
-              />
+      <SectionWrapper title='User settings' description={texts.description}>
+        {(changed.length) ? (
+          <Confirmation text={texts.confirmation} changed={changed} running={running} apply={this.submitForm} cancel={reset} />
+        ) : null}
+        <form className='subsection-content columned'>
+          <div className='form-block'>
+            <TextInput
+              className='row'
+              name='fullname'
+              label='Fullname'
+              disabled={running}
+              {...bindInput('fullname')}
+            />
+            <TextInput
+              className='row'
+              name='position'
+              label='Position'
+              disabled={running}
+              {...bindInput('position')}
+            />
+            <TextInput
+              className='row'
+              name='email'
+              type='email'
+              label='Email'
+              disabled={running}
+              {...bindInput('email')}
+            />
+            <div className='row'>
+              <h3 className='form-subtitle'>Email BCC assigment:</h3>
+              <EmailList
+                email={values.email}
+                data={values.email_bcc}
+                onChange={makeUpdater('email_bcc')}
+                onError={onEmailBccError}
+                />
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </SectionWrapper>
     );
   }
 }
@@ -84,7 +78,16 @@ class EditUser extends React.Component {
 // ===========================================================================
 EditUser.propTypes = {
   onEmailBccError: PropTypes.func,
-  ...injectedPropsType
+  onSubmit: PropTypes.func.isRequired,
+  ...injectedProps
 };
 
-export default MakeEditForm(EditUser);
+export default statefullForm({
+  mapStateToData({ name, ...data }, props) {
+    return data;
+  },
+  propTypes: {
+    data: PropTypes.shape(defaultInterface).isRequired,
+    onEmailBccError: PropTypes.func
+  }
+})(EditUser);

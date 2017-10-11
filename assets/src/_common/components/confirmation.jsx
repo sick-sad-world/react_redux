@@ -6,26 +6,31 @@ import { capitalize } from 'lodash';
 // ===========================================================================
 import React from 'react';
 import PropTypes from 'prop-types';
+import FormSubmit from 'common/components/forms/form-submit';
 
-export default function Confirmation({ text, changed, apply, cancel }) {
-  let message = text;
-  if (text.indexOf('{data}') > -1) {
-    message = text.replace('{data}', capitalize(changed.map((change => change.replace('_', ' '))).join(', ')));
-  }
+function createMessage(text, changed) {
+  return text.replace('{data}', capitalize(changed.map((change => change.replace('_', ' '))).join(', ')));
+}
 
+export default function Confirmation({ text, changed, running, apply, cancel }) {
   return (
     <div className='edit-confirmation'>
-      <p>{message}</p>
+      <p>{(text.indexOf('{data}') > -1) ? createMessage(text, changed) : text}</p>
       <div>
-        <a onClick={apply} className='button is-accent'>Apply</a>
+        <FormSubmit loading={running} className='button is-accent' text='Apply' onClick={apply} />
         <a onClick={cancel} className='button'>Cancel</a>
       </div>
     </div>
   );
 }
 
+Confirmation.defaultProps = {
+  running: false
+};
+
 Confirmation.propTypes = {
   changed: PropTypes.arrayOf(PropTypes.string).isRequired,
+  running: PropTypes.bool.isRequired,
   text: PropTypes.string.isRequired,
   apply: PropTypes.func.isRequired,
   cancel: PropTypes.func.isRequired

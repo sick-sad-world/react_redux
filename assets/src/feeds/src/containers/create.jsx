@@ -21,7 +21,7 @@ import { setFeedsState, createFeed, testUrl } from '../actions';
 // Import Child components
 // ===========================================================================
 import Dropdown from 'common/components/forms/dropdown';
-import { EditFormHeader } from 'common/hocs/edit-form';
+import SectionHeader from 'common/section/header';
 import FormAutodetect from '../components/form-autodetect';
 import FormFacebook from '../components/form-facebook';
 import FormRss from '../components/form-rss';
@@ -153,7 +153,7 @@ class FeedCreate extends React.Component {
         'mod-create-source': true,
         'state-loading': running
       })}>
-        <EditFormHeader
+        <SectionHeader
           title={`${texts.title} ${this.props.set.name}`}
           description={texts.description}
           url={`${this.props.backPath}/${this.props.set.id}`}

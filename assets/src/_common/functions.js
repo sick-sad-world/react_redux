@@ -1,3 +1,5 @@
+import { toNumber } from 'lodash';
+
 export const numOrString = (str, base = 10) => {
   const int = parseFloat(str, base);
   return (isNaN(int)) ? str : int;
@@ -34,11 +36,11 @@ export const sortParamToShort = (param = '') => {
   return stat;
 };
 
-export const normalizeValue = (v, base = 10) => {
-  // const intVal = parseFloat(v, base);
-  // if (!isNaN(intVal)) {
-  //   return intVal;
-  // } else
+export const normalizeValue = (v) => {
+  const intVal = toNumber(v);
+  if (!Number.isNaN(intVal)) {
+    return intVal;
+  } else
   if (v === 'true') {
     return true;
   } else if (v === 'false') {

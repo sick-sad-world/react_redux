@@ -49,11 +49,9 @@ class Columns extends React.Component {
         <ColumnFeedsAssignment
           data={chosen}
           state={state}
-          update={editItem}
-          backPath={`${route.path}/${curId}`}
-          formProps={{
-            texts: assignmentText
-          }}
+          onSubmit={editItem}
+          backUrl={`${route.path}/${curId}`}
+          texts={assignmentText}
         />
       );
     }
@@ -62,9 +60,9 @@ class Columns extends React.Component {
         className='mod-column-edit'
         data={chosen}
         state={state}
-        update={editItem}
+        onSubmit={editItem}
         texts={editText}
-        backPath={route.path}
+        backUrl={route.path}
       />
     );
   }

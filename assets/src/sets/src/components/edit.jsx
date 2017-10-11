@@ -43,7 +43,7 @@ class EditSet extends React.Component {
   }
 
   render() {
-    const { state, changed, values, texts, backUrl, reset, bindInput, makeUpdater, emptyFeeds } = this.props;
+    const { state, changed, values, texts, backUrl, reset, bindInput, emptyFeeds } = this.props;
     const running = state === 3;
     const title = (values.name) ? `${texts.title} "${values.name}"` : texts.title;
     return (

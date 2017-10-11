@@ -32,15 +32,11 @@ import { PickDisplaySettings } from 'src/display-settings';
 class EditColumn extends React.Component {
   constructor(props) {
     super(props);
-    bindAll(this, 'getDisplaySettings', 'getContentType');
+    bindAll(this, 'getDisplaySettings', 'getContentType', 'submitForm');
   }
 
   getDisplaySettings(value) {
     return updateArrayWithValue(this.props.values.display_settings, value);
-  }
-
-  getAutoreload(value) {
-    return value || 0;
   }
 
   updateSorting() {
@@ -50,12 +46,12 @@ class EditColumn extends React.Component {
   getContentType() {
     return (value, state, props, name) => {
       if (value === 1) {
-        return this.props.stateUpdater({
+        return this.props.makeUpdater({
           ...this.props.contentTypeDef,
           [name]: 1
         });
       }
-      return this.props.stateUpdater({ [name]: value });
+      return this.props.makeUpdater({ [name]: value });
     };
   }
 
@@ -74,13 +70,17 @@ class EditColumn extends React.Component {
     );
   }
 
+  submitForm() {
+    this.props.onSubmit(this.props.submit());
+  }
+
   render() {
-    const { state, changed, values, texts, backUrl, path, reset, bindInput, makeUpdater } = this.props;
+    const { state, changed, values, texts, backUrl, reset, bindInput, makeUpdater } = this.props;
     const running = state === 3;
     const title = (values.name) ? `${texts.title} "${values.name}"` : texts.title;
     const contentTypeUpdater = makeUpdater(['is_image', 'is_video', 'is_gallery', 'is_facebook'], this.getContentType);
     return (
-      <SectionWrapper title={title} description={texts.description} url={backUrl} className='mod-sourceset-edit'>
+      <SectionWrapper title={title} description={texts.description} url={backUrl} className='mod-column-edit'>
         {(changed.length) ? (
           <Confirmation text={texts.confirmation} changed={changed} apply={this.submitForm} cancel={reset} />
         ) : null}
@@ -113,7 +113,7 @@ class EditColumn extends React.Component {
                   />
                 ) : null}
               </div>
-              {(SetList || FeedList) ? <Link to={`${path}/${values.id}/assignment`} className='button is-accent'>Assign feeds</Link> : null}
+              {(SetList || FeedList) ? <Link to={`${backUrl}/${values.id}/assignment`} className='button is-accent'>Assign feeds</Link> : null}
             </fieldset>
             <h4 className='form-subtitle'>Display options:</h4>
             <Toggler
@@ -156,7 +156,7 @@ class EditColumn extends React.Component {
               selectClassName='size-120'
               name='autoreload'
               options={this.props.autoReloadOptions}
-              {...bindInput('infinite', this.getAutoreload)}
+              {...bindInput('infinite', v => v || 0)}
               clearable={true}
             />
             <TextInput
@@ -283,6 +283,7 @@ EditColumn.propTypes = {
     is_gallery: PropTypes.string.isRequired,
     is_facebook: PropTypes.string.isRequired
   }).isRequired,
+  onSubmit: PropTypes.func.isRequired,
   language: optionShape('string').isRequired,
   autoReloadOptions: optionShape('number').isRequired,
   advRegExp: PropTypes.instanceOf(RegExp).isRequired,

@@ -12,7 +12,6 @@ export default function Toggler({ name, label, disabled, value, onChange, option
       e.target.parentNode.classList.add('is-focused');
     }
   }
-
   return (
     <div className={className}>
       <span className='form-label'>{label}:</span>
