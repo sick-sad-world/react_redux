@@ -19,8 +19,8 @@ export const updateObjectById = (state, id, updater) => ({
 });
 
 export const sortMiddleware = store => next => (action) => {
-  if (action.payload instanceof Array && action.payload.length && action.payload[0].order && action.type.indexOf('READ') > -1) {
-    action.payload = sortBy(action.payload.map(item => ({ ...item, order: (item.order === null) ? -1 : item.order })), 'order');
+  if (action.payload instanceof Array && action.payload.length && action.type.indexOf('READ') > -1) {
+    action.payload = sortBy(action.payload, 'order');
   } else if (action.type.indexOf('SORT') > -1) {
     action.payload = action.payload.list.map(({ id }) => id);
   }

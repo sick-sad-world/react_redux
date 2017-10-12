@@ -33,6 +33,13 @@ export const editColumn = createAction({
   successMessage: 'Column data has been updated.'
 });
 
+export const updateVisibility = createAction({
+  type: types.UPD_VIS,
+  state_type: types.STATE,
+  url: 'column',
+  pendingMessage: 'Updating column visiblity...'
+});
+
 export const deleteColumn = createAction({
   type: types.DELETE,
   state_type: types.STATE,

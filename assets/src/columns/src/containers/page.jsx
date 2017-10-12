@@ -16,7 +16,7 @@ import { makePageSelector } from '../selectors';
 
 // Import actions
 // ===========================================================================
-import { createColumn, editColumn, sortColumns, deleteColumn } from '../actions';
+import { createColumn, editColumn, sortColumns, deleteColumn, updateVisibility } from '../actions';
 import { fetchResults, clearResults } from 'src/results';
 
 // Import Child components
@@ -36,11 +36,11 @@ class Columns extends React.Component {
     bindAll(this, 'makeItemIcon');
   }
 
-  makeItemIcon({ id, open }) {
+  makeItemIcon({ id, open, order }) {
     return (open) ? (
-      <Hide onClick={() => this.props.actionHide(id)} />
+      <Hide onClick={() => this.props.actionHide(id, order)} />
     ) : (
-      <Show onClick={() => this.props.actionShow(id, this.props.payload.find(col => col.id === id).data)} />
+      <Show onClick={() => this.props.actionShow(id, order, this.props.payload.find(col => col.id === id).data)} />
     );
   }
 
@@ -155,16 +155,16 @@ function mapDispatchToProps(dispatch) {
     actionSort(data, opts) {
       return dispatch(sortColumns(data, opts));
     },
-    actionHide(id) {
-      return dispatch(editColumn({ id, open: 0 })).then((resp) => {
+    actionHide(id, order) {
+      return dispatch(updateVisibility({ id, open: 0, order })).then((resp) => {
         if (clearResults) {
           dispatch(clearResults(id));
         }
         return resp;
       });
     },
-    actionShow(id, data) {
-      return dispatch(editColumn({ id, open: 1 })).then((resp) => {
+    actionShow(id, order, data) {
+      return dispatch(updateVisibility({ id, open: 1, order })).then((resp) => {
         if (fetchResults && data) {
           dispatch(fetchResults(data, { entity: id }));
         }

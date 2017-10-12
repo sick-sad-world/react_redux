@@ -26,7 +26,7 @@ export default createReducer({
     ...state[0],
     column_ids: updateArrayWithValue(state[0].column_ids, action.id)
   }],
-  [columns.UPDATE]: (state, action) => {
+  [columns.UPD_VIS]: (state, action) => {
     return [{
       ...state[0],
       column_ids: updateDashboardContents(state[0].column_ids, action)
