@@ -3,9 +3,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { normalizeValue } from 'functions';
 import { optionShape } from 'common/typecheck';
-import { toNumber, toInteger, toSafeInteger } from 'lodash';
 
-console.log(toNumber, toInteger, toSafeInteger);
 export default function Toggler({ name, label, disabled, value, onChange, options, className, togglerClassName }) {
   function setRootFocusClass(e) {
     if (e.type === 'blur') {

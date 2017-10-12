@@ -19,17 +19,18 @@ import { editAlert, deleteAlert, createAlert, sortAlerts } from './actions';
 
 // Import Child components
 // ===========================================================================
-import makePageContainer from 'common/hocs/container';
+import makePageContainer, { injectedProps } from 'common/hocs/container';
 import DeleteConfirmation from 'common/components/delete-confirmation';
 import { ListSection, ListItem } from 'common/list';
 import EditAlert from './components/edit';
 
 class Alerts extends React.Component {
   render() {
-    const { listText, state, payload, createItem, deleteConfirm, editItem, editText, actionSort, chosen, deleting, route, curId } = this.props;
+    const { listText, state, payload, createItem, deleteConfirm, deleteItem, editItem, editText, actionSort, chosen, creating, deleting, route, curId } = this.props;
     return (
       <div className='mod-page'>
         <ListSection
+        loading={creating}
           payload={payload}
           state={state}
           createItem={createItem}
@@ -56,7 +57,7 @@ class Alerts extends React.Component {
           />
         ) : null}
         {(deleting) ? (
-          <DeleteConfirmation close={deleteConfirm()} accept={deleteConfirm(deleting.id)}>
+          <DeleteConfirmation close={deleteConfirm()} accept={deleteItem}>
             <dl>
               <dt>Are you sure you want to delete the alert</dt>
               <dd>{`ID: ${deleting.id} - ${deleting.name}.`}</dd>
@@ -86,18 +87,14 @@ Alerts.defaultProps = {
 
 Alerts.propTypes = {
   curId: PropTypes.number.isRequired,
-  deleting: PropTypes.shape(listShape),
   listText: PropTypes.objectOf(PropTypes.string).isRequired,
   editText: PropTypes.objectOf(PropTypes.string).isRequired,
   payload: PropTypes.arrayOf(PropTypes.shape(listShape)).isRequired,
   state: stateNum.isRequired,
-  editItem: PropTypes.func.isRequired,
-  deleteConfirm: PropTypes.func.isRequired,
-  createItem: PropTypes.func.isRequired,
-  actionSort: PropTypes.func.isRequired,
   router: PropTypes.object.isRequired,
   route: PropTypes.object.isRequired,
-  chosen: PropTypes.shape(coreInterface)
+  chosen: PropTypes.shape(coreInterface),
+  ...injectedProps
 };
 
 // Connect our Container to State

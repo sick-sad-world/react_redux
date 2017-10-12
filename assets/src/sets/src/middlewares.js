@@ -1,9 +1,10 @@
 import types from './types';
-import { calcFeedOccurance, setUniqFeeds } from './helpers';
+import { get } from 'lodash';
+import { setUniqFeeds, calcFeedOccurance, processSet } from './helpers';
 
 // Clear feeds property on SET UPDATE (sent by server defaults)
 // ===========================================================================
-export function clearFeeds({ dispatch, getState }) {
+export function clearFeeds() {
   return next => (action) => {
     if (action.type === types.UPDATE) {
       return next({
@@ -20,22 +21,30 @@ export function clearFeeds({ dispatch, getState }) {
 
 // Loop over sets in order to determine which feeds are uniq for each set
 // ===========================================================================
-export function updateUniq({ dispatch, getState }) {
+export function updateUniq({ getState }) {
   return next => (action) => {
-    if (action.type === types.READ) {
-      const feeds = calcFeedOccurance(action.payload);
-      return next({
-        ...action,
-        payload: action.payload.map(set => setUniqFeeds(set, feeds))
-      });
-    } else if (action.type === types.UPDATE_UNIQ) {
-      const { sets } = getState();
-      const feeds = calcFeedOccurance(sets.payload);
-      return next({
-        ...action,
-        payload: sets.payload.map(set => setUniqFeeds(set, feeds)).map(({ id, uniq_ids }) => ({ id, uniq_ids }))
-      });
+    switch (action.type) {
+      case types.READ:
+        return next({
+          ...action,
+          payload: action.payload.map((set, i, sets) => processSet(set, sets))
+        });
+      case types.UPDATE_UNIQ:
+        return next({
+          ...action,
+          payload: get(getState(), 'sets.payload', []).map((set, i, sets) => ({
+            ...set,
+            uniq_ids: setUniqFeeds(set.source_ids, calcFeedOccurance(sets))
+          })).map(({ id, uniq_ids }) => ({ id, uniq_ids }))
+        });
+      case types.CREATE:
+      case types.UPDATE:
+        return next({
+          ...action,
+          payload: processSet(action.payload, get(getState(), 'sets.payload', []))
+        });
+      default:
+        return next(action);
     }
-    return next(action);
   };
 }

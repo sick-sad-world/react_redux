@@ -21,7 +21,7 @@ import { fetchResults, clearResults } from 'src/results';
 
 // Import Child components
 // ===========================================================================
-import makePageContainer from 'common/hocs/container';
+import makePageContainer, { injectedProps } from 'common/hocs/container';
 import DeleteConfirmation from 'common/components/delete-confirmation';
 import { ListSection, ListItem } from 'common/list';
 import { Show, Hide } from 'common/components/buttons';
@@ -68,10 +68,11 @@ class Columns extends React.Component {
   }
 
   render() {
-    const { listText, state, payload, createItem, deleteConfirm, actionSort, chosen, deleting, route, curId } = this.props;
+    const { listText, state, payload, createItem, deleteConfirm, deleteItem, actionSort, chosen, creating, deleting, route, curId } = this.props;
     return (
       <div className='mod-page'>
         <ListSection
+          loading={creating}
           payload={payload}
           state={state}
           createItem={createItem}
@@ -91,7 +92,7 @@ class Columns extends React.Component {
         </ListSection>
         {(chosen) ? this.renderDetails() : null}
         {(deleting) ? (
-          <DeleteConfirmation close={deleteConfirm()} accept={deleteConfirm(deleting.id)}>
+          <DeleteConfirmation close={deleteConfirm()} accept={deleteItem}>
             <dl>
               <dt>Are you sure you want to delete the column</dt>
               <dd>{deleting.name}</dd>
@@ -130,23 +131,18 @@ Columns.defaultProps = {
 // ===========================================================================
 Columns.propTypes = {
   curId: PropTypes.number.isRequired,
-  deleting: PropTypes.shape(listShape),
   listText: PropTypes.objectOf(PropTypes.string).isRequired,
   editText: PropTypes.objectOf(PropTypes.string).isRequired,
   assignmentText: PropTypes.objectOf(PropTypes.string).isRequired,
   payload: PropTypes.arrayOf(PropTypes.shape(listShape)).isRequired,
   state: stateNum.isRequired,
-  editItem: PropTypes.func.isRequired,
-  deleteConfirm: PropTypes.func.isRequired,
-  createItem: PropTypes.func.isRequired,
-  actionSort: PropTypes.func.isRequired,
   actionHide: PropTypes.func.isRequired,
   actionShow: PropTypes.func.isRequired,
-  changeLocation: PropTypes.func.isRequired,
   router: PropTypes.object.isRequired,
   route: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
-  chosen: PropTypes.shape(coreInterface)
+  chosen: PropTypes.shape(coreInterface),
+  ...injectedProps
 };
 
 // Connect our Container to State
@@ -162,7 +158,7 @@ export default connect(makePageSelector, dispatch => ({
   actionShow(id, order, data) {
     return dispatch(editColumn({ id, open: 1, order })).then((resp) => {
       if (fetchResults && data) {
-        return dispatch(fetchResults(data, { entity: id }));
+        dispatch(fetchResults(data, { entity: id }));
       }
       return resp;
     });
@@ -170,7 +166,7 @@ export default connect(makePageSelector, dispatch => ({
   actionEdit(data, changed) {
     return dispatch(editColumn(data)).then((resp) => {
       if (fetchResults && data.open && intersection(affectingProps, changed).length) {
-        return dispatch(fetchResults(data, { entity: data.id }));
+        dispatch(fetchResults(data, { entity: data.id }));
       }
       return resp;
     });
@@ -178,17 +174,12 @@ export default connect(makePageSelector, dispatch => ({
   actionCreate(...args) {
     return dispatch(createColumn(...args)).then((resp) => {
       if (fetchResults) {
-        return dispatch(fetchResults(resp.payload.data, { entity: resp.payload.id }));
+        dispatch(fetchResults(resp.payload.data, { entity: resp.payload.id }));
       }
       return resp;
     });
   },
   actionDelete({ id }) {
-    return dispatch(deleteColumn({ id })).then((resp) => {
-      if (clearResults) {
-        return dispatch(clearResults(id));
-      }
-      return resp;
-    });
+    return dispatch(deleteColumn({ id })).then(() => dispatch(clearResults(id)));
   }
 }))(makePageContainer({ create: 'call' }, Columns));

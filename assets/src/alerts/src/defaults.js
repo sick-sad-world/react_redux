@@ -17,7 +17,7 @@ export const defaultData = {
   active: 1,
   frequency: 15,
   recipient: null,
-  order: null,
+  order: -1,
   via_mail: true,
   via_twitter: null
 };
@@ -33,7 +33,7 @@ export const defaultInterface = {
   ...coreInterface,
   frequency: PropTypes.oneOf(defaultFrequency.map(({ value }) => value)).isRequired,
   recipient: PropTypes.string,
-  order: PropTypes.oneOf([PropTypes.number, PropTypes.string]).isRequired,
+  order: PropTypes.number.isRequired,
   via_mail: PropTypes.bool,
   via_twitter: PropTypes.bool
 };

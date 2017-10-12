@@ -3,7 +3,7 @@ import { } from 'common/typecheck';
 
 export const defaultData = {
   id: 0,
-  order: null,
+  order: -1,
   name: '',
   source_ids: []
 };

@@ -6,6 +6,7 @@ import { bindAll, omit } from 'lodash';
 // ===========================================================================
 import React from 'react';
 import PropTypes from 'prop-types';
+import { listShape } from 'common/typecheck';
 
 export default function makePageContainer(opts, Component) {
   const o = { create: 'call', ...opts };
@@ -14,6 +15,7 @@ export default function makePageContainer(opts, Component) {
     constructor(props) {
       super(props);
       this.state = {
+        creating: false,
         deleting: null
       };
       bindAll(this, 'changeLocation', 'createItem', 'editItem', 'deleteItem', 'deleteConfirm', 'deleteItem');
@@ -27,7 +29,8 @@ export default function makePageContainer(opts, Component) {
     }
 
     runCreateAction(data, ...args) {
-      this.props.actionCreate({ ...data, order: -1 }, ...args).then(({ payload }) => this.changeLocation(`/${payload.id}`));
+      this.setState({ creating: true });
+      this.props.actionCreate({ ...data, order: -1 }, ...args).then(({ payload }) => this.changeLocation(`/${payload.id}`)).then(() => this.setState({ creating: false }));
     }
 
     createItem(value) {
@@ -58,9 +61,11 @@ export default function makePageContainer(opts, Component) {
       return (
         <Component
           {...this.props}
+          creating={this.state.creating}
           deleting={this.state.deleting}
           createItem={this.createItem}
           editItem={this.editItem}
+          deleteItem={this.deleteItem}
           deleteConfirm={this.deleteConfirm}
           actionSort={this.props.actionSort}
           changeLocation={this.changeLocation}
@@ -80,3 +85,15 @@ export default function makePageContainer(opts, Component) {
 
   return ContainerHOC;
 }
+
+export const injectedProps = {
+  curId: PropTypes.number.isRequired,
+  creating: PropTypes.bool.isRequired,
+  deleting: PropTypes.shape(listShape),
+  editItem: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func.isRequired,
+  deleteConfirm: PropTypes.func.isRequired,
+  createItem: PropTypes.func.isRequired,
+  actionSort: PropTypes.func.isRequired,
+  changeLocation: PropTypes.func.isRequired
+};

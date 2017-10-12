@@ -18,7 +18,7 @@ export const defaultData = {
   active: 1,
   frequency: 1440,
   recipient: null,
-  order: null
+  order: -1
 };
 
 export const coreInterface = {

@@ -23,6 +23,7 @@ export function normalizeDisplaySettings(s) {
 export function composeColumnData({ data, display_settings, ...column }) {
   return {
     ...column,
+    order: parseInt(column.order, 10) || -1,
     display_settings: ensureDisplaySettings(display_settings).map(normalizeDisplaySettings),
     data: {
       ...defColumnData,

@@ -16,15 +16,19 @@ export function calcFeedOccurance(sets) {
 
 // Loop over Set [source_ids] and push uniqe ones to [uniq_ids]
 // ===========================================================================
-export function setUniqFeeds(set, feeds) {
-  const uniq_ids = [];
-  set.source_ids.forEach((source) => {
+export function setUniqFeeds(feedIds, feeds) {
+  return feedIds.reduce((acc, source) => {
     if (feeds[source] === 1) {
-      uniq_ids.push(source);
+      acc.push(source);
     }
-  });
+    return acc;
+  }, []);
+}
+
+export function processSet(set, sets) {
   return {
     ...set,
-    uniq_ids
+    order: parseInt(set.order, 10) || -1,
+    uniq_ids: setUniqFeeds(set.source_ids, calcFeedOccurance(sets))
   };
 }

@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 // Import child components
 // ===========================================================================
 import { arrayMove } from 'react-sortable-hoc';
+import FormSubmit from '../components/forms/form-submit.jsx';
 import ListItem from './item';
 import PayloadList from './list';
 
@@ -63,15 +64,16 @@ export class ListSection extends React.Component {
   }
 
   render() {
+    const { texts, loading } = this.props;
     return (
       <section className='mod-subsection-list'>
         <header className='subsection-header'>
           <div className='text'>
-            <h1>{this.props.texts.title}</h1>
-            <p>{this.props.texts.description}</p>
+            <h1>{texts.title}</h1>
+            <p>{texts.description}</p>
             <form onSubmit={this.createHandler}>
-              <input type='text' name='name' required placeholder={this.props.texts.placeholder} />
-              <button className='button is-accent size-90' title={this.props.texts.btn}>Add</button>
+              <input type='text' name='name' required placeholder={texts.placeholder} />
+              <FormSubmit className='button is-accent size-90' loading={loading} title={texts.btn} text='Add' />
             </form>
           </div>
         </header>
@@ -80,7 +82,7 @@ export class ListSection extends React.Component {
           helperClass='mod-entity sortable-ghost'
           useDragHandle
           onSortEnd={this.updateSortState}
-          emptyText={this.props.texts.empty}
+          emptyText={texts.empty}
         >
           {this.renderChildren}
         </PayloadList>
@@ -98,12 +100,14 @@ ListSection.defaultProps = {
     deleting: 'Are you sure want to delete this?',
     empty: 'List is empty.'
   },
+  loading: false,
   state: 1,
   payload: []
 };
 
 ListSection.propTypes = {
   children: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
   texts: PropTypes.shape({
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,

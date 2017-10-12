@@ -20,7 +20,7 @@ import { createSet, editSet, deleteSet, forseUpdateUniq, sortSets } from '../act
 
 // Import Child components
 // ===========================================================================
-import makePageContainer from 'common/hocs/container';
+import makePageContainer, { injectedProps } from 'common/hocs/container';
 import DeleteConfirmation from 'common/components/delete-confirmation';
 import { ListSection, ListItem } from 'common/list';
 import EditSet from '../components/edit';
@@ -65,10 +65,11 @@ class Sourcesets extends React.Component {
   }
 
   render() {
-    const { listText, state, payload, createItem, deleteConfirm, actionSort, chosen, deleting, route, curId } = this.props;
+    const { listText, state, payload, createItem, deleteConfirm, actionSort, deleteItem, chosen, deleting, route, curId, creating } = this.props;
     return (
       <div className='mod-page'>
         <ListSection
+          loading={creating}
           payload={payload}
           state={state}
           createItem={createItem}
@@ -87,7 +88,7 @@ class Sourcesets extends React.Component {
         </ListSection>
         {(chosen) ? this.renderDetails() : null}
         {(deleting) ? (
-          <DeleteConfirmation close={deleteConfirm()} accept={deleteConfirm(deleting.id)}>
+          <DeleteConfirmation close={deleteConfirm()} accept={deleteItem}>
             <dl>
               <dt>Trendolizer sourceset</dt>
               <dd>
@@ -123,20 +124,15 @@ Sourcesets.defaultProps = {
 // ===========================================================================
 Sourcesets.propTypes = {
   curId: PropTypes.number.isRequired,
-  deleting: PropTypes.shape(listShape),
   listText: PropTypes.objectOf(PropTypes.string).isRequired,
   editText: PropTypes.objectOf(PropTypes.string).isRequired,
   payload: PropTypes.arrayOf(PropTypes.shape(listShape)).isRequired,
   state: stateNum.isRequired,
-  editItem: PropTypes.func.isRequired,
-  deleteConfirm: PropTypes.func.isRequired,
-  createItem: PropTypes.func.isRequired,
-  actionSort: PropTypes.func.isRequired,
-  changeLocation: PropTypes.func.isRequired,
   router: PropTypes.object.isRequired,
   route: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
-  chosen: PropTypes.shape(coreInterface)
+  chosen: PropTypes.shape(coreInterface),
+  ...injectedProps
 };
 
 // Connect our Container to State

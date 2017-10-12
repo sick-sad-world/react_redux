@@ -19,6 +19,6 @@ export function makeContainerSelector() {
       state,
       curId,
       payload: payload.map(({ id, name, columns, active }) => ({ id, name, counter: columns.length, active })),
-      chosen: (newName) ? { ...defaultData, name: newName, order: payload.length } : payload.find(({ id }) => id === curId)
+      chosen: (newName) ? { ...defaultData, name: newName } : payload.find(({ id }) => id === curId)
     }));
 }
