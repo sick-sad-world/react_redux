@@ -23,14 +23,6 @@ import Toggler from 'common/components/forms/toggler';
 import { EmailBcc } from 'src/user';
 
 class EditReport extends React.Component {
-  constructor(props) {
-    super(props);
-    bindAll(this, 'submitForm');
-  }
-
-  submitForm() {
-    this.props.onSubmit(this.props.submit());
-  }
 
   getEmailRecipient(emails, state, props, newEmail) {
     return newEmail;
@@ -41,15 +33,15 @@ class EditReport extends React.Component {
   }
 
   render() {
-    const { state, changed, values, texts, backUrl, reset, bindInput, frequencyOptions, makeUpdater } = this.props;
-    const running = state === 3;
+    const { state, changed, values, texts, backUrl, reset, submit, bindInput, frequencyOptions, makeUpdater } = this.props;
+    const loading = state === 3;
     const title = (values.name) ? `${texts.title} "${values.name}"` : texts.title;
     const datePickerFormats = this.props.timeFormat.split(' ');
 
     return (
       <SectionWrapper title={title} description={texts.description} url={backUrl}>
         {(changed.length) ? (
-          <Confirmation text={texts.confirmation} running={running} changed={changed} apply={this.submitForm} cancel={reset} />
+          <Confirmation text={texts.confirmation} loading={loading} changed={changed} apply={submit} cancel={reset} />
         ) : null}
         <form className='subsection-content columned'>
           <div className='form-block'>
@@ -57,14 +49,14 @@ class EditReport extends React.Component {
               className='row'
               name='name'
               label='Report name'
-              disabled={running}
+              disabled={loading}
               {...bindInput('name')}
             />
             <Toggler
               label='Status'
               className='row-flex'
               togglerClassName='size-180'
-              disabled={running}
+              disabled={loading}
               name='active'
               options={[
                 { label: 'Active', value: 1 },
@@ -74,7 +66,7 @@ class EditReport extends React.Component {
             />
             <Dropdown
               label='Frequency'
-              disabled={running}
+              disabled={loading}
               className='row-flex-wrap'
               selectClassName='size-120'
               name='frequency'
@@ -90,7 +82,7 @@ class EditReport extends React.Component {
                 timeFormat={datePickerFormats[1]}
                 inputProps={{
                   className: 'size-180',
-                  disabled: running,
+                  disabled: loading,
                   name: 'next_send'
                 }}
                 {...bindInput('next_send', this.getNextSend)}
@@ -100,7 +92,7 @@ class EditReport extends React.Component {
               {({ payload }) => (
                 <Dropdown
                   label='Columns assigment'
-                  disabled={running}
+                  disabled={loading}
                   className='row'
                   name='columns'
                   options={payload}
@@ -116,7 +108,7 @@ class EditReport extends React.Component {
               <h3 className='form-subtitle'>Email assigment:</h3>
               <p>Currently this report going to: <b>{values.recipient}</b></p>
               <EmailBcc
-                disabled={running}
+                disabled={loading}
                 active={values.recipient}
                 onChange={makeUpdater('recipient', this.getEmailRecipient)}
                 onClick={makeUpdater('recipient')}
@@ -139,7 +131,6 @@ EditReport.propTypes = {
   backUrl: PropTypes.string.isRequired,
   state: stateNum.isRequired,
   frequencyOptions: optionShape('number'),
-  onSubmit: PropTypes.func.isRequired,
   timeFormat: PropTypes.string.isRequired,
   ...injectedProps
 };

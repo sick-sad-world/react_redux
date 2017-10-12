@@ -11,9 +11,9 @@ import PropTypes from 'prop-types';
 // ===========================================================================
 import SectionHeader from './header.jsx';
 
-export default function SectionWrapper({ url, title, description, running, children, className }) {
+export default function SectionWrapper({ url, title, description, loading, children, className }) {
   return (
-    <section className={classNames('mod-subsection-edit', className, { 'state-loading': running })}>
+    <section className={classNames('mod-subsection-edit', className, { 'state-loading': loading })}>
       <SectionHeader url={url} title={title} description={description} />
       {children}
     </section>
@@ -21,11 +21,11 @@ export default function SectionWrapper({ url, title, description, running, child
 }
 
 SectionWrapper.defaultProps = {
-  running: false
+  loading: false
 };
 
 SectionWrapper.propTypes = {
-  running: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
   url: PropTypes.string,
   title: PropTypes.string.isRequired,
   description: PropTypes.string,

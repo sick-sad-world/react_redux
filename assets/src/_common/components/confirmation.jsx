@@ -12,12 +12,12 @@ function createMessage(text, changed) {
   return text.replace('{data}', capitalize(changed.map((change => change.replace('_', ' '))).join(', ')));
 }
 
-export default function Confirmation({ text, changed, running, apply, cancel }) {
+export default function Confirmation({ text, changed, loading, apply, cancel }) {
   return (
     <div className='edit-confirmation'>
       <p>{(text.indexOf('{data}') > -1) ? createMessage(text, changed) : text}</p>
       <div>
-        <FormSubmit loading={running} className='button is-accent' text='Apply' onClick={apply} />
+        <FormSubmit loading={loading} className='button is-accent' text='Apply' onClick={apply} />
         <a onClick={cancel} className='button'>Cancel</a>
       </div>
     </div>
@@ -25,12 +25,12 @@ export default function Confirmation({ text, changed, running, apply, cancel }) 
 }
 
 Confirmation.defaultProps = {
-  running: false
+  loading: false
 };
 
 Confirmation.propTypes = {
   changed: PropTypes.arrayOf(PropTypes.string).isRequired,
-  running: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
   text: PropTypes.string.isRequired,
   apply: PropTypes.func.isRequired,
   cancel: PropTypes.func.isRequired

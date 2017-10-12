@@ -17,22 +17,14 @@ import statefullForm, { injectedProps } from 'common/hocs/statefull-form';
 import EmailList from './email-list';
 
 class EditUser extends React.Component {
-  constructor(props) {
-    super(props);
-    bindAll(this, 'submitForm');
-  }
-
-  submitForm() {
-    this.props.onSubmit(this.props.submit());
-  }
 
   render() {
-    const { state, values, changed, texts, bindInput, makeUpdater, onEmailBccError, reset } = this.props;
-    const running = state === 3;
+    const { state, values, changed, texts, bindInput, makeUpdater, onEmailBccError, submit, reset } = this.props;
+    const loading = state === 3;
     return (
       <SectionWrapper title='User settings' description={texts.description}>
         {(changed.length) ? (
-          <Confirmation text={texts.confirmation} changed={changed} running={running} apply={this.submitForm} cancel={reset} />
+          <Confirmation text={texts.confirmation} changed={changed} loading={loading} apply={submit} cancel={reset} />
         ) : null}
         <form className='subsection-content columned'>
           <div className='form-block'>
@@ -40,14 +32,14 @@ class EditUser extends React.Component {
               className='row'
               name='fullname'
               label='Fullname'
-              disabled={running}
+              disabled={loading}
               {...bindInput('fullname')}
             />
             <TextInput
               className='row'
               name='position'
               label='Position'
-              disabled={running}
+              disabled={loading}
               {...bindInput('position')}
             />
             <TextInput
@@ -55,7 +47,7 @@ class EditUser extends React.Component {
               name='email'
               type='email'
               label='Email'
-              disabled={running}
+              disabled={loading}
               {...bindInput('email')}
             />
             <div className='row'>
@@ -78,12 +70,11 @@ class EditUser extends React.Component {
 // ===========================================================================
 EditUser.propTypes = {
   onEmailBccError: PropTypes.func,
-  onSubmit: PropTypes.func.isRequired,
   ...injectedProps
 };
 
 export default statefullForm({
-  mapStateToData({ name, ...data }, props) {
+  mapStateToData({ name, ...data }) {
     return data;
   },
   propTypes: {

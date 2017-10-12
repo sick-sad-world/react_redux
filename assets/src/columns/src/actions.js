@@ -40,3 +40,4 @@ export const deleteColumn = createAction({
   pendingMessage: 'Deleting column...',
   successMessage: 'Column was deleted.'
 });
+

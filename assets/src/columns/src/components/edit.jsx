@@ -2,7 +2,7 @@
 // ===========================================================================
 import { forOwn, isEqual, pickBy, includes, bindAll } from 'lodash';
 import { updateArrayWithValue } from 'functions';
-import { availableColumnData, defaultInterface, editOptions, notAffecting } from '../defaults';
+import { availableColumnData, defaultInterface, editOptions } from '../defaults';
 
 // Import React related stuff
 // ===========================================================================
@@ -27,12 +27,14 @@ import { BriefList as SetList } from 'src/sets';
 import { BriefList as FeedList } from 'src/feeds';
 import { PickDisplaySettings } from 'src/display-settings';
 
+const notAffecting = ['id', 'name', 'display_settings', 'advancedFilters', 'changed'];
+
 // Edit Column
 // ===========================================================================
 class EditColumn extends React.Component {
   constructor(props) {
     super(props);
-    bindAll(this, 'getDisplaySettings', 'getContentType', 'submitForm');
+    bindAll(this, 'getDisplaySettings', 'getContentType');
   }
 
   getDisplaySettings(value) {
@@ -68,18 +70,14 @@ class EditColumn extends React.Component {
     );
   }
 
-  submitForm() {
-    this.props.onSubmit(this.props.submit());
-  }
-
   render() {
     const { state, changed, values, texts, backUrl, reset, bindInput, makeUpdater } = this.props;
-    const running = state === 3;
+    const loading = state === 3;
     const title = (values.name) ? `${texts.title} "${values.name}"` : texts.title;
     return (
       <SectionWrapper title={title} description={texts.description} url={backUrl} className='mod-column-edit'>
         {(changed.length) ? (
-          <Confirmation text={texts.confirmation} running={running} changed={changed} apply={this.submitForm} cancel={reset} />
+          <Confirmation text={texts.confirmation} loading={loading} changed={changed} apply={submit} cancel={reset} />
         ) : null}
         <form className='subsection-content columned'>
           <div className='form-block'>
@@ -87,7 +85,7 @@ class EditColumn extends React.Component {
               className='row'
               name='name'
               label='Column name'
-              disabled={running}
+              disabled={loading}
               {...bindInput('name')}
             />
             <fieldset className='row'>
@@ -114,7 +112,7 @@ class EditColumn extends React.Component {
             </fieldset>
             <h4 className='form-subtitle'>Display options:</h4>
             <Toggler
-              disabled={running}
+              disabled={loading}
               label='Display ignored items anyway'
               className='row-flex'
               name='show_ignored'
@@ -125,7 +123,7 @@ class EditColumn extends React.Component {
               {...bindInput('show_ignored')}
             />
             <Toggler
-              disabled={running}
+              disabled={loading}
               label='Show only favorited items'
               className='row-flex'
               name='show_favorites'
@@ -138,7 +136,7 @@ class EditColumn extends React.Component {
             <Toggler
               label='Infinite scroll'
               className='row-flex'
-              disabled={running}
+              disabled={loading}
               name='infinite'
               options={[
                 { value: 1, label: 'On' },
@@ -147,7 +145,7 @@ class EditColumn extends React.Component {
               {...bindInput('infinite')}
             />
             <Dropdown
-              disabled={running}
+              disabled={loading}
               className='row-flex'
               label='Autoreloading'
               selectClassName='size-120'
@@ -162,7 +160,7 @@ class EditColumn extends React.Component {
               name='limit'
               type='number'
               label='Max number of items'
-              disabled={running}
+              disabled={loading}
               {...bindInput('limit')}
             />
             <div className='row-flex'>
@@ -170,13 +168,13 @@ class EditColumn extends React.Component {
               <Sorting
                 className='sorting-selects'
                 value={{ sort: values.sort, direction: values.direction }}
-                disabled={running}
+                disabled={loading}
                 onChange={makeUpdater(['sort', 'direction'])}
               />
             </div>
             <PickDisplaySettings
               className='row display-settings'
-              disabled={running}
+              disabled={loading}
               {...bindInput('display_settings', this.getDisplaySettings)}
             />
           </div>
@@ -187,7 +185,7 @@ class EditColumn extends React.Component {
             {this.getContentTypeProps('Facebook posts', 'is_facebook')}
             {this.getContentTypeProps('Galleries', 'is_gallery')}
             <Dropdown
-              disabled={running}
+              disabled={loading}
               className='row-flex'
               label='Language'
               selectClassName='size-180'
@@ -200,28 +198,28 @@ class EditColumn extends React.Component {
               className='row'
               name='search'
               label='Title/description contains'
-              disabled={running}
+              disabled={loading}
               {...bindInput('search')}
             />
             <TextInput
               className='row'
               name='LIKE(url)'
               label='URL contains'
-              disabled={running}
+              disabled={loading}
               {...bindInput('LIKE(url)')}
             />
             <TextInput
               className='row'
               name='author'
               label='Author contains'
-              disabled={running}
+              disabled={loading}
               {...bindInput('author')}
             />
             <TextInput
               className='row'
               name='exclude_search'
               label='Title/description does not contains'
-              disabled={running}
+              disabled={loading}
               {...bindInput('exclude_search')}
             />
             <div className='row-flex'>
@@ -231,14 +229,14 @@ class EditColumn extends React.Component {
                   name='since'
                   inputClassName='size-120'
                   placeholder='Since...'
-                  disabled={running}
+                  disabled={loading}
                   {...bindInput('since')}
                 />
                 <TextInput
                   name='before'
                   inputClassName='size-120'
                   placeholder='Before...'
-                  disabled={running}
+                  disabled={loading}
                   {...bindInput('before')}
                 />
               </div>
@@ -246,7 +244,7 @@ class EditColumn extends React.Component {
           </div>
           <AdvFilters
             className=''
-            disabled={running}
+            disabled={loading}
             {...bindInput('advancedFilters')}
           />
         </form>
@@ -262,14 +260,12 @@ EditColumn.defaultProps = {
     { value: '', label: 'Include' },
     { value: 0, label: 'Omit' }
   ],
-  notAffecting: [...notAffecting],
   ...editOptions
 };
 
 EditColumn.propTypes = {
   contentTypeOpts: optionShape('any').isRequired,
   contentTypeEntries: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onSubmit: PropTypes.func.isRequired,
   language: optionShape('string').isRequired,
   autoReloadOptions: optionShape('number').isRequired,
   advRegExp: PropTypes.instanceOf(RegExp).isRequired,
@@ -300,16 +296,18 @@ export default statefullForm({
       ...columnData
     };
   },
-  mapStateToData(state, props) {
-    const dataProps = pickBy(state, (v, k) => !includes(props.notAffecting, k) && ((v instanceof Array) ? v.length : v !== ''));
-    if (dataProps['LIKE(url)']) dataProps['LIKE(url)'] = `%${dataProps['LIKE(url)']}%`;
+  mapStateToData(values) {
+    const dataProps = pickBy(values, (v, k) => !includes(notAffecting, k) && ((v instanceof Array) ? v.length : v !== ''));
+    if (dataProps['LIKE(url)']) {
+      dataProps['LIKE(url)'] = `%${dataProps['LIKE(url)']}%`;
+    }
     return {
-      id: state.id,
-      name: state.name,
-      display_settings: state.display_settings,
+      id: values.id,
+      name: values.name,
+      display_settings: values.display_settings,
       data: {
         ...dataProps,
-        ...state.advancedFilters
+        ...values.advancedFilters
       }
     };
   },

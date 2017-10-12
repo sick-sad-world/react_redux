@@ -1,7 +1,7 @@
 import types from './types';
 import { composeColumnData } from './helpers';
 
-export function processColumn({ dispatch, getState }) {
+export function processColumn() {
   return next => (action) => {
     switch (action.type) {
       case types.READ:

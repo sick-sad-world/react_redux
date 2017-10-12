@@ -5,6 +5,8 @@ export const numOrString = (str, base = 10) => {
   return (isNaN(int)) ? str : int;
 };
 
+export const parseOrder = (order) => (typeof order === 'string') ? parseInt(order, 10) || -1 : order;
+
 export const updateArrayWithValue = (arr, val) => {
   const result = [];
   let inArray = false;

@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 // ===========================================================================
 import PropTypes from 'prop-types';
 import { listShape, stateNum } from 'common/typecheck';
-import { coreInterface, affectingProps } from '../defaults';
+import { coreInterface } from '../defaults';
 import { makePageSelector } from '../selectors';
 
 // Import actions
@@ -28,17 +28,19 @@ import { Show, Hide } from 'common/components/buttons';
 import EditColumn from '../components/edit';
 import ColumnFeedsAssignment from '../components/assignment';
 
+const affectingProps = ['sort', 'direction', 'show_favorites', 'show_ignored', 'limit', 'author', 'search', 'exclude_search', 'LIKE(url)', 'since', 'before', 'language', 'source', 'set', 'ignore_source', 'ignore_set', 'is_image', 'is_video', 'is_facebook', 'is_gallery'];
+
 class Columns extends React.Component {
   constructor(props) {
     super(props);
     bindAll(this, 'makeItemIcon');
   }
 
-  makeItemIcon({ id, open, order }) {
+  makeItemIcon({ id, open }) {
     return (open) ? (
-      <Hide onClick={() => this.props.actionHide(id, order)} />
+      <Hide onClick={() => this.props.actionHide(id)} />
     ) : (
-      <Show onClick={() => this.props.actionShow(id, order, this.props.payload.find(col => col.id === id).data)} />
+      <Show onClick={() => this.props.actionShow(id, this.props.payload.find(col => col.id === id).data)} />
     );
   }
 
@@ -148,38 +150,52 @@ Columns.propTypes = {
 // Connect our Container to State
 // @ deps -> Columns
 // ===========================================================================
-export default connect(makePageSelector, dispatch => ({
-  actionSort(...args) {
-    return dispatch(sortColumns(...args));
-  },
-  actionHide(id, order) {
-    return dispatch(editColumn({ id, open: 0, order })).then(() => dispatch(clearResults(id)));
-  },
-  actionShow(id, order, data) {
-    return dispatch(editColumn({ id, open: 1, order })).then((resp) => {
-      if (fetchResults && data) {
-        dispatch(fetchResults(data, { entity: id }));
-      }
-      return resp;
-    });
-  },
-  actionEdit(data, changed) {
-    return dispatch(editColumn(data)).then((resp) => {
-      if (fetchResults && data.open && intersection(affectingProps, changed).length) {
-        dispatch(fetchResults(data, { entity: data.id }));
-      }
-      return resp;
-    });
-  },
-  actionCreate(...args) {
-    return dispatch(createColumn(...args)).then((resp) => {
-      if (fetchResults) {
-        dispatch(fetchResults(resp.payload.data, { entity: resp.payload.id }));
-      }
-      return resp;
-    });
-  },
-  actionDelete({ id }) {
-    return dispatch(deleteColumn({ id })).then(() => dispatch(clearResults(id)));
-  }
-}))(makePageContainer({ create: 'call' }, Columns));
+function mapDispatchToProps(dispatch) {
+  return {
+    actionSort(data, opts) {
+      return dispatch(sortColumns(data, opts));
+    },
+    actionHide(id) {
+      return dispatch(editColumn({ id, open: 0 })).then((resp) => {
+        if (clearResults) {
+          dispatch(clearResults(id));
+        }
+        return resp;
+      });
+    },
+    actionShow(id, data) {
+      return dispatch(editColumn({ id, open: 1 })).then((resp) => {
+        if (fetchResults && data) {
+          dispatch(fetchResults(data, { entity: id }));
+        }
+        return resp;
+      });
+    },
+    actionEdit(data, opts, changed) {
+      return dispatch(editColumn(data)).then((resp) => {
+        if (fetchResults && data.open && intersection(affectingProps, changed).length) {
+          dispatch(fetchResults(data.data, { entity: data.id }));
+        }
+        return resp;
+      });
+    },
+    actionCreate(data, opts) {
+      return dispatch(createColumn(data, opts)).then((resp) => {
+        if (fetchResults) {
+          dispatch(fetchResults(resp.payload.data, { entity: resp.payload.id }));
+        }
+        return resp;
+      });
+    },
+    actionDelete(data, opts) {
+      return dispatch(deleteColumn(data, opts)).then((resp) => {
+        if (clearResults) {
+          dispatch(clearResults(data.id));
+        }
+        return resp;
+      });
+    }
+  };
+}
+
+export default connect(makePageSelector, mapDispatchToProps)(makePageContainer({ create: 'call' }, Columns));

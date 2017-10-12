@@ -47,7 +47,7 @@ class FeedCreate extends React.Component {
       }
     };
 
-    bindAll(this, ['setUrl', 'checkFeed', 'chooseFeedType', 'chooseAutodetect', 'selectFeed', 'setFacebookFeed', 'setSingleFeed', 'setError', 'createFeeds']);
+    bindAll(this, 'setUrl', 'checkFeed', 'chooseFeedType', 'chooseAutodetect', 'selectFeed', 'setFacebookFeed', 'setSingleFeed', 'setError', 'createFeeds');
   }
 
   createFeeds(e) {
@@ -144,14 +144,14 @@ class FeedCreate extends React.Component {
   render() {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
-    const running = this.props.state > 2;
+    const loading = this.props.state > 2;
     const texts = this.props.texts;
 
     return (
       <section className={classNames({
         'mod-subsection-management': true,
         'mod-create-source': true,
-        'state-loading': running
+        'state-loading': loading
       })}>
         <SectionHeader
           title={`${texts.title} ${this.props.set.name}`}
@@ -165,25 +165,25 @@ class FeedCreate extends React.Component {
               label='Type of source'
               name='feed_type'
               options={this.props.types}
-              disabled={running}
+              disabled={loading}
               value={this.state.type}
               onChange={this.chooseFeedType}
             />
-            {this.renderForm(running)}
+            {this.renderForm(loading)}
           </div>
           <div className='result-area'>
-            {this.renderResults(running)}
+            {this.renderResults(loading)}
           </div>
         </div>
       </section>
     );
   }
 
-  renderForm(running = this.props.state > 2) {
+  renderForm(loading = this.props.state > 2) {
     switch (this.state.type) {
       case 'autodetect':
         return <FormAutodetect
-            running={running}
+            loading={loading}
             activeTypes={transform(this.state.results, (acc, v, k) => {
               if (v) acc.push(k);
               return acc;
@@ -197,7 +197,7 @@ class FeedCreate extends React.Component {
           />;
       case 'RSS':
         return <FormRss
-            running={running}
+            loading={loading}
             value={this.state.url}
             success={!!this.state.feeds.length}
             onChange={this.setUrl}
@@ -206,7 +206,7 @@ class FeedCreate extends React.Component {
           />;
       case 'HTML':
         return <FormHtml
-            running={running}
+            loading={loading}
             value={this.state.url}
             success={!!this.state.feeds.length}
             onChange={this.setUrl}
@@ -215,7 +215,7 @@ class FeedCreate extends React.Component {
           />;
       case 'Facebook':
         return <FormFacebook
-            running={running}
+            loading={loading}
             url={this.state.url}
             feed={(this.state.feeds[0]) ? this.state.feeds[0].feed : ''}
             onChange={this.setFacebookFeed}
@@ -223,14 +223,14 @@ class FeedCreate extends React.Component {
           />;
       case 'Twitter':
         return <FormTwitter
-            running={running}
+            loading={loading}
             value={this.state.url}
             onChange={this.setSingleFeed}
             onSubmit={this.createFeeds}
           />;
       case 'Reddit':
         return <FormReddit
-            running={running}
+            loading={loading}
             value={this.state.url}
             onChange={this.setSingleFeed}
             onSubmit={this.createFeeds}
@@ -240,14 +240,14 @@ class FeedCreate extends React.Component {
     }
   }
 
-  renderResults(running = this.props.state > 2) {
+  renderResults(loading = this.props.state > 2) {
     switch (this.state.type) {
       case 'Facebook':
         return <ResultsFacebook
             className='result-container'
             data={(this.state.results.Facebook.length) ? this.state.results.Facebook : []}
             chosen={this.getFeedsUri()}
-            loading={running}
+            loading={loading}
             onClick={this.selectFeed('Facebook')}
           />;
       case 'RSS':
@@ -255,32 +255,32 @@ class FeedCreate extends React.Component {
             className='result-container'
             data={(this.state.results.RSS.length) ? this.state.results.RSS : []}
             chosen={this.getFeedsUri()}
-            loading={running}
+            loading={loading}
             onClick={this.selectFeed('RSS')}
           />;
       case 'HTML':
         return <ResultsHtml
             className='result-container'
             data={(this.state.results.HTML.length) ? this.state.results.HTML : []}
-            loading={running}
+            loading={loading}
           />;
       case 'autodetect':
         return <div className='result-container result-autodetect'>
           {(this.state.results.Facebook) ? <ResultsFacebook
             data={(this.state.results.Facebook.length) ? this.state.results.Facebook : []}
             chosen={this.getFeedsUri()}
-            loading={running}
+            loading={loading}
             onClick={this.selectFeed('Facebook')}
           /> : null}
           {(this.state.results.RSS) ? <ResultsRss
             data={(this.state.results.RSS.length) ? this.state.results.RSS : []}
             chosen={this.getFeedsUri()}
-            loading={running}
+            loading={loading}
             onClick={this.selectFeed('RSS')}
           /> : null}
           {(this.state.results.HTML) ? <ResultsHtml
             data={(this.state.results.HTML.length) ? this.state.results.HTML : []}
-            loading={running}
+            loading={loading}
           /> : null}
         </div>;
       default:
@@ -321,10 +321,6 @@ FeedCreate.propTypes = {
 // Connect our Container to State
 // @ deps -> Feeds
 // ===========================================================================
-function mapStateToProps() {
-  return ({ feeds }, props) => ({ state: feeds.state });
-}
-
 function mapDispatchToProps(dispatch) {
   return {
     testUrl(tests, url) {
@@ -341,4 +337,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps(), mapDispatchToProps)(FeedCreate);
+export default connect(({ feeds }) => ({ state: feeds.state }), mapDispatchToProps)(FeedCreate);

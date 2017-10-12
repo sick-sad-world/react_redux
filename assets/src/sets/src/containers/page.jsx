@@ -34,11 +34,11 @@ class Sourcesets extends React.Component {
   }
 
   updateOnNewFeeds(data) {
-    const { editItem, changeLocation, chosen, route } = this.props;
+    const { editItem, changeLocation, chosen } = this.props;
     return editItem({
       id: chosen.id,
       source_ids: union(chosen.source_ids, data)
-    }).then(() => changeLocation(`${route.path}/${chosen.id}`));
+    }).then(() => changeLocation(`/${chosen.id}`));
   }
 
   renderDetails() {
@@ -146,11 +146,11 @@ function mapDispatchToProps(dispatch) {
     actionCreate(data, opts) {
       return dispatch(createSet(data, opts));
     },
-    actionEdit(data, changed, opts) {
-      return dispatch(editSet(data, changed, opts)).then(() => dispatch(forseUpdateUniq));
+    actionEdit(data, opts) {
+      return dispatch(editSet(data, opts)).then(() => dispatch(forseUpdateUniq));
     },
-    actionDelete(data) {
-      return dispatch(deleteSet(data)).then(() => dispatch(forseUpdateUniq));
+    actionDelete(data, opts) {
+      return dispatch(deleteSet(data, opts)).then(() => dispatch(forseUpdateUniq));
     }
   };
 }

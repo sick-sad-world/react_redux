@@ -22,14 +22,6 @@ import { FeedsList } from 'src/feeds';
 import SetsWithContents from './list';
 
 class EditSet extends React.Component {
-  constructor(props) {
-    super(props);
-    bindAll(this, 'submitForm');
-  }
-
-  submitForm() {
-    this.props.onSubmit(this.props.submit());
-  }
 
   mergeFeeds({ type, id }, values, props) {
     if (type === 'set') {
@@ -43,13 +35,13 @@ class EditSet extends React.Component {
   }
 
   render() {
-    const { state, changed, values, texts, backUrl, reset, bindInput, emptyFeeds } = this.props;
-    const running = state === 3;
+    const { state, changed, values, texts, backUrl, submit, reset, bindInput, emptyFeeds } = this.props;
+    const loading = state === 3;
     const title = (values.name) ? `${texts.title} "${values.name}"` : texts.title;
     return (
       <SectionWrapper title={title} description={texts.description} url={backUrl} className='mod-sourceset-edit'>
         {(changed.length) ? (
-          <Confirmation text={texts.confirmation} changed={changed} running={running} apply={this.submitForm} cancel={reset} />
+          <Confirmation text={texts.confirmation} changed={changed} loading={loading} apply={submit} cancel={reset} />
         ) : null}
         <form className='subsection-content columned'>
           <div className='form-block'>
@@ -57,7 +49,7 @@ class EditSet extends React.Component {
               className='row'
               name='name'
               label='Sourceset name'
-              disabled={running}
+              disabled={loading}
               {...bindInput('name')}
             />
             <div className='row'>
@@ -68,7 +60,7 @@ class EditSet extends React.Component {
             <div className='form-block'>
               <h4 className='row'>Feeds management</h4>
               <section className='mod-submanagement'>
-                <div className={classNames('selected', { 'state-disabled': running })}>
+                <div className={classNames('selected', { 'state-disabled': loading })}>
                   <div className='header'>
                     <span>Sourceset has {values.source_ids.length} sources total.</span>
                   </div>

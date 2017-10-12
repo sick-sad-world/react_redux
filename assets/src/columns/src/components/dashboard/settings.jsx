@@ -39,18 +39,18 @@ export default class ItemSettings extends React.Component {
   }
 
   render() {
-    const { running, hideColumn, id, deleteColumn } = this.props;
+    const { loading, hideColumn, id, deleteColumn } = this.props;
     return (
       <form className='column-settings'>
         <Sorting
           className='row-flex'
           value={this.state.sort}
           direction={this.state.direction}
-          disabled={running}
+          disabled={loading}
           onChange={this.updateSorting}
         />
         <Toggler
-          disabled={running}
+          disabled={loading}
           label='Infinite scroll'
           className='row-flex'
           name={`infinite-${id}`}
@@ -62,7 +62,7 @@ export default class ItemSettings extends React.Component {
           value={this.state.infinite}
         />
         <Toggler
-          disabled={running}
+          disabled={loading}
           label='Autoreloading'
           className='row-flex'
           name={`autoreload-${id}`}
@@ -84,14 +84,14 @@ export default class ItemSettings extends React.Component {
 }
 
 ItemSettings.defaultProps = {
-  running: false,
+  loading: false,
   data: { ...defColumnData }
 };
 
 ItemSettings.propTypes = {
   id: PropTypes.number.isRequired,
   data: PropTypes.shape(defaultDashboardInterface).isRequired,
-  running: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
   editColumn: PropTypes.func.isRequired,
   hideColumn: PropTypes.func.isRequired,
   deleteColumn: PropTypes.func

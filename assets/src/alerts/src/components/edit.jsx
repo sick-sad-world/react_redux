@@ -21,27 +21,19 @@ import Toggler from 'common/components/forms/toggler';
 import { EmailBcc } from 'src/user';
 
 class EditAlert extends React.Component {
-  constructor(props) {
-    super(props);
-    bindAll(this, 'submitForm');
-  }
-
-  submitForm() {
-    this.props.onSubmit(this.props.submit());
-  }
 
   getEmailRecipient(emails, state, props, newEmail) {
     return newEmail;
   }
 
   render() {
-    const { state, changed, values, texts, backUrl, reset, bindInput, frequencyOptions, makeUpdater } = this.props;
-    const running = state === 3;
+    const { state, changed, values, texts, backUrl, reset, submit, bindInput, frequencyOptions, makeUpdater } = this.props;
+    const loading = state === 3;
     const title = (values.name) ? `${texts.title} "${values.name}"` : texts.title;
     return (
       <SectionWrapper title={title} description={texts.description} url={backUrl}>
         {(changed.length) ? (
-          <Confirmation text={texts.confirmation} changed={changed} apply={this.submitForm} cancel={reset} />
+          <Confirmation text={texts.confirmation} changed={changed} apply={submit} cancel={reset} />
         ) : null}
         <form className='subsection-content columned'>
           <div className='form-block'>
@@ -49,14 +41,14 @@ class EditAlert extends React.Component {
               className='row'
               name='name'
               label='Alert name'
-              disabled={running}
+              disabled={loading}
               {...bindInput('name')}
             />
             <Toggler
               label='Status'
               className='row-flex'
               togglerClassName='size-180'
-              disabled={running}
+              disabled={loading}
               name='active'
               options={[
                 { label: 'Active', value: 1 },
@@ -66,7 +58,7 @@ class EditAlert extends React.Component {
             />
             <Dropdown
               label='Frequency'
-              disabled={running}
+              disabled={loading}
               className='row-flex-wrap'
               selectClassName='size-120'
               name='frequency'
@@ -78,7 +70,7 @@ class EditAlert extends React.Component {
               {({ payload }) => (
                 <Dropdown
                   label='Columns assigment'
-                  disabled={running}
+                  disabled={loading}
                   className='row'
                   name='columns'
                   options={payload}
@@ -94,7 +86,7 @@ class EditAlert extends React.Component {
               <h3 className='form-subtitle'>Email assigment:</h3>
               <p>Currently this alert is going to: <b>{values.recipient}</b></p>
               <EmailBcc
-                disabled={running}
+                disabled={loading}
                 active={values.recipient}
                 onChange={makeUpdater('recipient', this.getEmailRecipient)}
                 onClick={makeUpdater('recipient')}
@@ -117,7 +109,6 @@ EditAlert.propTypes = {
   backUrl: PropTypes.string.isRequired,
   state: stateNum.isRequired,
   frequencyOptions: optionShape('number'),
-  onSubmit: PropTypes.func.isRequired,
   ...injectedProps
 };
 

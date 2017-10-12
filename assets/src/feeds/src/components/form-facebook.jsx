@@ -4,7 +4,7 @@ import TextInput from 'common/components/forms/input-text';
 
 // Form to run RSS feed testing
 // ===========================================================================
-export default function FormFacebook({ texts, feed, url, running, success, onChange, onSubmit }) {
+export default function FormFacebook({ texts, feed, url, loading, success, onChange, onSubmit }) {
   return (
     <form name='RSS'>
       <div className='row'>{texts.heading}</div>
@@ -13,7 +13,7 @@ export default function FormFacebook({ texts, feed, url, running, success, onCha
         name='feed'
         label='Facebook URL'
         placeholder='https://www.facebook.com/....'
-        disabled={running}
+        disabled={loading}
         value={feed}
         onChange={onChange('feed')}
         desc={texts.feed}
@@ -23,13 +23,13 @@ export default function FormFacebook({ texts, feed, url, running, success, onCha
         name='url'
         label='Feed url'
         placeholder='http://something.com'
-        disabled={running}
+        disabled={loading}
         value={url}
         onChange={onChange('url')}
         desc={texts.description}
       />
       <div className='row button-group'>
-        <input className='button is-accent size-half' disabled={running} type='button' value='Create' onClick={onSubmit} />
+        <input className='button is-accent size-half' disabled={loading} type='button' value='Create' onClick={onSubmit} />
       </div>
       <div className='form-description'>{ texts.description }</div>
     </form>
@@ -42,7 +42,7 @@ FormFacebook.defaultProps = {
     url: '(If the Facebook page is related to a website, enter the URL here, otherwise put the FB URL in here too)',
     description: 'Searching for Facebook pages related to URL.'
   },
-  running: false
+  loading: false
 };
 
 FormFacebook.propTypes = {
@@ -51,7 +51,7 @@ FormFacebook.propTypes = {
     url: PropTypes.string,
     description: PropTypes.string
   }),
-  running: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
   feed: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,

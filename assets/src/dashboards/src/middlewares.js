@@ -8,7 +8,7 @@ export function ensureDashboardUrl({ dispatch, getState }) {
         ...action,
         payload: action.payload.map(makeUrl)
       });
-    } else if (action.type === types.CREATE || action.type === types.EDIT) {
+    } else if (action.type === types.CREATE || action.type === types.UPDATE) {
       return next({
         ...action,
         payload: makeUrl(action.payload)

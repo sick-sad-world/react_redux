@@ -30,7 +30,10 @@ export default function makePageContainer(opts, Component) {
 
     runCreateAction(data, ...args) {
       this.setState({ creating: true });
-      this.props.actionCreate({ ...data, order: -1 }, ...args).then(({ payload }) => this.changeLocation(`/${payload.id}`)).then(() => this.setState({ creating: false }));
+      this.props.actionCreate({ ...data, order: -1 }, ...args)
+        .then(({ payload }) => this.changeLocation(`/${payload.id}`))
+        .then(() => this.setState({ creating: false }))
+        .catch(() => this.setState({ creating: false }));
     }
 
     createItem(value) {
@@ -41,11 +44,11 @@ export default function makePageContainer(opts, Component) {
       }
     }
 
-    editItem(data, ...args) {
+    editItem(data, options, changed) {
       if (o.create === 'edit' && !data.id) {
-        return this.runCreateAction(omit(data, 'id'), ...args);
+        return this.runCreateAction(omit(data, 'id'), options);
       }
-      return this.props.actionEdit(data, ...args);
+      return this.props.actionEdit(data, options, changed);
     }
 
     deleteConfirm(deleting = null) {
@@ -54,7 +57,11 @@ export default function makePageContainer(opts, Component) {
 
     deleteItem() {
       if (!this.state.deleting) return;
-      this.props.actionDelete({ id: this.state.deleting.id }).then(this.deleteConfirm()).then(() => this.changeLocation());
+      const closeModal = this.deleteConfirm();
+      this.props.actionDelete({ id: this.state.deleting.id })
+        .then(closeModal)
+        .then(() => this.changeLocation())
+        .catch(closeModal);
     }
 
     render() {

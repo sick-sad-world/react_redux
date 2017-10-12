@@ -34,7 +34,7 @@ class ResultsContainer extends React.Component {
     this.state = {
       error: null
     };
-    this.infiniteRunning = false;
+    this.infiniteloading = false;
     this.interval = null;
     this.rowHeight = DisplaySettings.calculateHeight(props.displaySettings);
     this.heightConfig = DisplaySettings.getHeights(props.displaySettings);
@@ -131,10 +131,10 @@ class ResultsContainer extends React.Component {
 
   onRowsRendered(rowCount) {
     return ({ stopIndex }) => {
-      if (stopIndex > 2 && rowCount > 0 && stopIndex > (rowCount - this.props.data.limit) && !this.infiniteRunning && this.props.state === 2) {
-        this.infiniteRunning = true;
+      if (stopIndex > 2 && rowCount > 0 && stopIndex > (rowCount - this.props.data.limit) && !this.infiniteloading && this.props.state === 2) {
+        this.infiniteloading = true;
         this.props.getResults({ ...this.props.data, offset: this.props.payload.length }, { entity: this.props.id, state: false }).then(() => {
-          this.infiniteRunning = false;
+          this.infiniteloading = false;
         });
       }
     };

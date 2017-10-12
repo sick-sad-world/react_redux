@@ -21,14 +21,6 @@ import { CompleteList, SetsList } from 'src/sets';
 // Feed assginment to columns
 // ===========================================================================
 class Assignment extends React.Component {
-  constructor(props) {
-    super(props);
-    bindAll(this, 'submitForm');
-  }
-
-  submitForm() {
-    this.props.onSubmit(this.props.submit());
-  }
 
   updateData(type) {
     const stateUpdater = this.props.updateState(type, `get${type}`);
@@ -36,8 +28,8 @@ class Assignment extends React.Component {
   }
 
   render() {
-    const { state, changed, values, texts, backUrl, reset, makeUpdater } = this.props;
-    const running = state === 3;
+    const { state, changed, values, texts, backUrl, reset, submit, makeUpdater } = this.props;
+    const loading = state === 3;
     const title = (values.name) ? `${texts.title} "${values.name}"` : texts.title;
 
     // Create Feed handlers to use
@@ -48,7 +40,7 @@ class Assignment extends React.Component {
     return (
       <SectionWrapper title={title} description={texts.description} url={backUrl}>
         {(changed.length) ? (
-          <Confirmation text={texts.confirmation} running={running} changed={changed} apply={this.submitForm} cancel={reset} />
+          <Confirmation text={texts.confirmation} loading={loading} changed={changed} apply={submit} cancel={reset} />
         ) : null}
         <form className='subsection-content mod-submanagement'>
           <div className='selected'>
@@ -58,20 +50,20 @@ class Assignment extends React.Component {
             <ul className='entity-list'>
               <li className='list-title'><h4>Sets selected</h4></li>
               <li className='mod-entity'>
-                <SetsList criterea={{ set_ids: values.set }} disabled={running} empty='No sets assigned'>
+                <SetsList criterea={{ set_ids: values.set }} disabled={loading} empty='No sets assigned'>
                   {({ id }) => <Deselect onClick={() => setUpdater(id)} />}
                 </SetsList>
               </li>
               <li className='list-title'><h4>Sources selected</h4></li>
               <li className='mod-entity'>
-                <FeedsList criterea={{ source_ids: values.source }} disabled={running} empty='No feeds assigned'>
+                <FeedsList criterea={{ source_ids: values.source }} disabled={loading} empty='No feeds assigned'>
                   {({ id }) => <Deselect onClick={() => sourceUpdater(id)} />}
                 </FeedsList>
               </li>
             </ul>
           </div>
           <CompleteList
-            disabled={running}
+            disabled={loading}
             disabled_sets={values.set}
             disabled_sources={values.source}
             setAction={({ id }) => <SelectAll onClick={() => setUpdater(id)} />}
@@ -83,7 +75,9 @@ class Assignment extends React.Component {
   }
 }
 
-Assignment.propTypes = { ...injectedProps };
+Assignment.propTypes = {
+  ...injectedProps
+};
 
 export default statefullForm({
   mapDataToState(data) {
@@ -91,16 +85,15 @@ export default statefullForm({
       id: data.id,
       name: data.name,
       set: data.data.set || availableColumnData.set,
-      source: data.data.source || availableColumnData.source
+      source: data.data.source || availableColumnData.source,
+      data: { ...availableColumnData, ...data.data }
     };
   },
-  mapStateToData(state, data, changed, props) {
+  mapStateToData(state) {
     return {
       id: state.id,
-      name: state.name,
-      display_settings: data.display_settings,
       data: {
-        ...data.data,
+        ...state.data,
         set: (state.set.length) ? state.set : undefined,
         source: (state.source.length) ? state.source : undefined
       }

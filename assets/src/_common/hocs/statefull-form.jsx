@@ -93,17 +93,28 @@ export default function statefullForm(settings) {
       }
 
       submit() {
-        return opts.mapStateToData(this.state.values, this.props, this.state.chaged);
+        return this.props.onSubmit(opts.mapStateToData(this.state.values), null, this.state.changed);
       }
 
       reset(props) {
-        this.setState({ values: getStateValues((typeof props.data === 'object') ? props : this.props), changed: [] });
+        this.setState({
+          values: getStateValues((typeof props.data === 'object') ? props : this.props),
+          changed: []
+        });
       }
 
       render() {
         const { data, ...rest } = this.props;
         return (
-          <Component values={this.state.values} changed={this.state.changed} bindInput={this.bindInput} submit={this.submit} reset={this.reset} makeUpdater={this.makeUpdater} {...rest} />
+          <Component
+            values={this.state.values}
+            changed={this.state.changed}
+            bindInput={this.bindInput}
+            submit={this.submit}
+            reset={this.reset}
+            makeUpdater={this.makeUpdater}
+            {...rest}
+          />
         );
       }
     }
@@ -111,6 +122,7 @@ export default function statefullForm(settings) {
     StatefullForm.propTypes = {
       state: stateNum,
       data: PropTypes.object.isRequired,
+      onSubmit: PropTypes.func.isRequired,
       ...opts.propTypes
     };
 

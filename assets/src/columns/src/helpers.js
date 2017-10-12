@@ -1,11 +1,18 @@
 import types from './types';
-import { sortingOptions, defColumnData, loDashRegExp } from './defaults';
+import { sortingOptions, defColumnData } from './defaults';
 import DisplaySettings from 'src/display-settings';
+import { parseOrder } from 'functions';
 
+const loDashRegExp = /_+/;
+
+// Get columns to fetch results (Used on init loading)
+// ===========================================================================
 export function getColumnsForResults(payload) {
   return payload.find(item => (item && item.type === types.READ)).payload.map(({ id, data, open }) => ({ id, data, open }));
 }
 
+// Split string (old ui) or provide default ones
+// ===========================================================================
 export function ensureDisplaySettings(s) {
   if (!s) {
     return DisplaySettings.getDefault();
@@ -15,26 +22,39 @@ export function ensureDisplaySettings(s) {
   return s;
 }
 
+// Remove multiple lodashes from values (bug result from old ui)
+// ===========================================================================
 export function normalizeDisplaySettings(s) {
   if (s === '_videoviews') return 'views_video';
   return s.replace(loDashRegExp, '_');
 }
 
-export function composeColumnData({ data, display_settings, ...column }) {
-  return {
+// Make required column object on UI (used in middleware)
+// ===========================================================================
+export function composeColumnData({ data, display_settings, order, ...column }) {
+  const result = {
     ...column,
-    order: parseInt(column.order, 10) || -1,
-    display_settings: ensureDisplaySettings(display_settings).map(normalizeDisplaySettings),
-    data: {
+    order: parseOrder(order),
+    display_settings: ensureDisplaySettings(display_settings).map(normalizeDisplaySettings)
+  };
+
+  // Compose default and providen data
+  // ===========================================================================
+  if (data) {
+    result.data = {
       ...defColumnData,
       ...data,
       infinite: (data.infinite) ? 1 : 0,
       set: (typeof data.set === 'number') ? [data.set] : data.set,
       source: (typeof data.source === 'number') ? [data.source] : data.source
-    }
-  };
+    };
+  }
+
+  return result;
 }
 
+// Split sort param on prefix and param itself (used for diff fields)
+// ===========================================================================
 export function decomposeColumnSort(sort = defColumnData.sort) {
   const prefix = sortingOptions.sortPrefix.find(pref => sort.indexOf(pref.value) > -1);
   const property = sortingOptions.sortProperty.find(prop => sort.indexOf(prop.value) > -1);
@@ -44,6 +64,8 @@ export function decomposeColumnSort(sort = defColumnData.sort) {
   };
 }
 
+// Put sorting together
+// ===========================================================================
 export function composeColumnSort(pref, prop) {
   return pref && prop !== 'found' ? `${pref}_${prop}` : prop;
 }

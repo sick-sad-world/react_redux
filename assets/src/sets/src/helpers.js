@@ -1,3 +1,5 @@
+import { parseOrder } from 'functions';
+
 // Create hash of all Sources [id] where value is a number of occurances
 // ===========================================================================
 export function calcFeedOccurance(sets) {
@@ -28,7 +30,7 @@ export function setUniqFeeds(feedIds, feeds) {
 export function processSet(set, sets) {
   return {
     ...set,
-    order: parseInt(set.order, 10) || -1,
+    order: parseOrder(set.order),
     uniq_ids: setUniqFeeds(set.source_ids, calcFeedOccurance(sets))
   };
 }

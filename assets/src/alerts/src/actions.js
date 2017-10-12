@@ -1,11 +1,6 @@
 import createAction from 'common/action-factory';
 import types from './types';
 
-export const setAlertsState = state => ({
-  type: types.STATE,
-  state
-});
-
 export const getAlerts = createAction({
   type: types.READ,
   state_type: types.STATE,

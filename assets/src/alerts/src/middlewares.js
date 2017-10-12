@@ -1,9 +1,10 @@
 import types from './types';
+import { parseOrder } from 'functions';
 
 function processor(user) {
-  return alert => ({
+  return ({ order, ...alert }) => ({
     ...alert,
-    order: parseInt(alert.order, 10) || -1,
+    order: parseOrder(order),
     recipient: alert.recipient || user.email
   });
 }

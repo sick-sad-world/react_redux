@@ -9,12 +9,6 @@ export const defColumnData = {
   direction: 'desc'
 };
 
-export const loDashRegExp = /_+/;
-
-export const notAffecting = ['id', 'name', 'display_settings', 'advancedFilters', 'changed'];
-
-export const affectingProps = ['sort', 'direction', 'show_favorites', 'show_ignored', 'limit', 'author', 'search', 'exclude_search', 'LIKE(url)', 'since', 'before', 'language', 'source', 'set', 'ignore_source', 'ignore_set', 'is_image', 'is_video', 'is_facebook', 'is_gallery'];
-
 export const availableColumnData = {
   show_favorites: 0,
   show_ignored: 0,

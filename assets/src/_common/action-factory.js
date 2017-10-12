@@ -12,7 +12,7 @@ export default function createAction(conf) {
     ...conf
   };
 
-  return (data, opts) => (dispatch, getState, { notification, clientError }) => {
+  return (data, opts = {}) => (dispatch, getState, { notification, clientError }) => {
     const notificationId = moment().unix();
     const options = {
       notification: true,

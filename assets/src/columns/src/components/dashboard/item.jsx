@@ -23,7 +23,7 @@ export default class DashboardItem extends React.Component {
     super(props);
     this.state = {
       deleting: false,
-      running: false,
+      loading: false,
       edit: false
     };
     bindAll(this, 'toggleState', 'editColumn', 'hideColumn', 'getResults', 'deleteColumn');
@@ -34,12 +34,12 @@ export default class DashboardItem extends React.Component {
   }
 
   editColumn(value, changed) {
-    return this.setState({ running: true }, () => {
+    return this.setState({ loading: true }, () => {
       const data = { ...this.props.payload.data, ...value };
       return this.props.editColumn({ id: this.props.payload.id, data }).then((resp) => {
         if (changed === 'infinite' || changed === 'autoreload') return resp;
         return this.getResults(data);
-      }).then(this.toggleState('running'));
+      }).then(this.toggleState('loading'));
     });
   }
 
@@ -70,7 +70,7 @@ export default class DashboardItem extends React.Component {
             <ItemSettings
               id={payload.id}
               data={pick(payload.data, 'infinite', 'autoreload', 'sort', 'direction', 'limit')}
-              running={this.state.running}
+              loading={this.state.loading}
               editColumn={this.editColumn}
               hideColumn={this.hideColumn}
               deleteColumn={this.toggleState('deleting')}
