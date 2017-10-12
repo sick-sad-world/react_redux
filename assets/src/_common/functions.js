@@ -38,10 +38,9 @@ export const sortParamToShort = (param = '') => {
 
 export const normalizeValue = (v) => {
   const intVal = toNumber(v);
-  if (!Number.isNaN(intVal)) {
+  if (v && v.length > 0 && !Number.isNaN(intVal)) {
     return intVal;
-  } else
-  if (v === 'true') {
+  } else if (v === 'true') {
     return true;
   } else if (v === 'false') {
     return false;

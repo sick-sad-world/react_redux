@@ -96,8 +96,8 @@ export default function statefullForm(settings) {
         return opts.mapStateToData(this.state.values, this.props, this.state.chaged);
       }
 
-      reset(props = this.props) {
-        this.setState({ values: getStateValues(props), changed: [] });
+      reset(props) {
+        this.setState({ values: getStateValues((typeof props.data === 'object') ? props : this.props), changed: [] });
       }
 
       render() {

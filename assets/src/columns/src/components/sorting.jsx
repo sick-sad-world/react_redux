@@ -19,10 +19,11 @@ export default class Sorting extends React.Component {
     this.setState(this.mapDataToState(newProps));
   }
 
-  mapDataToState({ value, direction }) {
+  mapDataToState(newProps) {
+    const { sort, direction } = newProps.value;
     return {
       direction,
-      ...decomposeColumnSort(value)
+      ...decomposeColumnSort(sort)
     };
   }
 
@@ -86,7 +87,6 @@ export default class Sorting extends React.Component {
 Sorting.defaultProps = {
   disabled: false,
   direction: defColumnData.direction,
-  sort: defColumnData.sort,
   ...sortingOptions
 };
 

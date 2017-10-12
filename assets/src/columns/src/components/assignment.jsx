@@ -48,7 +48,7 @@ class Assignment extends React.Component {
     return (
       <SectionWrapper title={title} description={texts.description} url={backUrl}>
         {(changed.length) ? (
-          <Confirmation text={texts.confirmation} changed={changed} apply={this.submitForm} cancel={reset} />
+          <Confirmation text={texts.confirmation} running={running} changed={changed} apply={this.submitForm} cancel={reset} />
         ) : null}
         <form className='subsection-content mod-submanagement'>
           <div className='selected'>

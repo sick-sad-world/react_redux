@@ -43,29 +43,27 @@ class EditColumn extends React.Component {
     return data => this.props.stateUpdater(data);
   }
 
-  getContentType() {
-    return (value, state, props, name) => {
-      if (value === 1) {
-        return this.props.makeUpdater({
-          ...this.props.contentTypeDef,
-          [name]: 1
-        });
+  getContentType(name) {
+    return (value, values) => (this.props.contentTypeEntries.reduce((acc, key) => {
+      if (key !== name) {
+        acc[key] = (value === 1 && values[key] === 1) ? '' : values[key];
       }
-      return this.props.makeUpdater({ [name]: value });
-    };
+      return acc;
+    }, { [name]: value }));
   }
 
-  getContentTypeProps(label, name, updater) {
+  getContentTypeProps(label, name) {
+    const { makeUpdater, state, values, contentTypeOpts, contentTypeEntries } = this.props;
     return (
       <Toggler
         label={label}
         className='row-flex'
         togglerClassName='size-180'
-        disabled={this.props.state === 3}
+        disabled={state === 3}
         name={name}
-        options={this.props.contentTypeOpts}
-        value={this.props.values[name]}
-        onChange={updater}
+        options={contentTypeOpts}
+        value={values[name]}
+        onChange={makeUpdater(contentTypeEntries, this.getContentType(name))}
       />
     );
   }
@@ -78,11 +76,10 @@ class EditColumn extends React.Component {
     const { state, changed, values, texts, backUrl, reset, bindInput, makeUpdater } = this.props;
     const running = state === 3;
     const title = (values.name) ? `${texts.title} "${values.name}"` : texts.title;
-    const contentTypeUpdater = makeUpdater(['is_image', 'is_video', 'is_gallery', 'is_facebook'], this.getContentType);
     return (
       <SectionWrapper title={title} description={texts.description} url={backUrl} className='mod-column-edit'>
         {(changed.length) ? (
-          <Confirmation text={texts.confirmation} changed={changed} apply={this.submitForm} cancel={reset} />
+          <Confirmation text={texts.confirmation} running={running} changed={changed} apply={this.submitForm} cancel={reset} />
         ) : null}
         <form className='subsection-content columned'>
           <div className='form-block'>
@@ -156,7 +153,7 @@ class EditColumn extends React.Component {
               selectClassName='size-120'
               name='autoreload'
               options={this.props.autoReloadOptions}
-              {...bindInput('infinite', v => v || 0)}
+              {...bindInput('autoreload', v => v || 0)}
               clearable={true}
             />
             <TextInput
@@ -172,10 +169,9 @@ class EditColumn extends React.Component {
               <span className='form-label'>Sort results by:</span>
               <Sorting
                 className='sorting-selects'
-                value={values.sort}
-                direction={values.direction}
+                value={{ sort: values.sort, direction: values.direction }}
                 disabled={running}
-                onChange={makeUpdater('sort')}
+                onChange={makeUpdater(['sort', 'direction'])}
               />
             </div>
             <PickDisplaySettings
@@ -186,10 +182,10 @@ class EditColumn extends React.Component {
           </div>
           <div className='form-block'>
             <h4 className='form-subtitle'>Content type(s):</h4>
-            {this.getContentTypeProps('Images', 'is_image', contentTypeUpdater)}
-            {this.getContentTypeProps('Videos', 'is_video', contentTypeUpdater)}
-            {this.getContentTypeProps('Facebook posts', 'is_facebook', contentTypeUpdater)}
-            {this.getContentTypeProps('Galleries', 'is_gallery', contentTypeUpdater)}
+            {this.getContentTypeProps('Images', 'is_image')}
+            {this.getContentTypeProps('Videos', 'is_video')}
+            {this.getContentTypeProps('Facebook posts', 'is_facebook')}
+            {this.getContentTypeProps('Galleries', 'is_gallery')}
             <Dropdown
               disabled={running}
               className='row-flex'
@@ -260,12 +256,7 @@ class EditColumn extends React.Component {
 }
 
 EditColumn.defaultProps = {
-  contentTypeDef: {
-    is_image: '',
-    is_video: '',
-    is_gallery: '',
-    is_facebook: ''
-  },
+  contentTypeEntries: ['is_image', 'is_video', 'is_gallery', 'is_facebook'],
   contentTypeOpts: [
     { value: 1, label: 'Only' },
     { value: '', label: 'Include' },
@@ -277,12 +268,7 @@ EditColumn.defaultProps = {
 
 EditColumn.propTypes = {
   contentTypeOpts: optionShape('any').isRequired,
-  contentTypeDef: PropTypes.shape({
-    is_image: PropTypes.string.isRequired,
-    is_video: PropTypes.string.isRequired,
-    is_gallery: PropTypes.string.isRequired,
-    is_facebook: PropTypes.string.isRequired
-  }).isRequired,
+  contentTypeEntries: PropTypes.arrayOf(PropTypes.string).isRequired,
   onSubmit: PropTypes.func.isRequired,
   language: optionShape('string').isRequired,
   autoReloadOptions: optionShape('number').isRequired,
