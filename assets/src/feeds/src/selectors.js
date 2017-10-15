@@ -8,7 +8,7 @@ const getFeeds = ({ feeds }) => feeds.payload;
 const getCriterea = ({ feeds }, props) => props.criterea;
 
 export function makeContainerSelector() {
-  return createSelector(
+  const selector = createSelector(
     getFeedsState,
     getFeeds,
     getCriterea,
@@ -33,4 +33,6 @@ export function makeContainerSelector() {
         })) : payload
       };
     });
+
+  return (state, props) => selector(state, props);
 }

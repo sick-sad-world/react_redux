@@ -44,8 +44,7 @@ export default class ItemSettings extends React.Component {
       <form className='column-settings'>
         <Sorting
           className='row-flex'
-          value={this.state.sort}
-          direction={this.state.direction}
+          value={{ sort: this.state.sort, direction: this.state.direction }}
           disabled={loading}
           onChange={this.updateSorting}
         />

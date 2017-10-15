@@ -38,4 +38,4 @@ DashboardNav.propTypes = {
 // Connect our Container to State
 // @ deps -> Dashboards
 // ===========================================================================
-export default connect(makeNavSelector())(DashboardNav);
+export default connect(makeNavSelector)(DashboardNav);

@@ -106,17 +106,4 @@ FeedsList.propTypes = {
 // Connect our Container to State
 // @ deps -> Feeds
 // ===========================================================================
-function mapStateToProps() {
-  const selector = makeContainerSelector();
-  return (state, props) => selector(state, props);
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    deleteFeed(data) {
-      return dispatch(deleteFeed(data));
-    }
-  };
-}
-
-export default connect(mapStateToProps(), mapDispatchToProps)(FeedsList);
+export default connect(makeContainerSelector, { deleteFeed })(FeedsList);

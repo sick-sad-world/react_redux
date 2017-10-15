@@ -25,6 +25,22 @@ export const createFeed = createAction({
   successMessage: 'Source succesfully created.'
 });
 
+export const addFeed = createAction({
+  type: types.ADD,
+  state_type: types.STATE,
+  url: 'add_source',
+  pendingMessage: 'Creating new source...',
+  successMessage: 'Source succesfully created.'
+});
+
+export const removeFeed = createAction({
+  type: types.REMOVE,
+  state_type: types.STATE,
+  url: 'remove_source',
+  pendingMessage: 'Removing source from set...',
+  successMessage: 'Source succesfully removed.'
+});
+
 export const deleteFeed = createAction({
   type: types.DELETE,
   state_type: types.STATE,

@@ -71,7 +71,7 @@ class EditColumn extends React.Component {
   }
 
   render() {
-    const { state, changed, values, texts, backUrl, reset, bindInput, makeUpdater } = this.props;
+    const { state, changed, values, texts, backUrl, reset, submit, bindInput, makeUpdater } = this.props;
     const loading = state === 3;
     const title = (values.name) ? `${texts.title} "${values.name}"` : texts.title;
     return (

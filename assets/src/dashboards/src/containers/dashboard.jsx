@@ -30,7 +30,7 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const { payload, emptyTpl, scrollTo, location, width } = this.props;
+    const { payload, sort, emptyTpl, scrollTo, location, width } = this.props;
     return (
       <section className='mod-dashboard'>
         {(payload) ? (
@@ -41,7 +41,7 @@ class Dashboard extends React.Component {
                   <DashboardItem payload={payload} deleteColumn={deleteColumn} editColumn={editColumn} getResults={this.props.fetchResults}>
                     <ResultsContainer
                       id={payload.id}
-                      sort={payload.data.sort}
+                      sort={sort}
                       data={payload.data}
                       width={width - 10}
                       location={location.pathname}
@@ -72,6 +72,7 @@ Dashboard.propTypes = {
   width: PropTypes.number.isRequired,
   fetchResults: PropTypes.func.isRequired,
   sortColumns: PropTypes.func.isRequired,
+  sort: PropTypes.string.isRequired,
   params: PropTypes.shape({
     name: PropTypes.string.isRequired
   }).isRequired,

@@ -17,6 +17,7 @@ export function makeNavSelector() {
       payload: dashboards.map(({ id, name, column_ids, url }) => ({ id, name, counter: column_ids.length, url }))
     })
   );
+
   return (state, props) => selector(state, props);
 }
 
