@@ -1,9 +1,13 @@
 import { has } from 'lodash';
 
-import { updateObjectById } from 'common/reducer-factory';
 import { LOGIN, LOGOUT } from 'common/type-factory';
 
 import types from './types';
+
+export const updateObjectById = (state, id, updater) => ({
+  ...state,
+  [id]: updater(state[id])
+});
 
 export default (state = {}, action) => {
   switch (action.type) {

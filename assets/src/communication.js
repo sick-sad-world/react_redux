@@ -26,7 +26,7 @@ export function cancelAll() {
 // Just an wrapper to a third-party module
 // which provides default settings and callback mapping
 // ===========================================================================
-export default function fetch(url, data) {
+export default function fetch(url, data, { entity, ...opts }) {
   return new Promise((resolve, reject) => {
     const id = counter;
     const { abort } = jsonp({
@@ -34,7 +34,8 @@ export default function fetch(url, data) {
       data: transformRequestData(data),
       error: reject,
       success: resolve,
-      complete(payload, params) {
+      ...opts,
+      complete() {
         abort();
       }
     });

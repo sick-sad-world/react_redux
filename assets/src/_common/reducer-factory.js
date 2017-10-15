@@ -1,6 +1,9 @@
 import { reject, uniqBy, has, sortBy } from 'lodash';
 import { LOGIN, LOGOUT } from './type-factory';
 
+// Traverse Array and update data of item ID given
+// If not @dir ? prepend : postpend data to array
+// ===========================================================================
 export const mergeArrayById = (arr, obj, dir) => {
   let changed = false;
   const method = (dir) ? 'unshift' : 'push';
@@ -13,16 +16,33 @@ export const mergeArrayById = (arr, obj, dir) => {
   return result;
 };
 
-export const updateObjectById = (state, id, updater) => ({
-  ...state,
-  [id]: updater(state[id])
-});
+// Set new Orders to items in Collection
+// ===========================================================================
+export const updateCollectionOrder = (item, i, payload) => {
+  const index = payload.indexOf(item.id);
+  return {
+    ...item,
+    order: (index === -1) ? item.order : index
+  };
+};
 
-export const sortMiddleware = store => next => (action) => {
+// Middleware designed to provide ensurance about ordering
+// ===========================================================================
+export const sortMiddleware = () => next => (action) => {
   if (action.payload instanceof Array && action.payload.length && action.type.indexOf('READ') > -1) {
-    action.payload = sortBy(action.payload, 'order');
+    // Resort items if action is READ and payload is Array
+    // ===========================================================================
+    return next({
+      ...action,
+      payload: sortBy(action.payload, 'order')
+    });
   } else if (action.type.indexOf('SORT') > -1) {
-    action.payload = action.payload.list.map(({ id }) => id);
+    // Provide Array of ID's required by reducer default SORT handler
+    // ===========================================================================
+    return next({
+      ...action,
+      payload: action.payload.list.map(({ id }) => id)
+    });
   }
   return next(action);
 };
@@ -77,3 +97,4 @@ export default function createReducer(config) {
     }
   };
 }
+
