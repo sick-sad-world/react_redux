@@ -68,7 +68,7 @@ export default class PayloadList extends React.Component {
                   columnCount={colCount}
                   columnWidth={this.props.width}
                   overscanColumnCount={Math.ceil(window.innerWidth / (this.props.width * 1.5))}
-                  rowHeight={height - scrollbarSize() + 4}
+                  rowHeight={height - scrollbarSize()}
                   onSortEnd={this.updateSortState}
                   helperClass='mod-column sortable-ghost'
                   lockAxis='x'
