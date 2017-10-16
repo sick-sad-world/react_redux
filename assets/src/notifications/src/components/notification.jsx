@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Icon from 'common/components/icon';
 import { capitalize } from 'lodash';
 import { defaultData, defaultInterface } from '../defaults';
-//import Loading from 'img/loading2.svg';
+// import Loading from 'img/loading2.svg';
 
 export default function Notification({ type, text, onClick }) {
   return (

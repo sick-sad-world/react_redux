@@ -1,14 +1,13 @@
 // Import utility stuff
 // ===========================================================================
 import moment from 'moment';
-import { bindAll } from 'lodash';
 import { defaultInterface, defaultFrequency } from '../defaults';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
 import PropTypes from 'prop-types';
-import { optionShape, stateNum } from 'common/typecheck';
+import { optionShape } from 'common/typecheck';
 
 // Import Child components
 // ===========================================================================
@@ -24,7 +23,7 @@ import { EmailBcc } from 'src/user';
 
 class EditReport extends React.Component {
 
-  getEmailRecipient(emails, state, props, newEmail) {
+  getEmailRecipient(emails, state, props, newEmail, ...args) {
     return newEmail;
   }
 
@@ -33,8 +32,7 @@ class EditReport extends React.Component {
   }
 
   render() {
-    const { state, changed, values, texts, backUrl, reset, submit, bindInput, frequencyOptions, makeUpdater } = this.props;
-    const loading = state === 3;
+    const { loading, changed, values, texts, backUrl, reset, submit, bindInput, frequencyOptions, makeUpdater } = this.props;
     const title = (values.name) ? `${texts.title} "${values.name}"` : texts.title;
     const datePickerFormats = this.props.timeFormat.split(' ');
 
@@ -108,7 +106,7 @@ class EditReport extends React.Component {
               <h3 className='form-subtitle'>Email assigment:</h3>
               <p>Currently this report going to: <b>{values.recipient}</b></p>
               <EmailBcc
-                disabled={loading}
+                loading={loading}
                 active={values.recipient}
                 onChange={makeUpdater('recipient', this.getEmailRecipient)}
                 onClick={makeUpdater('recipient')}
@@ -129,7 +127,6 @@ EditReport.defaultProps = {
 EditReport.propTypes = {
   texts: PropTypes.objectOf(PropTypes.string).isRequired,
   backUrl: PropTypes.string.isRequired,
-  state: stateNum.isRequired,
   frequencyOptions: optionShape('number'),
   timeFormat: PropTypes.string.isRequired,
   ...injectedProps

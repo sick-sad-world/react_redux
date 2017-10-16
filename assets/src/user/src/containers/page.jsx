@@ -26,7 +26,6 @@ class User extends React.Component {
       <div className='mod-page'>
         <EditUser
           data={this.props.payload}
-          state={this.props.state}
           onSubmit={this.props.editUser}
           texts={this.props.texts}
         />
@@ -36,7 +35,6 @@ class User extends React.Component {
 }
 
 User.defaultProps = {
-  state: 2,
   texts: {
     title: 'Profile settings',
     description: 'Tell us a bit about yourself...',
@@ -50,7 +48,6 @@ User.propTypes = {
   texts: PropTypes.shape(textShape).isRequired,
   editUser: PropTypes.func.isRequired,
   notification: PropTypes.func,
-  state: stateNum.isRequired,
   payload: PropTypes.shape(defaultInterface).isRequired
 };
 

@@ -7,12 +7,11 @@ import { bindAll } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { stateNum } from 'common/typecheck';
 import { makeEmailsSelector } from '../selectors';
 
 // Import child components
 // ===========================================================================
-import EmailList from '../components/email-list';
+import EmailList from '../components/email-list.jsx';
 
 // Import actions
 // ===========================================================================
@@ -23,14 +22,27 @@ import { editUser } from '../actions';
 class Emails extends React.Component {
   constructor(props) {
     super(props);
-    bindAll(this, 'updateEmailList');
+    this.state = {
+      loading: props.loading,
+      error: null
+    };
+    bindAll(this, 'updateEmailList', 'toggleLoading');
+  }
+
+  componentWillReceiveProps({loading}) {
+    this.setState({ error: null, loading });
+  }
+
+  toggleLoading() {
+    this.setState({ loading: !this.state.loading });
   }
 
   updateEmailList(emails, newEmail) {
+    this.toggleLoading();
     return this.props.editUser({ email_bcc: emails }).then(() => {
       if (this.props.onChange) return this.props.onChange(emails, newEmail);
       return null;
-    }).catch(this.props.onError);
+    }).catch(({error}) => this.setState({ error, loading: false })).then(() => this.setState({ loading: false }));
   }
 
   render() {
@@ -39,10 +51,10 @@ class Emails extends React.Component {
         email={this.props.email}
         active={this.props.active}
         onClick={this.props.onClick}
-        disabled={this.props.disabled || this.props.state > 2}
+        error={this.state.error}
+        loading={this.state.loading}
         description={(this.props.email === this.props.active) ? this.props.description : null}
         data={this.props.data}
-        onError={this.props.onError}
         onChange={this.updateEmailList}
       />
     );
@@ -50,7 +62,7 @@ class Emails extends React.Component {
 }
 
 Emails.defaultProps = {
-  state: 2
+  loading: false
 };
 
 // Prop types check
@@ -59,11 +71,9 @@ Emails.propTypes = {
   email: PropTypes.string.isRequired,
   active: PropTypes.string,
   onClick: PropTypes.func,
-  disabled: PropTypes.bool.isRequired,
-  state: stateNum.isRequired,
+  loading: PropTypes.bool.isRequired,
   description: PropTypes.string,
   data: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onError: PropTypes.func,
   onChange: PropTypes.func,
   editUser: PropTypes.func.isRequired
 };

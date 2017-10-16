@@ -28,7 +28,7 @@ export function cancelAll() {
 // ===========================================================================
 export default function fetch(url, data, opts) {
   return new Promise((resolve, reject) => {
-    const id = counter;
+    // const id = counter;
     const { abort } = jsonp({
       url: `${BASEURL}/${url}`,
       data: transformRequestData(data),
@@ -39,8 +39,8 @@ export default function fetch(url, data, opts) {
         abort();
       }
     });
-    window.stack[id] = abort;
-    counter += 1;
+    // window.stack[id] = abort;
+    // counter += 1;
   });
 }
 

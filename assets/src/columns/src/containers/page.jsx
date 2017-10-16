@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { listShape, stateNum } from 'common/typecheck';
+import { listShape } from 'common/typecheck';
 import { coreInterface } from '../defaults';
 import { makePageSelector } from '../selectors';
 
@@ -45,12 +45,11 @@ class Columns extends React.Component {
   }
 
   renderDetails() {
-    const { state, editItem, editText, chosen, route, curId, params, assignmentText } = this.props;
+    const { editItem, editText, chosen, route, curId, params, assignmentText } = this.props;
     if (params.assignment) {
       return (
         <ColumnFeedsAssignment
           data={chosen}
-          state={state}
           onSubmit={editItem}
           backUrl={`${route.path}/${curId}`}
           texts={assignmentText}
@@ -61,7 +60,6 @@ class Columns extends React.Component {
       <EditColumn
         className='mod-column-edit'
         data={chosen}
-        state={state}
         onSubmit={editItem}
         texts={editText}
         backUrl={route.path}
@@ -70,13 +68,12 @@ class Columns extends React.Component {
   }
 
   render() {
-    const { listText, state, payload, createItem, deleteConfirm, deleteItem, actionSort, chosen, creating, deleting, route, curId } = this.props;
+    const { listText, payload, createItem, deleteConfirm, deleteItem, actionSort, chosen, creating, deleting, route, curId } = this.props;
     return (
       <div className='mod-page'>
         <ListSection
           loading={creating}
           payload={payload}
-          state={state}
           createItem={createItem}
           deleteItem={deleteConfirm}
           sortItems={actionSort}
@@ -109,7 +106,6 @@ class Columns extends React.Component {
 // Columns container default props
 // ===========================================================================
 Columns.defaultProps = {
-  state: 2,
   listText: {
     title: 'Columns Management',
     description: 'Create, edit or delete dashboard columns. Drag to reorder, use the eye icon to hide/unhide them (tip: hidden columns can still be used for alerts/reports).',
@@ -138,7 +134,6 @@ Columns.propTypes = {
   editText: PropTypes.objectOf(PropTypes.string).isRequired,
   assignmentText: PropTypes.objectOf(PropTypes.string).isRequired,
   payload: PropTypes.arrayOf(PropTypes.shape(listShape)).isRequired,
-  state: stateNum.isRequired,
   actionHide: PropTypes.func.isRequired,
   actionShow: PropTypes.func.isRequired,
   router: PropTypes.object.isRequired,

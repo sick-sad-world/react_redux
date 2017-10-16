@@ -59,9 +59,9 @@ export default function makePageContainer(opts, Component) {
       if (!this.state.deleting) return;
       const closeModal = this.deleteConfirm();
       this.props.actionDelete({ id: this.state.deleting.id })
-        .then(closeModal)
+        .catch(console.error)
         .then(() => this.changeLocation())
-        .catch(closeModal);
+        .then(closeModal);
     }
 
     render() {

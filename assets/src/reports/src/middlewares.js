@@ -15,13 +15,13 @@ export function processReport({ getState }) {
       case types.READ:
         return next({
           ...action,
-          payload: action.payload.map(processor(getState().user.payload))
+          payload: action.payload.map(processor(getState().user))
         });
       case types.CREATE:
       case types.UPDATE:
         return next({
           ...action,
-          payload: processor(getState().user.payload)(action.payload)
+          payload: processor(getState().user)(action.payload)
         });
       default:
         return next(action);

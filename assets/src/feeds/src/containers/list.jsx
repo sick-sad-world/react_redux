@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { includes, bindAll } from 'lodash';
+import { bindAll } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
@@ -10,7 +10,6 @@ import { connect } from 'react-redux';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { stateNum } from 'common/typecheck';
 import { defaultInterface } from '../defaults';
 import { makeContainerSelector } from '../selectors';
 
@@ -80,7 +79,6 @@ class FeedsList extends React.Component {
 FeedsList.defaultProps = {
   className: 'entity-list',
   emptyTpl: 'No feeds found.',
-  state: 2,
   deletable: true,
   sortable: false
 };
@@ -98,7 +96,6 @@ FeedsList.propTypes = {
   sortable: PropTypes.bool.isRequired,
   children: PropTypes.func,
   className: PropTypes.string,
-  state: stateNum.isRequired,
   emptyTpl: PropTypes.string.isRequired,
   payload: PropTypes.arrayOf(PropTypes.shape(defaultInterface)).isRequired,
   deleteFeed: PropTypes.func.isRequired

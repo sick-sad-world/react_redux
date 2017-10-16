@@ -32,7 +32,7 @@ export function updateUniq({ getState }) {
       case types.UPDATE_UNIQ:
         return next({
           ...action,
-          payload: get(getState(), 'sets.payload', []).map((set, i, sets) => ({
+          payload: get(getState(), 'sets', []).map((set, i, sets) => ({
             ...set,
             uniq_ids: setUniqFeeds(set.source_ids, calcFeedOccurance(sets))
           })).map(({ id, uniq_ids }) => ({ id, uniq_ids }))
@@ -41,7 +41,7 @@ export function updateUniq({ getState }) {
       case types.UPDATE:
         return next({
           ...action,
-          payload: processSet(action.payload, get(getState(), 'sets.payload', []))
+          payload: processSet(action.payload, get(getState(), 'sets', []))
         });
       default:
         return next(action);

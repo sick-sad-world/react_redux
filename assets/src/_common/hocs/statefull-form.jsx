@@ -1,13 +1,12 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, pick, isEqual, without } from 'lodash';
+import { bindAll, pick, isEqual, without, isUndefined } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
 import PropTypes from 'prop-types';
-import { stateNum } from '../typecheck';
 
 function defaultMapDataToState(data) {
   return { ...data };
@@ -22,6 +21,7 @@ function defaultComparator(v, k, data) {
 }
 
 export const injectedProps = {
+  loading: PropTypes.bool.isRequired,
   bindInput: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
@@ -48,16 +48,15 @@ export default function statefullForm(settings) {
       constructor(props) {
         super(props);
         this.state = {
+          loading: false,
           values: getStateValues(props),
           changed: []
         };
-        bindAll(this, 'makeUpdater', 'bindInput', 'submit', 'checkChanges', 'reset');
+        bindAll(this, 'makeUpdater', 'bindInput', 'submit', 'checkChanges', 'reset', 'toggleLoading');
       }
 
       componentWillReceiveProps(newProps) {
-        if (newProps.state === 2) {
-          this.reset(newProps);
-        }
+        this.reset(newProps);
       }
 
       checkChanges(changed, value) {
@@ -74,13 +73,17 @@ export default function statefullForm(settings) {
         return (raw, ...args) => {
           this.setState(({ values, changed }, props) => {
             let value = (getter instanceof Function) ? getter(raw, values, props, ...args) : raw;
-            if (!Array.isArray(entry)) {
-              value = { [entry]: value };
+            if (value === undefined) {
+              return {};
+            } else {
+              if (!Array.isArray(entry)) {
+                value = { [entry]: value };
+              }
+              return {
+                values: { ...values, ...value },
+                changed: this.checkChanges(changed, value)
+              };
             }
-            return {
-              values: { ...values, ...value },
-              changed: this.checkChanges(changed, value)
-            };
           });
         };
       }
@@ -92,8 +95,13 @@ export default function statefullForm(settings) {
         };
       }
 
+      toggleLoading() {
+        return this.setState({ loading: !this.state.loading });
+      }
+
       submit() {
-        return this.props.onSubmit(opts.mapStateToData(this.state.values), null, this.state.changed);
+        this.toggleLoading();
+        return this.props.onSubmit(opts.mapStateToData(this.state.values), null, this.state.changed).catch(console.error).then(this.toggleLoading);
       }
 
       reset(props) {
@@ -105,13 +113,15 @@ export default function statefullForm(settings) {
 
       render() {
         const { data, ...rest } = this.props;
+        const { values, loading, changed } = this.state;
         return (
           <Component
-            values={this.state.values}
-            changed={this.state.changed}
+            values={values}
+            changed={changed}
             bindInput={this.bindInput}
             submit={this.submit}
             reset={this.reset}
+            loading={loading}
             makeUpdater={this.makeUpdater}
             {...rest}
           />
@@ -120,7 +130,6 @@ export default function statefullForm(settings) {
     }
 
     StatefullForm.propTypes = {
-      state: stateNum,
       data: PropTypes.object.isRequired,
       onSubmit: PropTypes.func.isRequired,
       ...opts.propTypes

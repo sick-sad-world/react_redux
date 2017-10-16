@@ -26,13 +26,12 @@ import EditAlert from './components/edit';
 
 class Alerts extends React.Component {
   render() {
-    const { listText, state, payload, createItem, deleteConfirm, deleteItem, editItem, editText, actionSort, chosen, creating, deleting, route, curId } = this.props;
+    const { listText, payload, createItem, deleteConfirm, deleteItem, editItem, editText, actionSort, chosen, creating, deleting, route, curId } = this.props;
     return (
       <div className='mod-page'>
         <ListSection
         loading={creating}
           payload={payload}
-          state={state}
           createItem={createItem}
           deleteItem={deleteConfirm}
           sortItems={actionSort}
@@ -50,7 +49,6 @@ class Alerts extends React.Component {
         {(chosen) ? (
           <EditAlert
             data={chosen}
-            state={state}
             onSubmit={editItem}
             backUrl={route.path}
             texts={editText}
@@ -70,7 +68,6 @@ class Alerts extends React.Component {
 }
 
 Alerts.defaultProps = {
-  state: 2,
   listText: {
     title: 'Alerts Management',
     description: 'Create, edit and delete alerts that will be sent to you when specific columns get new items.',

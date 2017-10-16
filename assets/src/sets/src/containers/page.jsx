@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { listShape, stateNum } from 'common/typecheck';
+import { listShape } from 'common/typecheck';
 import { coreInterface } from '../defaults';
 import { makeContainerSelector } from '../selectors';
 
@@ -42,7 +42,7 @@ class Sourcesets extends React.Component {
   }
 
   renderDetails() {
-    const { state, editItem, editText, chosen, route, curId, params, payload } = this.props;
+    const { editItem, editText, chosen, route, curId, params, payload } = this.props;
     if (params.create) {
       return (
         <FeedCreate
@@ -55,7 +55,6 @@ class Sourcesets extends React.Component {
     return (
       <EditSet
         data={chosen}
-        state={state}
         onSubmit={editItem}
         backUrl={route.path}
         texts={editText}
@@ -65,13 +64,12 @@ class Sourcesets extends React.Component {
   }
 
   render() {
-    const { listText, state, payload, createItem, deleteConfirm, actionSort, deleteItem, chosen, deleting, route, curId, creating } = this.props;
+    const { listText, payload, createItem, deleteConfirm, actionSort, deleteItem, chosen, deleting, route, curId, creating } = this.props;
     return (
       <div className='mod-page'>
         <ListSection
           loading={creating}
           payload={payload}
-          state={state}
           createItem={createItem}
           deleteItem={deleteConfirm}
           sortItems={actionSort}
@@ -105,7 +103,6 @@ class Sourcesets extends React.Component {
 // Sourcesets container default props
 // ===========================================================================
 Sourcesets.defaultProps = {
-  state: 2,
   listText: {
     title: 'Sources Management',
     description: 'Create, edit and delete sets of sources. Drag to reorder list. Open set to edit the sources in it.',
@@ -128,7 +125,6 @@ Sourcesets.propTypes = {
   listText: PropTypes.objectOf(PropTypes.string).isRequired,
   editText: PropTypes.objectOf(PropTypes.string).isRequired,
   payload: PropTypes.arrayOf(PropTypes.shape(listShape)).isRequired,
-  state: stateNum.isRequired,
   router: PropTypes.object.isRequired,
   route: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,

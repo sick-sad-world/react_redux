@@ -2,7 +2,7 @@
 // ===========================================================================
 import { bindAll } from 'lodash';
 import classNames from 'classnames';
-import { stateNum, listShape } from 'common/typecheck';
+import { listShape } from 'common/typecheck';
 
 // Import React related stuff
 // ===========================================================================
@@ -30,7 +30,7 @@ export class ListSection extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.state === 2) this.setState({ payload: newProps.payload.map((item, i) => ({ ...item, order: i })) });
+    this.setState({ payload: newProps.payload.map((item, i) => ({ ...item, order: i })) });
   }
 
   createHandler(e) {
@@ -101,7 +101,6 @@ ListSection.defaultProps = {
     empty: 'List is empty.'
   },
   loading: false,
-  state: 1,
   payload: []
 };
 
@@ -119,7 +118,6 @@ ListSection.propTypes = {
   createItem: PropTypes.func.isRequired,
   deleteItem: PropTypes.func.isRequired,
   sortItems: PropTypes.func.isRequired,
-  state: stateNum.isRequired,
   payload: PropTypes.arrayOf(PropTypes.shape(listShape)).isRequired
 };
 

@@ -1,7 +1,6 @@
 // Import utility stuff
 // ===========================================================================
 import { defaultInterface } from '../defaults';
-import { bindAll } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
@@ -19,8 +18,7 @@ import EmailList from './email-list';
 class EditUser extends React.Component {
 
   render() {
-    const { state, values, changed, texts, bindInput, makeUpdater, onEmailBccError, submit, reset } = this.props;
-    const loading = state === 3;
+    const { loading, values, changed, texts, bindInput, makeUpdater, submit, reset } = this.props;
     return (
       <SectionWrapper title='User settings' description={texts.description}>
         {(changed.length) ? (
@@ -56,8 +54,7 @@ class EditUser extends React.Component {
                 email={values.email}
                 data={values.email_bcc}
                 onChange={makeUpdater('email_bcc')}
-                onError={onEmailBccError}
-                />
+              />
             </div>
           </div>
         </form>
@@ -69,7 +66,6 @@ class EditUser extends React.Component {
 // Edit profile form prop types checks
 // ===========================================================================
 EditUser.propTypes = {
-  onEmailBccError: PropTypes.func,
   ...injectedProps
 };
 
@@ -78,7 +74,6 @@ export default statefullForm({
     return data;
   },
   propTypes: {
-    data: PropTypes.shape(defaultInterface).isRequired,
-    onEmailBccError: PropTypes.func
+    data: PropTypes.shape(defaultInterface).isRequired
   }
 })(EditUser);

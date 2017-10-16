@@ -3,6 +3,7 @@
 import { bindAll, without, includes } from 'lodash';
 import classNames from 'classnames';
 import { emailRegExp, webHookRegExp } from 'common/typecheck';
+import FormSubmit from 'common/components/forms/form-submit';
 
 // Import React related stuff
 // ===========================================================================
@@ -19,20 +20,18 @@ export default class EmailList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: null,
+      error: props.error,
       new: ''
     };
     bindAll(this, 'makeListItem', 'addEmail', 'errorHandler');
   }
 
-  componentWillReceiveProps() {
-    this.setState({ error: null });
+  componentWillReceiveProps({ error }) {
+    this.errorHandler(error);
   }
 
   errorHandler(error) {
-    return this.setState({ error }, () => {
-      if (this.props.onError) this.props.onError(error);
-    });
+    return this.setState({ error });
   }
 
   // Create list item DOM element -> used in render method
@@ -42,11 +41,17 @@ export default class EmailList extends React.Component {
     return (
       <li
         key={`email_${i}`}
-        className={classNames({ 'is-disabled': this.props.disabled, 'is-selected': isActive })}
-        onClick={(this.props.onClick) ? () => this.props.onClick((isActive ? this.props.email : email)) : null}
+        className={classNames({ 'is-disabled': this.props.loading, 'is-selected': isActive })}
+        onClick={(this.props.onClick) ? (e) => {
+          e.stopPropagation();
+          this.props.onClick((isActive ? this.props.email : email))
+        } : null}
       >
         <span className='t-ellipsis'>{email}</span>
-        <a onClick={() => this.props.onChange(without(this.props.data, email), false)}><Icon icon='cross'/></a>
+        <a onClick={(e) => {
+          e.stopPropagation();
+          this.props.onChange(without(this.props.data, email), undefined);
+        }}><Icon icon='cross'/></a>
       </li>
     );
   }
@@ -63,26 +68,26 @@ export default class EmailList extends React.Component {
     } else {
       this.props.onChange([...this.props.data, newItem], newItem);
     }
-
+    
     if (error) {
       this.errorHandler(error);
     } else {
       this.setState({ new: '', error: null });
     }
   }
-
+  
   render() {
     return (
       <div className='mod-email-list'>
         <div className='row-flex'>
           <input
-            disabled={this.props.disabled}
+            disabled={this.props.loading}
             type='text'
             placeholder='Enter an email address or Slack webhook link'
             value={this.state.new}
             onChange={e => this.setState({ new: e.target.value })}
           />
-          <a disabled={this.props.disabled} className='button is-accent size-90' onClick={this.addEmail}>Add new</a>
+          <FormSubmit className='button is-accent size-90' loading={this.props.loading} onClick={this.addEmail} text='Add new'/>
         </div>
         {(this.state.error) ? (<span className='warning'><Icon viewBox='0 0 24 24' icon='warning' />{this.state.error}</span>) : null }
         <ul className='tag-list row'>
@@ -97,11 +102,11 @@ export default class EmailList extends React.Component {
 // Default props to component
 // ===========================================================================
 EmailList.defaultProps = {
+  error: null,
   onChange: null,
-  onError: null,
   onClick: null,
   active: null,
-  disabled: false,
+  loading: false,
   description: 'if E-mail list is empty. Use form below to create one. If not - your profile e-mail [{email}] will be used as default.',
   emailValidator: emailRegExp,
   slackValidator: webHookRegExp,
@@ -111,11 +116,11 @@ EmailList.defaultProps = {
 // Prop type check
 // ===========================================================================
 EmailList.propTypes = {
+  error: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-  onError: PropTypes.func,
   onClick: PropTypes.func,
   email: PropTypes.string.isRequired,
-  disabled: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
   active: PropTypes.string,
   description: PropTypes.string,
   data: PropTypes.arrayOf(PropTypes.string).isRequired,

@@ -5,9 +5,9 @@ import PropTypes from 'prop-types';
 
 export default function FormSubmit({ text, type, loading, ...props }) {
   return (
-    <button type={type} {...props}>{(loading) ? (
+    <button type={type} disabled={loading} {...props}>{(loading) ? (
       <svg className='spinner' width='65px' height='65px' viewBox='0 0 66 66'>
-        <circle className='path' disabled={loading} fill='none' strokeWidth='6' strokeLinecap='round' cx='33' cy='33' r='30'></circle>
+        <circle className='path' fill='none' strokeWidth='6' strokeLinecap='round' cx='33' cy='33' r='30'></circle>
       </svg>
     ) : text}</button>
   );
