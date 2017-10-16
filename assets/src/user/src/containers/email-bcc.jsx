@@ -26,7 +26,7 @@ class Emails extends React.Component {
       loading: props.loading,
       error: null
     };
-    bindAll(this, 'updateEmailList', 'toggleLoading');
+    bindAll(this, 'updateEmailList');
   }
 
   componentWillReceiveProps({loading}) {
@@ -38,7 +38,7 @@ class Emails extends React.Component {
   }
 
   updateEmailList(emails, newEmail) {
-    this.toggleLoading();
+    this.setState({ loading: true })
     return this.props.editUser({ email_bcc: emails }).then(() => {
       if (this.props.onChange) return this.props.onChange(emails, newEmail);
       return null;
