@@ -19,15 +19,16 @@ export default function FormReg({ handler, loading }) {
 
   return (
     <form action='create' className='register' onSubmit={onSubmit}>
+      <input type='hidden' value='bla'/>
       <h3>New to Trendolizer?</h3>
       <div className='row'>
-        <input type='text' name='name' placeholder='Your login' required />
+        <input type='text' name='name' autoComplete='off' placeholder='Your login' required />
       </div>
       <div className='row'>
-        <input type='email' name='email' placeholder='Your email' required />
+        <input type='email' name='email' autoComplete='off' placeholder='Your email' required />
       </div>
       <div className='row'>
-        <input type='password' name='password' placeholder='Your password' required />
+        <input type='password' name='password' autoComplete='off' placeholder='Your password' required />
       </div>
       <div className='row'>
         <FormSubmit text='Create account' loading={loading} className='button is-alt' />

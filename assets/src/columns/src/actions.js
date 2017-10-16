@@ -1,50 +1,48 @@
+import fetch from 'src/communication';
 import createAction from 'common/action-factory';
 import types from './types';
 
 export const getColumns = createAction({
-  type: types.READ,
-  state_type: types.STATE,
-  url: 'columns',
-  pendingMessage: 'Reading column data...',
-  successMessage: 'Column data has been read.'
+  action: types.READ,
+  loading: types.STATE,
+  call: 'columns'
 });
 
 export const sortColumns = createAction({
-  type: types.SORT,
-  state_type: types.STATE,
-  url: 'sort_columns',
-  pendingMessage: 'Saving new Columns order...',
-  successMessage: 'Columns order has been read.'
+  action: types.SORT,
+  loading: types.STATE,
+  call(data, opts) {
+    return fetch('sort_columns', data, opts).then(resp => (resp.success) ? data : resp);
+  }
 });
 
 export const createColumn = createAction({
-  type: types.CREATE,
-  state_type: types.STATE,
-  url: 'add_column',
-  pendingMessage: 'Creating new column...',
-  successMessage: 'Column succesfully created.'
+  action: types.CREATE,
+  loading: types.STATE,
+  call: 'add_column'
 });
 
 export const editColumn = createAction({
-  type: types.UPDATE,
-  state_type: types.STATE,
-  url: 'column',
-  pendingMessage: 'Updating column data...',
-  successMessage: 'Column data has been updated.'
+  action: types.UPDATE,
+  loading: types.STATE,
+  call(data, opts) {
+    return fetch('column', data, opts).then(resp => (resp.success) ? data : resp);
+  }
 });
 
 export const updateVisibility = createAction({
-  type: types.UPD_VIS,
-  state_type: types.STATE,
-  url: 'column',
-  pendingMessage: 'Updating column visiblity...'
+  action: types.UPD_VIS,
+  loading: types.STATE,
+  call(data, opts) {
+    return fetch('column', data, opts).then(resp => (resp.success) ? data : resp);
+  }
 });
 
 export const deleteColumn = createAction({
-  type: types.DELETE,
-  state_type: types.STATE,
-  url: 'remove_column',
-  pendingMessage: 'Deleting column...',
-  successMessage: 'Column was deleted.'
+  action: types.DELETE,
+  loading: types.STATE,
+  call(data, opts) {
+    return fetch('remove_column', data, opts).then(resp => (resp.success) ? data : resp);
+  }
 });
 

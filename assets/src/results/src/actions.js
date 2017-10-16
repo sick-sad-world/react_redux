@@ -1,22 +1,7 @@
+import { get } from 'lodash';
 import createAction from 'common/action-factory';
 import types from './types';
 import moment from 'moment';
-
-export const getResults = createAction({
-  type: types.READ,
-  state_type: types.STATE,
-  url: 'links',
-  pendingMessage: 'Fetching results for $id column...',
-  successMessage: 'Results fetched successfully.'
-});
-
-export const addResults = createAction({
-  type: types.PUSH,
-  state_type: types.STATE,
-  url: 'links',
-  pendingMessage: 'Fetching more results for $id column...',
-  successMessage: 'Results added successfully.'
-});
 
 export const clearResults = entity => dispatch => dispatch({
   type: types.DELETE,
@@ -29,28 +14,34 @@ export const resultError = (error, entity) => dispatch => dispatch({
   error: (typeof error === 'string') ? error : `Results for column ${entity} ended with error`
 });
 
+export const getResults = createAction({
+  action: types.READ,
+  loading: types.STATE,
+  call: 'links'
+});
+
+export const addResults = createAction({
+  action: types.PUSH,
+  loading: types.STATE,
+  call: 'links'
+});
+
 export const refreshResult = createAction({
-  type: types.UPDATE,
-  state_type: types.STATE,
-  url: 'links',
-  pendingMessage: 'Refreshing result $id...',
-  successMessage: 'Result updated.'
+  action: types.UPDATE,
+  loading: types.STATE,
+  call: 'links'
 });
 
 export const ignoreResult = createAction({
-  type: types.IGNORE,
-  state_type: types.STATE,
-  url: 'ignore',
-  pendingMessage: 'Changing state of result $id...',
-  successMessage: 'Result ignorance changed.'
+  action: types.IGNORE,
+  loading: types.STATE,
+  call: 'ignore'
 });
 
 export const favoriteResult = createAction({
-  type: types.FAVORITE,
-  state_type: types.STATE,
-  url: 'favorite',
-  pendingMessage: 'Changing state of result $id...',
-  successMessage: 'Result favor changed.'
+  action: types.FAVORITE,
+  loading: types.STATE,
+  call: 'favorite'
 });
 
 export function fetchResults(data, opts) {
@@ -104,24 +95,24 @@ export function getAllResults(data) {
           // Run our call and simple forward results to [Upper-level] promise chain
           // ===========================================================================
           timeouts.push(setTimeout(() => {
-            if (!getState().user.payload.id) return endSequence();
-            return dispatch(getResults(column.data, {
-              entity: column.id,
-              notification: false,
-              state: false
-            })).then((payload) => {
-              if (!getState().user.payload.id) return null;
-              count -= 1;
-              stepMessage();
-              resolve(payload);
-            }).catch((...args) => {
-              if (!getState().user.payload.id) return null;
-              count -= 1;
-              const text = `Results for column ${column.id} ended with error`;
-              if (notification) dispatch(notification({ type: 'error', text }));
-              dispatch(resultError(text, column.id));
-              reject(...args);
-            });
+            if (!get(getState(), 'user.payload.id', false)) return endSequence();
+            return dispatch(getResults(column.data, { entity: column.id, silent: true }))
+              .then((payload) => {
+                if (get(getState(), 'user.payload.id', false)) {
+                  count -= 1;
+                  stepMessage();
+                  resolve(payload);
+                }
+              })
+              .catch((...args) => {
+                if (get(getState(), 'user.payload.id', false)) {
+                  count -= 1;
+                  // const text = `Results for column ${column.id} ended with error`;
+                  // if (notification) dispatch(notification({ type: 'error', text }));
+                  dispatch(resultError(null, column.id));
+                  reject(...args);
+                }
+              });
           }, delay));
         });
       })

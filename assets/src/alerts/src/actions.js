@@ -1,42 +1,37 @@
+import fetch from 'src/communication';
 import createAction from 'common/action-factory';
 import types from './types';
 
 export const getAlerts = createAction({
-  type: types.READ,
-  state_type: types.STATE,
-  url: 'alerts',
-  pendingMessage: 'Reading alerts data...',
-  successMessage: 'Alerts data has been read.'
+  action: types.READ,
+  loading: types.STATE,
+  call: 'alerts'
 });
 
 export const sortAlerts = createAction({
-  type: types.SORT,
-  state_type: types.STATE,
-  url: 'sort_alerts',
-  pendingMessage: 'Saving new Alerts order...',
-  successMessage: 'Alerts order has been read.'
+  action: types.SORT,
+  loading: types.STATE,
+  call(data, opts) {
+    return fetch('sort_alerts', data, opts).then(resp => (resp.success) ? data : resp);
+  }
 });
 
 export const createAlert = createAction({
-  type: types.CREATE,
-  state_type: types.STATE,
-  url: 'add_alert',
-  pendingMessage: 'Creating new alert...',
-  successMessage: 'Alert succesfully created.'
+  action: types.CREATE,
+  loading: types.STATE,
+  call: 'add_alert'
 });
 
 export const editAlert = createAction({
-  type: types.UPDATE,
-  state_type: types.STATE,
-  url: 'alert',
-  pendingMessage: 'Updating alert data...',
-  successMessage: 'Alert data has been updated.'
+  action: types.UPDATE,
+  loading: types.STATE,
+  call: 'alert'
 });
 
 export const deleteAlert = createAction({
-  type: types.DELETE,
-  state_type: types.STATE,
-  url: 'remove_alert',
-  pendingMessage: 'Deleting alert...',
-  successMessage: 'Alert was deleted.'
+  action: types.DELETE,
+  loading: types.STATE,
+  call(data, opts) {
+    return fetch('remove_alert', data, opts).then(resp => (resp.success) ? data : resp);
+  }
 });

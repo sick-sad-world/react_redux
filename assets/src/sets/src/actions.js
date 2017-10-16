@@ -1,49 +1,39 @@
+import fetch from 'src/communication';
 import createAction from 'common/action-factory';
 import types from './types';
 
-export const setSetsState = state => ({
-  type: types.STATE,
-  state
-});
-
 export const getSets = createAction({
-  type: types.READ,
-  state_type: types.STATE,
-  url: 'sets',
-  pendingMessage: 'Reading set data...',
-  successMessage: 'Sourceset data has been read.'
+  action: types.READ,
+  loading: types.STATE,
+  call: 'sets'
 });
 
 export const sortSets = createAction({
-  type: types.SORT,
-  state_type: types.STATE,
-  url: 'sort_sets',
-  pendingMessage: 'Saving new Sets order...',
-  successMessage: 'Sets order has been read.'
+  action: types.SORT,
+  loading: types.STATE,
+  call(data, opts) {
+    return fetch('sort_sets', data, opts).then(resp => (resp.success) ? data : resp);
+  }
 });
 
 export const createSet = createAction({
-  type: types.CREATE,
-  state_type: types.STATE,
-  url: 'add_set',
-  pendingMessage: 'Creating new set...',
-  successMessage: 'Set succesfully created.'
+  action: types.CREATE,
+  loading: types.STATE,
+  call: 'add_set'
 });
 
 export const editSet = createAction({
-  type: types.UPDATE,
-  state_type: types.STATE,
-  url: 'set',
-  pendingMessage: 'Updating set data...',
-  successMessage: 'Set data has been updated.'
+  action: types.UPDATE,
+  loading: types.STATE,
+  call: 'set'
 });
 
 export const deleteSet = createAction({
-  type: types.DELETE,
-  state_type: types.STATE,
-  url: 'remove_set',
-  pendingMessage: 'Deleting set...',
-  successMessage: 'Set was deleted.'
+  action: types.DELETE,
+  loading: types.STATE,
+  call(data, opts) {
+    return fetch('remove_set', data, opts).then(resp => (resp.success) ? data : resp);
+  }
 });
 
 export const forseUpdateUniq = dispatch => dispatch({

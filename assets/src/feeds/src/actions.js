@@ -1,6 +1,6 @@
 import moment from 'moment';
-import createAction from 'common/action-factory';
 import fetch from 'src/communication';
+import createAction from 'common/action-factory';
 import types from './types';
 import { testUrls } from './defaults';
 
@@ -10,43 +10,33 @@ export const setFeedsState = state => ({
 });
 
 export const getFeeds = createAction({
-  type: types.READ,
-  state_type: types.STATE,
-  url: 'sources',
-  pendingMessage: 'Reading sources data...',
-  successMessage: 'Sources data has been read.'
+  action: types.READ,
+  loading: types.STATE,
+  call: 'sources'
 });
 
 export const createFeed = createAction({
-  type: types.CREATE,
-  state_type: types.STATE,
-  url: 'add_source',
-  pendingMessage: 'Creating new source...',
-  successMessage: 'Source succesfully created.'
+  action: types.CREATE,
+  loading: types.STATE,
+  call: 'add_source'
 });
 
 export const addFeed = createAction({
-  type: types.ADD,
-  state_type: types.STATE,
-  url: 'add_source',
-  pendingMessage: 'Creating new source...',
-  successMessage: 'Source succesfully created.'
+  action: types.ADD,
+  loading: types.STATE,
+  call: 'add_source'
 });
 
 export const removeFeed = createAction({
-  type: types.REMOVE,
-  state_type: types.STATE,
-  url: 'remove_source',
-  pendingMessage: 'Removing source from set...',
-  successMessage: 'Source succesfully removed.'
+  action: types.REMOVE,
+  loading: types.STATE,
+  call: 'remove_source'
 });
 
 export const deleteFeed = createAction({
-  type: types.DELETE,
-  state_type: types.STATE,
-  url: 'remove_source',
-  pendingMessage: 'Deleting source...',
-  successMessage: 'Source was deleted.'
+  action: types.DELETE,
+  loading: types.STATE,
+  call: 'remove_source'
 });
 
 export const testUrl = ([...tests], url) => (dispatch, getState, { notification, clientError }) => new Promise((resolve, reject) => {

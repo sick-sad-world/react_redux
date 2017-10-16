@@ -3,40 +3,31 @@ import types from './types';
 import { LOGIN, LOGOUT } from 'common/type-factory';
 
 export const login = createAction({
-  type: LOGIN,
-  state_type: types.STATE,
-  url: 'login',
-  successMessage: 'Logged in.'
+  action: LOGIN,
+  loading: types.STATE,
+  call: 'login'
 });
 
 export const logout = createAction({
-  type: LOGOUT,
-  state_type: types.STATE,
-  url: 'logout',
-  pendingMessage: 'Shutting down session...',
-  successMessage: 'Logged out.'
+  action: LOGOUT,
+  loading: types.STATE,
+  call: 'logout'
 });
 
 export const addUser = createAction({
-  type: types.CREATE,
-  state_type: types.STATE,
-  url: 'add_user',
-  pendingMessage: 'Registering new user...',
-  successMessage: 'New user has been created.'
+  action: types.CREATE,
+  loading: types.STATE,
+  call: 'add_user'
 });
 
 export const getUser = createAction({
-  type: types.READ,
-  state_type: types.STATE,
-  url: 'user',
-  pendingMessage: 'Reading user data...',
-  successMessage: 'User data has been read.'
+  action: types.READ,
+  loading: types.STATE,
+  call: 'user'
 });
 
 export const editUser = createAction({
-  type: types.UPDATE,
-  state_type: types.STATE,
-  url: 'user',
-  pendingMessage: 'Updating user data...',
-  successMessage: 'User data has been updated.'
+  action: types.UPDATE,
+  loading: types.STATE,
+  call: 'user'
 });

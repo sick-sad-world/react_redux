@@ -3,17 +3,15 @@ import types from './types';
 import { fetchScript } from 'src/communication';
 
 export const getResultMeasurements = createAction({
-  type: types.READ,
-  state_type: types.STATE,
-  url: 'graphdata',
-  pendingMessage: 'Fetching result data to build graphs'
+  action: types.READ,
+  loading: types.STATE,
+  call: 'graphdata'
 });
 
 export const getBriefMeasurements = createAction({
-  type: types.UPDATE_CACHE,
-  state_type: types.STATE,
-  url: 'graphdata',
-  pendingMessage: 'Fetching result data to build graphs'
+  action: types.UPDATE_CACHE,
+  loading: types.STATE,
+  call: 'graphdata'
 });
 
 export const fetchGoogleGraphs = () => fetchScript('https://www.gstatic.com/charts/loader.js')

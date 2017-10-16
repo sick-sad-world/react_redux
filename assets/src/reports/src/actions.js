@@ -1,47 +1,37 @@
+import fetch from 'src/communication';
 import createAction from 'common/action-factory';
 import types from './types';
 
-export const setReportsState = state => ({
-  type: types.STATE,
-  state
-});
-
 export const getReports = createAction({
-  type: types.READ,
-  state_type: types.STATE,
-  url: 'reports',
-  pendingMessage: 'Reading reports data...',
-  successMessage: 'Reports data has been read.'
+  action: types.READ,
+  loading: types.STATE,
+  call: 'reports'
 });
 
 export const sortReports = createAction({
-  type: types.SORT,
-  state_type: types.STATE,
-  url: 'sort_reports',
-  pendingMessage: 'Saving new Reports order...',
-  successMessage: 'Reports order has been read.'
+  action: types.SORT,
+  loading: types.STATE,
+  call(data, opts) {
+    return fetch('sort_reports', data, opts).then(resp => (resp.success) ? data : resp);
+  }
 });
 
 export const createReport = createAction({
-  type: types.CREATE,
-  state_type: types.STATE,
-  url: 'add_report',
-  pendingMessage: 'Creating new report...',
-  successMessage: 'Report succesfully created.'
+  action: types.CREATE,
+  loading: types.STATE,
+  call: 'add_report'
 });
 
 export const editReport = createAction({
-  type: types.UPDATE,
-  state_type: types.STATE,
-  url: 'report',
-  pendingMessage: 'Updating report data...',
-  successMessage: 'Report data has been updated.'
+  action: types.UPDATE,
+  loading: types.STATE,
+  call: 'report'
 });
 
 export const deleteReport = createAction({
-  type: types.DELETE,
-  state_type: types.STATE,
-  url: 'remove_report',
-  pendingMessage: 'Deleting report...',
-  successMessage: 'Report was deleted.'
+  action: types.DELETE,
+  loading: types.STATE,
+  call(data, opts) {
+    return fetch('remove_report', data, opts).then(resp => (resp.success) ? data : resp);
+  }
 });

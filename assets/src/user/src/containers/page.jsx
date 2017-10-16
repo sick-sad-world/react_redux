@@ -21,19 +21,6 @@ import { editUser } from '../actions';
 import EditUser from '../components/edit.jsx';
 
 class User extends React.Component {
-  constructor(props) {
-    super(props);
-    bindAll(this, 'onEmailBccError');
-  }
-
-  onEmailBccError(error) {
-    if (this.props.notification instanceof Function) {
-      this.props.notification({ type: 'error', text: error });
-    } else {
-      // some fallback
-    }
-  }
-
   render() {
     return (
       <div className='mod-page'>
@@ -42,7 +29,6 @@ class User extends React.Component {
           state={this.props.state}
           onSubmit={this.props.editUser}
           texts={this.props.texts}
-          onEmailBccError={this.onEmailBccError}
         />
       </div>
     );

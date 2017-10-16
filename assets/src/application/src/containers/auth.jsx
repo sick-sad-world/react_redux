@@ -30,7 +30,7 @@ class Auth extends React.Component {
   // Handle reaction of a new user
   // ===========================================================================
   handleReg(data) {
-    this.props.addUser({ ...data, redirect: window.location.host });
+    return this.props.addUser({ ...data, redirect: window.location.host });
   }
 
   // Redirect to auth if user is authentificated
