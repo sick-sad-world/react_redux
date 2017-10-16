@@ -182,7 +182,7 @@ class FeedCreate extends React.Component {
     );
   }
 
-  renderForm(loading = this.props.state > 2) {
+  renderForm(loading) {
     switch (this.state.type) {
       case 'autodetect':
         return <FormAutodetect
@@ -243,7 +243,7 @@ class FeedCreate extends React.Component {
     }
   }
 
-  renderResults(loading = this.props.state > 2) {
+  renderResults(loading) {
     switch (this.state.type) {
       case 'Facebook':
         return <ResultsFacebook
