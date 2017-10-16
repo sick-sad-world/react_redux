@@ -1,4 +1,4 @@
-import createSelector from 'common/selector-creator';
+import createSelector from 'common/selector-factory';
 import { defaultResults } from './defaults';
 
 const getResultsById = ({ results }, props) => results[props.id] || { ...defaultResults };

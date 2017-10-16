@@ -47,21 +47,15 @@ export function fetchData(opts) {
 }
 
 export function initialLoading(opts) {
-  const options = { state: false, notification: false, ...opts };
+  const options = { silent: true, ...opts };
 
   return (dispatch) => {
     if (!window.google) fetchGoogleGraphs();
-    return dispatch(getUser(null, { silent: true }))
+    return dispatch(getUser(null, options))
       .then(() => dispatch(fetchData(options)))
       .then(getColumnsForResults)
       .then(data => dispatch(getAllResults(data)))
-      .catch((err) => {
-        if (err instanceof Error) {
-          dispatch(clientError(err));
-        } else {
-          console.log(err);
-        }
-      })
+      .catch(err => (err instanceof Error) ? dispatch(clientError(err)) : console.log(err))
       .then(() => dispatch(setAppState(2)));
   };
 }

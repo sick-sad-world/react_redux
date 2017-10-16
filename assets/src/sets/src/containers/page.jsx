@@ -105,6 +105,7 @@ class Sourcesets extends React.Component {
 // Sourcesets container default props
 // ===========================================================================
 Sourcesets.defaultProps = {
+  state: 2,
   listText: {
     title: 'Sources Management',
     description: 'Create, edit and delete sets of sources. Drag to reorder list. Open set to edit the sources in it.',

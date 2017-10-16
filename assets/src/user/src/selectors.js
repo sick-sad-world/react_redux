@@ -1,14 +1,11 @@
-import createSelector from 'common/selector-creator';
+import createSelector from 'common/selector-factory';
 
-const getUserState = ({ user }) => user.state;
-const getUserData = ({ user }) => user.payload;
+const getUserData = ({ user }) => user;
 
 export function makeWorkspaceSelector() {
   const selector = createSelector(
-    getUserState,
     getUserData,
-    (state, { id, image, fullname, position }) => ({
-      state,
+    ({ id, image, fullname, position }) => ({
       user: { id, image, fullname, position }
     })
   );
@@ -17,21 +14,16 @@ export function makeWorkspaceSelector() {
 
 export function makeContainerSelector() {
   const selector = createSelector(
-    getUserState,
     getUserData,
-    (state, payload) => ({
-      state, payload
-    })
+    payload => ({ payload })
   );
   return (state, props) => selector(state, props);
 }
 
 export function makeEmailsSelector() {
   const selector = createSelector(
-    getUserState,
     getUserData,
-    (state, payload) => ({
-      state,
+    payload => ({
       email: payload.email,
       data: payload.email_bcc
     })

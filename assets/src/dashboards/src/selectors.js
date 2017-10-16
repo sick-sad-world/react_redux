@@ -1,8 +1,6 @@
-import createSelector from 'common/selector-creator';
+import createSelector from 'common/selector-factory';
 
-const getDashboardsState = ({ dashboards }) => dashboards.state;
-
-const getDashboards = ({ dashboards }) => dashboards.payload;
+const getDashboards = ({ dashboards }) => dashboards;
 
 const getCurrentId = ({ dashboards }, props) => parseInt(props.params.id, 10) || 0;
 

@@ -36,6 +36,7 @@ class SetsList extends React.Component {
 }
 
 SetsList.defaultProps = {
+  state: 2,
   className: 'entity-list',
   emptyTpl: 'No sets found.',
   sortable: false

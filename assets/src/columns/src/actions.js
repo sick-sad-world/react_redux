@@ -4,13 +4,11 @@ import types from './types';
 
 export const getColumns = createAction({
   action: types.READ,
-  loading: types.STATE,
   call: 'columns'
 });
 
 export const sortColumns = createAction({
   action: types.SORT,
-  loading: types.STATE,
   call(data, opts) {
     return fetch('sort_columns', data, opts).then(resp => (resp.success) ? data : resp);
   }
@@ -18,13 +16,11 @@ export const sortColumns = createAction({
 
 export const createColumn = createAction({
   action: types.CREATE,
-  loading: types.STATE,
   call: 'add_column'
 });
 
 export const editColumn = createAction({
   action: types.UPDATE,
-  loading: types.STATE,
   call(data, opts) {
     return fetch('column', data, opts).then(resp => (resp.success) ? data : resp);
   }
@@ -32,7 +28,6 @@ export const editColumn = createAction({
 
 export const updateVisibility = createAction({
   action: types.UPD_VIS,
-  loading: types.STATE,
   call(data, opts) {
     return fetch('column', data, opts).then(resp => (resp.success) ? data : resp);
   }
@@ -40,7 +35,6 @@ export const updateVisibility = createAction({
 
 export const deleteColumn = createAction({
   action: types.DELETE,
-  loading: types.STATE,
   call(data, opts) {
     return fetch('remove_column', data, opts).then(resp => (resp.success) ? data : resp);
   }

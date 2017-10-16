@@ -1,18 +1,15 @@
 import { includes } from 'lodash';
-import createSelector from 'common/selector-creator';
+import createSelector from 'common/selector-factory';
 
-const getFeedsState = ({ feeds }) => feeds.state;
-
-const getFeeds = ({ feeds }) => feeds.payload;
+const getFeeds = ({ feeds }) => feeds;
 
 const getCriterea = ({ feeds }, props) => props.criterea;
 
 export function makeContainerSelector() {
   const selector = createSelector(
-    getFeedsState,
     getFeeds,
     getCriterea,
-    (state, payload, criterea) => {
+    (payload, criterea) => {
       let result = [];
 
       if (criterea) {
@@ -25,7 +22,6 @@ export function makeContainerSelector() {
       }
 
       return {
-        state,
         payload: (criterea) ? result.map(feed => ({
           ...feed,
           deletable: (criterea.uniq_ids) && includes(criterea.uniq_ids, feed.id),

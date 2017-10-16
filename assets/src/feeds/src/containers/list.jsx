@@ -80,6 +80,7 @@ class FeedsList extends React.Component {
 FeedsList.defaultProps = {
   className: 'entity-list',
   emptyTpl: 'No feeds found.',
+  state: 2,
   deletable: true,
   sortable: false
 };

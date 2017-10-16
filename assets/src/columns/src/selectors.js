@@ -1,15 +1,13 @@
-import createSelector from 'common/selector-creator';
+import createSelector from 'common/selector-factory';
 import { includes } from 'lodash';
 
 const checkOpen = val => ({ open }) => open === val;
 
 const checkIds = ids => ({ id }) => includes(ids, id);
 
-const getColumnState = ({ columns }) => columns.state;
+const getColumns = ({ columns }) => columns;
 
-const getColumns = ({ columns }) => columns.payload;
-
-const getColumnById = ({ columns }, { col_id }) => columns.payload.find(({ id }) => id === col_id);
+const getColumnById = ({ columns }, { col_id }) => columns.find(({ id }) => id === col_id);
 
 const getCurrentId = ({ columns }, props) => parseInt(props.params.id, 10) || 0;
 
@@ -19,11 +17,9 @@ const getOpen = ({ columns }, props) => props.open;
 
 export function makePageSelector() {
   const selector = createSelector(
-    getColumnState,
     getColumns,
     getCurrentId,
-    (state, payload, curId) => ({
-      state,
+    (payload, curId) => ({
       curId,
       payload: payload.map(({ id, name, open, order, data }) => ({ id, name, open, order, data })),
       chosen: payload.find(({ id }) => id === curId)
@@ -35,16 +31,14 @@ export function makePageSelector() {
 
 export function makeContainerSelector() {
   const selector = createSelector(
-    getColumnState,
     getColumns,
     getColumnIds,
     getOpen,
-    (state, payload, ids, open) => {
+    (payload, ids, open) => {
       const criterea = [];
       if (open !== undefined) criterea.push(checkOpen(open));
       if (ids.length) criterea.push(checkIds(ids));
       return {
-        state,
         payload: (criterea.length) ? payload.filter(column => criterea.every(f => f(column))) : payload
       };
     }
@@ -55,12 +49,8 @@ export function makeContainerSelector() {
 
 export function makeSingleSelector() {
   const selector = createSelector(
-    getColumnState,
     getColumnById,
-    (state, payload) => ({
-      state,
-      payload
-    })
+    payload => ({ payload })
   );
 
   return (state, props) => selector(state, props);

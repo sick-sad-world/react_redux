@@ -95,17 +95,17 @@ export function getAllResults(data) {
           // Run our call and simple forward results to [Upper-level] promise chain
           // ===========================================================================
           timeouts.push(setTimeout(() => {
-            if (!get(getState(), 'user.payload.id', false)) return endSequence();
+            if (!get(getState(), 'user.id', false)) return endSequence();
             return dispatch(getResults(column.data, { entity: column.id, silent: true }))
               .then((payload) => {
-                if (get(getState(), 'user.payload.id', false)) {
+                if (get(getState(), 'user.id', false)) {
                   count -= 1;
                   stepMessage();
                   resolve(payload);
                 }
               })
               .catch((...args) => {
-                if (get(getState(), 'user.payload.id', false)) {
+                if (get(getState(), 'user.id', false)) {
                   count -= 1;
                   // const text = `Results for column ${column.id} ended with error`;
                   // if (notification) dispatch(notification({ type: 'error', text }));

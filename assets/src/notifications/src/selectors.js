@@ -1,4 +1,4 @@
-import createSelector from 'common/selector-creator';
+import createSelector from 'common/selector-factory';
 import { includes } from 'lodash';
 
 const getNotifications = ({ notifications }) => notifications;

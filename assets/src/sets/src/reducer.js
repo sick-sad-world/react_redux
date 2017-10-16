@@ -1,6 +1,5 @@
 import createReducer from 'common/reducer-factory';
 import types from './types';
-import defaultSet from './defaults';
 
 export default createReducer({
   ...types,

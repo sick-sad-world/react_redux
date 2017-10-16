@@ -1,7 +1,6 @@
 // Imports related to State tree
 // ===========================================================================
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import { combineEpics, createEpicMiddleware } from 'redux-observable';
 import { routerReducer as routing } from 'react-router-redux';
 import thunk from 'redux-thunk';
 import { sortMiddleware } from 'common/reducer-factory';
@@ -43,7 +42,6 @@ export default createStore(
   }),
   composeEnhancers(applyMiddleware(
     thunk.withExtraArgument({ notification, clientError }),
-    // createEpicMiddleware(),
     sortMiddleware,
     processColumn,
     processAlert,

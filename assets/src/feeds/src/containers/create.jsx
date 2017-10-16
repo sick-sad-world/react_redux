@@ -291,6 +291,7 @@ class FeedCreate extends React.Component {
 
 FeedCreate.defaultProps = {
   types: feedTypes,
+  state: 2,
   texts: {
     title: 'Create new feeds for:',
     description: 'Feed creation dialog',

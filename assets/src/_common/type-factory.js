@@ -5,7 +5,6 @@ const defaults = {
   READ: 'READ',
   UPDATE: 'UPDATE',
   DELETE: 'DELETE',
-  STATE: 'STATE',
   SORT: 'SORT',
   ERROR: 'ERROR'
 };

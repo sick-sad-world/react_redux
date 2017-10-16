@@ -1,11 +1,6 @@
 import createAction from 'common/action-factory';
 import types from './types';
 
-export const setDashboardsState = state => ({
-  type: types.STATE,
-  state
-});
-
 export const getDashboards = () => (dispatch) => {
   const data = {
     type: types.READ,
@@ -20,33 +15,21 @@ export const getDashboards = () => (dispatch) => {
 };
 
 // export const getDashboards = createAction({
-//   type: types.READ,
-//   state_type: types.STATE,
-//   url: 'dashboards',
-//   pendingMessage: 'Reading dashboards data...',
-//   successMessage: 'Dashboard data has been read.'
+//   action: types.READ,
+//   call: 'dashboards'
 // });
 
 export const createDashboard = createAction({
-  type: types.CREATE,
-  state_type: types.STATE,
-  url: 'add_dashboard',
-  pendingMessage: 'Creating new dashboard...',
-  successMessage: 'Dashboard succesfully created.'
+  action: types.CREATE,
+  call: 'add_dashboard'
 });
 
 export const editDashboard = createAction({
-  type: types.UPDATE,
-  state_type: types.STATE,
-  url: 'dashboard',
-  pendingMessage: 'Updating dashboard data...',
-  successMessage: 'Dashboard data has been updated.'
+  action: types.UPDATE,
+  call: 'dashboard'
 });
 
 export const deleteDashboard = createAction({
-  type: types.DELETE,
-  state_type: types.STATE,
-  url: 'remove_dashboard',
-  pendingMessage: 'Deleting dashboard...',
-  successMessage: 'Dashboard was deleted.'
+  action: types.DELETE,
+  call: 'remove_dashboard'
 });

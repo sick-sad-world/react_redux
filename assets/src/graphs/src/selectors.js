@@ -1,4 +1,4 @@
-import createSelector from 'common/selector-creator';
+import createSelector from 'common/selector-factory';
 
 const getGraphState = ({ graphs }, props) => graphs.state;
 

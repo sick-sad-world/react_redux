@@ -109,6 +109,7 @@ class Columns extends React.Component {
 // Columns container default props
 // ===========================================================================
 Columns.defaultProps = {
+  state: 2,
   listText: {
     title: 'Columns Management',
     description: 'Create, edit or delete dashboard columns. Drag to reorder, use the eye icon to hide/unhide them (tip: hidden columns can still be used for alerts/reports).',

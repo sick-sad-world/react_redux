@@ -49,6 +49,10 @@ class Emails extends React.Component {
   }
 }
 
+Emails.defaultProps = {
+  state: 2
+};
+
 // Prop types check
 // ===========================================================================
 Emails.propTypes = {

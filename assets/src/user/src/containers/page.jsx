@@ -36,6 +36,7 @@ class User extends React.Component {
 }
 
 User.defaultProps = {
+  state: 2,
   texts: {
     title: 'Profile settings',
     description: 'Tell us a bit about yourself...',

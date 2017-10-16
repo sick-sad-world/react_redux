@@ -1,4 +1,4 @@
-import createSelector from 'common/selector-creator';
+import createSelector from 'common/selector-factory';
 
 const getAppState = ({ app }) => app.state;
 const getAppError = ({ app }) => app.error;

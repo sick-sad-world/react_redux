@@ -70,6 +70,7 @@ class Alerts extends React.Component {
 }
 
 Alerts.defaultProps = {
+  state: 2,
   listText: {
     title: 'Alerts Management',
     description: 'Create, edit and delete alerts that will be sent to you when specific columns get new items.',

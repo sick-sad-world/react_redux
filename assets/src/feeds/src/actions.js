@@ -11,31 +11,26 @@ export const setFeedsState = state => ({
 
 export const getFeeds = createAction({
   action: types.READ,
-  loading: types.STATE,
   call: 'sources'
 });
 
 export const createFeed = createAction({
   action: types.CREATE,
-  loading: types.STATE,
   call: 'add_source'
 });
 
 export const addFeed = createAction({
   action: types.ADD,
-  loading: types.STATE,
   call: 'add_source'
 });
 
 export const removeFeed = createAction({
   action: types.REMOVE,
-  loading: types.STATE,
   call: 'remove_source'
 });
 
 export const deleteFeed = createAction({
   action: types.DELETE,
-  loading: types.STATE,
   call: 'remove_source'
 });
 

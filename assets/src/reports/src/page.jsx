@@ -71,6 +71,7 @@ class Reports extends React.Component {
 }
 
 Reports.defaultProps = {
+  state: 2,
   listText: {
     title: 'Reports Management',
     description: 'Create, edit and delete reports that will be sent to you when specific columns get new items.',

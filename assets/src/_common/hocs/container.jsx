@@ -32,8 +32,8 @@ export default function makePageContainer(opts, Component) {
       this.setState({ creating: true });
       this.props.actionCreate({ ...data, order: -1 }, ...args)
         .then(({ payload }) => this.changeLocation(`/${payload.id}`))
-        .then(() => this.setState({ creating: false }))
-        .catch(() => this.setState({ creating: false }));
+        .catch(console.error)
+        .then(() => this.setState({ creating: false }));
     }
 
     createItem(value) {

@@ -1,9 +1,7 @@
 import { includes } from 'lodash';
-import createSelector from 'common/selector-creator';
+import createSelector from 'common/selector-factory';
 
-const getSetsState = ({ sets }) => sets.state;
-
-const getSets = ({ sets }) => sets.payload;
+const getSets = ({ sets }) => sets;
 
 const getCurrentId = ({ sets }, props) => parseInt(props.params.id, 10) || 0;
 
@@ -13,11 +11,9 @@ const getDisabled = ({ sets }, props) => props.disabled_sets;
 
 export function makeContainerSelector() {
   const selector = createSelector(
-    getSetsState,
     getSets,
     getCurrentId,
-    (state, payload, curId) => ({
-      state,
+    (payload, curId) => ({
       curId,
       payload: payload.map(({ id, name, source_ids }) => ({ id, name, source_ids, counter: source_ids.length })),
       chosen: payload.find(({ id }) => id === curId)
@@ -29,11 +25,9 @@ export function makeContainerSelector() {
 
 export function makeFullListSelector() {
   const selector = createSelector(
-    getSetsState,
     getSets,
     getDisabled,
-    (state, payload, disabled) => ({
-      state,
+    (payload, disabled) => ({
       payload: (disabled && disabled.length) ? payload.map(set => ({
         ...set,
         disabled: (disabled) && includes(disabled, set.id)
@@ -46,10 +40,9 @@ export function makeFullListSelector() {
 
 export function makeListSelector() {
   const selector = createSelector(
-    getSetsState,
     getSets,
     getCriterea,
-    (state, payload, criterea) => {
+    (payload, criterea) => {
       let result = [];
 
       if (criterea) {
@@ -62,7 +55,6 @@ export function makeListSelector() {
       }
 
       return {
-        state,
         payload: (criterea) ? result.map(set => ({
           ...set,
           disabled: (criterea.disabled) && includes(criterea.disabled, set.id)

@@ -48,49 +48,29 @@ export const sortMiddleware = () => next => (action) => {
 };
 
 export default function createReducer(config) {
-  return function reducer(state = { state: 1, payload: [] }, action) {
+  return function reducer(state = [], action) {
     switch (action.type) {
       case LOGOUT:
       case LOGIN:
-        return { state: 1, payload: [] };
-      case config.STATE:
-        return {
-          state: (typeof action.state === 'number') ? action.state : 0,
-          payload: state.payload
-        };
+        return [];
       case config.READ:
-        return {
-          state: 2,
-          payload: uniqBy(action.payload, 'id')
-        };
+        return uniqBy(action.payload, 'id');
       case config.SORT:
-        return {
-          state: 2,
-          payload: sortBy(state.payload.map((item) => {
-            const index = action.payload.indexOf(item.id);
-            return {
-              ...item,
-              order: (index === -1) ? item.order : index
-            };
-          }), 'order')
-        };
+        return sortBy(state.map((item) => {
+          const index = action.payload.indexOf(item.id);
+          return {
+            ...item,
+            order: (index === -1) ? item.order : index
+          };
+        }), 'order');
       case config.CREATE:
       case config.UPDATE:
-        return {
-          state: 2,
-          payload: mergeArrayById(state.payload, action.payload, true)
-        };
+        return mergeArrayById(state, action.payload, true);
       case config.DELETE:
-        return {
-          state: 2,
-          payload: reject(state.payload, { id: action.payload.id })
-        };
+        return reject(state, { id: action.payload.id });
       default:
         if (has(config, action.type) && typeof config[action.type] === 'function') {
-          return {
-            state: 2,
-            payload: config[action.type](state.payload, action.payload)
-          };
+          return config[action.type](state, action.payload);
         }
         return state;
 

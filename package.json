@@ -74,6 +74,7 @@
     "cross-env": "^5.0.1",
     "lodash-es": "^4.17.2",
     "moment": "^2.17.1",
+    "prop-types": "^15.5.8",
     "react": "^15.3.2",
     "react-datetime": "^2.7.5",
     "react-dom": "^15.3.2",
@@ -86,9 +87,7 @@
     "react-transition-group": "^1.2.0",
     "react-virtualized": "^9.7.5",
     "recharts": "^1.0.0-alpha.0",
-    "prop-types": "^15.5.8",
     "redux": "^3.6.0",
-    "redux-observable": "^0.14.1",
     "redux-thunk": "^2.2.0",
     "reselect": "^2.5.4",
     "rxjs": "^5.4.1"

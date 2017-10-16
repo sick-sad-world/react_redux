@@ -5,12 +5,6 @@ export default function createAction({ call, action, loading }) {
   return (data, options) => (dispatch, getState, { notification, clientError }) => {
     const { entity, ...opts } = options || {};
 
-    // Set entity state to LOADING
-    // ===========================================================================
-    if (!opts.silent) {
-      dispatch({ type: loading, state: 3 });
-    }
-
     // Run actual call
     // ===========================================================================
     return (typeof call === 'string' ? fetch(call, data, opts) : call(data, opts))
@@ -30,12 +24,6 @@ export default function createAction({ call, action, loading }) {
       // Handle error and pass in chain
       // ===========================================================================
       .catch((error) => {
-        // Set entity state to IDLE
-        // ===========================================================================
-        if (!opts.silent) {
-          dispatch({ type: loading, state: 2 });
-        }
-
         if (error instanceof Error && clientError) {
           // Dispatch global app Error
           // ===========================================================================
