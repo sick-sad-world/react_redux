@@ -11,12 +11,12 @@ import { connect } from 'react-redux';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { stateNum, optionShape } from 'common/typecheck';
+import { optionShape } from 'common/typecheck';
 
 // Import actions
 // ===========================================================================
 import { feedTypes } from '../defaults';
-import { setFeedsState, createFeed, testUrl } from '../actions';
+import { createFeed, testUrl } from '../actions';
 
 // Import Child components
 // ===========================================================================
@@ -37,6 +37,7 @@ class FeedCreate extends React.Component {
     super(props);
     this.state = {
       error: null,
+      loading: false,
       type: 'autodetect',
       url: '',
       feeds: [],
@@ -68,7 +69,9 @@ class FeedCreate extends React.Component {
         return acc;
       }, []);
     }
+    this.setState({loading: true});
     this.props.testUrl(tests, this.state.url).then(results => this.setState({
+      loading: false,
       feeds: (results.HTML && results.HTML.length) ? [this.createFeed({ type: 'HTML' })] : [],
       results: {
         ...this.state.results,
@@ -144,7 +147,7 @@ class FeedCreate extends React.Component {
   render() {
     // Do not render at all if [ITEM] is not provided
     // ===========================================================================
-    const loading = this.props.state > 2;
+    const { loading } = this.state;
     const texts = this.props.texts;
 
     return (
@@ -291,7 +294,6 @@ class FeedCreate extends React.Component {
 
 FeedCreate.defaultProps = {
   types: feedTypes,
-  state: 2,
   texts: {
     title: 'Create new feeds for:',
     description: 'Feed creation dialog',
@@ -301,7 +303,6 @@ FeedCreate.defaultProps = {
 };
 
 FeedCreate.propTypes = {
-  state: stateNum.isRequired,
   texts: PropTypes.shape({
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
@@ -325,11 +326,7 @@ FeedCreate.propTypes = {
 function mapDispatchToProps(dispatch) {
   return {
     testUrl(tests, url) {
-      dispatch(setFeedsState(3));
-      return dispatch(testUrl(tests, url)).then((results) => {
-        dispatch(setFeedsState(2));
-        return results;
-      });
+      return dispatch(testUrl(tests, url));
     },
 
     createFeed(data) {
@@ -338,4 +335,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(({ feeds }) => ({ state: feeds.state }), mapDispatchToProps)(FeedCreate);
+export default connect(({ feeds }) => ({ feeds }), mapDispatchToProps)(FeedCreate);

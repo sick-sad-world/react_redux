@@ -4,11 +4,6 @@ import createAction from 'common/action-factory';
 import types from './types';
 import { testUrls } from './defaults';
 
-export const setFeedsState = state => ({
-  type: types.STATE,
-  state
-});
-
 export const getFeeds = createAction({
   action: types.READ,
   call: 'sources'

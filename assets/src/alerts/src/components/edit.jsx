@@ -85,7 +85,7 @@ class EditAlert extends React.Component {
               <h3 className='form-subtitle'>Email assigment:</h3>
               <p>Currently this alert is going to: <b>{values.recipient}</b></p>
               <EmailBcc
-                disabled={loading}
+                loading={loading}
                 active={values.recipient}
                 onChange={makeUpdater('recipient', this.getEmailRecipient)}
                 onClick={makeUpdater('recipient')}
