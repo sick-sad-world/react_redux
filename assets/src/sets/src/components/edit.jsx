@@ -40,7 +40,7 @@ class EditSet extends React.Component {
     const title = (values.name) ? `${texts.title} "${values.name}"` : texts.title;
     return (
       <SectionWrapper title={title} description={texts.description} url={backUrl} className='mod-sourceset-edit'>
-        {(changed.length) ? (
+        {(changed.length || loading) ? (
           <Confirmation text={texts.confirmation} changed={changed} loading={loading} apply={submit} cancel={reset} />
         ) : null}
         <form className='subsection-content columned'>

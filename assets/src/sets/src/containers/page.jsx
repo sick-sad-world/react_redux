@@ -55,6 +55,7 @@ class Sourcesets extends React.Component {
     return (
       <EditSet
         data={chosen}
+        loading={loading === 'editing'}
         onSubmit={editItem}
         backUrl={route.path}
         texts={editText}
@@ -64,11 +65,11 @@ class Sourcesets extends React.Component {
   }
 
   render() {
-    const { listText, payload, createItem, deleteConfirm, actionSort, deleteItem, chosen, deleting, route, curId, creating } = this.props;
+    const { listText, payload, createItem, deleteConfirm, actionSort, deleteItem, chosen, deleting, route, curId, loading } = this.props;
     return (
       <div className='mod-page'>
         <ListSection
-          loading={creating}
+          loading={loading === 'creating'}
           payload={payload}
           createItem={createItem}
           deleteItem={deleteConfirm}
@@ -86,7 +87,7 @@ class Sourcesets extends React.Component {
         </ListSection>
         {(chosen) ? this.renderDetails() : null}
         {(deleting) ? (
-          <DeleteConfirmation close={deleteConfirm()} accept={deleteItem}>
+          <DeleteConfirmation close={deleteConfirm()} loading={loading === 'deleting'} accept={deleteItem}>
             <dl>
               <dt>Trendolizer sourceset</dt>
               <dd>

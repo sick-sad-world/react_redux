@@ -26,11 +26,11 @@ import EditReport from './components/edit';
 
 class Reports extends React.Component {
   render() {
-    const { listText, state, payload, createItem, deleteConfirm, deleteItem, editItem, editText, actionSort, chosen, creating, deleting, route, curId } = this.props;
+    const { listText, state, payload, createItem, deleteConfirm, deleteItem, editItem, editText, actionSort, chosen, loading, deleting, route, curId } = this.props;
     return (
       <div className='mod-page'>
         <ListSection
-          loading={creating}
+          loading={loading === 'creating'}
           payload={payload}
           state={state}
           createItem={createItem}
@@ -50,6 +50,7 @@ class Reports extends React.Component {
         {(chosen) ? (
           <EditReport
             data={chosen}
+            loading={loading === 'editing'}
             state={state}
             onSubmit={editItem}
             backUrl={route.path}
@@ -58,7 +59,7 @@ class Reports extends React.Component {
           />
         ) : null}
         {(deleting) ? (
-          <DeleteConfirmation close={deleteConfirm()} accept={deleteItem}>
+          <DeleteConfirmation close={deleteConfirm()} loading={loading === 'deleting'} accept={deleteItem}>
             <dl>
               <dt>Are you sure you want to delete the report</dt>
               <dd>{`ID: ${deleting.id} - ${deleting.name}.`}</dd>

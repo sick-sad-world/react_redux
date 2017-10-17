@@ -1,13 +1,12 @@
 // Import utility stuff
 // ===========================================================================
 import { defaultInterface, defaultFrequency } from '../defaults';
-import { bindAll } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
 import PropTypes from 'prop-types';
-import { optionShape, stateNum } from 'common/typecheck';
+import { optionShape } from 'common/typecheck';
 
 // Import Child components
 // ===========================================================================
@@ -31,7 +30,7 @@ class EditAlert extends React.Component {
     const title = (values.name) ? `${texts.title} "${values.name}"` : texts.title;
     return (
       <SectionWrapper title={title} description={texts.description} url={backUrl}>
-        {(changed.length) ? (
+        {(changed.length || loading) ? (
           <Confirmation text={texts.confirmation} changed={changed} apply={submit} cancel={reset} />
         ) : null}
         <form className='subsection-content columned'>
@@ -106,7 +105,6 @@ EditAlert.defaultProps = {
 EditAlert.propTypes = {
   texts: PropTypes.objectOf(PropTypes.string).isRequired,
   backUrl: PropTypes.string.isRequired,
-  state: stateNum.isRequired,
   frequencyOptions: optionShape('number'),
   ...injectedProps
 };

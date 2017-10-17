@@ -14,15 +14,24 @@ import PropTypes from 'prop-types';
 import { defaultInterface } from '../defaults';
 import { makeContainerSelector } from '../selectors';
 
-function ColumnsContainer({ children, schema, payload, state, actions, ...props }) {
+function mapPayloadToSchema(payload, schema) {
+  return Array.isArray(payload) ? payload.map(column => mapValues(schema, v => get(column, v, null))) : mapValues(schema, v => get(payload, v, null));
+}
+
+function ColumnsContainer({ output, children, schema, payload, actions, ...props }) {
+  const chosenActions = (actions && actions.length) ? pick(props, actions) : {};
   return children({
-    state,
-    payload: (schema) ? payload.map(column => mapValues(schema, v => get(column, v, null))) : payload,
-    ...((actions && actions.length) ? pick(props, actions) : {})
+    ...chosenActions,
+    [output]: (schema) ? mapPayloadToSchema(payload, schema) : payload
   });
 }
 
+ColumnsContainer.defaultProps = {
+  output: 'payload'
+};
+
 ColumnsContainer.propTypes = {
+  output: PropTypes.string.isRequired,
   actions: PropTypes.arrayOf(PropTypes.string),
   open: PropTypes.number,
   schema: PropTypes.objectOf(PropTypes.string),

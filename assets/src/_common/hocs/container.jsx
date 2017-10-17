@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, omit } from 'lodash';
+import { bindAll } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
@@ -15,10 +15,10 @@ export default function makePageContainer(opts, Component) {
     constructor(props) {
       super(props);
       this.state = {
-        creating: false,
+        loading: false,
         deleting: null
       };
-      bindAll(this, 'changeLocation', 'createItem', 'editItem', 'deleteItem', 'deleteConfirm', 'deleteItem');
+      bindAll(this, 'changeLocation', 'createItem', 'editItem', 'deleteItem', 'deleteConfirm', 'updateLoading');
     }
 
     changeLocation(chunk = '', query = {}) {
@@ -28,47 +28,56 @@ export default function makePageContainer(opts, Component) {
       });
     }
 
-    runCreateAction(data, ...args) {
-      this.setState({ creating: true });
-      this.props.actionCreate({ ...data, order: -1 }, ...args)
-        .then(({ payload }) => this.changeLocation(`/${payload.id}`))
-        .catch(console.error)
-        .then(() => this.setState({ creating: false }));
+    updateLoading(type) {
+      this.setState({
+        loading: (typeof type === 'string') ? type : false
+      });
     }
 
     createItem(value) {
       if (o.create === 'call') {
-        this.runCreateAction({ name: value });
+        this.updateLoading('creating');
+        this.props.actionCreate({ name: value, order: -1 })
+          .then(({ payload }) => this.changeLocation(`/${payload.id}`))
+          .catch(console.error)
+          .then(this.updateLoading);
       } else {
         this.changeLocation('/new', { name: value });
       }
     }
 
     editItem(data, options, changed) {
+      this.updateLoading('editing');
       if (o.create === 'edit' && !data.id) {
-        return this.runCreateAction(omit(data, 'id'), options);
+        this.props.actionCreate({ ...data, order: -1, id: undefined }, options)
+          .then(({ payload }) => this.changeLocation(`/${payload.id}`))
+          .catch(console.error)
+          .then(this.updateLoading);
+      } else {
+        this.props.actionEdit(data, options, changed)
+          .catch(console.error)
+          .then(this.updateLoading);
       }
-      return this.props.actionEdit(data, options, changed);
     }
 
     deleteConfirm(deleting = null) {
-      return () => this.setState({ deleting });
+      return () => this.setState({ deleting, loading: false });
     }
 
     deleteItem() {
       if (!this.state.deleting) return;
-      const closeModal = this.deleteConfirm();
+      this.updateLoading('deleting');
       this.props.actionDelete({ id: this.state.deleting.id })
         .catch(console.error)
         .then(() => this.changeLocation())
-        .then(closeModal);
+        .then(this.deleteConfirm());
     }
 
     render() {
       return (
         <Component
           {...this.props}
-          creating={this.state.creating}
+          loading={this.state.loading}
           deleting={this.state.deleting}
           createItem={this.createItem}
           editItem={this.editItem}
@@ -95,7 +104,7 @@ export default function makePageContainer(opts, Component) {
 
 export const injectedProps = {
   curId: PropTypes.number.isRequired,
-  creating: PropTypes.bool.isRequired,
+  loading: PropTypes.oneOf([false, 'creating', 'editing', 'deleting']).isRequired,
   deleting: PropTypes.shape(listShape),
   editItem: PropTypes.func.isRequired,
   deleteItem: PropTypes.func.isRequired,

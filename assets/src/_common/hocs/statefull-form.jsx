@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, pick, isEqual, without, isUndefined } from 'lodash';
+import { bindAll, pick, isEqual, without } from 'lodash';
 import classNames from 'classnames';
 
 // Import React related stuff
@@ -21,7 +21,6 @@ function defaultComparator(v, k, data) {
 }
 
 export const injectedProps = {
-  loading: PropTypes.bool.isRequired,
   bindInput: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
@@ -48,11 +47,10 @@ export default function statefullForm(settings) {
       constructor(props) {
         super(props);
         this.state = {
-          loading: false,
           values: getStateValues(props),
           changed: []
         };
-        bindAll(this, 'makeUpdater', 'bindInput', 'submit', 'checkChanges', 'reset', 'toggleLoading');
+        bindAll(this, 'makeUpdater', 'bindInput', 'submit', 'checkChanges', 'reset');
       }
 
       componentWillReceiveProps(newProps) {
@@ -75,15 +73,14 @@ export default function statefullForm(settings) {
             let value = (getter instanceof Function) ? getter(raw, values, props, ...args) : raw;
             if (value === undefined) {
               return {};
-            } else {
-              if (!Array.isArray(entry)) {
+            }
+            if (!Array.isArray(entry)) {
                 value = { [entry]: value };
               }
-              return {
+            return {
                 values: { ...values, ...value },
                 changed: this.checkChanges(changed, value)
               };
-            }
           });
         };
       }
@@ -95,13 +92,8 @@ export default function statefullForm(settings) {
         };
       }
 
-      toggleLoading() {
-        return this.setState({ loading: !this.state.loading });
-      }
-
       submit() {
-        this.toggleLoading();
-        return this.props.onSubmit(opts.mapStateToData(this.state.values), null, this.state.changed).catch(console.error).then(this.toggleLoading);
+        return this.props.onSubmit(opts.mapStateToData(this.state.values), null, this.state.changed);
       }
 
       reset(props) {
@@ -113,7 +105,7 @@ export default function statefullForm(settings) {
 
       render() {
         const { data, ...rest } = this.props;
-        const { values, loading, changed } = this.state;
+        const { values, changed } = this.state;
         return (
           <Component
             values={values}
@@ -121,7 +113,6 @@ export default function statefullForm(settings) {
             bindInput={this.bindInput}
             submit={this.submit}
             reset={this.reset}
-            loading={loading}
             makeUpdater={this.makeUpdater}
             {...rest}
           />

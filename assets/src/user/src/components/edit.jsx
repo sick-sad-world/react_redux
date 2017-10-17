@@ -21,7 +21,7 @@ class EditUser extends React.Component {
     const { loading, values, changed, texts, bindInput, makeUpdater, submit, reset } = this.props;
     return (
       <SectionWrapper title='User settings' description={texts.description}>
-        {(changed.length) ? (
+        {(changed.length || loading) ? (
           <Confirmation text={texts.confirmation} changed={changed} loading={loading} apply={submit} cancel={reset} />
         ) : null}
         <form className='subsection-content columned'>

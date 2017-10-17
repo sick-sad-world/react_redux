@@ -45,11 +45,12 @@ class Columns extends React.Component {
   }
 
   renderDetails() {
-    const { editItem, editText, chosen, route, curId, params, assignmentText } = this.props;
+    const { editItem, editText, chosen, loading, route, curId, params, assignmentText } = this.props;
     if (params.assignment) {
       return (
         <ColumnFeedsAssignment
           data={chosen}
+          loading={loading === 'editing'}
           onSubmit={editItem}
           backUrl={`${route.path}/${curId}`}
           texts={assignmentText}
@@ -59,6 +60,7 @@ class Columns extends React.Component {
     return (
       <EditColumn
         className='mod-column-edit'
+        loading={loading === 'editing'}
         data={chosen}
         onSubmit={editItem}
         texts={editText}
@@ -68,11 +70,11 @@ class Columns extends React.Component {
   }
 
   render() {
-    const { listText, payload, createItem, deleteConfirm, deleteItem, actionSort, chosen, creating, deleting, route, curId } = this.props;
+    const { listText, payload, createItem, deleteConfirm, deleteItem, actionSort, chosen, loading, deleting, route, curId } = this.props;
     return (
       <div className='mod-page'>
         <ListSection
-          loading={creating}
+          loading={loading === 'creating'}
           payload={payload}
           createItem={createItem}
           deleteItem={deleteConfirm}
@@ -91,7 +93,7 @@ class Columns extends React.Component {
         </ListSection>
         {(chosen) ? this.renderDetails() : null}
         {(deleting) ? (
-          <DeleteConfirmation close={deleteConfirm()} accept={deleteItem}>
+          <DeleteConfirmation close={deleteConfirm()} loading={loading === 'deleting'} accept={deleteItem}>
             <dl>
               <dt>Are you sure you want to delete the column</dt>
               <dd>{deleting.name}</dd>

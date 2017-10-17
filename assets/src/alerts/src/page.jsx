@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { listShape, stateNum } from 'common/typecheck';
+import { listShape } from 'common/typecheck';
 import { coreInterface } from './defaults';
 import { makeContainerSelector } from './selectors';
 
@@ -26,11 +26,11 @@ import EditAlert from './components/edit';
 
 class Alerts extends React.Component {
   render() {
-    const { listText, payload, createItem, deleteConfirm, deleteItem, editItem, editText, actionSort, chosen, creating, deleting, route, curId } = this.props;
+    const { listText, payload, createItem, deleteConfirm, deleteItem, editItem, editText, actionSort, chosen, loading, deleting, route, curId } = this.props;
     return (
       <div className='mod-page'>
         <ListSection
-        loading={creating}
+          loading={loading === 'creating'}
           payload={payload}
           createItem={createItem}
           deleteItem={deleteConfirm}
@@ -49,13 +49,14 @@ class Alerts extends React.Component {
         {(chosen) ? (
           <EditAlert
             data={chosen}
+            loading={loading === 'editing'}
             onSubmit={editItem}
             backUrl={route.path}
             texts={editText}
           />
         ) : null}
         {(deleting) ? (
-          <DeleteConfirmation close={deleteConfirm()} accept={deleteItem}>
+          <DeleteConfirmation close={deleteConfirm()} loading={loading === 'deleting'} accept={deleteItem}>
             <dl>
               <dt>Are you sure you want to delete the alert</dt>
               <dd>{`ID: ${deleting.id} - ${deleting.name}.`}</dd>
@@ -88,7 +89,6 @@ Alerts.propTypes = {
   listText: PropTypes.objectOf(PropTypes.string).isRequired,
   editText: PropTypes.objectOf(PropTypes.string).isRequired,
   payload: PropTypes.arrayOf(PropTypes.shape(listShape)).isRequired,
-  state: stateNum.isRequired,
   router: PropTypes.object.isRequired,
   route: PropTypes.object.isRequired,
   chosen: PropTypes.shape(coreInterface),
