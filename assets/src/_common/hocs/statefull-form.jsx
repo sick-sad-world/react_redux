@@ -54,7 +54,9 @@ export default function statefullForm(settings) {
       }
 
       componentWillReceiveProps(newProps) {
-        this.reset(newProps);
+        if (!newProps.loading) {
+          this.reset(newProps);
+        }
       }
 
       checkChanges(changed, value) {
@@ -75,12 +77,12 @@ export default function statefullForm(settings) {
               return {};
             }
             if (!Array.isArray(entry)) {
-                value = { [entry]: value };
-              }
+              value = { [entry]: value };
+            }
             return {
-                values: { ...values, ...value },
-                changed: this.checkChanges(changed, value)
-              };
+              values: { ...values, ...value },
+              changed: this.checkChanges(changed, value)
+            };
           });
         };
       }
