@@ -114,6 +114,6 @@ Auth.propTypes = {
 };
 
 export default connect(({ user, app }) => ({
-  auth: !!user.payload.id,
+  auth: !!user.id,
   loading: app.state === 3
 }), { login, initialLoading, addUser, setAppState }, null, { withRef: true })(Auth);

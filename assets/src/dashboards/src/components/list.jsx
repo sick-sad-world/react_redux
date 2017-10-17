@@ -56,7 +56,7 @@ export default class PayloadList extends React.Component {
       <div className='list-container'>
         <AutoSizer>
           {({ height, width }) => (
-            <ArrowKeyStepper columnCount={colCount} rowCount={1} scrollToColumn={findIndex(this.state.payload, { id: this.props.scrollTo })}>
+            <ArrowKeyStepper columnCount={colCount} rowCount={1} scrollToColumn={findIndex(this.state.payload, { id: this.props.col })}>
               {({ onSectionRendered, scrollToColumn }) => (
                 <DashboardGrid
                   ref={(instance) => { this.SortableGrid = instance; }}
@@ -95,7 +95,7 @@ PayloadList.defaultProps = {
 PayloadList.propTypes = {
   width: PropTypes.number.isRequired,
   payload: PropTypes.arrayOf(PropTypes.number).isRequired,
-  scrollTo: PropTypes.number,
+  col: PropTypes.number,
   sortColumns: PropTypes.func.isRequired,
   children: PropTypes.func.isRequired,
   emptyTpl: PropTypes.element.isRequired

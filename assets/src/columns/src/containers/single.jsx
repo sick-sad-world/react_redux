@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { mapValues, pick } from 'lodash';
+import { mapValues, pick, get } from 'lodash';
 import * as availableActions from '../actions';
 
 // Import React related stuff
@@ -14,15 +14,21 @@ import PropTypes from 'prop-types';
 import { defaultInterface } from '../defaults';
 import { makeSingleSelector } from '../selectors';
 
-function SingleColumnContainer({ children, schema, payload, state, actions, ...props }) {
+function SingleColumnContainer({ output, children, schema, payload, actions, ...props }) {
+  const chosenActions = (actions && actions.length) ? pick(props, actions) : {};
+  const mappedPayload = (schema) ? mapValues(schema, v => get(payload, v, null)) : payload;
   return (payload) ? children({
-    state,
-    payload: (schema) ? mapValues(schema, v => payload[v]) : payload,
-    ...((actions && actions.length) ? pick(props, actions) : {})
+    ...chosenActions,
+    [output]: mappedPayload
   }) : null;
 }
 
+SingleColumnContainer.defaultProps = {
+  output: 'payload'
+};
+
 SingleColumnContainer.propTypes = {
+  output: PropTypes.string.isRequired,
   actions: PropTypes.arrayOf(PropTypes.string),
   schema: PropTypes.objectOf(PropTypes.string),
   col_id: PropTypes.number.isRequired,

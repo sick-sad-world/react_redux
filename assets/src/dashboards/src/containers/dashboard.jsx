@@ -30,22 +30,22 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const { payload, sort, emptyTpl, scrollTo, location, width } = this.props;
+    const { payload, emptyTpl, col, location, width } = this.props;
     return (
       <section className='mod-dashboard'>
         {(payload) ? (
-          <PayloadList width={width} payload={payload.column_ids} scrollTo={scrollTo} sortColumns={this.props.sortColumns}>
+          <PayloadList width={width} payload={payload.column_ids} col={col} sortColumns={this.props.sortColumns}>
             {({ id }) => (
-              <SingleColumnContainer col_id={id} actions={['deleteColumn', 'editColumn']}>
-                {({ payload, state, deleteColumn, editColumn }) => (
-                  <DashboardItem payload={payload} deleteColumn={deleteColumn} editColumn={editColumn} getResults={this.props.fetchResults}>
+              <SingleColumnContainer col_id={id} output='column' actions={['deleteColumn', 'editColumn']}>
+                {({ column, deleteColumn, editColumn }) => (
+                  <DashboardItem payload={column} deleteColumn={deleteColumn} editColumn={editColumn} getResults={this.props.fetchResults}>
                     <ResultsContainer
-                      id={payload.id}
-                      sort={sort}
-                      data={payload.data}
+                      id={column.id}
+                      sort={column.data.sort}
+                      data={column.data}
                       width={width - 10}
                       location={location.pathname}
-                      displaySettings={payload.display_settings}
+                      displaySettings={column.display_settings}
                     />
                   </DashboardItem>
                 )}
@@ -54,7 +54,7 @@ class Dashboard extends React.Component {
           </PayloadList>
         ) : emptyTpl }
         {(this.props.location.query.hash) ? (
-          <FullResult id={scrollTo} close={this.closeModal} initial={this.props.location.query.init} hash={this.props.location.query.hash} />
+          <FullResult id={col} close={this.closeModal} initial={this.props.location.query.init} hash={this.props.location.query.hash} />
         ) : null}
       </section>
     );
@@ -68,11 +68,10 @@ Dashboard.defaultProps = {
 
 Dashboard.propTypes = {
   payload: PropTypes.shape(defaultInterface),
-  scrollTo: PropTypes.number,
+  col: PropTypes.number,
   width: PropTypes.number.isRequired,
   fetchResults: PropTypes.func.isRequired,
   sortColumns: PropTypes.func.isRequired,
-  sort: PropTypes.string.isRequired,
   params: PropTypes.shape({
     name: PropTypes.string.isRequired
   }).isRequired,

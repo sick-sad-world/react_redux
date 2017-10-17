@@ -11,7 +11,6 @@ import { AutoSizer } from 'react-virtualized';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { stateNum } from 'common/typecheck';
 
 // Import connection
 // ===========================================================================
@@ -159,7 +158,6 @@ class GraphsContainer extends React.Component {
 }
 
 GraphsContainer.defaultProps = {
-  state: 1,
   error: null,
   colours,
   variable,
@@ -194,7 +192,6 @@ GraphsContainer.defaultProps = {
 };
 
 GraphsContainer.propTypes = {
-  state: stateNum.isRequired,
   initial: PropTypes.string,
   config: PropTypes.arrayOf(PropTypes.string),
   variable: PropTypes.arrayOf(PropTypes.string).isRequired,

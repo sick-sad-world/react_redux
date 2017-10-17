@@ -9,7 +9,6 @@ import classNames from 'classnames';
 // ===========================================================================
 import React from 'react';
 import PropTypes from 'prop-types';
-import { stateNum } from 'common/typecheck';
 import { connect } from 'react-redux';
 import { makeBriefSelector } from '../selectors';
 import { getBriefMeasurements } from '../actions';
@@ -101,7 +100,6 @@ BriefGraphs.propTypes = {
   type: PropTypes.string.isRequired,
   timestamp: PropTypes.number,
   cacheDur: PropTypes.number.isRequired,
-  state: stateNum.isRequired,
   chartOptions: PropTypes.object.isRequired,
   payload: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
   getBriefMeasurements: PropTypes.func.isRequired
