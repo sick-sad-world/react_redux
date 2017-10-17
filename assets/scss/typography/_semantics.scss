@@ -291,8 +291,8 @@ blockquote {}
       height: $icon;
     }
     svg {
-      width: $icon * 0.75;
-      height: $icon * 0.75;
+      width: $icon * 0.625;
+      height: $icon * 0.625;
     }
   }
   div {
@@ -307,34 +307,29 @@ blockquote {}
     @include pos(0 0 false false);
     line-height: 0;
     padding: baseUnit(0.5);
+    svg {
+      fill: $c-main;
+    }
+  }
+  &[class*='is-'] {
+    .icon svg {
+      fill: #fff;
+    }
   }
   &.is-error {
-    .icon {
-      svg {
-        fill: map-get($states, 'error');
-      }
-    }
+    background-color: lighten(map-get($states, 'error'), 14%);
   }
   &.is-warning {
-    .icon {
-      svg {
-        fill: map-get($states, 'warning');
-      }
-    }
+    background-color: lighten(map-get($states, 'warning'), 14%);
+  }
+  &.is-loading {
+    background-color: lighten(map-get($states, 'warning'), 30%);
   }
   &.is-info {
-    .icon {
-      svg {
-        fill: map-get($states, 'info');
-      }
-    }
+    background-color: lighten(map-get($states, 'info'), 14%);
   }
   &.is-success {
-    .icon {
-      svg {
-        fill: map-get($states, 'success');
-      }
-    }
+    background-color: lighten(map-get($states, 'success'), 14%);
   }
 }
 
