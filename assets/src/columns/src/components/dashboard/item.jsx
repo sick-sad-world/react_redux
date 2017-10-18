@@ -34,12 +34,12 @@ export default class DashboardItem extends React.Component {
   }
 
   editColumn(value, changed) {
-    return this.setState({ loading: true }, () => {
-      const data = { ...this.props.payload.data, ...value };
-      return this.props.editColumn({ id: this.props.payload.id, data })
-        .then(resp => (changed === 'infinite' || changed === 'autoreload') ? resp : this.getResults(data))
-        .then(this.toggleState('loading'));
-    });
+    const data = { ...this.props.payload.data, ...value };
+    this.setState({ loading: 'editing' });
+    return this.props.editColumn({ id: this.props.payload.id, data })
+      .then(resp => (changed === 'infinite' || changed === 'autoreload') ? resp : this.getResults(data))
+      .catch(console.error)
+      .then(this.toggleState('loading'));
   }
 
   hideColumn() {
@@ -50,11 +50,12 @@ export default class DashboardItem extends React.Component {
   }
 
   deleteColumn() {
-    return this.props.deleteColumn({ id: this.props.payload.id }).then(this.toggleState('deleting'));
+    this.setState({ loading: 'deleting' });
+    return this.props.deleteColumn({ id: this.props.payload.id }).catch(console.error).then(this.toggleState('deleting'));
   }
 
-  getResults(data) {
-    return this.props.getResults((data) || this.props.payload.data, { entity: this.props.payload.id });
+  getResults(data = this.props.payload.data) {
+    return this.props.getResults(data, { entity: this.props.payload.id });
   }
 
   render() {
@@ -69,7 +70,7 @@ export default class DashboardItem extends React.Component {
             <ItemSettings
               id={payload.id}
               data={pick(payload.data, 'infinite', 'autoreload', 'sort', 'direction', 'limit')}
-              loading={this.state.loading}
+              loading={this.state.loading === 'editing'}
               editColumn={this.editColumn}
               hideColumn={this.hideColumn}
               deleteColumn={this.toggleState('deleting')}
@@ -79,7 +80,7 @@ export default class DashboardItem extends React.Component {
             { children }
           </div>
           {(this.state.deleting) ? (
-          <DeleteConfirmation close={this.toggleState('deleting')} accept={this.deleteColumn}>
+          <DeleteConfirmation loading={this.state.loading === 'deleting'} close={this.toggleState('deleting')} accept={this.deleteColumn}>
             <dl>
               <dt>Are you sure you want to delete the column</dt>
               <dd>{this.props.payload.name}</dd>

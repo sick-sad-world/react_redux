@@ -29,6 +29,7 @@ class FeedsList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: false,
       deleting: null
     };
     bindAll(this, 'renderActions', 'deletingReset');
@@ -39,11 +40,14 @@ class FeedsList extends React.Component {
   }
 
   deletingReset() {
-    this.setState({ deleting: null });
+    this.setState({ deleting: null, loading: false });
   }
 
   deleteFeed(id) {
-    return () => this.props.deleteFeed({ id, set_id: this.props.set_id }).then(this.deletingReset);
+    return () => {
+      this.setState({ loading: true });
+      this.props.deleteFeed({ id, set_id: this.props.set_id }).catch(console.error).then(this.deletingReset);
+    };
   }
 
   renderActions(feed) {
@@ -63,7 +67,7 @@ class FeedsList extends React.Component {
           <Feed key={feed.id} {...feed} sortable={sortable}>{this.renderActions(feed)}</Feed>
         )) : <li className='state-empty'>{this.props.emptyTpl}</li>}
         {(this.state.deleting) ? (
-          <DeleteConfirmation close={this.deletingReset} accept={this.deleteFeed(this.state.deleting.id)} >
+          <DeleteConfirmation loading={this.state.loading} close={this.deletingReset} accept={this.deleteFeed(this.state.deleting.id)} >
             <dl>
               <dt>Trendolizer Feed</dt>
               <dd>{`ID: ${this.state.deleting.id} - ${this.state.deleting.name}`}</dd>
