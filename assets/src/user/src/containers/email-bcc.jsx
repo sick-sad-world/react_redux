@@ -23,26 +23,21 @@ class Emails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: props.loading,
-      error: null
+      loading: props.loading
     };
     bindAll(this, 'updateEmailList');
   }
 
-  componentWillReceiveProps({loading}) {
-    this.setState({ error: null, loading });
-  }
-
-  toggleLoading() {
-    this.setState({ loading: !this.state.loading });
+  componentWillReceiveProps({ loading }) {
+    this.setState({ loading });
   }
 
   updateEmailList(emails, newEmail) {
-    this.setState({ loading: true })
+    this.setState({ loading: true });
     return this.props.editUser({ email_bcc: emails }).then(() => {
       if (this.props.onChange) return this.props.onChange(emails, newEmail);
       return null;
-    }).catch(({error}) => this.setState({ error, loading: false })).then(() => this.setState({ loading: false }));
+    }).catch(console.error).then(() => this.setState({ loading: false }));
   }
 
   render() {
@@ -51,7 +46,6 @@ class Emails extends React.Component {
         email={this.props.email}
         active={this.props.active}
         onClick={this.props.onClick}
-        error={this.state.error}
         loading={this.state.loading}
         description={(this.props.email === this.props.active) ? this.props.description : null}
         data={this.props.data}

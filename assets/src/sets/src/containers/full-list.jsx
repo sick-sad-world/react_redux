@@ -3,9 +3,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { makeFullListSelector } from '../selectors';
+import makeSearchable from 'common/hocs/searchable';
 
 // Import Child components
 // ===========================================================================
-import SetsWithContents from '../components/list';
+import SetsList from '../components/list';
+import { FeedsList } from 'src/feeds';
 
-export default connect(makeFullListSelector)(SetsWithContents);
+function FullSetsList({ search }) {
+
+}
+
+export const SearchableSetsList = makeSearchable(FullSetsList);
+
+export default connect(makeFullListSelector)(SearchableSetsList);

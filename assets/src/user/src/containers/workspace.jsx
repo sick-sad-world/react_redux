@@ -102,7 +102,7 @@ class Workspace extends React.Component {
 // ===========================================================================
 Workspace.propTypes = {
   children: PropTypes.element,
-  user: PropTypes.shape(pick(defaultInterface, 'id', 'image', 'fullname', 'position')).isRequired,
+  user: PropTypes.shape(pick(defaultInterface, 'id', 'image', 'fullname', 'position')),
   logout: PropTypes.func.isRequired,
   route: PropTypes.shape({
     childRoutes: PropTypes.array.isRequired

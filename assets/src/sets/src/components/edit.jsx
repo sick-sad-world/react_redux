@@ -2,7 +2,6 @@
 // ===========================================================================
 import classNames from 'classnames';
 import { updateArrayWithValue } from 'functions';
-import { concat, find, bindAll } from 'lodash';
 import { defaultInterface, coreInterface } from '../defaults';
 
 // Import React related stuff
@@ -14,29 +13,28 @@ import { Link } from 'react-router';
 // Import Child components
 // ===========================================================================
 import TextInput from 'common/components/forms/input-text';
-import { Select, Deselect, SelectAll } from 'common/components/buttons';
+import DeleteConfirmation from 'common/components/delete-confirmation';
+import { Delete } from 'common/components/buttons';
+import { Select, Deselect } from 'common/components/buttons';
 import statefullForm, { injectedProps } from 'common/hocs/statefull-form';
 import SectionWrapper from 'common/section';
 import Confirmation from 'common/components/confirmation';
 import { FeedsList } from 'src/feeds';
-import SetsWithContents from './list';
+import SetsList from './list';
+
 
 class EditSet extends React.Component {
 
-  mergeFeeds({ type, id }, values, props) {
-    if (type === 'set') {
-      return concat(values.source_ids, find(props.sets, { id }).source_ids);
-    }
-    return updateArrayWithValue(values.source_ids, id);
-  }
-
-  makeFeedUpdater(data) {
-    return () => this.props.makeUpdater('source_ids', this.mergeFeeds)(data);
+  makeFeedHandler(method = '', source_id) {
+    return () => this.props[method]({
+      source_id,
+      set_id: this.props.values.id,
+      source_ids: updateArrayWithValue(this.props.values.source_ids, source_id)
+    });
   }
 
   render() {
-    const { state, changed, values, texts, backUrl, submit, reset, bindInput, emptyFeeds } = this.props;
-    const loading = state === 3;
+    const { loading, changed, values, texts, backUrl, submit, reset, bindInput, emptyFeeds } = this.props;
     const title = (values.name) ? `${texts.title} "${values.name}"` : texts.title;
     return (
       <SectionWrapper title={title} description={texts.description} url={backUrl} className='mod-sourceset-edit'>
@@ -64,16 +62,37 @@ class EditSet extends React.Component {
                   <div className='header'>
                     <span>Sourceset has {values.source_ids.length} sources total.</span>
                   </div>
-                  <FeedsList set_id={values.id} criterea={{ source_ids: values.source_ids, uniq_ids: values.uniq_ids }} empty={emptyFeeds} >
-                    {({ id }) => <Deselect onClick={this.makeFeedUpdater({ type: 'source', id })} />}
+                  <FeedsList
+                    set_id={values.id}
+                    criterea={{
+                      source_ids: values.source_ids,
+                      uniq_ids: values.uniq_ids
+                    }}
+                    empty={emptyFeeds}
+                  >
+                    {({ id, deletable }) => (deletable) ? (
+                      <Delete onClick={this.makeFeedHandler('removeFeed', id)} />
+                    ) : (
+                      <Deselect onClick={this.makeFeedHandler('removeFeed', id)} />
+                    )}
                   </FeedsList>
                 </div>
-                <SetsWithContents
-                  payload={this.props.sets}
-                  disabled_sources={values.source_ids}
-                  setAction={({ id }) => <SelectAll onClick={this.makeFeedUpdater({ type: 'set', id })} />}
-                  feedAction={({ id }) => <Select onClick={this.makeFeedUpdater({ type: 'source', id })} />}
-                />
+                <div className='list'>
+                  <div className='header'></div>
+                  <SetsList payload={this.props.sets}>
+                    {({ source_ids }) => (
+                      <FeedsList
+                        set_id={values.id}
+                        criterea={{
+                          source_ids,
+                          disabled: values.source_ids
+                        }}
+                      >
+                      {({ id }) => (<Select onClick={this.makeFeedHandler('addFeed', id)} />)}
+                      </FeedsList>
+                    )}
+                  </SetsList>
+                </div>
               </section>
             </div>
           ) : null}
@@ -94,6 +113,7 @@ EditSet.defaultProps = {
 // ===========================================================================
 EditSet.propTypes = {
   sets: PropTypes.arrayOf(PropTypes.shape(coreInterface)).isRequired,
+  addFeed: PropTypes.func.isRequired,
   ...injectedProps
 };
 
@@ -102,3 +122,13 @@ export default statefullForm({
     data: PropTypes.shape(defaultInterface).isRequired
   }
 })(EditSet);
+
+
+// {(this.state.deleting) ? (
+//   <DeleteConfirmation loading={this.state.loading} close={this.deletingReset} accept={this.deleteFeed(this.state.deleting.id)} >
+//     <dl>
+//       <dt>Trendolizer Feed</dt>
+//       <dd>{`ID: ${this.state.deleting.id} - ${this.state.deleting.name}`}</dd>
+//     </dl>
+//   </DeleteConfirmation>
+// ) : null}

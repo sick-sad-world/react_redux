@@ -12,95 +12,54 @@ import { coreInterface } from '../defaults';
 // Import Child components
 // ===========================================================================
 import { Expand, Collapse } from 'common/components/buttons';
-import { FeedsList } from 'src/feeds';
 import Sourceset from './sourceset';
 
-export default class SetsWithContents extends React.Component {
+export default class SetsList extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      search: '',
-      expanded: null
+      open: null
     };
-
-    bindAll(this, 'updateSearch', 'updateExpanded');
   }
 
-  updateExpanded(id) {
-    return () => this.setState({ expanded: (this.state.expanded === id) ? null : id });
-  }
-
-  updateSearch(e) {
-    this.setState({ search: e.target.value || '' });
-  }
-
-  renderSourceset({ id, name, source_ids, disabled, ...set }, isOpened) {
-    const onExpand = this.updateExpanded(id);
-    return (
-      <Sourceset key={id} name={name} counter={source_ids.length} sortable={this.props.sortable} disabled={disabled} >
-        {(this.props.setAction) ? this.props.setAction({ id, name, source_ids, disabled, ...set, isOpened }) : null}
-        {(isOpened) ? <Collapse onClick={onExpand} /> : <Expand onClick={onExpand} /> }
-      </Sourceset>
-    );
-  }
-
-  renderSetFeeds(source_ids) {
-    return (
-      <li key='list' className='sublist'>
-        <FeedsList criterea={{ source_ids, disabled: this.props.disabled_sources }} empty={this.props.feedsEmpty} >
-          {this.props.feedAction}
-        </FeedsList>
-      </li>
-    );
+  updateOpen(id) {
+    return () => this.setState({ open: (this.state.open === id) ? null : id });
   }
 
   render() {
+    const { payload, emptyTpl, className, sortable, children } = this.props;
     return (
-      <div className={classNames(this.props.className, {
-        'state-disabled': this.props.disabled
-      })}>
-        <div className='header'>
-          <input type='text' name='search' value={this.state.search} onChange={this.updateSearch} placeholder='Search for...' />
-        </div>
-          {(this.state.search.length > this.props.treshold) ? (
-            <FeedsList className='entity-list' criterea={{ search: this.state.search }}>
-              {this.props.feedAction}
-            </FeedsList>
-          ) : (
-            <ul className='entity-list'>
-              {this.props.payload.reduce((acc, set) => {
-                const isOpened = this.state.expanded === set.id;
-                acc.push(this.renderSourceset(set, isOpened));
-                if (isOpened) {
-                  acc.push(this.renderSetFeeds(set.source_ids));
-                }
-                return acc;
-              }, [])}
-            </ul>
+      <ul className={classNames('entity-list', className)}>
+        {(payload.length) ? (
+          payload.reduce((acc, set) => {
+            const isOpen = this.state.open && set.id === this.state.open;
+            acc.push(
+              <Sourceset key={set.id} name={set.name} counter={set.source_ids.length} sortable={sortable} >
+                {(isOpen) ? <Collapse onClick={this.updateOpen(set.id)} /> : <Expand onClick={this.updateOpen(set.id)} /> }
+              </Sourceset>
+            );
+            if (isOpen && children) {
+              acc.push(children(set));
+            }
+            return acc;
+          }, [])
+        ) : (
+          <li className='state-empty'>{emptyTpl}</li>
           )}
-      </div>
+      </ul>
     );
   }
 }
 
-SetsWithContents.defaultProps = {
-  className: 'list',
-  treshold: 3,
-  disabled: false,
+SetsList.defaultProps = {
   sortable: false,
-  feedsEmpty: 'This set does not contain any feeds. Add some.'
+  emptyTpl: 'No sets found'
 };
 
-SetsWithContents.propTypes = {
-  disabled_sources: PropTypes.arrayOf(PropTypes.number),
-  disabled_sets: PropTypes.arrayOf(PropTypes.number),
+SetsList.propTypes = {
   className: PropTypes.string,
-  sortable: PropTypes.bool.isRequired,
-  disabled: PropTypes.bool.isRequired,
-  treshold: PropTypes.number.isRequired,
   payload: PropTypes.arrayOf(PropTypes.shape(coreInterface)).isRequired,
-  setAction: PropTypes.func,
-  feedAction: PropTypes.func,
-  feedsEmpty: PropTypes.string.isRequired
+  sortable: PropTypes.bool.isRequired,
+  emptyTpl: PropTypes.string.isRequired,
+  children: PropTypes.func
 };

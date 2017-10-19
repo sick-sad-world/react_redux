@@ -14,16 +14,6 @@ export const createFeed = createAction({
   call: 'add_source'
 });
 
-export const addFeed = createAction({
-  action: types.ADD,
-  call: 'add_source'
-});
-
-export const removeFeed = createAction({
-  action: types.REMOVE,
-  call: 'remove_source'
-});
-
 export const deleteFeed = createAction({
   action: types.DELETE,
   call: 'remove_source'

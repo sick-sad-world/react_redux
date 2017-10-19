@@ -24,6 +24,20 @@ export const editSet = createAction({
   call: 'set'
 });
 
+export const addFeed = createAction({
+  action: types.ADD_FEED,
+  call({ source_ids, set_id, source_id }, opts) {
+    return fetch('add_source', { set_id, source_id }, opts).then(resp => resp.success ? { id: set_id, source_ids } : resp);
+  }
+});
+
+export const removeFeed = createAction({
+  action: types.REMOVE_FEED,
+  call({ source_ids, set_id, source_id }, opts) {
+    return fetch('remove_source', { set_id, source_id }, opts).then(resp => resp.success ? { id: set_id, source_ids } : resp);
+  }
+});
+
 export const deleteSet = createAction({
   action: types.DELETE,
   call(data, opts) {

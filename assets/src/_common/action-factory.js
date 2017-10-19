@@ -1,7 +1,7 @@
 import { omit } from 'lodash';
 import fetch from '../communication';
 
-export default function createAction({ call, action, loading }) {
+export default function createAction({ call, action }) {
   return (data, options) => (dispatch, getState, { notification, clientError }) => {
     const { entity, ...opts } = options || {};
 

@@ -20,40 +20,10 @@ export default class EmailList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: props.error,
+      error: null,
       new: ''
     };
-    bindAll(this, 'makeListItem', 'addEmail', 'errorHandler');
-  }
-
-  componentWillReceiveProps({ error }) {
-    this.errorHandler(error);
-  }
-
-  errorHandler(error) {
-    return this.setState({ error });
-  }
-
-  // Create list item DOM element -> used in render method
-  // ===========================================================================
-  makeListItem(email, i) {
-    const isActive = email === this.props.active;
-    return (
-      <li
-        key={`email_${i}`}
-        className={classNames({ 'is-disabled': this.props.loading, 'is-selected': isActive })}
-        onClick={(this.props.onClick) ? (e) => {
-          e.stopPropagation();
-          this.props.onClick((isActive ? this.props.email : email))
-        } : null}
-      >
-        <span className='t-ellipsis'>{email}</span>
-        <a onClick={(e) => {
-          e.stopPropagation();
-          this.props.onChange(without(this.props.data, email), undefined);
-        }}><Icon icon='cross'/></a>
-      </li>
-    );
+    bindAll(this, 'makeListItem', 'addEmail');
   }
 
   addEmail(e) {
@@ -68,14 +38,42 @@ export default class EmailList extends React.Component {
     } else {
       this.props.onChange([...this.props.data, newItem], newItem);
     }
-    
+
     if (error) {
-      this.errorHandler(error);
+      this.setState({ error });
     } else {
       this.setState({ new: '', error: null });
     }
   }
-  
+
+  chooseEmail(email, isActive) {
+    return (e) => {
+      e.stopPropagation();
+      this.props.onClick((isActive ? this.props.email : email));
+    };
+  }
+
+  removeEmail(email) {
+    return (e) => {
+      e.stopPropagation();
+      this.props.onChange(without(this.props.data, email), undefined);
+    };
+  }
+
+  makeListItem(email, i) {
+    const isActive = email === this.props.active;
+    return (
+      <li
+        key={`email_${i}`}
+        className={classNames({ 'is-disabled': this.props.loading, 'is-selected': isActive })}
+        onClick={(this.props.onClick) ? this.chooseEmail(email, isActive) : null}
+      >
+        <span className='t-ellipsis'>{email}</span>
+        <a onClick={this.removeEmail(email)}><Icon icon='cross'/></a>
+      </li>
+    );
+  }
+
   render() {
     return (
       <div className='mod-email-list'>

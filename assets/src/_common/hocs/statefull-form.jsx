@@ -1,7 +1,6 @@
 // Import utility stuff
 // ===========================================================================
 import { bindAll, pick, isEqual, without } from 'lodash';
-import classNames from 'classnames';
 
 // Import React related stuff
 // ===========================================================================

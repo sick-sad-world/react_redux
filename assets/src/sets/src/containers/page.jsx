@@ -16,7 +16,7 @@ import { makeContainerSelector } from '../selectors';
 
 // Import actions
 // ===========================================================================
-import { createSet, editSet, deleteSet, forseUpdateUniq, sortSets } from '../actions';
+import { createSet, editSet, deleteSet, addFeed, removeFeed, forseUpdateUniq, sortSets } from '../actions';
 
 // Import Child components
 // ===========================================================================
@@ -42,7 +42,7 @@ class Sourcesets extends React.Component {
   }
 
   renderDetails() {
-    const { editItem, editText, chosen, route, curId, params, payload } = this.props;
+    const { loading, editText, chosen, route, curId, params, payload } = this.props;
     if (params.create) {
       return (
         <FeedCreate
@@ -56,7 +56,9 @@ class Sourcesets extends React.Component {
       <EditSet
         data={chosen}
         loading={loading === 'editing'}
-        onSubmit={editItem}
+        addFeed={this.props.addFeed}
+        removeFeed={this.props.removeFeed}
+        onSubmit={this.props.editItem}
         backUrl={route.path}
         texts={editText}
         sets={payload.filter(({ id }) => id !== curId)}
@@ -65,15 +67,15 @@ class Sourcesets extends React.Component {
   }
 
   render() {
-    const { listText, payload, createItem, deleteConfirm, actionSort, deleteItem, chosen, deleting, route, curId, loading } = this.props;
+    const { listText, payload, loading, chosen, deleting, route, curId } = this.props;
     return (
       <div className='mod-page'>
         <ListSection
           loading={loading === 'creating'}
           payload={payload}
-          createItem={createItem}
-          deleteItem={deleteConfirm}
-          sortItems={actionSort}
+          createItem={this.props.createItem}
+          deleteItem={this.props.deleteConfirm}
+          sortItems={this.props.actionSort}
           texts={listText}
         >
           {props => (
@@ -87,7 +89,7 @@ class Sourcesets extends React.Component {
         </ListSection>
         {(chosen) ? this.renderDetails() : null}
         {(deleting) ? (
-          <DeleteConfirmation close={deleteConfirm()} loading={loading === 'deleting'} accept={deleteItem}>
+          <DeleteConfirmation close={this.props.deleteConfirm()} loading={loading === 'deleting'} accept={this.props.deleteItem}>
             <dl>
               <dt>Trendolizer sourceset</dt>
               <dd>
@@ -143,6 +145,12 @@ function mapDispatchToProps(dispatch) {
     },
     actionCreate(data, opts) {
       return dispatch(createSet(data, opts));
+    },
+    addFeed(data, opts) {
+      return dispatch(addFeed(data, opts));
+    },
+    removeFeed(data, opts) {
+      return dispatch(removeFeed(data, opts));
     },
     actionEdit(data, opts) {
       return dispatch(editSet(data, opts)).then(() => dispatch(forseUpdateUniq));
