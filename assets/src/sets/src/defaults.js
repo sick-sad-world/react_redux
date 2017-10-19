@@ -11,7 +11,8 @@ export const defaultData = {
 export const coreInterface = {
   id: PropTypes.number.isRequired,
   order: PropTypes.number,
-  name: PropTypes.string.isRequired
+  name: PropTypes.string.isRequired,
+  counter: PropTypes.number.isRequired
 };
 
 export const defaultInterface = {

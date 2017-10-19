@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 // ===========================================================================
 import PropTypes from 'prop-types';
 import { listShape } from 'common/typecheck';
-import { coreInterface } from '../defaults';
+import { defaultInterface } from '../defaults';
 import { makeContainerSelector } from '../selectors';
 
 // Import actions
@@ -42,13 +42,13 @@ class Sourcesets extends React.Component {
   }
 
   renderDetails() {
-    const { loading, editText, chosen, route, curId, params, payload } = this.props;
+    const { loading, editText, chosen, route, curId, params } = this.props;
     if (params.create) {
       return (
         <FeedCreate
           set={{ id: chosen.id, name: chosen.name }}
           onCreate={this.updateOnNewFeeds}
-          backPath={route.path}
+          backPath={`${route.path}/${curId}`}
         />
       );
     }
@@ -61,7 +61,6 @@ class Sourcesets extends React.Component {
         onSubmit={this.props.editItem}
         backUrl={route.path}
         texts={editText}
-        sets={payload.filter(({ id }) => id !== curId)}
       />
     );
   }
@@ -131,7 +130,7 @@ Sourcesets.propTypes = {
   router: PropTypes.object.isRequired,
   route: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
-  chosen: PropTypes.shape(coreInterface),
+  chosen: PropTypes.shape(defaultInterface),
   ...injectedProps
 };
 

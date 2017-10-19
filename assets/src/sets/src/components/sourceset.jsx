@@ -8,17 +8,14 @@ import DragHandle from 'common/components/drag-handle';
 // ===========================================================================
 import classNames from 'classnames';
 import { childrenShape } from 'common/typecheck';
+import IconBtns from 'common/components/buttons';
 
 // Agnostinc list item component
 // @using by: ListView and Management views
 // ===========================================================================
-export default function Sourceset({ sortable, name, counter, disabled, children }) {
+export default function Sourceset({ sortable, name, counter, className, children }) {
   return (
-    <li className={classNames({
-      'mod-entity': true,
-      'mod-sourceset': true,
-      'is-disabled': disabled
-    })}>
+    <li className={classNames('mod-entity', 'mod-sourceset', className)}>
       <div>
         { (sortable) ? <DragHandle /> : null }
         <div className='text'>
@@ -27,7 +24,9 @@ export default function Sourceset({ sortable, name, counter, disabled, children 
           </span>
         </div>
         {(children) ? (
-          <nav className='nav-links'>{children}</nav>
+          <nav className='nav-links'>
+            {children}
+          </nav>
         ) : null}
       </div>
     </li>
@@ -35,14 +34,13 @@ export default function Sourceset({ sortable, name, counter, disabled, children 
 }
 
 Sourceset.defaultProps = {
-  sortable: true,
-  disabled: false
+  sortable: true
 };
 
 Sourceset.propTypes = {
   name: PropTypes.string.isRequired,
   counter: PropTypes.number.isRequired,
   sortable: PropTypes.bool.isRequired,
-  disabled: PropTypes.bool.isRequired,
+  className: PropTypes.string,
   children: childrenShape
 };

@@ -16,16 +16,11 @@ import SectionWrapper from 'common/section';
 import Confirmation from 'common/components/confirmation';
 import { Select, Deselect, SelectAll } from 'common/components/buttons';
 import { FeedsList } from 'src/feeds';
-import { CompleteList, SetsList } from 'src/sets';
+import { ComposedList, SetsList } from 'src/sets';
 
 // Feed assginment to columns
 // ===========================================================================
 class Assignment extends React.Component {
-
-  updateData(type) {
-    const stateUpdater = this.props.updateState(type, `get${type}`);
-    return id => () => stateUpdater(id);
-  }
 
   render() {
     const { state, changed, values, texts, backUrl, reset, submit, makeUpdater } = this.props;
@@ -50,25 +45,28 @@ class Assignment extends React.Component {
             <ul className='entity-list'>
               <li className='list-title'><h4>Sets selected</h4></li>
               <li className='mod-entity'>
-                <SetsList criterea={{ set_ids: values.set }} disabled={loading} empty='No sets assigned'>
+                <SetsList criterea={{ ids: values.set }} empty='No sets assigned'>
                   {({ id }) => <Deselect onClick={() => setUpdater(id)} />}
                 </SetsList>
               </li>
               <li className='list-title'><h4>Sources selected</h4></li>
               <li className='mod-entity'>
-                <FeedsList criterea={{ source_ids: values.source }} disabled={loading} empty='No feeds assigned'>
+                <FeedsList criterea={{ ids: values.source }} empty='No feeds assigned'>
                   {({ id }) => <Deselect onClick={() => sourceUpdater(id)} />}
                 </FeedsList>
               </li>
             </ul>
           </div>
-          <CompleteList
-            disabled={loading}
-            disabled_sets={values.set}
-            disabled_sources={values.source}
-            setAction={({ id }) => <SelectAll onClick={() => setUpdater(id)} />}
-            feedAction={({ id }) => <Select onClick={() => sourceUpdater(id)} />}
-          />
+          <div className='list'>
+            <div className='header'></div>
+            <ComposedList criterea={{ disabled: values.set }} actions={({ id }) => <SelectAll onClick={() => setUpdater(id)} />}>
+              {({ source_ids }) => (
+                <FeedsList criterea={{ ids: source_ids, disabled: values.source }}>
+                  {({ id }) => <Select onClick={() => sourceUpdater(id)} />}
+                </FeedsList>
+              )}
+            </ComposedList>
+          </div>
         </form>
       </SectionWrapper>
     );

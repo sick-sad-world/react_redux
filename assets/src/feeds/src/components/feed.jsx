@@ -12,12 +12,9 @@ import { childrenShape } from 'common/typecheck';
 // Agnostinc list item component
 // @using by: ListView and Management views
 // ===========================================================================
-export default function Feed({ disabled, url, type, sortable, children, name }) {
+export default function Feed({ className, url, type, sortable, children, name }) {
   return (
-    <li className={classNames({
-      'mod-entity': true,
-      'is-disabled': disabled
-    })}>
+    <li className={classNames('mod-entity', className)}>
       <div>
         { (sortable) ? <DragHandle /> : null }
         <div className='text'>
@@ -40,8 +37,7 @@ export default function Feed({ disabled, url, type, sortable, children, name }) 
 }
 
 Feed.defaultProps = {
-  sortable: true,
-  disabled: false
+  sortable: true
 };
 
 Feed.propTypes = {
@@ -49,6 +45,6 @@ Feed.propTypes = {
   name: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
   sortable: PropTypes.bool.isRequired,
-  disabled: PropTypes.bool.isRequired,
+  className: PropTypes.string,
   children: childrenShape
 };

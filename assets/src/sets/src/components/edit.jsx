@@ -20,7 +20,7 @@ import statefullForm, { injectedProps } from 'common/hocs/statefull-form';
 import SectionWrapper from 'common/section';
 import Confirmation from 'common/components/confirmation';
 import { FeedsList } from 'src/feeds';
-import SetsList from './list';
+import SetsList from '../containers/composed-list';
 
 
 class EditSet extends React.Component {
@@ -65,10 +65,11 @@ class EditSet extends React.Component {
                   <FeedsList
                     set_id={values.id}
                     criterea={{
-                      source_ids: values.source_ids,
+                      ids: values.source_ids,
                       uniq_ids: values.uniq_ids
                     }}
                     empty={emptyFeeds}
+                    actions
                   >
                     {({ id, deletable }) => (deletable) ? (
                       <Delete onClick={this.makeFeedHandler('removeFeed', id)} />
@@ -79,12 +80,12 @@ class EditSet extends React.Component {
                 </div>
                 <div className='list'>
                   <div className='header'></div>
-                  <SetsList payload={this.props.sets}>
+                  <SetsList criterea={{ omit: [values.id] }}>
                     {({ source_ids }) => (
                       <FeedsList
                         set_id={values.id}
                         criterea={{
-                          source_ids,
+                          ids: source_ids,
                           disabled: values.source_ids
                         }}
                       >
@@ -112,7 +113,6 @@ EditSet.defaultProps = {
 // Prop type check
 // ===========================================================================
 EditSet.propTypes = {
-  sets: PropTypes.arrayOf(PropTypes.shape(coreInterface)).isRequired,
   addFeed: PropTypes.func.isRequired,
   ...injectedProps
 };

@@ -48,6 +48,18 @@ export const listShape = {
 
 export const childrenShape = PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element]);
 
+export const actionShape = {
+  btn: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+  title: PropTypes.string
+};
+
+export const critereaShape = {
+  disabled: PropTypes.arrayOf(PropTypes.number),
+  ids: PropTypes.arrayOf(PropTypes.number),
+  search: PropTypes.string
+};
+
 export const emailStr = createOptionableValidator((props, propName) => {
   if (!emailRegExp.test(props[propName])) {
     return new Error('Should be an email like: "blablabla-okay@gmail.com"');

@@ -6,15 +6,22 @@ import { bindAll } from 'lodash';
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
+import { connect } from 'react-redux';
+
+// Import selectors and typecheck
+// ===========================================================================
 import PropTypes from 'prop-types';
+import { critereaShape } from 'common/typecheck';
 import { coreInterface } from '../defaults';
+import { makeListSelector } from '../selectors';
 
 // Import Child components
 // ===========================================================================
+import makeSearchable from 'common/hocs/searchable';
 import { Expand, Collapse } from 'common/components/buttons';
-import Sourceset from './sourceset';
+import Sourceset from '../components/sourceset';
 
-export default class SetsList extends React.Component {
+export class ComposedList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,19 +33,28 @@ export default class SetsList extends React.Component {
     return () => this.setState({ open: (this.state.open === id) ? null : id });
   }
 
+  makeToggleBtn({ id }, isOpen) {
+    return (isOpen) ? (
+      <Collapse onClick={this.updateOpen(id)} />
+    ) : (
+      <Expand onClick={this.updateOpen(id)} />
+    );
+  }
+
   render() {
-    const { payload, emptyTpl, className, sortable, children } = this.props;
+    const { payload, emptyTpl, className, sortable, children, actions } = this.props;
     return (
       <ul className={classNames('entity-list', className)}>
         {(payload.length) ? (
           payload.reduce((acc, set) => {
             const isOpen = this.state.open && set.id === this.state.open;
             acc.push(
-              <Sourceset key={set.id} name={set.name} counter={set.source_ids.length} sortable={sortable} >
-                {(isOpen) ? <Collapse onClick={this.updateOpen(set.id)} /> : <Expand onClick={this.updateOpen(set.id)} /> }
+              <Sourceset key={set.id} {...set} sortable={sortable}>
+                {actions ? actions(set, isOpen) : null}
+                {children ? this.makeToggleBtn(set, isOpen) : null}
               </Sourceset>
             );
-            if (isOpen && children) {
+            if (children && isOpen) {
               acc.push(children(set));
             }
             return acc;
@@ -51,15 +67,22 @@ export default class SetsList extends React.Component {
   }
 }
 
-SetsList.defaultProps = {
+ComposedList.defaultProps = {
   sortable: false,
   emptyTpl: 'No sets found'
 };
 
-SetsList.propTypes = {
+ComposedList.propTypes = {
+  criterea: PropTypes.shape(critereaShape),
+  actions: PropTypes.func,
   className: PropTypes.string,
   payload: PropTypes.arrayOf(PropTypes.shape(coreInterface)).isRequired,
   sortable: PropTypes.bool.isRequired,
   emptyTpl: PropTypes.string.isRequired,
   children: PropTypes.func
 };
+
+
+// export const SearchableSetsList = makeSearchable(FullSetsList);
+
+export default connect(makeListSelector)(ComposedList);

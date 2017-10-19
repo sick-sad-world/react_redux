@@ -94,7 +94,7 @@ class EditColumn extends React.Component {
                   <SetList
                     className='brief-list'
                     title='Sets assigned:'
-                    criterea={{ set_ids: values.set }}
+                    criterea={{ ids: values.set }}
                     emptyText='No sets assigned to this column'
                   />
                 ) : null}
@@ -102,7 +102,7 @@ class EditColumn extends React.Component {
                   <FeedList
                     className='brief-list'
                     title='Feeds assigned:'
-                    criterea={{ source_ids: values.source }}
+                    criterea={{ ids: values.source }}
                     emptyText='No feeds assigned to this column'
                   />
                 ) : null}
