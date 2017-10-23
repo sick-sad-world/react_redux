@@ -1,3 +1,5 @@
+import { bindAll } from 'lodash';
+import { conditionalRun } from 'functions';
 import React from 'react';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
@@ -11,13 +13,16 @@ export default class Dropdown extends React.Component {
     this.state = {
       value: props.value
     };
-    this.updateState = this.updateState.bind(this);
+    this.setValueOnNewProps = conditionalRun('value', 'setValue');
+    bindAll(this, 'updateState', 'setValue');
+  }
+
+  setValue({ value }) {
+    this.setState({ value });
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.value !== this.state.value) {
-      this.setState({ value: newProps.value });
-    }
+    this.setValueOnNewProps(newProps);
   }
 
   updateState(v) {

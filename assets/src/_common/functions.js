@@ -1,11 +1,11 @@
-import { toNumber } from 'lodash';
+import { toNumber, get } from 'lodash';
 
 export const numOrString = (str, base = 10) => {
   const int = parseFloat(str, base);
   return (isNaN(int)) ? str : int;
 };
 
-export const parseOrder = (order) => (typeof order === 'string') ? parseInt(order, 10) || -1 : order;
+export const parseOrder = order => (typeof order === 'string') ? parseInt(order, 10) || -1 : order;
 
 export const updateArrayWithValue = (arr, val) => {
   const result = [];
@@ -61,3 +61,12 @@ export function decodeHtml() {
 }
 
 export const encodeUrlParams = params => (`?${Object.keys(params).map(prop => [prop, params[prop]].map(encodeURIComponent).join('=')).join('&')}`);
+
+export function conditionalRun(prop, func) {
+  const action = (typeof func === 'string') ? this[func] : func;
+  return (newProps) => {
+    if (action instanceof Function && get(newProps, prop, null) === get(this.props, prop, null)) {
+      action(newProps);
+    }
+  };
+}
