@@ -1,9 +1,7 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll } from 'lodash';
 import moment from 'moment';
-import { variable, colours, movWindow, limit, cacheDur } from '../defaults';
-import classNames from 'classnames';
+import { movWindow, limit, cacheDur } from '../defaults';
 
 // Import React related stuff
 // ===========================================================================

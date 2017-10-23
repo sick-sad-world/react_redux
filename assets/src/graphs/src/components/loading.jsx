@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from 'common/components/icon';
 
 // Graph Loading
 // ===========================================================================
 export default function GraphLoading({ children }) {
   return (
     <div className='state-loading'>
-      <Icon icon='loading' />
+      <img src='/img/loading2.svg' />
       <p>{children}</p>
     </div>
   );

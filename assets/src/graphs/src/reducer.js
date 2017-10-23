@@ -24,11 +24,6 @@ export default (state = { ...defaultGraphs }, action) => {
           }
         }
       };
-    case types.STATE:
-      return {
-        ...state,
-        state: (typeof action.state === 'number') ? action.state : 0
-      };
     default:
       return state;
   }

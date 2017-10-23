@@ -50,7 +50,7 @@ export function initialLoading(opts) {
   const options = { silent: true, ...opts };
 
   return (dispatch) => {
-    if (!window.google) fetchGoogleGraphs();
+    if (!window.google && fetchGoogleGraphs) fetchGoogleGraphs();
     return dispatch(getUser(null, options))
       .then(() => dispatch(fetchData(options)))
       .then(getColumnsForResults)
