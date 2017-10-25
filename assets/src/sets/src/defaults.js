@@ -19,6 +19,6 @@ export const defaultInterface = {
   id: PropTypes.number.isRequired,
   order: PropTypes.number,
   name: PropTypes.string.isRequired,
-  source_ids: PropTypes.arrayOf(PropTypes.number).isRequired,
-  uniq_ids: PropTypes.arrayOf(PropTypes.number).isRequired
+  source_ids: PropTypes.arrayOf(PropTypes.number).isRequired
+  // uniq_ids: PropTypes.arrayOf(PropTypes.number).isRequired
 };

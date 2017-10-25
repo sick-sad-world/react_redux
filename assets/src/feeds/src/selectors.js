@@ -8,12 +8,12 @@ export function makeContainerSelector() {
     getFeeds,
     getCriterea(),
     (payload, { uniq_ids, disabled, ...criterea }) => ({
-        payload: composeCriterea(criterea)(payload).map(feed => ({
-          ...feed,
-          deletable: (uniq_ids) && includes(uniq_ids, feed.id),
-          disabled: (disabled) && includes(disabled, feed.id)
-        }))
-      })
+      payload: composeCriterea(criterea)(payload).map(feed => ({
+        ...feed,
+          // deletable: (uniq_ids) && includes(uniq_ids, feed.id),
+        disabled: (disabled) && includes(disabled, feed.id)
+      }))
+    })
   );
 
   return (state, props) => selector(state, props);

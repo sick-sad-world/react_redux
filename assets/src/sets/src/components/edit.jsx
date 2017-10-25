@@ -2,7 +2,7 @@
 // ===========================================================================
 import classNames from 'classnames';
 import { updateArrayWithValue } from 'functions';
-import { defaultInterface, coreInterface } from '../defaults';
+import { defaultInterface } from '../defaults';
 
 // Import React related stuff
 // ===========================================================================
@@ -13,8 +13,7 @@ import { Link } from 'react-router';
 // Import Child components
 // ===========================================================================
 import TextInput from 'common/components/forms/input-text';
-import DeleteConfirmation from 'common/components/delete-confirmation';
-import { Delete } from 'common/components/buttons';
+import Spinner from 'common/components/spinner';
 import { Select, Deselect } from 'common/components/buttons';
 import statefullForm, { injectedProps } from 'common/hocs/statefull-form';
 import SectionWrapper from 'common/section';
@@ -24,13 +23,22 @@ import SetsList from '../containers/composed-list';
 
 
 class EditSet extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      feedsLoading: 0
+    };
+  }
 
   makeFeedHandler(method = '', source_id) {
-    return () => this.props[method]({
-      source_id,
-      set_id: this.props.values.id,
-      source_ids: updateArrayWithValue(this.props.values.source_ids, source_id)
-    });
+    return () => {
+      this.setState({ feedsLoading: source_id });
+      this.props[method]({
+        source_id,
+        set_id: this.props.values.id,
+        source_ids: updateArrayWithValue(this.props.values.source_ids, source_id)
+      }).catch(console.error).then(() => this.setState({ feedsLoading: 0 }));
+    };
   }
 
   render() {
@@ -65,17 +73,17 @@ class EditSet extends React.Component {
                   <FeedsList
                     set_id={values.id}
                     criterea={{
-                      ids: values.source_ids,
-                      uniq_ids: values.uniq_ids
+                      ids: values.source_ids
                     }}
                     empty={emptyFeeds}
                     actions
                   >
-                    {({ id, deletable }) => (deletable) ? (
-                      <Delete onClick={this.makeFeedHandler('removeFeed', id)} />
-                    ) : (
-                      <Deselect onClick={this.makeFeedHandler('removeFeed', id)} />
-                    )}
+                    {({ id }) => {
+                      if (id === this.state.feedsLoading) {
+                        return <a><Spinner/></a>;
+                      }
+                      return <Deselect onClick={this.makeFeedHandler('removeFeed', id)} />;
+                    }}
                   </FeedsList>
                 </div>
                 <div className='list'>
@@ -89,7 +97,12 @@ class EditSet extends React.Component {
                           disabled: values.source_ids
                         }}
                       >
-                      {({ id }) => (<Select onClick={this.makeFeedHandler('addFeed', id)} />)}
+                      {({ id }) => {
+                        if (id === this.state.feedsLoading) {
+                          return <a><Spinner/></a>;
+                        }
+                        return <Select onClick={this.makeFeedHandler('addFeed', id)} />;
+                      }}
                       </FeedsList>
                     )}
                   </SetsList>
@@ -121,17 +134,7 @@ export default statefullForm({
   propTypes: {
     data: PropTypes.shape(defaultInterface).isRequired
   },
-  mapStateToData({ source_ids, uniq_ids, ...values }) {
+  mapStateToData({ source_ids, ...values }) {
     return values;
   }
 })(EditSet);
-
-
-// {(this.state.deleting) ? (
-//   <DeleteConfirmation loading={this.state.loading} close={this.deletingReset} accept={this.deleteFeed(this.state.deleting.id)} >
-//     <dl>
-//       <dt>Trendolizer Feed</dt>
-//       <dd>{`ID: ${this.state.deleting.id} - ${this.state.deleting.name}`}</dd>
-//     </dl>
-//   </DeleteConfirmation>
-// ) : null}

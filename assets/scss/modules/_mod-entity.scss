@@ -62,7 +62,10 @@ in sub-managent like sources in set, sources/sets in column or column within ale
 			}
 			svg {
 				transition: fill $dur, transform $dur;
-			}
+      }
+      .spinner .path {
+        stroke: $c-accent;
+      }
 		}
 	}
 	&.is-selected > div {

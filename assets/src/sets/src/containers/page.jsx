@@ -16,7 +16,7 @@ import { makeContainerSelector } from '../selectors';
 
 // Import actions
 // ===========================================================================
-import { createSet, editSet, deleteSet, addFeed, removeFeed, forseUpdateUniq, sortSets } from '../actions';
+import { createSet, editSet, deleteSet, addFeed, removeFeed, sortSets } from '../actions';
 
 // Import Child components
 // ===========================================================================
@@ -134,30 +134,11 @@ Sourcesets.propTypes = {
   ...injectedProps
 };
 
-// Connect our Container to State
-// @ deps -> Sourcesets
-// ===========================================================================
-function mapDispatchToProps(dispatch) {
-  return {
-    actionSort(data, opts) {
-      return dispatch(sortSets(data, opts));
-    },
-    actionCreate(data, opts) {
-      return dispatch(createSet(data, opts));
-    },
-    addFeed(data, opts) {
-      return dispatch(addFeed(data, opts));
-    },
-    removeFeed(data, opts) {
-      return dispatch(removeFeed(data, opts));
-    },
-    actionEdit(data, opts) {
-      return dispatch(editSet(data, opts)).then(() => dispatch(forseUpdateUniq));
-    },
-    actionDelete(data, opts) {
-      return dispatch(deleteSet(data, opts)).then(() => dispatch(forseUpdateUniq));
-    }
-  };
-}
-
-export default connect(makeContainerSelector, mapDispatchToProps)(makePageContainer({ create: 'call' }, Sourcesets));
+export default connect(makeContainerSelector, {
+  actionSort: sortSets,
+  actionCreate: createSet,
+  addFeed,
+  removeFeed,
+  actionEdit: editSet,
+  actionDelete: deleteSet
+})(makePageContainer({ create: 'call' }, Sourcesets));
