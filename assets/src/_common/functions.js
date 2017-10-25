@@ -62,10 +62,10 @@ export function decodeHtml() {
 
 export const encodeUrlParams = params => (`?${Object.keys(params).map(prop => [prop, params[prop]].map(encodeURIComponent).join('=')).join('&')}`);
 
-export function conditionalRun(prop, func) {
-  const action = (typeof func === 'string') ? this[func] : func;
+export function conditionalRun(cmp, prop, func) {
+  const action = (typeof func === 'string') ? cmp[func] : func;
   return (newProps) => {
-    if (action instanceof Function && get(newProps, prop, null) === get(this.props, prop, null)) {
+    if (action instanceof Function && get(newProps, prop, null) === get(cmp.props, prop, null)) {
       action(newProps);
     }
   };

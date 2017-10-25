@@ -44,7 +44,7 @@
   &[class*="size-"] {
     padding: 0;
   }
-  &[disabled] {
+  &[disabled]:not(.statefull) {
     @include style-disabled();
   }
   svg {

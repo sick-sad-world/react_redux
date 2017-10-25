@@ -23,13 +23,13 @@ class Emails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: props.loading
+      loading: false
     };
     bindAll(this, 'updateEmailList');
   }
 
-  componentWillReceiveProps({ loading }) {
-    this.setState({ loading });
+  componentWillReceiveProps({ disabled }) {
+    this.setState({ disabled });
   }
 
   updateEmailList(emails, newEmail) {
@@ -46,6 +46,7 @@ class Emails extends React.Component {
         email={this.props.email}
         active={this.props.active}
         onClick={this.props.onClick}
+        disabled={this.props.disabled}
         loading={this.state.loading}
         description={(this.props.email === this.props.active) ? this.props.description : null}
         data={this.props.data}
@@ -56,7 +57,7 @@ class Emails extends React.Component {
 }
 
 Emails.defaultProps = {
-  loading: false
+  disabled: false
 };
 
 // Prop types check
@@ -65,7 +66,7 @@ Emails.propTypes = {
   email: PropTypes.string.isRequired,
   active: PropTypes.string,
   onClick: PropTypes.func,
-  loading: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool.isRequired,
   description: PropTypes.string,
   data: PropTypes.arrayOf(PropTypes.string).isRequired,
   onChange: PropTypes.func,

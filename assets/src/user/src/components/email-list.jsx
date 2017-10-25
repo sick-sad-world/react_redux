@@ -23,7 +23,7 @@ export default class EmailList extends React.Component {
       error: null,
       new: ''
     };
-    bindAll(this, 'makeListItem', 'addEmail');
+    bindAll(this, 'makeListItem', 'addEmail', 'removeError');
   }
 
   addEmail(e) {
@@ -60,38 +60,45 @@ export default class EmailList extends React.Component {
     };
   }
 
+  removeError() {
+    this.setState({ error: null });
+  }
+
   makeListItem(email, i) {
     const isActive = email === this.props.active;
+    const isDisabled = this.props.disabled || this.props.loading;
     return (
       <li
         key={`email_${i}`}
-        className={classNames({ 'is-disabled': this.props.loading, 'is-selected': isActive })}
+        disabled={isDisabled}
+        className={classNames({ 'is-disabled': isDisabled, 'is-selected': isActive })}
         onClick={(this.props.onClick) ? this.chooseEmail(email, isActive) : null}
       >
         <span className='t-ellipsis'>{email}</span>
-        <a onClick={this.removeEmail(email)}><Icon icon='cross'/></a>
+        <a disabled={isDisabled} onClick={this.removeEmail(email)}><Icon icon='cross'/></a>
       </li>
     );
   }
 
   render() {
+    const { disabled, loading, email, description, data, emptyTpl } = this.props;
     return (
       <div className='mod-email-list'>
         <div className='row-flex'>
           <input
-            disabled={this.props.loading}
+            disabled={disabled}
             type='text'
             placeholder='Enter an email address or Slack webhook link'
             value={this.state.new}
             onChange={e => this.setState({ new: e.target.value })}
           />
-          <FormSubmit className='button is-accent size-90' loading={this.props.loading} onClick={this.addEmail} text='Add new'/>
+          <FormSubmit className='button is-accent size-90' disabled={disabled} loading={loading} onClick={this.addEmail} text='Add new'/>
         </div>
-        {(this.state.error) ? (<span className='warning'><Icon viewBox='0 0 24 24' icon='warning' />{this.state.error}</span>) : null }
+        {(this.state.error) ? (<span className='warning' onClick={this.removeError}><Icon viewBox='0 0 24 24' icon='warning' />{this.state.error}</span>) : null }
         <ul className='tag-list row'>
-          { (this.props.data.length) ? this.props.data.map(this.makeListItem) : this.props.emptyTpl }
+          { (data.length) ? data.map(this.makeListItem) : emptyTpl }
         </ul>
-        {(this.props.description) ? <div className='form-description'>{this.props.description.replace('{email}', this.props.email)}</div> : null }
+        {(description) ? <div className='form-description'>{description.replace('{email}', email)}</div> : null }
       </div>
     );
   }
@@ -105,6 +112,7 @@ EmailList.defaultProps = {
   onClick: null,
   active: null,
   loading: false,
+  disabled: false,
   description: 'if E-mail list is empty. Use form below to create one. If not - your profile e-mail [{email}] will be used as default.',
   emailValidator: emailRegExp,
   slackValidator: webHookRegExp,
@@ -119,6 +127,7 @@ EmailList.propTypes = {
   onClick: PropTypes.func,
   email: PropTypes.string.isRequired,
   loading: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool.isRequired,
   active: PropTypes.string,
   description: PropTypes.string,
   data: PropTypes.arrayOf(PropTypes.string).isRequired,

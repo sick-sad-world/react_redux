@@ -106,7 +106,7 @@ class EditReport extends React.Component {
               <h3 className='form-subtitle'>Email assigment:</h3>
               <p>Currently this report going to: <b>{values.recipient}</b></p>
               <EmailBcc
-                loading={loading}
+                disabled={loading}
                 active={values.recipient}
                 onChange={makeUpdater('recipient', this.getEmailRecipient)}
                 onClick={makeUpdater('recipient')}

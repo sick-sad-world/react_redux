@@ -120,6 +120,9 @@ EditSet.propTypes = {
 export default statefullForm({
   propTypes: {
     data: PropTypes.shape(defaultInterface).isRequired
+  },
+  mapStateToData({ source_ids, uniq_ids, ...values }) {
+    return values;
   }
 })(EditSet);
 
