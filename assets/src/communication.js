@@ -16,7 +16,7 @@ export const transformRequestData = data => reduce(data, (acc, v, k) => {
   return acc;
 }, {});
 
-let counter = 0;
+const counter = 0;
 window.stack = {};
 
 export function cancelAll() {
@@ -27,9 +27,10 @@ export function cancelAll() {
 // which provides default settings and callback mapping
 // ===========================================================================
 export default function fetch(url, data, opts) {
-  return new Promise((resolve, reject) => {
+  let abort = null;
+  const promise = new Promise((resolve, reject) => {
     // const id = counter;
-    const { abort } = jsonp({
+    const request = jsonp({
       url: `${BASEURL}/${url}`,
       data: transformRequestData(data),
       error: reject,
@@ -39,9 +40,12 @@ export default function fetch(url, data, opts) {
         abort();
       }
     });
+    abort = request.abort;
     // window.stack[id] = abort;
     // counter += 1;
   });
+  promise.abort = abort;
+  return promise;
 }
 
 export function fetchScript(url, opts) {

@@ -67,8 +67,8 @@ export function getAllResults(data) {
       timeouts.forEach(clearTimeout);
     };
 
-    const stepMessage = () => {
-      if (notification && items.length > LIMIT) {
+    const stepMessage = (visible = (getState().notifications.find(({ id }) => id === noteId) || {}).visible) => {
+      if (notification && items.length > LIMIT && visible) {
         dispatch(notification({
           id: noteId,
           type: 'loading',
@@ -118,6 +118,6 @@ export function getAllResults(data) {
       })
     ).catch(console.warn).then(endSequence);
 
-    stepMessage();
+    stepMessage(true);
   };
 }

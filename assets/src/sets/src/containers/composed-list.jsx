@@ -55,7 +55,11 @@ export class ComposedList extends React.Component {
               </Sourceset>
             );
             if (children && isOpen) {
-              acc.push(children(set));
+              acc.push(
+                <li key={`${set.id}-content`} className='mod-entity'>
+                  {children(set)}
+                </li>
+              );
             }
             return acc;
           }, [])
