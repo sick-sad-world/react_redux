@@ -15,12 +15,21 @@ import { Link } from 'react-router';
 import TextInput from 'common/components/forms/input-text';
 import Spinner from 'common/components/spinner';
 import { Select, Deselect } from 'common/components/buttons';
+import makeSearchable from 'common/hocs/searchable';
 import statefullForm, { injectedProps } from 'common/hocs/statefull-form';
 import SectionWrapper from 'common/section';
 import Confirmation from 'common/components/confirmation';
 import { FeedsList } from 'src/feeds';
 import SetsList from '../containers/composed-list';
 
+const SearchableList = makeSearchable(({ search, bindSearch, children }) => (
+  <div className='list'>
+    <div className='header'>
+      <input type='text' name='search' placeholder='Search for...' {...bindSearch}/>
+    </div>
+    {children(search)}
+  </div>
+));
 
 class EditSet extends React.Component {
   constructor(props) {
@@ -86,27 +95,31 @@ class EditSet extends React.Component {
                     }}
                   </FeedsList>
                 </div>
-                <div className='list'>
-                  <div className='header'></div>
-                  <SetsList criterea={{ omit: [values.id] }}>
-                    {({ source_ids }) => (
-                      <FeedsList
-                        set_id={values.id}
-                        criterea={{
-                          ids: source_ids,
-                          disabled: values.source_ids
-                        }}
-                      >
+                <SearchableList>
+                  {search => (search) ? (
+                    <FeedsList set_id={values.id} criterea={{ search, disabled: values.source_ids }}>
                       {({ id }) => {
                         if (id === this.state.feedsLoading) {
                           return <a><Spinner/></a>;
                         }
                         return <Select onClick={this.makeFeedHandler('addFeed', id)} />;
                       }}
-                      </FeedsList>
-                    )}
-                  </SetsList>
-                </div>
+                    </FeedsList>
+                  ) : (
+                    <SetsList criterea={{ omit: [values.id] }}>
+                      {({ source_ids }) => (
+                        <FeedsList set_id={values.id} criterea={{ ids: source_ids, disabled: values.source_ids }}>
+                        {({ id }) => {
+                          if (id === this.state.feedsLoading) {
+                            return <a><Spinner/></a>;
+                          }
+                          return <Select onClick={this.makeFeedHandler('addFeed', id)} />;
+                        }}
+                        </FeedsList>
+                      )}
+                    </SetsList>
+                  )}
+                </SearchableList>
               </section>
             </div>
           ) : null}

@@ -8,7 +8,7 @@
     width: 100%;
     height: 100%;
   }
-  .ReactVirtualized__Grid__innerScrollContainer > div[class*="state-"] {
+  .ReactVirtualized__List > div[class*="state-"] {
     display: flex;
     flex-direction: column;
     justify-content: center;

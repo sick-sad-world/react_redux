@@ -12,11 +12,21 @@ import PropTypes from 'prop-types';
 // Import Child components
 // ===========================================================================
 import statefullForm, { injectedProps } from 'common/hocs/statefull-form';
+import makeSearchable from 'common/hocs/searchable';
 import SectionWrapper from 'common/section';
 import Confirmation from 'common/components/confirmation';
 import { Select, Deselect, SelectAll } from 'common/components/buttons';
 import { FeedsList } from 'src/feeds';
 import { ComposedList, SetsList } from 'src/sets';
+
+const SearchableList = makeSearchable(({ search, bindSearch, children }) => (
+  <div className='list'>
+    <div className='header'>
+      <input type='text' name='search' placeholder='Search for...' {...bindSearch}/>
+    </div>
+    {children(search)}
+  </div>
+));
 
 // Feed assginment to columns
 // ===========================================================================
@@ -57,16 +67,21 @@ class Assignment extends React.Component {
               </li>
             </ul>
           </div>
-          <div className='list'>
-            <div className='header'></div>
-            <ComposedList criterea={{ disabled: values.set }} actions={({ id }) => <SelectAll onClick={() => setUpdater(id)} />}>
-              {({ source_ids }) => (
-                <FeedsList criterea={{ ids: source_ids, disabled: values.source }}>
-                  {({ id }) => <Select onClick={() => sourceUpdater(id)} />}
-                </FeedsList>
-              )}
-            </ComposedList>
-          </div>
+          <SearchableList>
+            {search => (search) ? (
+              <FeedsList criterea={{ search, disabled: values.source }}>
+                {({ id }) => <Select onClick={() => sourceUpdater(id)} />}
+              </FeedsList>
+            ) : (
+              <ComposedList criterea={{ disabled: values.set }} actions={({ id }) => <SelectAll onClick={() => setUpdater(id)} />}>
+                {({ source_ids }) => (
+                  <FeedsList criterea={{ ids: source_ids, disabled: values.source }}>
+                    {({ id }) => <Select onClick={() => sourceUpdater(id)} />}
+                  </FeedsList>
+                )}
+              </ComposedList>
+            )}
+          </SearchableList>
         </form>
       </SectionWrapper>
     );

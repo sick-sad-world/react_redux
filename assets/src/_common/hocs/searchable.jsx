@@ -7,6 +7,14 @@ import { bindAll, get } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 
+export const injectedProps = {
+  search: PropTypes.string,
+  bindSearch: PropTypes.shape({
+    value: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired
+  }).isRequired
+};
+
 export default function makeSearchable(Component) {
   class SearchForm extends React.Component {
     constructor(props) {
@@ -22,30 +30,29 @@ export default function makeSearchable(Component) {
     }
 
     render() {
-      const { className, placeholder, treshold, ...props } = this.props;
+      const { treshold, ...props } = this.props;
       const { search } = this.state;
+
       return (
-        <div className={className}>
-          <div className='header'>
-            <input type='text' name='search' value={this.state.search} onChange={this.updateSearch} placeholder={placeholder} />
-          </div>
-          <Component
-            search={(search.length >= treshold) ? search : null}
-            {...props}
-          />
-        </div>
+        <Component
+          search={(search.length >= treshold) ? search : null}
+          bindSearch={{
+            value: this.state.search,
+            onChange: this.updateSearch
+          }}
+          {...props}
+        />
       );
     }
   }
 
   SearchForm.defaultProps = {
-    placeholder: 'Search for...',
     treshold: 3
   };
 
   SearchForm.propTypes = {
-    treshold: PropTypes.number.isRequired,
-    className: PropTypes.string,
-    placeholder: PropTypes.string.isRequired
+    treshold: PropTypes.number.isRequired
   };
+
+  return SearchForm;
 }
