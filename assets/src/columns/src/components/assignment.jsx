@@ -33,8 +33,7 @@ const SearchableList = makeSearchable(({ search, bindSearch, children }) => (
 class Assignment extends React.Component {
 
   render() {
-    const { state, changed, values, texts, backUrl, reset, submit, makeUpdater } = this.props;
-    const loading = state === 3;
+    const { state, changed, values, texts, backUrl, reset, submit, makeUpdater, loading } = this.props;
     const title = (values.name) ? `${texts.title} "${values.name}"` : texts.title;
 
     // Create Feed handlers to use
