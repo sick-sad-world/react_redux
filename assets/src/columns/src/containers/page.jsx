@@ -97,6 +97,7 @@ class Columns extends React.Component {
             <dl>
               <dt>Are you sure you want to delete the column</dt>
               <dd>{deleting.name}</dd>
+              <dd>Note: Alerts and Reports wich assigne to <b>THIS</b> column <b>only</b> also will be removed.</dd>
             </dl>
           </DeleteConfirmation>
         ) : null}
