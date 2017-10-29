@@ -26,12 +26,10 @@ export default createReducer({
     ...state[0],
     column_ids: updateArrayWithValue(state[0].column_ids, action.id)
   }],
-  [columns.UPD_VIS]: (state, action) => {
-    return [{
+  [columns.UPDATE]: (state, action) => [{
       ...state[0],
       column_ids: updateDashboardContents(state[0].column_ids, action)
-    }];
-  },
+    }],
   [columns.DELETE]: (state, action) => {
     if (state[0].column_ids.indexOf(action.id) === -1) return state;
     return [{
