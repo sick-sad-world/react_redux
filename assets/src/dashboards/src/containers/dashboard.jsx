@@ -1,4 +1,5 @@
 import { bindAll } from 'lodash';
+import scrollbarSize from 'dom-helpers/util/scrollbarSize';
 
 // Import React related stuff
 // ===========================================================================
@@ -10,49 +11,70 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { defaultInterface, width as colWidth } from '../defaults';
 import { makeContainerSelector } from '../selectors';
+import { arrayMove } from 'react-sortable-hoc';
 
 // Import child Components
 // ===========================================================================
 import DisplaySettings from 'src/display-settings';
 import { SingleColumnContainer, DashboardItem, sortColumns } from 'src/columns';
 import { ResultsContainer, FullResult, fetchResults } from 'src/results';
+
 import PayloadList from '../components/list';
+import PayloadItem from '../components/item';
 
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
-    bindAll(this, 'closeModal');
-    DisplaySettings.setHeightTesterWidth(props.width);
+    this.state = {
+      payload: props.payload
+    };
+    bindAll(this, 'closeModal', 'updateSortState');
+    DisplaySettings.setHeightTesterWidth(380);
+  }
+
+  componentWillReceiveProps({ payload }) {
+    this.setState({ payload });
   }
 
   closeModal() {
     this.props.router.push(`/${this.props.params.name}`);
   }
 
+  updateSortState({ oldIndex, newIndex }) {
+    if (oldIndex !== newIndex) {
+      this.setState({
+        payload: arrayMove(this.state.payload, oldIndex, newIndex)
+      }, () => this.props.sortColumns({ list: this.state.payload.map((id, i) => ({ id, order: i })) }, { state: false }));
+    }
+  }
+
   render() {
-    const { payload, emptyTpl, col, location, width } = this.props;
+    const { emptyTpl, col, location, width, scrollBar } = this.props;
+    const { payload } = this.state;
     return (
-      <section className='mod-dashboard'>
+      <section className='mod-dashboard' ref='root'>
         {(payload) ? (
-          <PayloadList width={width} payload={payload.column_ids} col={col} sortColumns={this.props.sortColumns}>
-            {({ id }) => (
-              <SingleColumnContainer col_id={id} output='column' actions={['deleteColumn', 'editColumn']}>
-                {({ column, deleteColumn, editColumn }) => (
-                  <DashboardItem payload={column} deleteColumn={deleteColumn} editColumn={editColumn} getResults={this.props.fetchResults}>
-                    <ResultsContainer
-                      id={column.id}
-                      sort={column.data.sort}
-                      data={column.data}
-                      width={width - 10}
-                      location={location.pathname}
-                      displaySettings={column.display_settings}
-                    />
-                  </DashboardItem>
-                )}
-              </SingleColumnContainer>
-            )}
+          <PayloadList axis='x' lockAxis='x' helperClass='mod-column sortable-ghost' useDragHandle onSortEnd={this.updateSortState}>
+            {payload.column_ids.map((id, i) => (
+              <PayloadItem key={id} index={i} width={width}>
+                <SingleColumnContainer col_id={id} output='column' actions={['deleteColumn', 'editColumn']}>
+                  {({ column, deleteColumn, editColumn }) => (
+                    <DashboardItem payload={column} deleteColumn={deleteColumn} editColumn={editColumn} getResults={this.props.fetchResults}>
+                      <ResultsContainer
+                        id={column.id}
+                        sort={column.data.sort}
+                        data={column.data}
+                        width={width - scrollBar}
+                        location={location.pathname}
+                        displaySettings={column.display_settings}
+                      />
+                    </DashboardItem>
+                  )}
+                </SingleColumnContainer>
+              </PayloadItem>
+            ))}
           </PayloadList>
-        ) : emptyTpl }
+        ) : emptyTpl}
         {(this.props.location.query.hash) ? (
           <FullResult id={col} close={this.closeModal} initial={this.props.location.query.init} hash={this.props.location.query.hash} />
         ) : null}
@@ -63,13 +85,15 @@ class Dashboard extends React.Component {
 
 Dashboard.defaultProps = {
   width: colWidth,
+  scrollBar: scrollbarSize(),
   emptyTpl: <div className='state-empty'>Oups... Dashboard not found</div>
 };
 
 Dashboard.propTypes = {
+  width: PropTypes.number.isRequired,
+  scrollBar: PropTypes.number.isRequired,
   payload: PropTypes.shape(defaultInterface),
   col: PropTypes.number,
-  width: PropTypes.number.isRequired,
   fetchResults: PropTypes.func.isRequired,
   sortColumns: PropTypes.func.isRequired,
   params: PropTypes.shape({

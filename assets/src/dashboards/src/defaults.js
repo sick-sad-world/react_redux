@@ -10,7 +10,7 @@ export const defDashboard = {
 
 export const path = '/d';
 
-export const width = 378;
+export const width = 380;
 
 export const defaultInterface = {
   id: PropTypes.number.isRequired,

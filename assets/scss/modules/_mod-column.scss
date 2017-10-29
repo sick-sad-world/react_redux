@@ -67,7 +67,27 @@
     }
 	}
 	> .content {
-		flex: 1 1 auto;
+    flex: 1 1 auto;
+    .ReactVirtualized__Grid:focus {
+      outline: 0;
+    }
+    div[class*="state-"] {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      @include pos();
+      padding: 0 5%;
+      text-align: center;
+      line-height: 1.25;
+      font-size: 1.5em;
+      font-style: italic;
+      img, svg {
+        display: block;
+        margin: 0 auto baseUnit(2);
+        width: 100px;
+        height: 100px;
+      }
+    }
 	}
 	&.is-expanded {
 		.column-header nav a.btn-settings {
