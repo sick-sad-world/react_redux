@@ -1,6 +1,32 @@
+import PropTypes from 'prop-types';
+
 export const TABLE = 18;
 export const CONTENT = 125;
 export const DETAIL = 20;
+
+export const predefined = [
+  {
+    value: 'custom',
+    label: 'Customize'
+  },
+  {
+    height: 300,
+    value: 'deck',
+    label: 'TweetDeck like'
+  },
+  {
+    height: 300,
+    value: 'gallery',
+    label: 'Gallery'
+  },
+  {
+    height: 300,
+    value: 'short',
+    label: 'Short one'
+  }
+];
+
+export const dsValueShape = PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]);
 
 export default {
   title: {

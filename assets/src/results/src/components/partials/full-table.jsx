@@ -1,11 +1,11 @@
+import { includes } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
-import HotnessBar from '../hotness';
+import HotnessBar from './hotness';
 
 // Result table
 // ===========================================================================
-export default function ResultTable({ data, to, style }) {
+export default function FullResultTable({ data, onClick, graph }) {
   return (
     <table className='stats-table'>
       <tbody>
@@ -14,21 +14,25 @@ export default function ResultTable({ data, to, style }) {
           <th>Total</th>
           <th>Rate</th>
           <th>Maxrate</th>
+          <th>Acc</th>
+          <th>First</th>
           <th>Hotness</th>
         </tr>
-        { data.map(({ title, normal, rate, maxrate, hotness }) => (
+        { data.map(({ title, normal, rate, maxrate, hotness, acc, first }) => (
           <tr key={title}>
             <td>
-              {(window.google && window.google.charts) ? (
-                <Link to={`${to}&init=${title.toLowerCase()}`}><b>{title}</b></Link>
+              {(includes(graph, title.toLowerCase())) ? (
+                <a onClick={onClick(title)}><b>{title}</b></a>
               ) : (
                 <b>{title}</b>
               )}
             </td>
-            <td style={style}>{ normal }</td>
-            <td style={style}>{ rate }</td>
-            <td style={style}>{ maxrate }</td>
-            <td style={style} className='hotness'>
+            <td>{ normal }</td>
+            <td>{ rate }</td>
+            <td>{ maxrate }</td>
+            <td>{acc}</td>
+            <td>{first}</td>
+            <td className='hotness'>
               { (hotness * 100).toFixed(2) }%
               <HotnessBar value={hotness} />
             </td>
@@ -39,14 +43,16 @@ export default function ResultTable({ data, to, style }) {
   );
 }
 
-ResultTable.propTypes = {
+FullResultTable.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string.isRequired,
     normal: PropTypes.number.isRequired,
     rate: PropTypes.number.isRequired,
     maxrate: PropTypes.number.isRequired,
-    hotness: PropTypes.number.isRequired
+    hotness: PropTypes.number.isRequired,
+    acc: PropTypes.number.isRequired,
+    first: PropTypes.number.isRequired
   })),
-  style: PropTypes.objectOf(PropTypes.string),
-  to: PropTypes.string
+  graph: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onClick: PropTypes.func.isRequired
 };

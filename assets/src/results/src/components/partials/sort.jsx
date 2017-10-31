@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { formatNumber, sortParamToShort } from '../helpers';
+import { formatNumber, sortParamToShort } from '../../helpers';
 
 // Result sorting badge
 // ===========================================================================

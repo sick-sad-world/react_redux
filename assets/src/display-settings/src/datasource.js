@@ -1,5 +1,5 @@
 import { pickBy, intersection, transform, forOwn } from 'lodash';
-import data from './config';
+import data, { predefined } from './config';
 
 
 class DisplaySettings {
@@ -9,6 +9,7 @@ class DisplaySettings {
     this.gutter = 8;
     this.aside = 26;
     this.tableHeader = 0;
+    this.predefined = predefined;
 
     this.heightTester = document.createElement('div');
     this.heightTester.classList.add('height-tester');
@@ -36,6 +37,14 @@ class DisplaySettings {
 
   getRaw() {
     return { ...this.data };
+  }
+
+  getPredefined() {
+    return this.predefined.map(({ value, label }) => ({ label, value }));
+  }
+
+  inPredefined(val) {
+    return !this.predefined.find(({ value }) => value === val);
   }
 
   getRenderMap() {
@@ -98,6 +107,9 @@ class DisplaySettings {
   }
 
   calculateHeight(settings) {
+    if (typeof settings === 'string') {
+      return (this.predefined.find(({ value }) => value === settings) || {}).height;
+    }
     let table = 0;
     const value = settings.filter(stat => !!this.data[stat]);
     const res = this.rows.reduce((acc, row) => {
@@ -121,6 +133,9 @@ class DisplaySettings {
   }
 
   getHeights(settings) {
+    if (typeof settings === 'string') {
+      return null;
+    }
     return settings.reduce((acc, stat) => {
       const item = this.data[stat];
       if (!item) return acc;

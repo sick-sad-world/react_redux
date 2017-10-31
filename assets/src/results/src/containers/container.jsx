@@ -12,7 +12,7 @@ import { AutoSizer, List } from 'react-virtualized';
 import PropTypes from 'prop-types';
 import { stateNum } from 'common/typecheck';
 import { limit, defaultResults } from '../defaults';
-import DisplaySettings from 'src/display-settings';
+import DisplaySettings, { dsValueShape } from 'src/display-settings';
 
 // Import connection
 // ===========================================================================
@@ -22,7 +22,7 @@ import { fetchResults, favoriteResult, ignoreResult, refreshResult } from '../ac
 
 // Import child Components
 // ===========================================================================
-import Result from '../components/result';
+import CustomResult from '../components/custom';
 import Placeholder from '../components/placeholder';
 import Icon from 'common/components/icon';
 
@@ -69,7 +69,7 @@ class ResultsContainer extends React.Component {
   componentWillReceiveProps(newProps) {
     this.heightConfig = DisplaySettings.getHeights(newProps.displaySettings);
     this.rowHeight = DisplaySettings.calculateHeight(newProps.displaySettings);
-    if (newProps.state === 2) {
+    if (newProps.state === 2 && (typeof this.rowHeight !== 'number')) {
       this.List.recomputeRowHeights();
     }
     if (newProps.data.autoreload > 0 && !this.interval) {
@@ -87,27 +87,39 @@ class ResultsContainer extends React.Component {
 
   rowRenderer({ index, isScrolling, isVisible, key, style }) {
     const result = this.props.payload[index];
+
+    let resultComponent = null;
+
+    if (typeof this.props.displaySettings === 'string') {
+      resultComponent = <ResultTypes.ds
+      />;
+    } else if (this.props.state === 3 || !result) {
+      resultComponent = (
+        <Placeholder
+          displaySettings={this.props.displaySettings}
+          tableStats={this.props.tableStats}
+          heights={this.heightConfig}
+        />
+      );
+    } else {
+      resultComponent = (
+        <CustomResult
+          payload={result}
+          sort={this.props.data.sort}
+          location={`${this.props.location}/${this.props.id}`}
+          displaySettings={this.props.displaySettings}
+          tableStats={this.props.tableStats}
+          heights={this.heightConfig}
+          refreshResult={this.props.refreshResult({ entity: this.props.id, state: false })}
+          favoriteResult={this.props.favoriteResult({ entity: this.props.id, state: false })}
+          ignoreResult={this.props.ignoreResult({ entity: this.props.id, state: false })}
+        />
+      );
+    }
+
     return (
       <div key={key} style={{ ...style, padding: `${this.props.gutter * 1}px 4px ${this.props.gutter * 1.5}px` }}>
-        {(this.props.state === 3 || !result) ? (
-          <Placeholder
-            displaySettings={this.props.displaySettings}
-            tableStats={this.props.tableStats}
-            heights={this.heightConfig}
-          />
-        ) : (
-          <Result
-            payload={result}
-            sort={this.props.data.sort}
-            location={`${this.props.location}/${this.props.id}`}
-            displaySettings={this.props.displaySettings}
-            tableStats={this.props.tableStats}
-            heights={this.heightConfig}
-            refreshResult={this.props.refreshResult({ entity: this.props.id, state: false })}
-            favoriteResult={this.props.favoriteResult({ entity: this.props.id, state: false })}
-            ignoreResult={this.props.ignoreResult({ entity: this.props.id, state: false })}
-          />
-        )}
+        {resultComponent}
       </div>
     );
   }
@@ -165,7 +177,7 @@ class ResultsContainer extends React.Component {
             rowRenderer={this.rowRenderer}
             height={height}
             rowCount={rowCount}
-            rowHeight={this.countRowHeight}
+            rowHeight={(typeof this.rowHeight === 'number') ? this.rowHeight : this.countRowHeight}
             overscanRowCount={2}
             width={width}
             noRowsRenderer={this.noRowsRenderer}
@@ -199,7 +211,7 @@ ResultsContainer.propTypes = {
   width: PropTypes.number.isRequired,
   stateEmpty: PropTypes.string.isRequired,
   tableStats: PropTypes.arrayOf(PropTypes.string).isRequired,
-  displaySettings: PropTypes.arrayOf(PropTypes.string).isRequired,
+  displaySettings: dsValueShape.isRequired,
   displaySettingsMap: PropTypes.object.isRequired,
   payload: PropTypes.arrayOf(PropTypes.object).isRequired,
   getResults: PropTypes.func.isRequired,

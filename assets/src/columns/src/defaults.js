@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { numBool, directionString } from 'common/typecheck';
+import { dsValueShape } from 'src/display-settings';
 
 export const defColumnData = {
   autoreload: 0,
@@ -192,7 +193,7 @@ export const coreInterface = {
 
 export const defaultInterface = {
   ...coreInterface,
-  display_settings: PropTypes.arrayOf(PropTypes.string),
+  display_settings: dsValueShape,
   data: PropTypes.shape(defaultDataInterface)
 };
 

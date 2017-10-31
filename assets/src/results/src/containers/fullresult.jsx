@@ -20,9 +20,9 @@ import { GraphsContainer } from 'src/graphs';
 // Import child Components
 // ===========================================================================
 import Modal from 'common/components/modal';
-import ResultActions from '../components/actions';
-import FullResultTable from '../components/full/table';
-import ResultMedia from '../components/result/image';
+import ResultActions from '../components/partials/actions';
+import FullResultTable from '../components/partials/full-table';
+import ResultMedia from '../components/partials/image';
 
 // description
 // ===========================================================================

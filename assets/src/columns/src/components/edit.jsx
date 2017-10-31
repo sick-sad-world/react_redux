@@ -1,7 +1,6 @@
 // Import utility stuff
 // ===========================================================================
 import { forOwn, isEqual, pickBy, includes, bindAll } from 'lodash';
-import { updateArrayWithValue } from 'functions';
 import { availableColumnData, defaultInterface, editOptions } from '../defaults';
 
 // Import React related stuff
@@ -34,11 +33,7 @@ const notAffecting = ['id', 'name', 'display_settings', 'advancedFilters', 'chan
 class EditColumn extends React.Component {
   constructor(props) {
     super(props);
-    bindAll(this, 'getDisplaySettings', 'getContentType');
-  }
-
-  getDisplaySettings(value) {
-    return updateArrayWithValue(this.props.values.display_settings, value);
+    bindAll(this, 'getContentType');
   }
 
   updateSorting() {
@@ -174,7 +169,7 @@ class EditColumn extends React.Component {
             <PickDisplaySettings
               className='row display-settings'
               disabled={loading}
-              {...bindInput('display_settings', this.getDisplaySettings)}
+              {...bindInput('display_settings')}
             />
           </div>
           <div className='form-block'>
@@ -315,7 +310,7 @@ export default statefullForm({
       case 'name':
         return v === data[k];
       case 'display_settings':
-        return isEqual(data[k].sort(), v.sort());
+        return (Array.isArray(data[k]) && Array.isArray(v)) ? isEqual(data[k].sort(), v.sort()) : v === data[k];
       default:
         return isEqual(data.data[k], (v === '') ? undefined : v);
     }

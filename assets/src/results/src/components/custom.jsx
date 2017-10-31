@@ -15,15 +15,14 @@ import { decomposeColumnSort } from 'src/columns';
 
 // Import child components
 // ===========================================================================
-import { Link } from 'react-router';
-import ResultSort from './sort';
-import ResultActions from './actions';
-import ResultTable from './result/table';
-import ResultMedia from './result/image';
+import ResultSort from './partials/sort';
+import ResultActions from './partials/actions';
+import ResultTable from './partials/table';
+import ResultMedia from './partials/image';
 
 // description
 // ===========================================================================
-export default class Result extends React.PureComponent {
+export default class CustomResult extends React.PureComponent {
   constructor(props) {
     super(props);
     bindAll(this, 'getTableData', 'inc', 'isValid');
@@ -60,7 +59,6 @@ export default class Result extends React.PureComponent {
     const isImage = this.inc('image');
     const isDescr = this.isValid('description');
     const graphParam = this.inc('graphs') ? decomposeColumnSort(sort).sort_prop : null;
-    // payload.domain.replace(this.props.proptocolRegExp, '')
     return (
       <article className='mod-result'>
         <aside style={{ height: heights.aside }}>
@@ -75,7 +73,6 @@ export default class Result extends React.PureComponent {
             refreshResult={this.props.refreshResult}
           />
         </aside>
-         {/* <Link to={browseUrl} className='result-link'> */}
           {(this.isValid('title')) ? <h1 style={{ maxHeight: heights.title }}><a href={payload.url} target='_blank' >{payload.title}</a></h1> : null}
           {(this.inc('found') || this.inc('domain') || this.inc('author')) ? (
             <small style={{ height: heights.found || heights.domain || heights.author }}>
@@ -97,7 +94,6 @@ export default class Result extends React.PureComponent {
               {(isDescr) ? <div className='content'>{payload.description}</div> : null}
             </div>
           ) : null}
-        {/* </Link> */}
         {(tableData && tableData.length) ? (
           <footer>
             <ResultTable to={browseUrl} style={{ height: heights.table }} data={tableData} />
@@ -113,7 +109,7 @@ export default class Result extends React.PureComponent {
   }
 }
 
-Result.defaultProps = {
+CustomResult.defaultProps = {
   sort: '',
   location: '',
   emptyText: 'No description found',
@@ -126,7 +122,7 @@ Result.defaultProps = {
   isPlaceholder: true
 };
 
-Result.propTypes = {
+CustomResult.propTypes = {
   isPlaceholder: PropTypes.bool.isRequired,
   sort: PropTypes.string.isRequired,
   emptyText: PropTypes.string.isRequired,

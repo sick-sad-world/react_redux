@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { proptocolRegExp } from '../defaults';
+import { proptocolRegExp } from '../../defaults';
 
 // Brief Stats in Result
 // ===========================================================================

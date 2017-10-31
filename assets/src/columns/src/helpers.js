@@ -16,7 +16,7 @@ export function getColumnsForResults(payload) {
 export function ensureDisplaySettings(s) {
   if (!s) {
     return DisplaySettings.getDefault();
-  } else if (typeof s === 'string') {
+  } else if (typeof s === 'string' && s.indexOf(',') > -1) {
     return s.split(',');
   }
   return s;
@@ -32,10 +32,11 @@ export function normalizeDisplaySettings(s) {
 // Make required column object on UI (used in middleware)
 // ===========================================================================
 export function composeColumnData({ data, display_settings, order, ...column }) {
+  const ds = ensureDisplaySettings(display_settings);
   const result = {
     ...column,
     order: parseOrder(order),
-    display_settings: ensureDisplaySettings(display_settings).map(normalizeDisplaySettings)
+    display_settings: (Array.isArray(ds)) ? ds.map(normalizeDisplaySettings) : ds
   };
 
   // Compose default and providen data
