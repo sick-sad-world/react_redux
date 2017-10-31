@@ -33,6 +33,7 @@ export default class DashboardItem extends React.Component {
     return () => this.setState({ [type]: !this.state[type] });
   }
 
+
   editColumn(value, changed) {
     const data = { ...this.props.payload.data, ...value };
     this.setState({ loading: 'editing' });
@@ -43,10 +44,7 @@ export default class DashboardItem extends React.Component {
   }
 
   hideColumn() {
-    return this.props.editColumn({
-      id: this.props.payload.id,
-      open: 0
-    });
+    return this.props.updateVisibility({ id: this.props.payload.id, open: 0 }, { silent: true });
   }
 
   deleteColumn() {
@@ -98,5 +96,6 @@ DashboardItem.propTypes = {
   payload: PropTypes.shape(defaultInterface).isRequired,
   getResults: PropTypes.func,
   editColumn: PropTypes.func.isRequired,
-  deleteColumn: PropTypes.func.isRequired
+  deleteColumn: PropTypes.func.isRequired,
+  updateVisibility: PropTypes.func.isRequired
 };

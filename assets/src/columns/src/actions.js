@@ -26,6 +26,13 @@ export const editColumn = createAction({
   }
 });
 
+export const updateVisibility = createAction({
+  action: types.UPD_VIS,
+  call(data, opts) {
+    return fetch('column', data, opts).then(resp => (resp.success) ? data : resp);
+  }
+});
+
 export const deleteColumn = createAction({
   action: types.DELETE,
   call(data, opts) {

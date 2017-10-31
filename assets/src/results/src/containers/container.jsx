@@ -85,24 +85,27 @@ class ResultsContainer extends React.Component {
     return () => clearInterval(interval);
   }
 
+  wrapRow(key, style, component) {
+    return (
+      <div key={key} style={{ ...style, padding: `${this.props.gutter * 1}px 4px ${this.props.gutter * 1.5}px` }}>
+        {component}
+      </div>
+    );
+  }
+
   rowRenderer({ index, isScrolling, isVisible, key, style }) {
     const result = this.props.payload[index];
 
-    let resultComponent = null;
-
-    if (typeof this.props.displaySettings === 'string') {
-      resultComponent = <ResultTypes.ds
-      />;
-    } else if (this.props.state === 3 || !result) {
-      resultComponent = (
+    if (this.props.state === 3 || !result) {
+      return this.wrapRow(key, style, (
         <Placeholder
           displaySettings={this.props.displaySettings}
           tableStats={this.props.tableStats}
           heights={this.heightConfig}
         />
-      );
-    } else {
-      resultComponent = (
+      ));
+    } else if (Array.isArray(this.props.displaySettings) && this.heightConfig && this.rowHeight instanceof Function) {
+      return this.wrapRow(key, style, (
         <CustomResult
           payload={result}
           sort={this.props.data.sort}
@@ -114,14 +117,8 @@ class ResultsContainer extends React.Component {
           favoriteResult={this.props.favoriteResult({ entity: this.props.id, state: false })}
           ignoreResult={this.props.ignoreResult({ entity: this.props.id, state: false })}
         />
-      );
+      ));
     }
-
-    return (
-      <div key={key} style={{ ...style, padding: `${this.props.gutter * 1}px 4px ${this.props.gutter * 1.5}px` }}>
-        {resultComponent}
-      </div>
-    );
   }
 
   noRowsRenderer() {

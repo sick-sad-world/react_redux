@@ -57,9 +57,9 @@ class Dashboard extends React.Component {
           <PayloadList axis='x' lockAxis='x' helperClass='mod-column sortable-ghost' useDragHandle onSortEnd={this.updateSortState}>
             {payload.column_ids.map((id, i) => (
               <PayloadItem key={id} index={i} width={width}>
-                <SingleColumnContainer col_id={id} output='column' actions={['deleteColumn', 'editColumn']}>
-                  {({ column, deleteColumn, editColumn }) => (
-                    <DashboardItem payload={column} deleteColumn={deleteColumn} editColumn={editColumn} getResults={this.props.fetchResults}>
+                <SingleColumnContainer col_id={id} output='column' actions={['deleteColumn', 'editColumn', 'updateVisibility']}>
+                  {({ column, deleteColumn, editColumn, updateVisibility }) => (
+                    <DashboardItem payload={column} deleteColumn={deleteColumn} editColumn={editColumn} updateVisibility={updateVisibility} getResults={this.props.fetchResults}>
                       <ResultsContainer
                         id={column.id}
                         sort={column.data.sort}
