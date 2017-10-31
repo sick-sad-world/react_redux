@@ -155,7 +155,7 @@ function mapDispatchToProps(dispatch) {
       return dispatch(sortColumns(data, opts));
     },
     actionHide(id, order) {
-      return dispatch(updateVisibility({ id, open: 0, order }, { silent: true })).then((resp) => {
+      return dispatch(editColumn({ id, open: 0, order }, { silent: true })).then((resp) => {
         if (clearResults) {
           dispatch(clearResults(id));
         }
@@ -163,7 +163,7 @@ function mapDispatchToProps(dispatch) {
       });
     },
     actionShow(id, order, data) {
-      return dispatch(updateVisibility({ id, open: 1, order }, { silent: true })).then((resp) => {
+      return dispatch(editColumn({ id, open: 1, order }, { silent: true })).then((resp) => {
         if (fetchResults && data) {
           dispatch(fetchResults(data, { entity: id }));
         }
