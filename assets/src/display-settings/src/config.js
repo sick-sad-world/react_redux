@@ -10,7 +10,7 @@ export const predefined = [
     label: 'Customize'
   },
   {
-    height: 300,
+    height: 150,
     value: 'deck',
     label: 'TweetDeck like'
   },

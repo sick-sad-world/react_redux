@@ -1,0 +1,19 @@
+@mixin result-actions($aside: 24px, $scale: 70%, $align: space-between) {
+  display: flex;
+  justify-content: $align;
+  align-items: center;
+  a {
+    display: inline-flex;
+    width: $aside;
+    height: $aside;
+    svg {
+      width: $scale;
+      height: $scale;
+    }
+    &:hover, &:focus {
+      svg {
+        fill: $c-accent;
+      }
+    }
+  }
+}

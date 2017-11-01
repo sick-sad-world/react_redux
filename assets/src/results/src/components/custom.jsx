@@ -9,7 +9,7 @@ import React from 'react';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { defaultInterface, defaultDashboardResult, proptocolRegExp } from '../defaults';
+import { defaultPropsInjected, defaultDashboardResult, proptocolRegExp, customPropsInjected } from '../defaults';
 import { BriefGraphs } from 'src/graphs';
 import { decomposeColumnSort } from 'src/columns';
 
@@ -112,28 +112,14 @@ export default class CustomResult extends React.PureComponent {
 CustomResult.defaultProps = {
   sort: '',
   location: '',
-  emptyText: 'No description found',
   payload: {
     ...defaultDashboardResult
   },
-  measure: null,
   heights: {},
-  proptocolRegExp,
-  isPlaceholder: true
+  proptocolRegExp
 };
 
 CustomResult.propTypes = {
-  isPlaceholder: PropTypes.bool.isRequired,
-  sort: PropTypes.string.isRequired,
-  emptyText: PropTypes.string.isRequired,
-  displaySettings: PropTypes.arrayOf(PropTypes.string).isRequired,
-  tableStats: PropTypes.arrayOf(PropTypes.string).isRequired,
-  heights: PropTypes.objectOf(PropTypes.string),
-  refreshResult: PropTypes.func,
-  favoriteResult: PropTypes.func,
-  ignoreResult: PropTypes.func,
-  measure: PropTypes.func,
-  location: PropTypes.string.isRequired,
-  proptocolRegExp: PropTypes.instanceOf(RegExp).isRequired,
-  payload: PropTypes.shape(defaultInterface)
+  ...defaultPropsInjected,
+  ...customPropsInjected
 };

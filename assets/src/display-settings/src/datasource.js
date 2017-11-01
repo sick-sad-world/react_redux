@@ -44,7 +44,7 @@ class DisplaySettings {
   }
 
   inPredefined(val) {
-    return !this.predefined.find(({ value }) => value === val);
+    return !!this.predefined.find(({ value }) => value === val);
   }
 
   getRenderMap() {

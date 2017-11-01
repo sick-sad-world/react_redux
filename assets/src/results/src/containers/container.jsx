@@ -1,6 +1,6 @@
 // Import helper stuff
 // ===========================================================================
-import { bindAll, includes, pick } from 'lodash';
+import { bindAll, includes } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
@@ -25,7 +25,7 @@ import { fetchResults, favoriteResult, ignoreResult, refreshResult } from '../ac
 import * as ResultComponents from '../components';
 import Icon from 'common/components/icon';
 
-// description
+// Container wich renders Results list in each column in Dashboard
 // ===========================================================================
 class ResultsContainer extends React.Component {
   constructor(props) {
@@ -114,7 +114,7 @@ class ResultsContainer extends React.Component {
 
     const Component = ResultComponents[`${componentType}${isPlaceholder}`];
     const requiredData = (!isPlaceholder) ? this.getRequiredData(index) : {};
-    const customData = (componentType === 'Custom') ? this.getCustomData() : {};
+    const customData = (componentType === 'Custom') ? this.getCustomData() : { height: this.rowHeight };
 
     return (
       <div key={key} style={{ ...style, padding: `${this.props.gutter * 1}px 4px ${this.props.gutter * 1.5}px` }}>

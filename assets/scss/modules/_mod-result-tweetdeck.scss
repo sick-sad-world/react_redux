@@ -1,0 +1,62 @@
+/* Styling for common popup items such as container header nav
+========================================================================== */
+.mod-result-tweetdeck {
+  $aside: 80px;
+  padding: baseUnit() 0;
+  border-bottom: $bd;
+  line-height: baseUnit(2.25);
+  font-size: baseUnit(2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  aside {
+    float: left;
+    width: $aside;
+  }
+  figure {
+    height: $aside;
+  }
+  header {
+    margin-left: $aside + baseUnit();
+  }
+  time {
+    font-weight: bold;
+    svg {
+      fill: $c-main;
+      width: baseUnit(1.875);
+      height: baseUnit(1.875);
+      vertical-align: -2px;
+    }
+    small {
+      padding-left: baseUnit(.5);
+    }
+  }
+  h1 {
+    font: inherit;
+    color: inherit;
+    max-height: 52px;
+    overflow: hidden;
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+  footer {
+    clear: both;
+  }
+  .stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75em;
+    list-style: none;
+    padding: 0;
+    font-weight: bold;
+  }
+  .actions {
+    //width: 96px;
+    @include result-actions($align: space-around);
+  }
+  &.is-placeholder {
+    
+  }
+}

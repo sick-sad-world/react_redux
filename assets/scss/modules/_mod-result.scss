@@ -3,26 +3,8 @@
 .mod-result {
   line-height: baseUnit(2.25);
   font-size: baseUnit(2);
-  $bar: baseUnit(.5);
   aside {
-    $aside: 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    a {
-			display: inline-flex;
-			width: $aside;
-			height: $aside;
-      svg {
-        width: 70%;
-        height: 70%;
-      }
-			&:hover, &:focus {
-				svg {
-					fill: $c-accent;
-				}
-			}
-		}
+    @include result-actions();
   }
   .comparator {
     font: 1em / 1 $heading-font-family;

@@ -31,7 +31,7 @@ export default function PickDisplaySettings({ data, value, onChange, predefined,
           disabled={disabled}
           className='row-flex'
           label='Display style'
-          selectClassName='size-120'
+          selectClassName='size-180'
           name='display_settings'
           value={(typeof value === 'string') ? value : 'custom'}
           onChange={onChangeWrapper}
