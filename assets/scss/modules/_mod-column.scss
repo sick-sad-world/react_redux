@@ -63,7 +63,8 @@
     svg {
       display: inline-block;
       vertical-align: -2px;
-      width: $form-unit;
+      width: $icon-unit;
+      margin-right: baseUnit(0.5);
     }
 	}
 	> .content {
