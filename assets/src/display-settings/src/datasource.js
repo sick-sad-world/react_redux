@@ -134,7 +134,7 @@ class DisplaySettings {
 
   getHeights(settings) {
     if (typeof settings === 'string') {
-      return null;
+      return settings;
     }
     return settings.reduce((acc, stat) => {
       const item = this.data[stat];

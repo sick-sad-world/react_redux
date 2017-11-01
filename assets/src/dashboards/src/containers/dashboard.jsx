@@ -29,7 +29,7 @@ class Dashboard extends React.Component {
       payload: props.payload
     };
     bindAll(this, 'closeModal', 'updateSortState');
-    DisplaySettings.setHeightTesterWidth(380);
+    DisplaySettings.setHeightTesterWidth(props.width);
   }
 
   componentWillReceiveProps({ payload }) {

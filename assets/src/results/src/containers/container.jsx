@@ -1,6 +1,6 @@
 // Import helper stuff
 // ===========================================================================
-import { bindAll, includes } from 'lodash';
+import { bindAll, includes, pick } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
@@ -22,8 +22,7 @@ import { fetchResults, favoriteResult, ignoreResult, refreshResult } from '../ac
 
 // Import child Components
 // ===========================================================================
-import CustomResult from '../components/custom';
-import Placeholder from '../components/placeholder';
+import * as ResultComponents from '../components';
 import Icon from 'common/components/icon';
 
 // description
@@ -36,13 +35,17 @@ class ResultsContainer extends React.Component {
     };
     this.infiniteloading = false;
     this.interval = null;
-    this.rowHeight = DisplaySettings.calculateHeight(props.displaySettings);
-    this.heightConfig = DisplaySettings.getHeights(props.displaySettings);
+    this.updateHeightStatus(props.displaySettings);
 
     bindAll(this, 'rowRenderer', 'onRowsRendered', 'autoreloadInitialize', 'noRowsRenderer', 'countRowHeight');
     if (props.data.autoreload > 0) {
       this.interval = this.autoreloadInitialize(props.data);
     }
+  }
+
+  updateHeightStatus(ds) {
+    this.rowHeight = DisplaySettings.calculateHeight(ds);
+    this.resultType = DisplaySettings.getHeights(ds);
   }
 
   countRows() {
@@ -67,11 +70,12 @@ class ResultsContainer extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    this.heightConfig = DisplaySettings.getHeights(newProps.displaySettings);
-    this.rowHeight = DisplaySettings.calculateHeight(newProps.displaySettings);
+    this.updateHeightStatus(newProps.displaySettings);
+
     if (newProps.state === 2 && (typeof this.rowHeight !== 'number')) {
       this.List.recomputeRowHeights();
     }
+
     if (newProps.data.autoreload > 0 && !this.interval) {
       this.interval = this.autoreloadInitialize(newProps.data);
     } else if (newProps.data.autoreload === 0 && this.interval) {
@@ -85,40 +89,42 @@ class ResultsContainer extends React.Component {
     return () => clearInterval(interval);
   }
 
-  wrapRow(key, style, component) {
-    return (
-      <div key={key} style={{ ...style, padding: `${this.props.gutter * 1}px 4px ${this.props.gutter * 1.5}px` }}>
-        {component}
-      </div>
-    );
+  getRequiredData(index) {
+    return {
+      location: `${this.props.location}/${this.props.id}`,
+      sort: this.props.data.sort,
+      refreshResult: this.props.refreshResult,
+      favoriteResult: this.props.favoriteResult,
+      ignoreResult: this.props.ignoreResult
+    };
+  }
+
+  getCustomData() {
+    return {
+      displaySettings: this.props.displaySettings,
+      tableStats: this.props.tableStats,
+      heights: this.resultType
+    };
   }
 
   rowRenderer({ index, isScrolling, isVisible, key, style }) {
     const result = this.props.payload[index];
+    const componentType = (typeof this.resultType === 'string') ? this.resultType : 'Custom';
+    const isPlaceholder = (this.props.state === 3 || !result) ? 'Placeholder' : '';
 
-    if (this.props.state === 3 || !result) {
-      return this.wrapRow(key, style, (
-        <Placeholder
-          displaySettings={this.props.displaySettings}
-          tableStats={this.props.tableStats}
-          heights={this.heightConfig}
-        />
-      ));
-    } else if (Array.isArray(this.props.displaySettings) && this.heightConfig && this.rowHeight instanceof Function) {
-      return this.wrapRow(key, style, (
-        <CustomResult
+    const Component = ResultComponents[`${componentType}${isPlaceholder}`];
+    const requiredData = (!isPlaceholder) ? this.getRequiredData(index) : {};
+    const customData = (componentType === 'Custom') ? this.getCustomData() : {};
+
+    return (
+      <div key={key} style={{ ...style, padding: `${this.props.gutter * 1}px 4px ${this.props.gutter * 1.5}px` }}>
+        <Component
           payload={result}
-          sort={this.props.data.sort}
-          location={`${this.props.location}/${this.props.id}`}
-          displaySettings={this.props.displaySettings}
-          tableStats={this.props.tableStats}
-          heights={this.heightConfig}
-          refreshResult={this.props.refreshResult({ entity: this.props.id, state: false })}
-          favoriteResult={this.props.favoriteResult({ entity: this.props.id, state: false })}
-          ignoreResult={this.props.ignoreResult({ entity: this.props.id, state: false })}
+          {...requiredData}
+          {...customData}
         />
-      ));
-    }
+      </div>
+    );
   }
 
   noRowsRenderer() {
@@ -152,9 +158,8 @@ class ResultsContainer extends React.Component {
   countRowHeight({ index }) {
     const ds = this.props.displaySettings;
     const result = this.props.payload[index];
-    const rowHeight = this.rowHeight;
     const isSolutionCount = includes(ds, 'description') && (includes(ds, 'wide_image') || !includes(ds, 'image'));
-    return rowHeight({
+    return this.rowHeight({
       title: (result) ? result.title : !result,
       description: (isSolutionCount && result) ? result.description : !result
     });
@@ -217,17 +222,17 @@ ResultsContainer.propTypes = {
   ignoreResult: PropTypes.func.isRequired
 };
 
-export default connect(makeContainerSelector, dispatch => ({
+export default connect(makeContainerSelector, (dispatch, { id }) => ({
   getResults(data, opts) {
     return dispatch(fetchResults(data, opts));
   },
-  favoriteResult(opts) {
-    return params => dispatch(favoriteResult(params, opts));
+  favoriteResult(params) {
+    return dispatch(favoriteResult(params, { entity: id, state: false }));
   },
-  ignoreResult(opts) {
-    return params => dispatch(ignoreResult(params, opts));
+  ignoreResult(params) {
+    return dispatch(ignoreResult(params, { entity: id, state: false }));
   },
-  refreshResult(opts) {
-    return params => dispatch(refreshResult(params, opts));
+  refreshResult(params) {
+    return dispatch(refreshResult(params, { entity: id, state: false }));
   }
 }))(ResultsContainer);
