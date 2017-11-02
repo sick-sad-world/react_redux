@@ -71,15 +71,19 @@ blockquote {}
   display: block;
   width: 100%;
   margin: 4px 0;
-  &:first-child {
-    margin-top: 0;
-  }
   &.short {
     width: 66%;
   }
   &.very-short {
     width: 33%;
   }
+}
+
+.circle {
+  @include ph-bg();
+  border-radius: 50%;
+  width: baseUnit(2);
+  height: baseUnit(2);
 }
 
 .drag-handle {
@@ -111,6 +115,7 @@ blockquote {}
   font-weight: bold;
   text-shadow: 0 0 4px #fff;
 }
+
 .color-bar {
   display: block;
   @include pos(0 0 0 0);

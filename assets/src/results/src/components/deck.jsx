@@ -74,7 +74,30 @@ export const deck = TweetDeckResult;
 function TweetDeckPlaceholder({ height }) {
   return (
     <article className='mod-result-tweetdeck is-placeholder' style={{ height: `${height}px` }}>
-
+      <div className='t-clear content'>
+        <aside>
+          <div className='image'></div>
+        </aside>
+        <header>
+          <span className='line very-short'></span>
+          <span className='line'></span>
+          <span className='line'></span>
+          <span className='line'></span>
+        </header>
+      </div>
+      <footer>
+        <div className='stats'>
+          <span className='line very-short'></span>
+          <span className='line very-short'></span>
+          <span className='line very-short'></span>
+        </div>
+        <div className='actions'>
+          <span className='circle'></span>
+          <span className='circle'></span>
+          <span className='circle'></span>
+          <span className='circle'></span>
+        </div>
+      </footer>
     </article>
   );
 }

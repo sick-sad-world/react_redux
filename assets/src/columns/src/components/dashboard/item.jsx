@@ -53,6 +53,7 @@ export default class DashboardItem extends React.Component {
   }
 
   getResults(data = this.props.payload.data) {
+    this.props.setResultState({ state: 3, entity: this.props.payload.id });
     return this.props.getResults(data, { entity: this.props.payload.id });
   }
 
@@ -97,5 +98,6 @@ DashboardItem.propTypes = {
   getResults: PropTypes.func,
   editColumn: PropTypes.func.isRequired,
   deleteColumn: PropTypes.func.isRequired,
+  setResultState: PropTypes.func,
   updateVisibility: PropTypes.func.isRequired
 };

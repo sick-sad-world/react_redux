@@ -17,7 +17,7 @@ import { arrayMove } from 'react-sortable-hoc';
 // ===========================================================================
 import DisplaySettings from 'src/display-settings';
 import { SingleColumnContainer, DashboardItem, sortColumns } from 'src/columns';
-import { ResultsContainer, FullResult, fetchResults } from 'src/results';
+import { ResultsContainer, FullResult, fetchResults, setResultState } from 'src/results';
 
 import PayloadList from '../components/list';
 import PayloadItem from '../components/item';
@@ -59,7 +59,14 @@ class Dashboard extends React.Component {
               <PayloadItem key={id} index={i} width={width}>
                 <SingleColumnContainer col_id={id} output='column' actions={['deleteColumn', 'editColumn', 'updateVisibility']}>
                   {({ column, deleteColumn, editColumn, updateVisibility }) => (
-                    <DashboardItem payload={column} deleteColumn={deleteColumn} editColumn={editColumn} updateVisibility={updateVisibility} getResults={this.props.fetchResults}>
+                    <DashboardItem
+                      payload={column}
+                      deleteColumn={deleteColumn}
+                      editColumn={editColumn}
+                      updateVisibility={updateVisibility}
+                      getResults={this.props.fetchResults}
+                      setResultState={this.props.setResultState}
+                    >
                       <ResultsContainer
                         id={column.id}
                         sort={column.data.sort}
@@ -96,6 +103,7 @@ Dashboard.propTypes = {
   col: PropTypes.number,
   fetchResults: PropTypes.func.isRequired,
   sortColumns: PropTypes.func.isRequired,
+  setResultState: PropTypes.func.isRequired,
   params: PropTypes.shape({
     name: PropTypes.string.isRequired
   }).isRequired,
@@ -112,4 +120,4 @@ Dashboard.propTypes = {
 // Connect our Container to State
 // @ deps -> Dashboards
 // ===========================================================================
-export default connect(makeContainerSelector, { sortColumns, fetchResults })(Dashboard);
+export default connect(makeContainerSelector, { sortColumns, fetchResults, setResultState })(Dashboard);

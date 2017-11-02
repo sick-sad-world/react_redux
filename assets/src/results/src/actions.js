@@ -3,6 +3,12 @@ import createAction from 'common/action-factory';
 import types from './types';
 import moment from 'moment';
 
+export const setResultState = ({ state, entity }) => dispatch => dispatch({
+  type: types.STATE,
+  state,
+  entity
+});
+
 export const clearResults = entity => dispatch => dispatch({
   type: types.DELETE,
   entity
@@ -16,31 +22,26 @@ export const resultError = (error, entity) => dispatch => dispatch({
 
 export const getResults = createAction({
   action: types.READ,
-  loading: types.STATE,
   call: 'links'
 });
 
 export const addResults = createAction({
   action: types.PUSH,
-  loading: types.STATE,
   call: 'links'
 });
 
 export const refreshResult = createAction({
   action: types.UPDATE,
-  loading: types.STATE,
   call: 'links'
 });
 
 export const ignoreResult = createAction({
   action: types.IGNORE,
-  loading: types.STATE,
   call: 'ignore'
 });
 
 export const favoriteResult = createAction({
   action: types.FAVORITE,
-  loading: types.STATE,
   call: 'favorite'
 });
 
@@ -96,7 +97,7 @@ export function getAllResults(data) {
           // ===========================================================================
           timeouts.push(setTimeout(() => {
             if (!get(getState(), 'user.id', false)) return endSequence();
-            return dispatch(getResults(column.data, { entity: column.id, silent: true }))
+            return dispatch(getResults(column.data, { entity: column.id }))
               .then((payload) => {
                 if (get(getState(), 'user.id', false)) {
                   count -= 1;

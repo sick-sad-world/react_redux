@@ -57,6 +57,10 @@
     @include result-actions($align: space-around);
   }
   &.is-placeholder {
-    
+    .image {
+      @include ph-bg();
+      width: $aside;
+      height: $aside;
+    }
   }
 }
