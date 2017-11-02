@@ -37,7 +37,7 @@ export default class DashboardItem extends React.Component {
   editColumn(value, changed) {
     const data = { ...this.props.payload.data, ...value };
     this.setState({ loading: 'editing' });
-    return this.props.editColumn({ id: this.props.payload.id, data })
+    return this.props.editColumn({ id: this.props.payload.id, data, display_settings: this.props.payload.display_settings })
       .then(resp => (changed === 'infinite' || changed === 'autoreload') ? resp : this.getResults(data))
       .catch(console.error)
       .then(this.toggleState('loading'));
