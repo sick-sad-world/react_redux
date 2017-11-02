@@ -11,10 +11,10 @@ export default function ResultStats({ payload, sort, className }) {
   const hotness = payload[`hotness_${sortProp}`];
   return (
     <ul className={className}>
-      <li className='raw'>{sortProp}: {formatNumber(payload[sort])}</li>
-      <li>Rate: {formatNumber(payload[`rate_${sortProp}`])}</li>
-      <li>MRate: {formatNumber(payload[`maxrate_${sortProp}`])}</li>
-      <li className='hotness'>
+      <li title={`${sortProp} - ${payload[sortProp]}`} className='raw'>{sortProp}: {formatNumber(payload[sort])}</li>
+      <li title={`Rate ${sortProp} - ${payload[`rate_${sortProp}`]}`}>Rate: {formatNumber(payload[`rate_${sortProp}`])}</li>
+      <li title={`MaxRate ${sortProp} - ${payload[`maxrate_${sortProp}`]}`}>MRate: {formatNumber(payload[`maxrate_${sortProp}`])}</li>
+      <li title={`Hotness ${sortProp} - ${hotness}`} className='hotness'>
         Hot:{ (hotness * 100).toFixed(2) }%
         <HotnessBar value={hotness} />
       </li>
