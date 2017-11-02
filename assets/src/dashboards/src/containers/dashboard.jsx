@@ -26,14 +26,14 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      payload: props.payload
+      payload: props.payload.column_ids
     };
     bindAll(this, 'closeModal', 'updateSortState');
     DisplaySettings.setHeightTesterWidth(props.width);
   }
 
   componentWillReceiveProps({ payload }) {
-    this.setState({ payload });
+    this.setState({ payload: payload.column_ids });
   }
 
   closeModal() {
@@ -55,7 +55,7 @@ class Dashboard extends React.Component {
       <section className='mod-dashboard' ref='root'>
         {(payload) ? (
           <PayloadList axis='x' lockAxis='x' helperClass='mod-column sortable-ghost' useDragHandle onSortEnd={this.updateSortState}>
-            {payload.column_ids.map((id, i) => (
+            {payload.map((id, i) => (
               <PayloadItem key={id} index={i} width={width}>
                 <SingleColumnContainer col_id={id} output='column' actions={['deleteColumn', 'editColumn', 'updateVisibility']}>
                   {({ column, deleteColumn, editColumn, updateVisibility }) => (
