@@ -34,7 +34,7 @@ function TweetDeckResult({ height, payload, location, sort, favoriteResult, igno
             <small>{moment(payload.found, foundFormat).fromNow()}</small>
           </time>
           <h1><a href={payload.url} target='_blank' >{payload.title}</a></h1>
-          <a href={payload.url} target='_blank' className='ellipsis'><small>{payload.domain}</small></a>
+          <a href={payload.url} target='_blank' className='t-ellipsis'><small>{payload.domain}</small></a>
         </header>
       </div>
       <footer>

@@ -20,7 +20,7 @@ export const predefined = [
     label: 'Gallery'
   },
   {
-    height: 300,
+    height: 90,
     value: 'short',
     label: 'Short one'
   }
