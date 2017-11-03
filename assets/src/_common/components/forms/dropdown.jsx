@@ -13,12 +13,10 @@ export default class Dropdown extends React.Component {
     this.state = {
       value: props.value
     };
-    bindAll(this, 'updateState', 'setValue');
-    this.setValueOnNewProps = conditionalRun(this, 'value', 'setValue');
-  }
-
-  setValue({ value }) {
-    this.setState({ value });
+    bindAll(this, 'updateState');
+    this.setValueOnNewProps = conditionalRun(this, 'value', ({ value }) => {
+      this.setState({ value });
+    });
   }
 
   componentWillReceiveProps(newProps) {

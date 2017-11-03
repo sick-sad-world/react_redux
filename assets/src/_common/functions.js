@@ -65,7 +65,7 @@ export const encodeUrlParams = params => (`?${Object.keys(params).map(prop => [p
 export function conditionalRun(cmp, prop, func) {
   const action = (typeof func === 'string') ? cmp[func] : func;
   return (newProps) => {
-    if (action instanceof Function && get(newProps, prop, null) === get(cmp.props, prop, null)) {
+    if (action instanceof Function && get(newProps, prop, null) !== get(cmp.props, prop, null)) {
       action(newProps);
     }
   };
