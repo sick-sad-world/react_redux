@@ -1,0 +1,73 @@
+.mod-result-gallery {
+  $bgc: rgba(0,0,0,.85);
+  $bdc: rgba(0,0,0,.35);
+  $z: 3;
+  $gap: baseUnit(4);
+  position: relative;
+  color: $c-alt;
+  .result-image {
+    @include pos(0 0 $gap 0);
+  }
+  header {
+    z-index: $z;
+    @include pos(auto 0 $gap 0);
+    background-color: $bgc;
+    padding: baseUnit(.5) baseUnit() 0;
+    border-top: 1px solid $bdc;
+  }
+  h1 {
+    font-size: 1em;
+    a {
+      color: inherit;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+  time {
+    margin-right: baseUnit();
+    svg {
+      fill: $c-alt;
+      width: baseUnit(1.875);
+      height: baseUnit(1.875);
+      vertical-align: -2px;
+      margin-right: baseUnit(.5);
+    }
+    small {
+      padding-left: baseUnit(.5);
+    }
+  }
+  small a {
+    color: lighten($c-accent, 20%);
+  }
+  .stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75em;
+    list-style: none;
+    padding: 0 0 0 baseUnit();
+    border-bottom: 1px solid $bdc;
+    background-color: $bgc;
+    position: relative;
+    z-index: $z;
+    .hotness {
+      position: relative;
+      z-index: 2;
+      padding: 0 baseUnit();
+      text-shadow: none;
+    }
+    .color-bar {
+      @include pos(2px 2px 2px 2px);
+    }
+  }
+  .actions {
+    @include pos(auto 0 baseUnit() 0);
+    @include result-actions($align: space-around);
+  }
+  &.is-placeholder {
+    .image {
+      @include ph-bg();
+      @include pos(0 0 $gap 0);
+    }
+  }
+}

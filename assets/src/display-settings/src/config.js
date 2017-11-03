@@ -15,7 +15,7 @@ export const predefined = [
     label: 'TweetDeck like'
   },
   {
-    height: 300,
+    height: 200,
     value: 'gallery',
     label: 'Gallery'
   },
