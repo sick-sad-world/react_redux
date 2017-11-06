@@ -1,50 +1,47 @@
 /* Authentification forms and welcome screen
 ========================================================================== */
 .mod-authentification {
-	$logo: 90px;
-	padding: baseUnit(5) 0 0 0;
+  @include gradient($c-main, to left);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center; 
 	color: $c-alt;
 	overflow-x: hidden;
 	overflow-y: auto;
 	a {
 		color: $c-alt;
 	}
-	form + form {
-		margin-top: baseUnit(2);
-	}
   .row, .row-flex {
     margin: baseUnit(2) auto;
   }
+  .tab-list {
+    border-bottom: 2px solid $c-alt;
+    margin-bottom: baseUnit(4);
+  }
 	.auth-forms {
-		flex: 0 0 map-get($layout, auth);
-		margin: 0 baseUnit(2);
-		order: 1;
-		padding-top: $logo + baseUnit() + ($display2-font-size - $heading-font-size);
+    $c: 3;
+		width: map-get($layout, auth) + baseUnit($c * 2);
+    position: relative;
+    padding: baseUnit($c);
+    top: 25%;
+    background: rgba(#000, .25);
     h3 {
       line-height: $display2-font-size;
     }
 	}
-	.welcome-text {
-		flex: 0 1 55%;
-		margin: 0 baseUnit(2);
-		order: 2;
-	}
 	.logotype {
 		margin: 0 0 baseUnit(2) 0;
-		height: $logo;
 	}
-	.copyright {
-		display: block;
-		text-align: center;
-  }
   .login {
     .button {
+      flex: 0 0 25%;
       width: 25%;
     }
   }
   .register {
     .button {
-      width: 38%;
+      width: 100%;
     }
   }
 }

@@ -1,7 +1,6 @@
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
-import { CSSTransitionGroup } from 'react-transition-group';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeAppSelector } from '../selectors';

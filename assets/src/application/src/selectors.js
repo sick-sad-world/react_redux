@@ -1,15 +1,9 @@
-import createSelector from 'common/selector-factory';
+import { commonSelector } from 'common/selector-factory';
+import { getUserAuth } from 'src/user';
 
 const getAppState = ({ app }) => app.state;
 const getAppError = ({ app }) => app.error;
 
-export function makeAppSelector() {
-  const selector = createSelector(
-  getAppState,
-  getAppError,
-  (state, error) => ({
-    state, error
-  }));
+export const makeAppSelector = commonSelector({ state: getAppState, error: getAppError });
 
-  return (state, props) => selector(state, props);
-}
+export const makeAuthSelector = commonSelector({ auth: getUserAuth, state: getAppState });

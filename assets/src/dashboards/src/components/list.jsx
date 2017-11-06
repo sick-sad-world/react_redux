@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 export function PayloadList({ children, emptyTpl, ...props }) {
   return (
     <div {...props}>
-      {(children.length) ? children : this.props.emptyTpl}
+      {(children.length) ? children : emptyTpl}
     </div>
   );
 }

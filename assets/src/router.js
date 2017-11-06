@@ -1,9 +1,9 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router';
+import { Route } from 'react-router';
 
 // Import Containers
 // ===========================================================================
-import { App, Auth } from './application';
+import { Route as Auth, App } from './application';
 import { Route as Dashboard } from './dashboards';
 import { Route as Columns } from './columns';
 import { Route as Sets } from './sets';
@@ -13,7 +13,7 @@ import { Route as User, Workspace } from './user';
 
 export default (
   <Route components={App}>
-    <Route path='/auth' component={Auth} />
+    {Auth}
     <Route path='/' component={Workspace}>
       {Columns}
       {Sets}

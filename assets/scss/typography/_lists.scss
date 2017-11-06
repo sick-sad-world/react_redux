@@ -40,6 +40,23 @@ ol ol {
   list-style-type: upper-alpha;
 }
 
+.tab-list {
+  display: flex;
+  a:hover, a:focus {
+    text-decoration: none;
+  }
+  > * {
+    flex: 1 1 auto;
+    text-align: center;
+    line-height: $base-line-height * 1.5;
+    border-bottom: 4px solid transparent;
+    margin-bottom: -3px;
+    &.is-current {
+      border-bottom-color: $c-accent-alt;
+    }
+  }
+}
+
 .tag-list {
 	list-style: none;
 	padding: 0;

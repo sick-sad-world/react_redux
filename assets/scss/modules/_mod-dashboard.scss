@@ -10,4 +10,24 @@
     display: flex;
     overflow: auto;
   }
+  .dashboard-empty {
+    $g: baseUnit();
+    $bgc: lighten(map-get($states, info), 20%);
+    @include pos($g);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(ellipse at center, rgba($bgc,.0) 50%,rgba($bgc, 0.2) 100%);
+    border: 2px solid $bgc;
+    svg{
+      margin: 0 0 baseUnit(2) 0;
+      width: 30%;
+      height: 30%;
+    }
+    span {
+      font-size: 1.5em;
+      text-align: center;
+    }
+  }
 }

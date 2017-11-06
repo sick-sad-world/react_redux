@@ -2,6 +2,8 @@ import createSelector from 'common/selector-factory';
 
 const getUserData = ({ user }) => user;
 
+export const getUserAuth = ({ user }) => !!user.id;
+
 export function makeWorkspaceSelector() {
   const selector = createSelector(
     getUserData,

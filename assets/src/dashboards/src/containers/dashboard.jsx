@@ -1,4 +1,4 @@
-import { bindAll } from 'lodash';
+import { bindAll, get } from 'lodash';
 import scrollbarSize from 'dom-helpers/util/scrollbarSize';
 
 // Import React related stuff
@@ -15,6 +15,7 @@ import { arrayMove } from 'react-sortable-hoc';
 
 // Import child Components
 // ===========================================================================
+import Icon from 'common/components/icon';
 import DisplaySettings from 'src/display-settings';
 import { SingleColumnContainer, DashboardItem, sortColumns } from 'src/columns';
 import { ResultsContainer, FullResult, fetchResults, setResultState } from 'src/results';
@@ -26,7 +27,7 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      payload: props.payload.column_ids
+      payload: get(props, 'payload.column_ids', [])
     };
     bindAll(this, 'closeModal', 'updateSortState');
     DisplaySettings.setHeightTesterWidth(props.width);
@@ -53,7 +54,7 @@ class Dashboard extends React.Component {
     const { payload } = this.state;
     return (
       <section className='mod-dashboard' ref='root'>
-        {(payload) ? (
+        {(this.props.payload) ? (
           <PayloadList axis='x' lockAxis='x' helperClass='mod-column sortable-ghost' useDragHandle onSortEnd={this.updateSortState}>
             {payload.map((id, i) => (
               <PayloadItem key={id} index={i} width={width}>
@@ -93,7 +94,12 @@ class Dashboard extends React.Component {
 Dashboard.defaultProps = {
   width: colWidth,
   scrollBar: scrollbarSize(),
-  emptyTpl: <div className='state-empty'>Oups... Dashboard not found</div>
+  emptyTpl: (
+    <div className='dashboard-empty state-empty'>
+      <Icon icon='cone' />
+      <span>Oups... Dashboard not found</span>
+    </div>
+  )
 };
 
 Dashboard.propTypes = {

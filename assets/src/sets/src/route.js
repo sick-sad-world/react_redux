@@ -6,7 +6,7 @@ import CreateFeed from 'src/feeds';
 export default (
   <Route path='/sets' component={Container} label='Sourcesets' icon='globe'>
     <Route path=':id' component={Container}>
-      <Route path=':create' component={CreateFeed} />
+      {CreateFeed && <Route path=':create' component={CreateFeed} />}
     </Route>
   </Route>
 );

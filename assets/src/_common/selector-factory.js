@@ -1,7 +1,14 @@
-import { createSelectorCreator, defaultMemoize } from 'reselect';
+import { createSelectorCreator, defaultMemoize, createStructuredSelector } from 'reselect';
 import { isEqual, get, every, transform, includes } from 'lodash';
 
-export default createSelectorCreator(defaultMemoize, isEqual);
+const selectorCreator = createSelectorCreator(defaultMemoize, isEqual);
+
+export default selectorCreator;
+
+export function commonSelector(selectors) {
+  const selector = createStructuredSelector(selectors, selectorCreator);
+  return () => (state, props) => selector(state, props);
+}
 
 export const getCriterea = (defaults = {}) => (state, props) => get(props, 'criterea', defaults);
 
