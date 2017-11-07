@@ -14,6 +14,7 @@ import { makeWorkspaceSelector } from '../selectors';
 // Import actions
 // ===========================================================================
 import { logout } from '../actions';
+import { path } from 'src/application';
 
 // Import Child components
 // ===========================================================================
@@ -40,9 +41,7 @@ class Workspace extends React.Component {
 
   redirectHandler(props) {
     if (!props.user.id) {
-      this.props.router.replace('/auth');
-    } else if (props.user.id && props.location.pathname === '/') {
-      this.props.router.replace('/dashboard');
+      this.props.router.replace({ path });
     }
   }
 

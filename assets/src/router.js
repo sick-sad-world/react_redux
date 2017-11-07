@@ -1,10 +1,10 @@
 import React from 'react';
-import { Route } from 'react-router';
+import { Route, Redirect } from 'react-router';
 
 // Import Containers
 // ===========================================================================
 import { Route as Auth, App } from './application';
-import { Route as Dashboard } from './dashboards';
+import { Route as Dashboard, path } from './dashboards';
 import { Route as Columns } from './columns';
 import { Route as Sets } from './sets';
 import { Route as Alerts } from './alerts';
@@ -21,6 +21,7 @@ export default (
       {Reports}
       {User}
       {Dashboard}
+      <Redirect omit from='*' to={path}/>
     </Route>
   </Route>
 );

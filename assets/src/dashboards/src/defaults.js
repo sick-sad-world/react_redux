@@ -8,7 +8,7 @@ export const defDashboard = {
   column_ids: []
 };
 
-export const path = '/d';
+export const path = '/dashboards';
 
 export const width = 320;
 

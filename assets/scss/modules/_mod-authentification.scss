@@ -1,7 +1,8 @@
 /* Authentification forms and welcome screen
 ========================================================================== */
 .mod-authentification {
-  @include gradient($c-main, to bottom);
+  background: url('../img/bg.png') center center no-repeat;
+  background-size: cover;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -11,7 +12,11 @@
 	overflow-y: auto;
 	a {
 		color: $c-alt;
-	}
+  }
+  small {
+    display: block;
+    margin-top: baseUnit(4);
+  }
   .row, .row-flex {
     margin: baseUnit(2) auto;
   }
@@ -21,11 +26,13 @@
   }
 	.auth-forms {
     $c: 3;
-		width: map-get($layout, auth) + baseUnit($c * 2);
+		width: map-get($layout, auth) + baseUnit($c * 4);
     position: relative;
-    padding: baseUnit($c);
+    padding: baseUnit($c) baseUnit($c * 2);
     top: 25%;
-    background: rgba(#000, .25);
+    background: rgba(#000, .4);
+    border: 1px solid rgba(#000,.5);
+    box-shadow: 0 0 0 1px rgba($c-alt,.15);
     h3 {
       line-height: $display2-font-size;
     }

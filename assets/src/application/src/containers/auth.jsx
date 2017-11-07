@@ -44,6 +44,7 @@ class Auth extends React.Component {
             <Link to='/register' activeClassName='is-current'>Register</Link>
           </nav>
           {children}
+          <small className='t-center'>&copy; 2015 - Lead Stories all rights reserved.</small>
         </div>
       </section>
     );
