@@ -41,7 +41,8 @@ class Workspace extends React.Component {
 
   redirectHandler(props) {
     if (!props.user.id) {
-      this.props.router.replace({ path });
+      console.log(path);
+      this.props.router.replace(path);
     }
   }
 
