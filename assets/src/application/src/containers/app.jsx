@@ -1,3 +1,5 @@
+import { bindAll } from 'lodash';
+
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
@@ -18,11 +20,26 @@ import { initialLoading, clientError } from '../actions';
 // It renders app if state > 1 or Progressbar if not
 // ===========================================================================
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.load = 0;
+    bindAll(this, 'loadStep');
+  }
+
+  loadStep() {
+    this.load += 1;
+    if (this.load === 2) {
+      document.body.removeAttribute('class');
+      window.removeEventListener('load', this.loadStep);
+    }
+  }
 
   componentWillMount() {
     window.onerror = this.props.clientError;
-    this.props.initialLoading();
+    window.addEventListener('load', this.loadStep);
+    this.props.initialLoading().catch(console.error).then(this.loadStep);
   }
+
 
   render() {
     const { error, children, state } = this.props;
@@ -30,17 +47,6 @@ class App extends React.Component {
       <div>
         { (error) ? <span className='overlay'><ClientError error={error} /></span> : null }
         {(state > 1) ? children : null}
-        {/* {(state === 2) ? (
-          <CSSTransitionGroup
-            transitionName='fadeInOut'
-            transitionAppear={true}
-            transitionAppearTimeout={350}
-            transitionEnterTimeout={350}
-            transitionLeaveTimeout={350}
-          >
-          {(children) ? React.cloneElement(children, { key: location.pathname }) : null}
-          </CSSTransitionGroup>
-        ) : null} */}
         <Notifications/>
       </div>
     );

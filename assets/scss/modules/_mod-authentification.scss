@@ -1,15 +1,30 @@
 /* Authentification forms and welcome screen
 ========================================================================== */
 .mod-authentification {
-  background: url('../img/bg.png') center center no-repeat;
-  background-size: cover;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center; 
 	color: $c-alt;
-	overflow-x: hidden;
-	overflow-y: auto;
+	overflow: hidden;
+  &:after {
+    $gap: 10%;
+    content: '';
+    display: block;
+    position: absolute;
+    top: -$gap;
+    left: -$gap;
+    width: 100% + ($gap * 2);
+    height: 100% + ($gap * 2);
+    background: url('../img/bg.png') center center no-repeat;
+    background-size: cover;
+    transition: filter 1.5s ease-out;
+    filter: blur(2px);
+    z-index: -1;
+    .app-loading & {
+      filter: blur(10px);
+    }
+  }
 	a {
 		color: $c-alt;
   }

@@ -1,6 +1,6 @@
 /* Layout
 ========================================================================== */
-html, body, body section[class^="screen"] {
+html, body, section[class^="screen"] {
 	@include pos();
 	width: 100%;
 	height: 100%;
@@ -8,12 +8,43 @@ html, body, body section[class^="screen"] {
 }
 
 body {
-	display: flex;
+  display: flex;
+  background-color: $c-main;
+  > .loading {
+    $s: baseUnit(6);
+    @include pos();
+    margin: auto;
+    width: 600px;
+    height: $s;
+    line-height: $s;
+    font-size: $s;
+    text-align: center;
+    color: rgba($c-alt, .35);
+    transition: opacity 0.3s;
+    opacity: 0;
+    &:after {
+      content: '|';
+      animation: fadeIn 0.8s ease 0s infinite alternate;
+      vertical-align: 4px;
+    }
+  }
+  > div {
+    transition: opacity 0.3s;
+    opacity: 1;
+  }
+  &.app-loading {
+    > .loading {
+      opacity: 1;
+    }
+    > div {
+      opacity: 0;
+    }
+  }
 }
 
 section[class^="screen"] {
-	display: flex;
-	z-index: 2;
+  display: flex;
+  z-index: 2;
 }
 
 .overlay {
