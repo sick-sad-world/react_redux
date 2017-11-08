@@ -33,8 +33,8 @@ class Dashboard extends React.Component {
     DisplaySettings.setHeightTesterWidth(props.width);
   }
 
-  componentWillReceiveProps({ payload }) {
-    this.setState({ payload: payload.column_ids });
+  componentWillReceiveProps(newProps) {
+    this.setState({ payload: get(newProps, 'payload.column_ids', []) });
   }
 
   closeModal() {

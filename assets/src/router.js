@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router';
+import { Route, Redirect, IndexRedirect } from 'react-router';
 
 // Import Containers
 // ===========================================================================
@@ -21,6 +21,7 @@ export default (
       {Reports}
       {User}
       {Dashboard}
+      <IndexRedirect omit to={path}/>
       <Redirect omit from='*' to={path}/>
     </Route>
   </Route>
