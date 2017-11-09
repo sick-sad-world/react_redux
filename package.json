@@ -89,8 +89,7 @@
     "recharts": "^1.0.0-alpha.0",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
-    "reselect": "^2.5.4",
-    "rxjs": "^5.4.1"
+    "reselect": "^2.5.4"
   },
   "devDependencies": {
     "aliasify": "^2.1.0",
