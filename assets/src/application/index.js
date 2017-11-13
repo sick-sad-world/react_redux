@@ -1,9 +1,8 @@
-import reducer from './src/reducer';
+import reducer from './src/service';
 import App from './src/containers/app';
 import Route from './src/routes';
 
 
-export * from './src/actions';
 export * from './src/middlewares';
 export { path } from './src/defaults';
 export { reducer };
