@@ -14,7 +14,7 @@ import { reducer as notifications, notification } from 'src/notifications';
 import { reducer as app, clientError } from 'src/application';
 import { reducer as user, fixMissingEmailBcc } from 'src/user';
 import { reducer as graphs, mapGraphData } from 'src/graphs';
-import { reducer as sets, updateUniq, clearFeeds } from 'src/sets';
+import { reducer as sets, clearFeeds } from 'src/sets';
 import { reducer as feeds } from 'src/feeds';
 import { reducer as alerts, processAlert, editAlert } from 'src/alerts';
 import { reducer as reports, processReport, editReport } from 'src/reports';
@@ -49,7 +49,6 @@ export default createStore(
     fixMissingEmailBcc(state => (state.reports), 'recipient', editReport),
     fixMissingEmailBcc(state => (state.alerts), 'recipient', editAlert),
     ensureDashboardUrl,
-    // updateUniq,
     clearFeeds,
     numerizeTabularData,
     splitResultText,
