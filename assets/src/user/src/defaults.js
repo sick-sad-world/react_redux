@@ -1,20 +1,17 @@
 import PropTypes from 'prop-types';
-import { numBool, imageUrl } from 'common/typecheck';
+import { numBool } from 'common/typecheck';
 // import UserImg from 'img/ph_user.png';
 
 export const defaultData = {
-  state: 1,
-  payload: {
-    id: 0,
-    email: 'some@gmail.com',
-    email_bcc: [],
-    name: '',
-    fullname: '',
-    position: '',
-    status: '',
-    is_admin: 0,
-    image: '/img/ph_user.png'
-  }
+  id: 0,
+  email: 'some@gmail.com',
+  email_bcc: [],
+  name: '',
+  fullname: '',
+  position: '',
+  status: '',
+  is_admin: 0,
+  image: '/img/ph_user.png'
 };
 
 export const defaultInterface = {

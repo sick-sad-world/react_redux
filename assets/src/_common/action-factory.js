@@ -1,43 +1,32 @@
-import { omit } from 'lodash';
 import fetch from '../communication';
 
 export default function createAction({ call, action }) {
-  return (data, options) => (dispatch, getState, { notification, clientError }) => {
+  return (data, options) => async (dispatch, getState, { notification, clientError }) => {
     const { entity, ...opts } = options || {};
 
-    // Run actual call
-    // ===========================================================================
-    return (typeof call === 'string' ? fetch(call, data, opts) : call(data, opts))
+    try {
+      const result = await (typeof call === 'string' ? fetch(call, data, opts) : call(data, opts));
 
-      // Filter data from server messages, or errors
-      // ===========================================================================
-      .then((payload) => {
-        if (typeof payload.error === 'string') {
-          throw { error: payload.error };
-        } else {
-          return (Array.isArray(payload)) ? payload : omit(payload, 'message', 'success', 'error');
-        }
-      })
-      // Dispatch actual action with data provided
-      // ===========================================================================
-      .then(payload => dispatch({ type: action, payload, entity }))
-      // Handle error and pass in chain
-      // ===========================================================================
-      .catch((error) => {
-        if (error instanceof Error && clientError) {
-          // Dispatch global app Error
-          // ===========================================================================
-          dispatch(clientError(error));
-        } else if (error && notification && !opts.silent) {
-          // Dispatch error notification
-          // ===========================================================================
-          dispatch(notification({
-            id: Date.now(),
-            type: 'error',
-            text: (error.event) ? `Network error: ${error.url}` : error.error
-          }));
-        }
-        throw error;
-      });
+      result.success = undefined;
+      result.message = undefined;
+      if (result.error) throw { error: result.error };
+      return dispatch({ type: action, payload: result, entity });
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error && clientError) {
+        // Dispatch global app Error
+        // ===========================================================================
+        return dispatch(clientError(error));
+      } else if (error && notification && !opts.silent) {
+        // Dispatch error notification
+        // ===========================================================================
+        return dispatch(notification({
+          id: Date.now(),
+          type: 'error',
+          text: (error.event) ? `Network error: ${error.url}` : error.error
+        }));
+      }
+      throw error;
+    }
   };
 }

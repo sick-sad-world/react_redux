@@ -1,4 +1,5 @@
 // import 'style-loader!css-loader!react-virtualized/styles.css';
+import 'babel-polyfill';
 
 // Import packages
 // ===========================================================================
