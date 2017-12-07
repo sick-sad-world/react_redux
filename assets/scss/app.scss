@@ -2,10 +2,16 @@
 // ======================================================================
 $debug-browser-support: false;
 $MAIN-UNIT: 8px;
+
+// Function to get BASEUNIT related values
+// ===================================================================================
+@function u($s: 1) {
+  @return round($MAIN-UNIT * $s);
+}
+
 // Import all necessary files
 
 // In general i suggest separate file for each mixin wich named same as mixin. If you make your own - describe what it does in a beginning of file NOTE: USE SASS COMMETS WICH WILL NOT BE COMPILED
-@import "mixins/_unit.scss"; // Function for generating BASE-UNIT related values see "base/base.scss:11;12"
 @import "mixins/_baseline.scss"; // Compass @baseline mixin override
 @import "mixins/_ellipsis.scss"; // Ellipsis turncrate
 @import "mixins/_hide-text.scss"; // Hide all text

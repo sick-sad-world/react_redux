@@ -2,7 +2,7 @@
  * @includes pageList, editForm, Assigment
 ========================================================================== */
 .mod-page {
-  padding-left: baseUnit();
+  padding-left: u();
   display: flex;
   align-items: stretch;
   section[class*="mod-subsection-"] {
@@ -11,7 +11,7 @@
 		flex-direction: column;
     border: $bd;
     background-color: #fdfdfd;
-    margin: baseUnit() baseUnit() baseUnit() 0;
+    margin: u() u() u() 0;
     .subsection-header {
 			flex: 0 0 auto;
 			position: relative;
@@ -33,11 +33,11 @@
     position: relative;
     .subsection-header {
       form {
-        margin-top: baseUnit();
+        margin-top: u();
         display: flex;
       }
       button {
-        margin-left: baseUnit();
+        margin-left: u();
       }
     }
     .delete-confirmation {

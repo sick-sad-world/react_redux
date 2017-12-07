@@ -71,10 +71,10 @@ ol ol {
       max-width: 33%;
 			background-color: $c-element;
 			border-radius: $bdrs;
-			padding: 0 baseUnit();
+			padding: 0 u();
 			border: $bd;
 			font-size: 0.875em;
-			margin: 0 baseUnit(0.5) baseUnit(0.5) 0;
+			margin: 0 u(0.5) u(0.5) 0;
 			box-shadow: 0;
 			transition: box-shadow $dur;
 			cursor: pointer;
@@ -85,11 +85,11 @@ ol ol {
 		svg {
 			cursor: pointer;
 			display: inline-block;
-			margin-right: -(baseUnit());
+			margin-right: -(u());
 			vertical-align: top;
 			width: $size - 2px;
 			height: $size - 2px;
-			padding: baseUnit(0.5);
+			padding: u(0.5);
 			fill: $c-border;
 			&:hover {
 				fill: darken($c-border, 10%);
@@ -140,7 +140,7 @@ ol ol {
 			font-style: italic;
 			img, svg {
 				display: block;
-				margin: 0 auto baseUnit(2);
+				margin: 0 auto u(2);
 				width: 100px;
 				height: 100px;
 			}
@@ -164,8 +164,8 @@ ol ol {
 	}
 	li:before {
 		content: '>';
-		margin-left: baseUnit(-2);
-		margin-right: baseUnit();
+		margin-left: u(-2);
+		margin-right: u();
 	}
 	a:hover, a:focus {
 		text-decoration: none;

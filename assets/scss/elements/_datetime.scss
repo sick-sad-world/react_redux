@@ -94,8 +94,8 @@
     &:before {
       content: '';
       display: inline-block;
-      border-left: baseUnit() solid transparent;
-      border-bottom: baseUnit() solid $c-accent;
+      border-left: u() solid transparent;
+      border-bottom: u() solid $c-accent;
       border-top-color: rgba(0, 0, 0, 0.2);
       position: absolute;
       bottom: 4px;
@@ -151,7 +151,7 @@
   // =======================================================================
   .rdtMilli {
     vertical-align: middle;
-    padding-left: baseUnit();
+    padding-left: u();
     width: $entity-unit;
     input {
       width: 100%;

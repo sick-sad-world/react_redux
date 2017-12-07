@@ -60,8 +60,6 @@ export function decodeHtml() {
   };
 }
 
-export const encodeUrlParams = params => (`?${Object.keys(params).map(prop => [prop, params[prop]].map(encodeURIComponent).join('=')).join('&')}`);
-
 export function conditionalRun(cmp, prop, func) {
   const action = (typeof func === 'string') ? cmp[func] : func;
   return (newProps) => {

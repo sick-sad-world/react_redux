@@ -131,10 +131,10 @@ span.switcher-direction {
 		font-size: 0.875em;
 		//transition: color $dur ease;
 		&:before {
-			margin-right: baseUnit();
+			margin-right: u();
 		}
 		&:after {
-			margin-left: baseUnit();
+			margin-left: u();
 		}
 	}
 	input:checked + label {

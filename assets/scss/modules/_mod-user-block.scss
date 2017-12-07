@@ -2,13 +2,16 @@
 ========================================================================== */
 .mod-user-block {
 	font-size: 1em;
+  display: flex;
+  align-items: flex-start;
 	div {
-		margin: baseUnit() 0;
+		margin: 0 u();
 		line-height: 1;
 		//transition: opacity $dur;
 	}
 	img {
-		margin: 0 auto;
+    flex: 0 1 u(4);
+    max-width: u(4);
 	}
 	h2 {
 		font-size: 1.2em;

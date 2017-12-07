@@ -43,16 +43,16 @@ h6, .t-caption {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: baseUnit();
+	padding: u();
 	border-bottom: $bd;
 	height: $entity-unit + 1px;
 	span {
-		$s: $entity-unit - baseUnit();
+		$s: $entity-unit - u();
 		flex: 0 0 ($s + 1);
-		margin-right: baseUnit(-1);
+		margin-right: u(-1);
 		text-align: center;
-		font-size: baseUnit(2.5);
-		line-height: $s - baseUnit();
+		font-size: u(2.5);
+		line-height: $s - u();
 		border-left: $bd;
 	}
 }
@@ -63,8 +63,8 @@ h6, .t-caption {
 	display: block;
   width: 100%;
 	line-height: 1;
-	margin-bottom: baseUnit(0.5);
-	padding-bottom: baseUnit();
+	margin-bottom: u(0.5);
+	padding-bottom: u();
 	border-bottom: $bd;
 	font-size: $subhead1-font-size;
 }
@@ -90,7 +90,7 @@ h6, .t-caption {
 	}
   > a {
     display: flex;
-    flex: 0 0 baseUnit(3);
+    flex: 0 0 u(3);
   }
 	.nav {
 		flex: 0 0 $form-unit;
@@ -98,7 +98,7 @@ h6, .t-caption {
 	}
 	.text {
 		flex: 0 1 100%;
-		padding: baseUnit();
+		padding: u();
     position: relative;
     z-index: 1;
 	}
@@ -107,7 +107,7 @@ h6, .t-caption {
 .edit-confirmation {
   background-color: lighten($c-accent-alt, 30%);
   box-shadow: inset 0 2px 8px rgba(darken($c-accent-alt, 40%),.2);
-  padding: baseUnit();
+  padding: u();
   border-bottom: $bd;
   display: flex;
   align-items: center;
@@ -119,7 +119,7 @@ h6, .t-caption {
     flex: 0 0 auto;
   }
   a, button {
-    margin-left: baseUnit();
+    margin-left: u();
     width: 80px;
   }
 }

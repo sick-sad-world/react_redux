@@ -9,22 +9,22 @@
 		select[name="sort_param"],
 		select[name="sort_param"]+.chosen-container {
 			flex: 1 1 auto;
-			margin: 0 baseUnit(0.5);
+			margin: 0 u(0.5);
 		}
 	}
   table {
     label {
-      text-indent: baseUnit();
+      text-indent: u();
       text-transform: capitalize;
     }
     .switcher-checkbox {
-      margin-right: baseUnit();
+      margin-right: u();
     }
   }
   .adv-filters {
     fieldset {
       .row-flex {
-        margin-bottom: baseUnit();
+        margin-bottom: u();
         >*:not(.button) {
           flex-grow: 1;
           flex-shrink: 1;
@@ -42,21 +42,21 @@
     }
     li {
       flex: 0 0 33%;
-      margin: 0 0 baseUnit();
+      margin: 0 0 u();
     }
   }
   .brief-list-container {
     clear: both;
     display: flex;
-    margin-bottom: baseUnit();
+    margin-bottom: u();
   }
   .brief-list {
     flex: 0 0 50%;
     padding: 0;
     list-style: none;
-    padding-right: baseUnit(.5);
+    padding-right: u(.5);
     +.brief-list {
-      padding-left: baseUnit(.5);
+      padding-left: u(.5);
       padding-right: 0;
     }
     h4 {
@@ -87,7 +87,7 @@
       display: inline-block;
       vertical-align: top;
       &:not(:last-child) {
-        margin-right: baseUnit(2);
+        margin-right: u(2);
       }
     }
   }

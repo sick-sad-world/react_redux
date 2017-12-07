@@ -4,13 +4,13 @@
     display: block;
     border: 1px solid $c;
     background-color: lighten($c, 20%);
-    padding: baseUnit();
+    padding: u();
     border-radius: 2px;
     svg {
       width: 24px;
       height: 24px;
       fill: $c;
-      margin-right: baseUnit();
+      margin-right: u();
       vertical-align: -5px;
     }
   }

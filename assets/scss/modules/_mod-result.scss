@@ -1,8 +1,8 @@
 /* Result - main item on main dashboard result
 ========================================================================== */
 .mod-result {
-  line-height: baseUnit(2.25);
-  font-size: baseUnit(2);
+  line-height: u(2.25);
+  font-size: u(2);
   aside {
     @include result-actions();
   }
@@ -24,7 +24,7 @@
   small {
     display: flex;
     justify-content: space-between;
-    line-height: baseUnit(3);
+    line-height: u(3);
   }
   h1 {
     max-height: 63px;
@@ -32,7 +32,7 @@
     line-height: 1.125;
     overflow: hidden;
     color: darken($c-accent, 10%);
-    //margin-bottom: baseUnit(.5);
+    //margin-bottom: u(.5);
     border-bottom: $bd;
   }
   .text {
@@ -53,7 +53,7 @@
       }
       &:not(.is-wide)+.content {
         flex-grow: 0;
-        padding-left: baseUnit(.5);
+        padding-left: u(.5);
       }
     }
   }
@@ -66,7 +66,7 @@
   }
   &.is-placeholder {
     small {
-      margin: baseUnit() 0 0 0;
+      margin: u() 0 0 0;
       .line.very-short {
         margin: 0;
       }

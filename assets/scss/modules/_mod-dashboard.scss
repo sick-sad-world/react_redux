@@ -1,7 +1,7 @@
 /* Dashboard module - main screen of an app
 ========================================================================== */
 .mod-dashboard {
-  //padding: baseUnit(0.5) 0 0 0;
+  background-color: darken($c-alt, 10%);
 	overflow: hidden;
   display: block;
   .list-container {
@@ -11,7 +11,7 @@
     overflow: auto;
   }
   .dashboard-empty {
-    $g: baseUnit();
+    $g: u();
     $bgc: lighten(map-get($states, info), 20%);
     @include pos($g);
     display: flex;
@@ -21,7 +21,7 @@
     background: radial-gradient(ellipse at center, rgba($bgc,.0) 50%,rgba($bgc, 0.2) 100%);
     border: 2px solid $bgc;
     svg{
-      margin: 0 0 baseUnit(2) 0;
+      margin: 0 0 u(2) 0;
       width: 30%;
       height: 30%;
     }

@@ -13,7 +13,7 @@
   .mod-submanagement {
     flex: 1 0 100%;
     min-height: 60vh;
-    margin: 0 baseUnit(-1) baseUnit(-1);
+    margin: 0 u(-1) u(-1);
     border-top: $bd;
     .list > .entity-list {
       min-height: 60vh;

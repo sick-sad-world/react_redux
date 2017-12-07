@@ -9,7 +9,7 @@
 	}
 	.input-area {
 		flex: 0 0 40%;
-		padding: baseUnit() baseUnit(2);
+		padding: u() u(2);
 		border-right: $bd;
 		overflow-y: auto;
 		overflow-x: hidden;
@@ -30,7 +30,7 @@
 			flex: 0 0 $entity-unit;
 			line-height: 1;
 			margin: 0;
-			padding: baseUnit();
+			padding: u();
 			border-bottom: $bd;
 		}
   }

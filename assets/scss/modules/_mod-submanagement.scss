@@ -5,14 +5,14 @@ reports and feeds in columns
 	display: flex;
 	justify-content: stretch;
 	.header {
-		padding: 0 baseUnit();
-		height: baseUnit()*2 + $form-unit;
+		padding: 0 u();
+		height: u()*2 + $form-unit;
 		border-bottom: $bd;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
     > input {
-      margin-right: baseUnit();
+      margin-right: u();
       flex: 0 0 50%;
     }
     > .Select, > select {

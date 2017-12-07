@@ -3,7 +3,7 @@
 
 %textlike-base {
 	width: 100%;
-	padding: 0 baseUnit();
+	padding: 0 u();
   @include form-element();
   @include placeholder () {
     @include form-pholder();

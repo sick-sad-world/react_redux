@@ -2,7 +2,7 @@
   $bgc: rgba(0,0,0,.85);
   $bdc: rgba(0,0,0,.35);
   $z: 3;
-  $gap: baseUnit(4);
+  $gap: u(4);
   position: relative;
   color: $c-alt;
   .result-image {
@@ -12,7 +12,7 @@
     z-index: $z;
     @include pos(auto 0 $gap 0);
     background-color: $bgc;
-    padding: baseUnit(.5) baseUnit() 0;
+    padding: u(.5) u() 0;
     border-top: 1px solid $bdc;
   }
   h1 {
@@ -25,16 +25,16 @@
     }
   }
   time {
-    margin-right: baseUnit();
+    margin-right: u();
     svg {
       fill: $c-alt;
-      width: baseUnit(1.875);
-      height: baseUnit(1.875);
+      width: u(1.875);
+      height: u(1.875);
       vertical-align: -2px;
-      margin-right: baseUnit(.5);
+      margin-right: u(.5);
     }
     small {
-      padding-left: baseUnit(.5);
+      padding-left: u(.5);
     }
   }
   small a {
@@ -45,7 +45,7 @@
     justify-content: space-between;
     font-size: 0.75em;
     list-style: none;
-    padding: 0 0 0 baseUnit();
+    padding: 0 0 0 u();
     border-bottom: 1px solid $bdc;
     background-color: $bgc;
     position: relative;
@@ -53,7 +53,7 @@
     .hotness {
       position: relative;
       z-index: 2;
-      padding: 0 baseUnit();
+      padding: 0 u();
       text-shadow: none;
     }
     .color-bar {
@@ -61,7 +61,7 @@
     }
   }
   .actions {
-    @include pos(auto 0 baseUnit() 0);
+    @include pos(auto 0 u() 0);
     @include result-actions($align: space-around);
   }
   &.is-placeholder {

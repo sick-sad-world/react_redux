@@ -12,8 +12,8 @@ $rhythm-unit: "px"; //rem
 $rem-with-px-fallback: false;
 // Typographic sizes variables ===========================================
 // =======================================================================
-$base-font-size: baseUnit(2); //16px;
-$base-line-height: baseUnit(3); //24px;
+$base-font-size: u(2); //16px;
+$base-line-height: u(3); //24px;
 $display2-font-size: 2.5 * $base-font-size;
 $display1-font-size: 2 * $base-font-size;
 $heading-font-size: 1.75 * $base-font-size;
@@ -35,10 +35,10 @@ $layout: (
 	popup: 480px
 );
 $sizes: 40 60 90 120 180 240 320 380;
-$icon-unit: baseUnit(2);
-$pointer-unit: baseUnit(3);
-$form-unit: baseUnit(4);
-$entity-unit: baseUnit(6);
+$icon-unit: u(2);
+$pointer-unit: u(3);
+$form-unit: u(4);
+$entity-unit: u(6);
 
 // Colors ================================================================
 // =======================================================================
@@ -64,7 +64,7 @@ $app-active: 'is-current';
 $sh-popup: 0 5px 10px rgba(0,0,0,.45);
 $sh-text: 0 1px 0px rgba(#000,.7);
 $sh-text-alt: 0 1px 0px rgba(#fff,.7);
-$sh-base: 0 0 baseUnit() rgba(#000,.35);
+$sh-base: 0 0 u() rgba(#000,.35);
 
 
 $bd: 1px solid $c-border;
@@ -94,8 +94,8 @@ $layers: (
   background-color: $c-accent; }
 
 ::-webkit-scrollbar {
-  width: baseUnit(1.125);
-  height: baseUnit(1.125);
+  width: u(1.125);
+  height: u(1.125);
 }
 
 ::-webkit-scrollbar-track {
@@ -111,7 +111,7 @@ $layers: (
 }
  
 ::-webkit-scrollbar-thumb {
-  border-radius: baseUnit();
+  border-radius: u();
   background: darken($c-border, 10%);
 }
 

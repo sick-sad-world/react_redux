@@ -2,15 +2,15 @@
 ========================================================================== */
 fieldset {
   border: $bd;
-	padding: baseUnit();
+	padding: u();
 	border-radius: $bdrs;
 	background-color: $c-element;
 	legend {
 		box-sizing: content-box;
 		float: left;
-		margin: -(baseUnit()) (-(baseUnit()) - 2px) baseUnit(2);
+		margin: -(u()) (-(u()) - 2px) u(2);
 		width: 100%;
-		padding: baseUnit() (baseUnit() + 2px) baseUnit(0.5);
+		padding: u() (u() + 2px) u(0.5);
 		border-bottom: $bd;
 		font-size: $subhead1-font-size;
 		font-family: $heading-font-family;

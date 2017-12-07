@@ -10,8 +10,8 @@
     @include gradient($c-main, to left);
 		color: $c-alt;
 		text-shadow: $sh-text;
-    padding-top: baseUnit(.5);
-    padding-bottom: baseUnit(.5);
+    padding-top: u(.5);
+    padding-bottom: u(.5);
     svg {
       fill: $c-alt;
     }
@@ -23,7 +23,7 @@
     background-color: $c-alt;
   }
   nav {
-    $icon: baseUnit(3);
+    $icon: u(3);
     flex: 0 0 auto;
     display: flex;
     justify-content: space-between;
@@ -65,17 +65,17 @@
     .feature {
       flex: 0 1 50%;
       &:first-child {
-        margin-right: baseUnit(2);
+        margin-right: u(2);
       } 
     }
   }
   .feature {
-    margin-bottom: baseUnit(2);
-    margin-top: baseUnit(2);
+    margin-bottom: u(2);
+    margin-top: u(2);
     h4 {
-      padding-bottom: baseUnit(.5);
+      padding-bottom: u(.5);
       border-bottom: $bd;
-      margin-bottom: baseUnit();
+      margin-bottom: u();
     }
   }
   .media {

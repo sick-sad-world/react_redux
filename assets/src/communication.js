@@ -1,8 +1,9 @@
 import jsonp from 'browser-jsonp';
-import { encodeUrlParams } from 'functions';
 import { reduce, isPlainObject, isNull, isUndefined } from 'lodash';
 
 export const BASEURL = 'http://api.trendolizer.com/v3';
+
+export const encodeUrlParams = params => (`?${Object.keys(params).map(prop => [prop, params[prop]].map(encodeURIComponent).join('=')).join('&')}`);
 
 // Transform data for serialization function
 // Nested objects - to string, exclude [null, undefined]
@@ -16,20 +17,12 @@ export const transformRequestData = data => reduce(data, (acc, v, k) => {
   return acc;
 }, {});
 
-const counter = 0;
-window.stack = {};
-
-export function cancelAll() {
-  Object.values(window.stack).forEach(abort => abort());
-}
-
 // Just an wrapper to a third-party module
 // which provides default settings and callback mapping
 // ===========================================================================
 export default function fetch(url, data, opts) {
   let abort = null;
   const promise = new Promise((resolve, reject) => {
-    // const id = counter;
     const request = jsonp({
       url: `${BASEURL}/${url}`,
       data: transformRequestData(data),
@@ -41,8 +34,6 @@ export default function fetch(url, data, opts) {
       }
     });
     abort = request.abort;
-    // window.stack[id] = abort;
-    // counter += 1;
   });
   promise.abort = abort;
   return promise;
@@ -57,5 +48,6 @@ export function fetchScript(url, opts) {
     tag.onload = () => resolve({ url, success: true });
     tag.onerror = err => reject(err);
     document.body.appendChild(tag);
+    return true;
   });
 }

@@ -30,20 +30,20 @@
   }
   small {
     display: block;
-    margin-top: baseUnit(4);
+    margin-top: u(4);
   }
   .row, .row-flex {
-    margin: baseUnit(2) auto;
+    margin: u(2) auto;
   }
   .tab-list {
     border-bottom: 2px solid $c-alt;
-    margin-bottom: baseUnit(4);
+    margin-bottom: u(4);
   }
 	.auth-forms {
     $c: 3;
-		width: map-get($layout, auth) + baseUnit($c * 4);
+		width: map-get($layout, auth) + u($c * 4);
     position: relative;
-    padding: baseUnit($c) baseUnit($c * 2);
+    padding: u($c) u($c * 2);
     top: 25%;
     background: rgba(#000, .4);
     border: 1px solid rgba(#000,.5);
@@ -53,7 +53,7 @@
     }
 	}
 	.logotype {
-		margin: 0 0 baseUnit(2) 0;
+		margin: 0 0 u(2) 0;
 	}
   .login {
     .button {

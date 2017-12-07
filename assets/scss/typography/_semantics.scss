@@ -66,8 +66,8 @@ blockquote {}
 
 .line {
   @include ph-bg();
-  border-radius: baseUnit();
-  height: baseUnit(1.5);
+  border-radius: u();
+  height: u(1.5);
   display: block;
   width: 100%;
   margin: 4px 0;
@@ -82,8 +82,8 @@ blockquote {}
 .circle {
   @include ph-bg();
   border-radius: 50%;
-  width: baseUnit(2);
-  height: baseUnit(2);
+  width: u(2);
+  height: u(2);
 }
 
 .drag-handle {
@@ -103,11 +103,11 @@ blockquote {}
   text-shadow: none;
 	font-size: 0.75em;
   line-height: 1;
-	padding: 2px baseUnit(0.5);
+	padding: 2px u(0.5);
 }
 
 .counter {
-  width: baseUnit(3);
+  width: u(3);
 }
 
 .hotness {
@@ -151,9 +151,9 @@ blockquote {}
     justify-content: space-between;
     align-items: center;
     min-height: $entity-unit;
-    padding: 0 baseUnit();
+    padding: 0 u();
     .close {
-      margin-right: baseUnit(-1);
+      margin-right: u(-1);
       width: $entity-unit;
       align-self: stretch;
       display: flex;
@@ -167,7 +167,7 @@ blockquote {}
     border-right: $bd;
     border-bottom: $bd;
     flex: 1 1 auto;
-    padding: baseUnit();
+    padding: u();
     overflow: hidden;
   }
 }
@@ -186,7 +186,7 @@ blockquote {}
   footer {
     border-top: $bd;
     display: flex;
-    padding: baseUnit();
+    padding: u();
   }
   .buttons {
     display: flex;
@@ -195,7 +195,7 @@ blockquote {}
   .button {
     flex: 0 1 50%;
     + .button {
-      margin-left: baseUnit();
+      margin-left: u();
     }
   }
 }
@@ -204,8 +204,8 @@ blockquote {}
   a {
     display: inline-block;
     color: $c-main;
-    line-height: baseUnit(4);
-    padding: 0 baseUnit(3);
+    line-height: u(4);
+    padding: 0 u(3);
     border: 1px solid transparent;
     border-bottom: 0;
     position: relative;
@@ -229,7 +229,7 @@ blockquote {}
 	margin: auto;
 	min-width: map-get($layout, min-width);
 	width: map-get($layout, auth);
-	height: baseUnit(0.5);
+	height: u(0.5);
 	background-color: rgba($c-alt, 0.1);
 	&:before {
 		display: block;
@@ -272,7 +272,7 @@ blockquote {}
   background-color: $c-element;
   h3, h4 {
     margin: 0;
-    padding: baseUnit();
+    padding: u();
     width: 100%;
     border-bottom: $bd;
   }
@@ -286,7 +286,7 @@ blockquote {}
   ul {
     width: 50%;
     list-style: none;
-    padding: baseUnit();
+    padding: u();
   }
   li {
     display: flex;
@@ -317,7 +317,7 @@ blockquote {}
     }
   }
   div {
-    padding: baseUnit();
+    padding: u();
     flex: 1 1 auto;
   }
   h5 {
@@ -327,7 +327,7 @@ blockquote {}
   .close {
     @include pos(0 0 false false);
     line-height: 0;
-    padding: baseUnit(0.5);
+    padding: u(0.5);
     svg {
       fill: $c-main;
     }
@@ -362,12 +362,12 @@ blockquote {}
   width: map-get($layout, popup);
   background-color: $lc;
   box-shadow: 0 0 20px rgba(#000,.25), 0 0 150px rgba($lc, 1);
-  padding: baseUnit();
+  padding: u();
   cursor: default;
   overflow: hidden;
   div {
     border: 1px solid $c;
-    padding: baseUnit();
+    padding: u();
     position: relative;
     z-index: 1;
   }
@@ -376,8 +376,8 @@ blockquote {}
     bottom: -12px;
     right: -12px;
     fill: $c;
-    width: baseUnit(10);
-    height: baseUnit(10);
+    width: u(10);
+    height: u(10);
     opacity: 0.5;
     z-index: 0;
   }

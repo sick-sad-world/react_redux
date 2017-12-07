@@ -2,10 +2,10 @@
 ========================================================================== */
 .mod-result-short {
   $aside: 65px;
-  padding: baseUnit() 0;
+  padding: u() 0;
   border-bottom: $bd;
-  line-height: baseUnit(2.25);
-  font-size: baseUnit(2);
+  line-height: u(2.25);
+  font-size: u(2);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -24,17 +24,17 @@
     height: $aside;
   }
   header {
-    margin-left: $aside + baseUnit();
+    margin-left: $aside + u();
   }
   time {
     font-weight: bold;
-    margin-right: baseUnit(.5);
+    margin-right: u(.5);
     svg {
       fill: $c-main;
-      width: baseUnit(1.875);
-      height: baseUnit(1.875);
+      width: u(1.875);
+      height: u(1.875);
       vertical-align: -2px;
-      margin-right: baseUnit(.5);
+      margin-right: u(.5);
     }
   }
   h1 {

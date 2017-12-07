@@ -35,13 +35,13 @@
     }
 		span {
 			display: block;
-			padding-left: baseUnit();
+			padding-left: u();
 		}
 		svg {
 			float: left;
 			width: $entity-unit;
 			height: $entity-unit;
-			padding: baseUnit(2);
+			padding: u(2);
 			fill: $c-alt;
 			+ span {
 				padding-left: 0;

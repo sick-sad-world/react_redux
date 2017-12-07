@@ -1,10 +1,11 @@
 /* Column - main item on main dashboard
 ========================================================================== */
 .mod-column {
-  @include pos(baseUnit(0.5) baseUnit(0.5) baseUnit(0.5) baseUnit(0.5));
+  @include pos(u(0.5) u(0.5) u(0.5) u(0.5));
 	display: flex;
 	flex-direction: column;
 	border: $bd;
+  background-color: $c-alt;
 	.column-header {
 		display: flex;
 		align-items: stretch;
@@ -23,17 +24,17 @@
 		}
 		nav {
 			border-left: $bd;
-			margin: baseUnit(0.5) 0;
+			margin: u(0.5) 0;
 		}
 		a {
-			width: $entity-unit - baseUnit();
+			width: $entity-unit - u();
 		}
 	}
 	.column-settings {
 		border-bottom: $bd;
 		flex: 0 1 auto;
 		background-color: $c-element;
-		padding: 0 baseUnit();
+		padding: 0 u();
 		select, .chosen-single, .toggler span, .switcher-mirrored span {
 			background-color: $c-alt;
 		}
@@ -45,7 +46,7 @@
 		align-items: center;
 		margin-bottom: 0;
 		border-top: $bd;
-		padding: baseUnit(0.5) 0;
+		padding: u(0.5) 0;
 		a {
 			flex: 1 1 33%;
 			color: $c-icon;
@@ -64,7 +65,7 @@
       display: inline-block;
       vertical-align: -2px;
       width: $icon-unit;
-      margin-right: baseUnit(0.5);
+      margin-right: u(0.5);
     }
 	}
 	> .content {
@@ -84,7 +85,7 @@
       font-style: italic;
       img, svg {
         display: block;
-        margin: 0 auto baseUnit(2);
+        margin: 0 auto u(2);
         width: 100px;
         height: 100px;
       }

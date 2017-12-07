@@ -46,7 +46,7 @@ table {
 /* Results stats table
 ========================================================================== */
 .stats-table {
-  margin-top: baseUnit();
+  margin-top: u();
   td, th {
     line-height: 1;
     font-size: 0.75em;
