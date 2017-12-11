@@ -15,7 +15,7 @@ import EmailList from '../components/email-list.jsx';
 
 // Import actions
 // ===========================================================================
-import { editUser } from '../actions';
+import { actions } from '../redux';
 
 // Email injectable Component - provide list of user Emails whatever it need
 // ===========================================================================
@@ -76,4 +76,4 @@ Emails.propTypes = {
 // Connect our Container to State
 // @ deps -> User
 // ===========================================================================
-export default connect(makeEmailsSelector, { editUser })(Emails);
+export default connect(makeEmailsSelector, { editUser: actions.editUser })(Emails);

@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 // ===========================================================================
 import { stateNum } from 'common/typecheck';
 import { makeAuthSelector } from '../selectors';
-import { addUser } from 'src/user';
+import { actions as userActions } from 'src/user';
 
 // Import Child components
 // ===========================================================================
@@ -36,4 +36,4 @@ Register.propTypes = {
   addUser: PropTypes.func.isRequired
 };
 
-export default connect(makeAuthSelector, { addUser })(Register);
+export default connect(makeAuthSelector, { addUser: userActions.addUser })(Register);

@@ -13,7 +13,7 @@ import { makeWorkspaceSelector } from '../selectors';
 
 // Import actions
 // ===========================================================================
-import { logout } from '../actions';
+import { actions } from '../redux';
 
 // Import Child components
 // ===========================================================================
@@ -104,7 +104,8 @@ Workspace.propTypes = {
   logout: PropTypes.func.isRequired,
   route: PropTypes.shape({
     childRoutes: PropTypes.array.isRequired,
-    authPath: PropTypes.string.isRequired
+    authPath: PropTypes.string.isRequired,
+    dashboardPath: PropTypes.string.isRequired
   }).isRequired,
   router: PropTypes.shape({
     replace: PropTypes.func.isRequired,
@@ -115,4 +116,4 @@ Workspace.propTypes = {
 // Connect our Container to State
 // @ deps -> App, (User in future)
 // ===========================================================================
-export default connect(makeWorkspaceSelector, { logout })(Workspace);
+export default connect(makeWorkspaceSelector, { logout: actions.logout })(Workspace);

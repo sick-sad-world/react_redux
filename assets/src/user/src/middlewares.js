@@ -1,5 +1,5 @@
 import { includes } from 'lodash';
-import types from './types';
+import { types } from './redux';
 
 export function fixMissingEmailBcc(dataPicker, prop, modifyAction) {
   return ({ dispatch, getState }) => next => (action) => {

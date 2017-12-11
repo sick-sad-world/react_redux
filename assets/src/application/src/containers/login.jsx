@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { initialLoading, setAppState } from '../actions';
 import { stateNum } from 'common/typecheck';
 import { makeAuthSelector } from '../selectors';
-import { login } from 'src/user';
+import { actions as userActions } from 'src/user';
 
 // Import Child components
 // ===========================================================================
@@ -43,4 +43,4 @@ Login.propTypes = {
   initialLoading: PropTypes.func.isRequired
 };
 
-export default connect(makeAuthSelector, { login, initialLoading, setAppState })(Login);
+export default connect(makeAuthSelector, { login: userActions.login, initialLoading, setAppState })(Login);

@@ -11,7 +11,7 @@ import { getAlerts } from 'src/alerts';
 import { getReports } from 'src/reports';
 import { getDashboards } from 'src/dashboards';
 import { fetchGoogleGraphs } from 'src/graphs';
-import { getUser } from 'src/user';
+import { actions as userActions } from 'src/user';
 import { getAllResults } from 'src/results';
 import { getColumnsForResults } from 'src/columns';
 
@@ -51,7 +51,7 @@ export function initialLoading(opts) {
 
   return (dispatch) => {
     if (!window.google && fetchGoogleGraphs) fetchGoogleGraphs();
-    return dispatch(getUser(null, options))
+    return dispatch(userActions.getUser(null, options))
       .then(() => dispatch(fetchData(options)))
       .then(getColumnsForResults)
       .then(data => dispatch(getAllResults(data)))

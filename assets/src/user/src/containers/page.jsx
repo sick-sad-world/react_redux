@@ -13,7 +13,7 @@ import { defaultInterface } from '../defaults';
 
 // Import actions
 // ===========================================================================
-import { editUser } from '../actions';
+import { actions } from '../redux';
 
 // Import Child components
 // ===========================================================================
@@ -53,4 +53,4 @@ UserSettings.propTypes = {
 // Connect our Container to State
 // @ deps -> User
 // ===========================================================================
-export default connect(makeContainerSelector, { editUser })(UserSettings);
+export default connect(makeContainerSelector, { editUser: actions.editUser })(UserSettings);
