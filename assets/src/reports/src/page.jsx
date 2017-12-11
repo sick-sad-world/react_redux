@@ -24,7 +24,7 @@ import DeleteConfirmation from 'common/components/delete-confirmation';
 import { ListSection, ListItem } from 'common/list';
 import EditReport from './components/edit';
 
-class Reports extends React.Component {
+class ReportsPage extends React.Component {
   render() {
     const { listText, state, payload, createItem, deleteConfirm, deleteItem, editItem, editText, actionSort, chosen, loading, deleting, route, curId } = this.props;
     return (
@@ -71,7 +71,7 @@ class Reports extends React.Component {
   }
 }
 
-Reports.defaultProps = {
+ReportsPage.defaultProps = {
   state: 2,
   listText: {
     title: 'Reports Management',
@@ -88,7 +88,7 @@ Reports.defaultProps = {
   }
 };
 
-Reports.propTypes = {
+ReportsPage.propTypes = {
   curId: PropTypes.number.isRequired,
   listText: PropTypes.objectOf(PropTypes.string).isRequired,
   editText: PropTypes.objectOf(PropTypes.string).isRequired,
@@ -108,4 +108,4 @@ export default connect(makeContainerSelector, {
   actionCreate: createReport,
   actionEdit: editReport,
   actionDelete: deleteReport
-})(makePageContainer({ create: 'edit' }, Reports));
+})(makePageContainer({ create: 'edit' }, ReportsPage));

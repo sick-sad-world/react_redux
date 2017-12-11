@@ -8,7 +8,6 @@ const loDashRegExp = /_+/;
 // Get columns to fetch results (Used on init loading)
 // ===========================================================================
 export function getColumnsForResults(payload) {
-  console.log(payload);
   return payload.find(item => (item && item.type === types.READ)).payload.map(({ id, data, open }) => ({ id, data, open }));
 }
 

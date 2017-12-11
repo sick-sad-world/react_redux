@@ -26,7 +26,7 @@ import { ListSection, ListItem } from 'common/list';
 import EditSet from '../components/edit';
 import { FeedCreate } from 'src/feeds';
 
-class Sourcesets extends React.Component {
+class SetsPage extends React.Component {
 
   constructor(props) {
     super(props);
@@ -104,7 +104,7 @@ class Sourcesets extends React.Component {
 
 // Sourcesets container default props
 // ===========================================================================
-Sourcesets.defaultProps = {
+SetsPage.defaultProps = {
   listText: {
     title: 'Sources Management',
     description: 'Create, edit and delete sets of sources. Drag to reorder list. Open set to edit the sources in it.',
@@ -122,7 +122,7 @@ Sourcesets.defaultProps = {
 
 // Prop type check
 // ===========================================================================
-Sourcesets.propTypes = {
+SetsPage.propTypes = {
   curId: PropTypes.number.isRequired,
   listText: PropTypes.objectOf(PropTypes.string).isRequired,
   editText: PropTypes.objectOf(PropTypes.string).isRequired,
@@ -141,4 +141,4 @@ export default connect(makeContainerSelector, {
   removeFeed,
   actionEdit: editSet,
   actionDelete: deleteSet
-})(makePageContainer({ create: 'call' }, Sourcesets));
+})(makePageContainer({ create: 'call' }, SetsPage));

@@ -24,7 +24,7 @@ import DeleteConfirmation from 'common/components/delete-confirmation';
 import { ListSection, ListItem } from 'common/list';
 import EditAlert from './components/edit';
 
-class Alerts extends React.Component {
+class AlertsPage extends React.Component {
   render() {
     const { listText, payload, createItem, deleteConfirm, deleteItem, editItem, editText, actionSort, chosen, loading, deleting, route, curId } = this.props;
     return (
@@ -68,7 +68,7 @@ class Alerts extends React.Component {
   }
 }
 
-Alerts.defaultProps = {
+AlertsPage.defaultProps = {
   listText: {
     title: 'Alerts Management',
     description: 'Create, edit and delete alerts that will be sent to you when specific columns get new items.',
@@ -84,7 +84,7 @@ Alerts.defaultProps = {
   }
 };
 
-Alerts.propTypes = {
+AlertsPage.propTypes = {
   curId: PropTypes.number.isRequired,
   listText: PropTypes.objectOf(PropTypes.string).isRequired,
   editText: PropTypes.objectOf(PropTypes.string).isRequired,
@@ -103,4 +103,4 @@ export default connect(makeContainerSelector, {
   actionCreate: createAlert,
   actionEdit: editAlert,
   actionDelete: deleteAlert
-})(makePageContainer({ create: 'edit' }, Alerts));
+})(makePageContainer({ create: 'edit' }, AlertsPage));

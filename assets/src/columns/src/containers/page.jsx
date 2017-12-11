@@ -30,7 +30,7 @@ import ColumnFeedsAssignment from '../components/assignment';
 
 const affectingProps = ['sort', 'direction', 'show_favorites', 'show_ignored', 'limit', 'author', 'search', 'exclude_search', 'LIKE(url)', 'since', 'before', 'language', 'source', 'set', 'ignore_source', 'ignore_set', 'is_image', 'is_video', 'is_facebook', 'is_gallery'];
 
-class Columns extends React.Component {
+class ColumnsPage extends React.Component {
   constructor(props) {
     super(props);
     bindAll(this, 'makeItemIcon');
@@ -108,7 +108,7 @@ class Columns extends React.Component {
 
 // Columns container default props
 // ===========================================================================
-Columns.defaultProps = {
+ColumnsPage.defaultProps = {
   listText: {
     title: 'Columns Management',
     description: 'Create, edit or delete dashboard columns. Drag to reorder, use the eye icon to hide/unhide them (tip: hidden columns can still be used for alerts/reports).',
@@ -131,7 +131,7 @@ Columns.defaultProps = {
 
 // Prop type check
 // ===========================================================================
-Columns.propTypes = {
+ColumnsPage.propTypes = {
   curId: PropTypes.number.isRequired,
   listText: PropTypes.objectOf(PropTypes.string).isRequired,
   editText: PropTypes.objectOf(PropTypes.string).isRequired,
@@ -197,4 +197,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(makePageSelector, mapDispatchToProps)(makePageContainer({ create: 'call' }, Columns));
+export default connect(makePageSelector, mapDispatchToProps)(makePageContainer({ create: 'call' }, ColumnsPage));

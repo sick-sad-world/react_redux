@@ -14,7 +14,6 @@ import { makeWorkspaceSelector } from '../selectors';
 // Import actions
 // ===========================================================================
 import { logout } from '../actions';
-import { path } from 'src/application';
 
 // Import Child components
 // ===========================================================================
@@ -41,8 +40,7 @@ class Workspace extends React.Component {
 
   redirectHandler(props) {
     if (!props.user.id) {
-      console.log(path);
-      this.props.router.replace(path);
+      this.props.router.replace(props.route.authPath);
     }
   }
 
@@ -69,7 +67,7 @@ class Workspace extends React.Component {
   // Handler for logout operation
   // ===========================================================================
   logoutHandler() {
-    this.props.logout().then(() => this.props.router.replace('/auth'));
+    this.props.logout().then(() => this.props.router.replace(this.props.route.authPath));
   }
 
   // Render our screen
@@ -87,7 +85,7 @@ class Workspace extends React.Component {
         })}>
           <UserBlock fullname={user.fullname} position={user.position} image={user.image} />
           <MainNav routes={routes} toggle={this.sidebarHandler} logout={this.logoutHandler}>
-            <DashboardNav />
+            <DashboardNav base={this.props.route.dashboardPath} />
           </MainNav>
         </aside>
         <div className='screen-content'>
@@ -105,7 +103,8 @@ Workspace.propTypes = {
   user: PropTypes.shape(pick(defaultInterface, 'id', 'image', 'fullname', 'position')),
   logout: PropTypes.func.isRequired,
   route: PropTypes.shape({
-    childRoutes: PropTypes.array.isRequired
+    childRoutes: PropTypes.array.isRequired,
+    authPath: PropTypes.string.isRequired
   }).isRequired,
   router: PropTypes.shape({
     replace: PropTypes.func.isRequired,
@@ -116,4 +115,4 @@ Workspace.propTypes = {
 // Connect our Container to State
 // @ deps -> App, (User in future)
 // ===========================================================================
-export default connect(makeWorkspaceSelector, { logout }, null, { withRef: true })(Workspace);
+export default connect(makeWorkspaceSelector, { logout })(Workspace);

@@ -5,7 +5,6 @@ export function processColumn() {
   return next => (action) => {
     switch (action.type) {
       case types.READ:
-        console.log(action);
         return next({
           ...action,
           payload: action.payload.map(composeColumnData)

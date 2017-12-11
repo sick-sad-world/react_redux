@@ -1,7 +1,7 @@
 import reducer from './src/reducer';
-import Route from './src/route';
+import ReportsPage from './src/page';
 
 export * from './src/actions';
 export * from './src/middlewares';
 export { reducer };
-export { Route };
+export { ReportsPage };

@@ -1,11 +1,10 @@
-import { bindAll } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { stateNum, textShape } from 'common/typecheck';
+import { textShape } from 'common/typecheck';
 
 // Import data related stuff
 // ===========================================================================
@@ -20,7 +19,7 @@ import { editUser } from '../actions';
 // ===========================================================================
 import EditUser from '../components/edit.jsx';
 
-class User extends React.Component {
+class UserSettings extends React.Component {
   render() {
     return (
       <div className='mod-page'>
@@ -34,7 +33,7 @@ class User extends React.Component {
   }
 }
 
-User.defaultProps = {
+UserSettings.defaultProps = {
   texts: {
     title: 'Profile settings',
     description: 'Tell us a bit about yourself...',
@@ -44,7 +43,7 @@ User.defaultProps = {
 
 // Prop type check
 // ===========================================================================
-User.propTypes = {
+UserSettings.propTypes = {
   texts: PropTypes.shape(textShape).isRequired,
   editUser: PropTypes.func.isRequired,
   notification: PropTypes.func,
@@ -54,4 +53,4 @@ User.propTypes = {
 // Connect our Container to State
 // @ deps -> User
 // ===========================================================================
-export default connect(makeContainerSelector, { editUser })(User);
+export default connect(makeContainerSelector, { editUser })(UserSettings);

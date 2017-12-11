@@ -8,8 +8,6 @@ export const defDashboard = {
   column_ids: []
 };
 
-export const path = '/dashboards';
-
 export const width = 320;
 
 export const defaultInterface = {
