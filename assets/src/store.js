@@ -12,7 +12,7 @@ import { reducer as columns, processColumn } from 'src/columns';
 import { reducer as results, splitResultText, numerizeTabularData } from 'src/results';
 import { reducer as notifications, notification } from 'src/notifications';
 import { reducer as app, clientError } from 'src/application';
-import { reducer as user, fixMissingEmailBcc } from 'src/user';
+import { reducer as user, middlewares as userMiddlewares } from 'src/user';
 import { reducer as graphs, mapGraphData } from 'src/graphs';
 import { reducer as sets, clearFeeds } from 'src/sets';
 import { reducer as feeds } from 'src/feeds';
@@ -46,8 +46,8 @@ export default createStore(
     processColumn,
     processAlert,
     processReport,
-    fixMissingEmailBcc(state => (state.reports), 'recipient', editReport),
-    fixMissingEmailBcc(state => (state.alerts), 'recipient', editAlert),
+    userMiddlewares.fixMissingEmailBcc(state => (state.reports), 'recipient', editReport),
+    userMiddlewares.fixMissingEmailBcc(state => (state.alerts), 'recipient', editAlert),
     ensureDashboardUrl,
     clearFeeds,
     numerizeTabularData,

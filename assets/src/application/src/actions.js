@@ -37,12 +37,12 @@ export function setAppState(state) {
 // ===========================================================================
 export function fetchData(opts) {
   return dispatch => Promise.all([
-    (getDashboards instanceof Function) ? dispatch(getDashboards(null, opts)) : null,
-    (getColumns instanceof Function) ? dispatch(getColumns({ data: 1 }, opts)) : null,
-    (getSets instanceof Function) ? dispatch(getSets(null, opts)) : null,
-    (getFeeds instanceof Function) ? dispatch(getFeeds(null, opts)) : null,
-    (getAlerts instanceof Function) ? dispatch(getAlerts(null, opts)) : null,
-    (getReports instanceof Function) ? dispatch(getReports(null, opts)) : null
+    dispatch(getDashboards(null, opts)),
+    dispatch(getColumns({ data: 1 }, opts)),
+    dispatch(getSets(null, opts)),
+    dispatch(getFeeds(null, opts)),
+    dispatch(getAlerts(null, opts)),
+    dispatch(getReports(null, opts))
   ]);
 }
 
