@@ -1,4 +1,4 @@
-import { includes } from 'lodash';
+import { includes, get } from 'lodash';
 import { LOGIN, LOGOUT } from 'common/type-factory';
 import { createNamespace, createReducer } from 'common/service';
 import { defaultData } from './defaults';
@@ -44,14 +44,13 @@ export const actions = {
 };
 
 export const middlewares = {
-  fixMissingEmailBcc(dataPicker, prop, modifyAction) {
+  fixMissingEmailBcc(path, prop, modifyAction) {
     return ({ dispatch, getState }) => next => (action) => {
-      if (action.type === types.UPDATE) {
+      if (action.type === types.update) {
         const { email, email_bcc } = action.payload;
-        dataPicker(getState())
+        get(getState(), path, [])
           .filter(data => !includes(email_bcc, data[prop]) && data[prop] !== email)
-          .map(({ id, ...data }) => dispatch(modifyAction({ id, [prop]: email })));
-        return next(action);
+          .map(({ id }) => dispatch(modifyAction({ id, [prop]: email })));
       }
       return next(action);
     };
