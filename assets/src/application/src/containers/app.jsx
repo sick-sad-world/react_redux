@@ -32,7 +32,6 @@ class App extends React.Component {
       document.body.removeAttribute('class');
       window.removeEventListener('load', this.loadStep);
     }
-    console.log(this.load, this.props.state, document.body.getAttribute('class'));
   }
 
   componentWillMount() {

@@ -1,5 +1,5 @@
 
-import { mergeArrayById } from 'common/reducer-factory';
+import { mergeArrayById } from 'functions';
 import types from './types';
 
 export default (state = [], action) => {

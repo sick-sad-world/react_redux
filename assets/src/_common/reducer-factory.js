@@ -1,20 +1,6 @@
 import { reject, uniqBy, has, sortBy } from 'lodash';
 import { LOGIN, LOGOUT } from './type-factory';
-
-// Traverse Array and update data of item ID given
-// If not @dir ? prepend : postpend data to array
-// ===========================================================================
-export const mergeArrayById = (arr, obj, dir) => {
-  let changed = false;
-  const method = (dir) ? 'unshift' : 'push';
-  const result = arr.map((item) => {
-    if (item.id !== obj.id) return { ...item };
-    changed = true;
-    return { ...item, ...obj };
-  });
-  if (!changed) result[method]({ ...obj });
-  return result;
-};
+import { mergeArrayById } from 'functions';
 
 // Set new Orders to items in Collection
 // ===========================================================================

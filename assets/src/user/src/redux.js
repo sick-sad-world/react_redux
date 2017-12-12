@@ -1,27 +1,24 @@
 import { includes } from 'lodash';
-import createTypes, { LOGIN, LOGOUT } from 'common/type-factory';
+import { LOGIN, LOGOUT } from 'common/type-factory';
+import { createNamespace, createReducer } from 'common/service';
 import { defaultData } from './defaults';
 import createAction from 'common/action-factory';
 
 
-export const types = createTypes('user');
+const types = createNamespace('user', 'read', 'create', 'update', 'login', 'logout');
 
-export default (state = { ...defaultData }, action) => {
-  switch (action.type) {
-    case types.CREATE:
-    case types.READ:
-    case types.UPDATE:
-      return {
-        ...state.payload,
-        ...action.payload,
-        image: defaultData.image
-      };
-    case LOGOUT:
-      return { ...defaultData };
-    default:
-      return state;
-  }
-};
+const mergeData = (state, payload) => ({
+  ...state,
+  ...payload,
+  image: defaultData.image
+});
+
+export default createReducer({
+  [types.read]: mergeData,
+  [types.create]: mergeData,
+  [types.update]: mergeData,
+  [LOGOUT]: 'reset'
+}, defaultData);
 
 export const actions = {
   login: createAction({
@@ -33,15 +30,15 @@ export const actions = {
     call: 'logout'
   }),
   addUser: createAction({
-    action: types.CREATE,
+    action: types.create,
     call: 'add_user'
   }),
   getUser: createAction({
-    action: types.READ,
+    action: types.read,
     call: 'user'
   }),
   editUser: createAction({
-    action: types.UPDATE,
+    action: types.update,
     call: 'user'
   })
 };

@@ -1,4 +1,5 @@
-import createReducer, { mergeArrayById } from 'common/reducer-factory';
+import createReducer from 'common/reducer-factory';
+import { mergeArrayById } from 'functions';
 import types from './types';
 
 export default createReducer({

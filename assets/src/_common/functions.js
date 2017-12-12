@@ -68,3 +68,15 @@ export function conditionalRun(cmp, prop, func) {
     }
   };
 }
+
+export const mergeArrayById = (arr, obj, dir) => {
+  let changed = false;
+  const method = (dir) ? 'unshift' : 'push';
+  const result = arr.map((item) => {
+    if (item.id !== obj.id) return { ...item };
+    changed = true;
+    return { ...item, ...obj };
+  });
+  if (!changed) result[method]({ ...obj });
+  return result;
+};
