@@ -83,6 +83,7 @@ export function mapGraphGoogle(data, { types, opts }) {
   let movCnt = 0;
   let annotation;
   let annotationText;
+  const dateExp = /\d{4}\/\d{2}\/\d{2}\s\d{2}:\d{2}:\d{2}/;
 
   // Create DataTable and make Datetimes column
   // ===========================================================================
@@ -109,7 +110,7 @@ export function mapGraphGoogle(data, { types, opts }) {
     movVals[`rate_${type}`] = [];
   }, this);
 
-  datetimes.forEach((dt) => {
+  datetimes.filter(v => dateExp.test(v)).forEach((dt) => {
     const row = [new Date(`${dt} UTC`)];
 
     types.forEach((rowType, j) => {

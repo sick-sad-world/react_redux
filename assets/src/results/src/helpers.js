@@ -31,7 +31,8 @@ export function splitText(result) {
     ...result,
     title: decoder(result.title),
     additional: (index.curr >= 0) ? decoder(result.description.substring(index.curr, result.description.length)) : '',
-    description: decoder((index.curr >= 0) ? result.description.substring(0, index.curr) : result.description)
+    description: decoder((index.curr >= 0) ? result.description.substring(0, index.curr) : result.description),
+    image: decoder(result.image)
   };
 }
 
