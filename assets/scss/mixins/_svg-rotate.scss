@@ -1,7 +1,0 @@
-@mixin svg-rotate($sel) {
-	transform: rotate(0deg);
-	transition: fill $dur, transform $dur;
-	#{$sel} & {
-		transform: rotate(180deg);
-	}
-}

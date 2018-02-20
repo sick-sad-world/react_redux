@@ -1,0 +1,280 @@
+*, *:after, *:before {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+*::-moz-selection {
+  background-color: $c-accent-lt;
+}
+*::selection {
+  background-color: $c-accent-lt;
+}
+
+::-webkit-scrollbar {
+  width: u(1.125);
+  height: u(1.125);
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-track:vertical {
+  border-left: 1px solid $c-line;
+}
+
+::-webkit-scrollbar-track:horizontal {
+  border-top: 1px solid $c-line;
+}
+ 
+::-webkit-scrollbar-thumb {
+  border-radius: u();
+  background: darken($c-line, 10%);
+}
+
+:global .colortest {
+  padding: 12px;
+  background: #fff;
+  span {
+    display: inline-block;
+    vertical-align: top;
+    width: 120px;
+    height: 40px;
+  }
+  span:nth-child(1) {
+    background-color: $c-main;
+  }
+  span:nth-child(2) {
+    background-color: $c-line;
+  }
+  span:nth-child(3) {
+    background-color: $c-alt;
+  }
+  span:nth-child(4) {
+    background-color: $c-accent;
+  }
+  span:nth-child(5) {
+    background-color: $c-accent-lt;
+  }
+  span:nth-child(6) {
+    background-color: $c-accent-dk;
+  }
+}
+
+html, body {
+  margin: 0;
+  color: $c-main;
+  background: $c-alt;
+  font-size: $f-text;
+  line-height: $f-line;
+  font-weight: 400;
+  font-family: 'Lato', Verdana, Geneva, sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+a {
+  color: $c-accent-dk;
+  text-decoration: none;
+  cursor: pointer;
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+    outline: 0;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  line-height: 1.5;
+  font-weight: 700;
+  small {
+    font-weight: 400;
+  }
+}
+
+h1, .t-display2 {
+  font-size: $f-dsp2;
+}
+
+h2, .t-display1 {
+  font-size: $f-dsp1;
+}
+
+h3, .t-heading {
+  font-size: $f-heading;
+}
+
+h4, .t-subhead1 {
+  font-size: $f-subhead1;
+}
+
+h5, .t-subhead2 {
+  font-size: $f-subhead2;
+}
+
+h6, .t-caption {
+  font-size: $f-cap;
+}
+
+mark {
+  background-color: $c-accent-lt;
+}
+
+dl {
+  
+}
+
+dt {
+  font-weight: bold;
+  &:after {
+    content: ":";
+  }
+}
+
+dd {
+  position: relative;
+  padding-left: 1.8em;
+  &:before {
+    display: inline-block;
+    content: "—";
+    position: absolute;
+    left: 0.4em;
+  }
+}
+
+ul, ol {
+  padding-left: 1.4em;
+  ol, ul {
+    margin: 0;
+  }
+}
+
+ol ol {
+  list-style-type: upper-alpha;
+}
+
+hr {
+  height: 0;
+}
+
+code, kbd, pre, samp {
+  font-size: 1em;
+}
+
+code, samp, kbd {
+  display: inline-block;
+  padding: 0 0.5em;
+}
+
+pre {
+  overflow: auto;
+}
+
+img {
+	display: block;
+  max-width: 100%;
+  height: auto;
+  a & {
+    border: 0;
+  }
+}
+
+svg:not(:root) {
+  overflow: hidden;
+}
+
+:global svg[role="icon"] {
+  margin: auto;
+	fill: $c-line;
+	width: $s-icon;
+	height: $s-icon;
+  pointer-events: none;
+  use {
+    pointer-events: none;
+  }
+}
+
+table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  caption {
+    text-align: left;
+    font-size: 1.5 * $f-text;
+    line-height: 1;
+  }
+  td {
+  }
+  td, th {
+    padding: 0.25em 0.5em;
+  }
+  >tr:last-child td, tr:last-child th {
+  }
+  thead td, th {
+    text-align: left;
+  }
+  tfoot {
+
+  }
+}
+
+%base-form-element {
+  margin: 0;
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 100%;
+  line-height: normal;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+button,
+input,
+select,
+textarea,
+:global(.button) {
+  @extend %base-form-element;
+  &:focus {
+    outline: 0;
+  }
+}
+
+button[disabled],
+html input[disabled] {
+  cursor: default;
+}
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  -webkit-appearance: button;
+  cursor: pointer;
+}
+
+input:invalid {
+  box-shadow: none;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+input[type="search"] {
+  -webkit-appearance: textfield;
+  &::-webkit-search-cancel-button,
+  &::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+}

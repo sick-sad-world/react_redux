@@ -1,3 +1,0 @@
-@mixin gradient($c, $dir: to bottom) {
-	background-image: linear-gradient($dir, lighten($c, 2.5%) 0%, darken($c, 2.5%) 100%);
-}

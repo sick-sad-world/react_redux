@@ -1,0 +1,25 @@
+$f-text: u(1.75); //14px;
+$f-line: u(2.75); //24px;
+$f-cap: u(1.5); //12px;
+$f-subhead2: u(2);
+$f-subhead1: u(2.75);
+$f-heading: u(3.25);
+$f-dsp1: u(4);
+$f-dsp2: u(5);
+
+
+
+$s-icon: u(2);
+$s-input: u(3);
+
+$c-main: #393E46;
+$c-alt: #f2f2f2;
+$c-accent: #F96D00;
+$c-line: #9da3ad;
+$c-icon: #9da3ad;
+$c-accent-dk: darken($c-accent, 15%);
+$c-accent-lt: lighten($c-accent, 15%);
+$c-error: #f7402c;
+
+$t-dur: 0.2s;
+$t-func: cubic-bezier(.4,0,.2,1);

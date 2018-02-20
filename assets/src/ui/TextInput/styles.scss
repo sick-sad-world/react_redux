@@ -1,0 +1,113 @@
+@import 'mixins/_u.scss';
+@import 'mixins/_ph.scss';
+@import '_vars.scss';
+
+:local .text-input {
+  $gutter: u(0.5);
+  display: flex;
+  font-size: $f-text;
+  align-items: flex-start; 
+  .prefix:first-child,
+  .suffix:last-child {
+    display: flex;
+    flex: 0 0 auto;
+    width: $s-input * 1.5;
+    height: $s-input + $gutter;
+  }
+  .prefix:first-child {
+    margin: 0 $gutter 0 0;
+  }
+  .suffix:last-child {
+    margin: 0 0 0 $gutter;
+  }
+  .input-body {
+    flex: 1 1 auto;
+    position: relative;
+  }
+  input {
+    display: block;
+    width: 100%;
+    border: 0;
+    height: $s-input;
+    background: none;
+    @include placeholder() {
+      font-style: italic;
+      font-weight: 300;
+      opacity: 0;
+      transition: opacity $t-dur $t-func;
+    }
+    &:focus {
+      @include placeholder() {
+        opacity: 1;
+      }
+    }
+  }
+  hr {
+    height: 1px;
+    display: block;
+    margin: $gutter 0;
+    position: relative;
+    background-color: $c-line;
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background-color: $c-accent;
+      transition: width $t-dur $t-func;
+    }
+  }
+  .subtext {
+    font-size: $f-cap;
+    display: block;
+    flex: 0 0 100%;
+    line-height: 1.125;
+  }
+  label {
+    position: absolute;
+    top: 1px;
+    font-size: inherit;
+    line-height: $s-input;
+    transition-duration: $t-dur;
+    transition-timing-function: $t-func;
+    transition-property: font-size transform;
+    transform: translate3d(0,0,0);
+  }
+  &:hover {
+    .prefix svg,
+    .suffix svg {
+      fill: darken($c-icon, 10%);
+    }
+    hr {
+      background-color: darken($c-line, 10%);
+    }
+  }
+  input:not([value='']) + label,
+  &.state--focus label {
+    transform: translate3d(0,-$s-input + $gutter,0);
+    font-size: $f-cap;
+    font-weight: bold;
+  }
+  &.state--focus {
+    .input-label {
+      color: $c-accent;
+    }
+    .prefix svg,
+    .suffix svg {
+      fill: $c-accent;
+    }
+    hr:after {
+      width: 100%;
+    }
+  }
+  &.state--error {
+    hr {
+      background-color: $c-error;
+    }
+    .subtext {
+      color: $c-error;
+    }
+  }
+}
