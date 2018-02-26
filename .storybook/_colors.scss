@@ -1,0 +1,74 @@
+@import '_vars.scss';
+
+:global .colors {
+  display: flex;
+  flex-wrap: wrap;
+  > span {
+    height: 100px;
+    display: flex;
+    align-items: flex-end;
+    span {
+      height: 50px;
+      flex: 0 0 50%;
+    }
+  }
+
+  .primary {
+    flex: 0 0 55%;
+    background-color: $c-prm;
+    .lighten {
+      background: $c-prm-lt;
+    }
+  }
+  
+  .secondary {
+    flex: 0 0 25%;
+    background-color: $c-sec;
+    .darken {
+      background: darken($c-sec, 5%);
+    }
+  }
+
+  .accent {
+    background-color: $c-acc;
+    flex: 0 0 10%;
+    .lighten {
+      background: $c-acc-lt;
+    }
+    .darken {
+      background: $c-acc-dk;
+    }
+  }
+
+  .accent-sec {
+    background-color: $c-acc-sec;
+    flex: 0 0 10%;
+    .lighten {
+      background: $c-acc-sec-lt;
+    }
+    .darken {
+      background: $c-acc-sec-dk;
+    }
+  }
+
+  .states {
+    flex: 0 0 100%;
+    
+    span {
+      flex: 0 0 25%;
+    }
+    
+    .error {
+      background-color: $c-error;  
+    }
+    .warning {
+      background-color: $c-warning;  
+    }
+    .success {
+      background-color: $c-success;  
+    }
+    .info {
+      background-color: $c-info;  
+    }
+  }
+}

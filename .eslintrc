@@ -5,6 +5,13 @@
     "es6": true,
     "jest": true
   },
+  "settings": {
+    "import/resolver": {
+    "node": {
+      "extensions": [".js",".jsx"]
+      }
+    }
+  },
   "extends": ["airbnb-base", "plugin:react/recommended"],
   "parserOptions": {
     "ecmaVersion": 2017,
@@ -14,7 +21,7 @@
       "jsx": true
     }
   },
-  "plugins": ["react", "babel"],
+  "plugins": ["react", "babel", "plugin:import/react"],
   "rules": {
     "no-unused-vars": 1,
     "camelcase": 1,
@@ -26,6 +33,7 @@
     "import/no-extraneous-dependencies": 0,
     "import/prefer-default-export": 1,
     "object-curly-newline": 0,
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "comma-dangle": ["error", {
         "arrays": "never",
         "objects": "never",

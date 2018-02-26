@@ -5,10 +5,10 @@
 }
 
 *::-moz-selection {
-  background-color: $c-accent-lt;
+  background-color: $c-acc-lt;
 }
 *::selection {
-  background-color: $c-accent-lt;
+  background-color: $c-acc-lt;
 }
 
 ::-webkit-scrollbar {
@@ -21,61 +21,32 @@
 }
 
 ::-webkit-scrollbar-track:vertical {
-  border-left: 1px solid $c-line;
+  border-left: 1px solid $c-sec-dk;
 }
 
 ::-webkit-scrollbar-track:horizontal {
-  border-top: 1px solid $c-line;
+  border-top: 1px solid $c-sec-dk;
 }
  
 ::-webkit-scrollbar-thumb {
   border-radius: u();
-  background: darken($c-line, 10%);
-}
-
-:global .colortest {
-  padding: 12px;
-  background: #fff;
-  span {
-    display: inline-block;
-    vertical-align: top;
-    width: 120px;
-    height: 40px;
-  }
-  span:nth-child(1) {
-    background-color: $c-main;
-  }
-  span:nth-child(2) {
-    background-color: $c-line;
-  }
-  span:nth-child(3) {
-    background-color: $c-alt;
-  }
-  span:nth-child(4) {
-    background-color: $c-accent;
-  }
-  span:nth-child(5) {
-    background-color: $c-accent-lt;
-  }
-  span:nth-child(6) {
-    background-color: $c-accent-dk;
-  }
+  background: darken($c-sec-dk, 10%);
 }
 
 html, body {
   margin: 0;
-  color: $c-main;
-  background: $c-alt;
+  color: $c-prm;
+  background: $c-sec;
   font-size: $f-text;
-  line-height: $f-line;
-  font-weight: 400;
+  line-height: 1.875;
+  font-weight: 300;
   font-family: 'Lato', Verdana, Geneva, sans-serif;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
 
 a {
-  color: $c-accent-dk;
+  color: $c-acc-dk;
   text-decoration: none;
   cursor: pointer;
   &:hover,
@@ -87,39 +58,36 @@ a {
 
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
-  line-height: 1.5;
-  font-weight: 700;
-  small {
-    font-weight: 400;
-  }
+  line-height: 1.875;
+  font-weight: 400;
 }
 
-h1, .t-display2 {
-  font-size: $f-dsp2;
+:global h1, :global .t-h1 {
+  font-size: $f-h1;
 }
 
-h2, .t-display1 {
-  font-size: $f-dsp1;
+:global h2, :global .t-h2 {
+  font-size: $f-h2;
 }
 
-h3, .t-heading {
-  font-size: $f-heading;
+:global h3, :global .t-h3 {
+  font-size: $f-h3;
 }
 
-h4, .t-subhead1 {
-  font-size: $f-subhead1;
+:global h4, :global .t-h4 {
+  font-size: $f-h4;
 }
 
-h5, .t-subhead2 {
-  font-size: $f-subhead2;
+:global h5, :global .t-h5 {
+  font-size: $f-h5;
 }
 
-h6, .t-caption {
-  font-size: $f-cap;
+:global h6, :global .t-h6 {
+  font-size: $f-h6;
 }
 
 mark {
-  background-color: $c-accent-lt;
+  background-color: $c-acc-lt;
 }
 
 dl {
@@ -127,7 +95,7 @@ dl {
 }
 
 dt {
-  font-weight: bold;
+  font-weight: 400;
   &:after {
     content: ":";
   }
@@ -169,7 +137,17 @@ code, samp, kbd {
 }
 
 pre {
+  border-left: 3px solid $c-acc;
+  background-color: $c-sec;
+  padding: 0.5em;
+  line-height: 1.125;
   overflow: auto;
+}
+
+blockquote {
+  padding: 0.5em 1em;
+  border-left: 3px solid $c-acc;
+  background-color: $c-sec;
 }
 
 img {
@@ -187,7 +165,7 @@ svg:not(:root) {
 
 :global svg[role="icon"] {
   margin: auto;
-	fill: $c-line;
+	fill: $c-sec-dk;
 	width: $s-icon;
 	height: $s-icon;
   pointer-events: none;
@@ -203,7 +181,7 @@ table {
   border-spacing: 0;
   caption {
     text-align: left;
-    font-size: 1.5 * $f-text;
+    font-size: $f-h3;
     line-height: 1;
   }
   td {

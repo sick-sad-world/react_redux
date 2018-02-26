@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import icons from './data';
 
-export default function Icon({ fill, icon, viewBox, ...props }) {
-  if (typeof icons[icon] !== 'string') throw new Error(`Icon [${icon}] not found in Icons list`);
-  return <svg role='icon' viewBox={viewBox} {...props}><path fill={fill} d={icons[icon]}></path></svg>;
+export default function Icon({ fill, g, viewBox, ...props }) {
+  if (typeof icons[g] !== 'string') throw new Error(`Icon [${g}] not found in Icons list`);
+  return <svg role='icon' viewBox={viewBox} {...props}><path fill={fill} d={icons[g]}></path></svg>;
 }
 
 Icon.defaultProps = {
@@ -15,13 +15,13 @@ Icon.defaultProps = {
 Icon.propTypes = {
   fill: PropTypes.string,
   viewBox: PropTypes.string.isRequired,
-  icon: PropTypes.string.isRequired
+  g: PropTypes.string.isRequired
 };
 
-export function IconButton({ fill, icon, viewBox, ...props }) {
+export function IconButton({ fill, g, viewBox, ...props }) {
   return (
     <a {...props}>
-      <Icon fill={fill} icon={icon} viewBox={viewBox} />
+      <Icon fill={fill} g={g} viewBox={viewBox} />
     </a>
   );
 }
@@ -29,13 +29,13 @@ export function IconButton({ fill, icon, viewBox, ...props }) {
 IconButton.propTypes = {
   fill: PropTypes.string,
   viewBox: PropTypes.string,
-  icon: PropTypes.string.isRequired
+  g: PropTypes.string.isRequired
 };
 
-export function LinkButton({ fill, icon, viewBox, ...props }) {
+export function LinkButton({ fill, g, viewBox, ...props }) {
   return (
     <NavLink {...props}>
-      <Icon fill={fill} icon={icon} viewBox={viewBox} />
+      <Icon fill={fill} g={g} viewBox={viewBox} />
     </NavLink>
   );
 }
@@ -43,5 +43,5 @@ export function LinkButton({ fill, icon, viewBox, ...props }) {
 LinkButton.propTypes = {
   fill: PropTypes.string,
   viewBox: PropTypes.string,
-  icon: PropTypes.string.isRequired
+  g: PropTypes.string.isRequired
 };

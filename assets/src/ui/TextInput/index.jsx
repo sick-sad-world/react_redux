@@ -43,12 +43,10 @@ export default class TextInput extends React.Component {
     return (
       <div className={classNames(styles['text-input'], classes, className)}>
         {prefix && <span className={styles.prefix}>{prefix}</span>}
-        <div className={styles['input-container']}>
-          <div className={styles['input-body']}>
-            <input {...props} type={type} id={name} value={value} onChange={this.onChange} onFocus={this.onFocus} onBlur={this.onBlur}name={name}/>
-            <label htmlFor={name}>{label}</label>
-            <hr/>
-          </div>
+        <div className={styles['input-body']}>
+          <input {...props} type={type} id={name} value={value} onChange={this.onChange} onFocus={this.onFocus} onBlur={this.onBlur}name={name}/>
+          <label htmlFor={name}>{label}</label>
+          <hr/>
           {((invalid && !pristine) || descr) ? <span className={styles.subtext}>{(invalid && !pristine) ? valid.join(', ') : descr}</span> : null}
         </div>
         {suffix && <span className={styles.suffix}>{suffix}</span>}

@@ -47,7 +47,7 @@
     display: block;
     margin: $gutter 0;
     position: relative;
-    background-color: $c-line;
+    background-color: $c-sec-dk;
     &:after {
       content: '';
       position: absolute;
@@ -55,7 +55,7 @@
       left: 0;
       width: 0;
       height: 3px;
-      background-color: $c-accent;
+      background-color: $c-acc;
       transition: width $t-dur $t-func;
     }
   }
@@ -78,10 +78,10 @@
   &:hover {
     .prefix svg,
     .suffix svg {
-      fill: darken($c-icon, 10%);
+      fill: darken($c-sec-dk, 10%);
     }
     hr {
-      background-color: darken($c-line, 10%);
+      background-color: darken($c-sec-dk, 10%);
     }
   }
   input:not([value='']) + label,
@@ -92,11 +92,11 @@
   }
   &.state--focus {
     .input-label {
-      color: $c-accent;
+      color: $c-acc;
     }
     .prefix svg,
     .suffix svg {
-      fill: $c-accent;
+      fill: $c-acc;
     }
     hr:after {
       width: 100%;
