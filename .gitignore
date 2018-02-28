@@ -1,11 +1,11 @@
 .sass-cache
 node_modules
-assets/app.css
-assets/app.js
 .map
 .zip
 build
 .vscode
 npm-debug.log
 stage
-/package-lock.json
+package-lock.json
+coverage
+jest-test-results.json

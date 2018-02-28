@@ -1,1 +1,2 @@
-import './typography.story';
+import './typography';
+import '../assets/src/ui/Icon/story.js';

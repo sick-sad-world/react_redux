@@ -32,7 +32,7 @@ IconButton.propTypes = {
   g: PropTypes.string.isRequired
 };
 
-export function LinkButton({ fill, g, viewBox, ...props }) {
+export function IconLink({ fill, g, viewBox, ...props }) {
   return (
     <NavLink {...props}>
       <Icon fill={fill} g={g} viewBox={viewBox} />
@@ -40,7 +40,7 @@ export function LinkButton({ fill, g, viewBox, ...props }) {
   );
 }
 
-LinkButton.propTypes = {
+IconLink.propTypes = {
   fill: PropTypes.string,
   viewBox: PropTypes.string,
   g: PropTypes.string.isRequired

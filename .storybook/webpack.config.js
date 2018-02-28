@@ -1,6 +1,11 @@
 const path = require('path');
 
 module.exports = (storybookBaseConfig, configType) => {
+
+  storybookBaseConfig.resolve.alias = {
+    ui: path.join(__dirname, 'assets', 'src/ui')
+  };
+
   storybookBaseConfig.module.rules.push({
     test: /\.(s?css)?$/,
     use: [{
