@@ -19,13 +19,19 @@
     .lighten {
       background: $c-prm-lt;
     }
+    .lighten2 {
+      background: $c-prm-lt2;
+    }
   }
   
   .secondary {
     flex: 0 0 25%;
     background-color: $c-sec;
     .darken {
-      background: darken($c-sec, 5%);
+      background: $c-sec-dk;
+    }
+    .darken2 {
+      background: $c-sec-dk2;
     }
   }
 

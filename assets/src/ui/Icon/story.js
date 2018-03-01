@@ -1,9 +1,11 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import {storiesOf} from '@storybook/react';
+import withTests from 'withTests';
 import Icon, { IconButton, IconLink } from './index';
 
 storiesOf('Global Elements', module)
+  .addDecorator(withTests('icon'))
   .add('Icons', () => (
     <BrowserRouter>
       <ul>

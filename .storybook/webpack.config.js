@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = (storybookBaseConfig, configType) => {
 
   storybookBaseConfig.resolve.alias = {
-    ui: path.join(__dirname, 'assets', 'src/ui')
+    withTests: path.join(__dirname, 'withTests.js')
   };
 
   storybookBaseConfig.module.rules.push({

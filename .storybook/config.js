@@ -1,5 +1,6 @@
 import React from 'react';
 import { configure, addDecorator } from '@storybook/react';
+import { setOptions } from '@storybook/addon-options';
 import '../assets/sass/app.scss';
 
 addDecorator(story => (
@@ -7,6 +8,10 @@ addDecorator(story => (
     {story()}
   </div>
 ));
+
+setOptions({
+  addonPanelInRight: true
+});
 
 function loadStories() {
   require('./stories');

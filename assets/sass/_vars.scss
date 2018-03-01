@@ -9,25 +9,31 @@ $f-text: u(2);
 $s-icon: u(2);
 $s-input: u(3);
 
-$c-prm: #393E46;
-$c-prm-lt: lighten($c-prm, 5%);
+$c-prm: #5c6470;
+$c-prm-lt: lighten($c-prm, 7.5%);
+$c-prm-lt2: lighten($c-prm, 25%);
 
 $c-sec: #f2f2f2;
-$c-sec-dk: darken($c-sec, 5%);
+$c-sec-dk: darken($c-sec, 7.5%);
+$c-sec-dk2: darken($c-sec, 15%);
 
-$c-acc: #F96D00;
+$c-acc: #74abe2;
 $c-acc-dk: darken($c-acc, 5%);
 $c-acc-lt: lighten($c-acc, 5%);
 
-$c-acc-sec: #2875d0;
+$c-acc-sec: #ff8e38;
 $c-acc-sec-dk: darken($c-acc-sec, 5%);
 $c-acc-sec-lt: lighten($c-acc-sec, 5%);
 
 $colors: (
-  primary: $c-prm,
-  secondary: $c-sec,
-  accent: $c-acc,
-  accent-secondary: $c-acc-sec
+  text: $c-prm,
+  caption: $c-prm-lt2,
+  icon: $c-prm-lt,
+  border: $c-sec-dk2,
+  highlight: $c-sec-dk,
+  shadow: $c-prm,
+  elements: $c-acc,
+  focus: $c-acc-sec
 );
 
 $c-error: #E45857;
@@ -40,6 +46,17 @@ $states: (
   warning: $c-warning,
   success: $c-success,
   info: $c-info
+);
+
+$utility: (
+  html: #009788,
+  rss: #FFA500,
+  facebook: #3B5998,
+  reddit: #FF4501,
+  twitter: #28AAE1,
+  gmail: #F14336,
+  slack: #47B088,
+  yahoo: #400090
 );
 
 

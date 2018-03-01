@@ -6,8 +6,8 @@ import {colors} from './_colors.scss';
 storiesOf('Global Elements', module)
   .add('Colors', () => (
     <div className='colors'>
-      <span className='primary'><span className='lighten'></span></span>
-      <span className='secondary'><span className='darken'></span></span>
+      <span className='primary'><span className='lighten'></span><span className='lighten2'></span></span>
+      <span className='secondary'><span className='darken2'></span><span className='darken'></span></span>
       <span className='accent'><span className='darken'></span><span className='lighten'></span></span>
       <span className='accent-sec'><span className='darken'></span><span className='lighten'></span></span>
       <span className='states'>

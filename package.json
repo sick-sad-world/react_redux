@@ -4,9 +4,7 @@
   "description": "",
   "main": "assets/app.js",
   "scripts": {
-    "test:output": "jest --json --outputFile=jest-test-results.json",
-    "test:coverage": "jest --coverage",
-    "test:watch": "jest --watch",
+    "test": "jest --json --outputFile=jest-test-results.json",
     "start": "webpack-dev-server --hot --inline --port=3000 --public=http://localhost:3000/",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "prebundle": "rimraf ./dist",
@@ -48,9 +46,23 @@
     }
   },
   "jest": {
-    "setupFiles": ["jest/setup.js"],
-    "watchPathIgnorePatterns" : ["/node_modules/", "jest-test-results.json", "**/*.json"],
-    "verbose": true
+    "notify": true,
+    "verbose": true,
+    "roots": [
+      "<rootDir>/assets"
+    ],
+    "setupFiles": [
+      "<rootDir>/jest/setup.js"
+    ],
+    "watchPathIgnorePatterns": [
+      "/node_modules/",
+      "story.js",
+      "jest-test-results.json"
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/jest/file-mock.js",
+      "\\.(css|sass|scss|less)$": "identity-obj-proxy"
+    }
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
@@ -66,6 +78,7 @@
     "redux": "^3.7.2"
   },
   "devDependencies": {
+    "@storybook/addon-options": "^3.3.14",
     "@storybook/react": "^3.3.14",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
@@ -85,6 +98,7 @@
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.6",
     "html-webpack-plugin": "^2.30.1",
+    "identity-obj-proxy": "^3.0.0",
     "image-webpack-loader": "^4.0.0",
     "jest": "^22.4.2",
     "node-sass": "^4.7.2",
