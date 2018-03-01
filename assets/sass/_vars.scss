@@ -1,10 +1,12 @@
-$f-h1: u(4.5);
-$f-h2: u(3.75);
-$f-h3: u(3.25);
-$f-h4: u(2.75);
-$f-h5: u(2.25);
-$f-h6: u(2);
-$f-text: u(2);
+$ff: 'Lato', Verdana, Geneva, sans-serif;
+
+$f-h1: u(3.75);
+$f-h2: u(3.25);
+$f-h3: u(2.75);
+$f-h4: u(2.25);
+$f-h5: u(2);
+$f-h6: u(1.75);
+$f-text: u(1.6);
 
 $s-icon: u(2);
 $s-input: u(3);
@@ -13,7 +15,7 @@ $c-prm: #5c6470;
 $c-prm-lt: lighten($c-prm, 7.5%);
 $c-prm-lt2: lighten($c-prm, 25%);
 
-$c-sec: #f2f2f2;
+$c-sec: #f7f7f7;
 $c-sec-dk: darken($c-sec, 7.5%);
 $c-sec-dk2: darken($c-sec, 15%);
 
@@ -33,7 +35,8 @@ $colors: (
   highlight: $c-sec-dk,
   shadow: $c-prm,
   elements: $c-acc,
-  focus: $c-acc-sec
+  focus: $c-acc-sec,
+  selection: lighten($c-acc-sec, 25%)
 );
 
 $c-error: #E45857;
@@ -48,12 +51,17 @@ $states: (
   info: $c-info
 );
 
-$utility: (
-  html: #009788,
-  rss: #FFA500,
-  facebook: #3B5998,
-  reddit: #FF4501,
-  twitter: #28AAE1,
+$feeds: (
+  accent: $c-acc,
+  accent-sec: $c-acc-sec,
+  html: $c-success,
+  rss: $c-warning,
+  facebook: $c-acc,
+  reddit: $c-error,
+  twitter: $c-info
+);
+
+$recipients: (
   gmail: #F14336,
   slack: #47B088,
   yahoo: #400090

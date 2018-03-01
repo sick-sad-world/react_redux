@@ -35,7 +35,7 @@ IconButton.propTypes = {
   /** HEX value for path fill property */
   fill: PropTypes.string,
   /** Viewbox value for SVG element - controls "viewport" of SVG */
-  viewBox: PropTypes.string.isRequired,
+  viewBox: PropTypes.string,
   /** Icon name to pick path data from storage */
   g: PropTypes.string.isRequired
 };
@@ -53,7 +53,7 @@ IconLink.propTypes = {
   /** HEX value for path fill property */
   fill: PropTypes.string,
   /** Viewbox value for SVG element - controls "viewport" of SVG */
-  viewBox: PropTypes.string.isRequired,
+  viewBox: PropTypes.string,
   /** Icon name to pick path data from storage */
   g: PropTypes.string.isRequired
 };

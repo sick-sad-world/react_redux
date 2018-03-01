@@ -20,13 +20,13 @@ storiesOf('Global Elements', module)
   ))
   .add('Typography', () => (
     <div>
-      <h1>36px Font size Lorem ipsum dolor sit amet.</h1>
-      <h2>30px Font size Lorem ipsum dolor sit amet.</h2>
-      <h3>26px Font size Lorem ipsum dolor sit amet.</h3>
-      <h4>22px Font size Lorem ipsum dolor sit amet.</h4>
-      <h5>18px Font size Lorem ipsum dolor sit amet.</h5>
-      <h6>16px Font size Lorem ipsum dolor sit amet.</h6>
-      <p>Default text have 16px. Lorem, <a href="">[Default text URL link]</a> ipsum dolor sit amet consectetur adipisicing elit. <b>[Bold text]</b> Lorem <strong>[Strong text]</strong> ipsum dolor sit amet. Repellendus nemo nisi autem praesentium voluptatum <i>[italic text]</i> sed facilis <em>[em tag italic]</em> dolor quam voluptatem pariatur odio mollitia voluptates, architecto quibusdam aut neque velit repudiandae necessitatibus, veritatis, fuga assumenda optio facere dolorem at. Cum, enim asperiores.</p>
+      <h1>30px Font size H1 Lorem ipsum dolor sit amet.</h1>
+      <h2>26px Font size H2 Lorem ipsum dolor sit amet.</h2>
+      <h3>22px Font size H3 Lorem ipsum dolor sit amet.</h3>
+      <h4>18px Font size H4 Lorem ipsum dolor sit amet.</h4>
+      <h5>16px Font size H5 Lorem ipsum dolor sit amet.</h5>
+      <h6>14px Font size H6 Lorem ipsum dolor sit amet.</h6>
+      <p>Default text have 13px. Lorem, <a href="">[Default text URL link]</a> ipsum dolor sit amet consectetur adipisicing elit. <b>[Bold text]</b> Lorem <strong>[Strong text]</strong> ipsum dolor sit amet. Repellendus nemo nisi autem praesentium voluptatum <i>[italic text]</i> sed facilis <em>[em tag italic]</em> dolor quam voluptatem pariatur odio mollitia voluptates, architecto quibusdam aut neque velit repudiandae necessitatibus, veritatis, fuga assumenda optio facere dolorem at. Cum, enim asperiores.</p>
       <ol>
         <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, dicta consequatur.</li>
         <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, dicta consequatur.</li>
@@ -44,6 +44,27 @@ storiesOf('Global Elements', module)
       </blockquote>
       <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Doloremque, fuga! Sapiente dolor vero rerum perspiciatis molestiae doloremque aut eligendi, esse alias ad <mark>[Mark tag]</mark> quisquam voluptatum soluta adipisci nobis. Provident, neque in cupiditate quidem quae incidunt similique omnis? Itaque iusto asperiores dignissimos eaque delectus!</p>
     </div>
+  ))
+  .add('Badges', () => (
+    <ol>
+      <li><samp>badge</samp> - simple badge</li>
+      <li>Status colors<hr/></li>
+      {['error', 'warning', 'success', 'info'].map((itm) => (
+        <li><samp className={itm}>badge</samp> - {itm} styled badge</li>
+      ))}
+      <li>Accent colors<hr/></li>
+      {['accent', 'accent-sec'].map((itm) => (
+        <li><samp className={itm}>badge</samp> - {itm} styled badge</li>
+      ))}
+      <li>Feeds colors<hr/></li>
+      {['html', 'rss', 'facebook', 'reddit', 'twitter'].map((itm) => (
+        <li><samp className={itm}>badge</samp> - {itm} styled badge</li>
+      ))}
+      <li>Recipietns colors<hr/></li>
+      {['gmail', 'slack', 'yahoo'].map((itm) => (
+        <li><samp className={itm}>badge</samp> - {itm} styled badge</li>
+      ))}
+    </ol>
   ))
   .add('Table', () => (
     <table>

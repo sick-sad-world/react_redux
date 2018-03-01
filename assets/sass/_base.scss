@@ -4,11 +4,8 @@
   padding: 0;
 }
 
-*::-moz-selection {
-  background-color: $c-acc-lt;
-}
-*::selection {
-  background-color: $c-acc-lt;
+@include selection() {
+  background-color: map-get($colors, selection);
 }
 
 ::-webkit-scrollbar {
@@ -40,7 +37,7 @@ html, body {
   font-size: $f-text;
   line-height: 1.875;
   font-weight: 300;
-  font-family: 'Lato', Verdana, Geneva, sans-serif;
+  font-family: $ff;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
@@ -87,7 +84,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 mark {
-  background-color: $c-acc-lt;
+  background-color: map-get($colors, selection);
 }
 
 dl {
@@ -134,6 +131,38 @@ code, kbd, pre, samp {
 code, samp, kbd {
   display: inline-block;
   padding: 0 0.5em;
+}
+
+:global samp, :global .badge {
+  $s: u(2.5);
+  font-family: $ff;
+  padding: 0px 1em;
+  font-size: u(1.5);
+  text-align: center;
+  border-radius: 4px;
+  height: $s;
+  line-height: $s - 2px;
+  background-color: map-get($colors, highlight);
+  text-transform: uppercase;
+  border: 1px solid map-get($colors, border);
+  @each $style, $color in $states {
+    &.#{$style} {
+      background-color: mix($color, #fff, 25%);
+      border-color: $color;
+    }
+  }
+  @each $style, $color in $feeds {
+    &.#{$style} {
+      background-color: mix($color, #fff, 25%);
+      border-color: $color;
+    }
+  }
+  @each $style, $color in $recipients {
+    &.#{$style} {
+      background-color: mix($color, #fff, 25%);
+      border-color: $color;
+    }
+  }
 }
 
 pre {

@@ -2,7 +2,6 @@ import React from 'react';
 import { configure, addDecorator } from '@storybook/react';
 import { setOptions } from '@storybook/addon-options';
 import { setDefaults } from '@storybook/addon-info';
-import '../assets/sass/app.scss';
 
 addDecorator(story => (
   <div style={{padding: '20px', 'backgroundColor': '#fff', 'minHeight': '100vh'}}>
@@ -29,6 +28,7 @@ setDefaults({
 });
 
 function loadStories() {
+  require('../assets/sass/app.scss');
   require('./stories');
 }
 
