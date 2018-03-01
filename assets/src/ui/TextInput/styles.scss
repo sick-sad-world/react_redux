@@ -2,7 +2,7 @@
 @import 'mixins/_ph.scss';
 @import '_vars.scss';
 
-:local .text-input {
+:global .text-input {
   $gutter: u(0.5);
   display: flex;
   font-size: $f-text;
@@ -78,10 +78,10 @@
   &:hover {
     .prefix svg,
     .suffix svg {
-      fill: darken($c-sec-dk, 10%);
+      fill: $c-sec-dk2;
     }
     hr {
-      background-color: darken($c-sec-dk, 10%);
+      background-color: $c-sec-dk2;
     }
   }
   input:not([value='']) + label,
