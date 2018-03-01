@@ -1,12 +1,15 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import {storiesOf} from '@storybook/react';
+import { storiesOf } from '@storybook/react';
+import { withInfo } from '@storybook/addon-info';
 import withTests from 'withTests';
 import Icon, { IconButton, IconLink } from './index';
 
 storiesOf('Global Elements', module)
   .addDecorator(withTests('icon'))
-  .add('Icons', () => (
+  .add('Icons', withInfo({
+    propTablesExclude: [BrowserRouter]
+  })(() => (
     <BrowserRouter>
       <ul>
         <li><Icon g='bell' /> Simple icon</li>
@@ -15,4 +18,4 @@ storiesOf('Global Elements', module)
         <li><IconLink to='some' g='home' title='Ding dong' /> React router as icon with title</li>
       </ul>
     </BrowserRouter>
-  ))
+  )));
