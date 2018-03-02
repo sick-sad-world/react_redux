@@ -1,0 +1,16 @@
+@import 'mixins/_u.scss';
+@import '_vars.scss';
+
+:local .button {
+  display: inline-block;
+
+  svg {
+
+  }
+
+  // @each $style, $color in $styles {
+  //   $.#{style} {
+      
+  //   }
+  // }
+}

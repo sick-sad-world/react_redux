@@ -9,7 +9,7 @@ export default function Icon({ fill, g, viewBox, ...props }) {
 }
 
 Icon.defaultProps = {
-  viewBox: '0 0 20 20'
+  viewBox: '0 0 24 24'
 };
 
 Icon.propTypes = {

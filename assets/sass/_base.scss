@@ -151,6 +151,12 @@ code, samp, kbd {
       border-color: $color;
     }
   }
+  @each $style, $color in $styles {
+    &.#{$style} {
+      background-color: mix($color, #fff, 25%);
+      border-color: $color;
+    }
+  }
   @each $style, $color in $feeds {
     &.#{$style} {
       background-color: mix($color, #fff, 25%);

@@ -9,7 +9,7 @@ import Icon from '../Icon';
 
 storiesOf('FormElements', module)
   .addDecorator(withTests('text-input'))
-  .add('TextInput', withState({}, withInfo()(store => (
+  .add('TextInput', withState({ inv: 'some value' }, withInfo()(store => (
     <React.Fragment>
       <TextInput
         label='Simple input'
@@ -25,6 +25,17 @@ storiesOf('FormElements', module)
         descr='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, placeat.'
         onChange={value => store.set(value)}
         value={store.state.descr}
+      />
+      <div style={{ height: '50px' }} />
+      <TextInput
+        label='Simple invalid input'
+        name='inv'
+        valid={['some validation error']}
+        pristine={false}
+        descr='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, placeat.'
+        suffix={<Icon g='warning' />}
+        onChange={value => store.set(value)}
+        value={store.state.inv}
       />
       <div style={{ height: '50px' }} />
       <TextInput
