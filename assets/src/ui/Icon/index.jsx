@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
 import icons from './data';
 
 /** Icon component description */
@@ -18,42 +17,6 @@ Icon.propTypes = {
   fill: PropTypes.string,
   /** Viewbox value for SVG element - controls "viewport" of SVG */
   viewBox: PropTypes.string.isRequired,
-  /** Icon name to pick path data from storage */
-  g: PropTypes.string.isRequired
-};
-
-/** IconButton component description */
-export function IconButton({ fill, g, viewBox, ...props }) {
-  return (
-    <a {...props}>
-      <Icon fill={fill} g={g} viewBox={viewBox} />
-    </a>
-  );
-}
-
-IconButton.propTypes = {
-  /** HEX value for path fill property */
-  fill: PropTypes.string,
-  /** Viewbox value for SVG element - controls "viewport" of SVG */
-  viewBox: PropTypes.string,
-  /** Icon name to pick path data from storage */
-  g: PropTypes.string.isRequired
-};
-
-/** IconLink component description */
-export function IconLink({ fill, g, viewBox, ...props }) {
-  return (
-    <NavLink {...props}>
-      <Icon fill={fill} g={g} viewBox={viewBox} />
-    </NavLink>
-  );
-}
-
-IconLink.propTypes = {
-  /** HEX value for path fill property */
-  fill: PropTypes.string,
-  /** Viewbox value for SVG element - controls "viewport" of SVG */
-  viewBox: PropTypes.string,
   /** Icon name to pick path data from storage */
   g: PropTypes.string.isRequired
 };

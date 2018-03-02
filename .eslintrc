@@ -21,7 +21,7 @@
       "jsx": true
     }
   },
-  "plugins": ["react", "babel", "plugin:import/react"],
+  "plugins": ["react", "babel", "import"],
   "rules": {
     "no-unused-vars": 1,
     "camelcase": 1,

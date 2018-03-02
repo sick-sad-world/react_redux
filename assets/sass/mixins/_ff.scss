@@ -7,10 +7,10 @@
     bold-italic: italic 700,
     regular: normal 400,
     regular-italic: italic 400,
-    thin: normal 300,
-    thin-italic: italic 300,
-    line: normal 100,
-    line-italic: italic 100,
+    light: normal 300,
+    light-italic: italic 300,
+    thin: normal 100,
+    thin-italic: italic 100,
   );
 
   @each $v in $variants {

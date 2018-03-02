@@ -1,52 +1,42 @@
 @import 'mixins/_u.scss';
 @import 'mixins/_ph.scss';
+@import 'mixins/_styles.scss';
 @import '_vars.scss';
 
-:global .text-input {
+:local .body {
   $gutter: u(0.5);
-  display: flex;
-  font-size: $f-text;
-  align-items: flex-start; 
-  .prefix:first-child,
-  .suffix:last-child {
+  display: block;
+
+  label {
     display: flex;
-    flex: 0 0 auto;
-    width: $s-input * 1.5;
-    height: $s-input + $gutter;
-  }
-  .prefix:first-child {
-    margin: 0 $gutter 0 0;
-  }
-  .suffix:last-child {
-    margin: 0 0 0 $gutter;
-  }
-  .input-body {
-    flex: 1 1 auto;
     position: relative;
   }
+
   input {
     display: block;
-    width: 100%;
-    border: 0;
+    flex: 1 1 auto;
     height: $s-input;
+    border: 0;
     background: none;
     @include placeholder() {
-      font-style: italic;
-      font-weight: 300;
+      @include ph-styles();
       opacity: 0;
-      transition: opacity $t-dur $t-func;
+      transition: opacity $t-dur;
     }
     &:focus {
       @include placeholder() {
         opacity: 1;
+        transition-delay: $t-dur * 0.5;
       }
     }
   }
+  
   hr {
     height: 1px;
     display: block;
     margin: $gutter 0;
     position: relative;
+    overflow: visible;
     background-color: $c-sec-dk;
     &:after {
       content: '';
@@ -59,13 +49,16 @@
       transition: width $t-dur $t-func;
     }
   }
-  .subtext {
-    font-size: $f-cap;
-    display: block;
-    flex: 0 0 100%;
-    line-height: 1.125;
+
+  .prefix:first-child,
+  .suffix:last-child {
+    display: flex;
+    flex: 0 0 auto;
+    width: $s-input * 1.5;
+    height: $s-input;
   }
-  label {
+
+  .label {
     position: absolute;
     top: 1px;
     font-size: inherit;
@@ -75,39 +68,129 @@
     transition-property: font-size transform;
     transform: translate3d(0,0,0);
   }
-  &:hover {
-    .prefix svg,
-    .suffix svg {
-      fill: $c-sec-dk2;
-    }
-    hr {
-      background-color: $c-sec-dk2;
-    }
+
+  .prefix ~ .label {
+    margin-left: $s-input * 1.5;
   }
-  input:not([value='']) + label,
-  &.state--focus label {
-    transform: translate3d(0,-$s-input + $gutter,0);
+
+  .subtext {
+    @include cap-styles();
+    display: block;
+    flex: 0 0 100%;
+  }
+  
+  input:not([value='']) + .label,
+  input:focus + .label,
+  &.state--focus .label {
+    transform: translate3d(0,-$s-input,0);
     font-size: $f-cap;
-    font-weight: bold;
+    font-weight: 700;
   }
+
   &.state--focus {
-    .input-label {
-      color: $c-acc;
-    }
-    .prefix svg,
-    .suffix svg {
+    svg {
       fill: $c-acc;
     }
+    
     hr:after {
       width: 100%;
     }
-  }
-  &.state--error {
-    hr {
-      background-color: $c-error;
-    }
-    .subtext {
-      color: $c-error;
+
+    .label {
+      color: $c-acc;
     }
   }
 }
+
+// :global .text-input {
+//   $gutter: u(0.5);
+//   display: flex;
+//   font-size: $f-text;
+//   align-items: flex-start; 
+//   .prefix:first-child,
+//   .suffix:last-child {
+//     display: flex;
+//     flex: 0 0 auto;
+//     width: $s-input * 1.5;
+//     height: $s-input + $gutter;
+//   }
+//   .prefix:first-child {
+//     margin: 0 $gutter 0 0;
+//   }
+//   .suffix:last-child {
+//     margin: 0 0 0 $gutter;
+//   }
+//   .input-body {
+//     flex: 1 1 auto;
+//     position: relative;
+//   }
+//   input {
+//     display: block;
+//     width: 100%;
+//     border: 0;
+//     height: $s-input;
+//     background: none;
+//     @include placeholder() {
+//       font-style: italic;
+//       font-weight: 300;
+//       opacity: 0;
+//       transition: opacity $t-dur $t-func;
+//     }
+//     &:focus {
+//       @include placeholder() {
+//         opacity: 1;
+//       }
+//     }
+//   }
+//   .subtext {
+//     font-size: $f-cap;
+//     display: block;
+//     flex: 0 0 100%;
+//     line-height: 1.125;
+//   }
+//   label {
+//     position: absolute;
+//     top: 1px;
+//     font-size: inherit;
+//     line-height: $s-input;
+//     transition-duration: $t-dur;
+//     transition-timing-function: $t-func;
+//     transition-property: font-size transform;
+//     transform: translate3d(0,0,0);
+//   }
+//   &:hover {
+//     .prefix svg,
+//     .suffix svg {
+//       fill: $c-sec-dk2;
+//     }
+//     hr {
+//       background-color: $c-sec-dk2;
+//     }
+//   }
+//   input:not([value='']) + label,
+//   &.state--focus label {
+//     transform: translate3d(0,-$s-input + $gutter,0);
+//     font-size: $f-cap;
+//     font-weight: bold;
+//   }
+//   &.state--focus {
+//     .input-label {
+//       color: $c-acc;
+//     }
+//     .prefix svg,
+//     .suffix svg {
+//       fill: $c-acc;
+//     }
+//     hr:after {
+//       width: 100%;
+//     }
+//   }
+//   &.state--error {
+//     hr {
+//       background-color: $c-error;
+//     }
+//     .subtext {
+//       color: $c-error;
+//     }
+//   }
+// }

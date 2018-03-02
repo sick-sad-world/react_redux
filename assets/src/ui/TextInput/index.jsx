@@ -6,7 +6,7 @@ import { classNamesTyping } from 'shared/typings';
 import styles from './styles.scss';
 
 const TYPES = ['text', 'email', 'number', 'password'];
-console.log(styles);
+
 export default class TextInput extends React.Component {
   constructor(props) {
     super(props);
@@ -17,7 +17,7 @@ export default class TextInput extends React.Component {
   }
 
   onChange({ target }) {
-    const change = {[this.props.name]: target.value};
+    const change = { [this.props.name]: target.value };
     const valid = (this.props.validate instanceof Function) ? this.props.validate(change) : true;
     this.props.onChange(change, valid);
   }
@@ -61,17 +61,23 @@ export default class TextInput extends React.Component {
     };
 
     return (
-      <div className={classNames(styles['text-input'], classes, className)}>
-        {prefix && <span className={styles.prefix}>{prefix}</span>}
-        <div className={styles['input-body']}>
-          <label>
-            <span className={styles['label-text']}>{label}</span>
-            <input {...props} name={name} type={type} value={value} onChange={this.onChange} onFocus={this.onFocus} onBlur={this.onBlur}name={name}/>
-          </label>
-          <hr/>
-          {((invalid && !pristine) || descr) ? <span className={styles.subtext}>{(invalid && !pristine) ? valid.join(', ') : descr}</span> : null}
-        </div>
-        {suffix && <span className={styles.suffix}>{suffix}</span>}
+      <div className={classNames(styles.body, classes, className)}>
+        <label>
+          {prefix && <span className={styles.prefix}>{prefix}</span>}
+          <input
+            {...props}
+            name={name}
+            type={type}
+            value={value}
+            onChange={this.onChange}
+            onFocus={this.onFocus}
+            onBlur={this.onBlur}
+          />
+          <span className={styles.label}>{label}</span>
+          {suffix && <span className={styles.suffix}>{suffix}</span>}
+        </label>
+        <hr/>
+        {((invalid && !pristine) || descr) ? <span className={styles.subtext}>{(invalid && !pristine) ? valid.join(', ') : descr}</span> : null}
       </div>
     );
   }
