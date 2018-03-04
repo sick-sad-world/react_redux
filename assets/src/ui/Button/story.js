@@ -2,13 +2,13 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
 import { action } from '@storybook/addon-actions';
-import withTests from 'withTests';
+import { withTests } from 'with';
 import Button from './index';
 import Icon from '../Icon';
 
 
 storiesOf('FormElements', module)
-  .addDecorator(withTests('button'))
+  .addDecorator(withTests('Button'))
   .add(
     'Button',
     withInfo({

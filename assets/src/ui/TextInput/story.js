@@ -1,15 +1,15 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
-import { withState } from '@dump247/storybook-state';
-import withTests from 'withTests';
+// import { withState } from '@dump247/storybook-state';
+import { withTests, withState } from 'with';
 import TextInput from './index';
 import Icon from '../Icon';
 
 storiesOf('FormElements', module)
-  .addDecorator(withTests('text-input'))
-  .add('TextInput', story =>
-    withState({ inv: 'some value' }, store => withInfo()(() => (
+  .addDecorator(withTests('TextInput'))
+  .add('TextInput', withState({ inv: 'some value' }, (story, store) => (
+    withInfo()(() => (
       <div>
         <TextInput
           label='Simple input'
@@ -54,4 +54,6 @@ storiesOf('FormElements', module)
           value={store.state.suffix}
         />
       </div>
-    ))(story))());
+    ))(story)
+  )));
+

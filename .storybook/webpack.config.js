@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = (storybookBaseConfig, configType) => {
 
   storybookBaseConfig.resolve.alias = {
-    withTests: path.join(__dirname, 'withTests.js'),
+    with: path.join(__dirname, 'with.js'),
     shared: path.join(__dirname, '../assets/src/shared')
   };
 

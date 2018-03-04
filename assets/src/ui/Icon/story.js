@@ -1,11 +1,11 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
-import withTests from 'withTests';
+import { withTests } from 'with';
 import Icon from './index';
 
 storiesOf('Icons', module)
-  .addDecorator(withTests('icon'))
+  .addDecorator(withTests('Icon'))
   .add('Simple', withInfo()(() => (
     <ol>
       <li><Icon g='bell' /> Simple icon</li>
