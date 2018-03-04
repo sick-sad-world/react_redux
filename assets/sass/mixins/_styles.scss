@@ -6,6 +6,12 @@
 
 @mixin cap-styles () {
   font-size: $f-cap;
+  color: map-get($colors, caption);
   line-height: 1.125;
   font-weight: 300;
+}
+
+@mixin dis-styles () {
+  opacity: 0.75;
+  cursor: default;
 }

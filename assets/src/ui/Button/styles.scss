@@ -1,16 +1,67 @@
 @import 'mixins/_u.scss';
+@import 'mixins/_styles.scss';
 @import '_vars.scss';
 
 :local .button {
-  display: inline-block;
-
+  display: inline-flex;
+  border: 0;
+  justify-content: center;
+  align-items: center; 
+  line-height: $s-button;
+  height: $s-button;
+  padding: 0 u();
+  border-radius: 4px;
+  background-color: $c-acc;
+  color: $c-sec;
+  font-size: $f-cap;
+  font-weight: 700;
+  text-transform: uppercase;
+  min-width: map-get($sizes, xs);
   svg {
-
+    fill: $c-sec;
+  }
+  svg:first-child {
+    margin-right: u();
+  }
+  svg:last-child {
+    margin-left: u();
   }
 
-  // @each $style, $color in $styles {
-  //   $.#{style} {
-      
-  //   }
-  // }
+  &:not([disabled]):hover {
+    text-decoration: none;
+    background-color: $c-acc-lt;
+  }
+
+  &:not([disabled]):focus {
+    box-shadow: 0 0 0 3px rgba($c-acc, .45);
+  }
+  
+  &[disabled] {
+    @include dis-styles();
+  }
+
+  &.secondary {
+    background-color: $c-acc-sec;
+    &:not([disabled]):hover {
+      background-color: $c-acc-sec-lt;
+    }
+    &:not([disabled]):focus {
+      box-shadow: 0 0 0 3px rgba($c-acc-sec, .45);
+    }
+  }
+
+  @each $style, $color in $states {
+    &.#{$style} {
+      background-color: $color;
+      svg {
+        fill: $c-sec;
+      }
+      &:not([disabled]):hover {
+        background-color: lighten($color, 5%);
+      }
+      &:not([disabled]):focus {
+        box-shadow: 0 0 0 3px rgba($color, .45);
+      }
+    }
+  }
 }

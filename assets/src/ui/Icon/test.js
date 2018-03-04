@@ -10,14 +10,14 @@ describe('<Icon/>', () => {
     expect(wrapper.find('path').prop('d')).toEqual(data[glyph]);
   });
 
-  test('Should set default [viewBox] to [0 0 24 24]', () => {
+  test('Should set default [viewBox] to [0 0 20 20]', () => {
     const wrapper = shallow(<Icon g='clock' />);
-    expect(wrapper.find('svg').prop('viewBox')).toEqual('0 0 24 24');
+    expect(wrapper.find('svg').prop('viewBox')).toEqual('0 0 20 20');
   });
 
   test('Should throw an Error if glyph not found in list', () => {
     expect(() => {
-      const wrapper = shallow(<Icon g='undefined' />);
+      shallow(<Icon g='undefined' />);
     }).toThrowError();
   });
 

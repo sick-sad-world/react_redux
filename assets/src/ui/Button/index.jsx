@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { classNamesTyping } from 'shared/typings';
+import { classNamesTyping } from '../../shared/typings';
 import styles from './styles.scss';
 
 const TYPE = ['button', 'input', 'link'];
-const THEMES = ['default', 'accent', 'accent-sec', 'success', 'error', 'warning', 'info'];
+const THEMES = ['default', 'secondary', 'success', 'error', 'warning', 'info'];
 
 export default function Button({ el, children, className, theme, ...props }) {
   const classList = classNames({
@@ -14,7 +14,7 @@ export default function Button({ el, children, className, theme, ...props }) {
   }, className);
   switch (el) {
     case 'input':
-      return <input {...props} className={classList} />;
+      return <input type='button' {...props} className={classList} />;
     case 'link':
       return <a {...props} className={classList} >{children}</a>;
     case 'button':
@@ -31,6 +31,7 @@ Button.defaultProps = {
 Button.propTypes = {
   /** What element use a button root */
   el: PropTypes.oneOf(TYPE).isRequired,
+  /** Color theme of a button */
   theme: PropTypes.oneOf(THEMES).isRequired,
   /** Additional class names */
   className: classNamesTyping,

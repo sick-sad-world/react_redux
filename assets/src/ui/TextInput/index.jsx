@@ -2,7 +2,7 @@ import bindAll from 'lodash/bindAll';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { classNamesTyping } from 'shared/typings';
+import { classNamesTyping } from '../../shared/typings';
 import styles from './styles.scss';
 
 const TYPES = ['text', 'email', 'number', 'password'];
@@ -11,27 +11,38 @@ export default class TextInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      focus: false
+      focus: false,
+      pristine: true
     };
     bindAll(this, 'onChange', 'onBlur', 'onFocus');
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.pristine === false && this.props.pristine === true) {
+      this.setState(() => ({ pristine: false }));
+    }
+  }
+
   onChange({ target }) {
     const change = { [this.props.name]: target.value };
-    const valid = (this.props.validate instanceof Function) ? this.props.validate(change) : true;
-    this.props.onChange(change, valid);
+    this.setState(() => ({ pristine: false }), () => {
+      const valid = (typeof this.props.validate === 'function') ? this.props.validate(change) : true;
+      this.props.onChange(change, valid);
+    });
   }
 
   onFocus(e) {
     e.persist();
-    this.setState(() => ({ focus: true }));
-    if (this.props.onFocus) this.props.onFocus(e.value);
+    this.setState(() => ({ focus: true }), () => {
+      if (this.props.onFocus) this.props.onFocus(e);
+    });
   }
 
   onBlur(e) {
     e.persist();
-    this.setState(() => ({ focus: false }));
-    if (this.props.onBlur) this.props.onBlur(e.value);
+    this.setState(() => ({ focus: false }), () => {
+      if (this.props.onBlur) this.props.onBlur(e);
+    });
   }
 
   render() {
@@ -40,13 +51,13 @@ export default class TextInput extends React.Component {
       type,
       value,
       name,
+      pristine,
       label,
       descr,
       prefix,
       suffix,
       valid,
       validate,
-      pristine,
       onChange,
       onFocus,
       onBlur,
@@ -56,7 +67,7 @@ export default class TextInput extends React.Component {
     const invalid = Array.isArray(valid);
 
     const classes = {
-      [styles['state--error']]: invalid && !pristine,
+      [styles['state--error']]: invalid && !this.state.pristine,
       [styles['state--focus']]: this.state.focus
     };
 
@@ -77,7 +88,9 @@ export default class TextInput extends React.Component {
           {suffix && <span className={styles.suffix}>{suffix}</span>}
         </label>
         <hr/>
-        {((invalid && !pristine) || descr) ? <span className={styles.subtext}>{(invalid && !pristine) ? valid.join(', ') : descr}</span> : null}
+        {((invalid && !this.state.pristine) || descr) ? (
+          <span className={styles.subtext}>{(invalid && !this.state.pristine) ? valid.join(', ') : descr}</span>
+        ) : null}
       </div>
     );
   }

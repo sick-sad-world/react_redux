@@ -7,17 +7,26 @@ $f-h4: u(2.25);
 $f-h5: u(2);
 $f-h6: u(1.75);
 $f-text: u(1.75);
-$f-cap: u(1.6);
+$f-cap: u(1.5);
 
 $s-icon: u(2);
 $s-input: u(3);
+$s-button: u(4);
+
+$sizes: (
+  xs: 90px,
+  s: 120px,
+  m: 180px,
+  l: 240px,
+  xl: 320px
+);
 
 $c-prm: #5c6470;
 $c-prm-lt: lighten($c-prm, 7.5%);
-$c-prm-lt2: lighten($c-prm, 25%);
+$c-prm-lt2: lighten($c-prm, 15%);
 
 $c-sec: #f7f7f7;
-$c-sec-dk: darken($c-sec, 7.5%);
+$c-sec-dk: darken($c-sec, 10%);
 $c-sec-dk2: darken($c-sec, 15%);
 
 $c-acc: #74abe2;
