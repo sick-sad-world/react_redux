@@ -2,7 +2,7 @@ import bindAll from 'lodash/bindAll';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { classNamesTyping } from '../../shared/typings';
+import { classNameShape } from '../../shared/typings';
 import styles from './styles.scss';
 
 const TYPES = ['text', 'email', 'number', 'password'];
@@ -106,7 +106,7 @@ TextInput.defaultProps = {
 
 TextInput.propTypes = {
   /** HTML Class will be applied to container */
-  className: classNamesTyping,
+  className: classNameShape,
   /** Type property of an input */
   type: PropTypes.oneOf(TYPES),
   /** Label text for input */

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { classNamesTyping } from '../../shared/typings';
+import { classNameShape } from '../../shared/typings';
 import styles from './styles.scss';
 
 const TYPE = ['button', 'input', 'link'];
@@ -34,7 +34,7 @@ Button.propTypes = {
   /** Color theme of a button */
   theme: PropTypes.oneOf(THEMES).isRequired,
   /** Additional class names */
-  className: classNamesTyping,
+  className: classNameShape,
   /** Content of a button (text, child elements, icons, e.t.c) */
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element, PropTypes.string])
 };

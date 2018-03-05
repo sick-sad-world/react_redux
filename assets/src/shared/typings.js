@@ -1,5 +1,10 @@
 import PropTypes from 'prop-types';
 
-export const classNamesTyping = PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string), PropTypes.objectOf(PropTypes.bool)]);
+/** Default options shape for Dropdowns, switchers, e.t.c */
+export const optionShape = (type = 'string', labelProp = 'label') => PropTypes.arrayOf(PropTypes.shape({
+  [labelProp]: PropTypes.string.isRequired,
+  value: PropTypes[type].isRequired
+}));
 
-export const someTyping = true;
+/** All possible variations of ClassNames definitions based on classNames https://github.com/JedWatson/classnames */
+export const classNameShape = PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string), PropTypes.objectOf(PropTypes.bool)]);
