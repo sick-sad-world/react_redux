@@ -1,21 +1,28 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
-// import { withState } from '@dump247/storybook-state';
 import { withTests, withState } from 'with';
 import TextInput from './index';
+import Raw from './component';
 import Icon from '../Icon';
 
 storiesOf('FormElements', module)
   .addDecorator(withTests('TextInput'))
   .add('TextInput', withState({ inv: 'some value' }, (story, store) => (
-    withInfo()(() => (
-      <div>
+    withInfo({
+      propTables: [Raw],
+      propTablesExclude: [TextInput]
+    })(() => {
+      function onChange(value) {
+        return store.set(value);
+      }
+      return (
+        <div>
         <TextInput
           label='Simple input'
           name='simple'
           placeholder='enter your name'
-          onChange={value => store.set(value)}
+          onChange={onChange}
           value={store.state.simple}
         />
         <div style={{ height: '50px' }} />
@@ -23,7 +30,7 @@ storiesOf('FormElements', module)
           label='Simple input with description'
           name='descr'
           descr='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, placeat.'
-          onChange={value => store.set(value)}
+          onChange={onChange}
           value={store.state.descr}
         />
         <div style={{ height: '50px' }} />
@@ -32,9 +39,10 @@ storiesOf('FormElements', module)
           name='inv'
           valid={['some validation error']}
           pristine={false}
+          validate={onChange}
           descr='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, placeat.'
-          suffix={<Icon g='warning' />}
-          onChange={value => store.set(value)}
+          suffix={<Icon g='warning' viewBox='0 0 24 24'/>}
+          onChange={onChange}
           value={store.state.inv}
         />
         <div style={{ height: '50px' }} />
@@ -42,7 +50,7 @@ storiesOf('FormElements', module)
           label='Simple input with prefix'
           name='prefix'
           prefix={<Icon g='documents' />}
-          onChange={value => store.set(value)}
+          onChange={onChange}
           value={store.state.prefix}
         />
         <div style={{ height: '50px' }} />
@@ -50,10 +58,11 @@ storiesOf('FormElements', module)
           label='Simple input with suffix'
           name='suffix'
           suffix={<Icon g='eye-with-line' />}
-          onChange={value => store.set(value)}
+          onChange={onChange}
           value={store.state.suffix}
         />
       </div>
-    ))(story)
+      );
+    })(story)
   )));
 

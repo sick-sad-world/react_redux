@@ -7,11 +7,13 @@ import styles from './styles.scss';
 const TYPE = ['button', 'input', 'link'];
 const THEMES = ['default', 'secondary', 'success', 'error', 'warning', 'info'];
 
+/** UI Button implementation */
 export default function Button({ el, children, className, theme, ...props }) {
   const classList = classNames({
     [styles.button]: true,
     [styles[theme]]: true
   }, className);
+
   switch (el) {
     case 'input':
       return <input type='button' {...props} className={classList} />;
