@@ -17,16 +17,16 @@ storiesOf('FormElements', module)
       <ol>
         <li style={{ marginBottom: '5px' }}><Button onClick={action('btn-click')}>Button</Button> - Simple button</li>
         <li style={{ marginBottom: '5px' }}><Button onClick={action('link-click')} el='link'>Button</Button> - Link as a button</li>
-        <li style={{ marginBottom: '5px' }}><Button onClick={action('input-click')} el='input' type='submit' value='Send'/> - [Input:submit] as a button</li>
+        <li style={{ marginBottom: '5px' }}><Button onClick={action('input-click')} el='input' type='submit' value='Send' /> - [Input:submit] as a button</li>
         <li style={{ marginBottom: '5px' }}><Button onClick={action('dis-click')} disabled>Disabled</Button> - Disabled button</li>
         <li style={{ marginBottom: '5px' }}>
-        <Button onClick={action('loading-click')}>Loading</Button> - Loading indicator
+          <Button onClick={action('loading-click')}>Loading</Button> - Loading indicator
         </li>
         <li style={{ marginBottom: '5px' }}>
-        <Button onClick={action('icon-click')}>
-          <span>Button</span>
-          <Icon g='trash' />
-        </Button> - Icon After
+          <Button onClick={action('icon-click')}>
+            <span>Button</span>
+            <Icon g='trash' />
+          </Button> - Icon After
         </li>
         <li style={{ marginBottom: '5px' }}>
           <Button theme='secondary' onClick={action('sec-click')}>

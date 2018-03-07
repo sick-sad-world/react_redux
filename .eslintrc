@@ -6,15 +6,6 @@
     "es6": true,
     "jest": true
   },
-  "settings": {
-    "import/resolver": {
-      "alias": [],
-      "extensions": [
-        ".js",
-        ".jsx"
-      ]
-    }
-  },
   "extends": ["airbnb", "plugin:react/recommended", "eslint:recommended"],
   "parserOptions": {
     "ecmaVersion": 8,
@@ -26,6 +17,7 @@
   },
   "plugins": ["react", "babel", "import", "jest"],
   "rules": {
-    "import/no-extraneous-dependencies": ["error", {"devDependencies": true, "dependencies": true, "peerDependencies": true}]
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": true, "peerDependencies": true}],
+    "react/jsx-filename-extension": 0
   }
 }
