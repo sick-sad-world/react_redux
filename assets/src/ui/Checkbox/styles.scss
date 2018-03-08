@@ -1,0 +1,61 @@
+@import 'mixins/_u.scss';
+@import 'mixins/_styles.scss';
+@import '_vars.scss';
+
+:local .root {
+  label {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .label {
+    font-size: inherit;
+    line-height: $s-input;
+  }
+
+  .subtext {
+    display: block;
+    margin-top: u();
+    @include cap-styles();
+    text-align: right;
+  }
+
+  .figure {
+    position: relative;
+    width: $s-input;
+    height: $s-input;
+    input, svg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+    input {
+      opacity: 0;
+      z-index: 3;
+    }
+    svg {
+      fill: transparent;
+      border: 1px solid map-get($colors, border);
+      border-radius: 4px;
+      //transition: border-color $t-dur $t-func, background-color $t-dur $t-func;
+      z-index: 2;
+    }
+    input:checked + svg {
+      background-color: $c-acc;
+      border-color: $c-acc;
+      fill: $c-sec;
+    }
+  }
+
+  &.state--focus {
+    .figure {
+      input:not([disabled]) + svg {
+        box-shadow: 0 0 0 3px rgba($c-acc, .4 );
+      }
+      input:not([disabled]):not(:checked) + svg {
+        background-color: rgba($c-acc, .15);
+        fill: $c-sec;
+      }
+    }
+  }
+}

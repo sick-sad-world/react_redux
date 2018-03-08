@@ -18,50 +18,50 @@ storiesOf('FormElements', module)
       }
       return (
         <div>
-        <TextInput
-          label='Simple input'
-          name='simple'
-          placeholder='enter your name'
-          onChange={onChange}
-          value={store.state.simple}
-        />
-        <div style={{ height: '50px' }} />
-        <TextInput
-          label='Simple input with description'
-          name='descr'
-          descr='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, placeat.'
-          onChange={onChange}
-          value={store.state.descr}
-        />
-        <div style={{ height: '50px' }} />
-        <TextInput
-          label='Simple invalid input'
-          name='inv'
-          valid={['some validation error']}
-          pristine={false}
-          validate={onChange}
-          descr='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, placeat.'
-          suffix={<Icon g='warning' viewBox='0 0 24 24'/>}
-          onChange={onChange}
-          value={store.state.inv}
-        />
-        <div style={{ height: '50px' }} />
-        <TextInput
-          label='Simple input with prefix'
-          name='prefix'
-          prefix={<Icon g='documents' />}
-          onChange={onChange}
-          value={store.state.prefix}
-        />
-        <div style={{ height: '50px' }} />
-        <TextInput
-          label='Simple input with suffix'
-          name='suffix'
-          suffix={<Icon g='eye-with-line' />}
-          onChange={onChange}
-          value={store.state.suffix}
-        />
-      </div>
+          <TextInput
+            label='Simple input'
+            name='simple'
+            placeholder='enter your name'
+            onChange={onChange}
+            value={store.state.simple}
+          />
+          <div style={{ height: '50px' }} />
+          <TextInput
+            label='Simple input with description'
+            name='descr'
+            descr='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, placeat.'
+            onChange={onChange}
+            value={store.state.descr}
+          />
+          <div style={{ height: '50px' }} />
+          <TextInput
+            label='Simple invalid input'
+            name='inv'
+            valid={['some validation error']}
+            pristine={false}
+            validate={onChange}
+            descr='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, placeat.'
+            suffix={<Icon g='warning' viewBox='0 0 24 24' />}
+            onChange={onChange}
+            value={store.state.inv}
+          />
+          <div style={{ height: '50px' }} />
+          <TextInput
+            label='Simple input with prefix'
+            name='prefix'
+            prefix={<Icon g='documents' />}
+            onChange={onChange}
+            value={store.state.prefix}
+          />
+          <div style={{ height: '50px' }} />
+          <TextInput
+            label='Simple input with suffix'
+            name='suffix'
+            helper={<Icon g='eye-with-line' />}
+            onChange={onChange}
+            value={store.state.suffix}
+          />
+        </div>
       );
     })(story)
   )));

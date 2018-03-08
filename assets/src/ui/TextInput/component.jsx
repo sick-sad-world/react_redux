@@ -7,32 +7,35 @@ import styles from './styles.scss';
 const TYPES = ['text', 'email', 'number', 'password'];
 
 /** Input of type: TEXT, EMAIL, NUMBER, PASSWORD implementation */
-export default function TextInput({ className, type, value, name, label, descr, prefix, suffix, focus, error, onChange, onFocus, onBlur, ...props }) {
+export default function TextInput({ className, type, value, name, label, descr, prefix, suffix, helper, focus, error, onChange, onFocus, onBlur, ...props }) {
   const classes = {
     [styles['state--error']]: !!error,
     [styles['state--focus']]: focus
   };
 
   return (
-    <div className={classNames(styles.body, classes, className)}>
-      <label>
-        {prefix && <span className={styles.prefix}>{prefix}</span>}
-        <input
-          {...props}
-          name={name}
-          type={type}
-          value={value}
-          onChange={onChange}
-          onFocus={onFocus}
-          onBlur={onBlur}
-        />
-        {label && <span className={styles.label}>{label}</span>}
-        {suffix && <span className={styles.suffix}>{suffix}</span>}
-      </label>
-      <hr/>
-      {(error || descr) ? (
-        <span className={styles.subtext}>{error || descr}</span>
-      ) : null}
+    <div className={classNames(styles.root, classes, className)}>
+      {prefix && <span className={styles.prefix}>{prefix}</span>}
+      <div className={styles.body}>
+        <label>
+          <input
+            {...props}
+            name={name}
+            type={type}
+            value={value}
+            onChange={onChange}
+            onFocus={onFocus}
+            onBlur={onBlur}
+          />
+          {label && <span className={styles.label}>{label}</span>}
+          {helper && <span className={styles.helper}>{helper}</span>}
+        </label>
+        <hr />
+        {(error || descr) ? (
+          <span className={styles.subtext}>{error || descr}</span>
+          ) : null}
+      </div>
+      {suffix && <span className={styles.suffix}>{suffix}</span>}
     </div>
   );
 }
@@ -67,6 +70,8 @@ TextInput.propTypes = {
   focus: PropTypes.bool.isRequired,
   /** Field validation state mark it as valid [true] or invalid [Array[String]] */
   error: errorShape.isRequired,
+  /** Elements placed BEFORE field (icons, buttons) */
+  helper: PropTypes.element,
   /** Elements placed BEFORE field (icons, buttons) */
   prefix: PropTypes.element,
   /** Elements placed AFTER field (icons, buttons) */

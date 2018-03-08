@@ -21,19 +21,19 @@ $sizes: (
   xl: 320px
 );
 
-$c-prm: #5c6470;
-$c-prm-lt: lighten($c-prm, 7.5%);
-$c-prm-lt2: lighten($c-prm, 15%);
+$c-prm: #616161;
+$c-prm-lt: lighten($c-prm, 12%);
+$c-prm-lt2: lighten($c-prm, 17%);
 
-$c-sec: #f7f7f7;
+$c-sec: #fafafa;
 $c-sec-dk: darken($c-sec, 10%);
 $c-sec-dk2: darken($c-sec, 15%);
 
-$c-acc: #74abe2;
+$c-acc: #009688;
 $c-acc-dk: darken($c-acc, 5%);
 $c-acc-lt: lighten($c-acc, 5%);
 
-$c-acc-sec: #ff8e38;
+$c-acc-sec: #FFA726;
 $c-acc-sec-dk: darken($c-acc-sec, 5%);
 $c-acc-sec-lt: lighten($c-acc-sec, 5%);
 
@@ -49,10 +49,10 @@ $colors: (
   selection: lighten($c-acc-sec, 25%)
 );
 
-$c-error: #E45857;
-$c-warning: #F9A94A;
-$c-success: #8FC556;
-$c-info: #54B5DF;
+$c-error: #F44336;
+$c-warning: #FFC107;
+$c-success: #8BC34A;
+$c-info: #00BCD4;
 
 $states: (
   error: $c-error,

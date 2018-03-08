@@ -3,9 +3,9 @@
 @import 'mixins/_styles.scss';
 @import '_vars.scss';
 
-:local .body {
+:local .root {
   $gutter: u(0.5);
-  display: block;
+  display: flex;
 
   label {
     display: flex;
@@ -41,7 +41,7 @@
     margin: $gutter 0;
     position: relative;
     overflow: visible;
-    background-color: $c-sec-dk;
+    background-color: $c-sec-dk2;
     border: 0;
     &:after {
       content: '';
@@ -55,8 +55,13 @@
     }
   }
 
+  .body {
+    flex: 1 1 auto;
+  }
+
   .prefix:first-child,
-  .suffix:last-child {
+  .suffix:last-child,
+  .helper {
     display: flex;
     flex: 0 0 auto;
     width: $s-input * 1.5;
@@ -72,19 +77,13 @@
     transition-timing-function: $t-func;
     transition-property: font-size transform;
     transform: translate3d(0,0,0);
-    &:before {
-      content: "— ";
-    }
-  }
-
-  .prefix ~ .label {
-    margin-left: $s-input * 1.5;
   }
 
   .subtext {
     @include cap-styles();
     display: block;
     flex: 0 0 100%;
+    margin-top: u(.5);
   }
   
   input:not([value='']) + .label,
@@ -93,15 +92,6 @@
     transform: translate3d(0,-$s-input,0);
     font-size: $f-cap;
     font-weight: 700;
-  }
-
-  &:hover {
-    svg {
-      fill: $c-prm-lt2;
-    }
-    hr {
-      background-color: $c-sec-dk2;
-    }
   }
 
   &.state--focus {
