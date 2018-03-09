@@ -5,7 +5,7 @@ import icons from './data';
 /** Icon component description */
 export default function Icon({ fill, g, viewBox, ...props }) {
   if (typeof icons[g] !== 'string') throw new Error(`Icon [${g}] not found in Icons list`);
-  return <svg role='icon' viewBox={viewBox} {...props}><path fill={fill} d={icons[g]}></path></svg>;
+  return <svg role='icon' viewBox={viewBox} {...props}><path fill={fill} d={icons[g]} /></svg>;
 }
 
 Icon.defaultProps = {

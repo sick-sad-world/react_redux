@@ -73,7 +73,6 @@ const sassLoader = {
     use: [{
       loader: 'css-loader',
       options: {
-        modules: true,
         sourceMap: !p,
         localIdentName: (p) ? ['hash:base64:8'] : '[path]-[local]',
         importLoaders: 1
@@ -84,7 +83,6 @@ const sassLoader = {
         sourceMap: !p,
         outputStyle: (p) ? 'compressed' : 'expanded',
         includePaths: [
-          path.resolve(__dirname, './node_modules/normalize.css/normalize.css'),
           path.resolve(__dirname, CONTEXT, 'sass')
         ]
       }

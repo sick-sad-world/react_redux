@@ -59,27 +59,27 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 400;
 }
 
-:global h1, :global .t-h1 {
+h1, .t-h1 {
   font-size: $f-h1;
 }
 
-:global h2, :global .t-h2 {
+h2, .t-h2 {
   font-size: $f-h2;
 }
 
-:global h3, :global .t-h3 {
+h3, .t-h3 {
   font-size: $f-h3;
 }
 
-:global h4, :global .t-h4 {
+h4, .t-h4 {
   font-size: $f-h4;
 }
 
-:global h5, :global .t-h5 {
+h5, .t-h5 {
   font-size: $f-h5;
 }
 
-:global h6, :global .t-h6 {
+h6, .t-h6 {
   font-size: $f-h6;
 }
 
@@ -133,7 +133,7 @@ code, samp, kbd {
   padding: 0 0.5em;
 }
 
-:global samp, :global .badge {
+samp, .badge {
   $s: u(2.5);
   font-family: $ff;
   padding: 0px 1em;
@@ -158,12 +158,6 @@ code, samp, kbd {
     }
   }
   @each $style, $color in $feeds {
-    &.#{$style} {
-      background-color: mix($color, #fff, 25%);
-      border-color: $color;
-    }
-  }
-  @each $style, $color in $recipients {
     &.#{$style} {
       background-color: mix($color, #fff, 25%);
       border-color: $color;
@@ -198,7 +192,7 @@ svg:not(:root) {
   overflow: hidden;
 }
 
-:global svg[role="icon"] {
+svg[role="icon"] {
 	fill: $c-prm-lt;
 	width: $s-icon;
 	height: $s-icon;

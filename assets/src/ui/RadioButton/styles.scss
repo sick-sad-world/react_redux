@@ -2,7 +2,7 @@
 @import 'mixins/_styles.scss';
 @import '_vars.scss';
 
-:local .root {
+.RadioButton--root {
   display: grid;
   grid-template-columns: auto $s-input;
   grid-template-rows: $s-input auto;

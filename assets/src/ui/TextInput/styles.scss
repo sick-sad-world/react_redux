@@ -3,7 +3,7 @@
 @import 'mixins/_styles.scss';
 @import '_vars.scss';
 
-:local .root {
+.TextInput--root {
   $gutter: u(0.5);
   display: flex;
 

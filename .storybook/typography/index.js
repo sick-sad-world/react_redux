@@ -60,10 +60,6 @@ storiesOf('Global Elements', module)
       {['html', 'rss', 'facebook', 'reddit', 'twitter'].map((itm) => (
         <li><samp className={itm}>badge</samp> - {itm} styled badge</li>
       ))}
-      <li>Recipietns colors<hr/></li>
-      {['gmail', 'slack', 'yahoo'].map((itm) => (
-        <li><samp className={itm}>badge</samp> - {itm} styled badge</li>
-      ))}
     </ol>
   ))
   .add('Table', () => (

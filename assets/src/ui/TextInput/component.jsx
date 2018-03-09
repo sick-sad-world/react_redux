@@ -2,21 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { classNameShape, errorShape } from '../../shared/typings';
-import styles from './styles.scss';
+import './styles.scss';
 
 const TYPES = ['text', 'email', 'number', 'password'];
 
 /** Input of type: TEXT, EMAIL, NUMBER, PASSWORD implementation */
 export default function TextInput({ className, type, value, name, label, descr, prefix, suffix, helper, focus, error, onChange, onFocus, onBlur, ...props }) {
   const classes = {
-    [styles['state--error']]: !!error,
-    [styles['state--focus']]: focus
+    'state--error': !!error,
+    'state--focus': focus
   };
 
   return (
-    <div className={classNames(styles.root, classes, className)}>
-      {prefix && <span className={styles.prefix}>{prefix}</span>}
-      <div className={styles.body}>
+    <div className={classNames('TextInput--root', classes, className)}>
+      {prefix && <span className='prefix'>{prefix}</span>}
+      <div className='body'>
         <label>
           <input
             {...props}
@@ -27,15 +27,15 @@ export default function TextInput({ className, type, value, name, label, descr, 
             onFocus={onFocus}
             onBlur={onBlur}
           />
-          {label && <span className={styles.label}>{label}</span>}
-          {helper && <span className={styles.helper}>{helper}</span>}
+          {label && <span className='label'>{label}</span>}
+          {helper && <span className='helper'>{helper}</span>}
         </label>
         <hr />
         {(error || descr) ? (
-          <span className={styles.subtext}>{error || descr}</span>
+          <span className='subtext'>{error || descr}</span>
           ) : null}
       </div>
-      {suffix && <span className={styles.suffix}>{suffix}</span>}
+      {suffix && <span className='suffix'>{suffix}</span>}
     </div>
   );
 }

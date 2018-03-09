@@ -28,6 +28,7 @@ setDefaults({
 });
 
 function loadStories() {
+  require('node_modules/normalize.css/normalize.css');
   require('../assets/sass/app.scss');
   require('./stories');
 }

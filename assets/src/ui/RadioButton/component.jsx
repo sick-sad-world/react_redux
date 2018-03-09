@@ -3,22 +3,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { classNameShape, errorShape } from '../../shared/typings';
-import styles from './styles.scss';
+import './styles.scss';
 
 /** RadioButton input to choose some of many */
 export default function RadioButton({ className, reverse, value, name, label, descr, focus, error, onChange, onFocus, onBlur, checked, ...props }) {
   const classes = {
-    [styles['state--error']]: !!error,
-    [styles['state--focus']]: focus,
-    [styles['style--reverse']]: !!reverse
+    'state--error': !!error,
+    'state--focus': focus,
+    'style--reverse': !!reverse
   };
 
   const id = `${name}-${value}`
 
   return (
-    <div className={classNames(styles.root, classes, className)}>
+    <div className={classNames('RadioButton--root', classes, className)}>
       {label && <label htmlFor={id}>{label}</label>}
-      <div className={styles.control}>
+      <div className='control'>
         <input
           {...props}
           type='radio'
@@ -32,7 +32,7 @@ export default function RadioButton({ className, reverse, value, name, label, de
         />
         <span />
       </div>
-      {descr && <span className={styles.subtext}>{descr}</span>}
+      {descr && <span className='subtext'>{descr}</span>}
     </div>
   );
 }

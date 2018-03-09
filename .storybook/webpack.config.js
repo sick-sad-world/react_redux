@@ -17,7 +17,6 @@ module.exports = (storybookBaseConfig, configType) => {
     }, {
       loader: 'css-loader',
       options: {
-        modules: true,
         sourceMap: true,
         localIdentName: '[path]-[local]',
         importLoaders: 1
@@ -28,7 +27,7 @@ module.exports = (storybookBaseConfig, configType) => {
         sourceMap: true,
         outputStyle: 'expanded',
         includePaths: [
-          path.resolve(__dirname, '../node_modules/normalize.css/normalize.css'),
+          path.resolve(__dirname, '../node_modules'),
           path.resolve(__dirname, '../assets/sass')
         ]
       }

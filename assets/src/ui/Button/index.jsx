@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { classNameShape } from '../../shared/typings';
-import styles from './styles.scss';
+import './styles.scss';
 
 const TYPE = ['button', 'input', 'link'];
 const THEMES = ['default', 'secondary', 'success', 'error', 'warning', 'info'];
@@ -10,10 +10,10 @@ const THEMES = ['default', 'secondary', 'success', 'error', 'warning', 'info'];
 /** UI Button implementation */
 export default function Button({ el, children, className, mode, theme, ...props }) {
   const classList = classNames({
-    [styles.button]: true,
-    [styles[theme]]: true,
-    [styles['style--lined']]: mode === 'lined',
-    [styles['style--solid']]: mode === 'solid'
+    Button: true,
+    [theme]: true,
+    'style--lined': mode === 'lined',
+    'style--solid': mode === 'solid'
   }, className);
 
   switch (el) {
