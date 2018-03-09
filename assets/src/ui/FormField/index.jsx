@@ -57,7 +57,7 @@ export default function makeFormField(Component) {
 
   FormField.propTypes = {
     /** Value of input itself */
-    value: PropTypes.string.isRequired,
+    value: PropTypes.string,
     /** Name property for input */
     name: PropTypes.string.isRequired,
     /** Function invoked on change event */

@@ -41,7 +41,7 @@ storiesOf('FormElements', module)
             pristine={false}
             validate={onChange}
             descr='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, placeat.'
-            suffix={<Icon g='warning' viewBox='0 0 24 24' />}
+            helper={<Icon g='warning' viewBox='0 0 24 24' />}
             onChange={onChange}
             value={store.state.inv}
           />
@@ -57,7 +57,7 @@ storiesOf('FormElements', module)
           <TextInput
             label='Simple input with suffix'
             name='suffix'
-            helper={<Icon g='eye-with-line' />}
+            suffix={<Icon g='eye-with-line' />}
             onChange={onChange}
             value={store.state.suffix}
           />

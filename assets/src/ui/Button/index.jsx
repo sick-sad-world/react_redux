@@ -8,10 +8,12 @@ const TYPE = ['button', 'input', 'link'];
 const THEMES = ['default', 'secondary', 'success', 'error', 'warning', 'info'];
 
 /** UI Button implementation */
-export default function Button({ el, children, className, theme, ...props }) {
+export default function Button({ el, children, className, mode, theme, ...props }) {
   const classList = classNames({
     [styles.button]: true,
-    [styles[theme]]: true
+    [styles[theme]]: true,
+    [styles['style--lined']]: mode === 'lined',
+    [styles['style--solid']]: mode === 'solid'
   }, className);
 
   switch (el) {
@@ -27,7 +29,8 @@ export default function Button({ el, children, className, theme, ...props }) {
 
 Button.defaultProps = {
   el: 'button',
-  theme: 'default'
+  theme: 'default',
+  mode: false
 };
 
 Button.propTypes = {
@@ -35,6 +38,8 @@ Button.propTypes = {
   el: PropTypes.oneOf(TYPE).isRequired,
   /** Color theme of a button */
   theme: PropTypes.oneOf(THEMES).isRequired,
+  /** Whatever button solid or lined or transparent */
+  mode: PropTypes.bool,
   /** Additional class names */
   className: classNameShape,
   /** Content of a button (text, child elements, icons, e.t.c) */

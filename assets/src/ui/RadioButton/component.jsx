@@ -4,13 +4,12 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { classNameShape, errorShape } from '../../shared/typings';
 import styles from './styles.scss';
-import Icon from '../Icon';
 
-/** Checkbox input to choose some of many */
-export default function Checkbox({ className, reverse, value, name, label, descr, focus, error, onChange, onFocus, onBlur, checked, ...props }) {
+/** RadioButton input to choose some of many */
+export default function RadioButton({ className, reverse, value, name, label, descr, focus, error, onChange, onFocus, onBlur, checked, ...props }) {
   const classes = {
     [styles['state--error']]: !!error,
-    [styles['state--focus']]: !!focus,
+    [styles['state--focus']]: focus,
     [styles['style--reverse']]: !!reverse
   };
 
@@ -22,7 +21,7 @@ export default function Checkbox({ className, reverse, value, name, label, descr
       <div className={styles.control}>
         <input
           {...props}
-          type='checkbox'
+          type='radio'
           id={id}
           name={name}
           value={value}
@@ -31,28 +30,28 @@ export default function Checkbox({ className, reverse, value, name, label, descr
           onFocus={onFocus}
           onBlur={onBlur}
         />
-        <Icon g='check' />
+        <span />
       </div>
       {descr && <span className={styles.subtext}>{descr}</span>}
     </div>
   );
 }
 
-Checkbox.defaultProps = {
+RadioButton.defaultProps = {
   value: '',
   focus: false,
   error: false,
   checked: false
 };
 
-Checkbox.propTypes = {
+RadioButton.propTypes = {
   /** HTML Class will be applied to container */
   className: classNameShape,
   /** Label text for input */
   label: PropTypes.string,
   /** Small description text under the input */
   descr: PropTypes.string,
-  /** State of Checkbox */
+  /** State of RadioButton */
   checked: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]).isRequired,
   /** Value of input itself */
   value: PropTypes.string.isRequired,

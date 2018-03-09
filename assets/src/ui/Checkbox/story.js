@@ -4,7 +4,6 @@ import { withInfo } from '@storybook/addon-info';
 import { withTests, withState } from 'with';
 import Checkbox from './index';
 import Raw from './component';
-import Icon from '../Icon';
 
 storiesOf('FormElements', module)
   .addDecorator(withTests('Checkbox'))
@@ -18,23 +17,28 @@ storiesOf('FormElements', module)
           <Checkbox
             label='Simple checkbox'
             name='simple'
-            value
-            onChange={({simple}) => store.set({simple: !simple})}
+            onChange={() => store.set({simple: !store.state.simple})}
             checked={store.state.simple === true}
           />
           <div style={{ height: '50px' }} />
           <Checkbox
+            label='Reversed layout checkbox'
+            name='rev'
+            reverse
+            onChange={() => store.set({rev: !store.state.rev})}
+            checked={store.state.rev === true}
+          />
+          <div style={{ height: '50px' }} />
+          <Checkbox
             name='min'
-            value
-            onChange={({min}) => store.set({min: !min})}
+            onChange={() => store.set({min: !store.state.min})}
             checked={store.state.min === true}
           />
           <div style={{ height: '50px' }} />
           <Checkbox
             label='With description'
             name='desc'
-            value
-            onChange={({desc}) => store.set({desc: !desc})}
+            onChange={() => store.set({desc: !store.state.desc})}
             checked={store.state.desc === true}
             descr='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, placeat.'
           />

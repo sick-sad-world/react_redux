@@ -5,35 +5,36 @@
 :local .button {
   display: inline-flex;
   border: 0;
+  padding: 0 u();
+  min-width: map-get($sizes, xs);
   justify-content: center;
   align-items: center; 
-  line-height: $s-button;
   height: $s-button;
-  padding: 0 u();
-  border-radius: 4px;
-  background-color: $c-acc;
-  color: $c-sec;
-  font-size: $f-cap;
+  line-height: $s-button;
   font-weight: 400;
+  font-size: $f-cap;
   text-transform: uppercase;
-  min-width: map-get($sizes, xs);
-  svg {
-    fill: $c-sec;
+  border-radius: 4px;
+  background: none;
+  color: $c-acc;
+
+  &:hover {
+    text-decoration: none;
+    &:not([disabled]) {
+      color: $c-acc-dk;
+    }
   }
+
+  svg {
+    width: u(1.75);
+    height: u(1.75);
+  }
+
   svg:first-child {
     margin-right: u();
   }
   svg:last-child {
     margin-left: u();
-  }
-
-  &:not([disabled]):hover {
-    text-decoration: none;
-    background-color: $c-acc-lt;
-  }
-
-  &:not([disabled]):focus {
-    box-shadow: 0 0 0 3px rgba($c-acc, .45);
   }
   
   &[disabled] {
@@ -41,26 +42,46 @@
   }
 
   &.secondary {
-    background-color: $c-acc-sec;
+    color: $c-acc-sec;
     &:not([disabled]):hover {
-      background-color: $c-acc-sec-lt;
-    }
-    &:not([disabled]):focus {
-      box-shadow: 0 0 0 3px rgba($c-acc-sec, .45);
+      color: $c-acc-sec-dk;
     }
   }
 
   @each $style, $color in $states {
     &.#{$style} {
-      background-color: $color;
-      svg {
-        fill: $c-sec;
-      }
+      color: $color;
       &:not([disabled]):hover {
-        background-color: lighten($color, 5%);
+        color: darken($color, .5);
       }
-      &:not([disabled]):focus {
-        box-shadow: 0 0 0 3px rgba($color, .45);
+    }
+  }
+
+  &.style--solid {
+    @include button-solid($c-acc, $c-acc-lt, $c-sec);
+
+    &.secondary {
+      @include button-solid($c-acc-sec, $c-acc-sec-lt, $c-sec);
+    }
+
+    @each $style, $color in $states {
+      &.#{$style} {
+        @include button-solid($color, lighten($color, 5%), $c-sec);
+      }
+    }
+  }
+
+  &.style--lined {
+    @include button-lined($c-acc);
+    line-height: $s-input - 4px;
+
+    &.secondary {
+      @include button-lined($c-acc-sec);
+    }
+
+    @each $style, $color in $states {
+      &.#{$style} {
+        @include button-lined($color);
       }
     }
   }

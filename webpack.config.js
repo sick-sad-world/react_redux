@@ -7,7 +7,8 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const { p, c, watch, ...args } = require('yargs').argv;
-const public = args.public || args['output-public-path'];
+
+const publicPath = args.public || args['output-public-path'];
 const CONTEXT = 'assets';
 const DEST = (p) ? '/build' : '/dist';
 const ALIAS = ['/images', '/sass', '/src', '/src/shared', 'src/ui'];
@@ -46,9 +47,9 @@ if (p) {
   PLUGINS.push(new webpack.NoEmitOnErrorsPlugin());
 }
 
-if (public) {
+if (publicPath) {
   PLUGINS.push(new webpack.HotModuleReplacementPlugin());
-} else if (!public && !c) {
+} else if (!publicPath && !c) {
   PLUGINS.push(new BundleAnalyzerPlugin({
     analyzerMode: (watch) ? 'server' : 'static'
   }));
@@ -74,7 +75,7 @@ const sassLoader = {
       options: {
         modules: true,
         sourceMap: !p,
-        localIdentName: (p) ? ['hash:base64:8'] : '[path]--[local]',
+        localIdentName: (p) ? ['hash:base64:8'] : '[path]-[local]',
         importLoaders: 1
       }
     }, {
@@ -136,11 +137,11 @@ module.exports = {
   cache: true,
   stats: 'normal',
   entry: {
-    app: (public) ? ['react-hot-loader/patch', `webpack-dev-server/client?${public}`, 'webpack/hot/only-dev-server', 'babel-polyfill', './src/app.js'] : ['babel-polyfill', './src/app.js']
+    app: (publicPath) ? ['react-hot-loader/patch', `webpack-dev-server/client?${publicPath}`, 'webpack/hot/only-dev-server', 'babel-polyfill', './src/app.js'] : ['babel-polyfill', './src/app.js']
   },
   output: {
     path: path.join( __dirname, DEST),
-    publicPath: (public) ? public : '/',
+    publicPath: (publicPath) ? publicPath : '/',
     filename: (p) ? '[chunkhash:12].js' : '[name].js'
   },
   resolve: {

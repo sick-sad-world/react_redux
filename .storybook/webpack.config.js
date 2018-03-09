@@ -19,7 +19,7 @@ module.exports = (storybookBaseConfig, configType) => {
       options: {
         modules: true,
         sourceMap: true,
-        localIdentName: '[path]--[local]',
+        localIdentName: '[path]-[local]',
         importLoaders: 1
       }
     }, {
