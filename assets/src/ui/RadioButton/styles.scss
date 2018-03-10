@@ -4,6 +4,7 @@
 
 .RadioButton--root {
   display: grid;
+  grid-gap: u();
   grid-template-columns: auto $s-input;
   grid-template-rows: $s-input auto;
   grid-template-areas:
@@ -12,13 +13,11 @@
 
   label {
     grid-area: label;
-    margin-right: u();
   }
 
   .subtext {
     grid-area: subtext;
     display: block;
-    margin-top: u();
     text-align: right;
     @include cap-styles();
   }
@@ -66,10 +65,6 @@
     grid-template-areas:
       "control label"
       "subtext subtext";
-    label {
-      margin-right: 0;
-      margin-left: u();
-    }
     .subtext {
       text-align: left;
     }

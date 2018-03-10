@@ -4,21 +4,20 @@
 
 .Checkbox--root {
   display: grid;
-  grid-template-columns: auto $s-input;
-  grid-template-rows: $s-input auto;
+  grid-gap: u();
+  grid-template-columns: auto $s-pointer;
+  grid-template-rows: $s-pointer auto;
   grid-template-areas:
     "label control"
     "subtext subtext";
 
   label {
     grid-area: label;
-    margin-right: u();
   }
 
   .subtext {
     grid-area: subtext;
     display: block;
-    margin-top: u();
     text-align: right;
     @include cap-styles();
   }
@@ -26,8 +25,8 @@
   .control {
     grid-area: control;
     position: relative;
-    width: $s-input;
-    height: $s-input;
+    width: $s-pointer;
+    height: $s-pointer;
     input, svg {
       position: absolute;
       width: 100%;
@@ -52,14 +51,10 @@
   }
 
   &.style--reverse {
-    grid-template-columns: $s-input auto;
+    grid-template-columns: $s-pointer auto;
     grid-template-areas:
       "control label"
       "subtext subtext";
-    label {
-      margin-right: 0;
-      margin-left: u();
-    }
     .subtext {
       text-align: left;
     }

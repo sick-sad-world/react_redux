@@ -47,18 +47,18 @@ storiesOf('Global Elements', module)
   ))
   .add('Badges', () => (
     <ol>
-      <li><samp>badge</samp> - simple badge</li>
-      <li>Status colors<hr/></li>
-      {['error', 'warning', 'success', 'info'].map((itm) => (
-        <li><samp className={itm}>badge</samp> - {itm} styled badge</li>
+      <li key='-2'><samp>badge</samp> - simple badge</li>
+      <li key='-1'>Status colors<hr/></li>
+      {['error', 'warning', 'success', 'info'].map((itm, i) => (
+        <li key={i}><samp className={itm}>badge</samp> - {itm} styled badge</li>
       ))}
-      <li>Accent colors<hr/></li>
-      {['accent', 'accent-sec'].map((itm) => (
-        <li><samp className={itm}>badge</samp> - {itm} styled badge</li>
+      <li key='-3'>Accent colors<hr/></li>
+      {['accent', 'accent-sec'].map((itm, i) => (
+        <li key={i}><samp className={itm}>badge</samp> - {itm} styled badge</li>
       ))}
-      <li>Feeds colors<hr/></li>
-      {['html', 'rss', 'facebook', 'reddit', 'twitter'].map((itm) => (
-        <li><samp className={itm}>badge</samp> - {itm} styled badge</li>
+      <li key='-4'>Feeds colors<hr/></li>
+      {['html', 'rss', 'facebook', 'reddit', 'twitter'].map((itm, i) => (
+        <li key={i}><samp className={itm}>badge</samp> - {itm} styled badge</li>
       ))}
     </ol>
   ))

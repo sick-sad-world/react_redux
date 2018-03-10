@@ -39,7 +39,7 @@ Button.propTypes = {
   /** Color theme of a button */
   theme: PropTypes.oneOf(THEMES).isRequired,
   /** Whatever button solid or lined or transparent */
-  mode: PropTypes.bool,
+  mode: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   /** Additional class names */
   className: classNameShape,
   /** Content of a button (text, child elements, icons, e.t.c) */
