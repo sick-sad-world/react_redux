@@ -3,50 +3,40 @@
 @import '_vars.scss';
 
 .Dropdown--root {
-  display: flex;
-  label {
+  position: relative;
+  .label {
+    position: absolute;
+    top: 1px;
+    font-size: inherit;
     line-height: $s-input;
+    transition-duration: $t-dur;
+    transition-timing-function: $t-func;
+    transition-property: font-size transform;
+    transform: translate3d(0,0,0);
   }
   .Select {
-    flex: 1 1 auto;
-  }
-  .Select-control {
-    height: $s-input;
-    border: 0;
-    border-radius: 0;
-    border-bottom: 1px solid map-get($colors, border);
-    &:after {
-      content: '';
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      width: 0;
-      height: 3px;
-      background-color: $c-acc;
-      transition: width $t-dur $t-func;
+    .Select-placeholder {
+      opacity: 0;
+      transition: opacity $t-dur;
     }
-  }
-  .Select-placeholder {
-    line-height: $s-input;
-  }
-  .Select-input {
-    height: $s-input;
-  }
-  .Select-arrow-zone {
-    a, svg {
-      display: block;
-      margin: auto;
-    }
-  }
-  .Select.is-focused {
-    .Select-control {
-      box-shadow: none;
-      &:after {
-        width: 100%;
-      }
-      .Select-arrow-zone svg {
-        fill: $c-acc;
+    &.is-focused, &.has-value {
+      & + .label {
+        transform: translate3d(0, $s-input * -0.75,0);
+        font-size: $f-cap;
+        font-weight: 700;
       }
     }
+    &.is-focused {
+      .Select-placeholder {
+        opacity: 1;
+        transition-delay: $t-dur * 0.5;
+      }
+    }
+  }
+  .subtext {
+    grid-area: subtext;
+    display: block;
+    text-align: right;
+    @include cap-styles();
   }
 }

@@ -1,42 +1,104 @@
-import isFunction from 'lodash/isFunction';
+import bindAll from 'lodash/bindAll';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import Select from 'react-select';
-
-import { classNameShape, errorShape } from '../../shared/typings';
-
+import Select, { Creatable } from 'react-select';
 import 'node_modules/react-select/dist/react-select.css';
+
+import { classNameShape, errorShape, optionShape } from '../../shared/typings';
+
+import './override.scss';
 import './styles.scss';
 import IconButton from '../IconButton';
 
-export default function Dropdown({label, name, focus, error, className, descr,  ...props}) {
-  const classes = {
-    'state--error': !!error,
-    'state--focus': !!focus
-  };
+export default class Dropdown extends React.Component {
 
-  return (
-    <div className={classNames('Dropdown--root', classes, className)}>
-      {label && <label>{label}</label>}
-      <Select
-        {...props}
-        arrowRenderer={({ onMouseDown, isOpen }) => <IconButton onMouseDown={onMouseDown} g={(isOpen) ? 'chevron-up' : 'chevron-down'} />}
-      />
-      {(error || descr) ? (
-        <span className='subtext'>{error || descr}</span>
-      ) : null}
-    </div>
-  )
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: false,
+      options: null
+    }
+    bindAll(this, 'toggleLoading');
+  }
+
+
+  componentWillMount() {
+    if (this.props.loadOptions) {
+      this.toggleLoading(this.runLoadOptions);
+    }
+  }
+
+  runLoadOptions() {
+    this.props.loadOptions()
+      .then((options) => this.setState(() => ({options})))
+      .catch(console.error)
+      .then(this.toggleLoading)
+  }
+  
+  toggleLoading(cb) {
+    return this.setState(({isLoading}) => ({isLoading: !isLoading}), cb)
+  }
+
+  valueRenderer({label}) {
+    return <span title={label}>{label}</span>
+  }
+
+  arrowRenderer({ onMouseDown, isOpen }) {
+    return <IconButton onMouseDown={onMouseDown} g={(isOpen) ? 'chevron-up' : 'chevron-down'} />
+  }
+
+  render() {
+    const {label, name, focus, error, className, descr, options, loadingPlaceholder, creatable, ...props} = this.props;
+    const { isLoading } = this.state;
+
+    const classes = {
+      'state--error': !!error,
+      'state--focus': !!focus
+    };
+
+    const controlProps = {
+      placeholder: (isLoading) ? loadingPlaceholder : undefined,
+      ...props,
+      isLoading: this.state.isLoading,
+      options: this.state.options || options,
+      valueRenderer: this.valueRenderer,
+      arrowRenderer: this.arrowRenderer,
+      openOnFocus: true
+    }
+  
+    return (
+      <div className={classNames('Dropdown--root', classes, className)}>
+        <label>
+          {(creatable) ? (
+            <Creatable {...controlProps} />
+          ) : (
+            <Select {...controlProps} />
+          )}
+          {label && <span className='label'>{label}</span>}
+        </label>
+        {(error || descr) ? (
+          <span className='subtext'>{error || descr}</span>
+        ) : null}
+      </div>
+    );
+  }
 }
 
 Dropdown.defaultProps = {
-
 };
 
 Dropdown.propTypes = {
+  /** Options for dropdown */
+  options: optionShape('any'),
+  /** Function used to get options from remote, [options] will be taken from internal state */
+  loadOptions: PropTypes.func,
   /** HTML Class will be applied to container */
   className: classNameShape,
+  /** Bool: Allow creation of new Options */
+  creatable: PropTypes.bool,
+  /** Customizable placeholder while [loadOptions] is in progress */
+  loadingPlaceholder: PropTypes.string,
   /** Name property for input */
   name: PropTypes.string.isRequired,
   /** Label text for input */

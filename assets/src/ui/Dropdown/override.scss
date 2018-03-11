@@ -1,0 +1,177 @@
+@import 'mixins/_u.scss';
+@import 'mixins/_styles.scss';
+@import '_vars.scss';
+
+@keyframes zoomIn {
+  from {
+    transform: scale(.75, .75);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+}
+
+.Select {
+  .Select-control {
+    color: inherit;
+    height: auto;
+    border: 0;
+    display: flex;
+    align-items: center;
+    background: none;
+    overflow: visible;
+    border-radius: 0;
+    border-bottom: 1px solid map-get($colors, border);
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background-color: $c-acc;
+      transition: width $t-dur $t-func;
+    }
+  }
+  &.is-focused:not(.is-open) > .Select-control {
+    border-color: map-get($colors, border);
+    box-shadow: none;
+  }
+  .Select-placeholder {
+    @include ph-styles();
+    line-height: $s-input;
+    padding: 0;
+  }
+  .Select-input {
+    height: $s-input;
+    padding: 0;
+    input {
+      padding: 0;
+    }
+  }
+  .Select-clear-zone {
+    display: flex;
+    flex: 0 0 $s-pointer;
+    height: $s-input;
+    color: map-get($colors, caption);
+    .Select-clear {
+      display: block;
+      text-align: center;
+      margin: auto;
+    }
+  }
+  .Select-loading-zone {
+    display: flex;
+    flex: 0 0 $s-pointer;
+    height: $s-input;
+    .Select-loading {
+      display: block;
+      margin: auto;
+      border-right-color: $c-prm;
+    }
+  }
+  .Select-arrow-zone {
+    display: flex;
+    flex: 0 0 $s-pointer;
+    height: $s-input;
+    a, svg {
+      display: block;
+      margin: auto;
+    }
+  }
+  .Select-menu-outer {
+    margin-top: 0;
+    box-shadow: $sh-modal;
+    max-height: 240px;
+    z-index: 10;
+    border-radius: 2px;
+    border: 1px solid map-get($colors, border);
+    top: auto;
+    animation-name: zoomIn;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-duration: $t-dur;
+  }
+  .Select-multi-value-wrapper {
+    flex: 1 1 auto;
+    align-items: center;
+    display: flex;
+  }
+  .Select-option {
+    background: none;
+    color: $c-prm;
+    padding: 0 u();
+    &:hover, &.is-focused {
+      background-color: $c-sec-dk;
+    }
+    &.is-selected {
+      background-color: rgba($c-acc-lt, .2);
+      font-weight: bold;
+    }
+  }
+  &.Select--single {
+    .Select-control {
+      .Select-value {
+        position:static;
+        padding: 0 !important;
+      }
+    }
+  }
+  &.Select--multi {
+    .Select-multi-value-wrapper {
+      flex-wrap: wrap;
+    }
+    .Select-input {
+      height: $s-pointer;
+      margin: 0;
+    }
+    .Select-value {
+      display: inline-flex;
+      background-color: rgba($c-acc-lt, .2);
+      color: $c-acc-dk;
+      margin: 2px u(.5) 2px 0;
+      border: 0;
+      border-radius: $s-pointer * .5;
+      font-size: $f-cap;
+      line-height: $s-pointer;
+      height: $s-pointer;
+      min-width: 64px;
+      max-width: 120px;
+      .Select-value-label {
+        padding: 0;
+        text-indent: $s-pointer * .5;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+      .Select-value-icon {
+        padding: 0;
+        width: $s-pointer;
+        order: 2;
+        border: 0;
+        border-radius: 0;
+        font-size: u(2);
+        text-align: center;
+        &:hover {
+          background: none;
+        }
+      }
+      &:hover {
+        background-color: rgba($c-acc-lt, .3);
+      }
+    }
+  }
+  &.is-focused {
+    .Select-control {
+      box-shadow: none;
+      &:after {
+        width: 100%;
+      }
+      .Select-arrow-zone svg {
+        fill: $c-acc;
+      }
+    }
+  }
+}

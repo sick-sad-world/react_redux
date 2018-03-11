@@ -89,7 +89,7 @@
   input:not([value='']) + .label,
   input:focus + .label,
   &.state--focus .label {
-    transform: translate3d(0,-$s-input,0);
+    transform: translate3d(0, $s-input * -0.75,0);
     font-size: $f-cap;
     font-weight: 700;
   }

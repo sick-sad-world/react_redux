@@ -70,7 +70,7 @@ TextInput.propTypes = {
   focus: PropTypes.bool.isRequired,
   /** Field validation state mark it as valid [true] or invalid [Array[String]] */
   error: errorShape.isRequired,
-  /** Elements placed BEFORE field (icons, buttons) */
+  /** Elements placed at the end of field (icons, buttons) */
   helper: PropTypes.element,
   /** Elements placed BEFORE field (icons, buttons) */
   prefix: PropTypes.element,

@@ -5,8 +5,8 @@
 .RadioButton--root {
   display: grid;
   grid-gap: u();
-  grid-template-columns: auto $s-input;
-  grid-template-rows: $s-input auto;
+  grid-template-columns: 1fr $s-pointer;
+  grid-template-rows: $s-pointer auto;
   grid-template-areas:
     "label control"
     "subtext subtext";
@@ -25,8 +25,8 @@
   .control {
     grid-area: control;
     position: relative;
-    width: $s-input;
-    height: $s-input;
+    width: $s-pointer;
+    height: $s-pointer;
     input, span {
       position: absolute;
       width: 100%;
@@ -61,7 +61,7 @@
   }
 
   &.style--reverse {
-    grid-template-columns: $s-input auto;
+    grid-template-columns: $s-pointer 1fr;
     grid-template-areas:
       "control label"
       "subtext subtext";
