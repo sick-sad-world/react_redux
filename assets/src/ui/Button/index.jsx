@@ -5,15 +5,13 @@ import { classNameShape } from '../../shared/typings';
 import './styles.scss';
 
 const TYPE = ['button', 'input', 'link'];
-const THEMES = ['default', 'secondary', 'success', 'error', 'warning', 'info'];
+const THEMES = ['lined', 'secondary', 'secondary-lined', 'success', 'success-lined', 'error', 'error-lined', 'warning', 'warning-lined', 'info', 'info-lined'];
 
 /** UI Button implementation */
-export default function Button({ el, children, className, mode, theme, ...props }) {
+export default function Button({ el, children, className, theme, ...props }) {
   const classList = classNames({
     Button: true,
-    [theme]: true,
-    'style--lined': mode === 'lined',
-    'style--solid': mode === 'solid'
+    [theme]: !!theme
   }, className);
 
   switch (el) {
@@ -29,7 +27,6 @@ export default function Button({ el, children, className, mode, theme, ...props 
 
 Button.defaultProps = {
   el: 'button',
-  theme: 'default',
   mode: false
 };
 
@@ -37,9 +34,7 @@ Button.propTypes = {
   /** What element use a button root */
   el: PropTypes.oneOf(TYPE).isRequired,
   /** Color theme of a button */
-  theme: PropTypes.oneOf(THEMES).isRequired,
-  /** Whatever button solid or lined or transparent */
-  mode: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  theme: PropTypes.oneOf(THEMES),
   /** Additional class names */
   className: classNameShape,
   /** Content of a button (text, child elements, icons, e.t.c) */

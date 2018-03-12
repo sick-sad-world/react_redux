@@ -15,21 +15,16 @@
   font-size: $f-cap;
   text-transform: uppercase;
   border-radius: 4px;
-  background: none;
-  color: $c-acc;
-
+  
   &:hover {
     text-decoration: none;
-    &:not([disabled]) {
-      color: $c-acc-dk;
-    }
   }
-
+  
   svg {
     width: u(1.75);
     height: u(1.75);
   }
-
+  
   svg:first-child {
     margin-right: u();
   }
@@ -41,48 +36,34 @@
     @include dis-styles();
   }
 
+// Regular (solid) button styles
+// =================================================================
+
+  @include button-solid($c-acc, $c-acc-lt, $c-sec);
+  
   &.secondary {
-    color: $c-acc-sec;
-    &:not([disabled]):hover {
-      color: $c-acc-sec-dk;
-    }
+    @include button-solid($c-acc-sec, $c-acc-sec-lt, $c-sec);
   }
 
   @each $style, $color in $states {
     &.#{$style} {
-      color: $color;
-      &:not([disabled]):hover {
-        color: darken($color, .5);
-      }
+      @include button-solid($color, lighten($color, 5%), $c-sec);
     }
   }
 
-  &.style--solid {
-    @include button-solid($c-acc, $c-acc-lt, $c-sec);
-
-    &.secondary {
-      @include button-solid($c-acc-sec, $c-acc-sec-lt, $c-sec);
-    }
-
-    @each $style, $color in $states {
-      &.#{$style} {
-        @include button-solid($color, lighten($color, 5%), $c-sec);
-      }
-    }
-  }
-
-  &.style--lined {
+// Lined button styles
+// =================================================================
+  &.lined {
     @include button-lined($c-acc);
-    line-height: $s-input - 4px;
+  }
 
-    &.secondary {
-      @include button-lined($c-acc-sec);
-    }
+  &.secondary-lined {
+    @include button-lined($c-acc-sec);
+  }
 
-    @each $style, $color in $states {
-      &.#{$style} {
-        @include button-lined($color);
-      }
+  @each $style, $color in $states {
+    &.#{$style} {
+      @include button-lined($color);
     }
   }
 }
