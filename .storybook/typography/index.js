@@ -26,7 +26,7 @@ storiesOf('Global Elements', module)
       <h4>18px Font size H4 Lorem ipsum dolor sit amet.</h4>
       <h5>16px Font size H5 Lorem ipsum dolor sit amet.</h5>
       <h6>14px Font size H6 Lorem ipsum dolor sit amet.</h6>
-      <p>Default text have 13px. Lorem, <a href="">[Default text URL link]</a> ipsum dolor sit amet consectetur adipisicing elit. <b>[Bold text]</b> Lorem <strong>[Strong text]</strong> ipsum dolor sit amet. Repellendus nemo nisi autem praesentium voluptatum <i>[italic text]</i> sed facilis <em>[em tag italic]</em> dolor quam voluptatem pariatur odio mollitia voluptates, architecto quibusdam aut neque velit repudiandae necessitatibus, veritatis, fuga assumenda optio facere dolorem at. Cum, enim asperiores.</p>
+      <p>Default text have 14px. Lorem, <a href="">[Default text URL link]</a> ipsum dolor sit amet consectetur adipisicing elit. <b>[Bold text]</b> Lorem <strong>[Strong text]</strong> ipsum dolor sit amet. Repellendus nemo nisi autem praesentium voluptatum <i>[italic text]</i> sed facilis <em>[em tag italic]</em> dolor quam voluptatem pariatur odio mollitia voluptates, architecto quibusdam aut neque velit repudiandae necessitatibus, veritatis, fuga assumenda optio facere dolorem at. Cum, enim asperiores.</p>
       <ol>
         <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, dicta consequatur.</li>
         <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, dicta consequatur.</li>

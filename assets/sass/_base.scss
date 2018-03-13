@@ -43,13 +43,21 @@ html, body {
 }
 
 a {
-  color: $c-acc-dk;
+  color: $c-acc-sec-dk;
   text-decoration: none;
   cursor: pointer;
   &:hover,
   &:focus {
     text-decoration: underline;
     outline: 0;
+  }
+  &.icon-button {
+    display: flex;
+    width: $s-pointer;
+    height: $s-pointer;
+    svg {
+      margin: auto;
+    }
   }
 }
 

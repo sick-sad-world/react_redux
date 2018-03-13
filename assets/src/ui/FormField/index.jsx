@@ -2,7 +2,7 @@ import bindAll from 'lodash/bindAll';
 import isFunction from 'lodash/isFunction';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { validShape } from '../../shared/typings';
+import { validShape } from 'shared/typings';
 
 function setFocus() {
   return { focus: true };

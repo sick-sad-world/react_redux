@@ -21,23 +21,14 @@ storiesOf('FormElements', module)
             onChange={(value) => store.set(value)}
             checked={store.state.name === 'simple'}
           />
-          <div style={{ height: '50px' }} />
-          <RadioButton
-            label='Reversed radio'
-            name='name'
-            value='reverse'
-            reverse
-            onChange={(value) => store.set(value)}
-            checked={store.state.name === 'reverse'}
-          />
-          <div style={{ height: '50px' }} />
+          <div style={{ height: '24px' }} />
           <RadioButton
             name='name'
             value='min'
             onChange={(value) => store.set(value)}
             checked={store.state.name === 'min'}
           />
-          <div style={{ height: '50px' }} />
+          <div style={{ height: '24px' }} />
           <RadioButton
             label='With description'
             name='name'
@@ -46,7 +37,7 @@ storiesOf('FormElements', module)
             checked={store.state.name === 'desc'}
             descr='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, placeat.'
           />
-          <div style={{ height: '50px' }} />
+          <div style={{ height: '24px' }} />
         </div>
       );
     })(story)

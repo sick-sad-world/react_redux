@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { classNameShape } from '../../shared/typings';
+import { classNameShape } from 'shared/typings';
 import './styles.scss';
 
 const TYPE = ['button', 'input', 'link'];

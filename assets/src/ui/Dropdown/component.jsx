@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import Select, { Creatable } from 'react-select';
 import 'node_modules/react-select/dist/react-select.css';
 
-import { classNameShape, errorShape, optionShape } from '../../shared/typings';
+import { classNameShape, errorShape, optionShape } from 'shared/typings';
 
 import './override.scss';
 import './styles.scss';

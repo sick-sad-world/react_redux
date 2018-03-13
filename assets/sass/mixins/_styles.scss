@@ -30,7 +30,7 @@
   }
 
   &:not([disabled]):focus {
-    box-shadow: 0 0 0 3px rgba($main, .45);
+    box-shadow: getFocusShadow($main)
   }
 }
 
@@ -50,6 +50,6 @@
   }
 
   &:not([disabled]):focus {
-    box-shadow: 0 0 0 3px rgba($main, .45);
+    box-shadow: getFocusShadow($main)
   }
 }

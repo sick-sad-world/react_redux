@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { classNameShape, errorShape } from '../../shared/typings';
+import { classNameShape, errorShape } from 'shared/typings';
 import './styles.scss';
 
 const TYPES = ['text', 'email', 'number', 'password'];

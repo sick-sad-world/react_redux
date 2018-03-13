@@ -2,16 +2,15 @@ import isFunction from 'lodash/isFunction';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { classNameShape, errorShape } from '../../shared/typings';
+import { classNameShape, errorShape } from 'shared/typings';
 import './styles.scss';
 import Icon from '../Icon';
 
 /** Checkbox input to choose some of many */
-export default function Checkbox({ className, reverse, value, name, label, descr, focus, error, onChange, onFocus, onBlur, checked, ...props }) {
+export default function Checkbox({ className, value, name, label, descr, focus, error, onChange, onFocus, onBlur, checked, ...props }) {
   const classes = {
     'state--error': !!error,
-    'state--focus': !!focus,
-    'style--reverse': !!reverse
+    'state--focus': !!focus
   };
 
   const id = `${name}-${value}`
@@ -19,7 +18,6 @@ export default function Checkbox({ className, reverse, value, name, label, descr
   return (
     <div className={classNames('Checkbox--root', classes, className)}>
       <div className='body'>
-        {label && <label htmlFor={id}>{label}</label>}
         <div className='control'>
           <input
             {...props}
@@ -34,6 +32,7 @@ export default function Checkbox({ className, reverse, value, name, label, descr
           />
           <Icon g='check' />
         </div>
+        {label && <label htmlFor={id}>{label}</label>}
       </div>
       {descr && <span className='subtext'>{descr}</span>}
     </div>
@@ -58,8 +57,6 @@ Checkbox.propTypes = {
   checked: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]).isRequired,
   /** Value of input itself */
   value: PropTypes.string.isRequired,
-  /** Define whatever label should be rendered first */
-  reverse: PropTypes.bool,
   /** Name property for input */
   name: PropTypes.string.isRequired,
   /** Function invoked on change event */

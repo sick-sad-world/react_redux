@@ -24,7 +24,7 @@ $sizes: (
 
 $c-prm: #616161;
 $c-prm-lt: lighten($c-prm, 12%);
-$c-prm-lt2: lighten($c-prm, 17%);
+$c-prm-lt2: lighten($c-prm, 20%);
 
 $c-sec: #fafafa;
 $c-sec-dk: darken($c-sec, 5%);
@@ -75,7 +75,12 @@ $feeds: (
   twitter: #5BBBF5
 );
 
+$sh-focus: 0 0 0 3px rgba($c-acc, .25);
 $sh-modal: 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12), 0 2px 4px -1px rgba(0,0,0,.4);
+
+@function getFocusShadow($c: $c-acc) {
+  @return 0 0 0 3px rgba($c, .25);
+}
 
 $bdrs: 4px;
 $t-dur: 0.2s;

@@ -25,19 +25,18 @@
   }
   .subtext {
     display: block;
-    margin-top: u();
+    margin-top: u(.5);
     text-align: right;
     @include cap-styles();
   }
   .label {
     position: absolute;
-    top: 1px;
+    top: 0px;
     font-size: inherit;
     line-height: $s-input;
-    transition-duration: $t-dur;
-    transition-timing-function: $t-func;
-    transition-property: transform;
-    transform: translate3d(0,0,0);
+    transition: transform $t-dur $t-func;
+    transform: translate3d(0,0,0) scale(1);
+    transform-origin: top left;
   }
   .Select {
     .Select-placeholder {
@@ -46,9 +45,8 @@
     }
     &.is-focused, &.has-value {
       & + .label {
-        transform: translate3d(0, $s-input * -0.75,0);
-        font-size: $f-cap;
-        font-weight: 700;
+        color: $c-acc-dk;
+        transform: translate3d(0, $s-input * -0.6, 0) scale(.9);
       }
     }
     &.is-focused {

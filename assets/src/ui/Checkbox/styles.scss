@@ -11,13 +11,13 @@
 
   label {
     flex: 1 1 auto;
-    margin-right: u();
+    margin-left: u();
   }
 
   .subtext {
-    margin-top: u();
+    margin-top: u(.5);
+    margin-left: $s-pointer + u();
     display: block;
-    text-align: right;
     @include cap-styles();
   }
 
@@ -49,22 +49,9 @@
     }
   }
 
-  &.style--reverse {
-    .body {
-      flex-direction: row-reverse;
-    }
-    label {
-      margin-right: 0;
-      margin-left: u();
-    }
-    .subtext {
-      text-align: left;
-    }
-  }
-
   &.state--focus .control svg,
   .control input:not([disabled]):focus + svg {
-    box-shadow: 0 0 0 3px rgba($c-acc, .25);
+    box-shadow: $sh-focus;
   }
 
   &.state--focus .control input:not(:checked) svg,
