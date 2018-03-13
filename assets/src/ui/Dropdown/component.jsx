@@ -9,7 +9,7 @@ import { classNameShape, errorShape, optionShape } from 'shared/typings';
 
 import './override.scss';
 import './styles.scss';
-import IconButton from '../IconButton';
+import Icon from '../IconButton';
 
 export default class Dropdown extends React.Component {
 
@@ -44,7 +44,7 @@ export default class Dropdown extends React.Component {
   }
 
   arrowRenderer({ onMouseDown, isOpen }) {
-    return <IconButton onMouseDown={onMouseDown} g={(isOpen) ? 'chevron-up' : 'chevron-down'} />
+    return <Icon onMouseDown={onMouseDown} g={(isOpen) ? 'chevron-up' : 'chevron-down'} />
   }
 
   render() {

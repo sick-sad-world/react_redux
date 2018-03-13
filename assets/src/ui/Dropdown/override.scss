@@ -74,12 +74,9 @@
   }
   .Select-arrow-zone {
     display: flex;
-    flex: 0 0 $s-pointer;
+    flex: 0 0 $s-input;
     height: $s-input;
-    a, svg {
-      display: block;
-      margin: auto;
-    }
+    padding: 0;
   }
   .Select-menu-outer {
     margin-top: 0;
