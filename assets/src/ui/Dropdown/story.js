@@ -4,6 +4,7 @@ import { withInfo } from '@storybook/addon-info';
 import { withTests, withState } from 'with';
 import Dropdown from './index';
 import Raw from './component';
+import Icon from '../Icon';
 
 const options = [
   { value: 'one', label: 'Digit One' },
@@ -13,6 +14,8 @@ const options = [
   { value: 'five', label: 'Five house of cards' },
   { value: 'six', label: 'Six sex' }
 ];
+
+const style = {display: 'block', margin: 'auto', width: '24px'};
 
 function loadOptions() {
   return new Promise((res) => {
@@ -35,6 +38,7 @@ storiesOf('FormElements', module)
             value={store.state.simple}
             onChange={(value) => store.set(value)}
             options={options}
+            prefix={<Icon style={style} g='cone' />}
           />
           <div style={{ height: '50px' }} />
           <Dropdown
@@ -44,6 +48,8 @@ storiesOf('FormElements', module)
             loadOptions={loadOptions}
             value={store.state.clear}
             onChange={(value) => store.set(value)}
+            descr='This dropdown values are loaded from remote'
+            suffix={<Icon style={style} g='bar-graph' />}
           />
           <div style={{ height: '50px' }} />
           <Dropdown
@@ -54,6 +60,7 @@ storiesOf('FormElements', module)
             closeOnSelect={false}
             onChange={(value) => store.set(value)}
             options={options}
+            descr='This dropdown allows you to select multiple items'
           />
           <div style={{ height: '50px' }} />
           <Dropdown

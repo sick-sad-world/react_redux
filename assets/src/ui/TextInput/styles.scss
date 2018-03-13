@@ -10,6 +10,18 @@
   label {
     display: flex;
     position: relative;
+    overflow: visible;
+    border-bottom: 1px solid $c-sec-dk2;
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: $c-acc;
+      transition: width $t-dur $t-func;
+    }
   }
 
   svg {
@@ -34,38 +46,22 @@
       }
     }
   }
-  
-  hr {
-    height: 1px;
-    display: block;
-    margin: 0 0 $gutter 0;
-    position: relative;
-    overflow: visible;
-    background-color: $c-sec-dk2;
-    border: 0;
-    &:after {
-      content: '';
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      width: 0;
-      height: 3px;
-      background-color: $c-acc;
-      transition: width $t-dur $t-func;
-    }
-  }
 
   .body {
     flex: 1 1 auto;
   }
 
-  .prefix:first-child,
-  .suffix:last-child,
-  .helper {
+  .prefix, .suffix, .helper {
     display: flex;
     flex: 0 0 auto;
-    width: $s-input * 1.5;
-    height: $s-input;
+  }
+  
+  .prefix {
+    margin-right: u();
+  }
+
+  .suffix {
+    margin-left: u();
   }
 
   .label {
@@ -75,7 +71,7 @@
     line-height: $s-input;
     transition-duration: $t-dur;
     transition-timing-function: $t-func;
-    transition-property: font-size transform;
+    transition-property: transform;
     transform: translate3d(0,0,0);
   }
 
@@ -83,7 +79,7 @@
     @include cap-styles();
     display: block;
     flex: 0 0 100%;
-    margin-top: u(.5);
+    margin-top: u();
   }
   
   input:not([value='']) + .label,
@@ -99,7 +95,7 @@
       fill: $c-acc;
     }
     
-    hr:after {
+    label:after {
       width: 100%;
     }
 
@@ -113,8 +109,8 @@
       fill: $c-error;
     }
 
-    hr, hr:after {
-      background-color: $c-error;
+    label, label:after {
+      border-color: $c-error;
     }
     .subtext, .label {
       color: $c-error;

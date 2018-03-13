@@ -10,7 +10,7 @@ $f-text: u(1.75);
 $f-cap: u(1.5);
 
 $s-icon: u(2);
-$s-pointer: u(3);
+$s-pointer: u(2.5);
 $s-input: u(4);
 $s-button: u(4);
 
@@ -70,12 +70,13 @@ $styles: (
 $feeds: (
   html: $c-success,
   rss: $c-warning,
-  facebook: $c-acc,
-  reddit: $c-error,
-  twitter: $c-info
+  facebook: #3b5998,
+  reddit: #EF5350,
+  twitter: #5BBBF5
 );
 
 $sh-modal: 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12), 0 2px 4px -1px rgba(0,0,0,.4);
 
+$bdrs: 4px;
 $t-dur: 0.2s;
 $t-func: cubic-bezier(.4,0,.2,1);

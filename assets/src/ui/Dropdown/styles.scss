@@ -3,7 +3,32 @@
 @import '_vars.scss';
 
 .Dropdown--root {
-  position: relative;
+  display: flex;
+  align-items: flex-start;
+  .control {
+    flex: 1 1 auto;
+  }
+  .prefix, .suffix {
+    display: flex;
+    flex: 0 0 auto;
+    height: $s-input;
+  }
+  .prefix {
+    margin-right: u();
+  }
+  .suffix {
+    margin-left: u();
+  }
+  label {
+    display: block;
+    position: relative;
+  }
+  .subtext {
+    display: block;
+    margin-top: u();
+    text-align: right;
+    @include cap-styles();
+  }
   .label {
     position: absolute;
     top: 1px;
@@ -11,7 +36,7 @@
     line-height: $s-input;
     transition-duration: $t-dur;
     transition-timing-function: $t-func;
-    transition-property: font-size transform;
+    transition-property: transform;
     transform: translate3d(0,0,0);
   }
   .Select {
@@ -32,11 +57,5 @@
         transition-delay: $t-dur * 0.5;
       }
     }
-  }
-  .subtext {
-    grid-area: subtext;
-    display: block;
-    text-align: right;
-    @include cap-styles();
   }
 }

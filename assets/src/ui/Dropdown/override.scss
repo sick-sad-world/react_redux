@@ -30,7 +30,7 @@
       bottom: -1px;
       left: 0;
       width: 0;
-      height: 3px;
+      height: 2px;
       background-color: $c-acc;
       transition: width $t-dur $t-func;
     }
@@ -86,7 +86,7 @@
     box-shadow: $sh-modal;
     max-height: 240px;
     z-index: 10;
-    border-radius: 2px;
+    border-radius: $bdrs;
     border: 1px solid map-get($colors, border);
     top: auto;
     animation-name: zoomIn;
@@ -129,15 +129,14 @@
     }
     .Select-value {
       display: inline-flex;
-      background-color: rgba($c-acc-lt, .2);
-      color: $c-acc-dk;
+      background-color: $c-acc-sec-dk;
+      color: $c-sec;
       margin: 2px u(.5) 2px 0;
       border: 0;
       border-radius: $s-pointer * .5;
       font-size: $f-cap;
       line-height: $s-pointer;
       height: $s-pointer;
-      min-width: 64px;
       max-width: 120px;
       .Select-value-label {
         padding: 0;

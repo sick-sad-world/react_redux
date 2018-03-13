@@ -139,28 +139,27 @@ samp, .badge {
   padding: 0px 1em;
   font-size: u(1.5);
   text-align: center;
-  border-radius: 4px;
+  border-radius: $bdrs;
   height: $s;
-  line-height: $s - 2px;
-  background-color: map-get($colors, highlight);
+  line-height: $s;
+  // background-color: map-get($colors, highlight);
   text-transform: uppercase;
-  border: 1px solid map-get($colors, border);
   @each $style, $color in $states {
     &.#{$style} {
-      background-color: mix($color, #fff, 25%);
-      border-color: $color;
+      background-color: mix($color, #fff, 90%);
+      color: $c-sec;
     }
   }
   @each $style, $color in $styles {
     &.#{$style} {
-      background-color: mix($color, #fff, 25%);
-      border-color: $color;
+      background-color: mix($color, #fff, 90%);
+      color: $c-sec;
     }
   }
   @each $style, $color in $feeds {
     &.#{$style} {
-      background-color: mix($color, #fff, 25%);
-      border-color: $color;
+      background-color: mix($color, #fff, 90%);
+      color: $c-sec;
     }
   }
 }

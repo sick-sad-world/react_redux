@@ -30,7 +30,6 @@ export default function TextInput({ className, type, value, name, label, descr, 
           {label && <span className='label'>{label}</span>}
           {helper && <span className='helper'>{helper}</span>}
         </label>
-        <hr />
         {(error || descr) ? (
           <span className='subtext'>{error || descr}</span>
           ) : null}

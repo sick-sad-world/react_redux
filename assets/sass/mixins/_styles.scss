@@ -38,7 +38,8 @@
   border: 2px solid $main;
   color: $main;
   line-height: $s-input - 4px;
-
+  background-color: transparent;
+  
   svg {
     fill: $main;
   }

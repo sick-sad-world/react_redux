@@ -83,6 +83,7 @@ const sassLoader = {
         sourceMap: !p,
         outputStyle: (p) ? 'compressed' : 'expanded',
         includePaths: [
+          path.resolve(__dirname, '../node_modules'),
           path.resolve(__dirname, CONTEXT, 'sass')
         ]
       }
@@ -129,13 +130,21 @@ const fontLoader = {
   }
 };
 
+const APP = ['babel-polyfill', './src/app.js'];
+
+if (publicPath) {
+  APP.unshift('webpack/hot/only-dev-server');
+  APP.unshift(`webpack-dev-server/client?${publicPath}`);
+  APP.unshift('react-hot-loader/patch');
+}
+
 module.exports = {
   devtool: (!p) ? 'source-map' : false,
   context: path.resolve(__dirname, CONTEXT),
   cache: true,
   stats: 'normal',
   entry: {
-    app: (publicPath) ? ['react-hot-loader/patch', `webpack-dev-server/client?${publicPath}`, 'webpack/hot/only-dev-server', 'babel-polyfill', './src/app.js'] : ['babel-polyfill', './src/app.js']
+    app: APP
   },
   output: {
     path: path.join( __dirname, DEST),

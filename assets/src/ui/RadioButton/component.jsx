@@ -17,20 +17,22 @@ export default function RadioButton({ className, reverse, value, name, label, de
 
   return (
     <div className={classNames('RadioButton--root', classes, className)}>
-      {label && <label htmlFor={id}>{label}</label>}
-      <div className='control'>
-        <input
-          {...props}
-          type='radio'
-          id={id}
-          name={name}
-          value={value}
-          checked={isFunction(checked) ? checked({[name]: value}) : checked}
-          onChange={onChange}
-          onFocus={onFocus}
-          onBlur={onBlur}
-        />
-        <span />
+      <div className='body'>
+        {label && <label htmlFor={id}>{label}</label>}
+        <div className='control'>
+          <input
+            {...props}
+            type='radio'
+            id={id}
+            name={name}
+            value={value}
+            checked={isFunction(checked) ? checked({[name]: value}) : checked}
+            onChange={onChange}
+            onFocus={onFocus}
+            onBlur={onBlur}
+          />
+          <span />
+        </div>
       </div>
       {descr && <span className='subtext'>{descr}</span>}
     </div>

@@ -14,7 +14,7 @@
   font-weight: 400;
   font-size: $f-cap;
   text-transform: uppercase;
-  border-radius: 4px;
+  border-radius: $bdrs;
   
   &:hover {
     text-decoration: none;
@@ -62,7 +62,7 @@
   }
 
   @each $style, $color in $states {
-    &.#{$style} {
+    &.#{$style}-lined {
       @include button-lined($color);
     }
   }

@@ -32,7 +32,6 @@ export default class Dropdown extends React.Component {
   runLoadOptions() {
     this.props.loadOptions()
       .then((options) => this.setState(() => ({options})))
-      .catch(console.error)
       .then(this.toggleLoading)
   }
   
@@ -49,7 +48,7 @@ export default class Dropdown extends React.Component {
   }
 
   render() {
-    const {label, name, focus, error, className, descr, options, loadingPlaceholder, creatable, ...props} = this.props;
+    const {label, name, focus, error, className, descr, prefix, suffix, options, loadingPlaceholder, creatable, ...props} = this.props;
     const { isLoading } = this.state;
 
     const classes = {
@@ -69,17 +68,21 @@ export default class Dropdown extends React.Component {
   
     return (
       <div className={classNames('Dropdown--root', classes, className)}>
-        <label>
-          {(creatable) ? (
-            <Creatable {...controlProps} />
-          ) : (
-            <Select {...controlProps} />
-          )}
-          {label && <span className='label'>{label}</span>}
-        </label>
-        {(error || descr) ? (
-          <span className='subtext'>{error || descr}</span>
-        ) : null}
+        {prefix && <span className='prefix'>{prefix}</span>}
+        <div className='control'>
+          <label>
+            {(creatable) ? (
+              <Creatable {...controlProps} />
+            ) : (
+              <Select {...controlProps} />
+            )}
+            {label && <span className='label'>{label}</span>}
+          </label>
+          {(error || descr) ? (
+            <span className='subtext'>{error || descr}</span>
+          ) : null}
+        </div>
+        {suffix && <span className='suffix'>{suffix}</span>}
       </div>
     );
   }
@@ -108,5 +111,9 @@ Dropdown.propTypes = {
   /** Whatever field is focused or not */
   focus: PropTypes.bool.isRequired,
   /** Field validation state mark it as valid [true] or invalid [Array[String]] */
-  error: errorShape.isRequired
+  error: errorShape.isRequired,
+  /** Elements placed BEFORE dropdown (icons, buttons) */
+  prefix: PropTypes.element,
+  /** Elements placed AFTER dropdown (icons, buttons) */
+  suffix: PropTypes.element
 };

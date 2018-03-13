@@ -6,6 +6,8 @@ import TextInput from './index';
 import Raw from './component';
 import Icon from '../Icon';
 
+const style = {display: 'block', margin: 'auto', width: '24px'};
+
 storiesOf('FormElements', module)
   .addDecorator(withTests('TextInput'))
   .add('TextInput', withState({ inv: 'some value' }, (story, store) => (
@@ -41,7 +43,7 @@ storiesOf('FormElements', module)
             pristine={false}
             validate={onChange}
             descr='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, placeat.'
-            helper={<Icon g='warning' viewBox='0 0 24 24' />}
+            helper={<Icon style={style} g='warning' viewBox='0 0 24 24' />}
             onChange={onChange}
             value={store.state.inv}
           />
@@ -49,7 +51,7 @@ storiesOf('FormElements', module)
           <TextInput
             label='Simple input with prefix'
             name='prefix'
-            prefix={<Icon g='documents' />}
+            prefix={<Icon style={style} g='documents' />}
             onChange={onChange}
             value={store.state.prefix}
           />
@@ -57,7 +59,7 @@ storiesOf('FormElements', module)
           <TextInput
             label='Simple input with suffix'
             name='suffix'
-            suffix={<Icon g='eye-with-line' />}
+            suffix={<Icon style={style} g='eye-with-line' />}
             onChange={onChange}
             value={store.state.suffix}
           />

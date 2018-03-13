@@ -18,20 +18,22 @@ export default function Checkbox({ className, reverse, value, name, label, descr
 
   return (
     <div className={classNames('Checkbox--root', classes, className)}>
-      {label && <label htmlFor={id}>{label}</label>}
-      <div className='control'>
-        <input
-          {...props}
-          type='checkbox'
-          id={id}
-          name={name}
-          value={value}
-          checked={isFunction(checked) ? checked({[name]: value}) : checked}
-          onChange={onChange}
-          onFocus={onFocus}
-          onBlur={onBlur}
-        />
-        <Icon g='check' />
+      <div className='body'>
+        {label && <label htmlFor={id}>{label}</label>}
+        <div className='control'>
+          <input
+            {...props}
+            type='checkbox'
+            id={id}
+            name={name}
+            value={value}
+            checked={isFunction(checked) ? checked({[name]: value}) : checked}
+            onChange={onChange}
+            onFocus={onFocus}
+            onBlur={onBlur}
+          />
+          <Icon g='check' />
+        </div>
       </div>
       {descr && <span className='subtext'>{descr}</span>}
     </div>
