@@ -18,10 +18,12 @@ export default function Switcher({ className, value, name, label, descr, focus, 
   const labels = [];
 
   options.forEach((item, i) => {
+
     const key = `${name}-${i}`;
     const chk = item.value === value;
     const eId = (chk) ? id : null;
-    inputs.push(<input key={key} id={eId} name={name} type='radio' value={item.value} checked={chk} onChange={onChange} onFocus={onFocus} onBlur={onBlur} />);
+
+    inputs.push(<input key={key} title={label} id={eId} name={name} type='radio' value={i} checked={chk} onChange={onChange} onFocus={onFocus} onBlur={onBlur} />);
     labels.push(<span key={key}>{item.label}</span>)
   });
 

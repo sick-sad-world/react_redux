@@ -1,11 +1,11 @@
 import makeFormInput from '../FormField';
 import Checkbox from './component';
 
-function getValue({ target }, {name, numBool}) {
+function getValue({ target }, {name, numBool, value}) {
   if (numBool) {
     return { [name]: (target.checked) ? 1 : 0 };
   } else {
-    return { [name]: target.value };
+    return { [name]: (target.checked) ? value : null };
   }
 }
 

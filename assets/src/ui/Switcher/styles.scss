@@ -3,5 +3,41 @@
 @import '_vars.scss';
 
 .Switcher--root {
-
+  $h: u(1.5);
+  $w: u(2);
+  .control {
+    input {
+      position: relative;
+      vertical-align: top;
+      width: $w;
+      height: $h;
+      opacity: 0;
+      z-index: 3;
+      cursor: pointer;
+    }
+    .handle {
+      display: block;
+      position: absolute;
+      top: ($h - $s-pointer) * .5;
+      width: $s-pointer;
+      height: $s-pointer;
+      border-radius: 50%;
+      background-color: #fff;
+      box-shadow: $sh-thumb;
+    }
+    .track {
+      $step: $w + ($w - $s-pointer) * .5;
+      display: inline-block;
+      position: relative;
+      border-radius: $h * .5;
+      height: $h;
+      background-color: $c-sec-dk;
+      input:nth-child(2):checked ~ .handle {
+        transform: translate3d($step,0,0);
+      }
+      input:nth-child(3):checked ~ .handle {
+        transform: translate3d($step * 2,0,0);
+      }
+    }
+  }
 }

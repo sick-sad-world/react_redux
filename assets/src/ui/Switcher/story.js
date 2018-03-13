@@ -19,10 +19,10 @@ storiesOf('FormElements', module)
             name='simple'
             value={store.state.simple}
             onChange={(value) => store.set(value)}
-            options={{
-              'Active': 1,
-              'Inactive': 0
-            }}
+            options={[
+              { label: 'Active', value: 1 },
+              { label: 'Inactive', value: 0 }
+            ]}
           />
           <div style={{ height: '24px' }} />
           <Switcher
@@ -30,11 +30,11 @@ storiesOf('FormElements', module)
             name='triple'
             value={store.state.triple}
             onChange={(value) => store.set(value)}
-            options={{
-              'Only': 1,
-              'Include': null,
-              'Omit': 0
-            }}
+            options={[
+              { label: 'Only', value: 1 },
+              { label: 'Include', value: null },
+              { label: 'Omit', value: 0 }
+            ]}
           />
           <div style={{ height: '24px' }} />
         </div>

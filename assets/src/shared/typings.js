@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 /** Default options shape for Dropdowns, switchers, e.t.c */
 export const optionShape = (type = 'string', labelProp = 'label') => PropTypes.arrayOf(PropTypes.shape({
   [labelProp]: PropTypes.string.isRequired,
-  value: PropTypes[type].isRequired
+  value: PropTypes[type]
 }));
 
 /** All possible variations of ClassNames definitions based on classNames https://github.com/JedWatson/classnames */
