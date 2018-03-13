@@ -1,14 +1,12 @@
 const path = require('path');
-const packageJSON = require('./package.json');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
-const { p, c, watch, ...args } = require('yargs').argv;
+const { p, c, port, watch } = require('yargs').argv;
 
-const publicPath = args.public || args['output-public-path'];
 const CONTEXT = 'assets';
 const DEST = (p) ? '/build' : '/dist';
 const ALIAS = ['/images', '/sass', '/src', '/src/shared', 'src/ui'];
@@ -47,9 +45,9 @@ if (p) {
   PLUGINS.push(new webpack.NoEmitOnErrorsPlugin());
 }
 
-if (publicPath) {
+if (port) {
   PLUGINS.push(new webpack.HotModuleReplacementPlugin());
-} else if (!publicPath && !c) {
+} else if (!port && !c) {
   PLUGINS.push(new BundleAnalyzerPlugin({
     analyzerMode: (watch) ? 'server' : 'static'
   }));
@@ -130,13 +128,6 @@ const fontLoader = {
   }
 };
 
-const APP = ['babel-polyfill', './src/app.js'];
-
-if (publicPath) {
-  APP.unshift('webpack/hot/only-dev-server');
-  APP.unshift(`webpack-dev-server/client?${publicPath}`);
-  APP.unshift('react-hot-loader/patch');
-}
 
 module.exports = {
   devtool: (!p) ? 'source-map' : false,
@@ -144,11 +135,11 @@ module.exports = {
   cache: true,
   stats: 'normal',
   entry: {
-    app: APP
+    app: ['babel-polyfill', './src/app.js']
   },
   output: {
     path: path.join( __dirname, DEST),
-    publicPath: (publicPath) ? publicPath : '/',
+    publicPath: '/',
     filename: (p) ? '[chunkhash:12].js' : '[name].js'
   },
   resolve: {

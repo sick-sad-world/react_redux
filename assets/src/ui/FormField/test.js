@@ -87,6 +87,17 @@ describe('HOC: <FormField/>', () => {
     expect(onChange).toHaveBeenCalledWith({ [name]: 'a' }, true);
   });
 
+  test('Should call [getValue] function with proper data', () => {
+    const name = 'name';
+    const onChange = jest.fn();
+    const getValue = jest.fn(({target}, name) => ({ [name]: target.value }))
+    const Field = makeFormField(getValue)(Input);
+    const wrapper = shallow(<Field name={name} onChange={onChange} value='a' />);
+    wrapper.first().simulate('change', set(mockedEvent, 'target.value', 'a'));
+    expect(getValue).toHaveBeenCalledTimes(1);
+    expect(getValue).toHaveBeenCalledWith(mockedEvent, {name, onChange, value: 'a'});
+  });
+
   test('Should call [validate] function with proper data and pass result to [onChange] func', () => {
     const name = 'name';
     const validate = jest.fn(() => ['error']);

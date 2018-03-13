@@ -6,7 +6,7 @@ import '../sass/app.scss';
 
 render(
   (
-    <div>Here will be app
+    <div>Here will be app 123s
     </div>
   ),
   document.getElementById('root')

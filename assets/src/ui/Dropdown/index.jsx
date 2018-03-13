@@ -1,8 +1,7 @@
 import makeFormInput from '../FormField';
 import Dropdown from './component';
 
-function getValue(e, name) {
-  console.log(e);
+function getValue(e, {name}) {
   return {
     [name]: (e && e.value) ? e.value : e
   }

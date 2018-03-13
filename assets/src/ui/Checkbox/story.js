@@ -15,23 +15,26 @@ storiesOf('FormElements', module)
       return (
         <div>
           <Checkbox
-            label='Simple checkbox'
+            label='Simple checkbox as number boolean'
             name='simple'
-            onChange={() => store.set({simple: !store.state.simple})}
-            checked={store.state.simple === true}
+            numBool
+            onChange={(v) => store.set(v)}
+            checked={!!store.state.simple}
           />
           <div style={{ height: '24px' }} />
           <Checkbox
             name='min'
-            onChange={() => store.set({min: !store.state.min})}
-            checked={store.state.min === true}
+            onChange={(v) => store.set(v)}
+            value='min'
+            checked={!!(store.state.min && store.state.min.length)}
           />
           <div style={{ height: '24px' }} />
           <Checkbox
             label='With description'
             name='desc'
-            onChange={() => store.set({desc: !store.state.desc})}
-            checked={store.state.desc === true}
+            onChange={(v) => store.set(v)}
+            value
+            checked={!!(store.state.desc && store.state.desc.length)}
             descr='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, placeat.'
           />
           <div style={{ height: '24px' }} />

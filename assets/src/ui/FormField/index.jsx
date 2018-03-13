@@ -12,7 +12,7 @@ function unsetFocus() {
   return { focus: false };
 }
 
-function getValueDefault({ target }, name) {
+function getValueDefault({ target }, {name}) {
   return { [name]: target.value };
 }
 
@@ -28,7 +28,7 @@ export default function makeFormField(getValue = getValueDefault) {
       }
   
       onChange(e) {
-        const change = getValue(e, this.props.name);
+        const change = getValue(e, this.props);
         const valid = isFunction(this.props.validate) ? this.props.validate(change) : true;
         this.props.onChange(change, valid);
       }

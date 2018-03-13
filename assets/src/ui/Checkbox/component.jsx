@@ -7,7 +7,7 @@ import './styles.scss';
 import Icon from '../Icon';
 
 /** Checkbox input to choose some of many */
-export default function Checkbox({ className, value, name, label, descr, focus, error, onChange, onFocus, onBlur, checked, ...props }) {
+export default function Checkbox({ className, value, name, label, descr, focus, error, onChange, onFocus, onBlur, checked, numBool, ...props }) {
   const classes = {
     'state--error': !!error,
     'state--focus': !!focus
@@ -59,6 +59,8 @@ Checkbox.propTypes = {
   value: PropTypes.string.isRequired,
   /** Name property for input */
   name: PropTypes.string.isRequired,
+  /** Boolean defines whatever checkbox return Number Booleans 1 / 0 */
+  numBool: PropTypes.bool,
   /** Function invoked on change event */
   onChange: PropTypes.func.isRequired,
   /** Function invoked when input gaining focus */

@@ -5,7 +5,7 @@
   "main": "assets/app.js",
   "scripts": {
     "test": "jest --json --outputFile=jest-test-results.json",
-    "start": "webpack-dev-server --hot --inline --port=3000 --public=http://localhost:3000/",
+    "start": "webpack-dev-server --inline --port=3000",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "prebundle": "rimraf ./dist",
     "bundle": "webpack --progress",
@@ -28,7 +28,8 @@
       "stage-0"
     ],
     "plugins": [
-      "lodash"
+      "lodash",
+      "react-hot-loader/babel"
     ],
     "env": {
       "production": {
@@ -59,7 +60,9 @@
       "story.js",
       "jest-test-results.json"
     ],
+    "modulePaths": ["<rootDir>/assets/src/shared"],
     "moduleNameMapper": {
+      "^shared(.*)$": "<rootDir>/assets/src/shared$1",
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/jest/file-mock.js",
       "\\.(css|sass|scss|less)$": "identity-obj-proxy"
     }
@@ -110,7 +113,7 @@
     "image-webpack-loader": "^4.0.0",
     "jest": "^22.4.2",
     "node-sass": "^4.7.2",
-    "react-hot-loader": "^3.1.3",
+    "react-hot-loader": "^4.0.0",
     "react-test-utils": "0.0.1",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.20.1",

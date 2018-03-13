@@ -5,21 +5,37 @@ import { classNameShape, errorShape, optionShape } from 'shared/typings';
 import './styles.scss';
 
 /** RadioButton input to choose some of many */
-export default function Switcher({ className, value, name, label, descr, focus, error, onChange, onFocus, onBlur, checked, ...props }) {
+export default function Switcher({ className, value, name, label, descr, focus, error, onChange, onFocus, onBlur, options, ...props }) {
   const classes = {
     'state--error': !!error,
     'state--focus': focus
   };
 
-  const id = `${name}-${value}`
+  const id = `${name}-${value}`;
+
+  const inputs = [];
+
+  const labels = [];
+
+  options.forEach((item, i) => {
+    const key = `${name}-${i}`;
+    const chk = item.value === value;
+    const eId = (chk) ? id : null;
+    inputs.push(<input key={key} id={eId} name={name} type='radio' value={item.value} checked={chk} onChange={onChange} onFocus={onFocus} onBlur={onBlur} />);
+    labels.push(<span key={key}>{item.label}</span>)
+  });
 
   return (
     <div className={classNames('Switcher--root', classes, className)}>
       <div className='body'>
-        <div className='control'>
-          
-        </div>
         {label && <label htmlFor={id}>{label}</label>}
+        <div className='control'>
+          {labels}
+          <div className='track'>
+            {inputs}
+            <span className='handle' />
+          </div>
+        </div>
       </div>
       {descr && <span className='subtext'>{descr}</span>}
     </div>
@@ -40,7 +56,7 @@ Switcher.propTypes = {
   /** Small description text under the input */
   descr: PropTypes.string,
   /** Options to choose from */
-  checked: PropTypes.object.isRequired,
+  options: optionShape('any').isRequired,
   /** Value of input itself */
   value: PropTypes.string.isRequired,
   /** Name property for input */
