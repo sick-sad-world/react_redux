@@ -9,8 +9,8 @@ storiesOf('FormElements', module)
   .addDecorator(withTests('TextInput'))
   .add('Datepicker', withState({ simple: '' }, (story, store) => (
     withInfo({
-      propTables: [DateTime],
-      propTablesExclude: [Datepicker]
+      propTables: [Datepicker],
+      propTablesExclude: [DateTime]
     })(() => {
       function onChange(value) {
         return store.set(value);

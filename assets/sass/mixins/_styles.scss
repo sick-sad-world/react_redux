@@ -16,9 +16,11 @@
   cursor: default;
 }
 
-@mixin button-solid ($main, $main-lt, $alt) {
+@mixin button-raised ($main, $main-lt, $alt) {
+  border-color: $main;
   background-color: $main;
   color: $alt;
+  box-shadow: $sh-thumb;
 
   svg {
     fill: $alt;
@@ -30,14 +32,13 @@
   }
 
   &:not([disabled]):focus {
-    box-shadow: getFocusShadow($main)
+    box-shadow: $sh-thumb, getFocusShadow($main);
   }
 }
 
-@mixin button-lined ($main) {
-  border: 2px solid $main;
+@mixin button-simple ($main) {
+  border-color: $main;
   color: $main;
-  line-height: $s-input - 4px;
   background-color: transparent;
   
   svg {

@@ -12,7 +12,7 @@ export default function Switcher({ className, value, name, label, descr, focus, 
   const inputs = [];
 
   const labels = [];
-
+  
   options.forEach((item, i) => {
 
     const key = `${name}-${i}`;

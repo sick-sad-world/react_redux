@@ -6,13 +6,14 @@
   display: inline-flex;
   border: 0;
   padding: 0 u();
+  font-size: u(1.375);
   min-width: map-get($sizes, xs);
   justify-content: center;
   align-items: center; 
   height: $s-button;
-  line-height: $s-button;
+  line-height: $s-button - 4px;
+  border: 2px solid map-get($colors, border);
   font-weight: 400;
-  font-size: u(1.375);
   text-transform: uppercase;
   border-radius: $bdrs;
   
@@ -36,34 +37,33 @@
     @include dis-styles();
   }
 
-// Regular (solid) button styles
+// Lined button styles
 // =================================================================
+  @include button-simple($c-acc);
 
-  @include button-solid($c-acc, $c-acc-lt, $c-sec);
-  
   &.secondary {
-    @include button-solid($c-acc-sec, $c-acc-sec-lt, $c-sec);
+    @include button-simple($c-acc-sec);
   }
 
   @each $style, $color in $states {
     &.#{$style} {
-      @include button-solid($color, lighten($color, 5%), $c-sec);
+      @include button-simple($color);
     }
   }
 
-// Lined button styles
+// raised button styles
 // =================================================================
-  &.lined {
-    @include button-lined($c-acc);
+  &.raised {
+    @include button-raised($c-acc, $c-acc-lt, $c-sec);
   }
-
-  &.secondary-lined {
-    @include button-lined($c-acc-sec);
+  
+  &.secondary-raised {
+    @include button-raised($c-acc-sec, $c-acc-sec-lt, $c-sec);
   }
 
   @each $style, $color in $states {
-    &.#{$style}-lined {
-      @include button-lined($color);
+    &.#{$style}-raised {
+      @include button-raised($color, lighten($color, 5%), $c-sec);
     }
   }
 }

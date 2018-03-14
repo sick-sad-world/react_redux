@@ -1,4 +1,10 @@
 import makeFormInput from '../FormField';
 import RadioButton from './component';
 
-export default makeFormInput()(RadioButton);
+function getValue({target}, {name, value}) {
+  return {
+    [name]: (target.checked) ? value : null
+  }
+}
+
+export default makeFormInput(getValue)(RadioButton);

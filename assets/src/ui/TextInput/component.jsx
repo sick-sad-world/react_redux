@@ -17,7 +17,7 @@ export default function TextInput({ className, type, value, name, label, descr, 
             {...props}
             name={name}
             type={type}
-            value={value}
+            value={value || ''}
             onChange={onChange}
             onFocus={onFocus}
             onBlur={onBlur}

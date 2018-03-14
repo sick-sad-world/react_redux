@@ -5,7 +5,7 @@ import { classNameShape } from 'shared/typings';
 import './styles.scss';
 
 const TYPE = ['button', 'input', 'link'];
-const THEMES = ['lined', 'secondary', 'secondary-lined', 'success', 'success-lined', 'error', 'error-lined', 'warning', 'warning-lined', 'info', 'info-lined'];
+const THEMES = ['raised', 'secondary', 'secondary-raised', 'success', 'success-raised', 'error', 'error-raised', 'warning', 'warning-raised', 'info', 'info-raised'];
 
 /** UI Button implementation */
 export default function Button({ el, children, className, theme, ...props }) {

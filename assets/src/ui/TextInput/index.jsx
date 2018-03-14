@@ -1,4 +1,8 @@
 import makeFormInput from '../FormField';
 import TextInput from './component';
 
-export default makeFormInput()(TextInput);
+function getValue({ target }, {name}) {
+  return { [name]: (target.value.length) ? target.value : null };
+}
+
+export default makeFormInput(getValue)(TextInput);
