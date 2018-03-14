@@ -142,6 +142,10 @@ module.exports = {
     publicPath: '/',
     filename: (p) ? '[chunkhash:12].js' : '[name].js'
   },
+  devServer: {
+    hot: true,
+    basePath: path.resolve(__dirname, CONTEXT),
+  },
   resolve: {
     alias: Array.prototype.reduce.call(ALIAS, makeAlias, {}),
     extensions: ['.js', '.jsx']
