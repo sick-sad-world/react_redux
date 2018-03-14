@@ -45,7 +45,9 @@ $colors: (
   border: $c-sec-dk2,
   highlight: $c-sec-dk,
   shadow: $c-prm,
+  solid: #fff,
   elements: $c-acc,
+  elments-bg: mix($c-acc-lt, #fff, 20%),
   focus: $c-acc-sec,
   selection: lighten($c-acc-sec, 25%),
 );

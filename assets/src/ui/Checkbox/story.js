@@ -26,6 +26,7 @@ storiesOf('FormElements', module)
             name='min'
             onChange={(v) => store.set(v)}
             value='min'
+            label='label'
             checked={!!(store.state.min && store.state.min.length)}
           />
           <div style={{ height: '24px' }} />

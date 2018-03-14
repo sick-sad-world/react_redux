@@ -4,7 +4,7 @@
 
 .Switcher--root {
   $h: u(1.5);
-  $w: u(2);
+  $w: u(2.25);
   .body {
     display: flex;
     align-items: center;
@@ -12,13 +12,11 @@
   label {
     flex: 1 1 auto;
   }
-  .track {
+  .control {
     $step: $w + ($w - $s-pointer) * .5;
     display: inline-block;
     position: relative;
-    border-radius: $h * .5;
     height: $h;
-    background-color: $c-sec-dk;
       
     input {
       position: relative;
@@ -29,12 +27,39 @@
       z-index: 3;
       cursor: pointer;
     }
+
+    input:nth-child(1):checked {
+      & ~ .handle {
+        background-color: $c-acc;
+      }
+      & ~ .track {
+        background-color: map-get($colors, elments-bg);
+      }
+    }
+
     input:nth-child(2):checked ~ .handle {
       transform: translate3d($step,0,0);
     }
-    input:nth-child(3):checked ~ .handle {
-      transform: translate3d($step * 2,0,0);
+
+    input:nth-child(3):checked {
+      & ~ .handle {
+        transform: translate3d($step * 2,0,0);
+        background-color: $c-acc-sec;
+      }
+      & ~ .track {
+        background-color: mix($c-acc-sec, #fff, 20%);
+      }
     }
+
+    .track {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: $h * .5;
+      background-color: $c-sec-dk;
+    }
+
     .handle {
       display: block;
       position: absolute;
@@ -42,9 +67,27 @@
       width: $s-pointer;
       height: $s-pointer;
       border-radius: 50%;
-      background-color: #fff;
+      background-color: map-get($colors, solid);
       box-shadow: $sh-thumb;
       transition: transform $t-dur $t-func;
+      z-index: 2;
+    }
+
+    input:nth-child(1):focus, input:nth-child(2):focus {
+      & ~ .track {
+        background-color: map-get($colors, elments-bg);
+      }
+      & ~ .handle {
+        box-shadow: $sh-focus;
+      }
+    }
+    input:nth-child(3):focus {
+      & ~ .track {
+        background-color: mix($c-acc-sec, #fff, 20%);
+      }
+      & ~ .handle {
+        box-shadow: getFocusShadow($c-acc-sec);
+      }
     }
   }
 }

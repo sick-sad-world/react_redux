@@ -7,7 +7,7 @@ import Raw from './component';
 
 storiesOf('FormElements', module)
   .addDecorator(withTests('Switcher'))
-  .add('Switcher', withState({}, (story, store) => (
+  .add('Switcher', withState({triple: null, simple: 0}, (story, store) => (
     withInfo({
       propTables: [Raw],
       propTablesExclude: [Switcher]

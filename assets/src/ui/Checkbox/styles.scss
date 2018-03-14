@@ -39,7 +39,6 @@
       fill: transparent;
       border: 1px solid map-get($colors, border);
       border-radius: $bdrs;
-      transition: box-shadow $t-dur $t-func;
       z-index: 2;
     }
     input:checked + svg {

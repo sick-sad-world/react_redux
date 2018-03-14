@@ -39,7 +39,6 @@
       border: 1px solid map-get($colors, border);
       border-radius: 50%;
       z-index: 2;
-      transition: box-shadow $t-dur $t-func;
       &:after {
         content: '';
         position: absolute;
@@ -79,7 +78,7 @@
 
   &.state--focus .control input:not(:checked) span,
   .control input:not([disabled]):not(:checked):focus + span {
-    background-color: rgba($c-acc, .1);
+    background-color:  map-get($colors, elments-bg);
   }
 
 }

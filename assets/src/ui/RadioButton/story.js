@@ -25,6 +25,7 @@ storiesOf('FormElements', module)
           <RadioButton
             name='name'
             value='min'
+            label='label'
             onChange={(value) => store.set(value)}
             checked={store.state.name === 'min'}
           />

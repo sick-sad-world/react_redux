@@ -23,7 +23,7 @@ export default function Switcher({ className, value, name, label, descr, focus, 
     const chk = item.value === value;
     const eId = (chk) ? id : null;
 
-    inputs.push(<input key={key} title={label} id={eId} name={name} type='radio' value={i} checked={chk} onChange={onChange} onFocus={onFocus} onBlur={onBlur} />);
+    inputs.push(<input key={key} title={item.label} id={eId} name={name} type='radio' value={i} checked={chk} onChange={onChange} onFocus={onFocus} onBlur={onBlur} />);
     labels.push(<span key={key}>{item.label}</span>)
   });
 
@@ -31,9 +31,10 @@ export default function Switcher({ className, value, name, label, descr, focus, 
     <div className={classNames('Switcher--root', classes, className)}>
       <div className='body'>
         {label && <label htmlFor={id}>{label}</label>}
-        <div className='track'>
+        <div className='control'>
           {inputs}
           <span className='handle' />
+          <span className='track' />
         </div>
       </div>
       {descr && <span className='subtext'>{descr}</span>}
