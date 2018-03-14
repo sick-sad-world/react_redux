@@ -31,12 +31,9 @@ export default function Switcher({ className, value, name, label, descr, focus, 
     <div className={classNames('Switcher--root', classes, className)}>
       <div className='body'>
         {label && <label htmlFor={id}>{label}</label>}
-        <div className='control'>
-          {labels}
-          <div className='track'>
-            {inputs}
-            <span className='handle' />
-          </div>
+        <div className='track'>
+          {inputs}
+          <span className='handle' />
         </div>
       </div>
       {descr && <span className='subtext'>{descr}</span>}

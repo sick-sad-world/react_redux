@@ -45,11 +45,13 @@
     }
     &.is-focused, &.has-value {
       & + .label {
-        color: $c-acc-dk;
         transform: translate3d(0, $s-input * -0.6, 0) scale(.9);
       }
     }
     &.is-focused {
+      & + .label {
+        color: $c-acc-dk;
+      }
       .Select-placeholder {
         opacity: 1;
         transition-delay: $t-dur * 0.5;

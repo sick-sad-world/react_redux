@@ -122,11 +122,15 @@
     }
     .Select-input {
       height: $s-pointer;
-      margin: 0;
+      margin: 2px 0;
+      > input {
+        height: 100%;
+        vertical-align: top;
+      }
     }
     .Select-value {
       display: inline-flex;
-      background-color: $c-acc-sec-dk;
+      background-color: $c-acc-dk;
       color: $c-sec;
       margin: 2px u(.5) 2px 0;
       border: 0;
@@ -152,10 +156,11 @@
         text-align: center;
         &:hover {
           background: none;
+          color: inherit;
         }
       }
       &:hover {
-        background-color: rgba($c-acc-lt, .3);
+        background-color: $c-acc-lt;
       }
     }
   }
