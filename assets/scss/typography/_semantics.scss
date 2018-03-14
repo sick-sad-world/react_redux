@@ -130,11 +130,11 @@ blockquote {}
 .badge {
 	// Colorize types
 	//===============================================================
-	&[data-type="HTML"] { @include gradient(map-get($states, success)); }
-	&[data-type="RSS"] { @include gradient($c-accent-alt); }
-	&[data-type="Twitter"] { @include gradient(map-get($states, info)); }
-	&[data-type="Reddit"] { @include gradient(nth($c-scale, 3)); }
-	&[data-type="Facebook"] { @include gradient(nth($c-scale, 1)); }
+	&[data-type="HTML"] { background-color: map-get($states, success); }
+	&[data-type="RSS"] { background-color: $c-accent-alt; }
+	&[data-type="Twitter"] { background-color: map-get($states, info); }
+	&[data-type="Reddit"] { background-color: nth($c-scale, 3); }
+	&[data-type="Facebook"] { background-color: nth($c-scale, 1); }
 } 
 
 .popup {

@@ -31,7 +31,7 @@
     }
     .counter {
       vertical-align: 1px;
-      @include gradient($c-accent-alt);
+      background-color: $c-accent-alt;
     }
 		span {
 			display: block;

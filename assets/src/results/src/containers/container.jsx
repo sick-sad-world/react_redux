@@ -227,10 +227,10 @@ export default connect(makeContainerSelector, (dispatch, { id }) => ({
     return dispatch(fetchResults(data, opts));
   },
   favoriteResult(params) {
-    return dispatch(favoriteResult(params, { entity: id, state: false }));
+    return dispatch(favoriteResult(params, { entity: { id, hash: params.hash }, state: false }));
   },
   ignoreResult(params) {
-    return dispatch(ignoreResult(params, { entity: id, state: false }));
+    return dispatch(ignoreResult(params, { entity: { id, hash: params.hash }, state: false }));
   },
   refreshResult(params) {
     return dispatch(refreshResult(params, { entity: id, state: false }));

@@ -55,7 +55,7 @@ span.switcher-checkbox {
 	}
 	input:checked + svg {
 		fill: $c-alt;
-		@include gradient($c-accent);
+		background-color: $c-accent;
 		border: $bd-darken;
 	}
 }
@@ -66,7 +66,7 @@ span.switcher-radio {
 		border-radius: 50%;
 		width: 50%;
 		height: 50%;
-		@include gradient($c-accent);
+		background-color: $c-accent;
 		border: $bd-darken;
 		opacity: 0;
 	}
@@ -115,7 +115,7 @@ span.switcher-direction {
 		width: 50%;
 		z-index: 1;
 		border-radius: $bdrs;
-		@include gradient($c-accent);
+		background-color: $c-accent;
 		border: $bd-darken;
 		//transition: left $dur linear;
 	}

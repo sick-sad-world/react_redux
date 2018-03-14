@@ -83,7 +83,7 @@
   .rdtActive {
     @include style-accent-element($bdr: none);
     &:hover {
-      @include gradient(lighten($c-accent, 2%), top);
+      background-color: lighten($c-accent, 2%);
     }
   }
   .rdtActive.rdtToday:before {

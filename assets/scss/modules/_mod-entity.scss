@@ -69,7 +69,7 @@ in sub-managent like sources in set, sources/sets in column or column within ale
 		}
 	}
 	&.is-selected > div {
-		@include gradient(lighten($c-accent-alt, 20%));
+		background-color: lighten($c-accent-alt, 20%);
 		box-shadow: $sh-base;
 		.text {
 			text-shadow: $sh-text-alt;

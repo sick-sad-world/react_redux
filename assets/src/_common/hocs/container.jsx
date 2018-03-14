@@ -49,15 +49,15 @@ export default function makePageContainer(opts, Component) {
     editItem(data, options, changed) {
       this.updateLoading('editing');
       if (o.create === 'edit' && !data.id) {
-        this.props.actionCreate({ ...data, order: -1, id: undefined }, options)
+        return this.props.actionCreate({ ...data, order: -1, id: undefined }, options)
           .then(({ payload }) => this.changeLocation(`/${payload.id}`))
           .catch(console.error)
           .then(this.updateLoading);
-      } else {
-        this.props.actionEdit(data, options, changed)
+      } 
+        return this.props.actionEdit(data, options, changed)
           .catch(console.error)
           .then(this.updateLoading);
-      }
+      
     }
 
     deleteConfirm(deleting = null) {

@@ -7,8 +7,8 @@ export default function createAction({ call, action }) {
     try {
       const result = await (typeof call === 'string' ? fetch(call, data, opts) : call(data, opts));
 
-      result.success = undefined;
-      result.message = undefined;
+      delete result.success;
+      delete result.message;
       if (result.error) throw { error: result.error };
       return dispatch({ type: action, payload: result, entity });
     } catch (error) {

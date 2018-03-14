@@ -11,34 +11,33 @@
   text-decoration: none;
   color: $c-main;
   border-radius: $bdrs;
-  font: $base-font-size/#{$form-unit - 2px} $heading-font-family;
+  font-size: $base-font-size;
+  line-height: $form-unit;
+  font-family: $heading-font-family;
   border: 0;
-  border-bottom: 2px solid rgba(0, 0, 0, .2);
-  @include gradient($c-border);
+  background-color: $c-border;
   transition: background $dur;
   &:hover,
   &:focus {
     text-decoration: none;
-    @include gradient(darken($c-border, 2%), top);
+    background-color: darken($c-border, 2%);
   }
   &:active {
   }
   &.is-accent {
     color: $c-alt;
-    @include gradient($c-accent);
-    border-color: rgba(0, 0, 0, .4);
+    background-color: $c-accent;
     &:hover,
     &:focus {
-      @include gradient(lighten($c-accent, 2%), top);
+      background-color: lighten($c-accent, 2%);
     }
   }
   &.is-alt {
     color: $c-alt;
-    @include gradient($c-accent-alt);
-    border-color: rgba(0, 0, 0, .4);
+    background-color: $c-accent-alt;
     &:hover,
     &:focus {
-      @include gradient(darken($c-accent-alt, 2%), top);
+      background-color: darken($c-accent-alt, 2%);
     }
   }
   &[class*="size-"] {

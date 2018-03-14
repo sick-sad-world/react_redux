@@ -43,12 +43,12 @@ export default (state = {}, action) => {
     case types.DELETE:
       return {
         ...state,
-        [action.entity]: undefined
+        [action.entity.id]: undefined
       };
     case types.FAVORITE:
-      return updateObjectById(state, action.entity, prevState => ({
+      return updateObjectById(state, action.entity.id, prevState => ({
         payload: prevState.payload.map((link) => {
-          if (link.hash === action.payload.hash) {
+          if (link.hash === action.entity.hash) {
             return { ...link, favorite: (action.payload.unfavorite) ? 0 : 1 };
           }
           return link;
@@ -56,9 +56,9 @@ export default (state = {}, action) => {
         state: 2
       }));
     case types.IGNORE:
-      return updateObjectById(state, action.entity, prevState => ({
+      return updateObjectById(state, action.entity.id, prevState => ({
         payload: prevState.payload.map((link) => {
-          if (link.hash === action.payload.hash) {
+          if (link.hash === action.entity.hash) {
             return { ...link, ignore: (action.payload.unignore) ? 0 : 1 };
           }
           return link;
