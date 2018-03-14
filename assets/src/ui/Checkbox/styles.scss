@@ -49,14 +49,17 @@
   }
 
   &.state--focus .control svg,
-  .control input:not([disabled]):focus + svg {
+  .control input:focus + svg {
     box-shadow: $sh-focus;
   }
 
   &.state--focus .control input:not(:checked) svg,
-  .control input:not([disabled]):not(:checked):focus + svg {
-    background-color: rgba($c-acc, .1);
-    fill: $c-sec;
+  .control input:not(:checked):focus + svg {
+    border-color: $c-acc-lt;
+    fill: rgba($c-acc, .1);
   }
   
+  &.state--disabled {
+    @include dis-styles();
+  }
 }

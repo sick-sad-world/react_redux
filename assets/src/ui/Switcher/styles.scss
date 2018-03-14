@@ -33,7 +33,7 @@
         background-color: $c-acc;
       }
       & ~ .track {
-        background-color: map-get($colors, elments-bg);
+        background-color: map-get($colors, el-light);
       }
     }
 
@@ -75,7 +75,7 @@
 
     input:nth-child(1):focus, input:nth-child(2):focus {
       & ~ .track {
-        background-color: map-get($colors, elments-bg);
+        background-color: map-get($colors, el-light);
       }
       & ~ .handle {
         box-shadow: $sh-focus;

@@ -35,6 +35,15 @@ storiesOf('FormElements', module)
           />
           <div style={{ height: '50px' }} />
           <TextInput
+            label='Disabled input'
+            name='descr'
+            disabled
+            descr='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, placeat.'
+            onChange={onChange}
+            value={store.state.descr}
+          />
+          <div style={{ height: '50px' }} />
+          <TextInput
             label='Simple invalid input'
             name='inv'
             valid={['some validation error']}

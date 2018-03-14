@@ -104,7 +104,7 @@
       background-color: $c-sec-dk;
     }
     &.is-selected {
-      background-color: rgba($c-acc-lt, .2);
+      background-color: map-get($colors, el-light);
       font-weight: bold;
     }
   }
@@ -133,6 +133,7 @@
       background-color: $c-acc;
       color: $c-sec;
       margin: 2px u(.5) 2px 0;
+      padding: 0 4px 0 10px;
       border: 0;
       border-radius: $s-pointer * .5;
       font-size: $f-cap;
@@ -141,10 +142,12 @@
       max-width: 120px;
       .Select-value-label {
         padding: 0;
-        text-indent: $s-pointer * .5;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
+        span {
+          vertical-align: middle;
+        }
       }
       .Select-value-icon {
         padding: 0;

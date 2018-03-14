@@ -58,27 +58,22 @@
     }
   }
 
-  &.style--reverse {
-    .body {
-      flex-direction: row-reverse;
-    }
-    label {
-      margin-right: 0;
-      margin-left: u();
-    }
-    .subtext {
-      text-align: left;
-    }
-  }
-
   &.state--focus .control span,
-  .control input:not([disabled]):focus + span {
+  .control input:focus + span {
     box-shadow: $sh-focus;
   }
 
   &.state--focus .control input:not(:checked) span,
-  .control input:not([disabled]):not(:checked):focus + span {
-    background-color:  map-get($colors, elments-bg);
+  .control input:not(:checked):focus + span {
+    border-color: $c-acc-lt;
   }
 
+  &.state--focus .control input:not(:checked) span:after,
+  .control input:not(:checked):focus + span:after {
+    background-color:  map-get($colors, el-light);
+  }
+
+  &.state--disabled {
+    @include dis-styles();
+  }
 }

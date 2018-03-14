@@ -47,6 +47,16 @@ export default class Dropdown extends React.Component {
     return <Icon onMouseDown={onMouseDown} g={(isOpen) ? 'chevron-up' : 'chevron-down'} />
   }
 
+  clearRenderer() {
+    // Render Cross Icon
+    return;
+  }
+
+  loadingRenderer() {
+    // Render loading placeholder for async dropdowns
+    return this.props.loadingPlaceholder;
+  }
+
   render() {
     const {label, name, focus, error, className, descr, prefix, suffix, options, loadingPlaceholder, creatable, ...props} = this.props;
     const { isLoading } = this.state;
@@ -57,7 +67,7 @@ export default class Dropdown extends React.Component {
     };
 
     const controlProps = {
-      placeholder: (isLoading) ? loadingPlaceholder : undefined,
+      noResultsText: (isLoading) ? this.loadingRenderer() : undefined,
       ...props,
       isLoading: this.state.isLoading,
       options: this.state.options || options,

@@ -10,7 +10,6 @@
   label {
     display: flex;
     position: relative;
-    overflow: visible;
     border-bottom: 1px solid $c-sec-dk2;
     &:after {
       content: '';
@@ -114,5 +113,9 @@
     .subtext, .label {
       color: $c-error;
     }
+  }
+
+  &.state--disabled {
+    @include dis-styles();
   }
 }

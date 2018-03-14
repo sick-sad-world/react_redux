@@ -8,15 +8,10 @@ import Icon from '../Icon';
 
 /** Checkbox input to choose some of many */
 export default function Checkbox({ className, value, name, label, descr, focus, error, onChange, onFocus, onBlur, checked, numBool, ...props }) {
-  const classes = {
-    'state--error': !!error,
-    'state--focus': !!focus
-  };
-
   const id = `${name}-${value}`
 
   return (
-    <div className={classNames('Checkbox--root', classes, className)}>
+    <div className={classNames('Checkbox--root', className)}>
       <div className='body'>
         <div className='control'>
           <input
@@ -56,7 +51,7 @@ Checkbox.propTypes = {
   /** State of Checkbox */
   checked: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]).isRequired,
   /** Value of input itself */
-  value: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.bool, PropTypes.number, PropTypes.string]).isRequired,
   /** Name property for input */
   name: PropTypes.string.isRequired,
   /** Boolean defines whatever checkbox return Number Booleans 1 / 0 */

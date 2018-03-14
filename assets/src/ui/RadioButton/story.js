@@ -31,6 +31,15 @@ storiesOf('FormElements', module)
           />
           <div style={{ height: '24px' }} />
           <RadioButton
+            name='name'
+            value='dis'
+            disabled
+            label='Disablaed'
+            onChange={(value) => store.set(value)}
+            checked={store.state.name === 'dis'}
+          />
+          <div style={{ height: '24px' }} />
+          <RadioButton
             label='With description'
             name='name'
             value='desc'

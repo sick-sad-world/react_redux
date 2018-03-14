@@ -58,4 +58,9 @@
       }
     }
   }
+  &.state--focus {
+    .suffix svg, .prefix svg {
+      fill: $c-acc;
+    }
+  }
 }

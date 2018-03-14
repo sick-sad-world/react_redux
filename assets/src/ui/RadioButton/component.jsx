@@ -7,15 +7,11 @@ import './styles.scss';
 
 /** RadioButton input to choose some of many */
 export default function RadioButton({ className, value, name, label, descr, focus, error, onChange, onFocus, onBlur, checked, ...props }) {
-  const classes = {
-    'state--error': !!error,
-    'state--focus': focus
-  };
 
   const id = `${name}-${value}`
 
   return (
-    <div className={classNames('RadioButton--root', classes, className)}>
+    <div className={classNames('RadioButton--root', className)}>
       <div className='body'>
         <div className='control'>
           <input

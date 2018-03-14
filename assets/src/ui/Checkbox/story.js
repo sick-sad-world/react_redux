@@ -31,6 +31,15 @@ storiesOf('FormElements', module)
           />
           <div style={{ height: '24px' }} />
           <Checkbox
+            name='min'
+            onChange={(v) => store.set(v)}
+            value='dis'
+            disabled
+            label='Disabled'
+            checked={!!(store.state.min && store.state.min.length)}
+          />
+          <div style={{ height: '24px' }} />
+          <Checkbox
             label='With description'
             name='desc'
             onChange={(v) => store.set(v)}

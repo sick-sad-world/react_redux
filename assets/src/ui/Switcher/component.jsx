@@ -6,10 +6,6 @@ import './styles.scss';
 
 /** RadioButton input to choose some of many */
 export default function Switcher({ className, value, name, label, descr, focus, error, onChange, onFocus, onBlur, options, ...props }) {
-  const classes = {
-    'state--error': !!error,
-    'state--focus': focus
-  };
 
   const id = `${name}-${value}`;
 
@@ -23,12 +19,12 @@ export default function Switcher({ className, value, name, label, descr, focus, 
     const chk = item.value === value;
     const eId = (chk) ? id : null;
 
-    inputs.push(<input key={key} title={item.label} id={eId} name={name} type='radio' value={i} checked={chk} onChange={onChange} onFocus={onFocus} onBlur={onBlur} />);
+    inputs.push(<input {...props} key={key} title={item.label} id={eId} name={name} type='radio' value={i} checked={chk} onChange={onChange} onFocus={onFocus} onBlur={onBlur} />);
     labels.push(<span key={key}>{item.label}</span>)
   });
 
   return (
-    <div className={classNames('Switcher--root', classes, className)}>
+    <div className={classNames('Switcher--root', className)}>
       <div className='body'>
         {label && <label htmlFor={id}>{label}</label>}
         <div className='control'>

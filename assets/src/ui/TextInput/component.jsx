@@ -8,13 +8,8 @@ const TYPES = ['text', 'email', 'number', 'password'];
 
 /** Input of type: TEXT, EMAIL, NUMBER, PASSWORD implementation */
 export default function TextInput({ className, type, value, name, label, descr, prefix, suffix, helper, focus, error, onChange, onFocus, onBlur, ...props }) {
-  const classes = {
-    'state--error': !!error,
-    'state--focus': focus
-  };
-
   return (
-    <div className={classNames('TextInput--root', classes, className)}>
+    <div className={classNames('TextInput--root', className)}>
       {prefix && <span className='prefix'>{prefix}</span>}
       <div className='body'>
         <label>
