@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { classNameShape, errorShape, optionShape } from 'shared/typings';
+import { classNameShape, validationMessageShape, optionShape, valueShape } from 'shared/typings';
 import './styles.scss';
 
 /** RadioButton input to choose some of many */
@@ -52,9 +52,9 @@ Switcher.propTypes = {
   /** Small description text under the input */
   descr: PropTypes.string,
   /** Options to choose from */
-  options: optionShape('any').isRequired,
+  options: optionShape.isRequired,
   /** Value of input itself */
-  value: PropTypes.string.isRequired,
+  value: valueShape,
   /** Name property for input */
   name: PropTypes.string.isRequired,
   /** Function invoked on change event */
@@ -66,5 +66,5 @@ Switcher.propTypes = {
   /** Whatever field is focused or not */
   focus: PropTypes.bool.isRequired,
   /** Field validation state mark it as valid [true] or invalid [Array[String]] */
-  error: errorShape.isRequired
+  error: validationMessageShape.isRequired
 };

@@ -2,7 +2,7 @@ import isFunction from 'lodash/isFunction';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { classNameShape, errorShape } from 'shared/typings';
+import { classNameShape, validationMessageShape } from 'shared/typings';
 import './styles.scss';
 
 /** RadioButton input to choose some of many */
@@ -63,5 +63,5 @@ RadioButton.propTypes = {
   /** Whatever field is focused or not */
   focus: PropTypes.bool.isRequired,
   /** Field validation state mark it as valid [true] or invalid [Array[String]] */
-  error: errorShape.isRequired
+  error: validationMessageShape.isRequired
 };

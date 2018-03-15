@@ -6,10 +6,7 @@ import TextInput from '../TextInput';
 import './styles.scss';
 
 /** DateTime wrapper providing required intarface and Proper TextInput field as target */
-export default function Datepicker({onChange, format, ...props}) {
-  function handleChange(value) {
-    return (value instanceof moment) ? value.format(format) : value;
-  }
+export default function Datepicker({onChange, format, InputComponent, name, ...props}) {
 
   const formats = format ? format.split(' ') : null;
 
@@ -18,13 +15,23 @@ export default function Datepicker({onChange, format, ...props}) {
       {...props}
       dateFormat={formats ? formats[0] : undefined}
       timeFormat={formats ? formats[1] : undefined}
-      onChange={handleChange}
-      renderInput={(inputProps, openCalendar) => <TextInput {...inputProps} onFocus={openCalendar} />}
+      onChange={(value) => onChange({
+        [name]: (value instanceof moment) ? value.format(format) : value
+      })}
+      renderInput={(input, openCalendar) => <InputComponent {...input} name={name} onFocus={openCalendar} />}
     />
   )
 }
 
+Datepicker.defaultProps = {
+  InputComponent: TextInput
+}
+
 Datepicker.propTypes = {
+  /** Name property for input */
+  name: PropTypes.string.isRequired,
+  /** Component to render Input */
+  InputComponent: PropTypes.element.isRequired,
   /** String Format of output value */
   format: PropTypes.string,
   /** Value of an Input may be date string or Moment/Date instance */

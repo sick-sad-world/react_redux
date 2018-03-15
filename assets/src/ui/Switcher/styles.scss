@@ -68,7 +68,7 @@
       height: $s-pointer;
       border-radius: 50%;
       background-color: map-get($colors, solid);
-      box-shadow: $sh-thumb;
+      box-shadow: $sh-z3;
       transition: transform $t-dur $t-func;
       z-index: 2;
     }

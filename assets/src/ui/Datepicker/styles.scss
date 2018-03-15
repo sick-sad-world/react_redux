@@ -15,7 +15,7 @@
   margin-top: 1px;
   z-index: 99999 !important;
   background: map-get($colors, solid);
-  box-shadow: $sh-modal;
+  box-shadow: $sh-z4;
   border: 1px solid map-get($colors, border);
   .rdtOpen & {
     display: block;

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { classNameShape, errorShape } from 'shared/typings';
+import { classNameShape, validationMessageShape } from 'shared/typings';
 import './styles.scss';
 
 const TYPES = ['text', 'email', 'number', 'password'];
@@ -63,7 +63,7 @@ TextInput.propTypes = {
   /** Whatever field is focused or not */
   focus: PropTypes.bool.isRequired,
   /** Field validation state mark it as valid [true] or invalid [Array[String]] */
-  error: errorShape.isRequired,
+  error: validationMessageShape.isRequired,
   /** Elements placed at the end of field (icons, buttons) */
   helper: PropTypes.element,
   /** Elements placed BEFORE field (icons, buttons) */

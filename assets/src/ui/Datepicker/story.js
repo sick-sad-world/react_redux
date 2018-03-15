@@ -12,17 +12,14 @@ storiesOf('FormElements', module)
       propTables: [Datepicker],
       propTablesExclude: [DateTime]
     })(() => {
-      function onChange(value) {
-        return store.set(value);
-      }
       return (
         <div>
           <Datepicker
+            name='simple'
             inputProps={{
-              label: 'Simple Datetime input',
-              name: 'simple'
+              label: 'Simple Datetime input'
             }}
-            onChange={onChange}
+            onChange={(value) => store.set(value)}
             value={store.state.simple}
           />
         </div>

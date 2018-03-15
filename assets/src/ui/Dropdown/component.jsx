@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import Select, { Creatable } from 'react-select';
 import 'node_modules/react-select/dist/react-select.css';
 
-import { classNameShape, errorShape, optionShape } from 'shared/typings';
+import { classNameShape, validationMessageShape, optionShape, valueShape } from 'shared/typings';
 
 import './override.scss';
 import './styles.scss';
@@ -98,7 +98,7 @@ Dropdown.defaultProps = {
 
 Dropdown.propTypes = {
   /** Options for dropdown */
-  options: optionShape('any'),
+  options: optionShape,
   /** Function used to get options from remote, [options] will be taken from internal state */
   loadOptions: PropTypes.func,
   /** HTML Class will be applied to container */
@@ -116,7 +116,7 @@ Dropdown.propTypes = {
   /** Whatever field is focused or not */
   focus: PropTypes.bool.isRequired,
   /** Field validation state mark it as valid [true] or invalid [Array[String]] */
-  error: errorShape.isRequired,
+  error: validationMessageShape.isRequired,
   /** Elements placed BEFORE dropdown (icons, buttons) */
   prefix: PropTypes.element,
   /** Elements placed AFTER dropdown (icons, buttons) */

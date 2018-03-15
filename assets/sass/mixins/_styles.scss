@@ -20,7 +20,7 @@
   border-color: $main;
   background-color: $main;
   color: $alt;
-  box-shadow: $sh-thumb;
+  box-shadow: $sh-z3;
 
   svg {
     fill: $alt;
@@ -32,7 +32,7 @@
   }
 
   &:not([disabled]):focus {
-    box-shadow: $sh-thumb, getFocusShadow($main);
+    box-shadow: $sh-z3, getFocusShadow($main);
   }
 }
 

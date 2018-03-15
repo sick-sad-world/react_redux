@@ -27,16 +27,16 @@ storiesOf('FormElements', module)
             onChange={(v) => store.set(v)}
             value='min'
             label='label'
-            checked={!!(store.state.min && store.state.min.length)}
+            checked={!!store.state.min}
           />
           <div style={{ height: '24px' }} />
           <Checkbox
-            name='min'
+            name='dis'
             onChange={(v) => store.set(v)}
             value='dis'
             disabled
             label='Disabled'
-            checked={!!(store.state.min && store.state.min.length)}
+            checked={!!(store.state.dis && store.state.dis.length)}
           />
           <div style={{ height: '24px' }} />
           <Checkbox
@@ -44,7 +44,7 @@ storiesOf('FormElements', module)
             name='desc'
             onChange={(v) => store.set(v)}
             value
-            checked={!!(store.state.desc && store.state.desc.length)}
+            checked={!!store.state.desc}
             descr='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, placeat.'
           />
           <div style={{ height: '24px' }} />

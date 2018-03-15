@@ -78,8 +78,9 @@ $feeds: (
 );
 
 $sh-focus: 0 0 0 3px rgba($c-acc, .25);
-$sh-thumb: 0 2px 3px 0 rgba(0,0,0,.14), 0 1px 7px 0 rgba(0,0,0,.12), 0 3px 2px -2px rgba(0,0,0,.2);
-$sh-modal: 0 4px 7px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12), 0 2px 5px -1px rgba(0,0,0,.4);
+$sh-z3: 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12), 0 3px 1px -2px rgba(0,0,0,.2);
+$sh-z4: 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 14px 0 rgba(0,0,0,.12), 0 3px 5px -1px rgba(0,0,0,.4);
+$sh-z5: 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12), 0 5px 5px -3px rgba(0,0,0,.4);
 
 @function getFocusShadow($c: $c-acc) {
   @return 0 0 0 3px rgba($c, .25);
