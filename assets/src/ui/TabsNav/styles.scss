@@ -1,0 +1,22 @@
+@import 'mixins/_u.scss';
+@import 'mixins/_ph.scss';
+@import 'mixins/_styles.scss';
+@import '_vars.scss';
+
+.Tabsnav--root {
+  display: flex;
+  > a {
+    flex: 1 1 auto;
+    color: $c-prm;
+    text-align: center;
+    line-height: $s-button;
+    border-bottom: 2px solid transparent;
+    text-decoration: none;
+    &:hover, &focus {
+      text-decoration: none;
+    }
+    &.state--selected {
+      border-color: $c-acc;
+    }
+  }
+}

@@ -15,6 +15,11 @@
       "jsx": true
     }
   },
+  "settings": {
+    "import/resolver": {
+      "webpack": true
+    }    
+  },
   "plugins": ["react", "babel", "import", "jest"],
   "rules": {
     "import/no-extraneous-dependencies": ["error", {"devDependencies": true, "peerDependencies": true}],
