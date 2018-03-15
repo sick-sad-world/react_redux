@@ -20,7 +20,7 @@ storiesOf('FormElements', module)
         <li style={{ marginBottom: '15px' }}><Button onClick={action('input-click')} theme='secondary' el='input' type='submit' value='Send' /> - [Input:submit] as a button, style secondary</li>
         <li style={{ marginBottom: '15px' }}><Button onClick={action('dis-click')} disabled>Disabled</Button> - Disabled button</li>
         <li style={{ marginBottom: '15px' }}>
-          <Button onClick={action('loading-click')} theme='raised  '>Loading</Button> - Loading indicator
+          <Button onClick={action('loading-click')} theme='raised'>Loading</Button> - Loading indicator
         </li>
         <li style={{ marginBottom: '15px' }}>
           <Button mode='raised' onClick={action('icon-click')}>

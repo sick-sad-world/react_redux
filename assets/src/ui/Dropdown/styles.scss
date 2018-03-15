@@ -63,4 +63,22 @@
       fill: $c-acc;
     }
   }
+  &.state--error {
+    .suffix svg, .prefix svg, .Select-control .Select-arrow-zone svg {
+      fill: $c-error;
+    }
+
+    .Select-control  {
+      border-color: $c-error;
+    }
+    .Select-control:after {
+      background-color: $c-error;
+    }
+    .subtext, .Select + .label {
+      color: $c-error;
+    }
+  }
+  &.state--disabled {
+    @include dis-styles();
+  }
 }

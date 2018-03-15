@@ -61,11 +61,6 @@ export default class Dropdown extends React.Component {
     const {label, name, focus, error, className, descr, prefix, suffix, options, loadingPlaceholder, creatable, ...props} = this.props;
     const { isLoading } = this.state;
 
-    const classes = {
-      'state--error': !!error,
-      'state--focus': !!focus
-    };
-
     const controlProps = {
       noResultsText: (isLoading) ? this.loadingRenderer() : undefined,
       ...props,
@@ -77,7 +72,7 @@ export default class Dropdown extends React.Component {
     }
   
     return (
-      <div className={classNames('Dropdown--root', classes, className)}>
+      <div className={classNames('Dropdown--root', className)}>
         {prefix && <span className='prefix'>{prefix}</span>}
         <div className='control'>
           <label>

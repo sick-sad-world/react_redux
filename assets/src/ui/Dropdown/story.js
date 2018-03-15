@@ -23,7 +23,7 @@ function loadOptions() {
 
 storiesOf('FormElements', module)
   .addDecorator(withTests('Dropdown'))
-  .add('Dropdown', withState({}, (story, store) => (
+  .add('Dropdown', withState({inv: 'two'}, (story, store) => (
     withInfo({
       propTables: [Raw],
       propTablesExclude: [Dropdown]
@@ -74,6 +74,16 @@ storiesOf('FormElements', module)
             onChange={(value) => store.set(value)}
           />
           <div style={{ height: '50px' }} />
+          <Dropdown
+            name='inv'
+            label='Invalid dropdown'
+            valid={['some validation error']}
+            pristine={false}
+            validate={() => false}
+            value={store.state.inv}
+            onChange={(value) => store.set(value)}
+            options={options}
+          />
           <div style={{ height: '50px' }} />
         </div>
       );
