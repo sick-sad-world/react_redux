@@ -14,3 +14,4 @@ import '../assets/src/ui/Dropdown/story.js';
 import '../assets/src/ui/Switcher/story.js';
 
 import '../assets/src/ui/TabsNav/story.js';
+import '../assets/src/ui/DataList/story.js';

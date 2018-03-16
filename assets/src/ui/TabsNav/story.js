@@ -6,7 +6,7 @@ import { Switch, Route } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import TabsNav from './index';
 
-storiesOf('Global Elements', module)
+storiesOf('UI Components', module)
   .addDecorator(withTests('TabsNav'))
   .add('TabsNav', withState({state: 'one', store: 'one'}, (story, store) => (
     withInfo({

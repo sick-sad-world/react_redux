@@ -2,3 +2,31 @@
 @import 'mixins/_ph.scss';
 @import 'mixins/_styles.scss';
 @import '_vars.scss';
+
+.DataList--root {
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+}
+
+.DataListRow--root {
+  display: flex;
+  padding: u(.5) 0;
+  align-items: center;
+  &:not(:last-child) {
+    border-bottom: 1px solid map-get($colors, border);
+  }
+  .content {
+    flex: 1 1 auto;
+    display: flex;
+    align-content: center;
+    overflow: hidden;
+    > * {
+      display: flex;
+      flex: 0 1 auto;
+      align-items: center;
+      margin: 0 u(.5);
+    }
+  }
+}
