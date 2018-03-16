@@ -3,6 +3,7 @@ import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
 import { withTests } from 'with';
 import DataList from './index';
+import DataListRow from './row';
 
 
 
@@ -52,14 +53,32 @@ const data = [{
     name: "Recipeless Report",
   }];
 
-const actions = [{
+const actions = (item, i) => {
+  const changeState = (item.active) ? {
+    label: 'Disable',
+    icon: 'eye-with-line',
+    handler: console.log
+  } : {
+    label: 'Enable',
+    icon: 'eye',
+    handler: console.log
+  };
 
-}];
+  return [changeState, {
+    label: 'Edit',
+    icon: 'documents',
+    handler: console.log
+  }, '---', {
+    label: 'Delete',
+    icon: 'documents',
+    handler: console.log
+  }]
+};
 
 storiesOf('UI Components', module)
   .addDecorator(withTests('DataList'))
   .add('DataList', withInfo({
-      propTables: [DataList],
+      propTables: [DataList, DataListRow],
       propTablesExclude: []
     })(() => {
       return (

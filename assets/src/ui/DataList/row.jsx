@@ -10,11 +10,12 @@ function getRowStyles(size) {
   }
 }
 
-export default function DataListRow({ children, data, config }) {
+export default function DataListRow({ children, data, config, onClick }) {
+
   return (
     <li className='DataListRow--root'>
       <IconButtom g='dots-three-vertical' />
-      <div className='content'>
+      <div className='content' onClick={onClick}>
         {config.map(({id, size, render, def }) => {
 
           const dataItem = data[id];
@@ -44,6 +45,7 @@ export default function DataListRow({ children, data, config }) {
 DataListRow.propTypes = {
   data: PropTypes.object.isRequired,
   children: PropTypes.element,
+  onClick: PropTypes.func,
   config: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     label: PropTypes.string,
