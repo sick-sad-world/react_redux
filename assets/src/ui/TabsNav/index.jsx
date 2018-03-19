@@ -19,29 +19,28 @@ export default class TabsNav extends React.Component {
     return Math.round(10000 / length) / 100
   }
 
-  renderNavLinks([path, element], i, {length}) {
-    const { linkProps, activeClassName } = this.props;
-    const style = {
+  getTabStyles(length = 1) {
+    const { linkProps } = this.props;
+    return {
       flex: `0 0 ${this.getTabWidth(length)}%`,
       ...(linkProps.styles || {})
     }
+  }
+
+  renderNavLinks([path, element], i, {length}) {
+    const { linkProps, activeClassName } = this.props;
     return (
-      <NavLink key={i} {...linkProps} style={style} to={path} tabIndex={i === 0 ? 0 : -1} activeClassName={activeClassName}>{element}</NavLink>
+      <NavLink key={i} {...linkProps} style={this.getTabStyles(length)} to={path} tabIndex={i === 0 ? 0 : -1} activeClassName={activeClassName}>{element}</NavLink>
     );
   }
 
   renderLinks([path, element], i, {length}) {
     const { linkProps, activeClassName, active, onChange } = this.props;
-    const style = {
-      flex: `0 0 ${this.getTabWidth(length)}%`,
-      ...(linkProps.styles || {})
-    }
     return (
       <a
         {...linkProps}
         key={i}
-        style={style}
-        role='menuitem'
+        style={this.getTabStyles(length)}
         tabIndex={i === 0  ? 0 : -1}
         onClick={() => onChange(path)}
         className={classNames(linkProps.className, {[activeClassName]: active === path})}

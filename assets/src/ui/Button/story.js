@@ -27,17 +27,17 @@ storiesOf('FormElements', module)
           <Button mode='raised' onClick={action('icon-click')}>
             <span>Button</span>
             <Icon g='trash' />
-          </Button> - Icon After
+          </Button> - Icon After, Style Raised
         </li>
         <li style={style}>
           <Button theme='raised' onClick={action('sec-click')}>
             <Icon g='globe' />
             <span>Button</span>
-          </Button> - Icon before. Style accent secondary
+          </Button> - Icon before. Style Raised
         </li>
-        <li style={style}><Button theme='error-raised' onClick={action('error-click')}>error</Button> - Simple button, Style error</li>
+        <li style={style}><Button theme='error-raised' onClick={action('error-click')}>error</Button> - Raised button, Style error</li>
         <li style={style}><Button theme='warning' onClick={action('warning-click')}>warning</Button> - Simple button, Style warning</li>
-        <li style={style}><Button theme='success-raised' onClick={action('success-click')}>success</Button> - Simple button, Style success</li>
+        <li style={style}><Button theme='success-raised' onClick={action('success-click')}>success</Button> - Raised button, Style success</li>
         <li style={style}><Button theme='info' onClick={action('info-click')}>info</Button> - Simple button, Style info</li>
       </ol>
     ))

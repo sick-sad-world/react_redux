@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { classNameShape, validationMessageShape, optionShape, valueShape } from 'shared/typings';
 import './styles.scss';
 
-/** RadioButton input to choose some of many */
+/** Switcher input to choose some of many */
 export default function Switcher({ className, value, name, label, descr, focus, error, onChange, onFocus, onBlur, options, ...props }) {
 
   const id = `${name}-${value}`;
@@ -13,13 +13,27 @@ export default function Switcher({ className, value, name, label, descr, focus, 
 
   const labels = [];
   
-  options.forEach((item, i) => {
+  (options || []).forEach((item, i) => {
 
     const key = `${name}-${i}`;
     const chk = item.value === value;
     const eId = (chk) ? id : null;
 
-    inputs.push(<input {...props} key={key} title={item.label} id={eId} name={name} type='radio' value={i} checked={chk} onChange={onChange} onFocus={onFocus} onBlur={onBlur} />);
+    inputs.push(
+      <input
+        {...props}
+        type='radio'
+        key={key}
+        title={item.label}
+        id={eId}
+        name={name}
+        value={i}
+        checked={chk}
+        onChange={onChange}
+        onFocus={onFocus}
+        onBlur={onBlur}
+      />
+    );
     labels.push(<span key={key}>{item.label}</span>)
   });
 

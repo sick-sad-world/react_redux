@@ -9,7 +9,7 @@ import { classNameShape, validationMessageShape, optionShape, valueShape } from 
 
 import './override.scss';
 import './styles.scss';
-import Icon from '../IconButton';
+import Icon from '../Icon';
 
 export default class Dropdown extends React.Component {
 
@@ -48,8 +48,7 @@ export default class Dropdown extends React.Component {
   }
 
   clearRenderer() {
-    // Render Cross Icon
-    return;
+    return <Icon g='cross' />;
   }
 
   loadingRenderer() {
@@ -63,12 +62,13 @@ export default class Dropdown extends React.Component {
 
     const controlProps = {
       noResultsText: (isLoading) ? this.loadingRenderer() : undefined,
+      openOnFocus: true,
       ...props,
       isLoading: this.state.isLoading,
       options: this.state.options || options,
+      clearRenderer: this.clearRenderer,
       valueRenderer: this.valueRenderer,
-      arrowRenderer: this.arrowRenderer,
-      openOnFocus: true
+      arrowRenderer: this.arrowRenderer
     }
   
     return (
@@ -97,6 +97,8 @@ Dropdown.defaultProps = {
 };
 
 Dropdown.propTypes = {
+  /** Change handler as all Form components interface require */
+  onChange: PropTypes.func.isRequired,
   /** Options for dropdown */
   options: optionShape,
   /** Function used to get options from remote, [options] will be taken from internal state */

@@ -168,21 +168,24 @@ samp, .badge {
   line-height: $s;
   // background-color: map-get($colors, highlight);
   text-transform: uppercase;
+  &.style--raised {
+    box-shadow: $sh-z3;
+  }
   @each $style, $color in $states {
     &.#{$style} {
-      background-color: mix($color, #fff, 90%);
+      background-color: $color;
       color: $c-sec;
     }
   }
   @each $style, $color in $styles {
     &.#{$style} {
-      background-color: mix($color, #fff, 90%);
+      background-color: $color;
       color: $c-sec;
     }
   }
   @each $style, $color in $feeds {
     &.#{$style} {
-      background-color: mix($color, #fff, 90%);
+      background-color: $color;
       color: $c-sec;
     }
   }
