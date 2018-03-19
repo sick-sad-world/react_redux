@@ -31,7 +31,7 @@ Datepicker.propTypes = {
   /** Name property for input */
   name: PropTypes.string.isRequired,
   /** Component to render Input */
-  InputComponent: PropTypes.element.isRequired,
+  InputComponent: PropTypes.func.isRequired,
   /** String Format of output value */
   format: PropTypes.string,
   /** Value of an Input may be date string or Moment/Date instance */

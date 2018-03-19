@@ -1,4 +1,5 @@
 import bindAll from 'lodash/bindAll';
+import isFunction from 'lodash/isFunction';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -53,7 +54,7 @@ export default class TabsNav extends React.Component {
   render() {
     const {options, onChange, className, activeClassName, linkProps, active, ...props} = this.props;
 
-    const method = (onChange instanceof Function) ? 'renderLinks' : 'renderNavLinks';
+    const method = isFunction(onChange) ? 'renderLinks' : 'renderNavLinks';
 
     const data = Object.entries(options);
     
