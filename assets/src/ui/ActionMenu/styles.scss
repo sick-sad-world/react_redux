@@ -7,9 +7,13 @@
   box-shadow: $sh-z4;
   background-color: map-get($colors, solid);
   max-width: 240px;
+  animation-name: zoomIn;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-duration: $t-dur;
   a {
     display: block;
-    padding: u(.5) u();
+    padding: 0 u();
     color: $c-prm;
     line-height: $s-input;
     &:first-child {

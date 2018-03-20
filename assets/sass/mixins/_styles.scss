@@ -28,6 +28,7 @@
 
   &:not([disabled]):hover {
     background-color: $main-lt;
+    border-color: $main-lt;
     color: $alt;
   }
 
