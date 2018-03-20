@@ -83,12 +83,13 @@
   }
   .Select-menu-outer {
     margin-top: 0;
-    box-shadow: $sh-z4;
     max-height: 240px;
     z-index: 10;
-    border-radius: $bdrs;
     border: 1px solid map-get($colors, border);
     top: auto;
+    border-radius: $bdrs;
+    box-shadow: $sh-z4;
+    background-color: map-get($colors, solid);
     animation-name: zoomIn;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;

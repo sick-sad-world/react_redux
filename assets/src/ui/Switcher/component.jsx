@@ -5,7 +5,7 @@ import { classNameShape, validationMessageShape, optionShape, valueShape } from 
 import './styles.scss';
 
 /** Switcher input to choose some of many */
-export default function Switcher({ className, value, name, label, descr, focus, error, onChange, onFocus, onBlur, options, ...props }) {
+export default function Switcher({ className, value, name, label, descr, focus, error, onChange, onFocus, onBlur, options, rootClassName, ...props }) {
 
   const id = `${name}-${value}`;
 
@@ -38,7 +38,7 @@ export default function Switcher({ className, value, name, label, descr, focus, 
   });
 
   return (
-    <div className={classNames('Switcher--root', className)}>
+    <div className={classNames(rootClassName, className)}>
       <div className='body'>
         {label && <label htmlFor={id}>{label}</label>}
         <div className='control'>
@@ -53,12 +53,14 @@ export default function Switcher({ className, value, name, label, descr, focus, 
 }
 
 Switcher.defaultProps = {
+  rootClassName: 'Switcher--root',
   value: '',
   focus: false,
   error: false,
 };
 
 Switcher.propTypes = {
+  rootClassName: PropTypes.string.isRequired,
   /** HTML Class will be applied to container */
   className: classNameShape,
   /** Label text for input */

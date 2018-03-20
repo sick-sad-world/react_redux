@@ -6,12 +6,12 @@ import { classNameShape, validationMessageShape } from 'shared/typings';
 import './styles.scss';
 
 /** RadioButton input to choose some of many */
-export default function RadioButton({ className, value, name, label, descr, focus, error, onChange, onFocus, onBlur, checked, ...props }) {
+export default function RadioButton({ className, value, name, label, descr, focus, error, onChange, onFocus, onBlur, checked, rootClassName, ...props }) {
 
   const id = `${name}-${value}`
 
   return (
-    <div className={classNames('RadioButton--root', className)}>
+    <div className={classNames(rootClassName, className)}>
       <div className='body'>
         <div className='control'>
           <input
@@ -35,6 +35,7 @@ export default function RadioButton({ className, value, name, label, descr, focu
 }
 
 RadioButton.defaultProps = {
+  rootClassName: 'RadioButton--root',
   value: '',
   focus: false,
   error: false,
@@ -42,6 +43,7 @@ RadioButton.defaultProps = {
 };
 
 RadioButton.propTypes = {
+  rootClassName: PropTypes.string.isRequired,
   /** HTML Class will be applied to container */
   className: classNameShape,
   /** Label text for input */

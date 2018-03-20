@@ -57,7 +57,7 @@ export default class Dropdown extends React.Component {
   }
 
   render() {
-    const {label, name, focus, error, className, descr, prefix, suffix, options, loadingPlaceholder, creatable, ...props} = this.props;
+    const {label, name, focus, error, className, descr, prefix, suffix, options, loadingPlaceholder, creatable, rootClassName, ...props} = this.props;
     const { isLoading } = this.state;
 
     const controlProps = {
@@ -72,7 +72,7 @@ export default class Dropdown extends React.Component {
     }
   
     return (
-      <div className={classNames('Dropdown--root', className)}>
+      <div className={classNames(rootClassName, className)}>
         {prefix && <span className='prefix'>{prefix}</span>}
         <div className='control'>
           <label>
@@ -94,9 +94,11 @@ export default class Dropdown extends React.Component {
 }
 
 Dropdown.defaultProps = {
+  rootClassName: 'Dropdown--root'
 };
 
 Dropdown.propTypes = {
+  rootClassName: PropTypes.string.isRequired,
   /** Change handler as all Form components interface require */
   onChange: PropTypes.func.isRequired,
   /** Options for dropdown */

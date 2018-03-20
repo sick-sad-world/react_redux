@@ -7,9 +7,9 @@ import './styles.scss';
 const TYPES = ['text', 'email', 'number', 'password'];
 
 /** Input of type: TEXT, EMAIL, NUMBER, PASSWORD implementation */
-export default function TextInput({ className, type, value, name, label, descr, prefix, suffix, helper, focus, error, onChange, onFocus, onBlur, ...props }) {
+export default function TextInput({ className, type, value, name, label, descr, prefix, suffix, helper, focus, error, onChange, onFocus, onBlur, rootClassName, ...props }) {
   return (
-    <div className={classNames('TextInput--root', className)}>
+    <div className={classNames(rootClassName, className)}>
       {prefix && <span className='prefix'>{prefix}</span>}
       <div className='body'>
         <label>
@@ -35,6 +35,7 @@ export default function TextInput({ className, type, value, name, label, descr, 
 }
 
 TextInput.defaultProps = {
+  rootClassName: 'TextInput--root',
   type: 'text',
   value: '',
   focus: false,
@@ -42,6 +43,7 @@ TextInput.defaultProps = {
 };
 
 TextInput.propTypes = {
+  rootClassName: PropTypes.string.isRequired,
   /** HTML Class will be applied to container */
   className: classNameShape,
   /** Type property of an input */

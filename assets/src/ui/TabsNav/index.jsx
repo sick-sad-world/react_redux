@@ -51,14 +51,14 @@ export default class TabsNav extends React.Component {
   }
 
   render() {
-    const {options, onChange, className, activeClassName, linkProps, active, ...props} = this.props;
+    const {options, onChange, className, activeClassName, linkProps, active, rootClassName, ...props} = this.props;
 
     const method = isFunction(onChange) ? 'renderLinks' : 'renderNavLinks';
 
     const data = Object.entries(options);
     
     return (
-      <nav className={classNames('Tabsnav--root', className)} {...props}>
+      <nav className={classNames(rootClassName, className)} {...props}>
         {data.map(this[method])}
       </nav>
     );
@@ -66,11 +66,13 @@ export default class TabsNav extends React.Component {
 }
 
 TabsNav.defaultProps = {
+  rootClassName: 'Tabsnav--root',
   activeClassName: 'state--selected',
   linkProps: {}
 }
 
 TabsNav.propTypes = {
+  rootClassName: PropTypes.string.isRequired,
   /** Classname for root element */
   className: classNameShape,
   /** Classname added to matching link */

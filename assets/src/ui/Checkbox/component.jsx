@@ -7,11 +7,11 @@ import './styles.scss';
 import Icon from '../Icon';
 
 /** Checkbox input to choose some of many */
-export default function Checkbox({ className, value, name, label, descr, focus, error, onChange, onFocus, onBlur, checked, numBool, ...props }) {
+export default function Checkbox({ className, value, name, label, descr, focus, error, onChange, onFocus, onBlur, checked, numBool, rootClassName, ...props }) {
   const id = `${name}-${value}`
 
   return (
-    <div className={classNames('Checkbox--root', className)}>
+    <div className={classNames(rootClassName, className)}>
       <div className='body'>
         <div className='control'>
           <input
@@ -35,6 +35,7 @@ export default function Checkbox({ className, value, name, label, descr, focus, 
 }
 
 Checkbox.defaultProps = {
+  rootClassName: 'Checkbox--root',
   value: '',
   focus: false,
   error: false,
@@ -42,6 +43,7 @@ Checkbox.defaultProps = {
 };
 
 Checkbox.propTypes = {
+  rootClassName: PropTypes.string.isRequired,
   /** HTML Class will be applied to container */
   className: classNameShape,
   /** Label text for input */

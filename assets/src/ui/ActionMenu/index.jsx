@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Icon from '../Icon';
+import './styles.scss';
 
+/** Simple link list as dropdown menu, representing different actions possible */
 export default class ActionMenu extends React.Component {
   render() {
     const {data, open, rootClassName, activeClassName, reverseClassName } = this.props;
@@ -20,7 +22,7 @@ export default class ActionMenu extends React.Component {
             return <hr key={`${item}${i}`} />
           }
           return (
-            <a key={item.label} role='menuitem' tabIndex={(i == 0) ? 0 : -1} onClick={item.handler}>
+            <a key={item.label} role='menuitem' onClick={item.handler}>
               {item.icon && <Icon g={item.icon} />}
               {item.label}
             </a>
