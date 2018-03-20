@@ -50,12 +50,12 @@
 
   &.state--focus .control svg,
   .control input:focus + svg {
-    box-shadow: $sh-focus;
+    box-shadow: $sh-z3;
   }
 
   &.state--focus .control input:not(:checked) svg,
   .control input:not(:checked):focus + svg {
-    border-color: $c-acc-lt;
+    //border-color: $c-acc-lt;
     fill: rgba($c-acc, .1);
   }
   

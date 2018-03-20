@@ -58,6 +58,7 @@
       height: 100%;
       border-radius: $h * .5;
       background-color: $c-sec-dk;
+      transition: background-color 0 ease-in $t-dur * .5;
     }
 
     .handle {
@@ -73,21 +74,25 @@
       z-index: 2;
     }
 
-    input:nth-child(1):focus, input:nth-child(2):focus {
-      & ~ .track {
-        background-color: map-get($colors, el-light);
-      }
-      & ~ .handle {
-        box-shadow: $sh-focus;
-      }
+    input:focus ~ .handle {
+      box-shadow: $sh-z4;
     }
-    input:nth-child(3):focus {
-      & ~ .track {
-        background-color: mix($c-acc-sec, #fff, 20%);
-      }
-      & ~ .handle {
-        box-shadow: getFocusShadow($c-acc-sec);
-      }
-    }
+
+    // input:nth-child(1):focus, input:nth-child(2):focus {
+    //   // & ~ .track {
+    //   //   background-color: map-get($colors, el-light);
+    //   // }
+    //   & ~ .handle {
+    //     box-shadow: $sh-z4;
+    //   }
+    // }
+    // input:nth-child(3):focus {
+    //   & ~ .track {
+    //     // background-color: mix($c-acc-sec, #fff, 20%);
+    //   }
+    //   & ~ .handle {
+    //     box-shadow: getFocusShadow($c-acc-sec);
+    //   }
+    // }
   }
 }

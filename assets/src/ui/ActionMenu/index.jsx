@@ -11,7 +11,6 @@ export default class ActionMenu extends React.Component {
 
     const rootClass = classNames({
       [rootClassName]: true,
-      [activeClassName]: open,
       [reverseClassName]: false
     });
 
@@ -35,14 +34,12 @@ export default class ActionMenu extends React.Component {
 
 ActionMenu.defaultProps = {
   rootClassName: 'ActionMenu--root',
-  activeClassName: 'state--open',
   reverseClassName: 'state-reverse',
   open: false
 }
 
 ActionMenu.propTypes = {
   rootClassName: PropTypes.string.isRequired,
-  activeClassName: PropTypes.string.isRequired,
   reverseClassName: PropTypes.string.isRequired,
   open: PropTypes.bool.isRequired,
   data: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.oneOf(['---']), PropTypes.shape({

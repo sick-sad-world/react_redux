@@ -60,12 +60,12 @@
 
   &.state--focus .control span,
   .control input:focus + span {
-    box-shadow: $sh-focus;
+    box-shadow: $sh-z3; //$sh-focus
   }
 
   &.state--focus .control input:not(:checked) span,
   .control input:not(:checked):focus + span {
-    border-color: $c-acc-lt;
+    // border-color: $c-acc-lt;
   }
 
   &.state--focus .control input:not(:checked) span:after,
