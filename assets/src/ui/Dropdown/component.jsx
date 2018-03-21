@@ -10,6 +10,7 @@ import { classNameShape, validationMessageShape, optionShape, valueShape } from 
 import './override.scss';
 import './styles.scss';
 import Icon from '../Icon';
+import { ProgressRadial } from '../Progress';
 
 export default class Dropdown extends React.Component {
 
@@ -19,7 +20,7 @@ export default class Dropdown extends React.Component {
       isLoading: false,
       options: null
     }
-    bindAll(this, 'toggleLoading');
+    bindAll(this, 'toggleLoading', 'arrowRenderer');
   }
 
 
@@ -44,16 +45,15 @@ export default class Dropdown extends React.Component {
   }
 
   arrowRenderer({ onMouseDown, isOpen }) {
-    return <Icon onMouseDown={onMouseDown} g={(isOpen) ? 'chevron-up' : 'chevron-down'} />
+    return (!this.state.isLoading) ? (
+      <Icon onMouseDown={onMouseDown} g={(isOpen) ? 'chevron-up' : 'chevron-down'} />
+    ) : (
+      <ProgressRadial />
+    );
   }
 
   clearRenderer() {
     return <Icon g='cross' />;
-  }
-
-  loadingRenderer() {
-    // Render loading placeholder for async dropdowns
-    return this.props.loadingPlaceholder;
   }
 
   render() {
@@ -61,7 +61,7 @@ export default class Dropdown extends React.Component {
     const { isLoading } = this.state;
 
     const controlProps = {
-      noResultsText: (isLoading) ? this.loadingRenderer() : undefined,
+      noResultsText: (isLoading) ? this.props.loadingPlaceholder : undefined,
       openOnFocus: true,
       ...props,
       isLoading: this.state.isLoading,
@@ -94,7 +94,8 @@ export default class Dropdown extends React.Component {
 }
 
 Dropdown.defaultProps = {
-  rootClassName: 'Dropdown--root'
+  rootClassName: 'Dropdown--root',
+  loadingPlaceholder: 'Data is being loaded'
 };
 
 Dropdown.propTypes = {
@@ -113,6 +114,8 @@ Dropdown.propTypes = {
   loadingPlaceholder: PropTypes.string,
   /** Name property for input */
   name: PropTypes.string.isRequired,
+  /** Dropdown value */
+  value: valueShape,
   /** Label text for input */
   label: PropTypes.string,
   /** Small description text under the input */

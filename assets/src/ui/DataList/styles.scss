@@ -1,5 +1,4 @@
 @import 'mixins/_u.scss';
-@import 'mixins/_ph.scss';
 @import 'mixins/_styles.scss';
 @import '_vars.scss';
 
@@ -15,7 +14,7 @@
   padding: u(.5) 0;
   align-items: center;
   &:not(:last-child) {
-    border-bottom: 1px solid map-get($colors, border);
+    border-bottom: 1px solid c(border);
   }
   .content {
     flex: 1 1 auto;

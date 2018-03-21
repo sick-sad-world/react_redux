@@ -10,13 +10,9 @@
 }
 .rdtPicker {
   display: none;
-  position: absolute;
   width: 250px;
   margin-top: 1px;
-  z-index: 99999 !important;
-  background: map-get($colors, solid);
-  box-shadow: $sh-z4;
-  border: 1px solid map-get($colors, border);
+  @include solid-styles($pos: absolute, $anim: true);
   .rdtOpen & {
     display: block;
   }
@@ -51,7 +47,7 @@
   }
   td.rdtOld,
   td.rdtNew {
-    color: map-get($colors, caption);
+    color: c(caption);
   }
   td.rdtToday {
     position: relative;
@@ -77,21 +73,21 @@
   td.rdtDisabled,
   td.rdtDisabled:hover {
     background: none;
-    color: map-get($colors, caption);
+    color: c(caption);
     cursor: not-allowed;
   }
   
   td span.rdtOld {
-    color: map-get($colors, caption);
+    color: c(caption);
   }
   td span.rdtDisabled,
   td span.rdtDisabled:hover {
     background: none;
-    color: map-get($colors, caption);
+    color: c(caption);
     cursor: not-allowed;
   }
   th {
-    border-bottom: 1px solid map-get($colors, border);
+    border-bottom: 1px solid c(border);
   }
   .dow {
     width: 14.2857%;
@@ -111,7 +107,7 @@
   th.rdtDisabled,
   th.rdtDisabled:hover {
     background: none;
-    color: map-get($colors, caption);
+    color: c(caption);
     cursor: not-allowed;
   }
   thead tr:first-child th {
@@ -122,7 +118,7 @@
   }
   
   tfoot {
-    border-top: 1px solid map-get($colors, border);
+    border-top: 1px solid c(border);
   }
   
   button {

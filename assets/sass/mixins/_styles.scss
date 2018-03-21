@@ -6,7 +6,7 @@
 
 @mixin cap-styles () {
   font-size: $f-cap;
-  color: map-get($colors, caption);
+  color: c(caption);
   line-height: 1.125;
   font-weight: 300;
 }
@@ -14,6 +14,34 @@
 @mixin dis-styles () {
   opacity: 0.65;
   cursor: default;
+}
+
+@mixin solid-styles($pos: relative, $anim: false, $or: top center) {
+  position: $pos;
+  z-index: 10;
+  border-radius: $bdrs;
+  box-shadow: $sh-z4;
+  background-color: c(solid);
+  // border: 1px solid c(border);
+  @if ($anim) {
+    transform-origin: $or;
+    animation-name: zoomIn;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-duration: $t-dur;
+  }
+}
+
+@mixin empty-styles() {
+
+}
+
+@mixin loading-styles() {
+
+}
+
+@mixin error-styles() {
+
 }
 
 @mixin button-raised ($main, $main-lt, $alt) {

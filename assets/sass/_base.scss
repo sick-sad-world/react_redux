@@ -5,7 +5,7 @@
 }
 
 @include selection() {
-  background-color: map-get($colors, selection);
+  background-color: c(selection);
 }
 
 ::-webkit-scrollbar {
@@ -92,7 +92,7 @@ h6, .t-h6 {
 }
 
 mark {
-  background-color: map-get($colors, selection);
+  background-color: c(selection);
 }
 
 dl {
@@ -147,7 +147,7 @@ ul.small-list {
 hr {
   height: 1px;
   border: 0;
-  background: map-get($colors, border);
+  background: c(border);
 }
 
 code, kbd, pre, samp {
@@ -168,18 +168,23 @@ samp, .badge {
   border-radius: $bdrs;
   height: $s;
   line-height: $s;
-  // background-color: map-get($colors, highlight);
+  background-color: c(highlight);
   text-transform: uppercase;
   &.style--raised {
     box-shadow: $sh-z3;
   }
-  @each $style, $color in $states {
-    &.#{$style} {
-      background-color: $color;
-      color: $c-sec;
-    }
+
+  &.accent {
+    background-color: $c-acc;
+    color: $c-sec;
   }
-  @each $style, $color in $styles {
+
+  &.accent-sec {
+    background-color: $c-acc-sec;
+    color: $c-sec;
+  }
+
+  @each $style, $color in $states {
     &.#{$style} {
       background-color: $color;
       color: $c-sec;

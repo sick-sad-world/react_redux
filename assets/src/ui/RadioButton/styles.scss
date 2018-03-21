@@ -36,7 +36,7 @@
       z-index: 3;
     }
     span {
-      border: 1px solid map-get($colors, border);
+      border: 1px solid c(border);
       border-radius: 50%;
       z-index: 2;
       &:after {
@@ -70,7 +70,7 @@
 
   &.state--focus .control input:not(:checked) span:after,
   .control input:not(:checked):focus + span:after {
-    background-color:  map-get($colors, el-light);
+    background-color:  c(el-light);
   }
 
   &.state--disabled {

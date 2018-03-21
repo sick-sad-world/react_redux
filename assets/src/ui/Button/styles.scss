@@ -12,7 +12,7 @@
   align-items: center; 
   height: $s-button;
   line-height: $s-button - 4px;
-  border: 2px solid map-get($colors, border);
+  border: 2px solid c(border);
   font-weight: 400;
   text-transform: uppercase;
   border-radius: $bdrs;

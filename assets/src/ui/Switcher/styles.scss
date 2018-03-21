@@ -33,7 +33,7 @@
         background-color: $c-acc;
       }
       & ~ .track {
-        background-color: map-get($colors, el-light);
+        background-color: c(el-light);
       }
     }
 
@@ -68,7 +68,7 @@
       width: $s-pointer;
       height: $s-pointer;
       border-radius: 50%;
-      background-color: map-get($colors, solid);
+      background-color: c(solid);
       box-shadow: $sh-z3;
       transition: transform $t-dur $t-func;
       z-index: 2;
@@ -80,7 +80,7 @@
 
     // input:nth-child(1):focus, input:nth-child(2):focus {
     //   // & ~ .track {
-    //   //   background-color: map-get($colors, el-light);
+    //   //   background-color: c(el-light);
     //   // }
     //   & ~ .handle {
     //     box-shadow: $sh-z4;

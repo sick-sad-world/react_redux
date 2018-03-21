@@ -64,10 +64,9 @@ $states: (
   info: $c-info
 );
 
-$styles: (
-  accent: $c-acc,
-  accent-sec: $c-acc-sec
-);
+@function c($c) {
+  @return map-get($colors, $c);
+}
 
 $feeds: (
   html: $c-success,

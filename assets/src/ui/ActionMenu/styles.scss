@@ -3,14 +3,8 @@
 @import '_vars.scss';
 
 .ActionMenu--root {
-  border-radius: $bdrs;
-  box-shadow: $sh-z4;
-  background-color: map-get($colors, solid);
   max-width: 240px;
-  animation-name: zoomIn;
-  animation-fill-mode: forwards;
-  animation-iteration-count: 1;
-  animation-duration: $t-dur;
+  @include solid-styles($anim: true, $or: top left);
   a {
     display: block;
     padding: 0 u();
