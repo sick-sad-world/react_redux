@@ -7,14 +7,44 @@
     list-style: none;
     padding: 0;
   }
+  .state--empty, .state--loading {
+    display: flex;
+    min-height: 240px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    span, svg {
+      display: block;
+    }
+    span {
+      text-align: center;
+    }
+  }
+  .state--loading {
+    svg {
+      width: $s-button;
+      height: $s-button;
+    }
+  }
+  .state--empty {
+    svg {
+      width: 120px;
+      height: 120px;
+      opacity: 0.5;
+    }
+  }
 }
 
 .DataListRow--root {
   display: flex;
+  position: relative;
   padding: u(.5) 0;
   align-items: center;
   &:not(:last-child) {
     border-bottom: 1px solid c(border);
+  }
+  &:hover {
+    background-color: c(highlight);
   }
   .content {
     flex: 1 1 auto;
@@ -27,5 +57,11 @@
       align-items: center;
       margin: 0 u(.5);
     }
+  }
+  .ActionMenu--root {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: u(-1);
   }
 }

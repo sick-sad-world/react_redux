@@ -89,7 +89,7 @@
     line-height: $s-input;
     padding: 0 u();
     &:hover, &.is-focused {
-      background-color: $c-sec-dk;
+      background-color: c(highlight);
     }
     &.is-selected {
       background-color: c(el-light);

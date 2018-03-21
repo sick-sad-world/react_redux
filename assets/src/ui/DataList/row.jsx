@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import IconButtom from '../IconButton';
 import renderers from './renderers';
+import { childrenShape } from 'shared/typings';
 
 function getRowStyles(size) {
   return {
@@ -10,11 +11,19 @@ function getRowStyles(size) {
   }
 }
 
-export default function DataListRow({ children, data, config, onClick }) {
+export const configShape = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  size: PropTypes.string,
+  render: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+  def: PropTypes.string
+});
+
+export default function DataListRow({ children, data, config, sortable, onClick }) {
 
   return (
     <li className='DataListRow--root'>
-      <IconButtom g='dots-three-vertical' />
+      {sortable && <IconButtom g='dots-three-vertical' />}
       <div className='content' onClick={onClick}>
         {config.map(({id, size, render, def }) => {
 
@@ -42,15 +51,14 @@ export default function DataListRow({ children, data, config, onClick }) {
   );
 }
 
+DataListRow.defaultProps = {
+  sortable: false
+}
+
 DataListRow.propTypes = {
-  data: PropTypes.object.isRequired,
-  children: PropTypes.element,
+  sortable: PropTypes.bool.isRequired,
+  data: PropTypes.object.isRequired, // eslint-disable-line
+  children: childrenShape,
   onClick: PropTypes.func,
-  config: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    label: PropTypes.string,
-    size: PropTypes.string,
-    render: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-    def: PropTypes.string
-  })).isRequired
+  config: PropTypes.arrayOf(configShape).isRequired
 }

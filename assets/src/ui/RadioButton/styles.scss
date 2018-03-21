@@ -70,7 +70,7 @@
 
   &.state--focus .control input:not(:checked) span:after,
   .control input:not(:checked):focus + span:after {
-    background-color:  c(el-light);
+    background-color: rgba($c-acc, .1);
   }
 
   &.state--disabled {

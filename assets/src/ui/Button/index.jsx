@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { classNameShape } from 'shared/typings';
+import { classNameShape, childrenShape } from 'shared/typings';
 import './styles.scss';
 
 const TYPE = ['button', 'input', 'link'];
@@ -38,5 +38,5 @@ Button.propTypes = {
   /** Additional class names */
   className: classNameShape,
   /** Content of a button (text, child elements, icons, e.t.c) */
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element, PropTypes.string])
+  children: childrenShape
 };

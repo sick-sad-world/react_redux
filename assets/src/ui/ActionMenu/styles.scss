@@ -18,7 +18,7 @@
     }
     &:hover, &:focus {
       text-decoration: none;
-      background-color: $c-sec-dk;
+      background-color: c(highlight);
     }
   }
   hr {

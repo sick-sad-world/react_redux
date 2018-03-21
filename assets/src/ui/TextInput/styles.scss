@@ -10,7 +10,7 @@
   label {
     display: flex;
     position: relative;
-    border-bottom: 1px solid $c-sec-dk2;
+    border-bottom: 1px solid c(border);
     &:after {
       content: '';
       position: absolute;

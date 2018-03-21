@@ -42,7 +42,7 @@
   td.rdtMinute:hover,
   td.rdtSecond:hover,
   .rdtTimeToggle:hover {
-    background: $c-sec-dk;
+    background: c(highlight);
     cursor: pointer;
   }
   td.rdtOld,
@@ -114,7 +114,7 @@
     cursor: pointer;
   }
   thead tr:first-child th:hover {
-    background: $c-sec-dk;
+    background: c(highlight);
   }
   
   tfoot {
@@ -127,7 +127,7 @@
     cursor: pointer;
   }
   button:hover {
-    background-color: $c-sec-dk;
+    background-color: c(highlight);
   }
   
   thead button {
@@ -159,7 +159,7 @@ td.rdtYear {
 }
 td.rdtMonth:hover,
 td.rdtYear:hover {
-  background: $c-sec-dk;
+  background: c(highlight);
 }
 
 .rdtCounters {
@@ -196,7 +196,7 @@ td.rdtYear:hover {
   user-select: none;
 }
 .rdtCounter .rdtBtn:hover {
-  background: $c-sec-dk;
+  background: c(highlight);
 }
 .rdtCounter .rdtCount {
   height: 20%;

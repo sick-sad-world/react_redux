@@ -57,7 +57,7 @@
       width: 100%;
       height: 100%;
       border-radius: $h * .5;
-      background-color: $c-sec-dk;
+      background-color: c(highlight);
       transition: background-color 0 ease-in $t-dur * .5;
     }
 

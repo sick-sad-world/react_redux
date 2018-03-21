@@ -53,7 +53,7 @@ const data = [{
     name: "Recipeless Report",
   }];
 
-const actions = (item, i) => {
+const actions = (item) => {
   const changeState = (item.active) ? {
     label: 'Disable',
     icon: 'eye-with-line',
@@ -70,7 +70,7 @@ const actions = (item, i) => {
     handler: console.log
   }, '---', {
     label: 'Delete',
-    icon: 'documents',
+    icon: 'trash',
     handler: console.log
   }]
 };
@@ -83,9 +83,28 @@ storiesOf('UI Components', module)
     })(() => {
       return (
         <div>
+          <h4>Regular list</h4>
           <DataList
             config={config}
             data={data}
+            sortable
+            loading={false}
+            actions={actions}
+          />
+          <div style={{height: '50px'}} />
+          <h4>Loading list</h4>
+          <DataList
+            config={config}
+            data={data}
+            sortable
+            loading
+            actions={actions}
+          />
+          <div style={{height: '50px'}} />
+          <h4>Empty list</h4>
+          <DataList
+            config={config}
+            data={[]}
             sortable
             loading={false}
             actions={actions}
