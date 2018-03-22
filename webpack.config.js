@@ -11,6 +11,10 @@ const CONTEXT = 'assets';
 const DEST = (p) ? '/build' : '/dist';
 const ALIAS = ['/images', '/sass', '/src', '/src/shared', 'src/ui'];
 
+const regExps = {
+  nm: /node_modules/
+}
+
 function makeAlias(acc, v) {
   acc[v.split(/\/_?/).pop()] = path.join(__dirname, CONTEXT, v);
   return acc;
@@ -31,8 +35,9 @@ const PLUGINS = [
   new webpack.optimize.CommonsChunkPlugin({
     name: 'vendor',
     filename: '[name].js',
-    minChunks(module) {
-      return module.context && module.context.indexOf('node_modules') >= 0;
+    chunks: ['app'],
+    minChunks({context}) {
+      return context && context.indexOf('node_modules') >= 0 && context.indexOf('-loader') === -1 && context.indexOf('.css') === -1;
     }
   })
 ];
