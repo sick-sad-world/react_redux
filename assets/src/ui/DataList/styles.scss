@@ -7,7 +7,7 @@
     list-style: none;
     padding: 0;
   }
-  .state--empty, .state--loading {
+  .state--empty, .state--loading, .state--error {
     display: flex;
     min-height: 240px;
     flex-direction: column;
@@ -33,18 +33,30 @@
       opacity: 0.5;
     }
   }
+
+  .state--error {
+    color: map-get($states, error);
+    svg {
+      fill: map-get($states, error);
+      width: 120px;
+      height: 120px;
+      opacity: 0.5;
+    }
+  }
 }
 
 .DataListRow--root {
-  display: flex;
-  position: relative;
-  padding: u(.5) 0;
-  align-items: center;
-  &:not(:last-child) {
-    border-bottom: 1px solid c(border);
+  .item {
+    display: flex;
+    position: relative;
+    padding: u(.5) 0;
+    align-items: center;
+    &:hover {
+      background-color: c(highlight);
+    }
   }
-  &:hover {
-    background-color: c(highlight);
+  &:not(:last-child) .item {
+    border-bottom: 1px solid c(border);
   }
   .content {
     flex: 1 1 auto;

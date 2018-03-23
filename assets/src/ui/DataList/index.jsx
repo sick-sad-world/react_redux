@@ -5,9 +5,9 @@ import isFunction from 'lodash/isFunction';
 import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from '../Icon';
-import IconButton from '../IconButton';
+import { actionConfigShape } from '../ActionMenu';
 import { ProgressRadial } from '../Progress';
-import Actionmenu, {actionConfigShape} from '../ActionMenu';
+
 import DataListRow, { configShape } from './row';
 import './styles.scss';
 
@@ -76,31 +76,41 @@ export default class DataList extends React.Component {
   makeRootRef(el) {
     this.root = el;
   }
+  
+  renderDataList() {
+    const { config, actions, sortable, data } = this.props;
+    return data.map((item, i) => (
+      <DataListRow
+        key={item.id}
+        data={item}
+        config={config}
+        sortable={sortable}
+        onClick={this.makeonClickHandler(item, i)}
+        toggleActions={this.setActionState(i)}
+        actions={(actions && this.state.actions === i) ? this.makeActions(item) : null}
+      />
+    ));
+  }
 
   render() {
-    const { config, actions, loading, sortable, loadingText, emptyText, emptyRenderer, loadingRenderer } = this.props;
+    const { loading, loadingText, error, emptyText, emptyRenderer, loadingRenderer, errorRenderer } = this.props;
     const { data } = this.state;
+
+    let content = null;
+
+    if (error) {
+      content = errorRenderer(error);
+    } else if (loading) {
+      content = loadingRenderer(loadingText);
+    } else if (!data.length) {
+      content = emptyRenderer(emptyText);
+    } else {
+      content = <ul>{this.renderDataList()}</ul>;
+    }
+
     return (
       <div className='DataList--root' ref={this.makeRootRef}>
-        {(loading) ? loadingRenderer(loadingText) : (
-            (data.length) ? (
-              <ul>{
-                data.map((item, i) => (
-                  <DataListRow
-                    key={item.id}
-                    data={item}
-                    config={config}
-                    sortable={sortable}
-                    onClick={this.makeonClickHandler(item, i)}
-                  >
-                    {actions && <IconButton g='menu' onClick={this.setActionState(i)} title='Item Actions' />}
-                    {(actions && this.state.actions === i) && <Actionmenu data={this.makeActions(item)} />}
-                  </DataListRow>
-                ))
-              }
-              </ul>
-            ) : emptyRenderer(emptyText)
-        )}
+        {content}
       </div>
     );
   }
@@ -110,6 +120,14 @@ DataList.defaultProps = {
   loading: false,
   sortable: false,
   sort: 'id',
+  errorRenderer(error) {
+    return(
+      <div className='state--error'>
+        <Icon viewBox='0 0 24 24' g='error' />
+        <span>{error}</span>
+      </div>
+    );
+  },
   loadingText: 'Loading...',
   loadingRenderer(text) {
     return(
@@ -137,6 +155,8 @@ DataList.propTypes = {
   loading: PropTypes.bool.isRequired,
   loadingText: PropTypes.string.isRequired,
   loadingRenderer: PropTypes.func.isRequired,
+  error: PropTypes.string,
+  errorRenderer: PropTypes.func.isRequired,
   emptyText: PropTypes.string.isRequired,
   emptyRenderer: PropTypes.func.isRequired,
   onClick: PropTypes.func,

@@ -109,6 +109,16 @@ storiesOf('UI Components', module)
             loading={false}
             actions={actions}
           />
+          <div style={{height: '50px'}} />
+          <h4>Errored list</h4>
+          <DataList
+            config={config}
+            error='Some error happened'
+            data={[]}
+            sortable
+            loading={false}
+            actions={actions}
+          />
         </div>
       );
     }));
