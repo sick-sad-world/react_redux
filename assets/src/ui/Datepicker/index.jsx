@@ -38,4 +38,4 @@ Datepicker.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(moment), PropTypes.instanceOf(Date)]),
   /** Function for handling change events */
   onChange: PropTypes.func.isRequired
-};
+}

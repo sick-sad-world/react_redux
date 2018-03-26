@@ -36,7 +36,7 @@ describe('<IconButton/>', () => {
       'data-some': 'data-some',
       oc: 'onclick',
       href:'#some'
-    };
+    }
     const wrapper = shallow(<IconButton g='bell' className={className} {...data} />);
     expect(wrapper.find('a').hasClass(className)).toBeTruthy();
     expect(wrapper.find('Icon').hasClass(className)).toBeFalsy();

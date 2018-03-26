@@ -40,7 +40,7 @@ TextInput.defaultProps = {
   value: '',
   focus: false,
   error: false
-};
+}
 
 TextInput.propTypes = {
   rootClassName: PropTypes.string.isRequired,
@@ -72,4 +72,4 @@ TextInput.propTypes = {
   prefix: PropTypes.element,
   /** Elements placed AFTER field (icons, buttons) */
   suffix: PropTypes.element
-};
+}

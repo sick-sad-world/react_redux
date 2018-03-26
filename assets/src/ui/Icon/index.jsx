@@ -10,7 +10,7 @@ export default function Icon({ fill, g, viewBox, ...props }) {
 
 Icon.defaultProps = {
   viewBox: '0 0 20 20'
-};
+}
 
 Icon.propTypes = {
   /** HEX value for path fill property */
@@ -19,4 +19,4 @@ Icon.propTypes = {
   viewBox: PropTypes.string.isRequired,
   /** Icon name to pick path data from storage */
   g: PropTypes.string.isRequired
-};
+}

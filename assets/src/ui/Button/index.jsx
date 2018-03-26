@@ -28,7 +28,7 @@ export default function Button({ el, children, className, theme, ...props }) {
 Button.defaultProps = {
   el: 'button',
   mode: false
-};
+}
 
 Button.propTypes = {
   /** What element use a button root */
@@ -39,4 +39,4 @@ Button.propTypes = {
   className: classNameShape,
   /** Content of a button (text, child elements, icons, e.t.c) */
   children: childrenShape
-};
+}

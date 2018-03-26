@@ -62,7 +62,7 @@ const actions = (item) => {
     label: 'Enable',
     icon: 'eye',
     handler: console.log
-  };
+  }
 
   return [changeState, {
     label: 'Edit',
@@ -73,7 +73,7 @@ const actions = (item) => {
     icon: 'trash',
     handler: console.log
   }]
-};
+}
 
 storiesOf('UI Components', module)
   .addDecorator(withTests('DataList'))

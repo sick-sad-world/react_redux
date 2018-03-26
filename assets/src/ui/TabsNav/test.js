@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import TabsNav from './index';
 import { NavLink } from 'react-router-dom';
 
-let options = {}; 
+let options = {} 
 
 describe('<TabsNav/>', () => {
 
@@ -12,7 +12,7 @@ describe('<TabsNav/>', () => {
       'one': 'First tab',
       'two': 'Second tab',
       'three': 'Third tab'
-    };
+    }
   })
 
   test('Should render given number of links', () => {

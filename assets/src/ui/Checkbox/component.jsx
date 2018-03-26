@@ -40,7 +40,7 @@ Checkbox.defaultProps = {
   focus: false,
   error: false,
   checked: false
-};
+}
 
 Checkbox.propTypes = {
   rootClassName: PropTypes.string.isRequired,
@@ -68,4 +68,4 @@ Checkbox.propTypes = {
   focus: PropTypes.bool.isRequired,
   /** Field validation state mark it as valid [true] or invalid [Array[String]] */
   error: validationMessageShape.isRequired
-};
+}

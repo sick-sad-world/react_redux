@@ -96,7 +96,7 @@ export default class Dropdown extends React.Component {
 Dropdown.defaultProps = {
   rootClassName: 'Dropdown--root',
   loadingPlaceholder: 'Data is being loaded'
-};
+}
 
 Dropdown.propTypes = {
   rootClassName: PropTypes.string.isRequired,
@@ -128,4 +128,4 @@ Dropdown.propTypes = {
   prefix: PropTypes.element,
   /** Elements placed AFTER dropdown (icons, buttons) */
   suffix: PropTypes.element
-};
+}

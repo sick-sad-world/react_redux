@@ -57,7 +57,7 @@ Switcher.defaultProps = {
   value: '',
   focus: false,
   error: false,
-};
+}
 
 Switcher.propTypes = {
   rootClassName: PropTypes.string.isRequired,
@@ -83,4 +83,4 @@ Switcher.propTypes = {
   focus: PropTypes.bool.isRequired,
   /** Field validation state mark it as valid [true] or invalid [Array[String]] */
   error: validationMessageShape.isRequired
-};
+}

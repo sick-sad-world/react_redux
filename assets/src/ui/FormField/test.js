@@ -16,7 +16,7 @@ describe('HOC: <FormField/>', () => {
     target: {
       value: ''
     }
-  };
+  }
 
   beforeEach(() => {
     TextField = makeFormField()(Input);

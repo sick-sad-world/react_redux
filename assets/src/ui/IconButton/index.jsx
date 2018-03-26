@@ -22,4 +22,4 @@ IconButton.propTypes = {
   viewBox: PropTypes.string,
   /** Icon name to pick path data from storage */
   g: PropTypes.string.isRequired
-};
+}

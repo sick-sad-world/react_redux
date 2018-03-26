@@ -6,15 +6,15 @@ import PropTypes from 'prop-types';
 import { validShape, classNameShape } from 'shared/typings';
 
 function setFocus() {
-  return { focus: true };
+  return { focus: true }
 }
 
 function unsetFocus() {
-  return { focus: false };
+  return { focus: false }
 }
 
 function getValueDefault({ target }, {name}) {
-  return { [name]: target.value };
+  return { [name]: target.value }
 }
 
 export default function makeFormField(getValue = getValueDefault) {
@@ -24,7 +24,7 @@ export default function makeFormField(getValue = getValueDefault) {
         super(props);
         this.state = {
           focus: false
-        };
+        }
         bindAll(this, 'onChange', 'onBlur', 'onFocus');
       }
   
@@ -63,7 +63,7 @@ export default function makeFormField(getValue = getValueDefault) {
           'state--error': error,
           'state--focus': this.state.focus,
           'state--disabled': disabled
-        };
+        }
   
         return (
           <Component
@@ -99,7 +99,7 @@ export default function makeFormField(getValue = getValueDefault) {
       pristine: PropTypes.bool,
       /** Field validation state mark it as valid [true] or invalid [Array[String]] */
       valid: validShape
-    };
+    }
   
     return FormField;
   }

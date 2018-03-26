@@ -18,9 +18,9 @@ function updateActionState(i) {
 function setData({data, sort}) {
   return (prevState) => {
     if (sort === prevState.sort) {
-      return { data };
+      return { data }
     }
-    return { data: sortBy(data, sort), sort };
+    return { data: sortBy(data, sort), sort }
   }
 }
 

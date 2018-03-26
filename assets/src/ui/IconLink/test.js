@@ -38,7 +38,7 @@ describe('<IconLink/>', () => {
       'data-some': 'data-some',
       oc: 'onclick',
       href:'#some'
-    };
+    }
     const wrapper = shallow(<IconLink g='bell' className={className} {...data} />);
     expect(wrapper.find('NavLink').hasClass(className)).toBeTruthy();
     expect(wrapper.find('Icon').hasClass(className)).toBeFalsy();

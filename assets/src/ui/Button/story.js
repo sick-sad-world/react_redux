@@ -6,7 +6,7 @@ import { withTests } from 'with';
 import Button from './index';
 import Icon from '../Icon';
 
-const style = { marginBottom: '15px' };
+const style = { marginBottom: '15px' }
 
 storiesOf('FormElements', module)
   .addDecorator(withTests('Button'))
