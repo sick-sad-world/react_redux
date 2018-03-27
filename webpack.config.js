@@ -11,10 +11,6 @@ const CONTEXT = 'assets';
 const DEST = (p) ? '/build' : '/dist';
 const ALIAS = ['/images', '/sass', '/src', '/src/shared', 'src/ui'];
 
-const regExps = {
-  nm: /node_modules/
-}
-
 function makeAlias(acc, v) {
   acc[v.split(/\/_?/).pop()] = path.join(__dirname, CONTEXT, v);
   return acc;
@@ -44,7 +40,19 @@ const PLUGINS = [
 
 if (p) {
   PLUGINS.push(new webpack.optimize.ModuleConcatenationPlugin());
-  PLUGINS.push(new UglifyJsPlugin());
+  PLUGINS.push(new UglifyJsPlugin({
+    uglifyOptions: {
+      compress: {
+        warnings: false,
+        comparisons: false,
+      },
+      safari10: true,      
+      output: {
+        comments: false,
+        ascii_only: true,
+      },
+    }
+  }));
 } else {
   PLUGINS.push(new webpack.NamedModulesPlugin());
   PLUGINS.push(new webpack.NoEmitOnErrorsPlugin());
