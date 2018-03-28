@@ -6,7 +6,6 @@
   "scripts": {
     "test": "jest --json --outputFile=jest-test-results.json",
     "start": "webpack-dev-server --inline --port=3000",
-    "prestorybook": "npm run test",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "prebundle": "rimraf ./dist",
     "bundle": "webpack --progress",

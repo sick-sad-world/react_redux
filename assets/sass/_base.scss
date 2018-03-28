@@ -159,52 +159,9 @@ code, samp, kbd {
   padding: 0 0.5em;
 }
 
-samp, .badge {
-  $s: u(2.5);
-  font-family: $ff;
-  padding: 0px 1em;
-  font-size: u(1.5);
-  text-align: center;
-  border-radius: $bdrs;
-  height: $s;
-  line-height: $s;
-  background-color: c(highlight);
-  text-transform: uppercase;
-  &.style--raised {
-    box-shadow: $sh-z3;
-  }
-
-  &.accent {
-    background-color: $c-acc;
-    color: $c-sec;
-  }
-
-  &.accent-sec {
-    background-color: $c-acc-sec;
-    color: $c-sec;
-  }
-
-  @each $style, $color in $states {
-    &.#{$style} {
-      background-color: $color;
-      color: $c-sec;
-    }
-  }
-  @each $style, $color in $feeds {
-    &.#{$style} {
-      background-color: $color;
-      color: $c-sec;
-    }
-  }
-
-  &.status {
-    width: 90px;
-  }
-}
-
 pre {
   border-left: 3px solid $c-acc;
-  background-color: $c-sec;
+  background-color: c(highlight);
   padding: 0.5em;
   line-height: 1.125;
   overflow: auto;

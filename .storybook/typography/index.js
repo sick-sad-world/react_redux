@@ -45,23 +45,6 @@ storiesOf('Global Elements', module)
       <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Doloremque, fuga! Sapiente dolor vero rerum perspiciatis molestiae doloremque aut eligendi, esse alias ad <mark>[Mark tag]</mark> quisquam voluptatum soluta adipisci nobis. Provident, neque in cupiditate quidem quae incidunt similique omnis? Itaque iusto asperiores dignissimos eaque delectus!</p>
     </div>
   ))
-  .add('Badges', () => (
-    <ol>
-      <li key='-2'><samp>badge</samp> - simple badge</li>
-      <li key='-1'>Status colors<hr/></li>
-      {['error', 'warning', 'success', 'info'].map((itm, i) => (
-        <li key={i}><samp className={itm}>badge</samp> - {itm} styled badge</li>
-      ))}
-      <li key='-3'>Accent colors<hr/></li>
-      {['accent', 'accent-sec'].map((itm, i) => (
-        <li key={i}><samp className={itm}>badge</samp> - {itm} styled badge</li>
-      ))}
-      <li key='-4'>Feeds colors<hr/></li>
-      {['html', 'rss', 'facebook', 'reddit', 'twitter'].map((itm, i) => (
-        <li key={i}><samp className={itm}>badge</samp> - {itm} styled badge</li>
-      ))}
-    </ol>
-  ))
   .add('Table', () => (
     <table>
       <thead>

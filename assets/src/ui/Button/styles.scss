@@ -2,7 +2,7 @@
 @import 'mixins/_styles.scss';
 @import '_vars.scss';
 
-.Button {
+.Button-root {
   display: inline-flex;
   border: 0;
   padding: 0 u();

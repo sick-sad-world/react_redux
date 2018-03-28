@@ -1,0 +1,46 @@
+@import 'mixins/_u.scss';
+@import 'mixins/_styles.scss';
+@import '_vars.scss';
+
+.Badge-root {
+  $s: u(2.5);
+  font-family: $ff;
+  padding: 0px 1em;
+  font-size: u(1.5);
+  text-align: center;
+  border-radius: $bdrs;
+  height: $s;
+  line-height: $s;
+  background-color: c(highlight);
+  text-transform: uppercase;
+  &.style--raised {
+    box-shadow: $sh-z3;
+  }
+
+  &.accent {
+    background-color: $c-acc;
+    color: $c-sec;
+  }
+
+  &.accent-sec {
+    background-color: $c-acc-sec;
+    color: $c-sec;
+  }
+
+  @each $style, $color in $states {
+    &.#{$style} {
+      background-color: $color;
+      color: $c-sec;
+    }
+  }
+  @each $style, $color in $feeds {
+    &.#{$style} {
+      background-color: $color;
+      color: $c-sec;
+    }
+  }
+
+  &.status {
+    width: 90px;
+  }
+}

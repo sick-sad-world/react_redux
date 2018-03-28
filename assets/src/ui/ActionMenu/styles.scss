@@ -4,10 +4,11 @@
 
 .ActionMenu--root {
   max-width: 240px;
+  font-size: u(1.5);
   @include solid-styles($anim: true, $or: top left);
   a {
     display: block;
-    padding: 0 u();
+    padding: 0 u(2);
     color: $c-prm;
     line-height: $s-input;
     &:first-child {

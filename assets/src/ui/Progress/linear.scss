@@ -1,0 +1,8 @@
+@import 'mixins/_u.scss';
+@import '_vars.scss';
+
+.LinearSpinner-root {
+  progress {
+    appearance: none;
+  }
+}

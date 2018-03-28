@@ -1,29 +1,81 @@
+import bindAll from 'lodash/bindAll';
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import './styles.scss';
+import { childrenShape } from 'shared/typings';
+import RadialSpinner from './radial';
+import LinearSpinner from './linear';
 
-export function ProgressRadial({className, rootClassName}) {
-  return (
-    <svg className={classNames(rootClassName, className)} width='65px' height='65px' viewBox='0 0 66 66'>
-      <circle className='path' fill='none' strokeWidth='6' strokeLinecap='round' cx='33' cy='33' r='30' />
-    </svg>
-  );
+
+
+const TYPES = {
+  radial: RadialSpinner,
+  linear: LinearSpinner
+} 
+
+function toggleLoading({ loading }) {
+  return { loading: !loading }
 }
 
-ProgressRadial.defaultProps = {
-  rootClassName: 'ProgressRadial-root'
+/** Loading component render spinner or  */
+export default class Progress extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false
+    };
+    this.buffer = null;
+    bindAll(this, 'toggleLoading');
+  }
+
+  componentWillReceiveProps({loading, buffer}) {
+    if (loading && !this.props.loading) {
+      if (buffer > 0) {
+        this.buffer = setTimeout(this.toggleLoading, buffer)
+      } else {
+        this.toggleLoading();
+      }
+    } else if (!loading && this.props.loading) {
+      clearTimeout(this.buffer);
+      this.buffer = null;
+      this.toggleLoading();
+    }
+  }
+
+  toggleLoading() {
+    this.setState(toggleLoading);
+  }
+
+  render() {
+    const { children, type, buffer, ...props } = this.props;
+    
+    if (!this.state.loading) {
+      return children;
+    }
+
+    const Loading = type[TYPES];
+
+    return <Loading {...props} />;
+  }
 }
 
-ProgressRadial.propTypes = {
-  rootClassName: PropTypes.string.isRequired,
-  className: PropTypes.string
+Progress.defaultProps = {
+  children: null,
+  type: 'radial',
+  loading: false,
+  buffer: 200,
+  value: 0
 }
 
-export function ProgressLinear() {
-
+Progress.propTypes = {
+  /** Component to render if not loading */
+  children: childrenShape.isRequired,
+  /** Whatever the loading in process */
+  loading: PropTypes.bool.isRequired,
+  /** Buffer time on which loading rendering will be delayed to avoid flashing */
+  buffer: PropTypes.number.isRequired,
+  /** What spinner to use Radial or linear */
+  type: PropTypes.oneOf(Object.keys(TYPES)).isRequired,
+  /** Amount of progress */
+  value: PropTypes.number.isRequired
 }
 
-ProgressLinear.propTypes = {
-  
-}

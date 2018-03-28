@@ -160,7 +160,9 @@ module.exports = {
     basePath: path.resolve(__dirname, CONTEXT),
   },
   resolve: {
-    alias: Array.prototype.reduce.call(ALIAS, makeAlias, {}),
+    alias: Array.prototype.reduce.call(ALIAS, makeAlias, {
+      with: path.join(__dirname, '.storybook/with.js'),
+    }),
     extensions: ['.js', '.jsx']
   },
   watchOptions: {

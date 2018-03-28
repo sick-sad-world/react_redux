@@ -8,11 +8,8 @@ const TYPE = ['button', 'input', 'link'];
 const THEMES = ['raised', 'secondary', 'secondary-raised', 'success', 'success-raised', 'error', 'error-raised', 'warning', 'warning-raised', 'info', 'info-raised'];
 
 /** UI Button implementation */
-export default function Button({ el, children, className, theme, ...props }) {
-  const classList = classNames({
-    Button: true,
-    [theme]: !!theme
-  }, className);
+export default function Button({ el, children, rootClassName, className, theme, ...props }) {
+  const classList = classNames(rootClassName, theme, className);
 
   switch (el) {
     case 'input':
@@ -26,11 +23,14 @@ export default function Button({ el, children, className, theme, ...props }) {
 }
 
 Button.defaultProps = {
+  rootClassName: 'Button-root',
   el: 'button',
   mode: false
 }
 
 Button.propTypes = {
+  /** Root className of component */
+  rootClassName: PropTypes.string.isRequired,
   /** What element use a button root */
   el: PropTypes.oneOf(TYPE).isRequired,
   /** Color theme of a button */
