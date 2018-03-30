@@ -76,7 +76,7 @@ export default class CustomResult extends React.PureComponent {
         </aside>
           {(this.isValid('title')) ? <h1 style={{ maxHeight: heights.title }}><a href={payload.url} target='_blank' >{payload.title}</a></h1> : null}
           {(this.inc('found') || this.inc('url') || this.inc('author')) ? (
-            <small className='t-ellipsis' style={{ height: heights.found || heights.domain || heights.author }} title={`Found: ${}`}>
+            <small className='t-ellipsis' style={{ height: heights.found || heights.domain || heights.author }}>
               {(this.isValid('found')) ? <time dateTime={payload.found} className='found'>{moment(payload.found, foundFormat).fromNow()}</time> : null}
               {(this.isValid('url')) ? <a href={payload.url} target='_blank' className='domain'>{payload.domain}</a> : null}
               {(this.isValid('author')) ? <span className='author'>{payload.author}</span> : null}
