@@ -8,7 +8,7 @@ export const defaultResults = {
 
 export const limit = 30;
 
-export const foundFormat = 'YYYY-MM-DD HH:mm:ss';
+export const foundFormat = 'YYYY-MM-DD HH:mm';
 
 export const proptocolRegExp = /^https?:\/\/w{0,3}\.?/;
 

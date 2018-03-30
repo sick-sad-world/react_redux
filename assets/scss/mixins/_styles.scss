@@ -8,7 +8,7 @@
 }
 @mixin style-focus () {
 	border-color: map-get($states, warning);
-	box-shadow: 0 0 0 u(.5) rgba(map-get($states, warning), .5);
+	box-shadow: 0 2px u(.25) 0 rgba(map-get($states, warning), .5);
 }
 @mixin style-accent-element ($fz: $base-font-size, $bdr: $bd-darken) {
   text-align: center;

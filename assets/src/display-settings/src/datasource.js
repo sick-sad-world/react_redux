@@ -136,6 +136,7 @@ class DisplaySettings {
     if (typeof settings === 'string') {
       return settings;
     }
+
     return settings.reduce((acc, stat) => {
       const item = this.data[stat];
       if (!item) return acc;

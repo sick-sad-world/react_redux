@@ -5,10 +5,12 @@
 	overflow-x: auto;
 	overflow-y: hidden;
 	.sidebar {
-		flex: 0 0 $entity-unit;
+    flex: 0 0 $entity-unit;
+    position: relative;
+    z-index: map-get($layers, message);
 		//transition: flex $dur;
     @include gradient($c-main, to left);
-    box-shadow: $sh-base;
+    box-shadow: $sh-aside;
 		color: $c-alt;
 		text-shadow: $sh-text;
 		overflow-x: hidden;

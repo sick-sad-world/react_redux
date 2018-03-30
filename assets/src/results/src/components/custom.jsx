@@ -1,6 +1,7 @@
 // Import helpers
 // ===========================================================================
 import { includes, bindAll } from 'lodash';
+import moment from 'moment';
 
 // Import react stuff
 // ===========================================================================
@@ -9,7 +10,7 @@ import React from 'react';
 // Import selectors and typecheck
 // ===========================================================================
 import PropTypes from 'prop-types';
-import { defaultPropsInjected, defaultDashboardResult, proptocolRegExp, customPropsInjected } from '../defaults';
+import { defaultPropsInjected, defaultDashboardResult, proptocolRegExp, customPropsInjected, foundFormat } from '../defaults';
 import { BriefGraphs } from 'src/graphs';
 import { decomposeColumnSort } from 'src/columns';
 
@@ -74,24 +75,19 @@ export default class CustomResult extends React.PureComponent {
           />
         </aside>
           {(this.isValid('title')) ? <h1 style={{ maxHeight: heights.title }}><a href={payload.url} target='_blank' >{payload.title}</a></h1> : null}
-          {(this.inc('found') || this.inc('domain') || this.inc('author')) ? (
-            <small style={{ height: heights.found || heights.domain || heights.author }}>
-              {(this.isValid('found')) ? <time dateTime={payload.found} className='found'>{payload.found}</time> : null}
-              {(this.isValid('domain')) ? <a href={payload.url} target='_blank' className='domain'>{payload.domain}</a> : null}
+          {(this.inc('found') || this.inc('url') || this.inc('author')) ? (
+            <small className='t-ellipsis' style={{ height: heights.found || heights.domain || heights.author }} title={`Found: ${}`}>
+              {(this.isValid('found')) ? <time dateTime={payload.found} className='found'>{moment(payload.found, foundFormat).fromNow()}</time> : null}
+              {(this.isValid('url')) ? <a href={payload.url} target='_blank' className='domain'>{payload.domain}</a> : null}
               {(this.isValid('author')) ? <span className='author'>{payload.author}</span> : null}
             </small>
           ) : null}
           {(isImage || isDescr) ? (
             <div className='text'>
               {(this.inc('image')) ? (
-                <ResultMedia
-                  wide={this.inc('wide_image')}
-                  image={payload.image}
-                  title={payload.title}
-                  style={{ height: heights.image }}
-                />
+                <ResultMedia wide={this.inc('wide_image')} image={payload.image} title={payload.title} style={{ height: heights.image }} />
               ) : null }
-              {(isDescr) ? <div className='content'>{payload.description}</div> : null}
+              {(isDescr) ? <div style={{ height: (this.inc('wide_image')) ? heights.image : heights.description }} className='content'>{payload.description}</div> : null}
             </div>
           ) : null}
         {(tableData && tableData.length) ? (

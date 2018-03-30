@@ -21,10 +21,13 @@
       text-decoration: none;
     }
   }
+  .domain {
+    margin: 0 u(.5);
+  }
   small {
     display: flex;
     justify-content: space-between;
-    line-height: u(3);
+    line-height: u(2.5);
   }
   h1 {
     max-height: 63px;
