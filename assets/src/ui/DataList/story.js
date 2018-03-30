@@ -92,15 +92,6 @@ storiesOf('UI Components', module)
             actions={actions}
           />
           <div style={{height: '50px'}} />
-          <h4>Loading list</h4>
-          <DataList
-            config={config}
-            data={data}
-            sortable
-            loading
-            actions={actions}
-          />
-          <div style={{height: '50px'}} />
           <h4>Empty list</h4>
           <DataList
             config={config}
@@ -122,4 +113,3 @@ storiesOf('UI Components', module)
         </div>
       );
     }));
-

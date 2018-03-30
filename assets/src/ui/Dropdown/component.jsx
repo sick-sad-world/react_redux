@@ -10,7 +10,7 @@ import { classNameShape, validationMessageShape, optionShape, valueShape } from 
 import './override.scss';
 import './styles.scss';
 import Icon from '../Icon';
-import { ProgressRadial } from '../Progress';
+import SvgSpinner from '../Spinner';
 
 export default class Dropdown extends React.Component {
 
@@ -48,7 +48,7 @@ export default class Dropdown extends React.Component {
     return (!this.state.isLoading) ? (
       <Icon onMouseDown={onMouseDown} g={(isOpen) ? 'chevron-up' : 'chevron-down'} />
     ) : (
-      <ProgressRadial />
+      <SvgSpinner />
     );
   }
 

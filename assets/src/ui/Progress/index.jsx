@@ -2,14 +2,12 @@ import bindAll from 'lodash/bindAll';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { childrenShape } from 'shared/typings';
-import RadialSpinner from './radial';
-import LinearSpinner from './linear';
-
-
+import RadialLoading from './radial';
+import LinearLoading from './linear';
 
 const TYPES = {
-  radial: RadialSpinner,
-  linear: LinearSpinner
+  radial: RadialLoading,
+  linear: LinearLoading
 } 
 
 function toggleLoading({ loading }) {
@@ -52,8 +50,8 @@ export default class Progress extends React.Component {
       return children;
     }
 
-    const Loading = type[TYPES];
-
+    const Loading = TYPES[type];
+    
     return <Loading {...props} />;
   }
 }

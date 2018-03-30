@@ -93,15 +93,13 @@ export default class DataList extends React.Component {
   }
 
   render() {
-    const { loading, loadingText, error, emptyText, emptyRenderer, loadingRenderer, errorRenderer } = this.props;
+    const { loading, error, emptyText, emptyRenderer, errorRenderer } = this.props;
     const { data } = this.state;
 
     let content = null;
 
     if (error) {
       content = errorRenderer(error);
-    } else if (loading) {
-      content = loadingRenderer(loadingText);
     } else if (!data.length) {
       content = emptyRenderer(emptyText);
     } else {
@@ -128,15 +126,6 @@ DataList.defaultProps = {
       </div>
     );
   },
-  loadingText: 'Loading...',
-  loadingRenderer(text) {
-    return(
-      <div className='state--loading'>
-        <ProgressRadial />
-        <span>{text}</span>
-      </div>
-    );
-  },
   emptyText: 'No items found',
   emptyRenderer(text) {
     return(
@@ -153,8 +142,6 @@ DataList.propTypes = {
   config: PropTypes.arrayOf(configShape).isRequired,
   sort: PropTypes.string,
   loading: PropTypes.bool.isRequired,
-  loadingText: PropTypes.string.isRequired,
-  loadingRenderer: PropTypes.func.isRequired,
   error: PropTypes.string,
   errorRenderer: PropTypes.func.isRequired,
   emptyText: PropTypes.string.isRequired,

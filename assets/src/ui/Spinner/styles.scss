@@ -1,0 +1,40 @@
+@import 'mixins/_u.scss';
+@import '_vars.scss';
+
+.spinner {
+
+  $offset: 187;
+  $duration: 2.4s;
+
+  @keyframes rotator {
+    100% {
+      transform: rotate(270deg);
+    }
+  }
+  
+  @keyframes dash {
+    0% {
+      stroke-dashoffset: $offset;
+    }
+    50% {
+      stroke-dashoffset: $offset/4;
+      transform:rotate(135deg);
+    }
+    100% {
+      stroke-dashoffset: $offset;
+      transform:rotate(450deg);
+    }
+  }
+
+  display: block;
+  width: $s-button;
+  height: $s-button;
+  animation: rotator $duration linear infinite;
+  .path {
+    stroke: $c-acc;
+    stroke-dasharray: $offset;
+    stroke-dashoffset: 0;
+    transform-origin: center;
+    animation: dash $duration ease-in-out infinite;
+  }
+}
