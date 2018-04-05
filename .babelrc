@@ -1,0 +1,34 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "modules": false,
+        "useBuiltIns": true,
+        "targets": {
+          "chrome": 63
+        }
+      }
+    ],
+    "react",
+    "stage-1"
+  ],
+  "plugins": [
+    "lodash",
+    "react-hot-loader/babel"
+  ],
+  "env": {
+    "production": {
+      "presets": [
+        "react-optimize"
+      ]
+    },
+    "test": {
+      "presets": [
+        "env",
+        "react",
+        "stage-1"
+      ]
+    }
+  }
+}

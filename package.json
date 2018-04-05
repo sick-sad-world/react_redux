@@ -16,36 +16,6 @@
   },
   "author": "Ihor Koptielov",
   "license": "MIT",
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "modules": false
-        }
-      ],
-      "react",
-      "stage-0"
-    ],
-    "plugins": [
-      "lodash",
-      "react-hot-loader/babel"
-    ],
-    "env": {
-      "production": {
-        "presets": [
-          "react-optimize"
-        ]
-      },
-      "test": {
-        "presets": [
-          "env",
-          "react",
-          "stage-0"
-        ]
-      }
-    }
-  },
   "jest": {
     "notify": false,
     "verbose": true,
