@@ -6,7 +6,7 @@
 
 @mixin cap-styles () {
   font-size: $f-cap;
-  color: c(caption);
+  color: color(caption);
   line-height: 1.125;
   font-weight: 300;
 }
@@ -20,9 +20,9 @@
   position: $pos;
   z-index: 10;
   border-radius: $bdrs;
-  box-shadow: $sh-z4;
-  background-color: c(solid);
-  // border: 1px solid c(border);
+  box-shadow: shadow(2);
+  background-color: color(element);
+  // border: 1px solid color(border);
   @if ($anim) {
     transform-origin: $or;
     animation-name: zoomIn;
@@ -48,7 +48,7 @@
   border-color: $main;
   background-color: $main;
   color: $alt;
-  box-shadow: $sh-z3;
+  box-shadow: shadow();
 
   svg {
     fill: $alt;
@@ -61,7 +61,7 @@
   }
 
   &:not([disabled]):focus {
-    box-shadow: $sh-z3, getFocusShadow($main);
+    box-shadow: shadow(), 0 0 0 3px rgba($main, .25);
   }
 }
 
@@ -80,6 +80,6 @@
   }
 
   &:not([disabled]):focus {
-    box-shadow: getFocusShadow($main)
+    box-shadow: 0 0 0 3px rgba($main, .25)
   }
 }

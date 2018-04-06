@@ -12,7 +12,7 @@
   align-items: center; 
   height: $s-button;
   line-height: $s-button - 4px;
-  border: 2px solid c(border);
+  border: 2px solid color(border);
   font-weight: 400;
   text-transform: uppercase;
   border-radius: $bdrs;
@@ -39,13 +39,13 @@
 
 // Lined button styles
 // =================================================================
-  @include button-simple($c-acc);
+  @include button-simple(color(accent));
 
   &.secondary {
-    @include button-simple($c-acc-sec);
+    @include button-simple(color(action));
   }
 
-  @each $style, $color in $states {
+  @each $style, $color in color(states) {
     &.#{$style} {
       @include button-simple($color);
     }
@@ -54,16 +54,16 @@
 // raised button styles
 // =================================================================
   &.raised {
-    @include button-raised($c-acc, $c-acc-lt, $c-sec);
+    @include button-raised(color(accent), color(action, light), color(secondary));
   }
   
   &.secondary-raised {
-    @include button-raised($c-acc-sec, $c-acc-sec-lt, $c-sec);
+    @include button-raised(color(action), color(action, light), color(secondary));
   }
 
-  @each $style, $color in $states {
+  @each $style, $color in color(states) {
     &.#{$style}-raised {
-      @include button-raised($color, lighten($color, 5%), $c-sec);
+      @include button-raised($color, lighten($color, 5%), color(secondary));
     }
   }
 }

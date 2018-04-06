@@ -5,7 +5,7 @@
 }
 
 @include selection() {
-  background-color: c(selection);
+  background-color: color(selection);
 }
 
 ::-webkit-scrollbar {
@@ -18,32 +18,30 @@
 }
 
 ::-webkit-scrollbar-track:vertical {
-  border-left: 1px solid $c-sec-dk;
+  border-left: 1px solid color(secondary, dark);
 }
 
 ::-webkit-scrollbar-track:horizontal {
-  border-top: 1px solid $c-sec-dk;
+  border-top: 1px solid color(secondary, dark);
 }
  
 ::-webkit-scrollbar-thumb {
   border-radius: u();
-  background: darken($c-sec-dk, 10%);
+  background: darken(color(secondary, dark), 10%);
 }
 
 html, body {
   margin: 0;
-  color: $c-prm;
-  background: $c-sec;
+  color: color(primary);
+  background: color(secondary);
   font-size: $f-text;
   line-height: 1.875;
   font-weight: 400;
   font-family: $ff;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
 }
 
 a {
-  color: $c-acc-sec-dk;
+  color: color(action, dark);
   text-decoration: none;
   cursor: pointer;
   &:hover,
@@ -92,7 +90,7 @@ h6, .t-h6 {
 }
 
 mark {
-  background-color: c(selection);
+  background-color: color(selection);
 }
 
 dl {
@@ -147,11 +145,7 @@ ul.small-list {
 hr {
   height: 1px;
   border: 0;
-  background: c(border);
-}
-
-code, kbd, pre, samp {
-  font-size: 1em;
+  background: color(border);
 }
 
 code, samp, kbd {
@@ -160,8 +154,8 @@ code, samp, kbd {
 }
 
 pre {
-  border-left: 3px solid $c-acc;
-  background-color: c(highlight);
+  border-left: 3px solid color(accent);
+  background-color: color(highlight);
   padding: 0.5em;
   line-height: 1.125;
   overflow: auto;
@@ -169,25 +163,18 @@ pre {
 
 blockquote {
   padding: 0.5em 1em;
-  border-left: 3px solid $c-acc;
-  background-color: $c-sec;
+  border-left: 3px solid color(accent);
+  background-color: color(secondary);
 }
 
 img {
 	display: block;
   max-width: 100%;
   height: auto;
-  a & {
-    border: 0;
-  }
-}
-
-svg:not(:root) {
-  overflow: hidden;
 }
 
 svg[role="icon"] {
-	fill: $c-prm-lt;
+	fill: color(primary, light);
 	width: $s-icon;
 	height: $s-icon;
   pointer-events: none;
@@ -221,7 +208,10 @@ table {
   }
 }
 
-%base-form-element {
+button,
+input,
+select,
+textarea {
   margin: 0;
   display: inline-block;
   vertical-align: middle;
@@ -230,51 +220,7 @@ table {
   color: inherit;
   font-family: inherit;
   font-size: inherit;
-}
-
-button,
-input,
-select,
-textarea,
-:global(.button) {
-  @extend %base-form-element;
   &:focus {
     outline: 0;
-  }
-}
-
-button[disabled],
-html input[disabled] {
-  cursor: default;
-}
-
-button::-moz-focus-inner,
-input::-moz-focus-inner {
-  border: 0;
-  padding: 0;
-}
-
-button,
-html input[type="button"],
-input[type="reset"],
-input[type="submit"] {
-  -webkit-appearance: button;
-  cursor: pointer;
-}
-
-input:invalid {
-  box-shadow: none;
-}
-
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  height: auto;
-}
-
-input[type="search"] {
-  -webkit-appearance: textfield;
-  &::-webkit-search-cancel-button,
-  &::-webkit-search-decoration {
-    -webkit-appearance: none;
   }
 }

@@ -50,7 +50,7 @@
     }
     &.is-focused {
       & + .label {
-        color: $c-acc-dk;
+        color: color(accent, dark);
       }
       .Select-placeholder {
         opacity: 1;
@@ -60,22 +60,22 @@
   }
   &.state--focus {
     .suffix svg, .prefix svg {
-      fill: $c-acc;
+      fill: color(accent);
     }
   }
   &.state--error {
     .suffix svg, .prefix svg, .Select-control .Select-arrow-zone svg {
-      fill: $c-error;
+      fill: color(error);
     }
 
     .Select-control  {
-      border-color: $c-error;
+      border-color: color(error);
     }
     .Select-control:after {
-      background-color: $c-error;
+      background-color: color(error);
     }
     .subtext, .Select + .label {
-      color: $c-error;
+      color: color(error);
     }
   }
   &.state--disabled {

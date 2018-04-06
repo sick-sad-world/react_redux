@@ -42,12 +42,12 @@
   td.rdtMinute:hover,
   td.rdtSecond:hover,
   .rdtTimeToggle:hover {
-    background: c(highlight);
+    background: color(highlight);
     cursor: pointer;
   }
   td.rdtOld,
   td.rdtNew {
-    color: c(caption);
+    color: color(caption);
   }
   td.rdtToday {
     position: relative;
@@ -56,7 +56,7 @@
     content: '';
     display: inline-block;
     border-left: 7px solid transparent;
-    border-bottom: 7px solid $c-acc;
+    border-bottom: 7px solid color(accent);
     border-top-color: rgba(0, 0, 0, 0.2);
     position: absolute;
     bottom: 4px;
@@ -64,7 +64,7 @@
   }
   td.rdtActive,
   td.rdtActive:hover {
-    background-color: $c-acc;
+    background-color: color(accent);
     color: #fff;
   }
   td.rdtActive.rdtToday:before {
@@ -73,21 +73,21 @@
   td.rdtDisabled,
   td.rdtDisabled:hover {
     background: none;
-    color: c(caption);
+    color: color(caption);
     cursor: not-allowed;
   }
   
   td span.rdtOld {
-    color: c(caption);
+    color: color(caption);
   }
   td span.rdtDisabled,
   td span.rdtDisabled:hover {
     background: none;
-    color: c(caption);
+    color: color(caption);
     cursor: not-allowed;
   }
   th {
-    border-bottom: 1px solid c(border);
+    border-bottom: 1px solid color(border);
   }
   .dow {
     width: 14.2857%;
@@ -107,18 +107,18 @@
   th.rdtDisabled,
   th.rdtDisabled:hover {
     background: none;
-    color: c(caption);
+    color: color(caption);
     cursor: not-allowed;
   }
   thead tr:first-child th {
     cursor: pointer;
   }
   thead tr:first-child th:hover {
-    background: c(highlight);
+    background: color(highlight);
   }
   
   tfoot {
-    border-top: 1px solid c(border);
+    border-top: 1px solid color(border);
   }
   
   button {
@@ -127,7 +127,7 @@
     cursor: pointer;
   }
   button:hover {
-    background-color: c(highlight);
+    background-color: color(highlight);
   }
   
   thead button {
@@ -159,7 +159,7 @@ td.rdtYear {
 }
 td.rdtMonth:hover,
 td.rdtYear:hover {
-  background: c(highlight);
+  background: color(highlight);
 }
 
 .rdtCounters {
@@ -196,7 +196,7 @@ td.rdtYear:hover {
   user-select: none;
 }
 .rdtCounter .rdtBtn:hover {
-  background: c(highlight);
+  background: color(highlight);
 }
 .rdtCounter .rdtCount {
   height: 20%;

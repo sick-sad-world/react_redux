@@ -11,32 +11,32 @@
   border-radius: $bdrs;
   height: $s;
   line-height: $s;
-  background-color: c(highlight);
+  background-color: color(highlight);
   text-transform: uppercase;
   &.style--raised {
-    box-shadow: $sh-z3;
+    box-shadow: shadow();
   }
 
   &.accent {
-    background-color: $c-acc;
-    color: $c-sec;
+    background-color: color(accent);
+    color: color(secondary);
   }
 
   &.accent-sec {
-    background-color: $c-acc-sec;
-    color: $c-sec;
+    background-color: color(action);
+    color: color(secondary);
   }
 
-  @each $style, $color in $states {
+  @each $style, $color in color(states) {
     &.#{$style} {
       background-color: $color;
-      color: $c-sec;
+      color: color(secondary);
     }
   }
-  @each $style, $color in $feeds {
+  @each $style, $color in color(feeds) {
     &.#{$style} {
       background-color: $color;
-      color: $c-sec;
+      color: color(secondary);
     }
   }
 

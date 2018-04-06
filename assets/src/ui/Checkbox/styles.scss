@@ -37,26 +37,26 @@
     }
     svg {
       fill: transparent;
-      border: 1px solid c(border);
+      border: 1px solid color(border);
       border-radius: $bdrs;
       z-index: 2;
     }
     input:checked + svg {
-      background-color: $c-acc;
-      border-color: $c-acc;
-      fill: $c-sec;
+      background-color: color(accent);
+      border-color: color(accent);
+      fill: color(secondary);
     }
   }
 
   &.state--focus .control svg,
   .control input:focus + svg {
-    box-shadow: $sh-z3;
+    box-shadow: shadow();
   }
 
   &.state--focus .control input:not(:checked) svg,
   .control input:not(:checked):focus + svg {
-    //border-color: $c-acc-lt;
-    fill: rgba($c-acc, .1);
+    //border-color: color(action, light);
+    fill: rgba(color(accent), .1);
   }
   
   &.state--disabled {

@@ -14,6 +14,10 @@ $s-pointer: u(2.5);
 $s-input: u(4);
 $s-button: u(4);
 
+$bdrs: 4px;
+$t-dur: 0.2s;
+$t-func: cubic-bezier(.4,0,.2,1);
+
 $sizes: (
   xs: 90px,
   s: 120px,
@@ -22,69 +26,110 @@ $sizes: (
   xl: 320px
 );
 
-$c-prm: #585858;
-$c-prm-lt: lighten($c-prm, 15%);
-$c-prm-lt2: lighten($c-prm, 25%);
+$shadows: (
+  1: (0 1px 3px rgba(#000,.12), 0 1px 2px rgba(#000,.24)),
+  2: (0 2px 4px rgba(#000,.16), 0 2px 4px rgba(#000,.23)),
+  3: (0 10px 20px rgba(#000,.19), 0 6px 6px rgba(#000,.23)),
+  4: (0 14px 28px rgba(#000,.25), 0 10px 10px rgba(#000,.22)),
+  5: (0 19px 38px rgba(#000,.30), 0 15px 12px rgba(#000,.22))
+);
 
-$c-sec: #fafafa;
-$c-sec-dk: darken($c-sec, 4.5%);
-$c-sec-dk2: darken($c-sec, 18%);
-
-$c-acc: #009688;
-$c-acc-dk: darken($c-acc, 5%);
-$c-acc-lt: lighten($c-acc, 5%);
-
-$c-acc-sec: #FFA726;
-$c-acc-sec-dk: darken($c-acc-sec, 5%);
-$c-acc-sec-lt: lighten($c-acc-sec, 5%);
+@function shadow($z: 1) {
+  @return map-get($shadows, $z);
+}
 
 $colors: (
-  text: $c-prm,
-  caption: $c-prm-lt2,
-  icon: $c-prm-lt,
-  border: $c-sec-dk2,
-  highlight: $c-sec-dk,
-  shadow: $c-prm,
-  solid: #fff,
-  el: $c-acc,
-  el-light: mix($c-acc-lt, #fff, 20%),
-  focus: $c-acc-sec,
-  selection: lighten($c-acc-sec, 25%),
+  primary: (
+    base: #585858,
+    light: lighten(#585858, 15%),
+    lighter: lighten(#585858, 25%)
+  ),
+  secondary: (
+    base: #fcfcfc,
+    dark: darken(#fcfcfc, 4.5%),
+    darker: darken(#fcfcfc, 18%)
+  ),
+  solid: (
+    base: #fff
+  ),
+  accent: (
+    dark: darken(#009688, 5%),
+    base: #009688,
+    light: lighten(#009688, 5%),
+  ),
+  action: (
+    dark: darken(#FFA726, 5%),
+    base: #FFA726,
+    light: lighten(#FFA726, 5%),
+    lighter: lighten(#FFA726, 25%)
+  ),
+  error: (
+    base: #F44336
+  ),
+  warning: (
+    base: #FFC107
+  ),
+  success: (
+    base: #8BC34A
+  ),
+  info: (
+    base: #00BCD4
+  ),
+  rss: (
+    base: #FFC107
+  ),
+  html: (
+    base: #8BC34A
+  ),
+  facebook: (
+    base: #3b5998
+  ),
+  reddit: (
+    base: #EF5350
+  ),
+  twitter: (
+    base: #5BBBF5
+  )
 );
 
-$c-error: #F44336;
-$c-warning: #FFC107;
-$c-success: #8BC34A;
-$c-info: #00BCD4;
-
-$states: (
-  error: $c-error,
-  warning: $c-warning,
-  success: $c-success,
-  info: $c-info
+$colors-mnemonic: (
+  text: primary,
+  icon: primary light,
+  caption: primary lighter,
+  background: secondary,
+  border: secondary darker,
+  highlight: secondary dark,
+  element: solid,
+  element-focus: accent,
+  standout: accent,
+  standout-hover: accent light,
+  cta: action,
+  cta-hover: action light,
+  selection: action lighter
 );
 
-@function c($c) {
-  @return map-get($colors, $c);
+@function cget($c, $v: base) {
+  @return map-get(map-get($colors, $c), $v);
 }
 
-$feeds: (
-  html: $c-success,
-  rss: $c-warning,
-  facebook: #3b5998,
-  reddit: #EF5350,
-  twitter: #5BBBF5
-);
-
-$sh-focus: 0 0 0 3px rgba($c-acc, .25);
-$sh-z3: 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12), 0 3px 1px -2px rgba(0,0,0,.2);
-$sh-z4: 0 3px 8px 0 rgba(0,0,0,.14), 0 1px 12px 0 rgba(0,0,0,.12), 0 3px 5px -1px rgba(0,0,0,.2);
-$sh-z5: 0 4px 8px 1px rgba(0,0,0,.14), 0 3px 12px 2px rgba(0,0,0,.12), 0 5px 5px -3px rgba(0,0,0,.2);
-
-@function getFocusShadow($c: $c-acc) {
-  @return 0 0 0 3px rgba($c, .25);
+@function mget($l, $v: base) {
+  $selection: ();
+  @each $item in $l {
+    $selection: map-merge($selection, ($item: cget($item, $v)));
+  }
+  @return $selection;
 }
 
-$bdrs: 4px;
-$t-dur: 0.2s;
-$t-func: cubic-bezier(.4,0,.2,1);
+@function color($color, $variation: base) {
+  @if $color == states {
+    $list: (error, warning, success, info);
+    @return mget($list, $variation);
+  } @else if $color == feeds {
+    $list: (rss, html, facebook, reddit, twitter);
+    @return mget($list, $variation);
+  } @else if map-has-key($colors-mnemonic, $color) {
+    @return cget(map-get($colors-mnemonic, $color)...);
+  } @else {
+    @return cget($color, $variation);
+  }
+}

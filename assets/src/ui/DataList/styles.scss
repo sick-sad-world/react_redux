@@ -29,9 +29,9 @@
   }
 
   .state--error {
-    color: map-get($states, error);
+    color: color(error);
     svg {
-      fill: map-get($states, error);
+      fill: color(error);
       width: 120px;
       height: 120px;
       opacity: 0.5;
@@ -46,11 +46,11 @@
     padding: u(.5) 0;
     align-items: center;
     &:hover {
-      background-color: c(highlight);
+      background-color: color(highlight);
     }
   }
   &:not(:last-child) .item {
-    border-bottom: 1px solid c(border);
+    border-bottom: 1px solid color(border);
   }
   .content {
     flex: 1 1 auto;

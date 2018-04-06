@@ -12,7 +12,7 @@
     background: none;
     overflow: visible;
     border-radius: 0;
-    border-bottom: 1px solid c(border);
+    border-bottom: 1px solid color(border);
     &:after {
       content: '';
       position: absolute;
@@ -20,12 +20,12 @@
       left: 0;
       width: 0;
       height: 2px;
-      background-color: $c-acc;
+      background-color: color(accent);
       transition: width $t-dur $t-func;
     }
   }
   &.is-focused:not(.is-open) > .Select-control {
-    border-color: c(border);
+    border-color: color(border);
     box-shadow: none;
   }
   .Select-placeholder {
@@ -44,7 +44,7 @@
     display: flex;
     flex: 0 0 $s-pointer;
     height: $s-input;
-    color: c(caption);
+    color: color(caption);
     svg {
       display: block;
       text-align: center;
@@ -58,7 +58,7 @@
     .Select-loading {
       display: block;
       margin: auto;
-      border-right-color: $c-prm;
+      border-right-color: color(primary);
     }
   }
   .Select-arrow-zone {
@@ -85,14 +85,14 @@
   }
   .Select-option {
     background: none;
-    color: $c-prm;
+    color: color(primary);
     line-height: $s-input;
     padding: 0 u();
     &:hover, &.is-focused {
-      background-color: c(highlight);
+      background-color: color(highlight);
     }
     &.is-selected {
-      background-color: c(el-light);
+      background-color: color(accent, lighter);
       font-weight: bold;
     }
   }
@@ -118,8 +118,8 @@
     }
     .Select-value {
       display: inline-flex;
-      background-color: $c-acc;
-      color: $c-sec;
+      background-color: color(accent);
+      color: color(secondary);
       margin: 2px u(.5) 2px 0;
       padding: 0 4px 0 10px;
       border: 0;
@@ -153,7 +153,7 @@
         }
       }
       &:hover {
-        background-color: $c-acc-lt;
+        background-color: color(accent, light);
       }
     }
   }
@@ -164,7 +164,7 @@
         width: 100%;
       }
       .Select-arrow-zone svg {
-        fill: $c-acc;
+        fill: color(accent);
       }
     }
   }

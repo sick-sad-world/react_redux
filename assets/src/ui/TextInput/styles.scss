@@ -10,7 +10,7 @@
   label {
     display: flex;
     position: relative;
-    border-bottom: 1px solid c(border);
+    border-bottom: 1px solid color(border);
     &:after {
       content: '';
       position: absolute;
@@ -18,7 +18,7 @@
       left: 0;
       width: 0;
       height: 2px;
-      background-color: $c-acc;
+      background-color: color(accent);
       transition: width $t-dur $t-func;
     }
   }
@@ -87,7 +87,7 @@
 
   &.state--focus {
     svg {
-      fill: $c-acc;
+      fill: color(accent);
     }
     
     label:after {
@@ -95,23 +95,23 @@
     }
 
     .label {
-      color: $c-acc-dk;
+      color: color(accent, dark);
     }
   }
 
   &.state--error {
     svg {
-      fill: $c-error;
+      fill: color(error);
     }
 
     label  {
-      border-color: $c-error;
+      border-color: color(error);
     }
     label:after {
-      background-color: $c-error;
+      background-color: color(error);
     }
     .subtext, .label {
-      color: $c-error;
+      color: color(error);
     }
   }
 

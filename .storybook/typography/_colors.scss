@@ -1,6 +1,6 @@
 @import '_vars.scss';
 
-:global .colors {
+.colors {
   display: flex;
   flex-wrap: wrap;
   > span {
@@ -15,45 +15,45 @@
 
   .primary {
     flex: 0 0 55%;
-    background-color: $c-prm;
+    background-color: color(primary);
     .lighten {
-      background: $c-prm-lt;
+      background: color(primary, light);
     }
     .lighten2 {
-      background: $c-prm-lt2;
+      background: color(primary, lighter);
     }
   }
   
   .secondary {
     flex: 0 0 25%;
-    background-color: $c-sec;
+    background-color: color(secondary);
     .darken {
-      background: $c-sec-dk;
+      background: color(secondary, dark);
     }
     .darken2 {
-      background: $c-sec-dk2;
+      background: color(secondary, darker);
     }
   }
 
   .accent {
-    background-color: $c-acc;
+    background-color: color(accent);
     flex: 0 0 10%;
     .lighten {
-      background: $c-acc-lt;
+      background: color(accent, light);
     }
     .darken {
-      background: $c-acc-dk;
+      background: color(accent, dark);
     }
   }
 
   .accent-sec {
-    background-color: $c-acc-sec;
+    background-color: color(accent);
     flex: 0 0 10%;
     .lighten {
-      background: $c-acc-sec-lt;
+      background: color(action, light);
     }
     .darken {
-      background: $c-acc-sec-dk;
+      background: color(action, dark);
     }
   }
 
@@ -65,16 +65,16 @@
     }
     
     .error {
-      background-color: $c-error;  
+      background-color: color(error);  
     }
     .warning {
-      background-color: $c-warning;  
+      background-color: color(warning);  
     }
     .success {
-      background-color: $c-success;  
+      background-color: color(success);  
     }
     .info {
-      background-color: $c-info;  
+      background-color: color(info);  
     }
   }
 }

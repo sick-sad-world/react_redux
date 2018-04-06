@@ -5,7 +5,7 @@
   display: flex;
   > a {
     flex: 1 1 auto;
-    color: $c-prm;
+    color: color(primary);
     text-align: center;
     line-height: $s-button;
     border-bottom: 2px solid transparent;
@@ -14,7 +14,7 @@
       text-decoration: none;
     }
     &.state--selected {
-      border-color: $c-acc;
+      border-color: color(accent);
     }
   }
 }

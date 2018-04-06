@@ -31,7 +31,7 @@
   height: $s-button;
   animation: rotator $duration linear infinite;
   .path {
-    stroke: $c-acc;
+    stroke: color(accent);
     stroke-dasharray: $offset;
     stroke-dashoffset: 0;
     transform-origin: center;
