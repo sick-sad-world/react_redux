@@ -56,12 +56,13 @@ $colors: (
     dark: darken(#009688, 5%),
     base: #009688,
     light: lighten(#009688, 5%),
+    lighter: mix(#009688, #fff, 25%)
   ),
   action: (
     dark: darken(#FFA726, 5%),
     base: #FFA726,
     light: lighten(#FFA726, 5%),
-    lighter: lighten(#FFA726, 25%)
+    lighter: mix(#FFA726, #fff, 25%)
   ),
   error: (
     base: #F44336

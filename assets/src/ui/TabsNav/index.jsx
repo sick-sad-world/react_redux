@@ -1,5 +1,3 @@
-import bindAll from 'lodash/bindAll';
-import isFunction from 'lodash/isFunction';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -10,56 +8,66 @@ import './styles.scss';
 /** Tabs navigation component, ARIA enabled. Works with React Router or custom state management */
 export default class TabsNav extends React.Component {
 
-  constructor(props) {
-    super(props);
-    bindAll(this, 'renderLinks', 'renderNavLinks');
-  }
-
   getTabWidth(length) {
     return Math.round(10000 / length) / 100
   }
 
-  getTabStyles(length = 1) {
+  getTabStyles(width) {
     const { linkProps } = this.props;
     return {
-      flex: `0 0 ${this.getTabWidth(length)}%`,
+      flex: `0 0 ${width}%`,
       ...(linkProps.styles || {})
     }
   }
 
-  renderNavLinks([path, element], i, {length}) {
-    const { linkProps, activeClassName } = this.props;
-    return (
-      <NavLink key={i} {...linkProps} style={this.getTabStyles(length)} to={path} tabIndex={i === 0 ? 0 : -1} activeClassName={activeClassName}>{element}</NavLink>
-    );
+  getPaceStyles(index, width) {
+    return {
+      left: `${width * index}%`,
+      width: `${width}%`
+    }
   }
 
-  renderLinks([path, element], i, {length}) {
-    const { linkProps, activeClassName, active, onChange } = this.props;
-    return (
-      <a
-        {...linkProps}
-        key={i}
-        style={this.getTabStyles(length)}
-        tabIndex={i === 0  ? 0 : -1}
-        onClick={() => onChange(path)}
-        className={classNames(linkProps.className, {[activeClassName]: active === path})}
-      >
-        {element}
-      </a>
-    );
-  }
+  // renderNavLinks([path, element], i, {length}) {
+  //   const { linkProps, activeClassName } = this.props;
+  //   return (
+  //     <NavLink
+  //       {...linkProps}
+  //       key={i}
+  //       style={this.getTabStyles(length)}
+  //       to={path}
+  //       tabIndex={i === 0 ? 0 : -1}
+  //       activeClassName={activeClassName}
+  //     >
+  //       {element}
+  //     </NavLink>
+  //   );
+  // }
 
   render() {
     const {options, onChange, className, activeClassName, linkProps, active, rootClassName, ...props} = this.props;
 
-    const method = isFunction(onChange) ? 'renderLinks' : 'renderNavLinks';
+    // const method = isFunction(onChange) ? 'renderLinks' : 'renderNavLinks';
 
     const data = Object.entries(options);
     
+    const width = this.getTabWidth(data.length);
+
+    let activeIndex = 0; 
+
     return (
       <nav className={classNames(rootClassName, className)} {...props}>
-        {data.map(this[method])}
+        {data.map(([path, element], i) => {
+          let isCurrent = active === path;
+          if (isCurrent) {
+            activeIndex = i;
+          }
+          return (
+            <a {...linkProps} key={path} style={this.getTabStyles(width)} tabIndex={i === 0  ? 0 : -1} onClick={() => onChange(path)}>
+              {element}
+            </a>
+          )
+        })}
+        <span className='pace' style={this.getPaceStyles(activeIndex, width)} />
       </nav>
     );
   }
@@ -68,6 +76,7 @@ export default class TabsNav extends React.Component {
 TabsNav.defaultProps = {
   rootClassName: 'Tabsnav--root',
   activeClassName: 'state--selected',
+  theme: 'accent',
   linkProps: {}
 }
 

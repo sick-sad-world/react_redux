@@ -6,8 +6,10 @@ import './linear.scss';
 export default function LinearLoading({rootClassName, className, value, text }) {
   return (
     <div className={classNames(rootClassName, className)}>
-      {text && <span>{text.replace('$p', value)}</span>}
-      <progress value={value} max='100' />
+      <span className='bar'>
+        <span style={{width: `${value}%`}} className='value' />
+      </span>
+      {text && <span>{text.replace('$p', Math.round(value))}</span>}
     </div>
   )
 }

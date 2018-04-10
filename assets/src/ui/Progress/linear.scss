@@ -1,8 +1,37 @@
 @import 'mixins/_u.scss';
 @import '_vars.scss';
 
+
 .LinearLoading-root {
-  progress {
-    appearance: none;
+  $h: u(.5);
+
+  @keyframes gradientLite{
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  display: flex;
+  min-height: 240px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .bar {
+    display: block;
+    width: 80%;
+    margin: 0 auto;
+    height: $h;
+  }
+  .value {
+    display: block;
+    height: $h;
+    background-image: linear-gradient(to right,  color(accent), mix(color(accent), #fff, 25%),  color(accent), color(accent));
+    background-size: 200%;
+    animation: gradientLite 3s ease-out infinite;
+    transition: width .6s $t-func;
   }
 }

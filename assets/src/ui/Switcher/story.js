@@ -30,6 +30,7 @@ storiesOf('FormElements', module)
             name='triple'
             value={store.state.triple}
             onChange={(value) => store.set(value)}
+            descr='Some desciption text'
             options={[
               { label: 'Only', value: 1 },
               { label: 'Include', value: null },

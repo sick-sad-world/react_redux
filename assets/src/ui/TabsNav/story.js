@@ -8,7 +8,7 @@ import TabsNav from './index';
 
 storiesOf('UI Components', module)
   .addDecorator(withTests('TabsNav'))
-  .add('TabsNav', withState({state: 'one', store: 'one'}, (story, store) => (
+  .add('TabsNav', withState({three: 'one', four: 'one'}, (story, store) => (
     withInfo({
       propTables: [TabsNav],
       propTablesExclude: [BrowserRouter]
@@ -22,14 +22,29 @@ storiesOf('UI Components', module)
                 'two': 'Second tab',
                 'three': 'Third tab'
               }}
-              onChange={(value) => store.set({state: value})}
-              active={store.state.state}
+              onChange={(value) => store.set({three: value})}
+              active={store.state.three}
             />
             <div>
-              Rendered tab: {store.state.state}
+              Rendered tab: {store.state.three}
             </div>
           </div>
-          <div style={{ height: '50px' }} />
+          <div>
+            <TabsNav
+              options={{
+                'one': 'First tab',
+                'two': 'Second tab',
+                'three': 'Third tab',
+                'four': 'Four tab'
+              }}
+              onChange={(value) => store.set({four: value})}
+              active={store.state.four}
+            />
+            <div>
+              Rendered tab: {store.state.four}
+            </div>
+          </div>
+          {/* <div style={{ height: '50px' }} />
           <BrowserRouter>
             <div>
               <TabsNav
@@ -45,7 +60,7 @@ storiesOf('UI Components', module)
                 <Route path="/three" component={() => <span>three</span>} />
               </Switch>
             </div>
-          </BrowserRouter>
+              </BrowserRouter>*/}
         </div>
       );
     })(story)

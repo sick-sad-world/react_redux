@@ -12,6 +12,11 @@
   label {
     flex: 1 1 auto;
   }
+  .subtext {
+    @include cap-styles();
+    display: block;
+    margin-top: u(.5);
+  }
   .control {
     $step: $w + ($w - $s-pointer) * .5;
     display: inline-block;
@@ -47,7 +52,7 @@
         background-color: color(action);
       }
       & ~ .track {
-        background-color: mix(color(action), #fff, 20%);
+        background-color: color(action, lighter);
       }
     }
 

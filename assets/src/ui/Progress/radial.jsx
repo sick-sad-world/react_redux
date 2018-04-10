@@ -8,7 +8,7 @@ export default function RadialLoading({text, rootClassName, className, value, ..
   return (
     <div {...props} className={classNames(rootClassName, className)}>
       <SvgSpinner />
-      {text && <span>{text.replace('$p', value)}</span>}
+      {text && <span>{text.replace('$p', Math.round(value))}</span>}
     </div>
   );
 }

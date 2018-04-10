@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import Badge from '../Badge';
 
 const statusValues = {
   1: ['success', 'Active'],
@@ -8,7 +9,7 @@ const statusValues = {
 }
 
 function StatusRenderer(data) {
-  return <samp className={classNames(statusValues[data][0], 'status')}>{statusValues[data][1]}</samp>
+  return <Badge className={classNames(statusValues[data][0], 'status')}>{statusValues[data][1]}</Badge>
 }
 
 function ListRenderer(data, def) {

@@ -16,7 +16,7 @@ storiesOf('FormElements', module)
       propTablesExclude: [Icon]
     })(() => (
       <ol>
-        <li style={style}><Button onClick={action('btn-click')}>Button</Button> - Simple button</li>
+        <li style={style}><Button onClick={action('btn-click')} theme='raised'>Button</Button> - Simple raised button</li>
         <li style={style}><Button onClick={action('link-click')} theme='secondary-raised' el='link'>Button</Button> - Link as a button, Style secondary raised</li>
         <li style={style}><Button onClick={action('input-click')} theme='secondary' el='input' type='submit' value='Send' /> - [Input:submit] as a button, style secondary</li>
         <li style={style}><Button onClick={action('dis-click')} disabled>Disabled</Button> - Disabled button</li>

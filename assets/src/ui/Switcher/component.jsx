@@ -10,8 +10,6 @@ export default function Switcher({ className, value, name, label, descr, focus, 
   const id = `${name}-${value}`;
 
   const inputs = [];
-
-  const labels = [];
   
   (options || []).forEach((item, i) => {
 
@@ -34,7 +32,6 @@ export default function Switcher({ className, value, name, label, descr, focus, 
         onBlur={onBlur}
       />
     );
-    labels.push(<span key={key}>{item.label}</span>)
   });
 
   return (
