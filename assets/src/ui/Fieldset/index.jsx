@@ -1,13 +1,16 @@
 import React from 'react';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { childrenShape } from 'shared/typings';
+import { childrenShape, classNameShape } from 'shared/typings';
+import './styles.scss';
 
-export default function Fieldset({ title, error, collapsable, children, ...props }) {
+export default function Fieldset({ title, collapsable, children, className, ...props }) {
   return (
-    <fieldset>
+    <fieldset {...props} className={classNames('Fieldset--root', className)}>
       {title && <legend>{title}</legend>}
-      {children}
-      {error && <span >{error}</span>}
+      <div className='body'>
+        {children}
+      </div>
     </fieldset>
   );
 }
@@ -19,10 +22,10 @@ Fieldset.defaultProps = {
 Fieldset.propTypes = {
   /** Contents of fieldset */
   children: childrenShape,
+  /** Class names added to root component */
+  className: classNameShape,
   /** Define whatever fieldset should be able to collapse in accordion style */
   collapsable: PropTypes.bool.isRequired,
   /** Title of fieldset - rendered as <legend/> */
   title: PropTypes.string,
-  /** Error message that may be shown */
-  error: PropTypes.string
 }

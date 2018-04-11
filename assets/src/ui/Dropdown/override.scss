@@ -24,9 +24,10 @@
       transition: width $t-dur $t-func;
     }
   }
-  &.is-focused:not(.is-open) > .Select-control {
-    border-color: color(border);
-    box-shadow: none;
+  &.is-focused > .Select-control {
+    border-color: color(border) !important;
+    background: none !important;
+    box-shadow: none !important;
   }
   .Select-placeholder {
     @include ph-styles();
@@ -100,6 +101,7 @@
     .Select-control {
       .Select-value {
         position:static;
+        line-height: $s-input;
         padding: 0 !important;
       }
     }

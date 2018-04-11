@@ -1,0 +1,19 @@
+@import 'mixins/_u.scss';
+@import '_vars.scss';
+
+.Fieldset--root {
+  $legend: $s-input;
+  display: block;
+  width: 100%;
+  background-color: color(highlight);
+  border: 0;
+  padding-top: $legend;
+  legend {
+    font-size: $f-h4;
+    line-height: $legend;
+    display: block;
+    width: 100%;
+    position: relative;
+    top: $legend * 0.75;
+  }
+}

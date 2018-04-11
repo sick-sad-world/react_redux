@@ -13,6 +13,7 @@ import '../assets/src/ui/RadioButton/story.js';
 import '../assets/src/ui/Button/story.js';
 import '../assets/src/ui/Dropdown/story.js';
 import '../assets/src/ui/Switcher/story.js';
+import '../assets/src/ui/Fieldset/story.js';
 
 import '../assets/src/ui/TabsNav/story.js';
 import '../assets/src/ui/Progress/story.js';
