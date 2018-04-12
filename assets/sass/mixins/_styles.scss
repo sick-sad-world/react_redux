@@ -65,9 +65,9 @@
   }
 }
 
-@mixin button-simple ($main) {
+@mixin button-simple ($main, $text: $main) {
   border-color: $main;
-  color: $main;
+  color: $text;
   background-color: transparent;
   
   svg {

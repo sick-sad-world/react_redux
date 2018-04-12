@@ -65,16 +65,20 @@ $colors: (
     lighter: mix(#FFA726, #fff, 25%)
   ),
   error: (
-    base: #F44336
+    base: #F44336,
+    dark: darken(#F44336, 10%)
   ),
   warning: (
-    base: #FFC107
+    base: #FFC107,
+    dark: darken(#FFC107, 10%)
   ),
   success: (
-    base: #8BC34A
+    base: #8BC34A,
+    dark: darken(#8BC34A, 10%)
   ),
   info: (
-    base: #00BCD4
+    base: #00BCD4,
+    dark: darken(#00BCD4, 10%)
   ),
   rss: (
     base: #FFC107

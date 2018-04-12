@@ -16,6 +16,7 @@
   font-weight: 400;
   text-transform: uppercase;
   border-radius: $bdrs;
+  cursor: pointer;
   
   &:hover {
     text-decoration: none;
@@ -47,14 +48,14 @@
 
   @each $style, $color in color(states) {
     &.#{$style} {
-      @include button-simple($color);
+      @include button-simple($color, color($style, dark));
     }
   }
 
 // raised button styles
 // =================================================================
   &.raised {
-    @include button-raised(color(accent), color(action, light), color(secondary));
+    @include button-raised(color(accent), color(accent, light), color(secondary));
   }
   
   &.secondary-raised {

@@ -7,7 +7,7 @@ import DateTime from 'react-datetime';
 
 storiesOf('FormElements', module)
   .addDecorator(withTests('TextInput'))
-  .add('Datepicker', withState({ simple: '' }, (story, store) => (
+  .add('Datepicker', withState({ simple: '', formatted: '' }, (story, store) => (
     withInfo({
       propTables: [Datepicker],
       propTablesExclude: [DateTime]
@@ -21,6 +21,16 @@ storiesOf('FormElements', module)
             }}
             onChange={(value) => store.set(value)}
             value={store.state.simple}
+          />
+          <div style={{height: '50px'}} />
+          <Datepicker
+            name='formatted'
+            inputProps={{
+              label: 'Formatted Datetime input'
+            }}
+            format='YYYY-MM-DD HH:mm:ss'
+            onChange={(value) => store.set(value)}
+            value={store.state.formatted}
           />
         </div>
       );

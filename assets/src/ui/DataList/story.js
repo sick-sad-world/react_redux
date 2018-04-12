@@ -1,6 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
+import { action } from '@storybook/addon-actions';
 import { withTests } from 'with';
 import DataList from './index';
 import DataListRow from './row';
@@ -57,21 +58,21 @@ const actions = (item) => {
   const changeState = (item.active) ? {
     label: 'Disable',
     icon: 'eye-with-line',
-    handler: console.log
+    handler: action('Disable')
   } : {
     label: 'Enable',
     icon: 'eye',
-    handler: console.log
+    handler: action('Enable')
   }
 
   return [changeState, {
     label: 'Edit',
     icon: 'documents',
-    handler: console.log
+    handler: action('Edit')
   }, '---', {
     label: 'Delete',
     icon: 'trash',
-    handler: console.log
+    handler: action('Delete')
   }]
 }
 
@@ -88,7 +89,6 @@ storiesOf('UI Components', module)
             config={config}
             data={data}
             sortable
-            loading={false}
             actions={actions}
           />
           <div style={{height: '50px'}} />
@@ -97,14 +97,16 @@ storiesOf('UI Components', module)
             config={config}
             data={[]}
             sortable
-            loading={false}
             actions={actions}
           />
           <div style={{height: '50px'}} />
           <h4>Errored list</h4>
           <DataList
             config={config}
-            error='Some error happened'
+            errorState={{
+              title: 'Some error happened',
+              text: 'Error 500: General back-end error'
+            }}
             data={[]}
             sortable
             loading={false}

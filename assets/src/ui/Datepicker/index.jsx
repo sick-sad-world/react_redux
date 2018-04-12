@@ -16,7 +16,7 @@ export default function Datepicker({onChange, format, InputComponent, name, ...p
       dateFormat={formats ? formats[0] : undefined}
       timeFormat={formats ? formats[1] : undefined}
       onChange={(value) => onChange({
-        [name]: (value instanceof moment) ? value.format(format) : value
+        [name]: (format) ? value.format(format) : value
       })}
       renderInput={(input, openCalendar) => <InputComponent {...input} name={name} onFocus={openCalendar} />}
     />

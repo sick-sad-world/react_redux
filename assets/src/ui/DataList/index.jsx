@@ -4,9 +4,8 @@ import mapValues from 'lodash/mapValues';
 import isFunction from 'lodash/isFunction';
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from '../Icon';
 import { actionConfigShape } from '../ActionMenu';
-import { ProgressRadial } from '../Progress';
+import { ListStateRenderer, listStateRendererShape } from './renderers';
 
 import DataListRow, { configShape } from './row';
 import './styles.scss';
@@ -93,15 +92,15 @@ export default class DataList extends React.Component {
   }
 
   render() {
-    const { loading, error, emptyText, emptyRenderer, errorRenderer } = this.props;
+    const { errorState, emptyState } = this.props;
     const { data } = this.state;
 
     let content = null;
 
-    if (error) {
-      content = errorRenderer(error);
+    if (errorState.text) {
+      content = <ListStateRenderer className='state--empty' {...emptyState} />;
     } else if (!data.length) {
-      content = emptyRenderer(emptyText);
+      content = <ListStateRenderer className='state--error' {...emptyState} />;
     } else {
       content = <ul>{this.renderDataList()}</ul>;
     }
@@ -115,25 +114,17 @@ export default class DataList extends React.Component {
 }
 
 DataList.defaultProps = {
-  loading: false,
   sortable: false,
   sort: 'id',
-  errorRenderer(error) {
-    return(
-      <div className='state--error'>
-        <Icon viewBox='0 0 24 24' g='error' />
-        <span>{error}</span>
-      </div>
-    );
+  errorState: {
+    title: 'We encountered error during data retrieval',
+    text: null,
+    additional: null
   },
-  emptyText: 'No items found',
-  emptyRenderer(text) {
-    return(
-      <div className='state--empty'>
-        <Icon g='images' />
-        <span>{text}</span>
-      </div>
-    );
+  emptyState: {
+    title: 'This list is empty',
+    text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut, nisi.',
+    additional: null
   }
 }
 
@@ -141,11 +132,8 @@ DataList.propTypes = {
   sortable: PropTypes.bool.isRequired,
   config: PropTypes.arrayOf(configShape).isRequired,
   sort: PropTypes.string,
-  loading: PropTypes.bool.isRequired,
-  error: PropTypes.string,
-  errorRenderer: PropTypes.func.isRequired,
-  emptyText: PropTypes.string.isRequired,
-  emptyRenderer: PropTypes.func.isRequired,
+  errorState: PropTypes.shape(listStateRendererShape).isRequired,
+  emptyState: PropTypes.shape(listStateRendererShape).isRequired,
   onClick: PropTypes.func,
   actions: PropTypes.oneOfType([
     PropTypes.func,
