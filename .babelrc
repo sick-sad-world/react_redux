@@ -5,6 +5,7 @@
       {
         "modules": false,
         "useBuiltIns": true,
+        "debug": true,
         "targets": {
           "chrome": 63
         }
