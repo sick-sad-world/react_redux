@@ -6,7 +6,6 @@
   position: relative;
   > a {
     flex: 1 1 auto;
-    color: color(primary);
     text-align: center;
     line-height: $s-button;
     text-decoration: none;
@@ -20,6 +19,21 @@
     height: 2px;
     margin-top: -2px;
     transition: left $t-dur $t-func;
-    background-color: color(accent);
+  }
+  &.style--accent {
+    .pace {
+      background-color: color(accent);
+    }
+    > a {
+      color: color(primary);
+    }
+  }
+  &.style--action {
+    .pace {
+      background-color: color(action);
+    }
+    > a {
+      color: color(secondary);
+    }
   }
 }

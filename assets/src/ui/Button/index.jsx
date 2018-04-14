@@ -15,10 +15,10 @@ export default function Button({ el, children, rootClassName, className, theme, 
     case 'input':
       return <input type='button' {...props} className={classList} />;
     case 'link':
-      return <a {...props} className={classList} >{children}</a>;
+      return <a {...props} className={classList}>{children}</a>;
     case 'button':
     default:
-      return <button {...props} className={classList} >{children}</button>;
+      return <button {...props} className={classList}>{children}</button>;
   }
 }
 

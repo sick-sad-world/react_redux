@@ -10,7 +10,7 @@
     display: block;
     padding: 0 u(2);
     color: color(primary);
-    line-height: $s-input;
+    line-height: $s-element;
     &:first-child {
       border-radius: $bdrs $bdrs 0 0;
     }

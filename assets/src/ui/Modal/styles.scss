@@ -1,0 +1,48 @@
+@import 'mixins/_u.scss';
+@import 'mixins/_styles.scss';
+@import '_vars.scss';
+
+.Modal--root {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 2;
+  max-width: 80%;
+  max-height: 80%;
+  background-color: color(solid);
+  box-shadow: shadow(4);
+  transform-origin: top center;
+  animation-name: zoomIn;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-duration: $t-dur;
+  .content {
+    flex: 1 0 auto;
+  }
+}
+
+.ModalHeader--root {
+  $t: color(secondary);
+  background-color: color(primary);
+  color: $t;
+  svg {
+    fill: $t;
+  }
+  .icon-button {
+    width: $s-element;
+    height: $s-element;
+  }
+  .line {
+    display: flex;
+    height: $s-element + u(2);
+    padding: u() 0 u() u(2);
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.ModalFooter--root {
+  border-top: 1px solid color(border);
+  padding: u();
+}

@@ -40,6 +40,30 @@ html, body {
   font-family: $ff;
 }
 
+#modal-root {
+  position: relative;
+  z-index: z(modal);
+  .container {
+    position: fixed;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+  }
+}
+
+.overlay {
+  background-color: rgba(#000,.5);
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  animation: opacityIn $t-dur;
+}
+
 a {
   color: color(action, dark);
   text-decoration: none;

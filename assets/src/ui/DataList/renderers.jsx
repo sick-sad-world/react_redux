@@ -35,7 +35,7 @@ export function ListStateRenderer({title, text, additional, className}) {
 ListStateRenderer.propTypes = {
   className: classNameShape,
   ...listStateRendererShape
-};
+}
 
 /**
  * Render Status via special badge i.e [Active|Inactive] e.t.c

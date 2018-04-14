@@ -19,3 +19,4 @@ import '../assets/src/ui/TabsNav/story.js';
 import '../assets/src/ui/Progress/story.js';
 import '../assets/src/ui/ActionMenu/story.js';
 import '../assets/src/ui/DataList/story.js';
+import '../assets/src/ui/Modal/story.js';

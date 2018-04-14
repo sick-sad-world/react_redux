@@ -2,7 +2,7 @@
 @import '_vars.scss';
 
 .Fieldset--root {
-  $legend: $s-input;
+  $legend: $s-element;
   display: block;
   width: 100%;
   background-color: color(highlight);

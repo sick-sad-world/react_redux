@@ -18,7 +18,7 @@
 
 @mixin solid-styles($pos: relative, $anim: false, $or: top center) {
   position: $pos;
-  z-index: 10;
+  z-index: z(popup);
   border-radius: $bdrs;
   box-shadow: shadow(2);
   background-color: color(element);

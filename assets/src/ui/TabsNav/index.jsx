@@ -5,6 +5,8 @@ import { NavLink } from 'react-router-dom';
 import { classNameShape } from 'shared/typings';
 import './styles.scss';
 
+const THEMES = ['accent', 'action'];
+
 /** Tabs navigation component, ARIA enabled. Works with React Router or custom state management */
 export default class TabsNav extends React.Component {
 
@@ -44,7 +46,7 @@ export default class TabsNav extends React.Component {
   // }
 
   render() {
-    const {options, onChange, className, activeClassName, linkProps, active, rootClassName, ...props} = this.props;
+    const {options, onChange, className, activeClassName, linkProps, active, rootClassName, theme, ...props} = this.props;
 
     // const method = isFunction(onChange) ? 'renderLinks' : 'renderNavLinks';
 
@@ -55,7 +57,7 @@ export default class TabsNav extends React.Component {
     let activeIndex = 0; 
 
     return (
-      <nav className={classNames(rootClassName, className)} {...props}>
+      <nav className={classNames(rootClassName, className, `style--${theme}`)} {...props}>
         {data.map(([path, element], i) => {
           let isCurrent = active === path;
           if (isCurrent) {
@@ -93,5 +95,7 @@ TabsNav.propTypes = {
   /** Change handler applied to Links. Adding it forse rendering usual <a/> Links instead of ReactRouter ones */
   onChange: PropTypes.func,
   /** Current state key active. Required in conjunction with [onChange] property to indicate what tab should be shown*/
-  active: PropTypes.string
+  active: PropTypes.string,
+  /** Themming of tabs nav */
+  theme: PropTypes.oneOf(THEMES).isRequired
 }
