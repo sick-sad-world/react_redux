@@ -9,16 +9,16 @@ storiesOf('UI Components', module)
   .add('Notification', withInfo()(() => (
     <ol>
       <li>
-        <Notification>Samle of info notification</Notification>
+        <Notification title='Some information'>Samle of info notification</Notification>
       </li>
       <li>
-        <Notification type='success'>Sample of Success notification</Notification>
+        <Notification type='success' title='Success is always good'>Sample of Success notification</Notification>
       </li>
       <li>
-        <Notification type='warning'>Samle of warning notification</Notification>
+        <Notification type='warning' title='Look at me!'>Samle of warning notification</Notification>
       </li>
       <li>
-        <Notification type='error'>Sample of Error notification</Notification>
+        <Notification type='error' title='We need to fix this now!'>Sample of Error notification</Notification>
       </li>
     </ol>
   )));
