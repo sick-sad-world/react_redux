@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { childrenShape, classNameShape } from 'shared/typings';
 import Badge from '../Badge';
-import Icon from '../Icon';
+import EmptyImg from 'images/empty.svg';
+import ErrorImg from 'images/error.svg';
 
 const statusValues = {
   1: ['success', 'Active'],
@@ -19,10 +20,10 @@ export const listStateRendererShape = {
 /**
  * Render list state Empty or Error ones. This will be rendered INSTEAD of list
  */
-export function ListStateRenderer({title, text, additional, className}) {
+export function ListStateRenderer({title, text, additional, type, className, ...props}) {
   return (
     <div className={classNames('', className)}>
-      <Icon g='images' />
+      <div dangerouslySetInnerHTML={{__html: props[`${type}Image`]}} />
       <div className='content'>
         <h4>{title}</h4>
         {text && <span>{text}</span>}
@@ -32,8 +33,15 @@ export function ListStateRenderer({title, text, additional, className}) {
   );
 }
 
+ListStateRenderer.defaultProps = {
+  errorImage: ErrorImg,
+  emptyImage: EmptyImg
+}
+
 ListStateRenderer.propTypes = {
   className: classNameShape,
+  errorImage: PropTypes.string.isRequired,
+  emptyImage: PropTypes.string.isRequired,
   ...listStateRendererShape
 }
 

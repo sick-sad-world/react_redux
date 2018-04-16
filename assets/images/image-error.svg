@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 60 60" style="enable-background:new 0 0 60 60;" xml:space="preserve" width="512px" height="512px" class=""><g transform="matrix(1 0 0 1 0 0)"><g>
+	<g>
+		<g>
+			<rect x="1" y="4.5" style="fill:#ECF0F1;" width="55" height="42" data-original="#ECF0F1" class=""/>
+			<path style="fill: rgb(84, 94, 115);" d="M57,47.5H0v-44h57V47.5z M2,45.5h53v-40H2V45.5z" data-original="#545E73" class="" data-old_color="#7e7e7e"/>
+		</g>
+		<g>
+			<rect x="5" y="8.5" style="fill: rgb(84, 94, 115);" width="47" height="34" data-original="#545E73" class="" data-old_color="#7e7e7e"/>
+			<path style="fill:#ECF0F1;" d="M53,43.5H4v-36h49V43.5z M6,41.5h45v-32H6V41.5z" data-original="#ECF0F1" class=""/>
+		</g>
+		<circle style="fill:#F3D55A;" cx="15" cy="17.069" r="4.569" data-original="#F3D55A" class=""/>
+		<polygon style="fill: rgb(17, 160, 133);" points="51,32.611 50,31.5 38,20.5 27.5,32 32.983,37.483 37,41.5 51,41.5   " data-original="#11A085" class="" data-old_color="#007d71"/>
+		<polygon style="fill: rgb(38, 185, 153);" points="6,41.5 37,41.5 32.983,37.483 22.017,26.517 6,40.5   " data-original="#26B999" class="" data-old_color="#26B999"/>
+	</g>
+	<g>
+		<circle style="fill: rgb(237, 113, 97);" cx="48" cy="44.5" r="12" data-original="#ED7161" class="" data-old_color="#ED7161"/>
+		<path style="fill:#FFFFFF" d="M49.414,44.5l3.536-3.536c0.391-0.391,0.391-1.023,0-1.414s-1.023-0.391-1.414,0L48,43.086    l-3.536-3.536c-0.391-0.391-1.023-0.391-1.414,0s-0.391,1.023,0,1.414l3.536,3.536l-3.536,3.536c-0.391,0.391-0.391,1.023,0,1.414    c0.195,0.195,0.451,0.293,0.707,0.293s0.512-0.098,0.707-0.293L48,45.914l3.536,3.536c0.195,0.195,0.451,0.293,0.707,0.293    s0.512-0.098,0.707-0.293c0.391-0.391,0.391-1.023,0-1.414L49.414,44.5z" data-original="#FFFFFF" class="active-path"/>
+	</g>
+</g></g> </svg>

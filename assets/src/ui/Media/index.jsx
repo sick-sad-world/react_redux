@@ -1,7 +1,11 @@
 import bindAll from 'lodash/bindAll';
+import isFunction from 'lodash/isFunction';
 import React from 'react';
 import PropTypes from 'prop-types';
-import './styles';
+import ImgLoading from 'images/image-loading.svg';
+import ImgError from 'images/image-error.svg';
+import './styles.scss';
+
 
 export default class Media extends React.Component {
   constructor(props) {
@@ -23,30 +27,40 @@ export default class Media extends React.Component {
   }
 
   onError() {
+    if (isFunction(this.props.sendCorruptedUrl)) {
+      this.props.sendCorruptedUrl(this.props.src);
+    }
     this.setState(() => ({state: 'error'}))
   }
 
   render() {
-    const {src, alt, ...props} = this.props;
-
-    const url = (this.state.state) ? this.props[`${this.state}Placeholder`] : src;
+    const {src, alt, isBroken, loadingImage, errorImage, ...props} = this.props;
+    
+    if (this.state.state === 'loading') {
+      return <figure dangerouslySetInnerHTML={{__html: loadingImage}} />
+    } else if (this.state.state === 'error') {
+      return <figure dangerouslySetInnerHTML={{__html: errorImage}} />
+    }
 
     return (
-      <img {...props} alt={alt} src={url} onLoad={this.onLoad} onError={this.onError} />
+      <figure >
+        <img {...props} alt={alt} src={src} onLoad={this.onLoad} onError={this.onError} />
+      </figure>
     )
   }
 }
 
 Media.defaultProps = {
   isBroken: false,
-  loadingPlaceholder: '',
-  errorPlaceholder: ''
+  loadingImage: ImgLoading,
+  errorImage: ImgError
 }
 
 Media.propTypes = {
+  sendCorruptedUrl: PropTypes.func,
   isBroken: PropTypes.bool.isRequired,
   alt: PropTypes.string.isRequired,
-  loadingPlaceholder: PropTypes.string.isRequired,
-  errorPlaceholder: PropTypes.string.isRequired,
+  loadingImage: PropTypes.string.isRequired,
+  errorImage: PropTypes.string.isRequired,
   src: PropTypes.string.isRequired
 }

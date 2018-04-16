@@ -98,9 +98,9 @@ export default class DataList extends React.Component {
     let content = null;
 
     if (errorState.text) {
-      content = <ListStateRenderer className='state--empty' {...emptyState} />;
+      content = <ListStateRenderer type='error' className='state--error' {...errorState} />;
     } else if (!data.length) {
-      content = <ListStateRenderer className='state--error' {...emptyState} />;
+      content = <ListStateRenderer type='empty' className='state--empty' {...emptyState} />;
     } else {
       content = <ul>{this.renderDataList()}</ul>;
     }

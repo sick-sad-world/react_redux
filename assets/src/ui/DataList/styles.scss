@@ -22,9 +22,8 @@
   }
   .state--empty {
     svg {
-      width: 120px;
-      height: 120px;
-      opacity: 0.5;
+      width: 400px;
+      height: 200px;
     }
   }
 
@@ -32,9 +31,8 @@
     color: color(error);
     svg {
       fill: color(error);
-      width: 120px;
-      height: 120px;
-      opacity: 0.5;
+      width: 400px;
+      height: 200px;
     }
   }
 }

@@ -5,7 +5,8 @@ module.exports = (storybookBaseConfig, configType) => {
   storybookBaseConfig.resolve.alias = {
     node_modules: path.join(__dirname, '../node_modules'),
     with: path.join(__dirname, 'with.js'),
-    shared: path.join(__dirname, '../assets/src/shared')
+    shared: path.join(__dirname, '../assets/src/shared'),
+    images: path.join(__dirname, '../assets/images')
   };
 
   storybookBaseConfig.module.rules.push({
@@ -48,6 +49,18 @@ module.exports = (storybookBaseConfig, configType) => {
       loader: 'image-webpack-loader'
     }]
   })
+
+  storybookBaseConfig.module.rules.push({
+    test: /\.svg$/,
+    include: /icons|images/,
+    exclude: /node_modules/,
+    use: [{
+      loader: 'svg-inline-loader',
+      options: {
+        classPrefix: true
+      }
+    }]
+  });
 
   storybookBaseConfig.module.rules.push({
     test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9#=&.]+)?$/,

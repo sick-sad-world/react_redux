@@ -109,7 +109,7 @@ const svgLoader = {
   use: [{
     loader: 'svg-inline-loader',
     options: {
-      removingTagAttrs: ['fill', 'stroke']
+      classPrefix: true
     }
   }]
 };
