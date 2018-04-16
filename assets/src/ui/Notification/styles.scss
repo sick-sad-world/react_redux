@@ -4,7 +4,7 @@
 
 .Notification--root {
   background-color: c(solid);
-  padding: u();
+  padding: u(2) u(2) u(2) 0;
   display: flex;
   svg {
     display: block;
@@ -14,18 +14,25 @@
   }
   h5 {
     line-height: 1;
+    padding-bottom: u(.5);
+    border-bottom: 1px solid color(border);
+    margin-bottom: u(.5);
+  }
+  .content {
+    flex: 1 1 auto;
   }
   .graphic {
     flex: 0 0 auto;
     width: u(8);
-    height: u(8);
+    height: u(4);
   }
   &.style--raised {
-    box-shadow: shadow(3);
+    box-shadow: shadow(2);
     border-radius: $bdrs;
   }
   @each $style, $color in color(states) {
     &.style--#{$style} {
+      background-color: mix($color, #fff, 7.5%);
       svg {
         fill: $color;
       }

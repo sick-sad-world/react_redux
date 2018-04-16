@@ -14,6 +14,7 @@
 @mixin dis-styles () {
   opacity: 0.65;
   cursor: default;
+  user-select: none;
 }
 
 @mixin solid-styles($pos: relative, $anim: false, $or: top center) {
@@ -75,7 +76,7 @@
   }
 
   &:not([disabled]):hover {
-    background-color: mix($main, #fff, .1);
+    background-color: mix($main, #fff, 5%);
     color: $main;
   }
 

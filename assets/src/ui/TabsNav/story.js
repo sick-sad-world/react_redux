@@ -8,7 +8,7 @@ import TabsNav from './index';
 
 storiesOf('UI Components', module)
   .addDecorator(withTests('TabsNav'))
-  .add('TabsNav', withState({three: 'one', four: 'one'}, (story, store) => (
+  .add('TabsNav', withState({three: 'one', four: 'one', action: 'two'}, (story, store) => (
     withInfo({
       propTables: [TabsNav],
       propTablesExclude: [BrowserRouter]
@@ -42,6 +42,22 @@ storiesOf('UI Components', module)
             />
             <div>
               Rendered tab: {store.state.four}
+            </div>
+          </div>
+          <div style={{backgroundColor: '#585858'}}>
+            <TabsNav
+              options={{
+                'one': 'First tab',
+                'two': 'Second tab',
+                'three': 'Third tab',
+                'four': 'Four tab'
+              }}
+              onChange={(value) => store.set({action: value})}
+              active={store.state.action}
+              theme='action'
+            />
+            <div>
+              Rendered tab: {store.state.action}
             </div>
           </div>
           {/* <div style={{ height: '50px' }} />
