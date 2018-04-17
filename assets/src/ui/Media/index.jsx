@@ -37,14 +37,14 @@ export default class Media extends React.Component {
     const {src, alt, isBroken, loadingImage, errorImage, ...props} = this.props;
     
     if (this.state.state === 'loading') {
-      return <figure dangerouslySetInnerHTML={{__html: loadingImage}} />
-    } else if (this.state.state === 'error') {
-      return <figure dangerouslySetInnerHTML={{__html: errorImage}} />
+      return <figure {...props} className='Media--root' dangerouslySetInnerHTML={{__html: loadingImage}} />
+    } else if (this.state.state === 'error' || isBroken) {
+      return <figure {...props} className='Media--root' dangerouslySetInnerHTML={{__html: errorImage}} />
     }
-
+    console.log(this.state.state);
     return (
-      <figure >
-        <img {...props} alt={alt} src={src} onLoad={this.onLoad} onError={this.onError} />
+      <figure {...props} className='Media--root' >
+        <img alt={alt} src={src} onLoad={this.onLoad} onError={this.onError} />
       </figure>
     )
   }
