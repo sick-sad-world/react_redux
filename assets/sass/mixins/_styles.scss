@@ -23,13 +23,7 @@
   border-radius: $bdrs;
   box-shadow: shadow(2);
   background-color: color(element);
-  // border: 1px solid color(border);
   @if ($anim) {
-    transform-origin: $or;
-    animation-name: zoomIn;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
-    animation-duration: $t-dur;
   }
 }
 

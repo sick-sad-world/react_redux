@@ -12,11 +12,6 @@
   max-height: 80%;
   background-color: color(solid);
   box-shadow: shadow(4);
-  transform-origin: top center;
-  animation-name: zoomIn;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
-  animation-duration: $t-dur;
   .content {
     flex: 1 0 auto;
   }
