@@ -34,11 +34,17 @@ export default class Media extends React.Component {
   }
 
   render() {
-    const {src, alt, isBroken, children, className, ...props} = this.props;
+    const {src, alt, isBroken, children, className, style, ...props} = this.props;
+
+    const isError = this.state.state === 'error' || isBroken;
 
     return (
-      <figure {...props} className={classNames('Media--root', className)} >
-        {(this.state.state === 'error' || isBroken)  && (<span className='error-message'>Image Not Found</span>)}
+      <figure {...props} className={classNames('Media--root', className)} style={{...style, backgroundImage: (!isError) ? `url(${src})` : null}}>
+        {(isError)  && (
+          <span className='error-message'>
+            <span>Image Not<br />Found</span>
+          </span>
+        )}
         <img alt={alt} src={src} onLoad={this.onLoad} onError={this.onError} />
         {children && <figcaption>{children}</figcaption>}
       </figure>
@@ -53,6 +59,7 @@ Media.defaultProps = {
 Media.propTypes = {
   className: classNameShape,
   children: childrenShape,
+  style: PropTypes.object,
   sendCorruptedUrl: PropTypes.func,
   isBroken: PropTypes.bool.isRequired,
   alt: PropTypes.string.isRequired,

@@ -12,11 +12,11 @@ storiesOf('Global Elements', module)
     })(() => {
       return (
         <div>
-          <Media style={{width: '200px'}} src='https://bo.pb.ua/resources/images/content/advantages/2.png' alt='Some image' /> Working image
+          <Media style={{width: '200px', height: '150px'}} src='https://bo.pb.ua/resources/images/content/advantages/2.png' alt='Some image' /> Working image
           <br />
-          <Media style={{width: '200px'}} isBroken src='https://bo.pb.ua/resources/images/content/advantages/1.png' alt='Some image' /> Manually set to broken
+          <Media style={{width: '200px', height: '150px'}} isBroken src='https://bo.pb.ua/resources/images/content/advantages/1.png' alt='Some image' /> Manually set to broken
           <br />
-          <Media style={{width: '200px'}} src='https://bo.pb.ua/resources/images/content/advantages/1419058.png' alt='Some image' /> 404 Image
+          <Media style={{width: '200px', height: '150px'}} src='https://bo.pb.ua/resources/images/content/advantages/1419058.png' alt='Some image' /> 404 Image
           <br />
         </div>
       );

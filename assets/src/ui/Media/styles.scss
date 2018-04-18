@@ -1,5 +1,29 @@
+@import 'mixins/_u.scss';
+@import '_vars.scss';
+
 .Media--root {
-  > * {
-    max-width: 100%;
+  background-position: center center;
+  background-size: cover;
+
+  img {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+  }
+
+  .error-message {
+    display: block;
+    border: 2px dashed color(border);
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    color: color(border);
+    text-transform: uppercase;
+    font-size: u(3);
+    line-height: 1;
+    display: flex;
+    span {
+      margin: auto;
+    }
   }
 }
