@@ -21,4 +21,5 @@ import '../assets/src/ui/Progress/story.js';
 import '../assets/src/ui/Notification/story.js';
 import '../assets/src/ui/ActionMenu/story.js';
 import '../assets/src/ui/DataList/story.js';
+import '../assets/src/ui/PageHeader/story.js';
 import '../assets/src/ui/Modal/story.js';

@@ -22,7 +22,7 @@ LinearLoading.defaultProps = {
 
 LinearLoading.propTypes = {
   rootClassName: PropTypes.string.isRequired,
-  className: PropTypes.string,
+  className: classNameShape,
   value: PropTypes.number.isRequired,
   text: PropTypes.string
 }

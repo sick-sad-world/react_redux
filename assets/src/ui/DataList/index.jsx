@@ -2,8 +2,10 @@ import sortBy from 'lodash/sortBy';
 import bindAll from 'lodash/bindAll';
 import mapValues from 'lodash/mapValues';
 import isFunction from 'lodash/isFunction';
+import classNames from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { classNameShape } from 'shared/typings';
 import { actionConfigShape } from '../ActionMenu';
 import { ListStateRenderer, listStateRendererShape } from './renderers';
 
@@ -92,7 +94,7 @@ export default class DataList extends React.Component {
   }
 
   render() {
-    const { errorState, emptyState } = this.props;
+    const { errorState, emptyState, className } = this.props;
     const { data } = this.state;
 
     let content = null;
@@ -106,7 +108,7 @@ export default class DataList extends React.Component {
     }
 
     return (
-      <div className='DataList--root' ref={this.makeRootRef}>
+      <div className={classNames('DataList--root', className)} ref={this.makeRootRef}>
         {content}
       </div>
     );
@@ -131,6 +133,7 @@ DataList.defaultProps = {
 DataList.propTypes = {
   sortable: PropTypes.bool.isRequired,
   config: PropTypes.arrayOf(configShape).isRequired,
+  className: classNameShape,
   sort: PropTypes.string,
   errorState: PropTypes.shape(listStateRendererShape).isRequired,
   emptyState: PropTypes.shape(listStateRendererShape).isRequired,
