@@ -12,9 +12,9 @@ const TYPEMAP = {
   error: 'error'
 };
 
-export default function Notification({type, icon, className, children, viewBox, raised, title, ...props}) {
+export default function Notification({type, icon, className, children, viewBox, raised, title, rootClassName, ...props}) {
   return (
-    <div {...props} className={classNames('Notification--root', `style--${type}`, className, {'style--raised': raised})}>
+    <div {...props} className={classNames(rootClassName, `style--${type}`, className, {'style--raised': raised})}>
       <div className='graphic'>
         <Icon g={icon || TYPEMAP[type]} viewBox={viewBox} />
       </div>
@@ -27,12 +27,15 @@ export default function Notification({type, icon, className, children, viewBox, 
 }
 
 Notification.defaultProps = {
+  rootClassName: 'Notification--root',
   type: 'info',
   viewBox: '0 0 24 24',
   raised: false
 }
 
 Notification.propTypes = {
+  /** Classname all styles bound to */
+  rootClassName: PropTypes.string.isRequired,
   raised: PropTypes.bool,
   viewBox: PropTypes.string,
   className: classNameShape,

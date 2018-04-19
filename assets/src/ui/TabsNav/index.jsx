@@ -83,6 +83,7 @@ TabsNav.defaultProps = {
 }
 
 TabsNav.propTypes = {
+  /** Classname all styles bound to */
   rootClassName: PropTypes.string.isRequired,
   /** Classname for root element */
   className: classNameShape,

@@ -35,6 +35,7 @@ ActionMenu.defaultProps = {
 }
 
 ActionMenu.propTypes = {
+  /** Classname all styles bound to */
   rootClassName: PropTypes.string.isRequired,
   className: classNameShape,
   data: PropTypes.arrayOf(actionConfigShape).isRequired

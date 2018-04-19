@@ -43,6 +43,7 @@ TextInput.defaultProps = {
 }
 
 TextInput.propTypes = {
+  /** Classname all styles bound to */
   rootClassName: PropTypes.string.isRequired,
   /** HTML Class will be applied to container */
   className: classNameShape,

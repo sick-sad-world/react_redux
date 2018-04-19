@@ -21,6 +21,7 @@ LinearLoading.defaultProps = {
 }
 
 LinearLoading.propTypes = {
+  /** Classname all styles bound to */
   rootClassName: PropTypes.string.isRequired,
   className: classNameShape,
   value: PropTypes.number.isRequired,
