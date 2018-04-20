@@ -5,14 +5,26 @@ import { withTests, withState } from 'with';
 import PageHeader from './index';
 
 storiesOf('UI Components', module)
-  .addDecorator(withTests('Progress'))
-  .add('Progress', withState({ radial: false }, (story, store) => (
+  .addDecorator(withTests('PageHeader'))
+  .add('PageHeader', withState({ search: '', sort: '' }, (story, store) => (
     withInfo({
       propTables: [PageHeader]
     })(() => {
       return (
         <section>
-          <PageHeader />
+          <PageHeader
+            title='Some awesome page'
+            subtitle='This page contains DataList'
+            search={{
+              value: store.state.search,
+              onChange: (value) => store.set(value)
+            }}
+            sort={{
+              options: [],
+              value: store.state.sort,
+              onChange: (value) => store.set(value)
+            }}
+          />
         </section>
       )
     })(story)

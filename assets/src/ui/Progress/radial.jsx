@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { classNameShape } from 'shared/typings';
 import './radial.scss';
 import SvgSpinner from '../Spinner';
 
