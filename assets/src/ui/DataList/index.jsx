@@ -94,7 +94,7 @@ export default class DataList extends React.Component {
   }
 
   render() {
-    const { errorState, emptyState, className } = this.props;
+    const { errorState, emptyState, className, rootClassName } = this.props;
     const { data } = this.state;
 
     let content = null;
@@ -108,7 +108,7 @@ export default class DataList extends React.Component {
     }
 
     return (
-      <div className={classNames('DataList--root', className)} ref={this.makeRootRef}>
+      <div className={classNames(rootClassName, className)} ref={this.makeRootRef}>
         {content}
       </div>
     );
@@ -118,6 +118,7 @@ export default class DataList extends React.Component {
 DataList.defaultProps = {
   sortable: false,
   sort: 'id',
+  rootClassName: 'DataList--root',
   errorState: {
     title: 'We encountered error during data retrieval',
     text: null,
@@ -131,6 +132,8 @@ DataList.defaultProps = {
 }
 
 DataList.propTypes = {
+  /** Classname all styles bound to */
+  rootClassName: PropTypes.string.isRequired,
   sortable: PropTypes.bool.isRequired,
   config: PropTypes.arrayOf(configShape).isRequired,
   className: classNameShape,

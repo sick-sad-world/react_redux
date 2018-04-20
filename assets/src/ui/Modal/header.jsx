@@ -4,9 +4,9 @@ import classNames from 'classnames';
 import { classNameShape, childrenShape } from 'shared/typings';
 import IconButton from '../IconButton';
 
-export default function ModalHeader({className, title, onClose, children, ...props}) {
+export default function ModalHeader({className, title, onClose, children, rootClassName, ...props}) {
   return (
-    <header {...props} className={classNames('ModalHeader--root', className)}>
+    <header {...props} className={classNames(, className)}>
       <div className='line'>
         <h4>{title}</h4>
         <IconButton g='cross' onClick={onClose} />
@@ -16,7 +16,13 @@ export default function ModalHeader({className, title, onClose, children, ...pro
   )
 }
 
+ModalHeader.defaultProps = {
+  rootClassName: 'ModalHeader--root'
+}
+
 ModalHeader.propTypes = {
+  /** Classname all styles bound to */
+  rootClassName: PropTypes.string.isRequired,
   className: classNameShape,
   children: childrenShape,
   title: PropTypes.string.isRequired,

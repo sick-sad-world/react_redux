@@ -99,6 +99,7 @@ Dropdown.defaultProps = {
 }
 
 Dropdown.propTypes = {
+  /** Classname all styles bound to */
   rootClassName: PropTypes.string.isRequired,
   /** Change handler as all Form components interface require */
   onChange: PropTypes.func.isRequired,

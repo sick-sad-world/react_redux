@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import { childrenShape, classNameShape } from 'shared/typings';
 import './styles.scss';
 
-export default function Fieldset({ title, collapsable, children, className, ...props }) {
+export default function Fieldset({ title, collapsable, children, className, rootClassName, ...props }) {
   return (
-    <fieldset {...props} className={classNames('Fieldset--root', className)}>
+    <fieldset {...props} className={classNames(rootClassName, className)}>
       {title && <legend>{title}</legend>}
       <div className='body'>
         {children}
@@ -16,10 +16,13 @@ export default function Fieldset({ title, collapsable, children, className, ...p
 }
 
 Fieldset.defaultProps = {
+  rootClassName: 'Fieldset--root',
   collapsable: false
 }
 
 Fieldset.propTypes = {
+  /** Classname all styles bound to */
+  rootClassName: PropTypes.string.isRequired,
   /** Contents of fieldset */
   children: childrenShape,
   /** Class names added to root component */

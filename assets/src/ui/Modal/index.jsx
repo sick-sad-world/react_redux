@@ -28,10 +28,10 @@ export default class ModalWindow extends React.Component {
   }
 
   renderModal(anim) {
-    const { key, className, children, onOverlayClick, target, style, open, ...props } = this.props;
+    const { key, className, children, onOverlayClick, target, style, open, rootClassName, ...props } = this.props;
     const delay = (open) ? defaultDuration : 0;
     return (
-      <section key={key} {...props} style={{...style, ...anim, transitionDelay: `${delay}ms` }} className={classNames('Modal--root', className)}>
+      <section key={key} {...props} style={{...style, ...anim, transitionDelay: `${delay}ms` }} className={classNames(rootClassName, className)}>
         {children}
       </section>
     );
@@ -48,11 +48,14 @@ export default class ModalWindow extends React.Component {
 
 ModalWindow.defaultProps = {
   open: false,
+  rootClassName: 'Modal--root',
   target: 'modal-root',
   key: 'modal'
 }
 
 ModalWindow.propTypes = {
+  /** Classname all styles bound to */
+  rootClassName: PropTypes.string.isRequired,
   key: PropTypes.string.isRequired,
   className: classNameShape,
   children: childrenShape,
