@@ -27,17 +27,17 @@ export default function DataListRow({ children, data, config, toggleActions, act
       <div className='item'>
         {sortable && <IconButton g='dots-three-vertical' />}
         <div className='content' onClick={onClick}>
-          {config.map(({id, size, render, def }) => {
-
+          {config.map((cfg) => {
+            const { id, size, render, def } = cfg;
             const dataItem = data[id];
             let content = null;
 
             if (render instanceof Function) {
-              content = render(dataItem);
+              content = render(dataItem, cfg);
             } else if (typeof render === 'string' && renderers[render] instanceof Function) {
-              content = renderers[render](dataItem, def);
+              content = renderers[render](dataItem, cfg);
             } else {
-              content = renderers.renderDefault(dataItem, def);
+              content = renderers.renderDefault(dataItem, cfg);
             }
 
             return (

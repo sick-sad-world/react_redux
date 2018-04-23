@@ -9,6 +9,12 @@ import DataListRow from './row';
 
 
 const config = [{
+    id: 'image',
+    label: 'Image',
+    render: 'image',
+    rounded: true,
+    size: '32px'
+  }, {
     id: 'name',
     label: 'Name',
     size: '25%'
@@ -31,24 +37,28 @@ const config = [{
 const data = [{
     active: 0,
     recipient: 'some@gmail.com',
+    image: {src:'https://picsum.photos/200', alt: 'Some image'},
     columns: [{id: 1, label: 'Column'}, {id: 2, label: 'Column 2'}, {id: 3, label: 'Column3'}],
     id: 69,
     name: "Report Hearth",
   }, {
     active: 1,
     recipient: 'awesome@gmail.com',
+    image: {src:'https://picsum.photos/200', alt: 'Some image'},
     columns: [{id: 1, label: 'Column'}],
     id: 71,
     name: "Report Awesome",
   }, {
     active: 1,
     recipient: 'last.day.of.earth@gmail.com',
+    image: {src:'https://picsum.photos/200', alt: 'Some image'},
     columns: [{id: 1, label: 'Column'}, {id: 2, label: 'Cool Column'}],
     id: 43,
     name: "Cool Report",
   }, {
     active: 1,
     recipient: null,
+    image: {src:'https://picsum.photos/200', alt: 'Some image'},
     columns: [{id: 2, label: 'Important Column'}],
     id: 12,
     name: "Recipeless Report",

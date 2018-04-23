@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { childrenShape, classNameShape } from 'shared/typings';
 import Badge from '../Badge';
+import Image from '../Image';
 import EmptyImg from 'images/empty.svg';
 import ErrorImg from 'images/error.svg';
 
@@ -55,7 +56,7 @@ function StatusRenderer(data) {
 /**
  * Render array as comma separated list
  */
-function ListRenderer(data, def) {
+function ListRenderer(data, {def}) {
   return (
     <ul className='small-list'>
       {data.length ? data.map(({label, id}) => (<li key={id}>{label}</li>)) : <li className='state--empty'>{def}</li>}
@@ -63,16 +64,21 @@ function ListRenderer(data, def) {
   );
 }
 
+function ImageRenderer(data, cfg) {
+  return <Image rounded={cfg.rounded} width={cfg.size} height={cfg.size} src={data.src} alt={data.alt || cfg.def} />
+}
+
 /**
  * Plain renderer of value with default fallback
  */
-function RenderDefault(data, def = 'not found') {
+function RenderDefault(data, {def = 'not found'}) {
   return (
     <span>{(data === null || data === undefined || data === '') ? def : data }</span>
   )
 }
 
 export default {
+  image: ImageRenderer,
   status: StatusRenderer,
   list: ListRenderer,
   renderDefault: RenderDefault
