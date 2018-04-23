@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { classNameShape, childrenShape } from 'shared/typings';
 import './styles.scss';
+import Icon from '../Icon';
 import Dropdown from '../Dropdown';
 import Button from '../Button';
 
@@ -11,6 +12,7 @@ function Search({ onChange, ...props}) {
   return (
     <div className='search'>
       <input {...props} onChange={({target}) => onChange({search: target.value})} />
+      <Icon g='search' viewBox='0 0 700 1000' />
     </div>
   );
 }
@@ -28,13 +30,13 @@ const SearchShape = Search.propTypes = {
   onChange: PropTypes.func
 }
 
-export default function PageHeader({title, subtitle, className, search, children, sort, createItem,  rootClassName, ...props}) {
+export default function PageHeader({title, subtitle, className, search, children, sort, onCreate,  rootClassName, ...props}) {
   return (
     <header {...props} className={classNames(rootClassName, className)}>
       <div className='container'>
         <h1>{title}</h1>
         {subtitle && <h2>{subtitle}</h2>}
-        {createItem && <Button className='create' onClick={createItem} value='Add' />}
+        {onCreate && <Button className='create' theme='raised' onClick={onCreate} value='Add' />}
         <form>
           {(typeof search.value === 'string' && isFunction(search.onChange)) && <Search {...search} />}
           {children}
@@ -56,7 +58,7 @@ PageHeader.propTypes = {
   subtitle: PropTypes.string,
   className: classNameShape,
   children: childrenShape,
-  createItem: PropTypes.func,
+  onCreate: PropTypes.func,
   search: PropTypes.shape(SearchShape),
   sort: PropTypes.object // eslint-disable-line
 }

@@ -1,6 +1,6 @@
 $ff: Arial, Verdana, Geneva, sans-serif;
 
-$f-h1: u(3.75);
+$f-h1: u(4);
 $f-h2: u(3.25);
 $f-h3: u(2.75);
 $f-h4: u(2.25);
@@ -29,6 +29,7 @@ $sizes: (
 );
 
 $z-indexes: (
+  header: 6,
   modal: 10,
   popup: 8
 );

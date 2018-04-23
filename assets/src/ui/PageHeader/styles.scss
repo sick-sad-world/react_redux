@@ -4,30 +4,95 @@
 
 .PageHeader--root {
   display: flex;
+  position: relative;
+  z-index: z(header);
+  &:before {
+    content:"";
+    position: absolute; 
+    z-index: 0;
+    background: rgba(#000,.33);
+    filter: blur(10px);
+    bottom: 0;
+    left: 2%;
+    right: 2%;
+    height: 32px;
+    border-radius: 20% / 50%;
+  }
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    background-color: color(secondary);
+  }
+
   h1, h2 {
     line-height: 1;
-    margin: 0;
+    font-weight: normal;
   }
   h1 {
-
+    margin: 0 0 u() 0;
   }
   h2 {
-
+    margin: u() 0;
+    font-size: $f-h3;
   }
   .create {
-
+    position: absolute;
+    top: 0;
+    right: 0;
   }
   .search {
-
+    position: relative;
+    svg {
+      position: absolute;
+      left: 0;
+      width: $s-input;
+      height: $s-input;
+      transition: opacity $t-dur $t-func;
+      opacity: 1;
+    }
+    input {
+      height: $s-input;
+      line-height: $s-input;
+      border: 0;
+      background: none;
+      text-indent: $s-input;
+      transition: text-indent $t-dur $t-func;
+      &:focus, &:not([value='']) {
+        text-indent: 0;
+        + svg {
+          opacity: 0;
+        }
+      }
+    }
   }
   .sort {
-
+    .Select-control {
+      border-bottom-color: transparent;
+    }
   }
   form {
-
+    display: flex;
+    margin-top: u();
+    justify-content: space-between;
   }
   .container {
+    position: relative;
+    z-index: 2;
     width: $s-container;
     margin: auto auto 0;
+    padding: u() 0;
+  }
+  .box {
+      width:70%;
+      height:200px;
+      background:#FFF;
+      margin:40px auto;
   }
 }

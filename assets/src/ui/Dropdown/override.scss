@@ -23,6 +23,9 @@
       background-color: color(accent);
       transition: width $t-dur $t-func;
     }
+    &:hover {
+      box-shadow: none;
+    }
   }
   &.is-focused > .Select-control {
     border-color: color(border) !important;
