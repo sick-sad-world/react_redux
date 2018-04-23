@@ -6,7 +6,7 @@ import PageHeader from './index';
 
 storiesOf('UI Components', module)
   .addDecorator(withTests('PageHeader'))
-  .add('PageHeader', withState({ search: '', sort: '' }, (story, store) => (
+  .add('PageHeader', withState({ search: '', sort: 'id' }, (story, store) => (
     withInfo({
       propTables: [PageHeader]
     })(() => {
@@ -20,7 +20,7 @@ storiesOf('UI Components', module)
               onChange: (value) => store.set(value)
             }}
             sort={{
-              options: [],
+              options: [{value: 'id', label:'By Id'}, {value: 'name', label: 'By name'}, {value: 'recipient', label: 'By recipient'}],
               value: store.state.sort,
               onChange: (value) => store.set(value)
             }}

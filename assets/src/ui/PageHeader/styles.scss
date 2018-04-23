@@ -3,5 +3,31 @@
 @import '_vars.scss';
 
 .PageHeader--root {
+  display: flex;
+  h1, h2 {
+    line-height: 1;
+    margin: 0;
+  }
+  h1 {
 
+  }
+  h2 {
+
+  }
+  .create {
+
+  }
+  .search {
+
+  }
+  .sort {
+
+  }
+  form {
+
+  }
+  .container {
+    width: $s-container;
+    margin: auto auto 0;
+  }
 }
