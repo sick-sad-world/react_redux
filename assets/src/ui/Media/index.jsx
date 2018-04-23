@@ -27,8 +27,8 @@ export default class Media extends React.Component {
   }
 
   onError() {
-    if (isFunction(this.props.sendCorruptedUrl)) {
-      this.props.sendCorruptedUrl(this.props.src);
+    if (isFunction(this.props.onError)) {
+      this.props.onError(this.props.src);
     }
     this.setState(() => ({state: 'error'}))
   }
@@ -63,7 +63,7 @@ Media.propTypes = {
   /** Classname all styles bound to */
   rootClassName: PropTypes.string.isRequired,
   style: PropTypes.object,
-  sendCorruptedUrl: PropTypes.func,
+  onError: PropTypes.func,
   isBroken: PropTypes.bool.isRequired,
   alt: PropTypes.string.isRequired,
   src: PropTypes.string.isRequired

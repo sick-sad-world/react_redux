@@ -1,6 +1,7 @@
 import './typography';
 import '../assets/src/ui/Badge/story.js';
 import '../assets/src/ui/Media/story.js';
+import '../assets/src/ui/Image/story.js';
 
 import '../assets/src/ui/Icon/story.js';
 import '../assets/src/ui/IconButton/story.js';
