@@ -34,7 +34,7 @@ export default class Media extends React.Component {
   }
 
   render() {
-    const {src, alt, isBroken, children, className, style, rootClassName, ...props} = this.props;
+    const {src, alt, isBroken, children, className, style, rootClassName, onError, ...props} = this.props;
 
     const isError = this.state.state === 'error' || isBroken;
 
@@ -62,7 +62,7 @@ Media.propTypes = {
   children: childrenShape,
   /** Classname all styles bound to */
   rootClassName: PropTypes.string.isRequired,
-  style: PropTypes.object,
+  style: PropTypes.object, // eslint-disable-line
   onError: PropTypes.func,
   isBroken: PropTypes.bool.isRequired,
   alt: PropTypes.string.isRequired,

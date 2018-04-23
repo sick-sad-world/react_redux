@@ -6,7 +6,7 @@ import IconButton from '../IconButton';
 
 export default function ModalHeader({className, title, onClose, children, rootClassName, ...props}) {
   return (
-    <header {...props} className={classNames(, className)}>
+    <header {...props} className={classNames(rootClassName, className)}>
       <div className='line'>
         <h4>{title}</h4>
         <IconButton g='cross' onClick={onClose} />

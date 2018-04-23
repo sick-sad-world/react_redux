@@ -26,7 +26,7 @@ storiesOf('FormElements', module)
             <br />
             <Dropdown label='Suffix' name='suffix' value={store.state.suffix} onChange={(value) => store.set(value)} options={suffix} />
             <br />
-            <Button theme='raised'>Add</Button>
+            <Button theme='raised' value='Add' />
           </Fieldset>
         </form>
       );

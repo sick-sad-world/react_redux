@@ -23,7 +23,7 @@ storiesOf('UI Components', module)
       
       return (
         <div>
-          <Button onClick={toggler}>Open Modal</Button>
+          <Button onClick={toggler} value='Open Modal' />
           <Modal style={{width: '480px', height: '60%'}} open={store.state.open} onOverlayClick={toggler}>
             <ModalHeader onClose={toggler} title='Cool modal window'>
               <TabsNav
@@ -40,7 +40,7 @@ storiesOf('UI Components', module)
             <div className='content'>Tab: {store.state.tab} is displayed</div>
             <ModalFooter style={{textAlign: 'right'}}>
               <small style={{marginRight: '8px'}}>Small footer text for a modal</small>
-              <Button onClick={toggler}>Close</Button>
+              <Button onClick={toggler} value='Close' />
             </ModalFooter>
           </Modal>
         </div>

@@ -1,0 +1,42 @@
+@import 'mixins/_u.scss';
+@import '_vars.scss';
+
+.Image--root {
+  $s: u(2.5);
+  font-size: 0;
+  line-height: 0;
+  position: relative;
+  overflow: hidden;
+  >* {
+    display: none;
+  }
+  &:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: color(accent);
+    z-index: 2;
+  }
+  &:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    color: color(secondary);
+    content: attr(data-placeholder);
+    text-transform: uppercase;
+    text-align: center;
+    font-size: $s;
+    line-height: $s;
+    height: $s;
+    z-index: 3;
+  }
+
+  &.style--rounded {
+    border-radius: 50%;
+  }
+}

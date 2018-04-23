@@ -20,10 +20,10 @@ export const configShape = PropTypes.shape({
   def: PropTypes.string
 });
 
-export default function DataListRow({ children, data, config, toggleActions, actions, sortable, onClick }) {
+export default function DataListRow({ children, data, config, toggleActions, actions, sortable, onClick, rootClassName }) {
 
   return (
-    <li className='DataListRow--root'>
+    <li className={rootClassName}>
       <div className='item'>
         {sortable && <IconButton g='dots-three-vertical' />}
         <div className='content' onClick={onClick}>
@@ -56,10 +56,13 @@ export default function DataListRow({ children, data, config, toggleActions, act
 }
 
 DataListRow.defaultProps = {
-  sortable: false
+  sortable: false,
+  rootClassName: 'DataListRow--root'
 }
 
 DataListRow.propTypes = {
+  /** Classname all styles bound to */
+  rootClassName: PropTypes.string.isRequired,
   sortable: PropTypes.bool.isRequired,
   data: PropTypes.object.isRequired, // eslint-disable-line
   children: childrenShape,
