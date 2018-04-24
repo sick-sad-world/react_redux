@@ -13,17 +13,27 @@
     height: $s;
     border-radius: $s * .5;
     transition: box-shadow $t-dur $t-func;
+    box-shadow: none;
     &:hover {
-      box-shadow: shadow(2);
+      box-shadow: shadow(1);
     }
     &:not(:last-child) {
       margin-right: u();
     }
-    > * {
-      max-height: 100%;
-    }
-    img {
-      border-radius: 50%;
+    .prefix {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-self: stretch;
+      overflow: hidden;
+      min-width: $s;
+      padding-left: $s * .5;
+      img {
+        max-height: $s;
+        border-radius: 50%;
+        max-width: auto;
+        margin-left: $s * -0.5;
+      }
     }
     .content {
       padding-left: u();

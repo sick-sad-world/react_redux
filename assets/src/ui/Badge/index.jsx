@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { classNameShape, childrenShape } from 'shared/typings';
 import './styles.scss';
 
-const THEMES = ['', 'accent', 'accent-sec', 'error', 'warning', 'success', 'info', 'html', 'rss', 'facebook', 'reddit', 'twitter'];
+const THEMES = ['', 'accent', 'action', 'error', 'warning', 'success', 'info', 'html', 'rss', 'facebook', 'reddit', 'twitter'];
 
 /** UI Badge implementation */
 export default function Badge({rootClassName, raised, className, children, theme, ...props}) {
@@ -18,7 +18,7 @@ export default function Badge({rootClassName, raised, className, children, theme
 }
 
 Badge.defaultProps = {
-  rootClassName: 'Badge-root',
+  rootClassName: 'Badge--root',
   raised: false,
   theme: ''
 }

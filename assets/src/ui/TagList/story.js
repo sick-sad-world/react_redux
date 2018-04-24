@@ -5,12 +5,15 @@ import { withTests, withState } from 'with';
 import TagList from './index';
 import IconButton from '../IconButton';
 import Image from '../Image';
+import Badge from '../Badge';
+import Icon from '../Icon';
 
 const content = [{
   id: 1,
   value: 'Some'
 }, {
   id: 2,
+  prefix: <Icon g='bell' />,
   value: 'List Item'
 }, {
   id: 3,
@@ -19,14 +22,21 @@ const content = [{
   id: 4,
   prefix: <Image src='https://picsum.photos/200' alt='Some' />,
   value: 'Ihor Koptielov'
-}];
+}, {
+  id: 5,
+  prefix: <Badge theme='accent'>123</Badge>,
+  value: 'List of Tags'
+}, {
+  id: 6,
+  value: 'Cool item'
+}, ];
 
 storiesOf('UI Components', module)
   .addDecorator(withTests('TagList'))
   .add('TagList', withState({}, (story, store) => (
     withInfo({
       propTables: [TagList],
-      propTablesExclude: [IconButton]
+      propTablesExclude: [IconButton, Icon, Image, Badge]
     })(() => {
       return (
         <div>

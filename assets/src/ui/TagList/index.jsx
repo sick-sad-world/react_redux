@@ -11,7 +11,7 @@ export default function TagList({rootClassName, className, data, emptyText, onCl
       {(data.length) ? data.map((item) => {
         return (
           <li key={item.id} onClick={() => onClick(item)}>
-            {item.prefix}
+            {item.prefix && (<div className='prefix'>{item.prefix}</div>)}
             <div className='content'>{item.value}</div>
             {onClose && <IconButton className='close' g='cross' onClick={(e) => e.stopPropagation() && onClose(item)} />}
           </li>
