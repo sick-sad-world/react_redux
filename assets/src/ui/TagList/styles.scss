@@ -1,11 +1,12 @@
 @import 'mixins/_u.scss';
+@import 'mixins/_styles.scss';
 @import '_vars.scss';
 
 .TagList--root {
   display: flex;
   list-style: none;
   padding: 0;
-  li {
+  li:not([class*="state--"]) {
     $s: $s-button;
     display: flex;
     align-items: center;
@@ -44,5 +45,15 @@
     .close {
       flex: 0 0 auto;
     }
+  }
+
+  .state--empty {
+    flex: 0 0 100%;
+    @include empty-styles();
+  }
+
+  .state--error {
+    flex: 0 0 100%;
+    @include error-styles();
   }
 }

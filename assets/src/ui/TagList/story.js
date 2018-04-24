@@ -45,8 +45,12 @@ storiesOf('UI Components', module)
             <TagList data={content} onClose={console.log} />
           </div>
           <div>
-            <h4>Empty Tag list</h4>
-            <TagList />
+            <h4>Empty Tag list - Custom empty message</h4>
+            <TagList empty={<span><b>THIS LIST</b> is totally and unquestionally empty</span>} />
+          </div>
+          <div>
+            <h4>Error staet list</h4>
+            <TagList data={content} error={<span><b>THIS LIST</b> encountered deadly error</span>} />
           </div>
         </div>
       );

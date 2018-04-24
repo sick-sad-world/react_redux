@@ -5,18 +5,27 @@ import { classNameShape, childrenShape } from 'shared/typings';
 import './styles.scss';
 import IconButton from '../IconButton';
 
-export default function TagList({rootClassName, className, data, emptyText, onClose, onClick, ...props}) {
+export default function TagList({rootClassName, className, data, empty, error, onClose, onClick, ...props}) {
+
+  let content = null;
+
+  if (error) {
+    content = <li className='state--error'>{error}</li>;
+  } else if (!data.length) {
+    content = <li className='state--empty'>{empty}</li>;
+  } else if (data.length) {
+    content = data.map((item) => (
+      <li key={item.id} onClick={() => onClick(item)}>
+        {item.prefix && (<div className='prefix'>{item.prefix}</div>)}
+        <div className='content'>{item.value}</div>
+        {onClose && <IconButton className='close' g='cross' onClick={(e) => e.stopPropagation() && onClose(item)} />}
+      </li>
+    ))
+  }
+
   return (
     <ul {...props} className={classNames(rootClassName, className)}>
-      {(data.length) ? data.map((item) => {
-        return (
-          <li key={item.id} onClick={() => onClick(item)}>
-            {item.prefix && (<div className='prefix'>{item.prefix}</div>)}
-            <div className='content'>{item.value}</div>
-            {onClose && <IconButton className='close' g='cross' onClick={(e) => e.stopPropagation() && onClose(item)} />}
-          </li>
-        )
-      }) : <span className='state--empty'>{emptyText}</span>}
+      {content}
     </ul>
   );
 }
@@ -24,7 +33,7 @@ export default function TagList({rootClassName, className, data, emptyText, onCl
 TagList.defaultProps = {
   rootClassName: 'TagList--root',
   data: [],
-  emptyText: 'No items found'
+  empty: 'No items found'
 }
 
 TagList.propTypes = {
@@ -33,7 +42,8 @@ TagList.propTypes = {
     content: childrenShape.isRequired,
     prefix: childrenShape
   })).isRequired,
-  emptyText: PropTypes.string.isRequired,
+  empty: childrenShape.isRequired,
+  error: childrenShape.isRequired,
   className: classNameShape,
   rootClassName: PropTypes.string.isRequired,
   onClose: PropTypes.func,

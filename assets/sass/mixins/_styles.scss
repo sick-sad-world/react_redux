@@ -28,7 +28,10 @@
 }
 
 @mixin empty-styles() {
-
+  font-style: italic;
+  color: color(caption);
+  font-size: 1.125em;
+  text-align: center;
 }
 
 @mixin loading-styles() {
@@ -36,7 +39,10 @@
 }
 
 @mixin error-styles() {
-
+  font-style: italic;
+  color: color(error, dark);
+  font-size: 1.125em;
+  text-align: center;
 }
 
 @mixin button-raised ($main, $main-lt, $alt) {
