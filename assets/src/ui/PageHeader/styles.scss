@@ -35,64 +35,69 @@
     line-height: 1;
     font-weight: normal;
   }
+
   h1 {
-    margin: 0 0 u() 0;
+    
   }
   h2 {
-    margin: u() 0;
     font-size: $f-h3;
   }
+
   .create {
     position: absolute;
     top: 0;
     right: 0;
   }
+
   .search {
     position: relative;
+    display: flex;
+    align-items: center;
     svg {
-      position: absolute;
-      left: 0;
-      width: $s-input;
-      height: $s-input;
-      transition: opacity $t-dur $t-func;
-      opacity: 1;
+      width: u(2.5);
+      height: u(2.5);
     }
     input {
       height: $s-input;
       line-height: $s-input;
       border: 0;
       background: none;
-      text-indent: $s-input;
-      transition: text-indent $t-dur $t-func;
-      &:focus, &:not([value='']) {
-        text-indent: 0;
-        + svg {
-          opacity: 0;
-        }
-      }
     }
   }
+
   .sort {
+    width: 120px;
     .Select-control {
       border-bottom-color: transparent;
     }
   }
+
   form {
     display: flex;
-    margin-top: u();
     justify-content: space-between;
   }
+
+  .list-header {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    font-size: $f-cap;
+    li {
+      line-height: 1;
+    }
+  }
+
   .container {
     position: relative;
     z-index: 2;
     width: $s-container;
     margin: auto auto 0;
     padding: u() 0;
-  }
-  .box {
-      width:70%;
-      height:200px;
-      background:#FFF;
-      margin:40px auto;
+    > *:not(:first-child) {
+      margin-top: u(2);
+    }
+    > *:not(:last-child) {
+      margin-bottom: u(2);
+    }
   }
 }

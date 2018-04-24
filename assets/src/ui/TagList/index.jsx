@@ -12,8 +12,8 @@ export default function TagList({rootClassName, className, data, emptyText, onCl
         return (
           <li key={item.id} onClick={() => onClick(item)}>
             {item.prefix}
-            <div className='content'>{item.content}</div>
-            {onClose && <IconButton g='cross' onClick={(e) => e.stopPropagation() && onClose(item)} />}
+            <div className='content'>{item.value}</div>
+            {onClose && <IconButton className='close' g='cross' onClick={(e) => e.stopPropagation() && onClose(item)} />}
           </li>
         )
       }) : <span className='state--empty'>{emptyText}</span>}

@@ -2,6 +2,37 @@
 @import '_vars.scss';
 
 .TagList--root {
+  display: flex;
   list-style: none;
   padding: 0;
+  li {
+    $s: $s-button;
+    display: flex;
+    align-items: center;
+    background-color: color(highlight);
+    height: $s;
+    border-radius: $s * .5;
+    transition: box-shadow $t-dur $t-func;
+    &:hover {
+      box-shadow: shadow(2);
+    }
+    &:not(:last-child) {
+      margin-right: u();
+    }
+    > * {
+      max-height: 100%;
+    }
+    img {
+      border-radius: 50%;
+    }
+    .content {
+      padding-left: u();
+      &:first-child {
+        padding-left: $s * .5;
+      }
+    }
+    .close {
+      flex: 0 0 auto;
+    }
+  }
 }

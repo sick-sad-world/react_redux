@@ -5,7 +5,7 @@ import IconButton from '../IconButton';
 import renderers from './renderers';
 import Actionmenu, { actionConfigShape } from '../ActionMenu';
 
-function getRowStyles(size) {
+export function getRowStyles(size) {
   return {
     flex: `0 0 ${size}`,
     width: size
