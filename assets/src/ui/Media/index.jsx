@@ -58,13 +58,20 @@ Media.defaultProps = {
 }
 
 Media.propTypes = {
+  /** Classname all styles bound to */
   className: classNameShape,
+  /** String|Elemnt|Array(Element) Contents of <figcaption/> */
   children: childrenShape,
   /** Classname all styles bound to */
   rootClassName: PropTypes.string.isRequired,
+  /** Additional styles for root element added ontop of internal one */
   style: PropTypes.object, // eslint-disable-line
+  /** Function called when image loading ends with error 404 or so.. */
   onError: PropTypes.func,
+  /** Forse this Media content broken */
   isBroken: PropTypes.bool.isRequired,
+  /** Alternative text for image */
   alt: PropTypes.string.isRequired,
+  /** URL source of an image */
   src: PropTypes.string.isRequired
 }

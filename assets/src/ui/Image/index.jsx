@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { classNameShape } from 'shared/typings';
 import './styles.scss';
 
-export function makePlaceholder(str, limit = 2) {
+export function makePlaceholder(str = '', limit = 2) {
   return str.split(' ').reduce((acc, sub) => {
     if (acc.length <= limit) {
       acc += sub[0];
@@ -48,11 +48,18 @@ Image.defaultProps = {
 }
 
 Image.propTypes = {
+  /** Whatever image should be round not square */
   rounded: PropTypes.bool.isRequired,
+  /** Classname all styles bound to */
   rootClassName: PropTypes.string.isRequired,
+  /** ClassNames added to element */
   className: classNameShape,
+  /** URL source of an image */
   src: PropTypes.string.isRequired,
+  /** Alternative text for image - placeholder calculated from it */
   alt: PropTypes.string.isRequired,
+  /** Override placeholder with custom value */
   placeholder: PropTypes.string,
+  /** Function called when image loading ends with error 404 or so.. */
   onError: PropTypes.func
 }
