@@ -40,6 +40,10 @@
       border: 1px solid color(border);
       border-radius: 50%;
       z-index: 2;
+      box-shadow: none;
+      transition-property: border-color, box-shadow;
+      transition-timing-function: $t-func;
+      transition-duration: $t-dur;
       &:after {
         content: '';
         position: absolute;
@@ -48,7 +52,7 @@
         right: u(.5);
         bottom: u(.5);
         border-radius: 50%;
-        
+        transition: background-color $t-dur $t-func;
       }
     }
     input:checked + span {

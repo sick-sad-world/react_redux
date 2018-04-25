@@ -20,10 +20,10 @@ describe('<TabsNav/>', () => {
     expect(wrapper.find('a').length).toEqual(Object.keys(options).length);
   });
 
-  test('Should render NavLinks if onChange and active is not provided (Router Mode)', () => {
-    const wrapper = shallow(<TabsNav options={options} />);
-    expect(wrapper.find(NavLink).length).toEqual(Object.keys(options).length);
-  });
+  // test('Should render NavLinks if onChange and active is not provided (Router Mode)', () => {
+  //   const wrapper = shallow(<TabsNav options={options} />);
+  //   expect(wrapper.find(NavLink).length).toEqual(Object.keys(options).length);
+  // });
 
   test('Should calculate proper flex styles based on items number 3 => 33.33%', () => {
     const wrapper = shallow(<TabsNav options={options} onChange={jest.fn()} active={Object.keys(options)[0]} />);

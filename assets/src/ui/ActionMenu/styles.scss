@@ -5,7 +5,7 @@
 .ActionMenu--root {
   max-width: 240px;
   font-size: u(1.5);
-  @include solid-styles($anim: true, $or: top left);
+  @include solid-styles($anim: true, $or: top right);
   a {
     display: block;
     padding: 0 u(2);

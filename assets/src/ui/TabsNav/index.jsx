@@ -69,7 +69,7 @@ export default class TabsNav extends React.Component {
             </a>
           )
         })}
-        <span className='pace' style={this.getPaceStyles(activeIndex, width)} />
+        <span className='pace' key='pace' style={this.getPaceStyles(activeIndex, width)} />
       </nav>
     );
   }

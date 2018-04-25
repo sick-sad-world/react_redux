@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import Notification from './index';
 import Icon from '../Icon';
 
-describe('<TagList/>', () => {
+describe('<Notification/>', () => {
   const error = jest.spyOn(console, 'error');
 
   beforeEach(() => {

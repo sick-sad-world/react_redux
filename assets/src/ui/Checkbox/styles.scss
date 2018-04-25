@@ -34,12 +34,15 @@
     input {
       opacity: 0;
       z-index: 3;
+      cursor: pointer;
     }
     svg {
       fill: transparent;
       border: 1px solid color(border);
       border-radius: $bdrs;
       z-index: 2;
+      box-shadow: none;
+      transition: box-shadow $t-dur $t-func;
     }
     input:checked + svg {
       background-color: color(accent);

@@ -80,7 +80,7 @@
     margin-top: 0;
     max-height: 240px;
     top: auto;
-    @include solid-styles($pos: absolute, $anim: true);
+    @include solid-styles($pos: absolute, $anim: true, $or: top left);
   }
   .Select-multi-value-wrapper {
     flex: 1 1 auto;

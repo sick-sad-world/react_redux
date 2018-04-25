@@ -24,6 +24,11 @@
   box-shadow: shadow(2);
   background-color: color(element);
   @if ($anim) {
+    transform-origin: $or;
+    animation-name: zoomIn;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-duration: $t-dur;
   }
 }
 

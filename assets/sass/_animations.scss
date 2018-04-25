@@ -1,0 +1,19 @@
+@keyframes zoomIn {
+  from {
+    transform: scale(.75, .75);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+}
+
+@keyframes opacityIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
