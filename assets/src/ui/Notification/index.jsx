@@ -12,6 +12,7 @@ const TYPEMAP = {
   error: 'error'
 };
 
+/** Notification for display and explain system states and events */
 export default function Notification({type, icon, className, children, viewBox, raised, title, rootClassName, ...props}) {
   return (
     <div {...props} className={classNames(rootClassName, `style--${type}`, className, {'style--raised': raised})}>
@@ -20,7 +21,7 @@ export default function Notification({type, icon, className, children, viewBox, 
       </div>
       <div className='content'>
         <h5>{title}</h5>
-        <p>{children}</p>
+        {children && <p>{children}</p>}
       </div>
     </div>
   )
@@ -36,12 +37,18 @@ Notification.defaultProps = {
 Notification.propTypes = {
   /** Classname all styles bound to */
   rootClassName: PropTypes.string.isRequired,
+  /** Define if we should apply specific class to make notification "raised" */
   raised: PropTypes.bool,
+  /** Viewbox for Icon of notification, since we can customze it and adjustment may required */
   viewBox: PropTypes.string,
+  /** Classname will be applied to Root element */
   className: classNameShape,
+  /** Body of notification */
   children: childrenShape,
-  title: PropTypes.string,
+  /** Title of notification */
+  title: PropTypes.string.isRequired,
+  /** Type of notification - affects on styling */
   type: PropTypes.oneOf(Object.keys(TYPEMAP)).isRequired,
-  icon: PropTypes.oneOf(Object.values(TYPEMAP)),
-  onClick: PropTypes.func
+  /** With a help of this prop you can override default icon */
+  icon: PropTypes.string,
 }
