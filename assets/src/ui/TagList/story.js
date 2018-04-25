@@ -29,7 +29,7 @@ const content = [{
 }, {
   id: 6,
   value: 'Cool item'
-}, ];
+}];
 
 storiesOf('UI Components', module)
   .addDecorator(withTests('TagList'))
