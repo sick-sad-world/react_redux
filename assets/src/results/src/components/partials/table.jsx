@@ -20,7 +20,7 @@ export default function ResultTable({ data, to, style }) {
           <tr key={title}>
             <td>
               {(window.google && window.google.charts) ? (
-                <Link to={`${to}&init=${title.toLowerCase()}`}><b>{title}</b></Link>
+                <Link title={title} to={`${to}&init=${title.toLowerCase()}`}><b>{title.replace('_', ' ')}</b></Link>
               ) : (
                 <b>{title}</b>
               )}

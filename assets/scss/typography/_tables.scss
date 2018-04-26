@@ -55,4 +55,8 @@ table {
   b {
     text-transform: capitalize;
   }
+  tr td:first-child {
+    max-width: 75px;
+    @include ellipsis();
+  }
 }

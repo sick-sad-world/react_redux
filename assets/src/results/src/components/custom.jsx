@@ -87,7 +87,7 @@ export default class CustomResult extends React.PureComponent {
               {(this.inc('image')) ? (
                 <ResultMedia wide={this.inc('wide_image')} image={payload.image} title={payload.title} style={{ height: heights.image }} />
               ) : null }
-              {(isDescr) ? <div style={{ height: (this.inc('wide_image')) ? heights.image : heights.description }} className='content'>{payload.description}</div> : null}
+              {(isDescr) ? <div style={{ height: (this.inc('wide_image')) ? heights.description : heights.image }} className='content'>{payload.description}</div> : null}
             </div>
           ) : null}
         {(tableData && tableData.length) ? (

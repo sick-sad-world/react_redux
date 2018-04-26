@@ -58,6 +58,9 @@
     }
     .color-bar {
       @include pos(2px 2px 2px 2px);
+      &.is-new {
+        background: darken(map-get($states, 'success'), 10%);
+      }
     }
   }
   .actions {
