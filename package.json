@@ -7,6 +7,7 @@
     "test": "jest --json --outputFile=jest-test-results.json",
     "start": "webpack-dev-server --inline --port=3000",
     "storybook": "start-storybook -p 9001 -c .storybook",
+    "storybook-bundle": "build-storybook -c .storybook -o framework-demo",
     "prebundle": "rimraf ./dist",
     "bundle": "webpack --progress",
     "prebuild": "rimraf ./build",

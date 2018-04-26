@@ -24,12 +24,14 @@ Search.defaultProps = {
   value: ''
 }
 
-const SearchShape = Search.propTypes = {
+const SearchShape = {
   type: PropTypes.string,
   placeholder: PropTypes.string,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func
 }
+
+Search.propTypes = SearchShape;
 
 export default function PageHeader({title, subtitle, className, search, children, sort, onCreate, config, rootClassName, ...props}) {
   return (

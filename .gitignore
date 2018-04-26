@@ -9,4 +9,5 @@ npm-debug.log
 stage
 package-lock.json
 coverage
+framework-demo
 jest-test-results.json
