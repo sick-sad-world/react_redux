@@ -148,7 +148,7 @@ module.exports = {
   cache: true,
   stats: 'normal',
   entry: {
-    app: ['babel-polyfill', './src/app.js']
+    app: ['./src/app.js']
   },
   output: {
     path: path.join( __dirname, DEST),

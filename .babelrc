@@ -7,7 +7,8 @@
         "useBuiltIns": true,
         "debug": true,
         "targets": {
-          "chrome": 63
+          "chrome": 63,
+          "firefox": 58
         }
       }
     ],
