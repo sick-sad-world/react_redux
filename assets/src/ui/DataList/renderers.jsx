@@ -50,7 +50,7 @@ ListStateRenderer.propTypes = {
  * Render Status via special badge i.e [Active|Inactive] e.t.c
  */
 function StatusRenderer(data) {
-  return <Badge className={classNames(statusValues[data][0], 'status')}>{statusValues[data][1]}</Badge>
+  return <Badge className={classNames(statusValues[data][0], 'status')} value={statusValues[data][1]} />
 }
 
 /**

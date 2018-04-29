@@ -7,13 +7,13 @@ import './styles.scss';
 const THEMES = ['', 'accent', 'action', 'error', 'warning', 'success', 'info', 'html', 'rss', 'facebook', 'reddit', 'twitter'];
 
 /** UI Badge implementation */
-export default function Badge({rootClassName, raised, className, children, theme, ...props}) {
+export default function Badge({rootClassName, raised, className, value, theme, ...props}) {
   const classes = classNames(rootClassName, theme, {
     'style--raised': raised
   }, className);
 
   return (
-    <samp className={classes} {...props}>{children}</samp>
+    <samp className={classes} {...props}>{value}</samp>
   );
 }
 
@@ -27,7 +27,7 @@ Badge.propTypes = {
   /** Root className of component */
   rootClassName: PropTypes.string.isRequired,
   /** Content of a button (text, child elements, icons, e.t.c) */
-  children: childrenShape,
+  value: childrenShape,
   /** Additional class names */
   className: classNameShape,
   /** Define whatever to apply raised styles to badge */

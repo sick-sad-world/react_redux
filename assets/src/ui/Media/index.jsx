@@ -18,7 +18,7 @@ export default class Media extends React.Component {
 
   componentWillReceiveProps({src, isBroken }) {
     if (src !== this.props.src) {
-      this.setState(() => ({loading: (isBroken) ? 'error' : 'loading'}))
+      this.setState(() => ({state: (isBroken) ? 'error' : 'loading'}))
     }
   }
 

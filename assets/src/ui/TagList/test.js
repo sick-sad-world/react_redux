@@ -21,7 +21,7 @@ const content = [{
   value: 'Ihor Koptielov'
 }, {
   id: 5,
-  prefix: <Badge theme='accent'>123</Badge>,
+  prefix: <Badge theme='accent' value='123' />,
   value: 'List of Tags'
 }, {
   id: 6,

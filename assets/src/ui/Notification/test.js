@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Notification from './index';
-import Icon from '../Icon';
+import data from '../Icon/data';
 
 describe('<Notification/>', () => {
   const error = jest.spyOn(console, 'error');
@@ -30,7 +30,7 @@ describe('<Notification/>', () => {
     const title = 'Title';
     const content = 'content';
     const wrapper = shallow(<Notification raised icon='clock' title={title}>{content}</Notification>);
-    expect(wrapper.containsMatchingElement(<Icon g='clock' />)).toBeTruthy();
+    expect(wrapper.html().indexOf(data.clock) > -1).toBeTruthy();
   });
 
   test('Should forse providing [title] property', () => {

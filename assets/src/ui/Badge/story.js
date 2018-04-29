@@ -8,18 +8,18 @@ storiesOf('Global Elements', module)
   .addDecorator(withTests('Badge'))
   .add('Badge', withInfo()(() => (
     <ol>
-      <li key='-2'><Badge>badge</Badge> - simple badge</li>
+      <li key='-2'><Badge value='badge' /> - simple badge</li>
       <li key='-1'>Status colors<hr /></li>
       {['error', 'warning', 'success', 'info'].map((itm, i) => (
-        <li key={i}><Badge theme={itm}>badge</Badge> - {itm} styled badge</li>
+        <li key={i}><Badge theme={itm} value='badge' /> - {itm} styled badge</li>
       ))}
       <li key='-3'>Accent colors<hr /></li>
-      {['accent', 'accent-sec'].map((itm, i) => (
-        <li key={i}><Badge theme={itm}>badge</Badge> - {itm} styled badge</li>
+      {['accent', 'action'].map((itm, i) => (
+        <li key={i}><Badge theme={itm} value='badge' /> - {itm} styled badge</li>
       ))}
       <li key='-4'>Feeds colors<hr /></li>
       {['html', 'rss', 'facebook', 'reddit', 'twitter'].map((itm, i) => (
-        <li key={i}><Badge theme={itm}>badge</Badge> - {itm} styled badge</li>
+        <li key={i}><Badge theme={itm} value='badge' /> - {itm} styled badge</li>
       ))}
     </ol>
   )));
