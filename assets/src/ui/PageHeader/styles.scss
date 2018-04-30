@@ -77,16 +77,6 @@
     justify-content: space-between;
   }
 
-  .list-header {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    font-size: $f-cap;
-    li {
-      line-height: 1;
-    }
-  }
-
   .container {
     position: relative;
     z-index: 2;

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { classNameShape, childrenShape } from 'shared/typings';
 import './styles.scss';
-import { configShape, getRowStyles } from '../DataList/row';
 import Icon from '../Icon';
 import Dropdown from '../Dropdown';
 import Button from '../Button';
@@ -33,7 +32,7 @@ const SearchShape = {
 
 Search.propTypes = SearchShape;
 
-export default function PageHeader({title, subtitle, className, search, children, sort, onCreate, config, rootClassName, ...props}) {
+export default function PageHeader({title, subtitle, className, search, children, sort, onCreate, rootClassName, ...props}) {
   return (
     <header {...props} className={classNames(rootClassName, className)}>
       <div className='container'>
@@ -45,11 +44,6 @@ export default function PageHeader({title, subtitle, className, search, children
           {children}
           {(sort.options && sort.options.length && isFunction(sort.onChange) && typeof sort.value === 'string') && <Dropdown clearable={false} className='sort' name='sort' placeholder='Sort/Group by' {...sort} />}
         </form>
-        {config && (
-          <ul className='list-header'>
-            {config.map(({id, label, size}) => (<li key={id} style={getRowStyles(size)}>{label}</li>))}
-          </ul>
-        )}
       </div>
     </header>
   );
@@ -67,7 +61,6 @@ PageHeader.propTypes = {
   className: classNameShape,
   children: childrenShape,
   onCreate: PropTypes.func,
-  config: PropTypes.arrayOf(configShape),
   search: PropTypes.shape(SearchShape),
   sort: PropTypes.object // eslint-disable-line
 }

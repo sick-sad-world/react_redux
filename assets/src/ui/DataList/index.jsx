@@ -9,7 +9,7 @@ import { classNameShape } from 'shared/typings';
 import { actionConfigShape } from '../ActionMenu';
 import { ListStateRenderer, listStateRendererShape } from './renderers';
 
-import DataListRow, { configShape } from './row';
+import DataListRow, { configShape, getRowStyles } from './row';
 import './styles.scss';
 
 function updateActionState(i) {
@@ -30,7 +30,6 @@ export default class DataList extends React.Component {
     super(props);
     this.state = {
       data: [],
-      sort: props.sort,
       actions: null
     }
     bindAll(this, 'makeRootRef', 'clearActionMenu')
@@ -77,6 +76,15 @@ export default class DataList extends React.Component {
   makeRootRef(el) {
     this.root = el;
   }
+
+  renderListHeader() {
+    const { config } = this.props;
+    return (
+      <li key='DataList--header'>
+        {config.map(({id, label, size}) => (<span key={id} style={getRowStyles(size)}>{label}</span>))}
+      </li>
+    );
+  }
   
   renderDataList() {
     const { config, actions, sortable, data } = this.props;
@@ -104,7 +112,12 @@ export default class DataList extends React.Component {
     } else if (!data.length) {
       content = <ListStateRenderer type='empty' className='state--empty' {...emptyState} />;
     } else {
-      content = <ul>{this.renderDataList()}</ul>;
+      content = (
+        <ul>
+          {this.renderListHeader()}
+          {this.renderDataList()}
+        </ul>
+      );
     }
 
     return (
