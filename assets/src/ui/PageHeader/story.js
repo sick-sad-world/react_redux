@@ -6,7 +6,7 @@ import PageHeader from './index';
 
 storiesOf('UI Components', module)
   .addDecorator(withTests('PageHeader'))
-  .add('PageHeader', withState({ search: '', sort: 'id', create: true }, (story, store) => (
+  .add('PageHeader', withState({}, (story, store) => (
     withInfo({
       propTables: [PageHeader]
     })(() => {
@@ -15,15 +15,12 @@ storiesOf('UI Components', module)
           <PageHeader
             title='Some awesome page'
             subtitle='This page contains DataList'
-            search={{
-              value: store.state.search,
-              onChange: (value) => store.set(value)
-            }}
-            sort={{
-              options: [{value: 'id', label:'By Id'}, {value: 'name', label: 'By name'}, {value: 'recipient', label: 'By recipient'}],
-              value: store.state.sort,
-              onChange: (value) => store.set(value)
-            }}
+            onChange={(cfg) => store.set(cfg)}
+            sort={[
+              {value: 'id', label:'By Id'}, 
+              {value: 'name', label: 'By name'}, 
+              {value: 'recipient', label: 'By recipient'}, 
+              {value: 'group:column', 'Group By Column'}]}
           />
         </section>
       )
