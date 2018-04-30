@@ -13,8 +13,11 @@ const statusValues = {
 }
 
 export const listStateRendererShape = {
+  /** Title of state screen */
   title: PropTypes.string.isRequired,
+  /** Text description of state */
   text: PropTypes.string,
+  /** Additional markup for state */
   additional: childrenShape
 }
 
@@ -23,7 +26,7 @@ export const listStateRendererShape = {
  */
 export function ListStateRenderer({title, text, additional, type, className, ...props}) {
   return (
-    <div className={classNames('', className)}>
+    <div className={classNames('state--message', className)}>
       <div dangerouslySetInnerHTML={{__html: props[`${type}Image`]}} />
       <div className='content'>
         <h4>{title}</h4>
@@ -40,8 +43,11 @@ ListStateRenderer.defaultProps = {
 }
 
 ListStateRenderer.propTypes = {
+  /** ClassName that applied, to State Root component  */
   className: classNameShape,
+  /** Image that should be displayed to indicate Error state */
   errorImage: PropTypes.string.isRequired,
+  /** Image that should be displayed to indicate Empty state */
   emptyImage: PropTypes.string.isRequired,
   ...listStateRendererShape
 }

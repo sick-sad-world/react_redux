@@ -147,16 +147,25 @@ DataList.defaultProps = {
 DataList.propTypes = {
   /** Classname all styles bound to */
   rootClassName: PropTypes.string.isRequired,
+  /** Whatever sortable wrappers should be applied */
   sortable: PropTypes.bool.isRequired,
+  /** Config For column sizes renderers, and order */
   config: PropTypes.arrayOf(configShape).isRequired,
+  /** ClassName applied to root component */
   className: classNameShape,
+  /** Data parameter List should sorted by */
   sort: PropTypes.string,
+  /** Configure Error state of DataList */
   errorState: PropTypes.shape(listStateRendererShape).isRequired,
+  /** Configure Empty state of DataList */
   emptyState: PropTypes.shape(listStateRendererShape).isRequired,
+  /** Click handler applied to each item */
   onClick: PropTypes.func,
+  /** Actions assigned for each item, Could be Action config or function(Item) -> ActionConfig */
   actions: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.arrayOf(actionConfigShape)
   ]),
+  /** Data collection to display */
   data: PropTypes.arrayOf(PropTypes.object).isRequired // eslint-disable-line
 }
