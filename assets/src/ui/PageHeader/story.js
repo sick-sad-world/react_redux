@@ -20,7 +20,8 @@ storiesOf('UI Components', module)
               {value: 'id', label:'By Id'}, 
               {value: 'name', label: 'By name'}, 
               {value: 'recipient', label: 'By recipient'}, 
-              {value: 'group:column', 'Group By Column'}]}
+              {value: 'group:column', label: 'Group By Column'}
+            ]}
           />
         </section>
       )
