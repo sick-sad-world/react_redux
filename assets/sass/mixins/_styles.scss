@@ -2,6 +2,7 @@
   font-style: italic;
   font-weight: 300;
   transition: opacity $t-dur $t-func;
+  color: color(caption);
 }
 
 @mixin cap-styles () {

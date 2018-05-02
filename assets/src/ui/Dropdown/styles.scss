@@ -40,7 +40,7 @@
   }
   .Select {
     .Select-placeholder {
-      opacity: 0;
+      opacity: 0.01;
       transition: opacity $t-dur;
     }
     &.is-focused, &.has-value {

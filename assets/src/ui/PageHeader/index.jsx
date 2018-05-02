@@ -14,8 +14,7 @@ export default class PageHeader extends React.Component {
     super(props)
     this.state = {
       search: '',
-      sort: null,
-      group: null
+      sort: null
     }
     bindAll(this, 'onSearch', 'onSort', 'sendUpdates')
   }
@@ -29,7 +28,7 @@ export default class PageHeader extends React.Component {
   }
 
   sendUpdates() {
-    const isGroup = this.state.sort.indexOf('group') > -1;
+    const isGroup = this.state.sort && this.state.sort.indexOf('group') > -1;
     const data = {
       search: this.state.search.split(' ').map((substr) => substr.split(':')).reduce((acc, [prop, val]) => {
         acc[(val) ? prop : 'name'] = (val) ? val : prop;
@@ -37,17 +36,21 @@ export default class PageHeader extends React.Component {
       }, {})
     }
 
-    if (isGroup) {
-      data.group = this.state.sort.replace('group:', '')
-    } else {
-      data.sort = this.state.sort
+    if (this.props.sort) {
+      if (isGroup) {
+        data.group = this.state.sort.replace('group:', '')
+        data.sort = null;
+      } else {
+        data.sort = this.state.sort;
+        data.group = null;
+      }
     }
     
     this.props.onChange(data);
   }
 
   render() {
-    const {title, subtitle, className, sort, placeholder, onCreate, rootClassName, ...props} = this.props;
+    const {title, subtitle, className, sort, placeholder, onCreate, rootClassName, onChange, ...props} = this.props;
     return (
       <header {...props} className={classNames(rootClassName, className)}>
         <div className='container'>
@@ -56,10 +59,19 @@ export default class PageHeader extends React.Component {
           {onCreate && <Button className='create' theme='raised' onClick={onCreate} value='Add' />}
           <form>
             <div className='search'>
-              <input type='text' placeholder={placeholder} value={this.state.search} onChange={this.onSearch} />
               <Icon g='search' />
+              <input type='text' name='search' placeholder={placeholder} value={this.state.search} onChange={this.onSearch} />
             </div>
-            {(sort && sort.length) && <Dropdown clearable={false} className='sort' name='sort' placeholder='Sort/Group by' value={this.state.sort} options={sort} />}
+            {(sort && sort.length) && (
+              <Dropdown
+                className='sort'
+                name='sort'
+                placeholder='Sort/Group by'
+                value={this.state.sort}
+                options={sort}
+                onChange={this.onSort}
+              />
+            )}
           </form>
         </div>
       </header>
@@ -83,7 +95,7 @@ PageHeader.propTypes = {
   className: classNameShape,
   /** Function invoked when ADD button clicked, if Function not provided  */
   onCreate: PropTypes.func,
-  /** Onchange */
+  /** Onchange function invoked on controls usages */
   onChange: PropTypes.func.isRequired,
   /** Placeholder for search field */
   placeholder: PropTypes.string,

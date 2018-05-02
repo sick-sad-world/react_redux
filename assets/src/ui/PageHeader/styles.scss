@@ -1,4 +1,5 @@
 @import 'mixins/_u.scss';
+@import 'mixins/_ph.scss';
 @import 'mixins/_styles.scss';
 @import '_vars.scss';
 
@@ -40,7 +41,7 @@
     
   }
   h2 {
-    font-size: $f-h3;
+    font-size: $f-h4;
   }
 
   .create {
@@ -54,21 +55,44 @@
     display: flex;
     align-items: center;
     svg {
-      width: u(2.5);
-      height: u(2.5);
+      width: u(3);
+      height: u(3);
+      margin-right: u();
+      opacity: 0.5;
     }
     input {
       height: $s-input;
       line-height: $s-input;
       border: 0;
       background: none;
+      @include placeholder() {
+        @include ph-styles();
+        opacity: 0.6;
+        transition: opacity $t-dur $t-func;
+      }
+      &:focus {
+        @include placeholder() {
+          opacity: 1;
+        }
+      }
     }
   }
 
   .sort {
     width: 120px;
     .Select-control {
-      border-bottom-color: transparent;
+      border-bottom: none !important;
+      &:after {
+        content: none;
+        display: none;
+      }
+    }
+    .Select-placeholder {
+      opacity: 0.6;
+      transition-delay: 0;
+    }
+    .Select-arrow-zone {
+      opacity: 0.5;
     }
   }
 

@@ -35,7 +35,7 @@
     background: none;
     @include placeholder() {
       @include ph-styles();
-      opacity: 0;
+      opacity: 0.01;
       transition: opacity $t-dur;
     }
     &:focus {
