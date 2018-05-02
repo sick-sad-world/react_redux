@@ -71,7 +71,7 @@ function ListRenderer(data, {def}) {
 }
 
 function ImageRenderer(data, cfg) {
-  return <Image rounded={cfg.rounded} width={cfg.size} height={cfg.size} src={data.src} alt={data.alt || cfg.def} />
+  return <div className='image-content'><Image rounded={cfg.rounded} style={{ width: '32px', height: '32px'}} src={data.src} alt={data.alt || cfg.def} /></div>
 }
 
 /**

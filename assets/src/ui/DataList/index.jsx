@@ -80,8 +80,8 @@ export default class DataList extends React.Component {
   renderListHeader() {
     const { config } = this.props;
     return (
-      <li key='DataList--header'>
-        {config.map(({id, label, size}) => (<span key={id} style={getRowStyles(size)}>{label}</span>))}
+      <li key='list-header' className='DataList--header'>
+        {config.map(({id, label, size}) => (<h5 key={id} style={getRowStyles(size)}>{label}</h5>))}
       </li>
     );
   }

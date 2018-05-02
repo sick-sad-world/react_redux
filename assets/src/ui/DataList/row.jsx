@@ -8,7 +8,7 @@ import Actionmenu, { actionConfigShape } from '../ActionMenu';
 export function getRowStyles(size) {
   return {
     flex: `0 0 ${size}`,
-    width: size
+    minWidth: size
   }
 }
 

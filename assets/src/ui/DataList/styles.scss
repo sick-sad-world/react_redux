@@ -45,11 +45,12 @@
   position: sticky;
   display: flex;
   list-style: none;
-  padding: 0;
+  padding: 0 $s-button;
   font-size: $f-cap;
 
-  span {
-    line-height: 1;
+  h5 {
+    display: inline-block;
+    margin: 0 u(.5);
   }
 
 }
@@ -80,6 +81,14 @@
       flex: 0 1 auto;
       align-items: center;
       margin: 0 u(.5);
+    }
+  }
+
+  .image-content {
+    margin: auto;
+    img {
+      display: block;
+      margin: auto;
     }
   }
 

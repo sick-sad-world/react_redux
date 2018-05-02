@@ -13,7 +13,7 @@ const config = [{
     label: 'Image',
     render: 'image',
     rounded: true,
-    size: '32px'
+    size: '48px'
   }, {
     id: 'name',
     label: 'Name',
@@ -26,7 +26,8 @@ const config = [{
   }, {
     id: 'active',
     label: 'Status',
-    render: 'status'
+    render: 'status',
+    size: '90px',
   }, {
     id: 'columns',
     label: 'Columns',
@@ -44,7 +45,7 @@ const data = [{
   }, {
     active: 1,
     recipient: 'awesome@gmail.com',
-    image: {src:'https://picsum.photos/200', alt: 'Some image'},
+    image: {src:'https://picsum.photos/20013123', alt: 'Ihor Koptielov'},
     columns: [{id: 1, label: 'Column'}],
     id: 71,
     name: "Report Awesome",
