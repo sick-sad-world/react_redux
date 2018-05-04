@@ -42,7 +42,10 @@
       border-radius: $bdrs;
       z-index: 2;
       box-shadow: none;
-      transition: box-shadow $t-dur $t-func;
+      transition-duration: $t-dur;
+      transition-timing-function: $t-func;
+      transition-property: box-shadow, fill, background-color, border-color;
+      padding: 2px;
     }
     input:checked + svg {
       background-color: color(accent);

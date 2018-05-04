@@ -36,11 +36,11 @@ storiesOf('FormElements', module)
           <div style={{ height: '50px' }} />
           <TextInput
             label='Disabled input'
-            name='descr'
+            name='dis'
             disabled
             descr='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, placeat.'
             onChange={onChange}
-            value={store.state.descr}
+            value={store.state.dis}
           />
           <div style={{ height: '50px' }} />
           <TextInput

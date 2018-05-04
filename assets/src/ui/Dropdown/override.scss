@@ -44,17 +44,6 @@
       padding: 0;
     }
   }
-  .Select-clear-zone {
-    display: flex;
-    flex: 0 0 $s-pointer;
-    height: $s-input;
-    color: color(caption);
-    svg {
-      display: block;
-      text-align: center;
-      margin: auto;
-    }
-  }
   .Select-loading-zone {
     display: none;
     flex: 0 0 $s-pointer;
@@ -74,6 +63,20 @@
       margin: auto;
       width: $s-icon;
       height: $s-icon;
+    }
+  }
+  .Select-clear-zone {
+    display: flex;
+    flex: 0 0 $s-input;
+    height: $s-input;
+    color: color(caption);
+    svg {
+      display: block;
+      text-align: center;
+      margin: auto;
+    }
+     & + .Select-arrow-zone {
+      display: none;
     }
   }
   .Select-menu-outer {
