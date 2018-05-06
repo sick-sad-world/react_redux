@@ -3,6 +3,7 @@ import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
 import { withTests, withState } from 'with';
 import Fieldset from './index';
+import FormField from '../FormField';
 import TextInput from '../TextInput';
 import Dropdown from '../Dropdown';
 import Button from '../Button';
@@ -15,16 +16,28 @@ storiesOf('FormElements', module)
   .add('Fieldset', withState({text: '', prefix: '', suffix: ''}, (story, store) => (
     withInfo({
       propTables: [Fieldset],
-      propTablesExclude: [TextInput, Dropdown]
+      propTablesExclude: [TextInput, Dropdown, Button, FormField]
     })(() => {
       return (
         <form>
-          <Fieldset title='Add custom filter'>
+          <Fieldset title='Add custom filter' collapsable>
             <TextInput label='Text' name='text' value={store.state.text} onChange={(value) => store.set(value)} />
             <br />
             <Dropdown label='Prefix' name='prefix' value={store.state.prefix} onChange={(value) => store.set(value)} options={prefix} />
             <br />
             <Dropdown label='Suffix' name='suffix' value={store.state.suffix} onChange={(value) => store.set(value)} options={suffix} />
+            <br />
+            <Button theme='raised' value='Add' />
+          </Fieldset>
+          <br />
+          <Fieldset title='Just plain always open one'>
+            <TextInput label='Text' name='text' value={store.state.text} onChange={(value) => store.set(value)} />
+            <br />
+            <Button theme='raised' value='Add' />
+          </Fieldset>
+          <br />
+          <Fieldset title='Error in fieldset' collapsable error={['Field should not be empty', 'Value must be a valid email']}>
+            <TextInput label='Text' name='text' value={store.state.text} onChange={(value) => store.set(value)} />
             <br />
             <Button theme='raised' value='Add' />
           </Fieldset>

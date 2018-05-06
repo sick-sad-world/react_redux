@@ -78,7 +78,8 @@ $colors: (
   ),
   error: (
     base: #F44336,
-    dark: darken(#F44336, 10%)
+    dark: darken(#F44336, 10%),
+    lighter: mix(#F44336, #fff, 25%)
   ),
   warning: (
     base: #FFC107,

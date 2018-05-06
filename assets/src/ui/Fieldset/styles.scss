@@ -8,12 +8,63 @@
   background-color: color(highlight);
   border: 0;
   padding-top: $legend;
+  border-bottom: 4px solid transparent;
+
   legend {
-    font-size: $f-h4;
+    font-size: $f-h5;
     line-height: $legend;
-    display: block;
     width: 100%;
     position: relative;
     top: $legend * 0.75;
+    margin-bottom: $legend * -0.375;
+    > div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    svg {
+      vertical-align: -1px;
+      margin-right: u();
+    }
+  }
+
+  .content > .content-body {
+    padding-top: $legend;
+  }
+
+  .error-message {
+    display: flex;
+    align-items: center;
+    margin-top: u();
+    color: color(error, dark);
+  }
+
+  &.is-collapsable {
+    legend {
+      cursor: pointer;
+    }
+
+    .content {
+      height: auto;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height $t-dur $t-func;
+    }
+
+    &.state--open {
+      .content {
+        max-height: 900px;
+      }
+    }
+  }
+
+  &.state--error {
+    border-color: color(error, lighter);
+    legend {
+      color: color(error, dark);
+      svg {
+        fill: color(error);
+      }
+    }
   }
 }

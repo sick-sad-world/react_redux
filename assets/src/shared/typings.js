@@ -58,7 +58,7 @@ export const optionShapeExtended = (size = 0, labelProp = 'label') => createOpti
 export const classNameShape = PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string), PropTypes.objectOf(PropTypes.bool)]);
 
 /** Shape of valid property provided by React-Validable */
-export const validShape = PropTypes.oneOfType([PropTypes.bool, PropTypes.arrayOf(PropTypes.string)]);
+export const validShape = PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.arrayOf(PropTypes.string)]);
 
 /** Generall error shape Message or false */
 export const validationMessageShape = PropTypes.oneOfType([PropTypes.string, PropTypes.bool]);
