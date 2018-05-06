@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { childrenShape, classNameShape } from 'shared/typings';
-import Badge from '../Badge';
-import Image from '../Image';
 import EmptyImg from 'images/empty.svg';
 import ErrorImg from 'images/error.svg';
+import Badge from '../Badge';
+import Image from '../Image';
 
 const statusValues = {
   1: ['success', 'Active'],
@@ -54,13 +54,24 @@ ListStateRenderer.propTypes = {
 
 /**
  * Render Status via special badge i.e [Active|Inactive] e.t.c
+ * @param {*} data 
  */
 function StatusRenderer(data) {
   return <Badge className={classNames(statusValues[data][0], 'status')} value={statusValues[data][1]} />
 }
 
 /**
+ * Render Feed type, RSS, HTML, Facebook, e.t.c.
+ * @param {*} data 
+ */
+function FeedTypeRenderer(data) {
+  return <Badge className={classNames(data, 'status')} value={data} />
+}
+
+/**
  * Render array as comma separated list
+ * @param {*} data 
+ * @param {*} param1 
  */
 function ListRenderer(data, {def}) {
   return (
@@ -70,8 +81,13 @@ function ListRenderer(data, {def}) {
   );
 }
 
+/**
+ * Render Image - User avatar or something else
+ * @param {*} data 
+ * @param {*} cfg 
+ */
 function ImageRenderer(data, cfg) {
-  return <div className='image-content'><Image rounded={cfg.rounded} style={{ width: '32px', height: '32px'}} src={data.src} alt={data.alt || cfg.def} /></div>
+  return <div className='image-content'><Image rounded={cfg.rounded} style={{ width: cfg.size, height: cfg.size}} src={data.src} alt={data.alt || cfg.def} /></div>
 }
 
 /**
@@ -87,5 +103,6 @@ export default {
   image: ImageRenderer,
   status: StatusRenderer,
   list: ListRenderer,
+  feedType: FeedTypeRenderer,
   renderDefault: RenderDefault
 }

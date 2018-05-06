@@ -7,30 +7,6 @@
   display: flex;
   position: relative;
   z-index: z(header);
-  &:before {
-    content:"";
-    position: absolute; 
-    z-index: 0;
-    background: rgba(#000,.33);
-    filter: blur(10px);
-    bottom: 0;
-    left: 2%;
-    right: 2%;
-    height: 32px;
-    border-radius: 20% / 50%;
-  }
-
-  &:after {
-    content: '';
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1;
-    background-color: color(secondary);
-  }
 
   h1, h2 {
     line-height: 1;
@@ -40,8 +16,9 @@
   h1 {
     
   }
+  
   h2 {
-    font-size: $f-h4;
+    font-size: $f-h5;
   }
 
   .create {

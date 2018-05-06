@@ -4,9 +4,22 @@
 
 .DataList--root {
 
-  ul {
+  .DataList--header .container, .list-container {
+    width: $s-container;
+    margin: 0 auto;
+  }
+
+  .DataList--header {
+    margin-bottom: u(2);
+  }
+
+  .list-container, .sub-list-container {
     list-style: none;
     padding: 0;
+  }
+
+  .sub-list-container {
+    padding-left: $s-element;
   }
 
   .state--empty, .state--error {
@@ -43,14 +56,45 @@
 
 .DataList--header {
   position: sticky;
-  display: flex;
-  list-style: none;
-  padding: 0 $s-button;
-  font-size: $f-cap;
+  position: relative;
+  background-color: color(secondary);
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    background-color: color(secondary);
+  }
+
+  &:before {
+    content:"";
+    position: absolute; 
+    z-index: 0;
+    background: rgba(#000,.33);
+    filter: blur(5px);
+    bottom: 0;
+    left: 2%;
+    right: 2%;
+    height: 5px;
+    border-radius: 20% / 50%;
+  }
 
   h5 {
-    display: inline-block;
+    display: block;
     margin: 0 u(.5);
+    font-size: $f-cap;
+  }
+
+  .container {
+    display: flex;
+    position: relative;
+    padding: 0 $s-button;
+    z-index: 2;
   }
 
 }

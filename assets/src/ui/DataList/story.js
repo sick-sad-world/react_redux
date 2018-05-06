@@ -6,14 +6,13 @@ import { withTests } from 'with';
 import DataList from './index';
 import DataListRow from './row';
 
-
-
-const config = [{
+const config = {
+  columns: [{
     id: 'image',
     label: 'Image',
     render: 'image',
     rounded: true,
-    size: '48px'
+    size: '32px'
   }, {
     id: 'name',
     label: 'Name',
@@ -33,15 +32,69 @@ const config = [{
     label: 'Columns',
     size: '30%',
     render: 'list'
-  }];
+  }],
+  actions: (item) => {
+    const changeState = (item.active) ? {
+      label: 'Disable',
+      icon: 'eye-with-line',
+      handler: action('Disable')
+    } : {
+      label: 'Enable',
+      icon: 'eye',
+      handler: action('Enable')
+    }
+
+    return [changeState, {
+      label: 'Edit',
+      icon: 'documents',
+      handler: action('Edit')
+    }, '---', {
+      label: 'Delete',
+      icon: 'trash',
+      handler: action('Delete')
+    }]
+  },
+  subdata: {
+    columns: [{
+      id: 'id',
+      size: '32px'
+    }, {
+      id: 'label',
+      size: '30%'
+    }, {
+      id: 'descr',
+      size: '30%'
+    }, {
+      id: 'type',
+      render: 'feedType',
+      size: '50px'
+    }]
+  }
+};
 
 const data = [{
     active: 0,
     recipient: 'some@gmail.com',
     image: {src:'https://picsum.photos/200', alt: 'Some image'},
-    columns: [{id: 1, label: 'Column'}, {id: 2, label: 'Column 2'}, {id: 3, label: 'Column3'}],
+    columns: [{id: 1, label: 'Column'}, {id: 2, label: 'Column 2'}, {id: 3, label: 'Column 3'}],
     id: 69,
     name: "Report Hearth",
+    subdata: [{
+      id: 1,
+      label: 'Column',
+      descr: 'Awesome column',
+      type: 'html'
+    }, {
+      id: 2,
+      label: 'Column 2',
+      descr: 'Awesome column',
+      type: 'rss'
+    }, {
+      id: 3,
+      label: 'Column 3',
+      descr: 'Awesome column',
+      type: 'twitter'
+    }]
   }, {
     active: 1,
     recipient: 'awesome@gmail.com',
@@ -49,6 +102,12 @@ const data = [{
     columns: [{id: 1, label: 'Column'}],
     id: 71,
     name: "Report Awesome",
+    subdata: [{
+      id: 1,
+      label: 'Column',
+      descr: 'Awesome column',
+      type: 'Facebook'
+    }]
   }, {
     active: 1,
     recipient: 'last.day.of.earth@gmail.com',
@@ -56,6 +115,17 @@ const data = [{
     columns: [{id: 1, label: 'Column'}, {id: 2, label: 'Cool Column'}],
     id: 43,
     name: "Cool Report",
+    subdata: [{
+      id: 1,
+      label: 'Column',
+      descr: 'Awesome column',
+      type: 'html'
+    }, {
+      id: 2,
+      label: 'Cool Column',
+      descr: 'Cool column',
+      type: 'rss'
+    }]
   }, {
     active: 1,
     recipient: null,
@@ -63,35 +133,19 @@ const data = [{
     columns: [{id: 2, label: 'Important Column'}],
     id: 12,
     name: "Recipeless Report",
+    subdata: [{
+      id: 2,
+      label: 'Important Column',
+      descr: 'Important column',
+      type: 'reddit'
+    }]
   }];
-
-const actions = (item) => {
-  const changeState = (item.active) ? {
-    label: 'Disable',
-    icon: 'eye-with-line',
-    handler: action('Disable')
-  } : {
-    label: 'Enable',
-    icon: 'eye',
-    handler: action('Enable')
-  }
-
-  return [changeState, {
-    label: 'Edit',
-    icon: 'documents',
-    handler: action('Edit')
-  }, '---', {
-    label: 'Delete',
-    icon: 'trash',
-    handler: action('Delete')
-  }]
-}
 
 storiesOf('UI Components', module)
   .addDecorator(withTests('DataList'))
   .add('DataList', withInfo({
       propTables: [DataList, DataListRow],
-      propTablesExclude: []
+      propTablesExclude: [DataList]
     })(() => {
       return (
         <div>
@@ -100,7 +154,6 @@ storiesOf('UI Components', module)
             config={config}
             data={data}
             sortable
-            actions={actions}
           />
           <div style={{height: '50px'}} />
           <h4>Empty list</h4>
@@ -108,7 +161,6 @@ storiesOf('UI Components', module)
             config={config}
             data={[]}
             sortable
-            actions={actions}
           />
           <div style={{height: '50px'}} />
           <h4>Errored list</h4>
@@ -121,7 +173,6 @@ storiesOf('UI Components', module)
             data={[]}
             sortable
             loading={false}
-            actions={actions}
           />
         </div>
       );

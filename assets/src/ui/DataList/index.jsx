@@ -1,47 +1,30 @@
-import sortBy from 'lodash/sortBy';
 import bindAll from 'lodash/bindAll';
-import mapValues from 'lodash/mapValues';
-import isFunction from 'lodash/isFunction';
 import classNames from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { classNameShape } from 'shared/typings';
-import { actionConfigShape } from '../ActionMenu';
 import { ListStateRenderer, listStateRendererShape } from './renderers';
 
-import DataListRow, { configShape, getRowStyles } from './row';
+import DataListRow, { configColumnShape, configActionShape, getRowStyles } from './row';
 import './styles.scss';
 
-function updateActionState(i) {
-  return ({actions}) => ({actions: (i === undefined || i === actions) ? null: i})
-}
-
-function setData({data, sort}) {
-  return (prevState) => {
-    if (sort === prevState.sort) {
-      return { data }
-    }
-    return { data: sortBy(data, sort), sort }
-  }
+function updateIndexedState(prop, i) {
+  return (state) => ({[prop]: (i === undefined || i === state[prop]) ? null: i})
 }
 
 export default class DataList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
+      data: props.data,
       actions: null
     }
-    bindAll(this, 'makeRootRef', 'clearActionMenu')
-  }
-
-  componentWillMount() {
-    this.setState(setData(this.props));
+    bindAll(this, '_makeRootRef', 'clearActionMenu')
   }
 
   
-  componentWillReceiveProps(newProps) {
-    this.setState(setData(newProps));
+  componentWillReceiveProps({data}) {
+    this.setState(() => ({data}));
   }
   
   componentDidUpdate() {
@@ -50,61 +33,22 @@ export default class DataList extends React.Component {
   }
   
   setActionState(i) {
-    return () => this.setState(updateActionState(i));
+    return () => this.setState(updateIndexedState('actions', i));
   }
 
   clearActionMenu({target}) {
     if (!this.root.contains(target)) {
-      this.setState(updateActionState())
+      this.setState(updateIndexedState('actions'))
     }
   }
 
-  makeonClickHandler(item, i) {
-    return (this.props.onClick) ? (e) => this.props.onClick(item, i, e) : null;
-  }
-
-  makeActions(item) {
-    if (isFunction(this.props.actions)) {
-      return this.props.actions(item);
-    }
-    return mapValues(this.props.actions, ({handler, ...item}) => ({
-      ...item,
-      handler: () => handler(item)
-    }));
-  }
-
-  makeRootRef(el) {
+  _makeRootRef(el) {
     this.root = el;
   }
 
-  renderListHeader() {
-    const { config } = this.props;
-    return (
-      <li key='list-header' className='DataList--header'>
-        {config.map(({id, label, size}) => (<h5 key={id} style={getRowStyles(size)}>{label}</h5>))}
-      </li>
-    );
-  }
-  
-  renderDataList() {
-    const { config, actions, sortable, data } = this.props;
-    return data.map((item, i) => (
-      <DataListRow
-        key={item.id}
-        data={item}
-        config={config}
-        sortable={sortable}
-        onClick={this.makeonClickHandler(item, i)}
-        toggleActions={this.setActionState(i)}
-        actions={(actions && this.state.actions === i) ? this.makeActions(item) : null}
-      />
-    ));
-  }
-
   render() {
-    const { errorState, emptyState, className, rootClassName } = this.props;
-    const { data } = this.state;
-
+    const { errorState, emptyState, className, rootClassName, config, sortable } = this.props;
+    const { data, actions } = this.state;
     let content = null;
 
     if (errorState.text) {
@@ -113,15 +57,43 @@ export default class DataList extends React.Component {
       content = <ListStateRenderer type='empty' className='state--empty' {...emptyState} />;
     } else {
       content = (
-        <ul>
-          {this.renderListHeader()}
-          {this.renderDataList()}
+        <ul className='list-container'>
+          {data.map((item, i) => (
+            <DataListRow
+              key={item.id}
+              data={item}
+              config={config}
+              sortable={sortable}
+              toggleActions={config.actions ? this.setActionState(i) : null}
+              actionsOpen={config.actions && actions === i}
+            >
+              {(config.subdata && item.subdata) && (
+                <ul className='sub-list-container'>
+                  {item.subdata.map((subItem, i) => (
+                    <DataListRow
+                      key={subItem.id}
+                      data={subItem}
+                      config={config.subdata}
+                      sortable={sortable}
+                      toggleActions={config.subdata.actions ? this.setActionState(i) : null}
+                      actionsOpen={config.subdata.actions && actions === i}
+                    />
+                  ))}
+                </ul>
+              )}
+            </DataListRow>
+          ))}
         </ul>
       );
     }
 
     return (
-      <div className={classNames(rootClassName, className)} ref={this.makeRootRef}>
+      <div className={classNames(rootClassName, className)} ref={this._makeRootRef}>
+        <div key='list-header' className='DataList--header'>
+          <div className='container'>
+            {config.columns.map(({id, label, size}) => (<h5 key={id} style={getRowStyles(size)}>{label}</h5>))}
+          </div>
+        </div>
         {content}
       </div>
     );
@@ -150,7 +122,14 @@ DataList.propTypes = {
   /** Whatever sortable wrappers should be applied */
   sortable: PropTypes.bool.isRequired,
   /** Config For column sizes renderers, and order */
-  config: PropTypes.arrayOf(configShape).isRequired,
+  config: PropTypes.shape({
+    columns: configColumnShape.isRequired,
+    actions: configActionShape,
+    subdata: PropTypes.shape({
+      columns: configColumnShape.isRequired,
+      actions: configActionShape
+    })
+  }).isRequired,
   /** ClassName applied to root component */
   className: classNameShape,
   /** Data parameter List should sorted by */
@@ -159,13 +138,6 @@ DataList.propTypes = {
   errorState: PropTypes.shape(listStateRendererShape).isRequired,
   /** Configure Empty state of DataList */
   emptyState: PropTypes.shape(listStateRendererShape).isRequired,
-  /** Click handler applied to each item */
-  onClick: PropTypes.func,
-  /** Actions assigned for each item, Could be Action config or function(Item) -> ActionConfig */
-  actions: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.arrayOf(actionConfigShape)
-  ]),
   /** Data collection to display */
   data: PropTypes.arrayOf(PropTypes.object).isRequired // eslint-disable-line
 }
