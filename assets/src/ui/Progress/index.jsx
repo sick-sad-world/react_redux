@@ -11,21 +11,21 @@ const TYPES = {
   linear: LinearLoading
 }
 
-const BUFFER = 200;
+export const BUFFER = 200;
 
 function resetState() {
-  return {loading: false, value: 0}
+  return { loading: false, value: 0 }
 }
 
 function isLoading() {
-  return {loading: true}
+  return { loading: true }
 }
 
 function makeFakePercentage({value}) {
   if (value) {
     return { value: value + ((100 - value) * 0.25) }
   } else {
-    return { value: 12.5}
+    return { value: 12.5 }
   }
 }
 
