@@ -81,11 +81,11 @@
   
   input:not([value='']) + .label,
   input:focus + .label,
-  &.state--focus .label {
+  &:focus-within .label {
     transform: translate3d(0, $s-input * -0.6, 0) scale(.9);
   }
 
-  &.state--focus {
+  &:focus-within {
     svg {
       fill: color(accent);
     }

@@ -63,17 +63,17 @@
     }
   }
 
-  &.state--focus .control span,
+  &:focus-within .control span,
   .control input:focus + span {
     box-shadow: shadow();
   }
 
-  &.state--focus .control input:not(:checked) span,
+  &:focus-within .control input:not(:checked) span,
   .control input:not(:checked):focus + span {
     // border-color: color(action, light);
   }
 
-  &.state--focus .control input:not(:checked) span:after,
+  &:focus-within .control input:not(:checked) span:after,
   .control input:not(:checked):focus + span:after {
     background-color: rgba(color(accent), .1);
   }

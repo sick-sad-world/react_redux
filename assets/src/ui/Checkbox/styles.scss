@@ -54,12 +54,12 @@
     }
   }
 
-  &.state--focus .control svg,
+  &:focus-within .control svg,
   .control input:focus + svg {
     box-shadow: shadow();
   }
 
-  &.state--focus .control input:not(:checked) svg,
+  &:focus-within .control input:not(:checked) svg,
   .control input:not(:checked):focus + svg {
     //border-color: color(action, light);
     fill: rgba(color(accent), .1);

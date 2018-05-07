@@ -60,13 +60,13 @@ describe('<PageHeader/>', () => {
   })
 
   test('Should forse providing [title] property', () => {
-    shallow(<PageHeader onChange={jest.fn} />);
+    shallow(<PageHeader onChange={jest.fn()} />);
     expect(error).toHaveBeenCalledTimes(1);
     expect(error.mock.calls[0][0]).toMatch(global.getPropTypeWarningTester('title', 'PageHeader'));
   })
 
   test('Should forse providing [onChange] handler to handle updates', () => {
-    shallow(<PageHeader title='Some' />);
+    shallow(<PageHeader title='Some' onChange={null} />);
     expect(error).toHaveBeenCalledTimes(1);
     expect(error.mock.calls[0][0]).toMatch(global.getPropTypeWarningTester('onChange', 'PageHeader'));
   })

@@ -58,7 +58,7 @@
       }
     }
   }
-  &.state--focus {
+  &:focus-within {
     .suffix svg, .prefix svg {
       fill: color(accent);
     }

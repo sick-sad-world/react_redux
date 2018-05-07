@@ -41,8 +41,8 @@ describe('HOC: <FormField/>', () => {
     expect(wrapper.first().prop('valid')).not.toEqual(true);
     expect(wrapper.first().prop('validate')).toBeUndefined();
     expect(jest.isMockFunction(wrapper.first().prop('onChange'))).toBeFalsy();
-    expect(jest.isMockFunction(wrapper.first().prop('onFocus'))).toBeFalsy();
-    expect(jest.isMockFunction(wrapper.first().prop('onBlur'))).toBeFalsy();
+    expect(jest.isMockFunction(wrapper.first().prop('onFocus'))).toBeTruthy();
+    expect(jest.isMockFunction(wrapper.first().prop('onBlur'))).toBeTruthy();
   })
 
   test('Should pass [value] to input', () => {
@@ -63,19 +63,6 @@ describe('HOC: <FormField/>', () => {
     shallow(<TextField name='name' />);
     expect(error).toHaveBeenCalledTimes(1);
     expect(error.mock.calls[0][0]).toMatch(global.getPropTypeWarningTester('onChange', 'Input'));
-  })
-
-  test('Should toggle [focused] state and Call [onFocus/onBlur] callbacks if provided', () => {
-    const name = 'name';
-    const onFocus = jest.fn();
-    const onBlur = jest.fn();
-    const wrapper = shallow(<TextField name={name} onChange={jest.fn()} onFocus={onFocus} onBlur={onBlur} />);
-    wrapper.first().simulate('focus', mockedEvent);
-    expect(wrapper.state('focus')).toBeTruthy();
-    wrapper.first().simulate('blur', mockedEvent);
-    expect(wrapper.state('focus')).toBeFalsy();
-    expect(onFocus).toHaveBeenCalledTimes(1);
-    expect(onBlur).toHaveBeenCalledTimes(1);
   })
 
   test('Should call [onChange] handler with proper data', () => {
