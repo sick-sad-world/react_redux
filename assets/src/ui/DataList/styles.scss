@@ -55,7 +55,6 @@
 }
 
 .DataList--header {
-  position: sticky;
   position: relative;
   background-color: color(secondary);
 
@@ -86,14 +85,15 @@
 
   h5 {
     display: block;
-    margin: 0 u(.5);
     font-size: $f-cap;
   }
 
   .container {
-    display: flex;
+    display: grid;
+    grid-template-rows: auto;
+    grid-gap: u();
     position: relative;
-    padding: 0 $s-button;
+    padding: 0 ($s-button*2) 0 $s-button;
     z-index: 2;
   }
 
@@ -115,17 +115,14 @@
     border-bottom: 1px solid color(border);
   }
 
-  .content {
+  .content-holder {
     flex: 1 1 auto;
-    display: flex;
-    align-content: center;
-    overflow: hidden;
-    > * {
-      display: flex;
-      flex: 0 1 auto;
-      align-items: center;
-      margin: 0 u(.5);
-    }
+  }
+
+  .content {
+    display: grid;
+    grid-template-rows: auto;
+    grid-gap: u();
   }
 
   .image-content {

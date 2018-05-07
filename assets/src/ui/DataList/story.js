@@ -9,14 +9,14 @@ import DataListRow from './row';
 const config = {
   columns: [{
     id: 'image',
-    label: 'Image',
+    label: '',
     render: 'image',
     rounded: true,
     size: '32px'
   }, {
     id: 'name',
     label: 'Name',
-    size: '25%'
+    size: '30%'
   }, {
     id: 'recipient',
     label: 'Recipient',
@@ -30,7 +30,7 @@ const config = {
   }, {
     id: 'columns',
     label: 'Columns',
-    size: '30%',
+    size: '40%',
     render: 'list'
   }],
   actions: (item) => {
@@ -60,15 +60,36 @@ const config = {
       size: '32px'
     }, {
       id: 'label',
-      size: '30%'
+      size: '50%'
     }, {
       id: 'descr',
-      size: '30%'
+      size: '50%'
     }, {
       id: 'type',
       render: 'feedType',
-      size: '50px'
-    }]
+      size: '90px'
+    }],
+    actions: (item) => {
+      const changeState = (item.active) ? {
+        label: 'Disable',
+        icon: 'eye-with-line',
+        handler: action('Disable')
+      } : {
+        label: 'Enable',
+        icon: 'eye',
+        handler: action('Enable')
+      }
+
+      return [changeState, {
+        label: 'Edit',
+        icon: 'documents',
+        handler: action('Edit')
+      }, '---', {
+        label: 'Delete',
+        icon: 'trash',
+        handler: action('Delete')
+      }]
+    }
   }
 };
 
@@ -106,7 +127,7 @@ const data = [{
       id: 1,
       label: 'Column',
       descr: 'Awesome column',
-      type: 'Facebook'
+      type: 'facebook'
     }]
   }, {
     active: 1,

@@ -12,6 +12,14 @@ function updateIndexedState(prop, i) {
   return (state) => ({[prop]: (i === undefined || i === state[prop]) ? null: i})
 }
 
+function getTemplate({columns}) {
+  return columns.reduce((acc, {size}, i) => {
+    if (i) acc += ' ';
+    acc += `${size}`;
+    return acc;
+  }, '')
+}
+
 export default class DataList extends React.Component {
   constructor(props) {
     super(props);
@@ -19,12 +27,16 @@ export default class DataList extends React.Component {
       data: props.data,
       actions: null
     }
+    this.template = getTemplate(props.config);
+    this.subtemplate = (props.config.subdata) ? getTemplate(props.config.subdata) : null;
     bindAll(this, '_makeRootRef', 'clearActionMenu')
   }
 
   
-  componentWillReceiveProps({data}) {
+  componentWillReceiveProps({data, config}) {
     this.setState(() => ({data}));
+    this.template = getTemplate(config);
+    this.subtemplate = (config.subdata) ? getTemplate(config.subdata) : null;
   }
   
   componentDidUpdate() {
@@ -63,6 +75,7 @@ export default class DataList extends React.Component {
               key={item.id}
               data={item}
               config={config}
+              template={this.template}
               sortable={sortable}
               toggleActions={config.actions ? this.setActionState(i) : null}
               actionsOpen={config.actions && actions === i}
@@ -74,6 +87,7 @@ export default class DataList extends React.Component {
                       key={subItem.id}
                       data={subItem}
                       config={config.subdata}
+                      template={this.subtemplate}
                       sortable={sortable}
                       toggleActions={config.subdata.actions ? this.setActionState(i) : null}
                       actionsOpen={config.subdata.actions && actions === i}
@@ -90,8 +104,8 @@ export default class DataList extends React.Component {
     return (
       <div className={classNames(rootClassName, className)} ref={this._makeRootRef}>
         <div key='list-header' className='DataList--header'>
-          <div className='container'>
-            {config.columns.map(({id, label, size}) => (<h5 key={id} style={getRowStyles(size)}>{label}</h5>))}
+          <div className='container' style={{gridTemplateColumns: this.template}}>
+            {config.columns.map(({id, label}) => (<h5 key={id}>{label}</h5>))}
           </div>
         </div>
         {content}

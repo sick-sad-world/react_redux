@@ -13,10 +13,10 @@ const toggleIcon = {
   false: ['chevron-down', 'Show contents']
 }
 
-export function getRowStyles(size) {
+export function getRowStyles(size, margin) {
   return {
-    flex: `0 0 auto`, // ${size}
-    minWidth: size
+    flex: `0 0 ${(size.indexOf('%') > -1 && margin) ? `calc(${size} - ${margin}px)` : size}`,
+    width: (size.indexOf('%') > -1 && margin) ? `calc(${size} - ${margin}px)` : size
   }
 }
 
@@ -58,33 +58,35 @@ export default class DataListRow extends React.Component {
   }
 
   render() {
-    const { children, data, config, toggleActions, actionsOpen, sortable, rootClassName } = this.props;
+    const { children, data, config, toggleActions, actionsOpen, sortable, rootClassName, template } = this.props;
     const { subdata } = this.state;
     const hasActions = config.actions && toggleActions;
     return (
       <li className={rootClassName}>
         <div className='item'>
           {sortable && <IconButton g='dots-three-vertical' />}
-          <div className='content'>
-            {config.columns.map((cfg) => {
-              const { id, size, render } = cfg;
-              const dataItem = data[id];
-              let content = null;
-  
-              if (render instanceof Function) {
-                content = render(dataItem, cfg);
-              } else if (typeof render === 'string' && renderers[render] instanceof Function) {
-                content = renderers[render](dataItem, cfg);
-              } else {
-                content = renderers.renderDefault(dataItem, cfg);
-              }
-  
-              return (
-                <div key={id} style={(size) ? getRowStyles(size) : {}}>
-                  {content}
-                </div>
-              );
-            })}
+          <div className='content-holder'>
+            <div className='content' style={{gridTemplateColumns: template}}>
+              {config.columns.map((cfg) => {
+                const { id, render } = cfg;
+                const dataItem = data[id];
+                let content = null;
+    
+                if (render instanceof Function) {
+                  content = render(dataItem, cfg);
+                } else if (typeof render === 'string' && renderers[render] instanceof Function) {
+                  content = renderers[render](dataItem, cfg);
+                } else {
+                  content = renderers.renderDefault(dataItem, cfg);
+                }
+    
+                return (
+                  <div key={id}>
+                    {content}
+                  </div>
+                );
+              })}
+            </div>
           </div>
           {children && <IconButton g={toggleIcon[subdata][0]} onClick={this.toggleSubdata} title={toggleIcon[subdata][1]} />}
           {hasActions && <IconButton g='menu' onClick={toggleActions} title='Item Actions' />}
