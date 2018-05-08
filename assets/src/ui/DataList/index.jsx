@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { classNameShape } from 'shared/typings';
 import { ListStateRenderer, listStateRendererShape } from './renderers';
 
-import DataListRow, { configColumnShape, configActionShape, getRowStyles } from './row';
+import DataListRow, { configColumnShape, configActionShape } from './row';
 import './styles.scss';
 
 function updateIndexedState(prop, i) {
