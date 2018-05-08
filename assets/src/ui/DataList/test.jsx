@@ -1,36 +1,45 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
-function List() {
+function ListHeader() {
+  return <div></div>
+}
+
+function List({ children, ...props }) {
   return (
-    <Droppable>
-      <ul>
-        {children}
-      </ul>
+    <Droppable {...props}>
+      {({ innerRef, droppableProps, placeholder }, { isDraggingOver, draggingOverWith }) => (
+        <ul ref={innerRef} {...droppableProps} className={classNames({'state--over': isDraggingOver})}>
+          {children}
+          {placeholder}
+        </ul>
+      )}
     </Droppable>
   )
 }
 
+function ItemWrapper({children, droppable, ...props}) {
+  return (
+    <Draggable {...props}>
+      {({ draggableProps, dragHandleProps, innerRef }, { isDragging }) => (
+        <li>
+          {(droppable) ? <Droppable {...droppable}>{children}</Droppable> : children}
+        </li>
+      )}
+    </Draggable>
+  );
+}
+
 function Item() {
-  if (children) {
-    return (
-      <li>
-        <Droppable>
-          <div>
-            // Content
-          </div>
-        </Droppable>
-      </li>
-    );
-  } else {
-    return (
-      <li>
-        <div>
-          // Content
-        </div>
-      </li>
-    );
-  }
+  return (
+    <li>
+      <div>
+        // Content
+      </div>
+    </li>
+  );
 }
 
 export default class DataList extends React.Component {
@@ -45,23 +54,32 @@ export default class DataList extends React.Component {
     const {data} = this.state;
     return (
       <div>
-        <Context>
-          <List>
-            {data.map((i) => (
-              <Draggable key={i}>
-                <Item>
-                  <List>
-                    {data.map((i) => (
-                      <Draggable key={i}>
-                        <Item />
-                      </Draggable>
-                    ))}
-                  </List>
-                </Item>
+        <ListHeader />
+        <DragDropContext>
+          <List droppableId='outer-list' type='outer'>
+            {data.map((item, i) => (
+              <Draggable key={item.id} index={i} draggable={`outer-${item.id}`}>
+                {({ draggableProps, dragHandleProps, innerRef }, { isDragging }) => (
+                  <Item ref={innerRef} {...draggableProps} {...dragHandleProps} data={item}>
+                    {item.subdata && (
+                      <List droppableId={`inner-list-${item.id}`}>
+                        {item.subdata.map((sub, i) => (
+                          <ItemWrapper key={sub.id} index={i} draggable={`outer-${sub.id}`}>
+                          </ItemWrapper>
+                          <Draggable>
+                            {({ draggableProps, dragHandleProps, innerRef }, { isDragging }) => (
+                              <Item data={sub} />
+                            )}
+                          </Draggable>
+                        ))}
+                      </List>
+                    )}
+                  </Item>
+                )}
               </Draggable>
             ))}
           </List>
-        </Context>
+        </DragDropContext>
       </div>
     );
   }
