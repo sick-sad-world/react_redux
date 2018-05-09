@@ -73,7 +73,7 @@ export default class DataList extends React.Component {
     if (!destination) return;
 
 
-    if (source.droppableId === destination.droppableId) {
+    if (parseInt(source.droppableId) === parseInt(destination.droppableId)) {
       if (source.droppableId.indexOf('inner') > -1 && destination.droppableId.indexOf('inner') > -1) {
         this.setState({
           data: this.state.data.map((item) => {
@@ -91,11 +91,23 @@ export default class DataList extends React.Component {
     } else {
       if (source.droppableId.indexOf('inner') > -1 && destination.droppableId.indexOf('inner') > -1) {
         const target = this.state.data.filter(({id}) => parseInt(source.droppableId) === id).map(({subdata}) => subdata[source.index]);
-        console.log(target);
         this.setState({
           data: this.state.data.map((item) => {
             if (parseInt(destination.droppableId) === item.id) {
               return {...item, subdata: addAt(item.subdata, destination.index, target[0])}
+            } else if (parseInt(source.droppableId) === item.id) {
+              item.subdata.splice(source.index, 1);
+              return {...item, subdata: item.subdata};
+            }
+            return item;
+          })
+        });
+      } else if (source.droppableId.indexOf('inner') > -1 && destination.droppableId.indexOf('inner-header') > -1) {
+        const target = this.state.data.filter(({id}) => parseInt(source.droppableId) === id).map(({subdata}) => subdata[source.index]);
+        this.setState({
+          data: this.state.data.map((item) => {
+            if (parseInt(destination.droppableId) === item.id) {
+              return {...item, subdata: addAt(item.subdata, 0, target[0])}
             } else if (parseInt(source.droppableId) === item.id) {
               item.subdata.splice(source.index, 1);
               return {...item, subdata: item.subdata};
@@ -120,7 +132,7 @@ export default class DataList extends React.Component {
                   <Draggable key={item.id} draggableId={item.id} index={i} type='outer'>
                     {({innerRef, draggableProps, dragHandleProps}, draggableSnapshot) => (
                       <li key={item.id} ref={innerRef} {...draggableProps} {...dragHandleProps}>
-                        <Droppable droppableId={`${item.id}-inner`} type='inner'>
+                        <Droppable droppableId={`${item.id}-inner-header`} type='inner'>
                           {({innerRef, placeholder}, {isDraggingOver}) => (
                             <div ref={innerRef} style={{border: '1px solid black'}}>{item.data}</div>
                           )}
