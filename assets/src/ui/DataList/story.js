@@ -5,6 +5,8 @@ import { action } from '@storybook/addon-actions';
 import { withTests } from 'with';
 import DataList from './index';
 import DataListRow from './row';
+import Test from './test';
+import data from './MOCK_DATA.json';
 
 const config = {
   columns: [{
@@ -93,7 +95,7 @@ const config = {
   }
 };
 
-const data = [{
+const sdata = [{
     active: 0,
     recipient: 'some@gmail.com',
     image: {src:'https://picsum.photos/200', alt: 'Some image'},
@@ -169,7 +171,12 @@ storiesOf('UI Components', module)
       propTablesExclude: [DataList]
     })(() => {
       return (
-        <div>
+        <Test data={data} />
+      );
+    }));
+
+/**
+ * <div>
           <h4>Regular list</h4>
           <DataList
             config={config}
@@ -196,5 +203,4 @@ storiesOf('UI Components', module)
             loading={false}
           />
         </div>
-      );
-    }));
+ */
