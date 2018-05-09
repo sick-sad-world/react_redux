@@ -22,13 +22,20 @@ export default class DataList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      isDragging: false,
       data: props.data
     }
-    bindAll(this, 'onDragEnd');
+    bindAll(this, 'onDragEnd', 'onDragStart');
   }
 
   componentWillReceiveProps({data}) {
     this.setState(() => ({data}));
+  }
+
+  onDragStart() {
+    this.setState({
+      isDragging: true
+    });
   }
 
   onDragEnd({draggableId, type, destination, source, reason}) {
@@ -38,6 +45,7 @@ export default class DataList extends React.Component {
     if (parseInt(source.droppableId) === parseInt(destination.droppableId)) {
       if (source.droppableId.indexOf('inner') > -1 && destination.droppableId.indexOf('inner') > -1) {
         this.setState({
+          isDragging: false,
           data: this.state.data.map((item) => {
             if (parseInt(destination.droppableId) === item.id) {
               return {...item, subdata: reorder(item.subdata, source.index, destination.index)}
@@ -54,6 +62,7 @@ export default class DataList extends React.Component {
       if (source.droppableId.indexOf('inner') > -1 && destination.droppableId.indexOf('inner') > -1) {
         const target = this.state.data.filter(({id}) => parseInt(source.droppableId) === id).map(({subdata}) => subdata[source.index]);
         this.setState({
+          isDragging: false,
           data: this.state.data.map((item) => {
             if (parseInt(destination.droppableId) === item.id) {
               return {...item, subdata: addAt(item.subdata, destination.index, target[0])}
@@ -67,6 +76,7 @@ export default class DataList extends React.Component {
       } else if (source.droppableId.indexOf('inner') > -1 && destination.droppableId.indexOf('inner-header') > -1) {
         const target = this.state.data.filter(({id}) => parseInt(source.droppableId) === id).map(({subdata}) => subdata[source.index]);
         this.setState({
+          isDragging: false,
           data: this.state.data.map((item) => {
             if (parseInt(destination.droppableId) === item.id) {
               return {...item, subdata: addAt(item.subdata, 0, target[0])}
@@ -86,7 +96,7 @@ export default class DataList extends React.Component {
     const { data } = this.state;
     return (
       <div>
-        <DragDropContext onDragEnd={this.onDragEnd}>
+        <DragDropContext onDragEnd={this.onDragEnd} onDragStart={this.onDragStart}>
           <Droppable droppableId='outer' type='outer'>
             {({innerRef, placeholder}, {isDraggingOver}) => (
               <ul ref={innerRef}>
