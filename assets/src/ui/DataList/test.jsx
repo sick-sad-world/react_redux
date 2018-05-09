@@ -4,44 +4,6 @@ import classNames from 'classnames';
 import bindAll from 'lodash/bindAll';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
-function ListHeader() {
-  return <div />
-}
-
-function List({ children, ...props }) {
-  return (
-    <Droppable {...props}>
-      {({ innerRef, droppableProps, placeholder }, { isDraggingOver, draggingOverWith }) => (
-        <ul ref={innerRef} {...droppableProps} className={classNames({'state--over': isDraggingOver})}>
-          {children}
-        </ul>
-      )}
-    </Droppable>
-  )
-}
-
-function ItemWrapper({children, droppable, ...props}) {
-  return (
-    <Draggable {...props}>
-      {({ draggableProps, dragHandleProps, innerRef }, { isDragging }) => (
-        <li>
-          {(droppable) ? <Droppable {...droppable}>{children}</Droppable> : children}
-        </li>
-      )}
-    </Draggable>
-  );
-}
-
-function Item() {
-  return (
-    <li>
-      <div>
-        // Content
-      </div>
-    </li>
-  );
-}
-
 const addAt = (list, index, item) => {
   const result = Array.from(list);
   result.splice(index, 0, item);
