@@ -4,8 +4,6 @@ import { withInfo } from '@storybook/addon-info';
 import { action } from '@storybook/addon-actions';
 import { withTests } from 'with';
 import DataList from './index';
-import DataListRow from './row';
-import Test from './test';
 import data from './MOCK_DATA.json';
 
 const config = {
@@ -171,7 +169,7 @@ storiesOf('UI Components', module)
       propTablesExclude: [DataList]
     })(() => {
       return (
-        <Test data={data} />
+        <DataList data={data} />
       );
     }));
 
