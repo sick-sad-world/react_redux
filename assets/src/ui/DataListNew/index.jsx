@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import bindAll from 'lodash/bindAll';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import { childrenShape } from 'shared/typings';
+import { classNameShape } from 'shared/typings';
+import ListHeader from './ListHeader';
 import ListItem from './ListItem';
 import List from './List';
-import Row from './Row';
+import { ListStateRenderer, listStateRendererShape } from './renderers';
+import Row, { configColumnShape, configActionShape } from './Row';
 
 const addAt = (list, index, item) => {
+  if (!item) return list;
   const result = Array.from(list);
   result.splice(index, 0, item);
   return result;
@@ -46,7 +49,7 @@ export default class DataList extends React.Component {
     }
     this.template = getTemplate(props.config);
     this.subtemplate = (props.config.subdata) ? getTemplate(props.config.subdata) : null;
-    bindAll(this, 'onDragEnd', 'onDragStart', 'renderListItem', 'renderSubListItem', '_makeRootRef', 'clearActionMenu');
+    bindAll(this, 'onDragEnd', 'onDragStart', 'renderListItem', 'renderSubListItem', '_makeRootRef', 'clearActionMenu', 'setActionState');
   }
 
   componentWillReceiveProps({data, config}) {
@@ -66,7 +69,7 @@ export default class DataList extends React.Component {
     });
   }
 
-  onDragEnd({draggableId, type, destination, source, reason}) {
+  onDragEnd({destination, source}) {
     if (!destination) return;
 
     const sourceId = parseInt(source.droppableId);
@@ -118,6 +121,10 @@ export default class DataList extends React.Component {
     }));
     
   }
+
+  setActionState(i) {
+    return () => this.setState(updateIndexedState('actions', i));
+  }
   
   _makeRootRef(el) {
     this.root = el;
@@ -130,15 +137,17 @@ export default class DataList extends React.Component {
   }
 
   renderListItem({dragHandleProps, toggleSubdata, data}) {
+    const { config } = this.props;
     return (
-      <Droppable droppableId={`${data.id}-inner-item`} type='inner'>
-        {({innerRef, placeholder}, {isDraggingOver}) => (
+      <Droppable isDropDisabled={this.props.sortable} droppableId={`${data.id}-inner-item`} type='inner'>
+        {({innerRef}, {isDraggingOver}) => (
           <Row
             dragHandleProps={dragHandleProps}
             toggleSubdata={toggleSubdata}
+            toggleActions={(config.actions) ? this.setActionState(data.id) : null}
             ref={innerRef}
             data={data}
-            config={this.props.config}
+            config={config}
             template={this.template}
           />
         )}
@@ -146,29 +155,36 @@ export default class DataList extends React.Component {
     );
   }
 
-  renderSubListItem({dragHandleProps, toggleSubdata, data}) {
+  renderSubListItem({dragHandleProps, data}) {
+    const { subdata } = this.props.config;
     return (
       <Row
         dragHandleProps={dragHandleProps}
-        toggleSubdata={toggleSubdata}
+        toggleActions={(subdata.actions) ? this.setActionState(`${data.id}-inner`) : null}
         data={data}
-        config={this.props.config}
+        config={subdata}
         template={this.subtemplate}
       />
     );
   }
 
   render() {
-    const { rootClassName, className, sortable } = this.props; 
+    const { rootClassName, className, sortable, errorState, emptyState, config } = this.props; 
     const { data } = this.state;
-    return (
-      <div ref={this._makeRootRef} className={classNames(rootClassName, className)}>
+    let content = null;
+
+    if (errorState.text) {
+      content = <ListStateRenderer type='error' className='state--error' {...errorState} />;
+    } else if (!data.length) {
+      content = <ListStateRenderer type='empty' className='state--empty' {...emptyState} />;
+    } else {
+      content = (
         <DragDropContext onDragEnd={this.onDragEnd} onDragStart={this.onDragStart}>
-          <List droppableId='outer' type='outer'>
+          <List droppableId='outer' type='outer' isDropDisabled={sortable}>
             {data.map(({subdata, ...item}, i) => (
               <ListItem key={item.id} draggableId={item.id} index={i} type='outer' data={item} Item={this.renderListItem}>
                 {(subdata) && (
-                  <List droppableId={`${item.id}-inner`} type='inner'>
+                  <List droppableId={`${item.id}-inner`} type='inner' isDropDisabled={sortable}>
                     {subdata.map((item, i) => (
                       <ListItem key={item.id} draggableId={item.id} index={i} type='inner' data={item} Item={this.renderSubListItem} />
                     ))}
@@ -178,6 +194,13 @@ export default class DataList extends React.Component {
             ))}
           </List>
         </DragDropContext>
+      );
+    }
+
+    return (
+      <div ref={this._makeRootRef} className={classNames(rootClassName, className)}>
+        <ListHeader sortable={sortable} config={config} template={this.template} />
+        {content}
       </div>
     );
   }

@@ -4,6 +4,7 @@ import { withInfo } from '@storybook/addon-info';
 import { action } from '@storybook/addon-actions';
 import { withTests } from 'with';
 import DataList from './index';
+import Row from './Row';
 import data from './MOCK_DATA.json';
 
 const config = {
@@ -59,15 +60,16 @@ const config = {
       id: 'id',
       size: '32px'
     }, {
-      id: 'label',
-      size: '50%'
-    }, {
-      id: 'descr',
-      size: '50%'
+      id: 'name',
+      size: '25%',
+      
     }, {
       id: 'type',
       render: 'feedType',
       size: '90px'
+    }, {
+      id: 'url',
+      size: '50%'
     }],
     actions: (item) => {
       const changeState = (item.active) ? {
@@ -93,83 +95,14 @@ const config = {
   }
 };
 
-const sdata = [{
-    active: 0,
-    recipient: 'some@gmail.com',
-    image: {src:'https://picsum.photos/200', alt: 'Some image'},
-    columns: [{id: 1, label: 'Column'}, {id: 2, label: 'Column 2'}, {id: 3, label: 'Column 3'}],
-    id: 69,
-    name: "Report Hearth",
-    subdata: [{
-      id: 1,
-      label: 'Column',
-      descr: 'Awesome column',
-      type: 'html'
-    }, {
-      id: 2,
-      label: 'Column 2',
-      descr: 'Awesome column',
-      type: 'rss'
-    }, {
-      id: 3,
-      label: 'Column 3',
-      descr: 'Awesome column',
-      type: 'twitter'
-    }]
-  }, {
-    active: 1,
-    recipient: 'awesome@gmail.com',
-    image: {src:'https://picsum.photos/20013123', alt: 'Ihor Koptielov'},
-    columns: [{id: 1, label: 'Column'}],
-    id: 71,
-    name: "Report Awesome",
-    subdata: [{
-      id: 1,
-      label: 'Column',
-      descr: 'Awesome column',
-      type: 'facebook'
-    }]
-  }, {
-    active: 1,
-    recipient: 'last.day.of.earth@gmail.com',
-    image: {src:'https://picsum.photos/200', alt: 'Some image'},
-    columns: [{id: 1, label: 'Column'}, {id: 2, label: 'Cool Column'}],
-    id: 43,
-    name: "Cool Report",
-    subdata: [{
-      id: 1,
-      label: 'Column',
-      descr: 'Awesome column',
-      type: 'html'
-    }, {
-      id: 2,
-      label: 'Cool Column',
-      descr: 'Cool column',
-      type: 'rss'
-    }]
-  }, {
-    active: 1,
-    recipient: null,
-    image: {src:'https://picsum.photos/200', alt: 'Some image'},
-    columns: [{id: 2, label: 'Important Column'}],
-    id: 12,
-    name: "Recipeless Report",
-    subdata: [{
-      id: 2,
-      label: 'Important Column',
-      descr: 'Important column',
-      type: 'reddit'
-    }]
-  }];
-
 storiesOf('UI Components', module)
   .addDecorator(withTests('DataList'))
   .add('DataList', withInfo({
-      propTables: [DataList, DataListRow],
+      propTables: [DataList, Row],
       propTablesExclude: [DataList]
     })(() => {
       return (
-        <DataList data={data} />
+        <DataList config={config} data={data} />
       );
     }));
 

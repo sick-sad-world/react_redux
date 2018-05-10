@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import bindAll from 'lodash/bindAll';
 import mapValues from 'lodash/mapValues';
 import isFunction from 'lodash/isFunction';
 import classNames from 'classnames';
-import { childrenShape } from 'shared/typings';
 import IconButton from '../IconButton';
 import renderers from './renderers';
 import Actionmenu, { actionConfigShape } from '../ActionMenu';
@@ -27,6 +25,11 @@ export const configActionShape = PropTypes.oneOfType([
   PropTypes.arrayOf(actionConfigShape)
 ]);
 
+/**
+ * Data List - one of key components of application, Allows to display data
+ * through configurable set of columns, and provide a lot of exceeding functionality
+ * like: D&D sorting, Custom actions, Default Renderers, 
+ */
 export default class DataListRow extends React.Component {
 
   makeActions(item) {
@@ -60,8 +63,9 @@ export default class DataListRow extends React.Component {
   }
 
   render() {
-    const { subdata, config, toggleActions, actionsOpen, dragHandleProps, rootClassName, template } = this.props;
+    const { config, toggleActions, actionsOpen, toggleSubdata, dragHandleProps, rootClassName, template } = this.props;
     const hasActions = config.actions && toggleActions;
+    const hasSubdata = toggleSubdata instanceof Function;
     return (
       <div className={classNames(rootClassName, 'item')}>
         {dragHandleProps && <IconButton g='dots-three-vertical' {...dragHandleProps} />}
@@ -70,7 +74,7 @@ export default class DataListRow extends React.Component {
             {config.columns.map(this.renderColumn)}
           </div>
         </div>
-        {subdata && <IconButton g={toggleIcon[subdata][0]} onClick={this.toggleSubdata} title={toggleIcon[subdata][1]} />}
+        {toggleSubdata && <IconButton g={toggleIcon[hasSubdata][0]} onClick={toggleSubdata} title={toggleIcon[hasSubdata][1]} />}
         {hasActions && <IconButton g='menu' onClick={toggleActions} title='Item Actions' />}
         {hasActions && actionsOpen && <Actionmenu data={this.makeActions()} />}
       </div>
@@ -103,8 +107,8 @@ DataListRow.propTypes = {
   template: PropTypes.string.isRequired,
   /** Actual data to render in a row */
   data: PropTypes.object.isRequired, // eslint-disable-line
-  /** Boolean indicating whatever this row have some subdata to render */
-  subdata: PropTypes.bool.isRequired,
+  /** Function that toggles state of parent component whatever it should render subata, if Null then no subdata to render */
+  toggleSubdata: PropTypes.func,
   /** Handler responsible for opening/closing Actions popup, Usually this is provided by List */
   toggleActions: PropTypes.func,
   /** Indicates whatever actions popup should be rendered */
