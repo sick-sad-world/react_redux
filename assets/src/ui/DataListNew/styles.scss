@@ -22,12 +22,7 @@
   }
 
   .sub-list-container {
-    display: none;
     padding-left: $s-element;
-  }
-
-  .subdata--open + .sub-list-container {
-    display: block;
   }
 
   .state--empty, .state--error {

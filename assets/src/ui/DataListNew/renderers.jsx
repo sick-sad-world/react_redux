@@ -56,16 +56,16 @@ ListStateRenderer.propTypes = {
  * Render Status via special badge i.e [Active|Inactive] e.t.c
  * @param {*} data 
  */
-function StatusRenderer(data) {
-  return <Badge className={classNames(statusValues[data][0], 'status')} value={statusValues[data][1]} />
+function StatusRenderer(data, cfg) {
+  return <Badge style={{width: cfg.size}} className={classNames(statusValues[data][0])} value={statusValues[data][1]} />
 }
 
 /**
  * Render Feed type, RSS, HTML, Facebook, e.t.c.
  * @param {*} data 
  */
-function FeedTypeRenderer(data) {
-  return <Badge className={classNames(data, 'status')} value={data} />
+function FeedTypeRenderer(data, cfg) {
+  return <Badge style={{width: cfg.size}} className={classNames(data)} value={data} />
 }
 
 /**
@@ -93,9 +93,9 @@ function ImageRenderer(data, cfg) {
 /**
  * Plain renderer of value with default fallback
  */
-function RenderDefault(data, {def = 'not found'}) {
+function RenderDefault(data, {className = '', def = 'not found'}) {
   return (
-    <span>{(data === null || data === undefined || data === '') ? def : data }</span>
+    <span className={className}>{(data === null || data === undefined || data === '') ? def : data }</span>
   )
 }
 

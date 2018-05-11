@@ -99,6 +99,11 @@ h6, .t-h6 {
   font-size: $f-h6;
 }
 
+.enum {
+  text-align: center;
+  display: block;
+}
+
 mark {
   background-color: color(selection);
 }

@@ -11,7 +11,8 @@ const config = {
   columns: [{
     id: 'id',
     label: 'id',
-    size: '32px'
+    size: '32px',
+    className: 'enum'
   }, {
     id: 'name',
     label: 'Name',
@@ -28,7 +29,7 @@ const config = {
     size: '30%'
   }],
   actions: (item) => {
-    const changeState = (item.active) ? {
+    const changeState = (item.status) ? {
       label: 'Disable',
       icon: 'eye-with-line',
       handler: action('Disable')
@@ -57,12 +58,12 @@ const config = {
       id: 'id',
       size: '32px'
     }, {
-      id: 'name',
-      size: '25%',
-    }, {
       id: 'type',
       render: 'feedType',
       size: '90px'
+    }, {
+      id: 'name',
+      size: '25%',
     }, {
       id: 'url',
       size: '50%'
@@ -86,18 +87,9 @@ storiesOf('UI Components', module)
       propTablesExclude: [DataList]
     })(() => {
       return (
-        <DataList config={config} data={data} />
-      );
-    }));
-
-/**
- * <div>
+        <div>
           <h4>Regular list</h4>
-          <DataList
-            config={config}
-            data={data}
-            sortable
-          />
+          <DataList config={config} data={data} />
           <div style={{height: '50px'}} />
           <h4>Empty list</h4>
           <DataList
@@ -118,4 +110,5 @@ storiesOf('UI Components', module)
             loading={false}
           />
         </div>
- */
+      );
+    }));

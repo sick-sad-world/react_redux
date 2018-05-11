@@ -35,20 +35,13 @@ export const configActionShape = PropTypes.oneOfType([
 export default class DataListRow extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      subdata: false
-    }
-    bindAll(this, 'makeActions', 'renderColumn', 'toggleSubdata')
+    bindAll(this, 'makeActions', 'renderColumn')
   }
 
-  toggleSubdata() {
-    return this.setState(({subdata}) => ({subdata: !subdata}))
-  }
-
-  makeActions(item) {
+  makeActions() {
     const {config, data} = this.props;
     if (isFunction(config.actions)) {
-      return config.actions(item);
+      return config.actions(data);
     }
     return mapValues(config.actions, ({handler, ...item}) => ({
       ...item,
@@ -56,7 +49,7 @@ export default class DataListRow extends React.Component {
     }));
   }
 
-  renderColumn({ id, render, ...cfg }) {
+  renderColumn({ id, render, label, ...cfg }) {
     const dataItem = this.props.data[id];
     let content = null;
 
@@ -69,25 +62,24 @@ export default class DataListRow extends React.Component {
     }
 
     return (
-      <div key={id}>
+      <div key={id} className={classNames('cell', `value-${label}`)}>
         {content}
       </div>
     );
   }
 
   render() {
-    const { config, toggleActions, actionsOpen, dragHandleProps, rootClassName, hasChildList, className, template } = this.props;
-    const { subdata } = this.state;
+    const { config, toggleActions, actionsOpen, dragHandleProps, rootClassName, toggleSubdata, subdata, className, template, data } = this.props;
     const hasActions = config.actions && toggleActions;
     return (
-      <div className={classNames(rootClassName, className, {'subdata--open': subdata})}>
+      <div className={classNames(rootClassName, className)}>
         {dragHandleProps && <IconButton g='dots-three-vertical' {...dragHandleProps} />}
         <div className='content' style={{gridTemplateColumns: template}}>
           {config.columns.map(this.renderColumn)}
         </div>
-        {hasChildList && <IconButton g={toggleIcon[subdata][0]} onClick={this.toggleSubdata} title={toggleIcon[subdata][1]} />}
-        {hasActions && <IconButton g='menu' onClick={toggleActions} title='Item Actions' />}
-        {hasActions && actionsOpen && <Actionmenu data={this.makeActions()} />}
+        {(toggleSubdata instanceof Function) && <IconButton g={toggleIcon[subdata][0]} onClick={toggleSubdata} title={toggleIcon[subdata][1]} />}
+        {hasActions && <IconButton data-ignore={data.id} g='menu' onClick={toggleActions} title='Item Actions' />}
+        {hasActions && actionsOpen && <Actionmenu onBodyClick={toggleActions} data={this.makeActions()} dataIgnore={`${data.id}`} />}
       </div>
     );
   }
@@ -95,7 +87,7 @@ export default class DataListRow extends React.Component {
 }
 
 DataListRow.defaultProps = {
-  hasChildList: false,
+  subdata: false,
   actionsOpen: false,
   rootClassName: 'DataListRow--root'
 }
@@ -122,8 +114,10 @@ DataListRow.propTypes = {
   data: PropTypes.object.isRequired, // eslint-disable-line
   /** Handler responsible for opening/closing Actions popup, Usually this is provided by List */
   toggleActions: PropTypes.func,
+  /**  */
+  toggleSubdata: PropTypes.func,
   /** indicates whatever subdata was rendered, this will affect on button styles */
-  hasChildList: PropTypes.bool.isRequired,
+  subdata: PropTypes.bool.isRequired,
   /** Indicates whatever actions popup should be rendered */
   actionsOpen: PropTypes.bool,
   /** Config that defines how each value should be rendered and actions related to item */
