@@ -42,7 +42,7 @@ export default class DataListRow extends React.Component {
   }
 
   toggleSubdata() {
-    return this.setState(({subdata}) => ({subata: !subdata}))
+    return this.setState(({subdata}) => ({subdata: !subdata}))
   }
 
   makeActions(item) {

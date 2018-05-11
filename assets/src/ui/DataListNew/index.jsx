@@ -159,6 +159,7 @@ export default class DataList extends React.Component {
                       ref={innerRef}
                       data={item}
                       config={config}
+                      hasChildList
                       template={this.template}
                     />
                     <List droppableId={`${item.id}-inner`} type='inner' className='sub-list-container'>
