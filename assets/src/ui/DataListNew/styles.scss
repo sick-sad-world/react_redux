@@ -16,10 +16,18 @@
   .list-container, .sub-list-container {
     list-style: none;
     padding: 0;
+    // li:not(:last-child) {
+    //   border-bottom: 1px solid color(border);
+    // }
   }
 
   .sub-list-container {
+    //display: none;
     padding-left: $s-element;
+  }
+
+  .subdata--open + .sub-list-container {
+    display: block;
   }
 
   .state--empty, .state--error {
@@ -106,9 +114,6 @@
   align-items: center;
   &:hover {
     background-color: color(highlight);
-  }
-  &:not(:last-child) .item {
-    border-bottom: 1px solid color(border);
   }
 
   .content {

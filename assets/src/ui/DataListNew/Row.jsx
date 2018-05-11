@@ -34,8 +34,15 @@ export const configActionShape = PropTypes.oneOfType([
  */
 export default class DataListRow extends React.Component {
   constructor(props) {
-    super(props)
-    bindAll(this, 'makeActions', 'renderColumn')
+    super(props);
+    this.state = {
+      subdata: false
+    }
+    bindAll(this, 'makeActions', 'renderColumn', 'toggleSubdata')
+  }
+
+  toggleSubdata() {
+    return this.setState(({subdata}) => ({subata: !subdata}))
   }
 
   makeActions(item) {
@@ -69,16 +76,16 @@ export default class DataListRow extends React.Component {
   }
 
   render() {
-    const { config, toggleActions, actionsOpen, toggleSubdata, dragHandleProps, subdata, rootClassName, className, template } = this.props;
+    const { config, toggleActions, actionsOpen, dragHandleProps, rootClassName, hasChildList, className, template } = this.props;
+    const { subdata } = this.state;
     const hasActions = config.actions && toggleActions;
-    const hasSubdata = toggleSubdata instanceof Function && subdata;
     return (
-      <div className={classNames(rootClassName, className)}>
+      <div className={classNames(rootClassName, className, {'subdata--open': subdata})}>
         {dragHandleProps && <IconButton g='dots-three-vertical' {...dragHandleProps} />}
         <div className='content' style={{gridTemplateColumns: template}}>
           {config.columns.map(this.renderColumn)}
         </div>
-        {(toggleSubdata instanceof Function) && <IconButton g={toggleIcon[hasSubdata][0]} onClick={toggleSubdata} title={toggleIcon[hasSubdata][1]} />}
+        {hasChildList && <IconButton g={toggleIcon[subdata][0]} onClick={this.toggleSubdata} title={toggleIcon[subdata][1]} />}
         {hasActions && <IconButton g='menu' onClick={toggleActions} title='Item Actions' />}
         {hasActions && actionsOpen && <Actionmenu data={this.makeActions()} />}
       </div>
@@ -88,7 +95,7 @@ export default class DataListRow extends React.Component {
 }
 
 DataListRow.defaultProps = {
-  subdata: false,
+  hasChildList: false,
   actionsOpen: false,
   rootClassName: 'DataListRow--root'
 }
@@ -113,12 +120,10 @@ DataListRow.propTypes = {
   template: PropTypes.string.isRequired,
   /** Actual data to render in a row */
   data: PropTypes.object.isRequired, // eslint-disable-line
-  /** Function that toggles state of parent component whatever it should render subata, if Null then no subdata to render */
-  toggleSubdata: PropTypes.func,
   /** Handler responsible for opening/closing Actions popup, Usually this is provided by List */
   toggleActions: PropTypes.func,
   /** indicates whatever subdata was rendered, this will affect on button styles */
-  subdata: PropTypes.bool.isRequired,
+  hasChildList: PropTypes.bool.isRequired,
   /** Indicates whatever actions popup should be rendered */
   actionsOpen: PropTypes.bool,
   /** Config that defines how each value should be rendered and actions related to item */
