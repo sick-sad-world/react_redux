@@ -9,9 +9,11 @@ import Header from './header';
 import Footer from './footer';
 import './styles.scss';
 
+/** Provide proper exports for child components */
 export const ModalHeader = Header; 
 export const ModalFooter = Footer; 
 
+/** Modal Component for UI Framework */
 export default class ModalWindow extends React.Component {
   constructor(props) {
     super(props)
@@ -56,11 +58,18 @@ ModalWindow.defaultProps = {
 ModalWindow.propTypes = {
   /** Classname all styles bound to */
   rootClassName: PropTypes.string.isRequired,
+  /** Unique key identifier of modal applied both to <Overlay> and <Modal/> with apropriate prefixes */
   key: PropTypes.string.isRequired,
+  /** Classes applied to root component */
   className: classNameShape,
+  /** Modal Contents */
   children: childrenShape,
+  /** ID to look for DOM Element that portal will bound to */
   target: PropTypes.string.isRequired,
+  /** Function bound to [click] on <Overlay/> */
   onOverlayClick: PropTypes.func,
+  /** Boolean indicates whatever modal is open or closed */
   open: PropTypes.bool.isRequired,
-  style: PropTypes.object
+  /** Styles directly applied to Modal <section/> that should be merged with animation styles */
+  style: PropTypes.object // eslint-disable-line
 }

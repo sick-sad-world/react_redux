@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { classNameShape, childrenShape } from 'shared/typings';
 import IconButton from '../IconButton';
 
+/** Predefined Modal Header component */
 export default function ModalHeader({className, title, onClose, children, rootClassName, ...props}) {
   return (
     <header {...props} className={classNames(rootClassName, className)}>
@@ -23,8 +24,12 @@ ModalHeader.defaultProps = {
 ModalHeader.propTypes = {
   /** Classname all styles bound to */
   rootClassName: PropTypes.string.isRequired,
+  /** ClassNames applied to <header/> element */
   className: classNameShape,
+  /** Additional contents for header (<Tabs/> for example) */
   children: childrenShape,
+  /** Title of modal window */
   title: PropTypes.string.isRequired,
-  onClose: PropTypes.func
+  /** Function invoked when [Close] button is clicked */
+  onClose: PropTypes.func.isRequired
 }
