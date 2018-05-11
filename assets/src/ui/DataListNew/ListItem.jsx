@@ -23,7 +23,7 @@ export default class ListItem extends React.Component {
       <Draggable {...props}>
         {({innerRef, draggableProps, dragHandleProps}, draggableSnapshot) => (
           <li ref={innerRef} {...draggableProps}>
-            <Item dragHandleProps={dragHandleProps} toggleSubdata={this.toggleSubdata} data={data} />
+            <Item dragHandleProps={dragHandleProps} toggleSubdata={this.toggleSubdata} subdata={this.state.subdata} data={data} />
             {(children && this.state.subdata) && children}
           </li>
         )}

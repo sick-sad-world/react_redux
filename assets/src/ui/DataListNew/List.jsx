@@ -1,12 +1,12 @@
 import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
-import { childrenShape } from 'shared/typings';
+import { childrenShape, classNameShape } from 'shared/typings';
 
-export default function List({children, ...props}) {
+export default function List({children, className, ...props}) {
   return (
     <Droppable {...props}>
       {({innerRef, placeholder}, {isDraggingOver}) => (
-        <ul classNames='data-list' ref={innerRef}>
+        <ul className={className} ref={innerRef}>
           {children}
           {placeholder}
         </ul>
@@ -16,5 +16,6 @@ export default function List({children, ...props}) {
 }
 
 List.propTypes = {
+  className: classNameShape,
   children: childrenShape.isRequired
 }

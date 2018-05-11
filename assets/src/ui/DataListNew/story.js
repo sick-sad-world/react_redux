@@ -9,30 +9,23 @@ import data from './MOCK_DATA.json';
 
 const config = {
   columns: [{
-    id: 'image',
-    label: '',
-    render: 'image',
-    rounded: true,
+    id: 'id',
+    label: 'id',
     size: '32px'
   }, {
     id: 'name',
     label: 'Name',
     size: '30%'
   }, {
-    id: 'recipient',
-    label: 'Recipient',
-    def: 'No recipient specified',
-    size: '30%'
-  }, {
-    id: 'active',
+    id: 'status',
     label: 'Status',
     render: 'status',
     size: '90px',
   }, {
-    id: 'columns',
-    label: 'Columns',
-    size: '40%',
-    render: 'list'
+    id: 'owner',
+    label: 'Owner',
+    def: 'Owner not found',
+    size: '30%'
   }],
   actions: (item) => {
     const changeState = (item.active) ? {
@@ -46,6 +39,10 @@ const config = {
     }
 
     return [changeState, {
+      label: 'Create feed here',
+      icon: 'add-to-list',
+      handler: action('Create feed here')
+    }, {
       label: 'Edit',
       icon: 'documents',
       handler: action('Edit')
@@ -62,7 +59,6 @@ const config = {
     }, {
       id: 'name',
       size: '25%',
-      
     }, {
       id: 'type',
       render: 'feedType',
@@ -71,27 +67,15 @@ const config = {
       id: 'url',
       size: '50%'
     }],
-    actions: (item) => {
-      const changeState = (item.active) ? {
-        label: 'Disable',
-        icon: 'eye-with-line',
-        handler: action('Disable')
-      } : {
-        label: 'Enable',
-        icon: 'eye',
-        handler: action('Enable')
-      }
-
-      return [changeState, {
-        label: 'Edit',
-        icon: 'documents',
-        handler: action('Edit')
-      }, '---', {
-        label: 'Delete',
-        icon: 'trash',
-        handler: action('Delete')
-      }]
-    }
+    actions: [{
+      label: 'Add to set',
+      icon: 'add-to-list',
+      handler: action('Add to set')
+    }, {
+      label: 'Remove from set',
+      icon: 'trash',
+      handler: action('Remove from set')
+    }]
   }
 };
 

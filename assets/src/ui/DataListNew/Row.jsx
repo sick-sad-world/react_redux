@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import bindAll from 'lodash/bindAll';
 import mapValues from 'lodash/mapValues';
 import isFunction from 'lodash/isFunction';
 import classNames from 'classnames';
+import { classNameShape } from 'shared/typings';
 import IconButton from '../IconButton';
 import renderers from './renderers';
 import Actionmenu, { actionConfigShape } from '../ActionMenu';
@@ -31,6 +33,10 @@ export const configActionShape = PropTypes.oneOfType([
  * like: D&D sorting, Custom actions, Default Renderers, 
  */
 export default class DataListRow extends React.Component {
+  constructor(props) {
+    super(props)
+    bindAll(this, 'makeActions', 'renderColumn')
+  }
 
   makeActions(item) {
     const {config, data} = this.props;
@@ -63,18 +69,16 @@ export default class DataListRow extends React.Component {
   }
 
   render() {
-    const { config, toggleActions, actionsOpen, toggleSubdata, dragHandleProps, rootClassName, template } = this.props;
+    const { config, toggleActions, actionsOpen, toggleSubdata, dragHandleProps, subdata, rootClassName, className, template } = this.props;
     const hasActions = config.actions && toggleActions;
-    const hasSubdata = toggleSubdata instanceof Function;
+    const hasSubdata = toggleSubdata instanceof Function && subdata;
     return (
-      <div className={classNames(rootClassName, 'item')}>
+      <div className={classNames(rootClassName, className)}>
         {dragHandleProps && <IconButton g='dots-three-vertical' {...dragHandleProps} />}
-        <div className='content-holder'>
-          <div className='content' style={{gridTemplateColumns: template}}>
-            {config.columns.map(this.renderColumn)}
-          </div>
+        <div className='content' style={{gridTemplateColumns: template}}>
+          {config.columns.map(this.renderColumn)}
         </div>
-        {toggleSubdata && <IconButton g={toggleIcon[hasSubdata][0]} onClick={toggleSubdata} title={toggleIcon[hasSubdata][1]} />}
+        {(toggleSubdata instanceof Function) && <IconButton g={toggleIcon[hasSubdata][0]} onClick={toggleSubdata} title={toggleIcon[hasSubdata][1]} />}
         {hasActions && <IconButton g='menu' onClick={toggleActions} title='Item Actions' />}
         {hasActions && actionsOpen && <Actionmenu data={this.makeActions()} />}
       </div>
@@ -92,6 +96,8 @@ DataListRow.defaultProps = {
 DataListRow.propTypes = {
   /** Classname all styles bound to */
   rootClassName: PropTypes.string.isRequired,
+  /** ClassNames applied to root element */
+  className: classNameShape,
   /** Shape of props provided by DnD Draggable component, null is sorting is off */
   dragHandleProps: PropTypes.shape({
     tabIndex: PropTypes.number.isRequired,
@@ -111,6 +117,8 @@ DataListRow.propTypes = {
   toggleSubdata: PropTypes.func,
   /** Handler responsible for opening/closing Actions popup, Usually this is provided by List */
   toggleActions: PropTypes.func,
+  /** indicates whatever subdata was rendered, this will affect on button styles */
+  subdata: PropTypes.bool.isRequired,
   /** Indicates whatever actions popup should be rendered */
   actionsOpen: PropTypes.bool,
   /** Config that defines how each value should be rendered and actions related to item */

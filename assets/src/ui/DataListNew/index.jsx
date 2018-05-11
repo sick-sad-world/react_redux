@@ -9,6 +9,7 @@ import ListItem from './ListItem';
 import List from './List';
 import { ListStateRenderer, listStateRendererShape } from './renderers';
 import Row, { configColumnShape, configActionShape } from './Row';
+import './styles.scss';
 
 const addAt = (list, index, item) => {
   if (!item) return list;
@@ -136,23 +137,35 @@ export default class DataList extends React.Component {
     }
   }
 
-  renderListItem({dragHandleProps, toggleSubdata, data}) {
+  renderListItem({dragHandleProps, toggleSubdata, subdata, data}) {
     const { config } = this.props;
     return (
-      <Droppable isDropDisabled={this.props.sortable} droppableId={`${data.id}-inner-item`} type='inner'>
-        {({innerRef}, {isDraggingOver}) => (
-          <Row
-            dragHandleProps={dragHandleProps}
-            toggleSubdata={toggleSubdata}
-            toggleActions={(config.actions) ? this.setActionState(data.id) : null}
-            ref={innerRef}
-            data={data}
-            config={config}
-            template={this.template}
-          />
-        )}
-      </Droppable>
+      <Row
+        dragHandleProps={dragHandleProps}
+        toggleSubdata={toggleSubdata}
+        toggleActions={(config.actions) ? this.setActionState(data.id) : null}
+        data={data}
+        subdata={subdata}
+        config={config}
+        template={this.template}
+      />
     );
+    // return (
+    //   <Droppable isDropDisabled={this.props.sortable} droppableId={`${data.id}-inner-item`} type='inner'>
+    //     {({innerRef}, {isDraggingOver}) => (
+    //       <Row
+    //         dragHandleProps={dragHandleProps}
+    //         toggleSubdata={toggleSubdata}
+    //         toggleActions={(config.actions) ? this.setActionState(data.id) : null}
+    //         ref={innerRef}
+    //         data={data}
+    //         subdata={subdata}
+    //         config={config}
+    //         template={this.template}
+    //       />
+    //     )}
+    //   </Droppable>
+    // );
   }
 
   renderSubListItem({dragHandleProps, data}) {
@@ -180,16 +193,16 @@ export default class DataList extends React.Component {
     } else {
       content = (
         <DragDropContext onDragEnd={this.onDragEnd} onDragStart={this.onDragStart}>
-          <List droppableId='outer' type='outer' isDropDisabled={sortable}>
+          <List droppableId='outer' type='outer' isDropDisabled={sortable} className='list-container'>
             {data.map(({subdata, ...item}, i) => (
               <ListItem key={item.id} draggableId={item.id} index={i} type='outer' data={item} Item={this.renderListItem}>
-                {(subdata) && (
-                  <List droppableId={`${item.id}-inner`} type='inner' isDropDisabled={sortable}>
+                {/*(subdata) && (
+                  <List droppableId={`${item.id}-inner`} type='inner' isDropDisabled={sortable} className='sub-list-container'>
                     {subdata.map((item, i) => (
                       <ListItem key={item.id} draggableId={item.id} index={i} type='inner' data={item} Item={this.renderSubListItem} />
                     ))}
                   </List>
-                )}
+                )*/}
               </ListItem>
             ))}
           </List>

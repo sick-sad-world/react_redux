@@ -100,29 +100,22 @@
 }
 
 .DataListRow--root {
-
-  .item {
-    display: flex;
-    position: relative;
-    padding: u(.5) 0;
-    align-items: center;
-    &:hover {
-      background-color: color(highlight);
-    }
+  display: flex;
+  position: relative;
+  padding: u(.5) 0;
+  align-items: center;
+  &:hover {
+    background-color: color(highlight);
   }
-
   &:not(:last-child) .item {
     border-bottom: 1px solid color(border);
-  }
-
-  .content-holder {
-    flex: 1 1 auto;
   }
 
   .content {
     display: grid;
     grid-template-rows: auto;
     grid-gap: u();
+    flex: 1 1 auto;
   }
 
   .image-content {
