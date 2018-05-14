@@ -1,36 +1,50 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import Modal, { ModalHeader, ModalFooter } from './index';
 
 describe('<Modal/>', () => {
   const error = jest.spyOn(console, 'error');
+  const body = global.document.querySelector('body');
   const modalRoot = global.document.createElement('div');
   modalRoot.setAttribute('id', 'modal-root');
-  const body = global.document.querySelector('body');
   body.appendChild(modalRoot);
+  let wrapper = null;
 
   beforeEach(() => {
     error.mockReset();
   })
 
-  test('Should render <Overlay> and <Modal> elements, into target element found in DOM', () => {
+  afterEach(() => {
+    wrapper.unmount();
+  })
 
+  test('Should render <Overlay> and <Modal> elements, into target element found in DOM,', () => {
+    wrapper = mount(<Modal key='test' open>Content</Modal>);
+    expect(wrapper.childAt(0).children().length).toEqual(2);
+    expect(wrapper.find('.overlay').length).toEqual(1);
+    expect(wrapper.find('.Modal--root').length).toEqual(1);
+    expect(modalRoot.querySelector('.Modal--root')).toBeTruthy();
+    expect(modalRoot.querySelector('.overlay')).toBeTruthy();
   })
 
   test('[children] acts as content of Modal window', () => {
-
+    wrapper = mount(<Modal key='test' open><span foo='data'>Content</span></Modal>);
+    expect(wrapper.containsMatchingElement(<span foo='data'>Content</span>)).toBeTruthy();
   })
 
   test('Should throw an Error if Target is not found', () => {
-
+    expect(() => {
+      mount(<Modal target={null}>Some body</Modal>);
+      expect(error).toHaveBeenCalledTimes(2);
+      expect(error.mock.calls[0][0]).toMatch(global.getPropTypeWarningTester('target', 'Modal'));
+    }).toThrow();
   })
 
-  test('Should enforce providing [target] property', () => {
-
-  })
-
-  test('Should pass all props to <header/> except listed in proptypes', () => {
-
+  test('Should pass all props to <modal/> except listed in proptypes', () => {
+    wrapper = mount(<Modal key='test' foo='foo' bar='bar'>Content</Modal>);
+    expect(wrapper.prop('key')).not.toEqual('test');
+    expect(wrapper.prop('foo')).toEqual('foo');
+    expect(wrapper.prop('bar')).toEqual('bar');
   })
 
 })

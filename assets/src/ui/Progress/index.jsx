@@ -36,16 +36,10 @@ export default class Progress extends React.Component {
     bindAll(this, 'activateLoading', 'setState', 'activateCounter');
     this.state = {
       value: 0,
-      loading: false
+      loading: props.loading
     }
     this.counter = null;
     this.activateLoading = debounce(this.activateLoading, BUFFER);
-  }
-
-  componentWillMount() {
-    if (this.props.loading) {
-      this.activateLoading();
-    }
   }
 
   componentWillReceiveProps({loading}) {

@@ -41,10 +41,12 @@ export default class ModalWindow extends React.Component {
 
   render() {
     const { key, open } = this.props;
-    return createPortal([
-      <Animation key={`overlay-${key}`} in={open} type='fade' unmountOnExit mountOnEnter>{this.renderOverlay}</Animation>,
-      <Animation key={`modal-${key}`} in={open} type='fadeDown' unmountOnExit mountOnEnter>{this.renderModal}</Animation>
-    ], this.target);
+    return createPortal((
+      <div>
+        <Animation key={`overlay-${key}`} in={open} type='fade' unmountOnExit mountOnEnter>{this.renderOverlay}</Animation>,
+        <Animation key={`modal-${key}`} in={open} type='fadeDown' unmountOnExit mountOnEnter>{this.renderModal}</Animation>
+      </div>
+    ), this.target);
   }
 }
 
