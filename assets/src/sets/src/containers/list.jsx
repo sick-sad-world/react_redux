@@ -1,7 +1,6 @@
 // Import utility stuff
 // ===========================================================================
 import classNames from 'classnames';
-import { includes, bindAll } from 'lodash';
 
 // Import React related stuff
 // ===========================================================================

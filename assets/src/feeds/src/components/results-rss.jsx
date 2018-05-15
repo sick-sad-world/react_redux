@@ -1,5 +1,5 @@
 import React from 'react';
-import { includes } from 'lodash';
+import includes from 'lodash/includes';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 

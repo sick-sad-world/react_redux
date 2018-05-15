@@ -1,4 +1,4 @@
-import { includes } from 'lodash';
+import includes from 'lodash/includes';
 import createSelector, { getCriterea, composeCriterea } from 'common/selector-factory';
 
 const getSets = ({ sets }) => sets;

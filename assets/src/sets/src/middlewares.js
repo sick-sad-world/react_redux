@@ -1,5 +1,5 @@
 import types from './types';
-import { get } from 'lodash';
+import get from 'lodash/get';
 import { setUniqFeeds, calcFeedOccurance, processSet } from './helpers';
 
 // Clear feeds property on SET UPDATE (sent by server defaults)

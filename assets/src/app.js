@@ -9,6 +9,8 @@ import { Provider } from 'react-redux';
 import { Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
+import '../scss/app.scss';
+
 // Import store
 // ===========================================================================
 import TrendolizerStore from './store';

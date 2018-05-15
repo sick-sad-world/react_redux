@@ -1,6 +1,10 @@
 // Import utility stuff
 // ===========================================================================
-import { forOwn, isEqual, pickBy, includes, bindAll } from 'lodash';
+import forOwn from 'lodash/forOwn';
+import isEqual from 'lodash/isEqual';
+import pickBy from 'lodash/pickBy';
+import includes from 'lodash/includes';
+import bindAll from 'lodash/bindAll';
 import { availableColumnData, defaultInterface, editOptions } from '../defaults';
 
 // Import React related stuff

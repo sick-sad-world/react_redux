@@ -1,4 +1,5 @@
-import { includes, get } from 'lodash';
+import includes from 'lodash/includes';
+import get from 'lodash/get';
 import { LOGIN, LOGOUT } from 'common/type-factory';
 import { createNamespace, createReducer } from 'common/service';
 import { defaultData } from './defaults';

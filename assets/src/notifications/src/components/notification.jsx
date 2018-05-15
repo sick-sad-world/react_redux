@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import Icon from 'common/components/icon';
-import { capitalize } from 'lodash';
+import capitalize from 'lodash/capitalize';
 import { defaultData, defaultInterface } from '../defaults';
 // import Loading from 'img/loading2.svg';
 

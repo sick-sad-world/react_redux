@@ -1,4 +1,7 @@
-import { transform, sortBy, uniqBy, reject } from 'lodash';
+import transform from 'lodash/transform';
+import sortBy from 'lodash/sortBy';
+import uniqBy from 'lodash/uniqBy';
+import reject from 'lodash/reject';
 import { mergeArrayById } from 'functions';
 import { pickType } from './namespace';
 

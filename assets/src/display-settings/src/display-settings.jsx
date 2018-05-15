@@ -1,4 +1,5 @@
-import { includes, capitalize } from 'lodash';
+import includes from 'lodash/includes';
+import capitalize from 'lodash/capitalize';
 import classNames from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';

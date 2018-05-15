@@ -1,5 +1,9 @@
 import { createSelectorCreator, defaultMemoize, createStructuredSelector } from 'reselect';
-import { isEqual, get, every, transform, includes } from 'lodash';
+import isEqual from 'lodash/isEqual';
+import get from 'lodash/get';
+import every from 'lodash/every';
+import transform from 'lodash/transform';
+import includes from 'lodash/includes';
 
 const selectorCreator = createSelectorCreator(defaultMemoize, isEqual);
 

@@ -1,6 +1,5 @@
 // Import helpers
 // ===========================================================================
-import { } from 'lodash';
 import moment from 'moment';
 
 // Import react stuff

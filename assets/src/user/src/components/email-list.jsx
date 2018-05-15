@@ -1,6 +1,8 @@
 // Import helpers
 // ===========================================================================
-import { bindAll, without, includes } from 'lodash';
+import bindAll from 'lodash/bindAll';
+import without from 'lodash/without';
+import includes from 'lodash/includes';
 import classNames from 'classnames';
 import { emailRegExp, webHookRegExp } from 'common/typecheck';
 import FormSubmit from 'common/components/forms/form-submit';

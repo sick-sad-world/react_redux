@@ -1,4 +1,4 @@
-import { bindAll } from 'lodash';
+import bindAll from 'lodash/bindAll';
 import { conditionalRun } from 'functions';
 import React from 'react';
 import Select from 'react-select';

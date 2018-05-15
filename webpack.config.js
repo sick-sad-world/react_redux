@@ -1,127 +1,102 @@
 const path = require('path');
-const packageJSON = require('./package.json');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
-const isDevelopment = process.env.NODE_ENV !== 'production';
+const { p, c, port, watch } = require('yargs').argv;
 
-const PORT = 3000;
-const HOST = 'localhost';
 const CONTEXT = 'assets';
-const alias = ['/img', '/icon', '/scss', '/src', '/src/_common', '/src/_common/functions'];
+const DEST = (p) ? '/build' : '/demo';
+const ALIAS = ['/images', '/sass', '/src', '/src/_common'];
 
-// "babel-loader": "^6.4.1",
-// "cross-env": "^4.0.0",
-// "css-loader": "^0.28.4",
-// "extract-text-webpack-plugin": "^2.1.0",
-// "file-loader": "^0.11.0",
-// "html-webpack-plugin": "^2.28.0",
-// "image-webpack-loader": "^3.3.0",
-// "node-sass": "^4.5.2",
-// "postcss-loader": "^2.0.6",
-// "sass-loader": "^6.0.5",
-// "style-loader": "^0.18.2",
-// "url-loader": "^0.5.8",
-// "webpack": "^2.6.1",
-// "webpack-dev-server": "^2.4.5"
-
-const extractCss = new ExtractTextPlugin({
-  filename: (isDevelopment) ? '[name].css' : '[hash:12].css',
-  disable: !!process.env.SERVER
-});
+function makeAlias(acc, v) {
+  acc[v.split(/\/_?/).pop()] = path.join(__dirname, CONTEXT, v);
+  return acc;
+}
 
 const PLUGINS = [
+  new ExtractTextPlugin({
+    filename: (p) ? '[hash:12].css' : 'app.css'
+  }),
   new webpack.DefinePlugin({
-    NODE_ENV: JSON.stringify(process.env.SERVER)
+    NODE_ENV: JSON.stringify(p ? 'production' : 'development')
   }),
   new HtmlWebpackPlugin({
     template: './index.html',
-    favicon: './favicon.ico'
-  }),
-  new webpack.optimize.CommonsChunkPlugin({
-    name: 'vendor',
-    minChunks: Infinity
-  }),
-  extractCss
+    title: 'Trendolizer pro',
+    favicon: './favicon.ico',
+    chunks: ['vendor', 'app']
+  })
 ];
 
-if (isDevelopment) {
-  PLUGINS.push(new webpack.NamedModulesPlugin());
-  PLUGINS.push(new webpack.NoEmitOnErrorsPlugin());
-} else {
-  PLUGINS.push(new webpack.optimize.UglifyJsPlugin());
-  PLUGINS.push(new webpack.BannerPlugin({
-    banner: `
-    /* ${packageJSON.name} app v${packageJSON.version}.
-    * Under ${packageJSON.license} protection.
-    * Made by: ${packageJSON.author}.
-    * ================================================================== */`,
-    entryOnly: true,
-    raw: true
+if (!port && !c) {
+  PLUGINS.push(new BundleAnalyzerPlugin({
+    analyzerMode: (watch) ? 'server' : 'static'
   }));
 }
 
 const jsLoader = {
   test: /\.jsx?$/,
   exclude: /node_modules/,
-  use: 'babel-loader'
+  use: ['babel-loader']
 };
 
 const sassLoader = {
-  test: /\.scss?$/,
-  exclude: /node_modules/,
-  use: extractCss.extract({
+  test: /\.(s?css)?$/,
+  use: PLUGINS[0].extract({
     fallback: {
       loader: 'style-loader',
       options: {
-        sourceMap: isDevelopment
+        sourceMap: !p
       }
     },
     use: [{
       loader: 'css-loader',
       options: {
-        sourceMap: isDevelopment,
+        sourceMap: !p,
+        localIdentName: (p) ? ['hash:base64:8'] : '[path]-[local]',
         importLoaders: 1
       }
     }, {
       loader: 'sass-loader',
       options: {
-        sourceMap: isDevelopment,
-        outputStyle: (isDevelopment) ? 'expanded' : 'compressed'
+        sourceMap: !p,
+        outputStyle: (p) ? 'compressed' : 'expanded',
+        includePaths: [
+          path.resolve(__dirname, '../node_modules'),
+          path.resolve(__dirname, CONTEXT, 'scss')
+        ]
       }
     }]
   })
 };
 
-// {
-//     loader: 'postcss-loader',
-//     options: {
-//       sourceMap: isDevelopment,
-//       plugins: [
-//         require('autoprefixer')()
-//       ]
-//     }
-//   },
-
-const imageLoader = {
-  test: /\.(png|jpe?g|gif|svg)?$/,
-  include: /img|icons/,
+const svgLoader = {
+  test: /\.svg$/,
+  include: /icons|images/,
   exclude: /node_modules/,
   use: [{
-    loader: 'url-loader',
+    loader: 'svg-inline-loader',
     options: {
-      limit: 8192,
-      name: (isDevelopment) ? '[path][name].[ext]' : 'img/[hash:12].[ext]'
+      classPrefix: true
     }
   }]
 };
-if (!isDevelopment) {
-  imageLoader.use.push({
-    loader: 'image-webpack-loader',
-    options: {}
-  });
-}
+
+const imageLoader = {
+  test: /\.(png|jpe?g|gif)?$/,
+  include: /img/,
+  exclude: /node_modules/,
+  use: [{
+    loader: 'file-loader',
+    options: {
+      name: (p) ? 'images/[hash:12].[ext]' : '[path][name].[ext]'
+    }
+  }, {
+    loader: 'image-webpack-loader'
+  }]
+};
 
 const fontLoader = {
   test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9#=&.]+)?$/,
@@ -131,46 +106,51 @@ const fontLoader = {
     loader: 'url-loader',
     options: {
       limit: 8192,
-      name: (isDevelopment) ? '[path][name].[ext]' : 'font/[hash:12].[ext]'
+      name: (p) ? 'font/[hash:12].[ext]' : '[path][name].[ext]'
     }
   }
 };
 
+
 module.exports = {
-  devtool: (isDevelopment) ? 'source-map' : false,
+  devtool: (!p) ? 'source-map' : false,
   context: path.resolve(__dirname, CONTEXT),
+  cache: true,
+  stats: 'normal',
   entry: {
-    vendor: Object.keys(packageJSON.dependencies),
-    app: ['babel-polyfill', './src/app.js']
+    app: ['./src/app.js']
   },
   output: {
-    path: path.resolve(__dirname, (isDevelopment) ? 'demo' : 'build'),
+    path: path.join(__dirname, DEST),
     publicPath: '/',
-    filename: (isDevelopment) ? '[name].js' : '[chunkhash:12].js'
+    filename: (p) ? '[chunkhash:12].js' : '[name].js'
   },
   devServer: {
-    host: HOST,
-    port: PORT,
-    contentBase: CONTEXT,
-    historyApiFallback: true,
-    watchOptions: {
-      ignored: /node_modules/
-    },
-    stats: {
-      chunks: false,
-      modules: false,
-      colors: true
+    hot: false,
+    contentBase: path.resolve(__dirname, CONTEXT)
+  },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendor',
+          chunks: 'all'
+        }
+      }
     }
   },
   resolve: {
-    alias: Array.prototype.reduce.call(alias, (acc, v) => {
-      acc[v.split(/\/_?/).pop()] = path.join(__dirname, CONTEXT, v);
-      return acc;
-    }, {}),
+    alias: Array.prototype.reduce.call(ALIAS, makeAlias, {
+      functions: path.join(__dirname, CONTEXT, '/src/_common/functions.js')
+    }),
     extensions: ['.js', '.jsx']
+  },
+  watchOptions: {
+    ignored: /node_modules/
   },
   plugins: PLUGINS,
   module: {
-    loaders: [jsLoader, sassLoader, imageLoader, fontLoader]
+    rules: [jsLoader, sassLoader, imageLoader, svgLoader, fontLoader]
   }
 };

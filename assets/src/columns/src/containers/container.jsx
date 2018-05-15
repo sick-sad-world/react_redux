@@ -1,6 +1,8 @@
 // Import utility stuff
 // ===========================================================================
-import { mapValues, pick, get } from 'lodash';
+import mapValues from 'lodash/mapValues';
+import pick from 'lodash/pick';
+import get from 'lodash/get';
 import * as availableActions from '../actions';
 
 // Import React related stuff

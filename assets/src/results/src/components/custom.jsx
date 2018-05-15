@@ -1,6 +1,7 @@
 // Import helpers
 // ===========================================================================
-import { includes, bindAll } from 'lodash';
+import includes from 'lodash/includes';
+import bindAll from 'lodash/bindAll';
 import moment from 'moment';
 
 // Import react stuff

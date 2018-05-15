@@ -1,4 +1,7 @@
-import { pickBy, intersection, transform, forOwn } from 'lodash';
+import pickBy from 'lodash/pickBy';
+import intersection from 'lodash/intersection';
+import transform from 'lodash/transform';
+import forOwn from 'lodash/forOwn';
 import data, { predefined } from './config';
 
 

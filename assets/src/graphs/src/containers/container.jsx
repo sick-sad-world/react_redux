@@ -1,6 +1,6 @@
 // Import helper stuff
 // ===========================================================================
-import { bindAll } from 'lodash';
+import bindAll from 'lodash/bindAll';
 import { updateArrayWithValue } from 'functions';
 
 // Import React related stuff

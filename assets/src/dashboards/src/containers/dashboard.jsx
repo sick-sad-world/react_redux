@@ -1,4 +1,5 @@
-import { bindAll, get } from 'lodash';
+import bindAll from 'lodash/bindAll';
+import get from 'lodash/get';
 import scrollbarSize from 'dom-helpers/util/scrollbarSize';
 
 // Import React related stuff

@@ -2,7 +2,7 @@
 // ===========================================================================
 import { updateArrayWithValue } from 'functions';
 import { availableColumnData, defaultInterface } from '../defaults';
-import { bindAll } from 'lodash';
+import bindAll from 'lodash/bindAll';
 
 // Import React related stuff
 // ===========================================================================

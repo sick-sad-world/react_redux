@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { capitalize } from 'lodash';
+import capitalize from 'lodash/capitalize';
 
 // Import React related stuff
 // ===========================================================================

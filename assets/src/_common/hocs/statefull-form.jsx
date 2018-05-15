@@ -1,6 +1,9 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, pick, isEqual, without } from 'lodash';
+import bindAll from 'lodash/bindAll';
+import pick from 'lodash/pick';
+import isEqual from 'lodash/isEqual';
+import without from 'lodash/without';
 
 // Import React related stuff
 // ===========================================================================

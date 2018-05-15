@@ -1,6 +1,7 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, pick } from 'lodash';
+import bindAll from 'lodash/bindAll';
+import pick from 'lodash/pick';
 import classNames from 'classnames';
 
 // Import React related stuff

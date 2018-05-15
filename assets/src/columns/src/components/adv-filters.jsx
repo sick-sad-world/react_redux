@@ -1,6 +1,9 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll, map, isEqual, omit } from 'lodash';
+import bindAll from 'lodash/bindAll';
+import map from 'lodash/map';
+import isEqual from 'lodash/isEqual';
+import omit from 'lodash/omit';
 import { sortingOptions } from '../defaults';
 
 // Import React related stuff

@@ -5,33 +5,17 @@
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourapp.git"
+    "url": "https://github.com/sick-sad-world/react_redux.git"
   },
   "author": "Igor Koptelov",
   "license": "MIT",
   "scripts": {
-    "test": "",
     "clean": "rimraf ./demo ./build",
-    "postclean": "rimraf ./assets/*.js ./assets/*.css ./assets/*.map",
-    "prestart": "rimraf ./assets/*.js ./assets/*.css ./assets/*.map",
-    "start": "cross-env NODE_ENV=development gulp serve --base ./assets",
+    "start": "webpack-dev-server --inline --port=3000 --mode=development",
     "prebundle": "rimraf ./demo",
-    "bundle": "cross-env NODE_ENV=development gulp bundle --base ./assets --dir ./demo",
+    "bundle": "webpack --progress --mode=development",
     "prebuild": "rimraf ./build",
-    "build": "cross-env NODE_ENV=production gulp build --base ./assets --dir ./build"
-  },
-  "browserify": {
-    "transform": [
-      "babelify",
-      "aliasify"
-    ]
-  },
-  "aliasify": {
-    "aliases": {
-      "src": "./assets/src",
-      "common": "./assets/src/_common",
-      "functions": "./assets/src/_common/functions"
-    }
+    "build": "webpack --progress --mode=production"
   },
   "babel": {
     "presets": [
@@ -47,23 +31,6 @@
         "presets": [
           "react-optimize"
         ]
-      },
-      "development": {
-        "plugins": [
-          [
-            "react-transform",
-            {
-              "transforms": [
-                {
-                  "transform": "livereactload/babel-transform",
-                  "imports": [
-                    "react"
-                  ]
-                }
-              ]
-            }
-          ]
-        ]
       }
     }
   },
@@ -71,7 +38,6 @@
     "babel-polyfill": "^6.23.0",
     "browser-jsonp": "^1.1.5",
     "classnames": "^2.2.5",
-    "cross-env": "^5.0.1",
     "lodash-es": "^4.17.2",
     "moment": "^2.17.1",
     "prop-types": "^15.5.8",
@@ -92,36 +58,34 @@
     "reselect": "^2.5.4"
   },
   "devDependencies": {
-    "aliasify": "^2.1.0",
     "babel-core": "^6.24.0",
+    "babel-loader": "^7.1.4",
     "babel-plugin-lodash": "^3.2.11",
-    "babel-plugin-react-transform": "^2.0.2",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.23.0",
     "babel-preset-react-optimize": "^1.0.1",
     "babel-preset-stage-0": "^6.24.1",
-    "babelify": "^7.3.0",
-    "browser-sync": "^2.17.5",
-    "browserify": "^13.3.0",
+    "css-loader": "^0.28.11",
     "eslint": "3.19.0",
     "eslint-config-airbnb-base": "^11.1.3",
     "eslint-plugin-babel": "^4.1.1",
     "eslint-plugin-import": "2.2.0",
     "eslint-plugin-react": "^6.10.3",
-    "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^3.1.1",
-    "gulp-gzip": "^1.4.0",
-    "gulp-imagemin": "^3.1.1",
-    "gulp-sass": "^3.1.0",
-    "gulp-uglify": "^2.0.0",
-    "gulp-util": "^3.0.8",
-    "livereactload": "^3.2.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "file-loader": "^1.1.11",
+    "html-webpack-plugin": "^3.2.0",
+    "image-webpack-loader": "^4.2.0",
     "node-sass": "^4.5.3",
-    "react-addons-test-utils": "^15.4.2",
-    "react-proxy": "^1.1.8",
     "rimraf": "^2.6.1",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream2": "^0.1.1",
-    "watchify": "^3.9.0"
+    "sass-loader": "^7.0.1",
+    "style-loader": "^0.21.0",
+    "svg-inline-loader": "^0.8.0",
+    "uglifyjs-webpack-plugin": "^1.2.5",
+    "url-loader": "^1.0.1",
+    "webpack": "^4.8.3",
+    "webpack-bundle-analyzer": "^2.12.0",
+    "webpack-cli": "^2.1.3",
+    "webpack-dev-server": "^3.1.4",
+    "yargs": "^11.0.0"
   }
 }

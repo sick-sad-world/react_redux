@@ -1,6 +1,6 @@
 // Import utility stuff
 // ===========================================================================
-import { bindAll } from 'lodash';
+import bindAll from 'lodash/bindAll';
 
 // Import React related stuff
 // ===========================================================================

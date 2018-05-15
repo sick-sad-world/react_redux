@@ -1,4 +1,7 @@
-import { reject, uniqBy, has, sortBy } from 'lodash';
+import reject from 'lodash/reject';
+import uniqBy from 'lodash/uniqBy';
+import has from 'lodash/has';
+import sortBy from 'lodash/sortBy';
 import { LOGIN, LOGOUT } from './type-factory';
 import { mergeArrayById } from 'functions';
 

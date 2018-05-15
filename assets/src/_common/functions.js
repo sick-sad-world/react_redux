@@ -1,4 +1,5 @@
-import { toNumber, get } from 'lodash';
+import toNumber from 'lodash/toNumber';
+import get from 'lodash/get';
 
 export const numOrString = (str, base = 10) => {
   const int = parseFloat(str, base);

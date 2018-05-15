@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import get from 'lodash/get';
 import createAction from 'common/action-factory';
 import types from './types';
 import moment from 'moment';

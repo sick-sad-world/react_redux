@@ -1,4 +1,4 @@
-import { mapValues } from 'lodash';
+import mapValues from 'lodash/mapValues';
 import { tableStatsRegExp } from 'src/display-settings';
 import { decodeHtml } from 'functions';
 

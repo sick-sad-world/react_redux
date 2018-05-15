@@ -1,6 +1,10 @@
 // Import utility stuff
 // ===========================================================================
-import { transform, bindAll, mapValues, concat, filter } from 'lodash';
+import transform from 'lodash/transform';
+import bindAll from 'lodash/bindAll';
+import mapValues from 'lodash/mapValues';
+import concat from 'lodash/concat';
+import filter from 'lodash/filter';
 import classNames from 'classnames';
 
 // Import React related stuff

@@ -1,4 +1,4 @@
-import { has } from 'lodash';
+import has from 'lodash/has';
 
 import { LOGIN, LOGOUT } from 'common/type-factory';
 

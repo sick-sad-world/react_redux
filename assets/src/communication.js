@@ -1,5 +1,8 @@
 import jsonp from 'browser-jsonp';
-import { reduce, isPlainObject, isNull, isUndefined } from 'lodash';
+import reduce from 'lodash/reduce';
+import isPlainObject from 'lodash/isPlainObject';
+import isNull from 'lodash/isNull';
+import isUndefined from 'lodash/isUndefined';
 
 export const BASEURL = 'http://api.trendolizer.com/v3';
 

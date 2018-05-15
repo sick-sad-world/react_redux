@@ -1,5 +1,5 @@
 import createSelector from 'common/selector-factory';
-import { includes } from 'lodash';
+import includes from 'lodash/includes';
 
 const checkOpen = val => ({ open }) => open === val;
 

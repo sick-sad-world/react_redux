@@ -1,4 +1,4 @@
-import { bindAll } from 'lodash';
+import bindAll from 'lodash/bindAll';
 // Import React related stuff
 // ===========================================================================
 import React from 'react';

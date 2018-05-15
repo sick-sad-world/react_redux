@@ -1,4 +1,6 @@
-import { get, set, startsWith } from 'lodash';
+import get from 'lodash/get';
+import set from 'lodash/set';
+import startsWith from 'lodash/startsWith';
 
 const space = {};
 

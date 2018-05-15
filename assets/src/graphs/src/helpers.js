@@ -1,4 +1,5 @@
-import { mapValues, assign } from 'lodash';
+import mapValues from 'lodash/mapValues';
+import assign from 'lodash/assign';
 import { numOrString } from 'functions';
 
 export function typeMapper(types) {
