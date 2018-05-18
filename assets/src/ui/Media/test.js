@@ -8,7 +8,7 @@ describe('<Media/>', () => {
   const onError = jest.spyOn(Media.prototype, 'onError');
 
   beforeEach(() => {
-    error.mockReset();
+    error.mockClear();
   })
 
   test('Should render Figure component, place src of a image as background of root and create Image element with onLoad and onError handlers', () => {

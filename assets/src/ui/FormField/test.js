@@ -20,8 +20,8 @@ describe('HOC: <FormField/>', () => {
 
   beforeEach(() => {
     TextField = makeFormField()(Input);
-    error.mockReset();
-    mockedEvent.persist.mockReset();
+    error.mockClear();
+    mockedEvent.persist.mockClear();
     mockedEvent.target.value = '';
   })
 

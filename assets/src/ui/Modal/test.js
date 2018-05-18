@@ -11,7 +11,7 @@ describe('<Modal/>', () => {
   let wrapper = null;
 
   beforeEach(() => {
-    error.mockReset();
+    error.mockClear();
   })
 
   afterEach(() => {
@@ -53,7 +53,7 @@ describe('<ModalHeader/>', () => {
   const error = jest.spyOn(console, 'error');
 
   beforeEach(() => {
-    error.mockReset();
+    error.mockClear();
   })
 
   test('Should render <header/> element with [title] given', () => {

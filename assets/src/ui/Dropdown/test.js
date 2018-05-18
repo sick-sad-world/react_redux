@@ -7,7 +7,7 @@ describe('<Dropdown/>', () => {
   const error = jest.spyOn(console, 'error');
 
   beforeEach(() => {
-    error.mockReset();
+    error.mockClear();
   })
 
   test('Should render Select component', () => {

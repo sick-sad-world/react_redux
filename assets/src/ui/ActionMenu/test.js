@@ -8,7 +8,7 @@ describe('<ActionMenu/>', () => {
   let data = [];
 
   beforeEach(() => {
-    error.mockReset();
+    error.mockClear();
     data = [{
       label: 'Manage feeds',
       handler: jest.fn()

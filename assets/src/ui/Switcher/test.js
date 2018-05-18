@@ -17,7 +17,7 @@ describe('<Switcher/>', () => {
       { label: 'Include', value: null },
       { label: 'Omit', value: 0 }
     ];
-    error.mockReset();
+    error.mockClear();
   })
 
   test('Should render input components based on options provided', () => {

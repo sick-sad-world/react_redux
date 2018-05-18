@@ -6,7 +6,7 @@ describe('<Fieldset/>', () => {
   const error = jest.spyOn(console, 'error');
 
   beforeEach(() => {
-    error.mockReset();
+    error.mockClear();
   })
 
   test('Should render children inside div.content-body element', () => {
