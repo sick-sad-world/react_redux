@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { shallow } from 'enzyme';
 import Checkbox from './component';
 

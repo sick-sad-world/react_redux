@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import isFunction from 'lodash/isFunction';
 import bindAll from 'lodash/bindAll';
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { classNameShape } from 'shared/typings';
 import './styles.scss';
@@ -15,7 +15,7 @@ export function makePlaceholder(str = '', limit = 2) {
   }, '');
 }
 
-export default class Image extends React.Component {
+export default class Image extends Component {
   constructor(props) {
     super(props)
     bindAll(this, 'onError');

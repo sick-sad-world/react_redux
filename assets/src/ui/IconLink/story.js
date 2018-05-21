@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';

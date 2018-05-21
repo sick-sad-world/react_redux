@@ -1,5 +1,5 @@
 import set from 'lodash/set';
-import React from 'react';
+import { Component } from 'react';
 import { shallow } from 'enzyme';
 import makeFormField from './index';
 

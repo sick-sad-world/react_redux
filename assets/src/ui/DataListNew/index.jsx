@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import bindAll from 'lodash/bindAll';
@@ -40,7 +40,7 @@ const getTemplate = ({columns}) => {
   }, '')
 }
 
-export default class DataList extends React.Component {
+export default class DataList extends Component {
   constructor(props) {
     super(props)
     this.state = {

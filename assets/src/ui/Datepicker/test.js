@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { shallow, mount } from 'enzyme';
 import Datepicker from './index';
 import Datetime from 'react-datetime';

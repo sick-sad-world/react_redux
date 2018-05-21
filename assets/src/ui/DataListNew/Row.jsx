@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import bindAll from 'lodash/bindAll';
 import mapValues from 'lodash/mapValues';
@@ -32,7 +32,7 @@ export const configActionShape = PropTypes.oneOfType([
  * through configurable set of columns, and provide a lot of exceeding functionality
  * like: D&D sorting, Custom actions, Default Renderers, 
  */
-export default class DataListRow extends React.Component {
+export default class DataListRow extends Component {
   constructor(props) {
     super(props);
     bindAll(this, 'makeActions', 'renderColumn')
