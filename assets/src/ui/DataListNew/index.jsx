@@ -28,10 +28,6 @@ const reorder = (list, startIndex, endIndex) => {
 
 const getSubdataTarget = (data, sid, idx) => data.filter(({id}) => sid === id).map(({subdata}) => subdata[idx])[0];
 
-const updateIndexedState = (prop, i) => {
-  return 
-}
-
 const getTemplate = ({columns}) => {
   return columns.reduce((acc, {size}, i) => {
     if (i) acc += ' ';
@@ -65,7 +61,7 @@ export default class DataList extends Component {
     });
   }
 
-  onDragEnd({destination, source}) {
+  onDragEnd({destination, source, draggableId}) {
     if (!destination) return;
 
     const sourceId = parseInt(source.droppableId) || source.droppableId;
@@ -75,6 +71,11 @@ export default class DataList extends Component {
     const isDropWithinSameInner = isSourceInner && isTargetInner && sourceId == targetId;
     const isDropOnItem = isSourceInner && destination.droppableId.indexOf('inner-item') > -1;
 
+    const shape = {
+      item: draggableId,
+      in: targetId,
+      out: sourceId
+    }
     let result = null;
     
     if (sourceId === targetId) {
@@ -88,8 +89,10 @@ export default class DataList extends Component {
           }
           return item;
         });
+        shape.type = 'same-inner';
       } else {
         result = reorder(this.state.data, source.index, destination.index);
+        shape.type = 'same-outer';
       }
     } else {
       result = this.state.data.map((item) => {
@@ -109,12 +112,13 @@ export default class DataList extends Component {
         }
         return item;
       });
+      shape.type = 'to-inner';
     }
 
     this.setState(() => ({
       isDragging: false,
       data: result
-    }));
+    }), () => this.props.onSort(shape));
     
   }
 
@@ -225,6 +229,8 @@ DataList.propTypes = {
   rootClassName: PropTypes.string.isRequired,
   /** Whatever sortable wrappers should be applied */
   sortable: PropTypes.bool.isRequired,
+  /** Callback runned when sorting is preformed. Using mostly for sending storing requests to backend */
+  onSort: PropTypes.func.isRequired,
   /** Config For column sizes renderers, and order */
   config: PropTypes.shape({
     columns: configColumnShape.isRequired,

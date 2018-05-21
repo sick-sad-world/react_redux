@@ -7,9 +7,18 @@ class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      values: {}
+      values: props.values || {}
     }
-    bindAll(this, 'bindInput', 'updateValue');
+    bindAll(this, 'bindInput', 'updateValue', 'setValues');
+  }
+
+  
+  componentWillReceiveProps({values}) {
+    this.setState(this.setValues(values));
+  }
+  
+  setValues(values = {}) {
+    return () => ({values});
   }
 
   updateValue(v) {
@@ -24,13 +33,14 @@ class Form extends Component {
   bindInput(name, getter = (value) => value) {
     return {
       value: this.state.values[name] || null,
-      onChange: (e) => this.setState(updateValue(getter(e)))
+      onChange: (e) => this.setState(this.updateValue(getter(e)))
     }
   }
 
   render() {
+    const { children, onSubmit } = this.props;
     return (
-      <form onSubmit={this.props.onSubmit}>
+      <form onSubmit={onSubmit}>
         {children({
           valid: this.props.valid,
           values: this.state.values,
@@ -42,6 +52,7 @@ class Form extends Component {
 }
 
 Form.propTypes = {
+  values: PropTypes.object, // eslint-disable-line
   onSubmit: PropTypes.func.isRequired,
   valid: PropTypes.bool.isRequired,
   children: PropTypes.func.isRequired
