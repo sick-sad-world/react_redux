@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import { childrenShape, classNameShape } from 'shared/typings';
 

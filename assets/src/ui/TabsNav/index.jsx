@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
@@ -8,7 +8,7 @@ import './styles.scss';
 const THEMES = ['accent', 'action'];
 
 /** Tabs navigation component, ARIA enabled. Works with React Router or custom state management */
-export default class TabsNav extends Component {
+export default class TabsNav extend React.Component {
 
   getTabWidth(length) {
     return Math.round(10000 / length) / 100

@@ -1,5 +1,5 @@
 import bindAll from 'lodash/bindAll';
-import { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Select, { Creatable } from 'react-select';
@@ -12,7 +12,7 @@ import './styles.scss';
 import Icon from '../Icon';
 import SvgSpinner from '../Spinner';
 
-export default class Dropdown extends Component {
+export default class Dropdown extend React.Component {
 
   constructor(props) {
     super(props);

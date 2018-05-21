@@ -1,7 +1,7 @@
 import bindAll from 'lodash/bindAll';
 import isFunction from 'lodash/isFunction';
 import classNames from 'classnames';
-import { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { validShape, classNameShape } from 'shared/typings';
 
@@ -11,7 +11,7 @@ function getValueDefault({ target }, {name}) {
 
 export default function makeFormField(getValue = getValueDefault) {
   return (Component) => {
-    class FormField extends Component {
+    class FormField extend React.Component {
       constructor(props) {
         super(props);
         bindAll(this, 'onChange');

@@ -1,5 +1,5 @@
 import bindAll from 'lodash/bindAll';
-import { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { classNameShape, optionShape } from 'shared/typings';
@@ -9,7 +9,7 @@ import Dropdown from '../Dropdown';
 import Button from '../Button';
 
 /** Page header component, Holds Title, Descroption, and Controls for page */
-export default class PageHeader extends Component {
+export default class PageHeader extend React.Component {
   constructor(props) {
     super(props)
     this.state = {

@@ -1,5 +1,5 @@
 import bindAll from 'lodash/bindAll';
-import { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { createPortal } from 'react-dom';
@@ -14,7 +14,7 @@ export const ModalHeader = Header;
 export const ModalFooter = Footer; 
 
 /** Modal Component for UI Framework */
-export default class ModalWindow extends Component {
+export default class ModalWindow extend React.Component {
   constructor(props) {
     super(props)
     bindAll(this, 'renderOverlay', 'renderModal');

@@ -1,9 +1,9 @@
 import bindAll from 'lodash/bindAll';
-import { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Draggable } from 'react-beautiful-dnd';
 
-export default class ListItem extends Component {
+export default class ListItem extend React.Component {
   constructor(props) {
     super(props)
     this.state = {

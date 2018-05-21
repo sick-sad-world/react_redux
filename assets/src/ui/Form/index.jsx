@@ -1,9 +1,9 @@
 import bindAll from 'lodash/bindAll';
-import { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Form as Validable } from 'react-validable';
 
-class Form extends Component {
+class Form extend React.Component {
   constructor(props) {
     super(props)
     this.state = {

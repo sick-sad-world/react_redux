@@ -1,13 +1,13 @@
 import bindAll from 'lodash/bindAll';
 import isFunction from 'lodash/isFunction';
-import { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { classNameShape, childrenShape } from 'shared/typings';
 import './styles.scss';
 
 
-export default class Media extends Component {
+export default class Media extend React.Component {
   constructor(props) {
     super(props)
     this.state = {

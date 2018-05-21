@@ -1,6 +1,6 @@
 import bindAll from 'lodash/bindAll';
 import debounce from 'lodash/debounce';
-import { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { childrenShape } from 'shared/typings';
 import RadialLoading from './radial';
@@ -30,7 +30,7 @@ function makeFakePercentage({value}) {
 }
 
 /** Loading component render spinner or  */
-export default class Progress extends Component {
+export default class Progress extend React.Component {
   constructor(props) {
     super(props);
     bindAll(this, 'activateLoading', 'setState', 'activateCounter');

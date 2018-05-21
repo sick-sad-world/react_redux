@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import bindAll from 'lodash/bindAll';
@@ -17,7 +17,7 @@ export const actionConfigShape = PropTypes.oneOfType([PropTypes.oneOf(['---']), 
 })]);
 
 /** Simple link list as dropdown menu, representing different actions possible */
-export default class ActionMenu extends Component {
+export default class ActionMenu extend React.Component {
   constructor(props) {
     super(props)
     bindAll(this, '_makeRootRef', 'runOnBodyClick');

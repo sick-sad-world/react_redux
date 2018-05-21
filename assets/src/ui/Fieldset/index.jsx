@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React from 'react';
 import bindAll from 'lodash/bindAll';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
@@ -6,7 +6,7 @@ import { childrenShape, classNameShape, validShape } from 'shared/typings';
 import './styles.scss';
 import Icon from '../Icon';
 
-export default class Fieldset extends Component {
+export default class Fieldset extend React.Component {
   constructor(props) {
     super(props);
     this.state = {
