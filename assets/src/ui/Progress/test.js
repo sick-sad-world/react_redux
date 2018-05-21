@@ -8,7 +8,7 @@ describe('<Progress/>', () => {
   const error = jest.spyOn(console, 'error');
 
   beforeEach(() => {
-    error.mockReset();
+    error.mockClear();
   })
 
   test('Should render children it wraps if [loading=false]', () => {

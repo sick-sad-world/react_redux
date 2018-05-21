@@ -2,13 +2,13 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
-const { p, c, port, watch } = require('yargs').argv;
+const { mode, c, port, watch } = require('yargs').argv;
 
 const CONTEXT = 'assets';
-const DEST = (p) ? '/build' : '/dist';
+const P = mode === 'production'
+const DEST = (P) ? '/build' : '/dist';
 const ALIAS = ['/images', '/sass', '/src', '/src/shared', 'src/ui'];
 
 function makeAlias(acc, v) {
@@ -18,43 +18,16 @@ function makeAlias(acc, v) {
 
 const PLUGINS = [
   new ExtractTextPlugin({
-    filename: (p) ? '[hash:12].css' : 'app.css'
-  }),
-  new webpack.DefinePlugin({
-    NODE_ENV: JSON.stringify(p ? 'production' : 'development')
+    filename: (P) ? '[hash:12].css' : 'app.css'
   }),
   new HtmlWebpackPlugin({
     template: './index.html',
     title: 'Trendolizer pro',
     chunks: ['vendor', 'app']
-  }),
-  new webpack.optimize.CommonsChunkPlugin({
-    name: 'vendor',
-    filename: '[name].js',
-    chunks: ['app'],
-    minChunks({context}) {
-      return context && context.indexOf('node_modules') >= 0 && context.indexOf('-loader') === -1 && context.indexOf('.css') === -1;
-    }
   })
 ];
 
-if (p) {
-  PLUGINS.push(new webpack.optimize.ModuleConcatenationPlugin());
-  PLUGINS.push(new UglifyJsPlugin({
-    uglifyOptions: {
-      compress: {
-        warnings: false,
-        comparisons: false,
-      },
-      safari10: true,      
-      output: {
-        comments: false,
-        ascii_only: true,
-      },
-    }
-  }));
-} else {
-  PLUGINS.push(new webpack.NamedModulesPlugin());
+if (!P) {
   PLUGINS.push(new webpack.NoEmitOnErrorsPlugin());
 }
 
@@ -78,21 +51,21 @@ const sassLoader = {
     fallback: {
       loader: 'style-loader',
       options: {
-        sourceMap: !p
+        sourceMap: !P
       }
     },
     use: [{
       loader: 'css-loader',
       options: {
-        sourceMap: !p,
-        localIdentName: (p) ? ['hash:base64:8'] : '[path]-[local]',
+        sourceMap: !P,
+        localIdentName: (P) ? ['hash:base64:8'] : '[path]-[local]',
         importLoaders: 1
       }
     }, {
       loader: 'sass-loader',
       options: {
-        sourceMap: !p,
-        outputStyle: (p) ? 'compressed' : 'expanded',
+        sourceMap: !P,
+        outputStyle: (P) ? 'compressed' : 'expanded',
         includePaths: [
           path.resolve(__dirname, '../node_modules'),
           path.resolve(__dirname, CONTEXT, 'sass')
@@ -121,7 +94,7 @@ const imageLoader = {
   use: [{
     loader: 'file-loader',
     options: {
-      name: (p) ? 'images/[hash:12].[ext]' : '[path][name].[ext]'
+      name: (P) ? 'images/[hash:12].[ext]' : '[path][name].[ext]'
     }
   }, {
     loader: 'image-webpack-loader'
@@ -136,14 +109,14 @@ const fontLoader = {
     loader: 'url-loader',
     options: {
       limit: 8192,
-      name: (p) ? 'font/[hash:12].[ext]' : '[path][name].[ext]'
+      name: (P) ? 'font/[hash:12].[ext]' : '[path][name].[ext]'
     }
   }
 };
 
 
 module.exports = {
-  devtool: (!p) ? 'source-map' : false,
+  devtool: (!P) ? 'source-map' : false,
   context: path.resolve(__dirname, CONTEXT),
   cache: true,
   stats: 'normal',
@@ -153,11 +126,11 @@ module.exports = {
   output: {
     path: path.join( __dirname, DEST),
     publicPath: '/',
-    filename: (p) ? '[chunkhash:12].js' : '[name].js'
+    filename: (P) ? '[chunkhash:12].js' : '[name].js'
   },
   devServer: {
-    hot: true,
-    basePath: path.resolve(__dirname, CONTEXT),
+    hot: !!port,
+    contentBase: path.resolve(__dirname, CONTEXT),
   },
   resolve: {
     alias: Array.prototype.reduce.call(ALIAS, makeAlias, {
@@ -165,11 +138,22 @@ module.exports = {
     }),
     extensions: ['.js', '.jsx']
   },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendor',
+          chunks: 'all'
+        }
+      }
+    }
+  },
   watchOptions: {
     ignored: /node_modules/
   },
   plugins: PLUGINS,
   module: {
-    loaders: [jsLoader, sassLoader, imageLoader, svgLoader, fontLoader]
+    rules: [jsLoader, sassLoader, imageLoader, svgLoader, fontLoader]
   }
 };

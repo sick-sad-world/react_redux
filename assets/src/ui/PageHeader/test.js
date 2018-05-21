@@ -6,7 +6,7 @@ describe('<PageHeader/>', () => {
   const error = jest.spyOn(console, 'error');
 
   beforeEach(() => {
-    error.mockReset();
+    error.mockClear();
   })
 
   test('Should render PageHeader component with given Title, Subtitle, and search field by default', () => {

@@ -32,7 +32,7 @@ describe('<TagList/>', () => {
   const error = jest.spyOn(console, 'error');
 
   beforeEach(() => {
-    error.mockReset();
+    error.mockClear();
   })
 
   test('Should render <li> component for each data entry given', () => {
