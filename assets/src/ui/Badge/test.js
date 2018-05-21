@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React from 'react';
 import { shallow } from 'enzyme';
 import Badge from './index';
 import styles from './styles.scss';

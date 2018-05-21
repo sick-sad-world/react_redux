@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React from 'react';
 import { shallow } from 'enzyme';
 import TagList from './index';
 import Image from '../Image';

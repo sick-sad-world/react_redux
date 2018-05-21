@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React from 'react';
 import { shallow } from 'enzyme';
 import Dropdown from './component';
 import Select, { Creatable } from 'react-select';

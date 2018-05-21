@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React from 'react';
 import { shallow, mount } from 'enzyme';
 import Modal, { ModalHeader, ModalFooter } from './index';
 
