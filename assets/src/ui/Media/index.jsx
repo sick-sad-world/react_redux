@@ -7,7 +7,7 @@ import { classNameShape, childrenShape } from 'shared/typings';
 import './styles.scss';
 
 
-export default class Media extend React.Component {
+export default class Media extends React.Component {
   constructor(props) {
     super(props)
     this.state = {

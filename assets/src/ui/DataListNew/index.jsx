@@ -36,7 +36,7 @@ const getTemplate = ({columns}) => {
   }, '')
 }
 
-export default class DataList extend React.Component {
+export default class DataList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {

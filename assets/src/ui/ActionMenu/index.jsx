@@ -17,7 +17,7 @@ export const actionConfigShape = PropTypes.oneOfType([PropTypes.oneOf(['---']), 
 })]);
 
 /** Simple link list as dropdown menu, representing different actions possible */
-export default class ActionMenu extend React.Component {
+export default class ActionMenu extends React.Component {
   constructor(props) {
     super(props)
     bindAll(this, '_makeRootRef', 'runOnBodyClick');

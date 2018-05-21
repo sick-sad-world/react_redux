@@ -8,7 +8,7 @@ import './styles.scss';
 const THEMES = ['accent', 'action'];
 
 /** Tabs navigation component, ARIA enabled. Works with React Router or custom state management */
-export default class TabsNav extend React.Component {
+export default class TabsNav extends React.Component {
 
   getTabWidth(length) {
     return Math.round(10000 / length) / 100

@@ -30,7 +30,7 @@ function makeFakePercentage({value}) {
 }
 
 /** Loading component render spinner or  */
-export default class Progress extend React.Component {
+export default class Progress extends React.Component {
   constructor(props) {
     super(props);
     bindAll(this, 'activateLoading', 'setState', 'activateCounter');

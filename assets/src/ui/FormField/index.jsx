@@ -11,7 +11,7 @@ function getValueDefault({ target }, {name}) {
 
 export default function makeFormField(getValue = getValueDefault) {
   return (Component) => {
-    class FormField extend React.Component {
+    class FormField extends React.Component {
       constructor(props) {
         super(props);
         bindAll(this, 'onChange');

@@ -12,7 +12,7 @@ import './styles.scss';
 import Icon from '../Icon';
 import SvgSpinner from '../Spinner';
 
-export default class Dropdown extend React.Component {
+export default class Dropdown extends React.Component {
 
   constructor(props) {
     super(props);

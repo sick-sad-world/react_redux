@@ -9,7 +9,7 @@ import Dropdown from '../Dropdown';
 import Button from '../Button';
 
 /** Page header component, Holds Title, Descroption, and Controls for page */
-export default class PageHeader extend React.Component {
+export default class PageHeader extends React.Component {
   constructor(props) {
     super(props)
     this.state = {

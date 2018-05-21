@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Form as Validable } from 'react-validable';
 
-class Form extend React.Component {
+class Form extends React.Component {
   constructor(props) {
     super(props)
     this.state = {

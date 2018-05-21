@@ -15,7 +15,7 @@ export function makePlaceholder(str = '', limit = 2) {
   }, '');
 }
 
-export default class Image extend React.Component {
+export default class Image extends React.Component {
   constructor(props) {
     super(props)
     bindAll(this, 'onError');

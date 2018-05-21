@@ -32,7 +32,7 @@ export const configActionShape = PropTypes.oneOfType([
  * through configurable set of columns, and provide a lot of exceeding functionality
  * like: D&D sorting, Custom actions, Default Renderers, 
  */
-export default class DataListRow extend React.Component {
+export default class DataListRow extends React.Component {
   constructor(props) {
     super(props);
     bindAll(this, 'makeActions', 'renderColumn')

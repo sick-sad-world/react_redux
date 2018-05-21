@@ -6,7 +6,7 @@ import { childrenShape, classNameShape, validShape } from 'shared/typings';
 import './styles.scss';
 import Icon from '../Icon';
 
-export default class Fieldset extend React.Component {
+export default class Fieldset extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

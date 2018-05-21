@@ -14,7 +14,7 @@ export const ModalHeader = Header;
 export const ModalFooter = Footer; 
 
 /** Modal Component for UI Framework */
-export default class ModalWindow extend React.Component {
+export default class ModalWindow extends React.Component {
   constructor(props) {
     super(props)
     bindAll(this, 'renderOverlay', 'renderModal');
