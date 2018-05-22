@@ -57,6 +57,7 @@ describe('<Form/>', () => {
     const bindInput = children.mock.calls[0][0].bindInput;
     const bind = bindInput('name');
     expect(bind.value).toEqual(null);
+    expect(bind.name).toEqual('name');
     expect(bind.onChange).toBeInstanceOf(Function);
     bind.onChange({name: 1});
     expect(wrapper.state('values').name).toEqual(1);

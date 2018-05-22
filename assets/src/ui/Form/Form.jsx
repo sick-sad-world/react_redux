@@ -34,6 +34,7 @@ export default class Form extends React.Component {
   bindInput(name, getter = (value) => value) {
     return {
       value: this.state.values[name] || null,
+      name,
       onChange: (e) => this.setState(this.updateValue(getter(e)))
     }
   }
