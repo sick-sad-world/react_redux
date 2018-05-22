@@ -2,7 +2,9 @@ import bindAll from 'lodash/bindAll';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Draggable } from 'react-beautiful-dnd';
+import { childrenShape } from 'shared/typings';
 
+/** ListItem that wraps D&D functionality and subdata rendering */
 export default class ListItem extends React.Component {
   constructor(props) {
     super(props)
@@ -33,4 +35,19 @@ export default class ListItem extends React.Component {
       </Draggable>
     );
   }
-} 
+}
+
+ListItem.defaultProps = {
+  hasSubList: false
+}
+
+ListItem.propTypes = {
+  /** Children to render - usually sublist */
+  children: childrenShape,
+  /** Actual Data passed to ListItem */
+  data: PropTypes.object, // eslint-disable-line
+  /** Define if this ListItem has SubList a.k.a deeper level */
+  hasSubList: PropTypes.bool.isRequired,
+  /** Item itself to render */
+  Item: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired
+}
