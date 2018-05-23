@@ -5,7 +5,7 @@ import isFunction from 'lodash/isFunction';
 import classNames from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { validShape, classNameShape } from 'shared/typings';
+import { validShape, classNameShape, valueShape } from 'shared/typings';
 import ruleBase from './rules';
 
 function makeid(name, length = 5) {
@@ -34,7 +34,8 @@ function createRuleset(rules) {
   });
 }
 
-function combineValidator(rules) {
+function combineValidator(raw) {
+  const rules = (Array.isArray(raw)) ? raw : [raw];
   const ruleSet = createRuleset(rules);
   return (val, opts = []) => {
     const result = ruleSet.map((validator, i) => validator(val, opts[i] || {})).filter(res => typeof res === 'string');
@@ -48,26 +49,24 @@ function callContextAction(func, ...args) {
   }
 }
 
-export default function makeFormField(getValue = getValueDefault) {
-
-  const ruleSet = combineValidator((Array.isArray(rules)) ? rules : [rules]);
-
-  function validate(val, opts) {
-    let result = true;
-    if (val instanceof FileList) {
-      result = Array.prototype.map.call(val, v => ruleSet(v, opts));
-      result = every(result, v => v === true) || result;
-    } else {
-      result = ruleSet(val, opts);
-    }
-    return result;
+function validate(ruleSet, val, opts) {
+  let result = true;
+  if (val instanceof FileList) {
+    result = Array.prototype.map.call(val, v => ruleSet(v, opts));
+    result = every(result, v => v === true) || result;
+  } else {
+    result = ruleSet(val, opts);
   }
+  return result;
+}
 
+export default function makeFormField(getValue = getValueDefault) {
   return (Component) => {
     class FormField extends React.Component {
       constructor(props) {
         super(props);
         this.eid = makeid(props.name);
+        this.ruleSet = combineValidator(props.rules);
         this.state = {
           pristine: props.pristine,
           valid: true
@@ -83,6 +82,10 @@ export default function makeFormField(getValue = getValueDefault) {
         });
         this.setState(() => ({ valid }));
       }
+
+      componentWillReceiveProps({rules}) {
+        this.ruleSet = combineValidator(rules);
+      }
   
       onChange(e) {
         const change = getValue(e, this.props);
@@ -91,7 +94,7 @@ export default function makeFormField(getValue = getValueDefault) {
       }
 
       validate(val, opts) {
-        const valid = validate(val, opts);
+        const valid = validate(this.ruleSet, val, opts);
         callContextAction(this.context.updatePosition, {
           key: this.eid,
           valid
@@ -154,7 +157,9 @@ export default function makeFormField(getValue = getValueDefault) {
       /** Field validation state mark it as valid [true] or invalid [Array[String]] */
       valid: validShape,
       /** Value of input field */
-      value: valueShape
+      value: valueShape,
+      /** Rules for validation */
+      rules: PropTypes.array
     }
 
     FormField.contextTypes = {
