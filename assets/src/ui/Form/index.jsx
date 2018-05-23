@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 function isValid(state) {
   const entries = Object.entries(state);
-  return !entries.length ? false : !entries.filter(([k, v]) => Array.isArray(v)).length;
+  return !entries.length ? true : entries.every(([k, v]) => !Array.isArray(v));
 }
 
 function updateValue(v) {

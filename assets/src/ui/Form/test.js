@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import Form from './index';
 
 describe('<Form/>', () => {
@@ -11,15 +11,30 @@ describe('<Form/>', () => {
   })
 
   test('Should render <form/> element, and render children as a function with values given, and bindInput function', () => {
+    const wrapper = shallow(<Form onSubmit={jest.fn()}>{jest.fn()}</Form>);
+    expect(wrapper.is('form')).toBeTruthy();
+  })
+
+  test('Should render children as a function with values given, and bindInput function', () => {
     const onSubmit = jest.fn();
     const children = jest.fn();
     const values = {a: 1};
-    const wrapper = shallow(<Form values={values} onSubmit={onSubmit}>{children}</Form>);
-    expect(wrapper.is('form')).toBeTruthy();
+    shallow(<Form values={values} onSubmit={onSubmit}>{children}</Form>);
     expect(children).toHaveBeenCalledTimes(1);
-    expect(children.mock.calls[0][0].valid).toBeTruthy();
-    expect(children.mock.calls[0][0].values).toMatchObject(values)
-    expect(children.mock.calls[0][0].bindInput).toBeInstanceOf(Function);
+    expect(children).toHaveBeenLastCalledWith(expect.objectContaining({
+      valid: true,
+      values: expect.toMatchObject(values),
+      bindInput: expect.toBeInstanceOf(Function)
+    }))
+  })
+
+  test('Should register [getChildContext] context method', () => {
+    const onSubmit = jest.fn();
+    const children = jest.fn();
+    const values = {a: 1};
+    jest.spyOn(Form.prototype, 'getChildContext');
+    const wrapper = mount(<Form values={values} onSubmit={onSubmit}>{children}</Form>, { lifecycleExperimental: true });
+    expect(wrapper.instance().getChildContext).toHaveBeenCalledTimes(1);
   })
 
   test('Should enforce providing [children] of form component', () => {
@@ -61,4 +76,72 @@ describe('<Form/>', () => {
     bind.onChange({name: 1});
     expect(wrapper.state('values').name).toEqual(1);
   })
+
+  test('Running [updatePosition] wiil create an entry in <Form/> state. If all entries are valid - overall form is also valid', () => {
+    const onSubmit = jest.fn();
+    const children = jest.fn();
+    const wrapper = shallow(<Form onSubmit={onSubmit}>{children}</Form>);
+    wrapper.instance().updatePosition({
+      key: 'name',
+      valid: true
+    });
+    wrapper.instance().updatePosition({
+      key: 'email',
+      valid: true
+    });
+    wrapper.instance().updatePosition({
+      key: 'password',
+      valid: true
+    });
+    wrapper.instance().updatePosition({
+      key: 'password2',
+      valid: true
+    });
+    expect(wrapper.update().state('valid')).toMatchObject({
+      name: true,
+      email: true,
+      password: true,
+      password2: true
+    });
+    expect(children.mock.calls[children.mock.calls.length - 1][0].valid).toBeTruthy();
+  })
+
+  test('Running [updatePosition] wiil updates apropriate state entry. If at leas one of entries is invalid, then overall form invalid also', () => {
+    const onSubmit = jest.fn();
+    const children = jest.fn();
+    const wrapper = shallow(<Form onSubmit={onSubmit}>{children}</Form>);
+    wrapper.instance().updatePosition({
+      key: 'name',
+      valid: true
+    });
+    wrapper.instance().updatePosition({
+      key: 'email',
+      valid: true
+    });
+    wrapper.instance().updatePosition({
+      key: 'email',
+      valid: ['error']
+    });
+    wrapper.update().instance().updatePosition({
+      key: 'email',
+      valid: ['error']
+    });
+    expect(children.mock.calls[children.mock.calls.length - 1][0].valid).toBeFalsy();
+  })
+
+  test('Form validation key may be removed by using [updatePosition] method with [valid=undefined]', () => {
+    const onSubmit = jest.fn();
+    const children = jest.fn();
+    const wrapper = shallow(<Form onSubmit={onSubmit}>{children}</Form>);
+    wrapper.instance().updatePosition({
+      key: 'name',
+      valid: true
+    });
+    wrapper.update().instance().updatePosition({
+      key: 'name',
+      valid: undefined
+    });
+    expect(wrapper.update().state('valid').name).toBeUndefined();
+  })
+
 })

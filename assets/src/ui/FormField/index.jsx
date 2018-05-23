@@ -89,27 +89,38 @@ export default function makeFormField(getValue = getValueDefault) {
         }
       }
 
-      componentWillReceiveProps({rules}) {
+      componentWillReceiveProps({rules, pristine}) {
         this.ruleSet = combineValidator(rules);
+        if (!pristine && this.state.pristine) {
+          this.setState(() => ({pristine}))
+        } 
+      }
+
+      componentWillUnmount() {
+        callContextAction(this.context.updatePosition, {
+          key: this.eid,
+          valid: undefined
+        });
       }
   
       onChange(e) {
         const change = getValue(e, this.props);
-        const valid = this.ruleSet && this.validate(change[this.props.name]);
-        this.props.onChange(change, valid);
+        if (this.ruleSet ? this.validate(change[this.props.name]) : true) {
+          this.props.onChange(change);
+        }
       }
 
       validate(val, opts) {
         const valid = validate(this.ruleSet, val, opts);
-        callContextAction(this.context.updatePosition, {
-          key: this.eid,
-          valid
-        });
+        
         this.setState(() => ({
           valid,
           pristine: false
+        }), () => callContextAction(this.context.updatePosition, {
+          key: this.eid,
+          valid
         }));
-        return valid;
+        return !Array.isArray(valid);
       }
   
       render() {
@@ -160,7 +171,9 @@ export default function makeFormField(getValue = getValueDefault) {
       /** Value of input field */
       value: valueShape,
       /** Rules for validation */
-      rules: PropTypes.array
+      rules: PropTypes.arrayOf([PropTypes.string, PropTypes.shape({
+        rule: PropTypes.string.isRequired
+      })])
     }
 
     FormField.contextTypes = {
