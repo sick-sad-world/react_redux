@@ -23,8 +23,8 @@ describe('<Form/>', () => {
     expect(children).toHaveBeenCalledTimes(1);
     expect(children).toHaveBeenLastCalledWith(expect.objectContaining({
       valid: true,
-      values: expect.toMatchObject(values),
-      bindInput: expect.toBeInstanceOf(Function)
+      values: expect.objectContaining(values),
+      bindInput: expect.any(Function)
     }))
   })
 
