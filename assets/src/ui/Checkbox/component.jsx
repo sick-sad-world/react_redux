@@ -2,7 +2,7 @@ import isFunction from 'lodash/isFunction';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { classNameShape, validationMessageShape } from 'shared/typings';
+import { classNameShape, validationMessageShape, valueShape } from 'shared/typings';
 import './styles.scss';
 import Icon from '../Icon';
 
@@ -54,7 +54,7 @@ Checkbox.propTypes = {
   /** State of Checkbox */
   checked: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]).isRequired,
   /** Value of input itself */
-  value: PropTypes.oneOfType([PropTypes.bool, PropTypes.number, PropTypes.string]).isRequired,
+  value: valueShape,
   /** Name property for input */
   name: PropTypes.string.isRequired,
   /** Boolean defines whatever checkbox return Number Booleans 1 / 0 */

@@ -2,7 +2,7 @@ import isFunction from 'lodash/isFunction';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { classNameShape, validationMessageShape } from 'shared/typings';
+import { classNameShape, validationMessageShape, valueShape } from 'shared/typings';
 import './styles.scss';
 
 /** RadioButton input to choose some of many */
@@ -54,7 +54,7 @@ RadioButton.propTypes = {
   /** State of RadioButton */
   checked: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]).isRequired,
   /** Value of input itself */
-  value: PropTypes.string.isRequired,
+  value: valueShape,
   /** Name property for input */
   name: PropTypes.string.isRequired,
   /** Function invoked on change event */

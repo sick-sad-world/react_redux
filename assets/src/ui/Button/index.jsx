@@ -8,7 +8,7 @@ const TYPE = ['button', 'input', 'link'];
 const THEMES = ['raised', 'secondary', 'secondary-raised', 'success', 'success-raised', 'error', 'error-raised', 'warning', 'warning-raised', 'info', 'info-raised'];
 
 /** UI Button implementation */
-export default function Button({ el, value, rootClassName, className, theme, prefix, suffix, ...props }) {
+export default function Button({ el, value, rootClassName, className, theme, prefix, suffix, mode, ...props }) {
   const classList = classNames(rootClassName, theme, className);
 
   switch (el) {

@@ -37,7 +37,6 @@ export default function TextInput({ className, type, value, name, label, descr, 
 TextInput.defaultProps = {
   rootClassName: 'TextInput--root',
   type: 'text',
-  value: '',
   focus: false,
   error: false
 }
@@ -54,7 +53,7 @@ TextInput.propTypes = {
   /** Small description text under the input */
   descr: PropTypes.string,
   /** Value of input itself */
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   /** Name property for input */
   name: PropTypes.string.isRequired,
   /** Function invoked on change event */

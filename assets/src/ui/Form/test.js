@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Form from './Form';
-import { wrap } from 'module';
+import Form from './index';
 
 describe('<Form/>', () => {
 

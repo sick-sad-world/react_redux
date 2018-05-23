@@ -39,12 +39,6 @@ if (port) {
   }));
 }
 
-const jsLoader = {
-  test: /\.jsx?$/,
-  exclude: /node_modules/,
-  use: ['babel-loader']
-};
-
 const sassLoader = {
   test: /\.(s?css)?$/,
   use: PLUGINS[0].extract({
@@ -134,7 +128,7 @@ module.exports = {
   },
   resolve: {
     alias: Array.prototype.reduce.call(ALIAS, makeAlias, {
-      with: path.join(__dirname, '.storybook/with.js'),
+      with: path.join(__dirname, '.storybook', 'with.js'),
     }),
     extensions: ['.js', '.jsx']
   },
@@ -154,6 +148,10 @@ module.exports = {
   },
   plugins: PLUGINS,
   module: {
-    rules: [jsLoader, sassLoader, imageLoader, svgLoader, fontLoader]
+    rules: [{
+      test: /\.jsx?$/,
+      include: [path.join(__dirname, 'node_modules', 'react-validable')],
+      use: ['babel-loader']
+    }, sassLoader, imageLoader, svgLoader, fontLoader]
   }
 };

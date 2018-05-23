@@ -57,7 +57,6 @@
     "react-router-redux": "^4.0.8",
     "react-select": "^1.2.1",
     "react-transition-group": "^2.3.1",
-    "react-validable": "^0.5.1",
     "redux": "^3.7.2"
   },
   "devDependencies": {

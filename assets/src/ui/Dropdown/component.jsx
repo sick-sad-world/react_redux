@@ -121,8 +121,6 @@ Dropdown.propTypes = {
   label: PropTypes.string,
   /** Small description text under the input */
   descr: PropTypes.string,
-  /** Whatever field is focused or not */
-  focus: PropTypes.bool.isRequired,
   /** Field validation state mark it as valid [true] or invalid [Array[String]] */
   error: validationMessageShape.isRequired,
   /** Elements placed BEFORE dropdown (icons, buttons) */

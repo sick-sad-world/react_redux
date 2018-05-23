@@ -64,7 +64,7 @@ export const validShape = PropTypes.oneOfType([PropTypes.bool, PropTypes.string,
 export const validationMessageShape = PropTypes.oneOfType([PropTypes.string, PropTypes.bool]);
 
 /** Common React Children possible options */
-export const childrenShape = PropTypes.oneOfType([PropTypes.string, PropTypes.node, PropTypes.arrayOf(PropTypes.node)]);
+export const childrenShape = PropTypes.oneOfType([PropTypes.string, PropTypes.node, PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.func, PropTypes.node]))]);
 
 /** Check prop to be valid email string */
 export const emailStr = createOptionableValidator((props, propName) => {

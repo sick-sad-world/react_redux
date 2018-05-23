@@ -16,10 +16,12 @@
     "stage-1"
   ],
   "plugins": [
-    "lodash",
-    "react-hot-loader/babel"
+    "lodash"
   ],
   "env": {
+    "development": {
+      "plugins": ["react-hot-loader/babel"]
+    },
     "production": {
       "presets": [
         "react-optimize"

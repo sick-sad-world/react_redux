@@ -4,21 +4,21 @@ import { withInfo } from '@storybook/addon-info';
 import { withTests } from 'with';
 import { action } from '@storybook/addon-actions';
 import Form from './index';
-import Raw from './Form';
 import TextInput from '../TextInput';
 import Dropdown from '../Dropdown';
 import RadioButton from '../RadioButton';
 import Button from '../Button';
 
-storiesOf('Form', module)
+storiesOf('FormElements', module)
   .addDecorator(withTests('FormField'))
   .add('Form', withInfo({
-    propTables: [Raw]
+    propTables: [Form]
   })(() => (
-    <Form onSubmit={action('Submit')}>
+    <Form onSubmit={action('Submit')} values={{radio: 1}}>
       {({values, bindInput, valid}) => (
         <React.Fragment>
-          <TextInput {...bindInput('text')} />
+          <TextInput {...bindInput('text')} label='Text field' />
+          <br />
           <Dropdown
             label='Simple dropdown'
             options={[
@@ -31,6 +31,7 @@ storiesOf('Form', module)
             ]}
             {...bindInput('dropdown')}
           />
+          <br />
           <div>
             <RadioButton
               label='Radio 1'
@@ -51,6 +52,7 @@ storiesOf('Form', module)
               checked={values.radio === 3}
             />
           </div>
+          <br />
           <Button value='submit' disabled={!valid} />
         </React.Fragment>
       )}
