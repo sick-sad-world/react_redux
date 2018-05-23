@@ -35,7 +35,7 @@ export default class Form extends React.Component {
       values: props.values || {},
       valid: {}
     }
-    bindAll(this, 'bindInput', 'updateValue', 'setValues', 'updatePosition');
+    bindAll(this, 'bindInput', 'setValues', 'updatePosition');
   }
 
   getChildContext() {
