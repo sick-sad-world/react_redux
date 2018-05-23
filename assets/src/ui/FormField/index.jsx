@@ -1,11 +1,10 @@
 import bindAll from 'lodash/bindAll';
 import every from 'lodash/every';
 import omit from 'lodash/omit';
-import isFunction from 'lodash/isFunction';
 import classNames from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { validShape, classNameShape, valueShape } from 'shared/typings';
+import { classNameShape, valueShape } from 'shared/typings';
 import ruleBase from './rules';
 
 function makeid(name, length = 5) {
@@ -23,6 +22,10 @@ function getValueDefault({ target }, {name}) {
   return { [name]: target.value }
 }
 
+function makeValidator(validator, defOpts) {
+  return (val, opts) => validator(val, { ...defOpts, ...opts });
+}
+
 function createRuleset(rules) {
   return rules.map((rule) => {
     const isSimple = typeof rule === 'string';
@@ -35,6 +38,7 @@ function createRuleset(rules) {
 }
 
 function combineValidator(raw) {
+  if (!raw) return false;
   const rules = (Array.isArray(raw)) ? raw : [raw];
   const ruleSet = createRuleset(rules);
   return (val, opts = []) => {
@@ -75,12 +79,14 @@ export default function makeFormField(getValue = getValueDefault) {
       }
 
       componentWillMount() {
-        const valid = validate(this.props.value);
-        callContextAction(this.context.updatePosition, {
-          key: this.eid,
-          valid
-        });
-        this.setState(() => ({ valid }));
+        if (this.ruleSet) {
+          const valid = validate(this.ruleSet, this.props.value);
+          callContextAction(this.context.updatePosition, {
+            key: this.eid,
+            valid
+          });
+          this.setState(() => ({ valid }));
+        }
       }
 
       componentWillReceiveProps({rules}) {
@@ -89,7 +95,7 @@ export default function makeFormField(getValue = getValueDefault) {
   
       onChange(e) {
         const change = getValue(e, this.props);
-        const valid = isFunction(this.props.validate) ? this.props.validate(change) : true;
+        const valid = this.ruleSet && this.validate(change[this.props.name]);
         this.props.onChange(change, valid);
       }
 
@@ -109,16 +115,14 @@ export default function makeFormField(getValue = getValueDefault) {
       render() {
         const {
           pristine,
-          valid,
           disabled,
-          validate,
           onChange,
           className,
           value,
           ...props
         } = this.props;
   
-        const error = (isFunction(validate) && Array.isArray(valid) && pristine === false) ? valid.join(', ') : false;
+        const error = (this.ruleSet && Array.isArray(this.state.valid) && this.state.pristine === false) ? this.state.valid.join(', ') : false;
 
         const classes = {
           'state--error': error,
@@ -131,14 +135,15 @@ export default function makeFormField(getValue = getValueDefault) {
             value={value}
             error={error}
             disabled={disabled}
-            validate={this.validate}
-            valid={this.state.valid}
-            pristine={this.state.pristine}
             className={classNames(classes, className)}
             onChange={this.onChange}
           />
         );
       }
+    }
+
+    FormField.defaultProps = {
+      pristine: true
     }
   
     FormField.propTypes = {
@@ -150,12 +155,8 @@ export default function makeFormField(getValue = getValueDefault) {
       disabled: PropTypes.bool,
       /** Function invoked on change event */
       onChange: PropTypes.func.isRequired,
-      /** Function to check whatever field is valid - should be provided by 3-rd party tool */
-      validate: PropTypes.func,
       /** Define whatever field was touched */
       pristine: PropTypes.bool,
-      /** Field validation state mark it as valid [true] or invalid [Array[String]] */
-      valid: validShape,
       /** Value of input field */
       value: valueShape,
       /** Rules for validation */

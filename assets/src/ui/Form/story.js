@@ -17,7 +17,7 @@ storiesOf('FormElements', module)
     <Form onSubmit={action('Submit')} values={{radio: 1}}>
       {({values, bindInput, valid}) => (
         <React.Fragment>
-          <TextInput {...bindInput('text')} label='Text field' />
+          <TextInput {...bindInput('text')} label='Text field' rules={['required']} />
           <br />
           <Dropdown
             label='Simple dropdown'

@@ -53,7 +53,7 @@ export default class Form extends React.Component {
   }
   
   updatePosition(data) {
-    this.setState(updateValid(data), this.onValidation);
+    this.setState(updateValid(data));
   }
 
   bindInput(name, getter = (value) => value) {
@@ -85,4 +85,8 @@ Form.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   /** Children of an form, Uses Render as a Function pattern ({valid, values, bindInput}) */
   children: PropTypes.func.isRequired
+}
+
+Form.childContextTypes = {
+  updatePosition: PropTypes.func
 }
