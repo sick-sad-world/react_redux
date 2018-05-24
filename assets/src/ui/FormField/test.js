@@ -69,7 +69,7 @@ describe('HOC: <FormField/>', () => {
     const wrapper = shallow(<TextField name={name} onChange={onChange} />);
     wrapper.first().simulate('change', set(mockedEvent, 'target.value', 'a'));
     expect(onChange).toHaveBeenCalledTimes(1);
-    expect(onChange).toHaveBeenCalledWith({ [name]: 'a' });
+    expect(onChange).toHaveBeenCalledWith({ [name]: 'a' }, true);
   })
 
   test('Should call [getValue] function with proper data', () => {

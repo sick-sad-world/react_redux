@@ -105,9 +105,7 @@ export default function makeFormField(getValue = getValueDefault) {
   
       onChange(e) {
         const change = getValue(e, this.props);
-        if (this.ruleSet ? this.validate(change[this.props.name]) : true) {
-          this.props.onChange(change);
-        }
+        this.props.onChange(change, this.ruleSet ? this.validate(change[this.props.name]) : true);
       }
 
       validate(val, opts) {

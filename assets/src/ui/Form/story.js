@@ -14,7 +14,7 @@ storiesOf('FormElements', module)
   .add('Form', withInfo({
     propTables: [Form]
   })(() => (
-    <Form onSubmit={action('Submit')} values={{radio: 1}}>
+    <Form onSubmit={action('Submit')} values={{radio: 1, dropdown: 'one', text: 'text'}}>
       {({values, bindInput, valid}) => (
         <React.Fragment>
           <TextInput {...bindInput('text')} label='Text field' rules={['required']} />
