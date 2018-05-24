@@ -25,9 +25,9 @@ export default class ListItem extends React.Component {
         {({innerRef, draggableProps, dragHandleProps}, draggableSnapshot) => (
           <li ref={innerRef} {...draggableProps}>
             {(hasSubList) ? (
-              <Item dragHandleProps={dragHandleProps} data={data} subdata={this.state.subdata} toggleSubdata={this.toggleSubdata} />
+              <Item draggableSnapshot={draggableSnapshot} dragHandleProps={dragHandleProps} data={data} subdata={this.state.subdata} toggleSubdata={this.toggleSubdata} />
             ) : (
-              <Item dragHandleProps={dragHandleProps} data={data} />
+              <Item draggableSnapshot={draggableSnapshot} dragHandleProps={dragHandleProps} data={data} />
             )}
             {this.state.subdata && children}
           </li>

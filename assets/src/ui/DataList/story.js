@@ -89,12 +89,13 @@ storiesOf('UI Components', module)
       return (
         <div>
           <h4>Regular list</h4>
-          <DataList config={config} data={data} />
+          <DataList config={config} data={data} onSort={action('onSort')} />
           <div style={{height: '50px'}} />
           <h4>Empty list</h4>
           <DataList
             config={config}
             data={[]}
+            onSort={action('onSort')}
             sortable
           />
           <div style={{height: '50px'}} />
@@ -106,6 +107,7 @@ storiesOf('UI Components', module)
               text: 'Error 500: General back-end error'
             }}
             data={[]}
+            onSort={action('onSort')}
             sortable
             loading={false}
           />

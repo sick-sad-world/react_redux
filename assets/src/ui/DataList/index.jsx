@@ -128,10 +128,11 @@ export default class DataList extends React.Component {
     };
   }
 
-  renderItem({data, subdata, toggleSubdata, dragHandleProps}) {
+  renderItem({data, subdata, toggleSubdata, dragHandleProps, draggableSnapshot}) {
     const { config } = this.props;
     return (
       <Row
+        className={classNames({'state--dragging': draggableSnapshot.isDragging})}
         toggleSubdata={toggleSubdata}
         dragHandleProps={dragHandleProps}
         toggleActions={(config.actions) ? this.setActionState(data.id) : null}
