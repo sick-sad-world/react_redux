@@ -18,7 +18,8 @@ function makeAlias(acc, v) {
 
 const PLUGINS = [
   new ExtractTextPlugin({
-    filename: (P) ? '[hash:12].css' : 'app.css'
+    filename: (P) ? '[hash:12].css' : '[name].css',
+    disable: !P
   }),
   new HtmlWebpackPlugin({
     template: './index.html',
@@ -150,8 +151,13 @@ module.exports = {
   module: {
     rules: [{
       test: /\.jsx?$/,
-      include: [path.join(__dirname, 'node_modules', 'react-validable')],
-      use: ['babel-loader']
+      exclude: /node_modules/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: ['react']
+        }
+      }
     }, sassLoader, imageLoader, svgLoader, fontLoader]
   }
 };
