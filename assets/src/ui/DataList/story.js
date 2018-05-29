@@ -52,32 +52,33 @@ const config = {
       icon: 'trash',
       handler: action('Delete')
     }]
-  },
-  subdata: {
-    columns: [{
-      id: 'id',
-      size: '32px'
-    }, {
-      id: 'type',
-      render: 'feedType',
-      size: '90px'
-    }, {
-      id: 'name',
-      size: '25%',
-    }, {
-      id: 'url',
-      size: '50%'
-    }],
-    actions: [{
-      label: 'Add to set',
-      icon: 'add-to-list',
-      handler: action('Add to set')
-    }, {
-      label: 'Remove from set',
-      icon: 'trash',
-      handler: action('Remove from set')
-    }]
   }
+};
+
+const subconfig = {
+  columns: [{
+    id: 'id',
+    size: '32px'
+  }, {
+    id: 'type',
+    render: 'feedType',
+    size: '90px'
+  }, {
+    id: 'name',
+    size: '25%',
+  }, {
+    id: 'url',
+    size: '50%'
+  }],
+  actions: [{
+    label: 'Add to set',
+    icon: 'add-to-list',
+    handler: action('Add to set')
+  }, {
+    label: 'Remove from set',
+    icon: 'trash',
+    handler: action('Remove from set')
+  }]
 };
 
 storiesOf('UI Components', module)
@@ -89,7 +90,7 @@ storiesOf('UI Components', module)
       return (
         <div>
           <h4>Regular list</h4>
-          <DataList config={config} data={data} onSort={action('onSort')} />
+          <DataList config={config} subconfig={subconfig} data={data} onSort={action('onSort')} />
           <div style={{height: '50px'}} />
           <h4>Empty list</h4>
           <DataList

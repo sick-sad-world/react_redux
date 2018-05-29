@@ -18,7 +18,9 @@ export default class Assignment extends React.Component {
         <div>
         </div>
         <List droppableId='choises' type='choises' className='list-container'>
-          {choises.map(() => ())}
+          {choises.map(() => (
+            
+          ))}
         </List>
       </section>
     );

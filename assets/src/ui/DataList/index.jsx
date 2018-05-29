@@ -45,8 +45,8 @@ export default class DataList extends React.Component {
       actions: null
     }
     this.template = getTemplate(props.config);
-    this.subtemplate = (props.config.subdata) ? getTemplate(props.config.subdata) : null;
-    bindAll(this, 'onDragEnd', 'onDragStart', 'setActionState', 'renderItem', 'renderSubItem');
+    this.subtemplate = (props.subconfig) ? getTemplate(props.subconfig) : null;
+    bindAll(this, 'onDragEnd', 'onDragStart', 'setActionState', 'renderItem', 'renderSubItem', 'makeClickHandler');
   }
 
   componentWillReceiveProps({data, config}) {
@@ -128,6 +128,14 @@ export default class DataList extends React.Component {
     };
   }
 
+  makeClickHandler(data) {
+    const { onItemClick } = this.props;
+    if (onItemClick) {
+      return () => onItemClick(data);
+    }
+    return null;
+  }
+
   renderItem({data, subdata, toggleSubdata, dragHandleProps, draggableSnapshot}) {
     const { config } = this.props;
     return (
@@ -141,26 +149,28 @@ export default class DataList extends React.Component {
         config={config}
         subdata={subdata}
         template={this.template}
+        onClick={this.makeClickHandler(data)}
       />
     )
   }
 
   renderSubItem({data, dragHandleProps}) {
-    const { config } = this.props;
+    const { subconfig } = this.props;
     return (
       <Row
         dragHandleProps={dragHandleProps}
-        toggleActions={(config.subdata.actions) ? this.setActionState(`${data.id}-inner`) : null}
+        toggleActions={(subconfig.actions) ? this.setActionState(`${data.id}-inner`) : null}
         actionsOpen={this.state.actions === data.id}
         data={data}
-        config={config.subdata}
+        config={subconfig}
         template={this.subtemplate}
+        onClick={this.makeClickHandler(data)}
       />
     );
   }
 
   render() {
-    const { rootClassName, className, sortable, errorState, emptyState, config } = this.props; 
+    const { rootClassName, className, sortable, errorState, emptyState, config, subconfig } = this.props; 
     const { data } = this.state;
     let content = null;
 
@@ -180,7 +190,7 @@ export default class DataList extends React.Component {
                 type='outer'
                 data={item}
                 Item={this.renderItem}
-                hasSubList
+                hasSubList={!!subconfig}
               >
                 <List droppableId={`${item.id}-inner`} type='inner' className='sub-list-container'>
                   {subdata.map((subItem, i) => (
@@ -232,15 +242,18 @@ DataList.propTypes = {
   sortable: PropTypes.bool.isRequired,
   /** Callback runned when sorting is preformed. Using mostly for sending storing requests to backend */
   onSort: PropTypes.func.isRequired,
+  /** Click Handler applied to each row */
+  onItemClick: PropTypes.func.isRequired,
   /** Config For column sizes renderers, and order */
   config: PropTypes.shape({
     columns: configColumnShape.isRequired,
     actions: configActionShape,
-    subdata: PropTypes.shape({
-      columns: configColumnShape.isRequired,
-      actions: configActionShape
-    })
   }).isRequired,
+  /** Config For deeper levle column sizes renderers, and order */
+  subconfig: PropTypes.shape({
+    columns: configColumnShape.isRequired,
+    actions: configActionShape,
+  }),
   /** ClassName applied to root component */
   className: classNameShape,
   /** Configure Error state of DataList */

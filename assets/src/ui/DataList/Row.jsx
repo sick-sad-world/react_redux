@@ -69,10 +69,10 @@ export default class DataListRow extends React.Component {
   }
 
   render() {
-    const { config, toggleActions, actionsOpen, dragHandleProps, rootClassName, toggleSubdata, subdata, className, template, data } = this.props;
+    const { config, toggleActions, actionsOpen, dragHandleProps, rootClassName, toggleSubdata, subdata, className, template, data, onClick, ...props } = this.props;
     const hasActions = config.actions && toggleActions;
     return (
-      <div className={classNames(rootClassName, className)}>
+      <div className={classNames(rootClassName, className)} onClick={onClick} {...props}>
         {dragHandleProps && <IconButton g='dots-three-vertical' {...dragHandleProps} />}
         <div className='content' style={{gridTemplateColumns: template}}>
           {config.columns.map(this.renderColumn)}
@@ -108,6 +108,8 @@ DataListRow.propTypes = {
     onDragStart: PropTypes.func.isRequired,
     draggable: PropTypes.bool.isRequired
   }),
+  /** Click handler applied to root element */
+  onClick: PropTypes.func,
   /** CSS Grid declaration that defines column layout of row */
   template: PropTypes.string.isRequired,
   /** Actual data to render in a row */
