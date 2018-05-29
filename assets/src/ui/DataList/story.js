@@ -30,24 +30,31 @@ const config = {
   }],
   actions: (item) => {
     const changeState = (item.status) ? {
+      key: 'dis',
       label: 'Disable',
       icon: 'eye-with-line',
       handler: action('Disable')
     } : {
+      key: 'enb',
       label: 'Enable',
       icon: 'eye',
       handler: action('Enable')
     }
 
     return [changeState, {
+      key: 'create',
       label: 'Create feed here',
       icon: 'add-to-list',
       handler: action('Create feed here')
     }, {
+      key: 'edit',
       label: 'Edit',
       icon: 'documents',
       handler: action('Edit')
-    }, '---', {
+    }, {
+      key: 'sep'
+    }, {
+      key: 'delete',
       label: 'Delete',
       icon: 'trash',
       handler: action('Delete')
@@ -71,10 +78,12 @@ const subconfig = {
     size: '50%'
   }],
   actions: [{
+    key: 'add',
     label: 'Add to set',
     icon: 'add-to-list',
     handler: action('Add to set')
   }, {
+    key: 'remove',
     label: 'Remove from set',
     icon: 'trash',
     handler: action('Remove from set')

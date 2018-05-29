@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { classNameShape, childrenShape } from 'shared/typings';
+import { classNameShape, childrenShape, idShape } from 'shared/typings';
 import './styles.scss';
 import IconButton from '../IconButton';
 
@@ -41,7 +41,7 @@ TagList.propTypes = {
   /** Data Source of a Component */
   data: PropTypes.arrayOf(PropTypes.shape({
     /** ID of an record, used as [key] */
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    id: idShape.isRequired,
     /** String|Elemnt|Array(Element)  Content  */
     content: childrenShape.isRequired,
     /** String|Elemnt|Array(Element) Prefix will be rendered before content, Image/Badge/Icon or something custom */

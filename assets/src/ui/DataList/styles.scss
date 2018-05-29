@@ -4,7 +4,7 @@
 
 .DataList--root {
 
-  .DataList--header .container, .list-container {
+  .DataList--header .container, ul {
     width: $s-container;
     margin: 0 auto;
   }
@@ -13,12 +13,12 @@
     margin-bottom: u(2);
   }
 
-  .list-container, .sub-list-container {
+  ul {
     list-style: none;
     padding: 0;
-    // li:not(:last-child) {
-    //   border-bottom: 1px solid color(border);
-    // }
+    li:not(:last-child) {
+      border-bottom: 1px solid color(border);
+    }
   }
 
   .sub-list-container {

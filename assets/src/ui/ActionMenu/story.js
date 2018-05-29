@@ -18,15 +18,18 @@ storiesOf('UI Components', module)
           open
           data={[
             {
+              key: 'manage',
               label: 'Manage feeds',
               handler: action('manage-feeds')
             },
-            {
+            { 
+              key: 'edit',
               label: 'Edit item',
               handler: action('edit-item')
             },
-            '---',
+            {key: 'sep'},
             {
+              key: 'delete',
               label: 'Delete item',
               icon: 'trash',
               handler: action('delete-item')

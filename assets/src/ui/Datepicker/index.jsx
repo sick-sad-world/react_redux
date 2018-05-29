@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import Datetime from 'react-datetime';
+import { childrenShape } from 'shared/typings';
 import TextInput from '../TextInput';
 import './styles.scss';
 
@@ -31,7 +32,7 @@ Datepicker.propTypes = {
   /** Name property for input */
   name: PropTypes.string.isRequired,
   /** Component to render Input */
-  InputComponent: PropTypes.func.isRequired,
+  InputComponent: childrenShape.isRequired,
   /** String Format of output value */
   format: PropTypes.string,
   /** Value of an Input may be date string or Moment/Date instance */

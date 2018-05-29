@@ -65,5 +65,5 @@ ListItem.propTypes = {
   /** Define if this ListItem has SubList a.k.a deeper level */
   hasSubList: PropTypes.bool.isRequired,
   /** Item itself to render */
-  Item: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired
+  Item: childrenShape.isRequired
 }

@@ -1,0 +1,19 @@
+@import 'mixins/_u.scss';
+@import 'mixins/_styles.scss';
+@import '_vars.scss';
+
+.Assignment--root {
+  display: flex;
+  align-items: stretch;
+  .selection, .choises {
+    flex: 0 0 auto;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    li:not(:last-child) {
+      border-bottom: 1px solid color(border);
+    }
+  }
+}

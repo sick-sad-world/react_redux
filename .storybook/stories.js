@@ -20,6 +20,7 @@ import '../assets/src/ui/Form/story.js';
 
 import '../assets/src/ui/TabsNav/story.js';
 import '../assets/src/ui/Progress/story.js';
+import '../assets/src/ui/Assignment/story.js';
 import '../assets/src/ui/Notification/story.js';
 import '../assets/src/ui/ActionMenu/story.js';
 import '../assets/src/ui/DataList/story.js';

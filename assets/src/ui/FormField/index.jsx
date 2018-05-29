@@ -5,18 +5,8 @@ import classNames from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { classNameShape, valueShape } from 'shared/typings';
+import { makeid, callContextAction } from 'shared/utils';
 import ruleBase from './rules';
-
-function makeid(name, length = 5) {
-  let text = `${name}-`;
-  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-  for (let i = 0; i < length; i += 1) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-
-  return text;
-}
 
 function getValueDefault({ target }, {name}) {
   return { [name]: target.value }
@@ -45,12 +35,6 @@ function combineValidator(raw) {
     const result = ruleSet.map((validator, i) => validator(val, opts[i] || {})).filter(res => typeof res === 'string');
     return (result.length > 0) ? result : true;
   };
-}
-
-function callContextAction(func, ...args) {
-  if (typeof func === 'function') {
-    func(...args);
-  }
 }
 
 function validate(ruleSet, val, opts) {

@@ -2,18 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import bindAll from 'lodash/bindAll';
-import { classNameShape } from 'shared/typings';
+import { classNameShape, idShape } from 'shared/typings';
 import Icon from '../Icon';
 import './styles.scss';
 
 /** Menu item can be shape or placeholder */
 export const actionConfigShape = PropTypes.oneOfType([PropTypes.oneOf(['---']), PropTypes.shape({
+  /** Used as key for list */
+  id: idShape.isRequired,
   /** Label used as a text of a menu item */
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   /** Whatever Icon should be rendered or not */
   icon: PropTypes.string,
   /** Function handler bound to menu item */
-  handler: PropTypes.func.isRequired
+  handler: PropTypes.func
 })]);
 
 /** Simple link list as dropdown menu, representing different actions possible */
@@ -49,14 +51,14 @@ export default class ActionMenu extends React.Component {
     const { data, className, rootClassName, onBodyClick, dataIgnore, ...props } = this.props;
     return (
       <nav {...props} ref={this._makeRootRef} className={classNames(rootClassName, className)}>
-        {data.map((item, i) => {
-          if (item === '---') {
-            return <hr key={i} />
+        {data.map(({label, handler, icon, key}) => {
+          if (!label && !handler) {
+            return <hr key={key} />
           }
           return (
-            <a key={item.label} onClick={item.handler} title={item.label}>
-              {item.icon && <Icon g={item.icon} />}
-              {item.label}
+            <a key={key} onClick={handler} title={label}>
+              {icon && <Icon g={icon} />}
+              {label}
             </a>
           )
         })}

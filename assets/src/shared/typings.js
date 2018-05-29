@@ -29,14 +29,6 @@ export default function createOptionableValidator(validator) {
   return chainedValidate;
 }
 
-/** Simple value shape */
-export const valueShape = PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]);
-
-export const optionShape = PropTypes.arrayOf(PropTypes.shape({
-  label: PropTypes.string.isRequired,
-  value: valueShape
-}));
-
 /** Default options shape for Dropdowns, switchers, e.t.c */
 export const optionShapeExtended = (size = 0, labelProp = 'label') => createOptionableValidator((props, propName) => {
   if (size > 0 && props[propName].length > size) {
@@ -54,6 +46,16 @@ export const optionShapeExtended = (size = 0, labelProp = 'label') => createOpti
   return undefined;
 });
 
+/** Simple value shape */
+export const valueShape = PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]);
+
+export const idShape = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
+
+export const optionShape = PropTypes.arrayOf(PropTypes.shape({
+  label: PropTypes.string.isRequired,
+  value: valueShape
+}));
+
 /** All possible variations of ClassNames definitions based on classNames https://github.com/JedWatson/classnames */
 export const classNameShape = PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string), PropTypes.objectOf(PropTypes.bool)]);
 
@@ -64,7 +66,15 @@ export const validShape = PropTypes.oneOfType([PropTypes.bool, PropTypes.string,
 export const validationMessageShape = PropTypes.oneOfType([PropTypes.string, PropTypes.bool]);
 
 /** Common React Children possible options */
-export const childrenShape = PropTypes.oneOfType([PropTypes.string, PropTypes.node, PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.func, PropTypes.node]))]);
+export const childrenShape = PropTypes.oneOfType([
+  PropTypes.string,
+  PropTypes.node,
+  PropTypes.func,
+  PropTypes.arrayOf(PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.node
+  ]))
+]);
 
 /** Check prop to be valid email string */
 export const emailStr = createOptionableValidator((props, propName) => {
