@@ -1,23 +1,35 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Droppable } from 'react-beautiful-dnd';
 import { childrenShape, classNameShape } from 'shared/typings';
 
 /** List that includes D&D functionality */
-export default function List({children, className, ...props}) {
+export default function List({children, className, sortable, ...props}) {
+  if (sortable) {
+    return (
+      <Droppable {...props}>
+        {({innerRef, placeholder}, {isDraggingOver}) => (
+          <ul className={classNames(className, {'state--over': isDraggingOver})} ref={innerRef}>
+            {children}
+            {placeholder}
+          </ul>
+        )}
+      </Droppable>
+    )
+  }
   return (
-    <Droppable {...props}>
-      {({innerRef, placeholder}, {isDraggingOver}) => (
-        <ul className={classNames(className, {'state--over': isDraggingOver})} ref={innerRef}>
-          {children}
-          {placeholder}
-        </ul>
-      )}
-    </Droppable>
-  )
+    <ul className={className} {...props}>{children}</ul>
+  ) 
+}
+
+List.defaultProps = {
+  sortable: true
 }
 
 List.propTypes = {
+  /** Whatever D&D sorting is enabled */
+  sortable: PropTypes.bool,
   /** Classes assigned to Rool element */
   className: classNameShape,
   /** Actual list to render */

@@ -18,30 +18,46 @@ export default class ListItem extends React.Component {
     return this.setState(({subdata}) => ({subdata: !subdata}));
   }
 
+  renderItem(provided = {}) {
+    const { data, Item, hasSubList } = this.props;
+    return (hasSubList) ? (
+      <Item {...provided} data={data} subdata={this.state.subdata} toggleSubdata={this.toggleSubdata} />
+    ) : (
+      <Item {...provided} data={data} />
+    )
+  }
+
   render() {
-    const { children, Item, data, hasSubList, ...props } = this.props;
+    const { children, Item, data, hasSubList, sortable, ...props } = this.props;
+    if (sortable) {
+      return (
+        <Draggable {...props}>
+          {({innerRef, draggableProps, dragHandleProps}, draggableSnapshot) => (
+            <li ref={innerRef} {...draggableProps}>
+              {this.renderItem({draggableSnapshot, dragHandleProps})}
+              {this.state.subdata && children}
+            </li>
+          )}
+        </Draggable>
+      );
+    }
     return (
-      <Draggable {...props}>
-        {({innerRef, draggableProps, dragHandleProps}, draggableSnapshot) => (
-          <li ref={innerRef} {...draggableProps}>
-            {(hasSubList) ? (
-              <Item draggableSnapshot={draggableSnapshot} dragHandleProps={dragHandleProps} data={data} subdata={this.state.subdata} toggleSubdata={this.toggleSubdata} />
-            ) : (
-              <Item draggableSnapshot={draggableSnapshot} dragHandleProps={dragHandleProps} data={data} />
-            )}
-            {this.state.subdata && children}
-          </li>
-        )}
-      </Draggable>
+      <li {...props}>
+        {this.renderItem()}
+        {this.state.subdata && children}
+      </li>
     );
   }
 }
 
 ListItem.defaultProps = {
-  hasSubList: false
+  hasSubList: false,
+  sortable: true
 }
 
 ListItem.propTypes = {
+  /** Whatever D&D sorting is enabled */
+  sortable: PropTypes.bool,
   /** Children to render - usually sublist */
   children: childrenShape,
   /** Actual Data passed to ListItem */
