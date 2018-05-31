@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 // import bindAll from 'lodash/bindAll';
 import classNames from 'classnames';
 import { childrenShape, classNameShape, idShape } from 'shared/typings';
-// import List from '../DragNDrop/List';
-// import ListItem from '../DragNDrop/Item'
+import { Context, List, ListItem } from '../DragNDrop';
 import './style.scss';
 
 export default class Assignment extends React.Component {
@@ -35,35 +34,46 @@ export default class Assignment extends React.Component {
   }
 
   render() {
-    const { data, rootClassName, className, selected, onChange, Item, search, showSelected, split, ...props } = this.props;
+    const { data, rootClassName, className, selected, onChange, Item, search, showSelected, split, sortable, ...props } = this.props;
     const { selection, choises } = this.prepareData();
 
     return (
       <section className={classNames(rootClassName, className)} {...props}>
-        <div className='selection' style={{width: split[0]}}>
-          <ul>
-            {selection.map((entry) => (
-              <li key={entry.id} onClick={this.makeOnClick(entry.id)}>
-                <Item {...entry} />
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className='choises' style={{width: split[1]}}>
-          <ul>
-            {choises.map((entry) => (
-              <li key={entry.id} onClick={this.makeOnClick(entry.id, true)}>
-                <Item {...entry} />
-              </li>
-            ))}
-          </ul>
-        </div>
+        <Context sortable={sortable}>
+          <div className='selection' style={{width: split[0]}}>
+            <List sortable={sortable}>
+              {selection.map((entry) => (
+                <ListItem
+                  sortable={sortable}
+                  key={entry.id}
+                  Item={Item}
+                  data={entry}
+                  onClick={this.makeOnClick(entry.id)} 
+                />
+              ))}
+            </List>
+          </div>
+          <div className='choises' style={{width: split[1]}}>
+            <List sortable={sortable}>
+              {choises.map((entry) => (
+                <ListItem
+                  sortable={sortable}
+                  key={entry.id}
+                  Item={Item}
+                  data={entry}
+                  onClick={this.makeOnClick(entry.id, true)} 
+                />
+              ))}
+            </List>
+          </div>
+        </Context>
       </section>
     );
   }
 }
 
 Assignment.defaultProps = {
+  sortable: false,
   showSelected: true,
   rootClassName: 'Assignment--root',
   split: ['40%','60%']
@@ -88,6 +98,8 @@ Assignment.propTypes = {
   Item: childrenShape.isRequired,
   /** String represents data property to search by, if not provided - search is disabled */
   search: PropTypes.string,
+  /** Whateer D&D interaction are enabled */
+  sortable: PropTypes.bool,
   /** Show selected items or omit them */
   showSelected: PropTypes.bool
   // /** String represents data property to group by, if not provided - search is disabled */

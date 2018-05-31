@@ -2,29 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import bindAll from 'lodash/bindAll';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { classNameShape } from 'shared/typings';
-import List from '../DragNDrop/List';
-import ListItem from '../DragNDrop/Item';
+import { Context, List, ListItem, addAt, reorder } from '../DragNDrop';
 import ListHeader from './ListHeader';
-import { ListStateRenderer, listStateRendererShape } from './renderers';
+import { ListStateRenderer, stateVisualizerShape } from '../StateVisualizer';
 import Row, { configColumnShape, configActionShape } from './Row';
 import './styles.scss';
-
-const addAt = (list, index, item) => {
-  if (!item) return list;
-  const result = Array.from(list);
-  result.splice(index, 0, item);
-  return result;
-};
-
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  return result;
-};
 
 const getSubdataTarget = (data, sid, idx) => data.filter(({id}) => sid === id).map(({subdata}) => subdata[idx])[0];
 
@@ -180,23 +163,25 @@ export default class DataList extends React.Component {
       content = <ListStateRenderer type='empty' className='state--empty' {...emptyState} />;
     } else {
       content = (
-        <DragDropContext onDragEnd={this.onDragEnd} onDragStart={this.onDragStart}>
-          <List droppableId='outer' type='outer' className='list-container'>
+        <Context sortable={sortable} onDragEnd={this.onDragEnd} onDragStart={this.onDragStart}>
+          <List sortable={sortable} droppableId='outer' type='outer' className='list-container'>
             {data.map(({subdata, ...item}, i) => (
               <ListItem
                 key={item.id}
                 draggableId={item.id}
+                sortable={sortable}
                 index={i}
                 type='outer'
                 data={item}
                 Item={this.renderItem}
                 hasSubList={!!subconfig}
               >
-                <List droppableId={`${item.id}-inner`} type='inner' className='sub-list-container'>
+                <List sortable={sortable} droppableId={`${item.id}-inner`} type='inner' className='sub-list-container'>
                   {subdata.map((subItem, i) => (
                     <ListItem
                       key={`${subItem.id}-${item.id}`}
                       draggableId={`${subItem.id}-${item.id}-inner`}
+                      sortable={sortable}
                       index={i}
                       type='inner'
                       data={subItem}
@@ -207,7 +192,7 @@ export default class DataList extends React.Component {
               </ListItem>
             ))}
           </List>
-        </DragDropContext>
+        </Context>
       );
     }
 
@@ -257,9 +242,9 @@ DataList.propTypes = {
   /** ClassName applied to root component */
   className: classNameShape,
   /** Configure Error state of DataList */
-  errorState: PropTypes.shape(listStateRendererShape).isRequired,
+  errorState: PropTypes.shape(stateVisualizerShape).isRequired,
   /** Configure Empty state of DataList */
-  emptyState: PropTypes.shape(listStateRendererShape).isRequired,
+  emptyState: PropTypes.shape(stateVisualizerShape).isRequired,
   /** Data collection to display */
   data: PropTypes.arrayOf(PropTypes.object).isRequired
 }

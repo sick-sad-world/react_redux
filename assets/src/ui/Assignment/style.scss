@@ -5,8 +5,13 @@
 .Assignment--root {
   display: flex;
   align-items: stretch;
+  
   .selection, .choises {
     flex: 0 0 auto;
+  }
+
+  .selection {
+    border-right: 1px solid color(border);
   }
 
   ul {
