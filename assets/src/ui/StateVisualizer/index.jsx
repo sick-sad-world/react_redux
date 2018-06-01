@@ -17,7 +17,7 @@ export const stateVisualizerShape = {
 /**
  * Render list state Empty or Error ones. This will be rendered INSTEAD of list
  */
-export function StateVisualizer({title, text, additional, type, className, ...props}) {
+export default function StateVisualizer({title, text, additional, type, className, ...props}) {
   return (
     <div className={classNames('state--message', className)}>
       <div dangerouslySetInnerHTML={{__html: props[`${type}Image`]}} />

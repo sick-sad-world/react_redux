@@ -6,7 +6,7 @@ export const Context = Ctx;
 
 export const List = Ls;
 
-export const Item = It;
+export const ListItem = It;
 
 export const addAt = (list, index, item) => {
   if (!item) return list;

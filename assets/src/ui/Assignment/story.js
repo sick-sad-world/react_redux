@@ -6,8 +6,8 @@ import { action } from '@storybook/addon-actions';
 import Assignment from './index';
 import data from './MOCK_DATA.json'
 
-function Item({type, name}) {
-  return <div><b>{type}</b>: {name}</div>
+function Item({data}) {
+  return <div><b>{data.type}</b>: {data.name}</div>
 }
 
 storiesOf('UI Components', module)

@@ -5,7 +5,7 @@ import bindAll from 'lodash/bindAll';
 import { classNameShape } from 'shared/typings';
 import { Context, List, ListItem, addAt, reorder } from '../DragNDrop';
 import ListHeader from './ListHeader';
-import { ListStateRenderer, stateVisualizerShape } from '../StateVisualizer';
+import StateVisualizer, { stateVisualizerShape } from '../StateVisualizer';
 import Row, { configColumnShape, configActionShape } from './Row';
 import './styles.scss';
 
@@ -158,9 +158,9 @@ export default class DataList extends React.Component {
     let content = null;
 
     if (errorState.text) {
-      content = <ListStateRenderer type='error' className='state--error' {...errorState} />;
+      content = <StateVisualizer type='error' className='state--error' {...errorState} />;
     } else if (!data.length) {
-      content = <ListStateRenderer type='empty' className='state--empty' {...emptyState} />;
+      content = <StateVisualizer type='empty' className='state--empty' {...emptyState} />;
     } else {
       content = (
         <Context sortable={sortable} onDragEnd={this.onDragEnd} onDragStart={this.onDragStart}>
