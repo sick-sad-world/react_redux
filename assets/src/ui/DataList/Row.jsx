@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import { classNameShape } from 'shared/typings';
 import IconButton from '../IconButton';
 import renderers from './renderers';
-import Actionmenu, { actionConfigShape } from '../ActionMenu';
+import Actionmenu, { actionShape } from '../ActionMenu';
 
 const toggleIcon = {
   true: ['chevron-up', 'Hide contents'],
@@ -24,7 +24,7 @@ export const configColumnShape = PropTypes.arrayOf(PropTypes.shape({
 
 export const configActionShape = PropTypes.oneOfType([
   PropTypes.func,
-  PropTypes.arrayOf(actionConfigShape)
+  PropTypes.arrayOf(actionShape)
 ]);
 
 /**
@@ -71,6 +71,7 @@ export default class DataListRow extends React.Component {
   render() {
     const { config, toggleActions, actionsOpen, dragHandleProps, rootClassName, toggleSubdata, subdata, className, template, data, onClick, ...props } = this.props;
     const hasActions = config.actions && toggleActions;
+    console.log();
     return (
       <div className={classNames(rootClassName, className)} onClick={onClick} {...props}>
         {dragHandleProps && <IconButton g='dots-three-vertical' {...dragHandleProps} />}
@@ -116,7 +117,7 @@ DataListRow.propTypes = {
   data: PropTypes.object.isRequired, // eslint-disable-line
   /** Handler responsible for opening/closing Actions popup, Usually this is provided by List */
   toggleActions: PropTypes.func,
-  /**  */
+  /** Function that switches state of sublist visibility */
   toggleSubdata: PropTypes.func,
   /** indicates whatever subdata was rendered, this will affect on button styles */
   subdata: PropTypes.bool.isRequired,

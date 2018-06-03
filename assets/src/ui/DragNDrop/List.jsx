@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Droppable } from 'react-beautiful-dnd';
-import { childrenShape, classNameShape } from 'shared/typings';
+import { childrenShape, classNameShape, idShape } from 'shared/typings';
 
 /** List that includes D&D functionality */
-export default function List({children, className, sortable, ...props}) {
+export default function List({children, className, sortable, droppableId, ...props}) {
   if (sortable) {
     return (
-      <Droppable {...props}>
+      <Droppable {...props} droppableId={droppableId}>
         {({innerRef, placeholder}, {isDraggingOver}) => (
           <ul className={classNames(className, {'state--over': isDraggingOver})} ref={innerRef}>
             {children}
@@ -28,6 +28,8 @@ List.defaultProps = {
 }
 
 List.propTypes = {
+  /** Unique ID for droppable element */
+  droppableId: idShape,
   /** Whatever D&D sorting is enabled */
   sortable: PropTypes.bool,
   /** Classes assigned to Rool element */

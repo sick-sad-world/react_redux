@@ -15,6 +15,18 @@ export function makeid(name, length = 5) {
 }
 
 /**
+ * Helper function for extracting numeric IDS from complex strings
+ * @param {String} str String to test
+ * @param {Any} def Return value if was unable to extract nubmer
+ */
+export const extractNumber = (str, def = 0) => {
+  const num = parseInt(str);
+  return (Number.isNaN(num)) ? def : num;
+};
+
+export const contain = (val, identity) => val.indexOf(identity) > -1;
+
+/**
  * Call context function, but only if exsits, since it easily can be missing.
  * Just simple wrapper over condition
  * @param {Function} func Function to run

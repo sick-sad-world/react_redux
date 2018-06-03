@@ -99,14 +99,13 @@ storiesOf('UI Components', module)
       return (
         <div>
           <h4>Regular list</h4>
-          <DataList config={config} subconfig={subconfig} data={data} onSort={action('onSort')} />
+          <DataList config={config} subconfig={subconfig} sortable='both' data={data} onSort={action('onSort')} />
           <div style={{height: '50px'}} />
           <h4>Empty list</h4>
           <DataList
             config={config}
             data={[]}
             onSort={action('onSort')}
-            sortable
           />
           <div style={{height: '50px'}} />
           <h4>Errored list</h4>
@@ -118,7 +117,6 @@ storiesOf('UI Components', module)
             }}
             data={[]}
             onSort={action('onSort')}
-            sortable
             loading={false}
           />
         </div>

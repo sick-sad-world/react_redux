@@ -7,7 +7,7 @@ import Icon from '../Icon';
 import './styles.scss';
 
 /** Menu item can be shape or placeholder */
-export const actionConfigShape = PropTypes.oneOfType([PropTypes.oneOf(['---']), PropTypes.shape({
+export const actionShape = PropTypes.shape({
   /** Used as key for list */
   id: idShape.isRequired,
   /** Label used as a text of a menu item */
@@ -16,7 +16,7 @@ export const actionConfigShape = PropTypes.oneOfType([PropTypes.oneOf(['---']), 
   icon: PropTypes.string,
   /** Function handler bound to menu item */
   handler: PropTypes.func
-})]);
+});
 
 /** Simple link list as dropdown menu, representing different actions possible */
 export default class ActionMenu extends React.Component {
@@ -81,5 +81,5 @@ ActionMenu.propTypes = {
   /** ClassName applied to Root element */
   className: classNameShape,
   /** Data source for our action menu */
-  data: PropTypes.arrayOf(actionConfigShape).isRequired
+  data: PropTypes.arrayOf(actionShape).isRequired
 }

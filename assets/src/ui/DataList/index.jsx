@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import bindAll from 'lodash/bindAll';
+import { extractNumber, contain } from 'shared/utils';
 import { classNameShape } from 'shared/typings';
 import { Context, List, ListItem, addAt, reorder } from '../DragNDrop';
 import ListHeader from './ListHeader';
@@ -18,6 +19,74 @@ const getTemplate = ({columns}) => {
     return acc;
   }, '')
 }
+
+const SORTABLES = {
+  top(data, source, destination, itemId) {
+    return {
+      shape: {
+        item: itemId,
+        in: destination.id,
+        out: source.id,
+        type: 'same-outer'
+      },
+      result: reorder(data, source.index, destination.index)
+    }
+  },
+  inner(data, source, destination, itemId) {
+    const sourceId = extractNumber(source.id, source.id);
+    const destId = extractNumber(destination.id, destination.id);
+    const isSameTarget = source.id == destination.id;
+    let result = data;
+    if (isSameTarget) {
+      result = data.map((item) => {
+        if (destId === item.id) {
+          return {
+            ...item,
+            subdata: reorder(item.subdata, source.index, destination.index)
+          }
+        }
+        return item;
+      });
+    } else {
+      result = data.map((item) => {
+        if (destId === item.id) {
+          return {
+            ...item,
+            subdata: addAt(
+              item.subdata,
+              destination.index,
+              getSubdataTarget(data, sourceId, source.index)
+            )
+          }
+        } else if (sourceId === item.id) {
+          return {
+            ...item,
+            subdata: item.subdata.filter((item, i) => i !== source.index)
+          };
+        }
+        return item;
+      });
+    }
+
+    return {
+      shape: {
+        item: itemId,
+        in: destId,
+        out: sourceId,
+        type: isSameTarget ? 'same-inner' : 'to-inner'
+      },
+      result
+    }
+  },
+  both(data, source, destination, itemId) {
+    if (contain(source.id, 'inner') && contain(destination.id, 'inner')) {
+      return this.inner(data, source, destination, itemId)
+    } else if (source.id === destination.id) {
+      return this.top(data, source, destination, itemId);
+    }
+    return { shape: { type: 'error' }, result: data };
+  }
+};
 
 export default class DataList extends React.Component {
   constructor(props) {
@@ -46,57 +115,12 @@ export default class DataList extends React.Component {
 
   onDragEnd({destination, source, draggableId}) {
     if (!destination) return;
-
-    const sourceId = parseInt(source.droppableId) || source.droppableId;
-    const targetId = parseInt(destination.droppableId) || destination.droppableId;
-    const isSourceInner = source.droppableId.indexOf('inner') > -1;
-    const isTargetInner = destination.droppableId.indexOf('inner') > -1;
-    const isDropWithinSameInner = isSourceInner && isTargetInner && sourceId == targetId;
-    const isDropOnItem = isSourceInner && destination.droppableId.indexOf('inner-item') > -1;
-
-    const shape = {
-      item: draggableId,
-      in: targetId,
-      out: sourceId
-    }
-    let result = null;
-    
-    if (sourceId === targetId) {
-      if (isDropWithinSameInner) {
-        result = this.state.data.map((item) => {
-          if (targetId === item.id) {
-            return {
-              ...item,
-              subdata: reorder(item.subdata, source.index, destination.index)
-            }
-          }
-          return item;
-        });
-        shape.type = 'same-inner';
-      } else {
-        result = reorder(this.state.data, source.index, destination.index);
-        shape.type = 'same-outer';
-      }
-    } else {
-      result = this.state.data.map((item) => {
-        if (targetId === item.id) {
-          return {
-            ...item,
-            subdata: addAt(
-              item.subdata, (isDropOnItem) ? 0 : destination.index,
-              getSubdataTarget(this.state.data, sourceId, source.index)
-            )
-          }
-        } else if (sourceId === item.id) {
-          return {
-            ...item,
-            subdata: item.subdata.filter((item, i) => i !== source.index)
-          };
-        }
-        return item;
-      });
-      shape.type = 'to-inner';
-    }
+    const { shape, result } = SORTABLES[this.props.sortable](
+      this.state.data,
+      {id: source.droppableId, index: source.index},
+      {id: destination.droppableId, index: destination.index},
+      extractNumber(draggableId, draggableId)
+    );
 
     this.setState(() => ({
       isDragging: false,
@@ -119,7 +143,7 @@ export default class DataList extends React.Component {
     return null;
   }
 
-  renderItem({data, subdata, toggleSubdata, dragHandleProps, draggableSnapshot}) {
+  renderItem({data, subdata, toggleSubdata, dragHandleProps, draggableSnapshot = {}}) {
     const { config } = this.props;
     return (
       <Row
@@ -137,10 +161,11 @@ export default class DataList extends React.Component {
     )
   }
 
-  renderSubItem({data, dragHandleProps}) {
+  renderSubItem({data, dragHandleProps, draggableSnapshot = {}}) {
     const { subconfig } = this.props;
     return (
       <Row
+        className={classNames({'state--dragging': draggableSnapshot.isDragging})}
         dragHandleProps={dragHandleProps}
         toggleActions={(subconfig.actions) ? this.setActionState(`${data.id}-inner`) : null}
         actionsOpen={this.state.actions === data.id}
@@ -157,31 +182,34 @@ export default class DataList extends React.Component {
     const { data } = this.state;
     let content = null;
 
+    const isInner = sortable === 'both' || sortable === 'inner';
+    const isOuter = sortable === 'both' || sortable === 'top';
+
     if (errorState.text) {
       content = <StateVisualizer type='error' className='state--error' {...errorState} />;
     } else if (!data.length) {
       content = <StateVisualizer type='empty' className='state--empty' {...emptyState} />;
     } else {
       content = (
-        <Context sortable={sortable} onDragEnd={this.onDragEnd} onDragStart={this.onDragStart}>
-          <List sortable={sortable} droppableId='outer' type='outer' className='list-container'>
+        <Context sortable={!!sortable} onDragEnd={this.onDragEnd} onDragStart={this.onDragStart}>
+          <List sortable={isOuter} droppableId='outer' type='outer' className='list-container'>
             {data.map(({subdata, ...item}, i) => (
               <ListItem
                 key={item.id}
                 draggableId={item.id}
-                sortable={sortable}
+                sortable={isOuter}
                 index={i}
                 type='outer'
                 data={item}
                 Item={this.renderItem}
                 hasSubList={!!subconfig}
               >
-                <List sortable={sortable} droppableId={`${item.id}-inner`} type='inner' className='sub-list-container'>
+                <List sortable={isInner} droppableId={`${item.id}-inner`} type='inner' className='sub-list-container'>
                   {subdata.map((subItem, i) => (
                     <ListItem
                       key={`${subItem.id}-${item.id}`}
                       draggableId={`${subItem.id}-${item.id}-inner`}
-                      sortable={sortable}
+                      sortable={isInner}
                       index={i}
                       type='inner'
                       data={subItem}
@@ -198,7 +226,7 @@ export default class DataList extends React.Component {
 
     return (
       <div className={classNames(rootClassName, className)}>
-        <ListHeader sortable={sortable} config={config} template={this.template} />
+        <ListHeader sortable={!!sortable} config={config} template={this.template} />
         {content}
       </div>
     );
@@ -206,7 +234,7 @@ export default class DataList extends React.Component {
 }
 
 DataList.defaultProps = {
-  sortable: true,
+  sortable: false,
   rootClassName: 'DataList--root',
   errorState: {
     title: 'We encountered error during data retrieval',
@@ -223,8 +251,8 @@ DataList.defaultProps = {
 DataList.propTypes = {
   /** Classname all styles bound to */
   rootClassName: PropTypes.string.isRequired,
-  /** Whatever sortable wrappers should be applied */
-  sortable: PropTypes.bool.isRequired,
+  /** D&D Interaction mode. For top level items, or inner items, both of them or none at all */
+  sortable: PropTypes.oneOf([false, ...Object.keys(SORTABLES)]).isRequired,
   /** Callback runned when sorting is preformed. Using mostly for sending storing requests to backend */
   onSort: PropTypes.func.isRequired,
   /** Click Handler applied to each row */
