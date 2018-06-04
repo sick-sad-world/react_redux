@@ -24,6 +24,11 @@ export const extractNumber = (str, def = 0) => {
   return (Number.isNaN(num)) ? def : num;
 };
 
+/**
+ * Simple utility used to check enum on value containing
+ * @param {String|Array} val Enum to check
+ * @param {Any} identity Value to check against
+ */
 export const contain = (val, identity) => val.indexOf(identity) > -1;
 
 /**
@@ -43,3 +48,16 @@ export function callContextAction(func, ...args) {
  * @param {Any} str Variable to test
  */
 export const isValStr = (str) => typeof str === 'string' && str.length > 0;
+
+/**
+ * This utility function used to parse Search string key:val key2:val2
+ * @param {String} str value to parse
+ * @param {String} default value if none props are found in query
+ * @return {Object} parsed list of key/val pairs to search for
+ */
+export const parseSearchStr = (str, def = 'name') => {
+  return str.split(' ').map((substr) => substr.split(':')).reduce((acc, [prop, val]) => {
+    acc[(val) ? prop : def] = (val) ? val : prop;
+    return acc;
+  }, {})
+}

@@ -28,31 +28,7 @@
   }
 
   .search {
-    position: relative;
-    display: flex;
-    align-items: center;
-    svg {
-      width: u(3);
-      height: u(3);
-      margin-right: u();
-      opacity: 0.5;
-    }
-    input {
-      height: $s-input;
-      line-height: $s-input;
-      border: 0;
-      background: none;
-      @include placeholder() {
-        @include ph-styles();
-        opacity: 0.6;
-        transition: opacity $t-dur $t-func;
-      }
-      &:focus {
-        @include placeholder() {
-          opacity: 1;
-        }
-      }
-    }
+    @include style-blank-field();
   }
 
   .sort {

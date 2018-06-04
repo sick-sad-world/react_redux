@@ -1,3 +1,5 @@
+@import 'mixins/_ph.scss';
+
 @mixin ph-styles () {
   font-style: italic;
   font-weight: 300;
@@ -88,5 +90,33 @@
 
   &:not([disabled]):focus {
     box-shadow: 0 0 0 3px rgba($main, .25)
+  }
+}
+
+@mixin style-blank-field() {
+  position: relative;
+  display: flex;
+  align-items: center;
+  svg {
+    width: u(3);
+    height: u(3);
+    margin-right: u();
+    opacity: 0.5;
+  }
+  input {
+    height: $s-input;
+    line-height: $s-input;
+    border: 0;
+    background: none;
+    @include placeholder() {
+      @include ph-styles();
+      opacity: 0.6;
+      transition: opacity $t-dur $t-func;
+    }
+    &:focus {
+      @include placeholder() {
+        opacity: 1;
+      }
+    }
   }
 }

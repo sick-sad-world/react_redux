@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { classNameShape, optionShape } from 'shared/typings';
+import { parseSearchStr } from 'shared/utils';
 import './styles.scss';
 import Icon from '../Icon';
 import Dropdown from '../Dropdown';
@@ -30,10 +31,7 @@ export default class PageHeader extends React.Component {
   sendUpdates() {
     const isGroup = this.state.sort && this.state.sort.indexOf('group') > -1;
     const data = {
-      search: this.state.search.split(' ').map((substr) => substr.split(':')).reduce((acc, [prop, val]) => {
-        acc[(val) ? prop : 'name'] = (val) ? val : prop;
-        return acc;
-      }, {})
+      search: parseSearchStr(this.state.search)
     }
 
     if (this.props.sort) {

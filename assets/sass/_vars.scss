@@ -34,6 +34,8 @@ $z-indexes: (
   popup: 8
 );
 
+$entity: 40px;
+
 @function z($z) {
   @return map-get($z-indexes, $z);
 }

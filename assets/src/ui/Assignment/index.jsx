@@ -1,18 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import bindAll from 'lodash/bindAll';
+import bindAll from 'lodash/bindAll';
 import cn from 'classnames';
 import { childrenShape, classNameShape, idShape } from 'shared/typings';
+import { parseSearchStr, contain, isValStr } from 'shared/utils';
 import { Context, List, ListItem } from '../DragNDrop';
+import Icon from '../Icon';
 import './style.scss';
 
 export default class Assignment extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-
+      search: ''
     }
-    //bindAll(this, '');
+    bindAll(this, 'onSearch');
+  }
+
+  onSearch({target}) {
+    this.setState(() => ({search: target.value}))
   }
 
   makeOnClick(id, insert) {
@@ -23,7 +29,7 @@ export default class Assignment extends React.Component {
   }
 
   prepareData() {
-    return this.props.data.reduce((acc, item) => {
+    const result = this.props.data.reduce((acc, item) => {
       if (this.props.selected.includes(item.id)) {
         acc.selection.push(item);
         if (this.props.showSelected) {
@@ -33,17 +39,45 @@ export default class Assignment extends React.Component {
         acc.choises.push(item);
       }
       return acc;
-    }, { selection: [], choises: [] })
+    }, { selection: [], choises: [] });
+
+    if (this.props.search && isValStr(this.state.search)) {
+      const search = Object.entries(parseSearchStr(this.state.search));
+      result.choises = result.choises.filter((item) => {
+        return search.every((prop, val) => {
+          return item[prop] === val || ((typeof item[prop] === 'string' || Array.isArray(item[prop])) && contain(item[prop] === val))
+        })
+      });
+    }
+
+    return result;
   }
 
   render() {
-    const { data, rootClassName, className, selected, onChange, Item, search, showSelected, split, sortable, ...props } = this.props;
+    const {
+      data,
+      rootClassName,
+      className,
+      selected,
+      onChange,
+      Item,
+      search,
+      showSelected,
+      split,
+      sortable,
+      headerText,
+      placeholder,
+      ...props
+    } = this.props;
     const { selection, choises } = this.prepareData();
 
     return (
-      <section className={cn(rootClassName, className)} {...props}>
+      <div className={cn(rootClassName, className)} {...props}>
         <Context sortable={sortable}>
-          <div className='selection' style={{width: split[0]}}>
+          <section className='selection' style={{width: split[0]}}>
+            <header>
+              {headerText.replace('%c', selection.length)}
+            </header>
             <List sortable={sortable}>
               {selection.map((entry) => (
                 <ListItem
@@ -55,8 +89,14 @@ export default class Assignment extends React.Component {
                 />
               ))}
             </List>
-          </div>
-          <div className='choises' style={{width: split[1]}}>
+          </section>
+          <section className='choises' style={{width: split[1]}}>
+            {(search) && (
+              <header className='search'>
+                <Icon g='search' />
+                <input type='text' name='search' placeholder={placeholder} value={this.state.search} onChange={this.onSearch} />
+              </header>
+            )}
             <List sortable={sortable}>
               {choises.map((entry) => (
                 <ListItem
@@ -68,9 +108,9 @@ export default class Assignment extends React.Component {
                 />
               ))}
             </List>
-          </div>
+          </section>
         </Context>
-      </section>
+      </div>
     );
   }
 }
@@ -78,7 +118,9 @@ export default class Assignment extends React.Component {
 Assignment.defaultProps = {
   sortable: false,
   showSelected: true,
+  placeholder: 'Type to search',
   rootClassName: 'Assignment--root',
+  headerText: '%c items selected',
   split: ['40%','60%']
 }
 
@@ -93,6 +135,8 @@ Assignment.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
     id: idShape.isRequired
   })),
+  /** String in selection header. Usually used to describe count %c replaced with number */
+  headerText: PropTypes.string.isRequired,
   /** Array of selected ID's */
   selected: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.number, PropTypes.string])),
   /** Function invoked when selection is changed. Used to handle selection in state of outside component */
@@ -101,6 +145,8 @@ Assignment.propTypes = {
   Item: childrenShape.isRequired,
   /** String represents data property to search by, if not provided - search is disabled */
   search: PropTypes.string,
+  /** Placeholder for search field */
+  placeholder: PropTypes.string,
   /** Whateer D&D interaction are enabled */
   sortable: PropTypes.bool,
   /** Show selected items or omit them */
