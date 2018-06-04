@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { classNameShape, childrenShape } from 'shared/typings';
 import './styles.scss';
 import Icon from '../Icon';
@@ -15,7 +15,7 @@ const TYPEMAP = {
 /** Notification for display and explain system states and events */
 export default function Notification({type, icon, className, children, viewBox, raised, title, rootClassName, ...props}) {
   return (
-    <div {...props} className={classNames(rootClassName, `style--${type}`, className, {'style--raised': raised})}>
+    <div {...props} className={cn(rootClassName, `style--${type}`, className, {'style--raised': raised})}>
       <div className='graphic'>
         <Icon g={icon || TYPEMAP[type]} viewBox={viewBox} />
       </div>

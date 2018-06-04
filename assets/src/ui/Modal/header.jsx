@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { classNameShape, childrenShape } from 'shared/typings';
 import IconButton from '../IconButton';
 
 /** Predefined Modal Header component */
 export default function ModalHeader({className, title, onClose, children, rootClassName, ...props}) {
   return (
-    <header {...props} className={classNames(rootClassName, className)}>
+    <header {...props} className={cn(rootClassName, className)}>
       <div className='line'>
         <h4>{title}</h4>
         <IconButton g='cross' onClick={onClose} />

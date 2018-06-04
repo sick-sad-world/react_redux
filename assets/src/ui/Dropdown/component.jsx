@@ -1,7 +1,7 @@
 import bindAll from 'lodash/bindAll';
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import Select, { Creatable } from 'react-select';
 import 'node_modules/react-select/dist/react-select.css';
 
@@ -72,7 +72,7 @@ export default class Dropdown extends React.Component {
     }
   
     return (
-      <div className={classNames(rootClassName, className)}>
+      <div className={cn(rootClassName, className)}>
         {prefix && <span className='prefix'>{prefix}</span>}
         <div className='control'>
           <label>

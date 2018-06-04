@@ -1,7 +1,7 @@
 import bindAll from 'lodash/bindAll';
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { classNameShape, optionShape } from 'shared/typings';
 import './styles.scss';
 import Icon from '../Icon';
@@ -52,7 +52,7 @@ export default class PageHeader extends React.Component {
   render() {
     const {title, subtitle, className, sort, placeholder, onCreate, rootClassName, onChange, ...props} = this.props;
     return (
-      <header {...props} className={classNames(rootClassName, className)}>
+      <header {...props} className={cn(rootClassName, className)}>
         <div className='container'>
           <h1>{title}</h1>
           {subtitle && <h2>{subtitle}</h2>}

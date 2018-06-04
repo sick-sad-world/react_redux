@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import bindAll from 'lodash/bindAll';
 import { classNameShape, idShape } from 'shared/typings';
 import Icon from '../Icon';
@@ -50,7 +50,7 @@ export default class ActionMenu extends React.Component {
   render() {
     const { data, className, rootClassName, onBodyClick, dataIgnore, ...props } = this.props;
     return (
-      <nav {...props} ref={this._makeRootRef} className={classNames(rootClassName, className)}>
+      <nav {...props} ref={this._makeRootRef} className={cn(rootClassName, className)}>
         {data.map(({label, handler, icon, key}) => {
           if (!label && !handler) {
             return <hr key={key} />

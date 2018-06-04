@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { childrenShape, classNameShape } from 'shared/typings';
 import EmptyImg from 'images/empty.svg';
 import ErrorImg from 'images/error.svg';
@@ -19,7 +19,7 @@ export const stateVisualizerShape = {
  */
 export default function StateVisualizer({title, text, additional, type, className, ...props}) {
   return (
-    <div className={classNames('state--message', className)}>
+    <div className={cn('state--message', className)}>
       <div dangerouslySetInnerHTML={{__html: props[`${type}Image`]}} />
       <div className='content'>
         <h4>{title}</h4>

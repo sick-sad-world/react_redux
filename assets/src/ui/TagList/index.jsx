@@ -1,5 +1,5 @@
 import React from 'react';
-import classNames from 'classnames';
+import cn from 'classnames';
 import PropTypes from 'prop-types';
 import { classNameShape, childrenShape, idShape } from 'shared/typings';
 import './styles.scss';
@@ -25,7 +25,7 @@ export default function TagList({rootClassName, className, data, empty, error, o
   }
 
   return (
-    <ul {...props} className={classNames(rootClassName, className)}>
+    <ul {...props} className={cn(rootClassName, className)}>
       {content}
     </ul>
   );

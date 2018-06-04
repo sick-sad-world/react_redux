@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { classNameShape } from 'shared/typings';
 import './radial.scss';
 import SvgSpinner from '../Spinner';
 
 export default function RadialLoading({text, rootClassName, className, value, ...props}) {
   return (
-    <div {...props} className={classNames(rootClassName, className)}>
+    <div {...props} className={cn(rootClassName, className)}>
       <SvgSpinner />
       {text && <span>{text.replace('$p', Math.round(value))}</span>}
     </div>

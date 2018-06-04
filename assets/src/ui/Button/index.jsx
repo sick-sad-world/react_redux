@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { classNameShape } from 'shared/typings';
 import './styles.scss';
 
@@ -9,7 +9,7 @@ const THEMES = ['raised', 'secondary', 'secondary-raised', 'success', 'success-r
 
 /** UI Button implementation */
 export default function Button({ el, value, rootClassName, className, theme, prefix, suffix, mode, ...props }) {
-  const classList = classNames(rootClassName, theme, className);
+  const classList = cn(rootClassName, theme, className);
 
   switch (el) {
     case 'input':

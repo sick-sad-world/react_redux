@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { classNameShape, validationMessageShape } from 'shared/typings';
 import './styles.scss';
 
@@ -9,7 +9,7 @@ const TYPES = ['text', 'email', 'number', 'password'];
 /** Input of type: TEXT, EMAIL, NUMBER, PASSWORD implementation */
 export default function TextInput({ className, type, value, name, label, descr, prefix, suffix, helper, focus, error, onChange, onFocus, onBlur, rootClassName, ...props }) {
   return (
-    <div className={classNames(rootClassName, className)}>
+    <div className={cn(rootClassName, className)}>
       {prefix && <span className='prefix'>{prefix}</span>}
       <div className='body'>
         <label>

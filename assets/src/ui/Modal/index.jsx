@@ -1,7 +1,7 @@
 import bindAll from 'lodash/bindAll';
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { createPortal } from 'react-dom';
 import { classNameShape, childrenShape } from 'shared/typings';
 import Animation, { defaultDuration } from '../Animations';
@@ -33,7 +33,7 @@ export default class ModalWindow extends React.Component {
     const { key, className, children, onOverlayClick, target, style, open, rootClassName, ...props } = this.props;
     const delay = (open) ? defaultDuration : 0;
     return (
-      <section key={key} {...props} style={{...style, ...anim, transitionDelay: `${delay}ms` }} className={classNames(rootClassName, className)}>
+      <section key={key} {...props} style={{...style, ...anim, transitionDelay: `${delay}ms` }} className={cn(rootClassName, className)}>
         {children}
       </section>
     );

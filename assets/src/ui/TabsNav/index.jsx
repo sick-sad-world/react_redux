@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { NavLink } from 'react-router-dom';
 import { classNameShape } from 'shared/typings';
 import './styles.scss';
@@ -57,7 +57,7 @@ export default class TabsNav extends React.Component {
     let activeIndex = 0; 
 
     return (
-      <nav className={classNames(rootClassName, className, `style--${theme}`)} {...props}>
+      <nav className={cn(rootClassName, className, `style--${theme}`)} {...props}>
         {data.map(([path, element], i) => {
           let isCurrent = active === path;
           if (isCurrent) {

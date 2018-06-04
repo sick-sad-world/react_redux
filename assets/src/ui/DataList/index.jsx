@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import bindAll from 'lodash/bindAll';
 import { extractNumber, contain } from 'shared/utils';
 import { classNameShape } from 'shared/typings';
@@ -147,7 +147,7 @@ export default class DataList extends React.Component {
     const { config } = this.props;
     return (
       <Row
-        className={classNames({'state--dragging': draggableSnapshot.isDragging})}
+        className={cn({'state--dragging': draggableSnapshot.isDragging})}
         toggleSubdata={toggleSubdata}
         dragHandleProps={dragHandleProps}
         toggleActions={(config.actions) ? this.setActionState(data.id) : null}
@@ -165,7 +165,7 @@ export default class DataList extends React.Component {
     const { subconfig } = this.props;
     return (
       <Row
-        className={classNames({'state--dragging': draggableSnapshot.isDragging})}
+        className={cn({'state--dragging': draggableSnapshot.isDragging})}
         dragHandleProps={dragHandleProps}
         toggleActions={(subconfig.actions) ? this.setActionState(`${data.id}-inner`) : null}
         actionsOpen={this.state.actions === data.id}
@@ -225,7 +225,7 @@ export default class DataList extends React.Component {
     }
 
     return (
-      <div className={classNames(rootClassName, className)}>
+      <div className={cn(rootClassName, className)}>
         <ListHeader sortable={!!sortable} config={config} template={this.template} />
         {content}
       </div>

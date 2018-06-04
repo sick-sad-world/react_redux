@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { classNameShape, childrenShape } from 'shared/typings';
 
 /** Footer part of Modal, Here can be placed some additional controls */
 export default function ModalFooter({className, children, rootClassName, ...props}) {
   return (
-    <footer {...props} className={classNames(rootClassName, className)}>
+    <footer {...props} className={cn(rootClassName, className)}>
       {children}
     </footer>
   )

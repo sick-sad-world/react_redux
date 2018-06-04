@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { classNameShape, validationMessageShape, optionShape, valueShape } from 'shared/typings';
 import './styles.scss';
 
@@ -35,7 +35,7 @@ export default function Switcher({ className, value, name, label, descr, focus, 
   });
 
   return (
-    <div className={classNames(rootClassName, className)}>
+    <div className={cn(rootClassName, className)}>
       <div className='body'>
         {label && <label htmlFor={id}>{label}</label>}
         <div className='control'>

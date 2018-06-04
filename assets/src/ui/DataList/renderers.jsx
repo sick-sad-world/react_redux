@@ -1,6 +1,6 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import Badge from '../Badge';
 import Image from '../Image';
 
@@ -14,7 +14,7 @@ const statusValues = {
  * @param {*} data 
  */
 function StatusRenderer(data, cfg) {
-  return <Badge style={{width: cfg.size}} className={classNames(statusValues[data][0])} value={statusValues[data][1]} />
+  return <Badge style={{width: cfg.size}} className={cn(statusValues[data][0])} value={statusValues[data][1]} />
 }
 
 /**
@@ -22,7 +22,7 @@ function StatusRenderer(data, cfg) {
  * @param {*} data 
  */
 function FeedTypeRenderer(data, cfg) {
-  return <Badge style={{width: cfg.size}} className={classNames(data)} value={data} />
+  return <Badge style={{width: cfg.size}} className={cn(data)} value={data} />
 }
 
 /**

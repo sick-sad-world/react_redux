@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { classNameShape } from 'shared/typings';
 import './linear.scss';
 
 export default function LinearLoading({rootClassName, className, value, text }) {
   return (
-    <div className={classNames(rootClassName, className)}>
+    <div className={cn(rootClassName, className)}>
       <span className='bar'>
         <span style={{width: `${value}%`}} className='value' />
       </span>

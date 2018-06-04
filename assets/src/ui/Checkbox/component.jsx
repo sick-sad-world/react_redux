@@ -1,7 +1,7 @@
 import isFunction from 'lodash/isFunction';
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { classNameShape, validationMessageShape, valueShape } from 'shared/typings';
 import './styles.scss';
 import Icon from '../Icon';
@@ -11,7 +11,7 @@ export default function Checkbox({ className, value, name, label, descr, focus, 
   const id = `${name}-${value}`
 
   return (
-    <div className={classNames(rootClassName, className)}>
+    <div className={cn(rootClassName, className)}>
       <div className='body'>
         <div className='control'>
           <input

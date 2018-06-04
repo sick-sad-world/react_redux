@@ -2,7 +2,7 @@ import bindAll from 'lodash/bindAll';
 import isFunction from 'lodash/isFunction';
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { classNameShape, childrenShape } from 'shared/typings';
 import './styles.scss';
 
@@ -39,7 +39,7 @@ export default class Media extends React.Component {
     const isError = this.state.state === 'error' || isBroken;
 
     return (
-      <figure {...props} className={classNames(rootClassName, className)} style={{...style, backgroundImage: (!isError) ? `url(${src})` : null}}>
+      <figure {...props} className={cn(rootClassName, className)} style={{...style, backgroundImage: (!isError) ? `url(${src})` : null}}>
         {(isError)  && (
           <span className='error-message'>
             <span>Image Not<br />Found</span>

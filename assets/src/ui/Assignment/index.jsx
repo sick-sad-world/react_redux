@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // import bindAll from 'lodash/bindAll';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { childrenShape, classNameShape, idShape } from 'shared/typings';
 import { Context, List, ListItem } from '../DragNDrop';
 import './style.scss';
@@ -41,7 +41,7 @@ export default class Assignment extends React.Component {
     const { selection, choises } = this.prepareData();
 
     return (
-      <section className={classNames(rootClassName, className)} {...props}>
+      <section className={cn(rootClassName, className)} {...props}>
         <Context sortable={sortable}>
           <div className='selection' style={{width: split[0]}}>
             <List sortable={sortable}>

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { classNameShape, childrenShape } from 'shared/typings';
 import './styles.scss';
 
@@ -8,7 +8,7 @@ const THEMES = ['', 'accent', 'action', 'error', 'warning', 'success', 'info', '
 
 /** UI Badge implementation */
 export default function Badge({rootClassName, raised, className, value, theme, ...props}) {
-  const classes = classNames(rootClassName, theme, {
+  const classes = cn(rootClassName, theme, {
     'style--raised': raised
   }, className);
 

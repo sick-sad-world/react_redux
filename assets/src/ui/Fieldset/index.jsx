@@ -1,6 +1,6 @@
 import React from 'react';
 import bindAll from 'lodash/bindAll';
-import classNames from 'classnames';
+import cn from 'classnames';
 import PropTypes from 'prop-types';
 import { childrenShape, classNameShape, validShape } from 'shared/typings';
 import './styles.scss';
@@ -23,7 +23,7 @@ export default class Fieldset extends React.Component {
 
   render() {
     const { title, collapsable, children, className, rootClassName, error, open, ...props } = this.props;
-    const rootClasses = classNames(rootClassName, className, {
+    const rootClasses = cn(rootClassName, className, {
       'state--error': !!error,
       'is-collapsable': collapsable,
       'state--open': collapsable && this.state.open

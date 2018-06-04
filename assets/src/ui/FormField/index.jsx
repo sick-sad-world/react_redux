@@ -1,7 +1,7 @@
 import bindAll from 'lodash/bindAll';
 import every from 'lodash/every';
 import omit from 'lodash/omit';
-import classNames from 'classnames';
+import cn from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { classNameShape, valueShape } from 'shared/typings';
@@ -128,7 +128,7 @@ export default function makeFormField(getValue = getValueDefault) {
             value={value}
             error={error}
             disabled={disabled}
-            className={classNames(classes, className)}
+            className={cn(classes, className)}
             onChange={this.onChange}
           />
         );

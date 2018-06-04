@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import Icon from '../Icon';
 import { classNameShape } from 'shared/typings';
 
 /** IconButton component description */
 export default function IconButton({ className, fill, g, viewBox, ...props }) {
   return (
-    <a className={classNames('icon-button', className)} {...props}>
+    <a className={cn('icon-button', className)} {...props}>
       <Icon fill={fill} g={g} viewBox={viewBox} />
     </a>
   );

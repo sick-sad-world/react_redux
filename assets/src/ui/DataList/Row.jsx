@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import bindAll from 'lodash/bindAll';
 import mapValues from 'lodash/mapValues';
 import isFunction from 'lodash/isFunction';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { classNameShape } from 'shared/typings';
 import IconButton from '../IconButton';
 import renderers from './renderers';
@@ -62,7 +62,7 @@ export default class DataListRow extends React.Component {
     }
 
     return (
-      <div key={id} className={classNames('cell', `value-${label}`)}>
+      <div key={id} className={cn('cell', `value-${label}`)}>
         {content}
       </div>
     );
@@ -73,7 +73,7 @@ export default class DataListRow extends React.Component {
     const hasActions = config.actions && toggleActions;
     console.log();
     return (
-      <div className={classNames(rootClassName, className)} onClick={onClick} {...props}>
+      <div className={cn(rootClassName, className)} onClick={onClick} {...props}>
         {dragHandleProps && <IconButton g='dots-three-vertical' {...dragHandleProps} />}
         <div className='content' style={{gridTemplateColumns: template}}>
           {config.columns.map(this.renderColumn)}

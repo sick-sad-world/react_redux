@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { Droppable } from 'react-beautiful-dnd';
 import { childrenShape, classNameShape, idShape } from 'shared/typings';
 
@@ -10,7 +10,7 @@ export default function List({children, className, sortable, droppableId, ...pro
     return (
       <Droppable {...props} droppableId={droppableId}>
         {({innerRef, placeholder}, {isDraggingOver}) => (
-          <ul className={classNames(className, {'state--over': isDraggingOver})} ref={innerRef}>
+          <ul className={cn(className, {'state--over': isDraggingOver})} ref={innerRef}>
             {children}
             {placeholder}
           </ul>

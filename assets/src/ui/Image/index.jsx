@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import cn from 'classnames';
 import isFunction from 'lodash/isFunction';
 import bindAll from 'lodash/bindAll';
 import React from 'react';
@@ -32,7 +32,7 @@ export default class Image extends React.Component {
     return (
       <img
         {...props}
-        className={classNames(rootClassName, className, {'style--rounded': rounded})}
+        className={cn(rootClassName, className, {'style--rounded': rounded})}
         src={src}
         data-placeholder={placeholder || makePlaceholder(alt)}
         alt={alt}

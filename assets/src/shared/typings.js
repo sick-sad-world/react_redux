@@ -56,7 +56,7 @@ export const optionShape = PropTypes.arrayOf(PropTypes.shape({
   value: valueShape
 }));
 
-/** All possible variations of ClassNames definitions based on classNames https://github.com/JedWatson/classnames */
+/** All possible variations of ClassNames definitions based on cn https://github.com/JedWatson/classnames */
 export const classNameShape = PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string), PropTypes.objectOf(PropTypes.bool)]);
 
 /** Shape of valid property provided by React-Validable */

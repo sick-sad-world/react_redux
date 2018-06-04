@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { classNameShape } from 'shared/typings';
 import { configColumnShape, configActionShape } from './Row';
 
 /** Header for DataList, With column labels, and some additional controls */
 export default function ListHeader({config, template, sortable, rootClassName, className}) {
-  const rootClasses = classNames(rootClassName, className, {
+  const rootClasses = cn(rootClassName, className, {
     'is-sortable': sortable,
     'is-subdata': !!config.subdata,
     'is-actions': !!config.actions
