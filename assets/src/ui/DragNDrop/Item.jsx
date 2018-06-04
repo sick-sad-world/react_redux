@@ -1,4 +1,5 @@
 import bindAll from 'lodash/bindAll';
+import classNames from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Draggable } from 'react-beautiful-dnd';
@@ -29,11 +30,12 @@ export default class ListItem extends React.Component {
 
   render() {
     const { children, Item, data, hasSubList, sortable, draggableId, ...props } = this.props;
+    const listClass = classNames({'sublist-visible': hasSubList && this.state.sublist});
     if (sortable) {
       return (
         <Draggable {...props} draggableId={draggableId}>
           {({innerRef, draggableProps, dragHandleProps}, draggableSnapshot) => (
-            <li ref={innerRef} {...draggableProps}>
+            <li ref={innerRef} {...draggableProps} className={listClass}>
               {this.renderItem({draggableSnapshot, dragHandleProps})}
               {this.state.subdata && children}
             </li>
@@ -42,7 +44,7 @@ export default class ListItem extends React.Component {
       );
     }
     return (
-      <li {...props}>
+      <li {...props} className={listClass}>
         {this.renderItem()}
         {this.state.subdata && children}
       </li>
@@ -57,7 +59,7 @@ ListItem.defaultProps = {
 
 ListItem.propTypes = {
   /** Unique ID for draggable element */
-  droppableId: idShape,
+  draggableId: idShape,
   /** Whatever D&D sorting is enabled */
   sortable: PropTypes.bool,
   /** Children to render - usually sublist */

@@ -26,6 +26,9 @@ export default class Assignment extends React.Component {
     return this.props.data.reduce((acc, item) => {
       if (this.props.selected.includes(item.id)) {
         acc.selection.push(item);
+        if (this.props.showSelected) {
+          acc.choises.push({ ...item, selected: true });
+        }
       } else {
         acc.choises.push(item);
       }
