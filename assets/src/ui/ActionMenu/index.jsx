@@ -9,7 +9,7 @@ import './styles.scss';
 /** Menu item can be shape or placeholder */
 export const actionShape = PropTypes.shape({
   /** Used as key for list */
-  id: idShape.isRequired,
+  key: idShape.isRequired,
   /** Label used as a text of a menu item */
   label: PropTypes.string,
   /** Whatever Icon should be rendered or not */

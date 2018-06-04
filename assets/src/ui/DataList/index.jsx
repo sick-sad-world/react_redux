@@ -147,11 +147,13 @@ export default class DataList extends React.Component {
     const { config } = this.props;
     return (
       <Row
-        className={cn({'state--dragging': draggableSnapshot.isDragging})}
+        className={cn({
+          'state--dragging': draggableSnapshot.isDragging,
+        })}
         toggleSubdata={toggleSubdata}
         dragHandleProps={dragHandleProps}
         toggleActions={(config.actions) ? this.setActionState(data.id) : null}
-        actionsOpen={this.state.actions === data.id}
+        actionsOpen={config.actions && this.state.actions === data.id}
         data={data}
         config={config}
         subdata={subdata}
@@ -168,7 +170,7 @@ export default class DataList extends React.Component {
         className={cn({'state--dragging': draggableSnapshot.isDragging})}
         dragHandleProps={dragHandleProps}
         toggleActions={(subconfig.actions) ? this.setActionState(`${data.id}-inner`) : null}
-        actionsOpen={this.state.actions === data.id}
+        actionsOpen={subconfig.actions && extractNumber(this.state.actions) === data.id}
         data={data}
         config={subconfig}
         template={this.subtemplate}
@@ -205,7 +207,7 @@ export default class DataList extends React.Component {
                 hasSubList={!!subconfig}
               >
                 <List sortable={isInner} droppableId={`${item.id}-inner`} type='inner' className='sub-list-container'>
-                  {subdata.map((subItem, i) => (
+                  {(subdata.length) ? subdata.map((subItem, i) => (
                     <ListItem
                       key={`${subItem.id}-${item.id}`}
                       draggableId={`${subItem.id}-${item.id}-inner`}
@@ -215,7 +217,11 @@ export default class DataList extends React.Component {
                       data={subItem}
                       Item={this.renderSubItem}
                     />
-                  ))}
+                  )) : (
+                    <li key='empty' className='state--empty'>
+                      <span>{subconfig.emptyText}</span>
+                    </li>
+                  )}
                 </List>
               </ListItem>
             ))}
@@ -264,6 +270,7 @@ DataList.propTypes = {
   }).isRequired,
   /** Config For deeper levle column sizes renderers, and order */
   subconfig: PropTypes.shape({
+    emptyText: PropTypes.string.isRequired,
     columns: configColumnShape.isRequired,
     actions: configActionShape,
   }),

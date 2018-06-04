@@ -63,6 +63,7 @@ const config = {
 };
 
 const subconfig = {
+  emptyText: 'This set is empty. Add some feeds.',
   columns: [{
     id: 'id',
     size: '32px'

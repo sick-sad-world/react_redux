@@ -10,7 +10,7 @@ export default function List({children, className, sortable, droppableId, ...pro
     return (
       <Droppable {...props} droppableId={droppableId}>
         {({innerRef, placeholder}, {isDraggingOver}) => (
-          <ul className={cn(className, {'state--over': isDraggingOver})} ref={innerRef}>
+          <ul className={cn(className, {'state--dragging-over': isDraggingOver})} ref={innerRef}>
             {children}
             {placeholder}
           </ul>

@@ -26,6 +26,10 @@
 
   .sub-list-container {
     padding-left: $s-element;
+    .state--empty {
+      min-height: auto;
+      height: 120px;
+    }
   }
 
   .state--empty, .state--error {

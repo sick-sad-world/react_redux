@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import bindAll from 'lodash/bindAll';
-import mapValues from 'lodash/mapValues';
 import isFunction from 'lodash/isFunction';
 import cn from 'classnames';
 import { classNameShape } from 'shared/typings';
@@ -43,7 +42,7 @@ export default class DataListRow extends React.Component {
     if (isFunction(config.actions)) {
       return config.actions(data);
     }
-    return mapValues(config.actions, ({handler, ...item}) => ({
+    return config.actions.map(({handler, ...item}) => ({
       ...item,
       handler: () => handler(data)
     }));
@@ -71,7 +70,7 @@ export default class DataListRow extends React.Component {
   render() {
     const { config, toggleActions, actionsOpen, dragHandleProps, rootClassName, toggleSubdata, subdata, className, template, data, onClick, ...props } = this.props;
     const hasActions = config.actions && toggleActions;
-    console.log();
+
     return (
       <div className={cn(rootClassName, className)} onClick={onClick} {...props}>
         {dragHandleProps && <IconButton g='dots-three-vertical' {...dragHandleProps} />}
