@@ -23,7 +23,6 @@ storiesOf('UI Components', module)
         showSelected={false}
         onChange={({selection}) => store.set({chosen: selection})}
         Item={Item}
-        search='name'
       />
     ))(story)
   )));

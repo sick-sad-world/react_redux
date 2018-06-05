@@ -41,7 +41,7 @@ export default class Assignment extends React.Component {
       return acc;
     }, { selection: [], choises: [] });
 
-    if (this.props.search && isValStr(this.state.search)) {
+    if (this.props.search && this.state.search.length > this.props.searchTreshold) {
       const search = Object.entries(parseSearchStr(this.state.search));
       result.choises = result.choises.filter((item) => {
         return search.every(([prop, val]) => {
@@ -118,6 +118,8 @@ export default class Assignment extends React.Component {
 Assignment.defaultProps = {
   sortable: false,
   showSelected: true,
+  search: true,
+  searchTreshold: 3,
   placeholder: 'Type to search',
   rootClassName: 'Assignment--root',
   headerText: '%c items selected',
@@ -144,7 +146,9 @@ Assignment.propTypes = {
   /** Function or Component that will be used to display items */
   Item: childrenShape.isRequired,
   /** String represents data property to search by, if not provided - search is disabled */
-  search: PropTypes.string,
+  search: PropTypes.bool,
+  /** Minimal length of search string to start filtering */
+  searchTreshold: PropTypes.number.isRequired,
   /** Placeholder for search field */
   placeholder: PropTypes.string,
   /** Whateer D&D interaction are enabled */
