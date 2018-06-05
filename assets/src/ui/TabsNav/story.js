@@ -54,7 +54,7 @@ storiesOf('UI Components', module)
               }}
               onChange={(value) => store.set({action: value})}
               active={store.state.action}
-              theme='action'
+              theme='reverse'
             />
             <div>
               Rendered tab: {store.state.action}

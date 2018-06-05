@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { classNameShape } from 'shared/typings';
 import './styles.scss';
 
-const THEMES = ['accent', 'action'];
+const THEMES = ['accent', 'reverse'];
 
 /** Tabs navigation component, ARIA enabled. Works with React Router or custom state management */
 export default class TabsNav extends React.Component {

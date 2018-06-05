@@ -59,12 +59,9 @@ $colors: (
     lighter: lighten(#585858, 25%)
   ),
   secondary: (
-    base: #fcfcfc,
-    dark: darken(#fcfcfc, 4.5%),
+    base: #fff,
+    dark: #fcfcfc,
     darker: darken(#fcfcfc, 18%)
-  ),
-  solid: (
-    base: #fff
   ),
   accent: (
     dark: darken(#009688, 5%),
@@ -119,7 +116,7 @@ $colors-mnemonic: (
   background: secondary,
   border: secondary darker,
   highlight: secondary dark,
-  element: solid,
+  element: secondary,
   element-focus: accent,
   standout: accent,
   standout-hover: accent light,

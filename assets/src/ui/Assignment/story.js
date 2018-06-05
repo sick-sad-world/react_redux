@@ -4,10 +4,16 @@ import { withInfo } from '@storybook/addon-info';
 import { withTests, withState } from 'with';
 import { action } from '@storybook/addon-actions';
 import Assignment from './index';
+import IconButton from '../IconButton';
 import data from './MOCK_DATA.json'
 
-function Item({data}) {
-  return <div style={{color: (data.selected) ? 'red' : 'inherit'}}><b>{data.type}</b>: {data.name}</div>
+function Item({data, selected, dragHandleProps, onClick}) {
+  return (
+    <div style={{color: (selected) ? 'red' : 'inherit'}} onClick={onClick}>
+      {dragHandleProps && <IconButton g='dots-three-vertical' {...dragHandleProps} />}
+      <b>{data.type}</b>: {data.name}
+    </div>
+  )
 }
 
 storiesOf('UI Components', module)

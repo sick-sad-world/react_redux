@@ -73,7 +73,7 @@
       width: $s-pointer;
       height: $s-pointer;
       border-radius: 50%;
-      background-color: color(solid);
+      background-color: color(secondary);
       box-shadow: shadow();
       transition: transform $t-dur $t-func, box-shadow $t-dur $t-func;
       z-index: 2;

@@ -32,7 +32,7 @@ storiesOf('UI Components', module)
                   'two': 'Second tab',
                   'three': 'Third tab'
                 }}
-                theme='action'
+                theme='reverse'
                 onChange={(value) => store.set({tab: value})}
                 active={store.state.tab}
               />

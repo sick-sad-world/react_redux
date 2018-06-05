@@ -25,7 +25,7 @@
 
       &:after {
         content: '';
-        @include shadow-cover(color(solid));
+        @include shadow-cover(color(secondary));
       }
 
       &:before {
@@ -54,7 +54,7 @@
 
   .selection {
     border-right: 1px solid color(border);
-    background-color: color(solid);
+    background-color: color(secondary);
   }
 
   ul {

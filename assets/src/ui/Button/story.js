@@ -24,9 +24,6 @@ storiesOf('FormElements', module)
           <Button onClick={action('loading-click')} theme='raised' value='Loading' /> - Loading indicator
         </li>
         <li style={style}>
-          <Button mode='raised' onClick={action('icon-click')} value='Button' suffix={<Icon g='trash' />} /> - Icon After, Style Raised
-        </li>
-        <li style={style}>
           <Button theme='raised' onClick={action('sec-click')} prefix={<Icon g='globe' />} value='Button' /> - Icon before. Style Raised
         </li>
         <li style={style}><Button theme='error-raised' onClick={action('error-click')} value='error' /> - Raised button, Style error</li>

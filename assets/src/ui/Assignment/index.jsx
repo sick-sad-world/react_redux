@@ -4,54 +4,115 @@ import bindAll from 'lodash/bindAll';
 import cn from 'classnames';
 import { childrenShape, classNameShape, idShape } from 'shared/typings';
 import { parseSearchStr, contain } from 'shared/utils';
-import { Context, List, ListItem } from '../DragNDrop';
+import { Context, List, ListItem, addAt } from '../DragNDrop';
 import StateVisualizer, { stateVisualizerShape } from '../StateVisualizer';
 import Icon from '../Icon';
 import './style.scss';
+
+function updateSelection(sel, entry, insert = -1) {
+  return (insert < 0) ? sel.filter((id) => id !== entry)  : addAt(sel, insert, entry) 
+}
+
+function filterResults(data, str) {
+  const search = Object.entries(parseSearchStr(str));
+  return data.filter((item) => {
+    return search.every(([prop, val]) => {
+      return item[prop] === val || ((typeof item[prop] === 'string' || Array.isArray(item[prop])) && contain(item[prop], val))
+    })
+  });
+}
+
+function prepareData({data, selected, showSelected, search, searchTreshold}) {
+  // const result = data.reduce((acc, item) => {
+  //   if (selected.includes(item.id)) {
+  //     acc.selection.push(item);
+  //     if (showSelected) {
+  //       acc.choises.push({ ...item, selected: true });
+  //     }
+  //   } else {
+  //     acc.choises.push(item);
+  //   }
+  //   return acc;
+  // }, { selection: [], choises: [] });
+
+  const result = {
+    selection: selected.map((id) => data.find((entry) => entry.id === id)),
+    choises: (!showSelected) ? data.filter((id) => !contain(selected, id)) : data
+  };
+
+  return (state) => {
+    if (search && state.search.length > searchTreshold) {
+      result.choises = filterResults(result.choises, state.search);
+    }
+    return result;
+  };
+}
 
 export default class Assignment extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      search: ''
+      search: '',
+      choises: [],
+      selection: [],
+      isDragging: false
     }
-    bindAll(this, 'onSearch');
+    bindAll(this, 'onSearch', 'onDragStart', 'onDragEnd', 'renderChoisesItem', 'renderSelectionItem');
   }
 
-  onSearch({target}) {
-    this.setState(() => ({search: target.value}))
+  componentWillMount() {
+    this.setState(prepareData(this.props))
   }
 
-  makeOnClick(id, insert) {
-    return () => this.props.onChange({
-      id,
-      selection: insert ? [...this.props.selected, id] : this.props.selected.filter((item) => item !== id)  
+  componentWillReceiveProps(nextProps) {
+    this.setState(prepareData(nextProps))
+  }
+
+  onDragStart() {
+    this.setState({
+      isDragging: true
     });
   }
 
-  prepareData() {
-    const result = this.props.data.reduce((acc, item) => {
-      if (this.props.selected.includes(item.id)) {
-        acc.selection.push(item);
-        if (this.props.showSelected) {
-          acc.choises.push({ ...item, selected: true });
-        }
-      } else {
-        acc.choises.push(item);
-      }
-      return acc;
-    }, { selection: [], choises: [] });
+  onDragEnd({destination, draggableId}) {
+    this.runOnChange(draggableId, (destination.droppableId === 'selection') ? destination.index : -1)();
+  }
 
-    if (this.props.search && this.state.search.length > this.props.searchTreshold) {
-      const search = Object.entries(parseSearchStr(this.state.search));
-      result.choises = result.choises.filter((item) => {
-        return search.every(([prop, val]) => {
-          return item[prop] === val || ((typeof item[prop] === 'string' || Array.isArray(item[prop])) && contain(item[prop], val))
-        })
-      });
-    }
+  onSearch({target}) {
+    this.setState(({choises}) => ({
+      search: target.value,
+      choises: filterResults(choises, target.value)
+    }))
+  }
 
-    return result;
+  runOnChange(id, insert) {
+    return () => this.props.onChange({
+      id,
+      selection: updateSelection(this.props.selected, id, insert)
+    });
+  }
+
+  renderItem({data, dragHandleProps, draggableSnapshot, onClick}) {
+    const { Item, selected } = this.props;
+    return (
+      <Item
+        dragHandleProps={dragHandleProps}
+        data={data}
+        selected={contain(selected, data.id)}
+        className={cn({
+          'state--dragging': draggableSnapshot.isDragging,
+        })}
+        onClick={onClick}
+      />
+    )
+  }
+
+  renderSelectionItem(provided) {
+    return this.renderItem({...provided, onClick: this.runOnChange(provided.data.id)});
+  }
+
+  renderChoisesItem(provided) {
+    return this.renderItem({...provided, onClick: this.runOnChange(provided.data.id, 0)});
   }
 
   render() {
@@ -63,6 +124,7 @@ export default class Assignment extends React.Component {
       onChange,
       Item,
       search,
+      searchTreshold,
       showSelected,
       split,
       sortable,
@@ -72,24 +134,25 @@ export default class Assignment extends React.Component {
       emptySelection,
       ...props
     } = this.props;
-    const { selection, choises } = this.prepareData();
+    const { selection, choises } = this.state;
 
     return (
       <div className={cn(rootClassName, className)} {...props}>
-        <Context sortable={sortable}>
+        <Context sortable={sortable} onDragEnd={this.onDragEnd} onDragStart={this.onDragStart}>
           <section className='selection' style={{width: split[0]}}>
             <header>
               <span className='text'>{headerText.replace('%c', selection.length)}</span>
             </header>
-            <List sortable={sortable}>
+            <List sortable={sortable} droppableId='selection'>
               {selection.length ? (
                 selection.map((entry) => (
                   <ListItem
+                    draggableId={entry.id}
                     sortable={sortable}
                     key={entry.id}
-                    Item={Item}
+                    Item={this.renderSelectionItem}
                     data={entry}
-                    onClick={this.makeOnClick(entry.id)} 
+                    onClick={this.runOnChange(entry.id)} 
                   />
                 ))
               ) : (
@@ -104,15 +167,15 @@ export default class Assignment extends React.Component {
                 <input type='text' name='search' placeholder={placeholder} value={this.state.search} onChange={this.onSearch} />
               </header>
             )}
-            <List sortable={sortable}>
+            <List sortable={sortable} droppableId='choises'>
               {choises.length ? (
                 choises.map((entry) => (
                   <ListItem
+                    draggableId={entry.id}
                     sortable={sortable}
                     key={entry.id}
-                    Item={Item}
+                    Item={this.renderChoisesItem}
                     data={entry}
-                    onClick={this.makeOnClick(entry.id, true)} 
                   />
                 ))
               ) : (
@@ -127,7 +190,7 @@ export default class Assignment extends React.Component {
 }
 
 Assignment.defaultProps = {
-  sortable: false,
+  sortable: true,
   showSelected: true,
   search: true,
   searchTreshold: 3,
