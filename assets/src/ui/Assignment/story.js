@@ -7,7 +7,7 @@ import Assignment from './index';
 import data from './MOCK_DATA.json'
 
 function Item({data}) {
-  return <div><b>{data.type}</b>: {data.name}</div>
+  return <div style={{color: (data.selected) ? 'red' : 'inherit'}}><b>{data.type}</b>: {data.name}</div>
 }
 
 storiesOf('UI Components', module)
@@ -20,6 +20,7 @@ storiesOf('UI Components', module)
       <Assignment
         selected={store.state.chosen}
         data={data}
+        showSelected={false}
         onChange={({selection}) => store.set({chosen: selection})}
         Item={Item}
         search='name'

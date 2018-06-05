@@ -44,8 +44,8 @@ export default class Assignment extends React.Component {
     if (this.props.search && isValStr(this.state.search)) {
       const search = Object.entries(parseSearchStr(this.state.search));
       result.choises = result.choises.filter((item) => {
-        return search.every((prop, val) => {
-          return item[prop] === val || ((typeof item[prop] === 'string' || Array.isArray(item[prop])) && contain(item[prop] === val))
+        return search.every(([prop, val]) => {
+          return item[prop] === val || ((typeof item[prop] === 'string' || Array.isArray(item[prop])) && contain(item[prop], val))
         })
       });
     }
@@ -76,7 +76,7 @@ export default class Assignment extends React.Component {
         <Context sortable={sortable}>
           <section className='selection' style={{width: split[0]}}>
             <header>
-              {headerText.replace('%c', selection.length)}
+              <span className='text'>{headerText.replace('%c', selection.length)}</span>
             </header>
             <List sortable={sortable}>
               {selection.map((entry) => (
