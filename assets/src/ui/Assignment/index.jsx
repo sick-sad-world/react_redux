@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import bindAll from 'lodash/bindAll';
 import cn from 'classnames';
 import { childrenShape, classNameShape, idShape } from 'shared/typings';
-import { parseSearchStr, contain, isValStr } from 'shared/utils';
+import { parseSearchStr, contain } from 'shared/utils';
 import { Context, List, ListItem } from '../DragNDrop';
+import StateVisualizer, { stateVisualizerShape } from '../StateVisualizer';
 import Icon from '../Icon';
 import './style.scss';
 
@@ -67,6 +68,8 @@ export default class Assignment extends React.Component {
       sortable,
       headerText,
       placeholder,
+      emptyState,
+      emptySelection,
       ...props
     } = this.props;
     const { selection, choises } = this.prepareData();
@@ -79,15 +82,19 @@ export default class Assignment extends React.Component {
               <span className='text'>{headerText.replace('%c', selection.length)}</span>
             </header>
             <List sortable={sortable}>
-              {selection.map((entry) => (
-                <ListItem
-                  sortable={sortable}
-                  key={entry.id}
-                  Item={Item}
-                  data={entry}
-                  onClick={this.makeOnClick(entry.id)} 
-                />
-              ))}
+              {selection.length ? (
+                selection.map((entry) => (
+                  <ListItem
+                    sortable={sortable}
+                    key={entry.id}
+                    Item={Item}
+                    data={entry}
+                    onClick={this.makeOnClick(entry.id)} 
+                  />
+                ))
+              ) : (
+                <StateVisualizer type='empty' className='state--empty' {...emptySelection} />
+              )}
             </List>
           </section>
           <section className='choises' style={{width: split[1]}}>
@@ -98,15 +105,19 @@ export default class Assignment extends React.Component {
               </header>
             )}
             <List sortable={sortable}>
-              {choises.map((entry) => (
-                <ListItem
-                  sortable={sortable}
-                  key={entry.id}
-                  Item={Item}
-                  data={entry}
-                  onClick={this.makeOnClick(entry.id, true)} 
-                />
-              ))}
+              {choises.length ? (
+                choises.map((entry) => (
+                  <ListItem
+                    sortable={sortable}
+                    key={entry.id}
+                    Item={Item}
+                    data={entry}
+                    onClick={this.makeOnClick(entry.id, true)} 
+                  />
+                ))
+              ) : (
+                <StateVisualizer type='empty' className='state--empty' {...emptyState} />
+              )}
             </List>
           </section>
         </Context>
@@ -123,7 +134,17 @@ Assignment.defaultProps = {
   placeholder: 'Type to search',
   rootClassName: 'Assignment--root',
   headerText: '%c items selected',
-  split: ['40%','60%']
+  split: ['40%','60%'],
+  emptySelection: {
+    title: 'No items selected',
+    text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut, nisi.',
+    additional: null
+  },
+  emptyState: {
+    title: 'Nothing found here',
+    text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut, nisi.',
+    additional: null
+  }
 }
 
 Assignment.propTypes = {
@@ -154,7 +175,11 @@ Assignment.propTypes = {
   /** Whateer D&D interaction are enabled */
   sortable: PropTypes.bool,
   /** Show selected items or omit them */
-  showSelected: PropTypes.bool
+  showSelected: PropTypes.bool,
   // /** String represents data property to group by, if not provided - search is disabled */
   // group: PropTypes.oneOfType([PropTypes.func, PropTypes.string])
+  /** Configure Selection epty state */
+  emptySelection: PropTypes.shape(stateVisualizerShape).isRequired,
+  /** Configure Empty state of Choises list */
+  emptyState: PropTypes.shape(stateVisualizerShape).isRequired,
 }

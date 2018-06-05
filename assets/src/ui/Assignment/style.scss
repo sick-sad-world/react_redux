@@ -15,11 +15,33 @@
       border-bottom: 1px solid color(border);
       flex: 0 0 $entity;
       padding: 0 u();
+      position: relative;
+      background-color: color(secondary);
+
+      >* {
+        position: relative;
+        z-index: 2;
+      }
+
+      &:after {
+        content: '';
+        @include shadow-cover(color(solid));
+      }
+
+      &:before {
+        content:"";
+        @include shadow-bottom();
+      }
     }
     ul {
       flex: 0 1 auto;
       overflow-y: auto;
     }
+  }
+
+  .state--empty {
+    width: 80%;
+    margin: 0 auto;
   }
 
   .search {
@@ -32,7 +54,7 @@
 
   .selection {
     border-right: 1px solid color(border);
-    background-color: color(secondary);
+    background-color: color(solid);
   }
 
   ul {

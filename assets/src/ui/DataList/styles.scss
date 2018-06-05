@@ -70,27 +70,12 @@
 
   &:after {
     content: '';
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1;
-    background-color: color(secondary);
+    @include shadow-cover();
   }
 
   &:before {
     content:"";
-    position: absolute; 
-    z-index: 0;
-    background: rgba(#000,.33);
-    filter: blur(5px);
-    bottom: 0;
-    left: 2%;
-    right: 2%;
-    height: 5px;
-    border-radius: 20% / 50%;
+    @include shadow-bottom();
   }
 
   h5 {
