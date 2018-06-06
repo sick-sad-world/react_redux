@@ -22,30 +22,21 @@ function filterResults(data, str) {
   });
 }
 
-function prepareData({data, selected, showSelected, search, searchTreshold}) {
-  // const result = data.reduce((acc, item) => {
-  //   if (selected.includes(item.id)) {
-  //     acc.selection.push(item);
-  //     if (showSelected) {
-  //       acc.choises.push({ ...item, selected: true });
-  //     }
-  //   } else {
-  //     acc.choises.push(item);
-  //   }
-  //   return acc;
-  // }, { selection: [], choises: [] });
-
-  const result = {
-    selection: selected.map((id) => data.find((entry) => entry.id === id)),
-    choises: (!showSelected) ? data.filter((id) => !contain(selected, id)) : data
-  };
-
-  return (state) => {
-    if (search && state.search.length > searchTreshold) {
-      result.choises = filterResults(result.choises, state.search);
+function prepareData({data, selected, showSelected}) {
+  const result = data.reduce((acc, item) => {
+    const idx = selected.indexOf(item.id);
+    if (idx > -1) {
+      acc.selection[idx] = item;
+      if (showSelected) {
+        acc.choises.push({ ...item, selected: true });
+      }
+    } else {
+      acc.choises.push(item);
     }
-    return result;
-  };
+    return acc;
+  }, { selection: [...selected], choises: [] });
+
+  return result;
 }
 
 export default class Assignment extends React.Component {
@@ -61,11 +52,11 @@ export default class Assignment extends React.Component {
   }
 
   componentWillMount() {
-    this.setState(prepareData(this.props))
+    this.setState(() => prepareData(this.props))
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState(prepareData(nextProps))
+    this.setState(() => prepareData(nextProps))
   }
 
   onDragStart() {
@@ -79,9 +70,8 @@ export default class Assignment extends React.Component {
   }
 
   onSearch({target}) {
-    this.setState(({choises}) => ({
-      search: target.value,
-      choises: filterResults(choises, target.value)
+    this.setState(() => ({
+      search: target.value
     }))
   }
 
@@ -93,12 +83,13 @@ export default class Assignment extends React.Component {
   }
 
   renderItem({data, dragHandleProps, draggableSnapshot, onClick}) {
-    const { Item, selected } = this.props;
+    const { Item } = this.props;
+    const { selected, ...itemData } = data;
     return (
       <Item
         dragHandleProps={dragHandleProps}
-        data={data}
-        selected={contain(selected, data.id)}
+        data={itemData}
+        selected={selected}
         className={cn({
           'state--dragging': draggableSnapshot.isDragging,
         })}
@@ -136,6 +127,8 @@ export default class Assignment extends React.Component {
     } = this.props;
     const { selection, choises } = this.state;
 
+    const choisesData = (this.state.search.length > searchTreshold) ? filterResults(choises, this.state.search) : choises;
+
     return (
       <div className={cn(rootClassName, className)} {...props}>
         <Context sortable={sortable} onDragEnd={this.onDragEnd} onDragStart={this.onDragStart}>
@@ -152,7 +145,6 @@ export default class Assignment extends React.Component {
                     key={entry.id}
                     Item={this.renderSelectionItem}
                     data={entry}
-                    onClick={this.runOnChange(entry.id)} 
                   />
                 ))
               ) : (
@@ -168,10 +160,10 @@ export default class Assignment extends React.Component {
               </header>
             )}
             <List sortable={sortable} droppableId='choises'>
-              {choises.length ? (
-                choises.map((entry) => (
+              {choisesData.length ? (
+                choisesData.map((entry) => (
                   <ListItem
-                    draggableId={entry.id}
+                    draggableId={(entry.selected) ? `${entry.id}-selected` : entry.id}
                     sortable={sortable}
                     key={entry.id}
                     Item={this.renderChoisesItem}

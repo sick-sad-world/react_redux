@@ -34,8 +34,10 @@
       }
     }
     ul {
-      flex: 0 1 auto;
+      flex: 0 1 100%;
       overflow-y: auto;
+      list-style: none;
+      padding: 0;
     }
   }
 
@@ -55,13 +57,5 @@
   .selection {
     border-right: 1px solid color(border);
     background-color: color(secondary);
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-    li:not(:last-child) {
-      border-bottom: 1px solid color(border);
-    }
   }
 }
