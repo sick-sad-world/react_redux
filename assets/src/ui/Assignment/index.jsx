@@ -22,7 +22,7 @@ function filterResults(data, str) {
   });
 }
 
-function prepareData({data, selected, showSelected}) {
+function prepareData({data = [], selected = [], showSelected}) {
   const result = data.reduce((acc, item) => {
     const idx = selected.indexOf(item.id);
     if (idx > -1) {
@@ -34,7 +34,7 @@ function prepareData({data, selected, showSelected}) {
       acc.choises.push(item);
     }
     return acc;
-  }, { selection: [...selected], choises: [] });
+  }, { selection: [], choises: [] });
 
   return result;
 }
@@ -212,11 +212,11 @@ Assignment.propTypes = {
   /** Data Array from which selection is preformed, a.k.a. choises */
   data: PropTypes.arrayOf(PropTypes.shape({
     id: idShape.isRequired
-  })),
+  })).isRequired,
   /** String in selection header. Usually used to describe count %c replaced with number */
   headerText: PropTypes.string.isRequired,
   /** Array of selected ID's */
-  selected: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.number, PropTypes.string])),
+  selected: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.number, PropTypes.string])).isRequired,
   /** Function invoked when selection is changed. Used to handle selection in state of outside component */
   onChange: PropTypes.func.isRequired,
   /** Function or Component that will be used to display items */
