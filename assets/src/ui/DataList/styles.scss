@@ -19,8 +19,21 @@
     li:not(:last-child) {
       border-bottom: 1px solid color(border);
     }
+    .DataListRow--root {
+      background-color: color(element);
+      &:hover {
+        background-color: rgba(color(primary, light),.05);
+      }
+    }
     ul {
       border-top: 1px solid color(border);
+      background-color: color(highlight);
+      .DataListRow--root {
+        background-color: color(highlight);
+        &:hover {
+          background-color: rgba(color(primary, light),.05);
+        }
+      }
     }
   }
 
@@ -99,14 +112,17 @@
   position: relative;
   padding: u(.5) 0;
   align-items: center;
-  background-color: color(element);
-
-  &:hover {
-    background-color: color(highlight);
-  }
-
+  
   &.state--dragging {
     box-shadow: shadow(2);
+  }
+  
+  &.sublist--visible {
+    .subdata-btn {
+      svg {
+        fill: color(accent)
+      }
+    }
   }
 
   .content {

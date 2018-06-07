@@ -1,5 +1,4 @@
 import bindAll from 'lodash/bindAll';
-import cn from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Draggable } from 'react-beautiful-dnd';
@@ -30,12 +29,11 @@ export default class ListItem extends React.Component {
 
   render() {
     const { children, Item, data, hasSubList, sortable, draggableId, ...props } = this.props;
-    const listClass = cn({'sublist-visible': hasSubList && this.state.sublist});
     if (sortable) {
       return (
         <Draggable {...props} draggableId={draggableId}>
           {({innerRef, draggableProps, dragHandleProps}, draggableSnapshot) => (
-            <li ref={innerRef} {...draggableProps} className={listClass}>
+            <li ref={innerRef} {...draggableProps}>
               {this.renderItem({draggableSnapshot, dragHandleProps})}
               {this.state.subdata && children}
             </li>
@@ -44,7 +42,7 @@ export default class ListItem extends React.Component {
       );
     }
     return (
-      <li {...props} className={listClass}>
+      <li {...props}>
         {this.renderItem()}
         {this.state.subdata && children}
       </li>

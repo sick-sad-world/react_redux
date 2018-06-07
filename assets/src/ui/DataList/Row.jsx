@@ -72,12 +72,12 @@ export default class DataListRow extends React.Component {
     const hasActions = config.actions && toggleActions;
 
     return (
-      <div className={cn(rootClassName, className)} onClick={onClick} {...props}>
+      <div className={cn(rootClassName, className, {'sublist--visible': subdata})} onClick={onClick} {...props}>
         {dragHandleProps && <IconButton g='dots-three-vertical' {...dragHandleProps} />}
         <div className='content' style={{gridTemplateColumns: template}}>
           {config.columns.map(this.renderColumn)}
         </div>
-        {(toggleSubdata instanceof Function) && <IconButton g={toggleIcon[subdata][0]} onClick={toggleSubdata} title={toggleIcon[subdata][1]} />}
+        {(toggleSubdata instanceof Function) && <IconButton g={toggleIcon[subdata][0]} className='subdata-btn' onClick={toggleSubdata} title={toggleIcon[subdata][1]} />}
         {hasActions && <IconButton data-ignore={data.id} g='menu' onClick={toggleActions} title='Item Actions' />}
         {hasActions && actionsOpen && <Actionmenu onBodyClick={toggleActions} data={this.makeActions()} dataIgnore={`${data.id}`} />}
       </div>

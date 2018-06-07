@@ -145,6 +145,7 @@ export default class DataList extends React.Component {
 
   renderItem({data, subdata, toggleSubdata, dragHandleProps, draggableSnapshot = {}}) {
     const { config } = this.props;
+    console.log(draggableSnapshot);
     return (
       <Row
         className={cn({
