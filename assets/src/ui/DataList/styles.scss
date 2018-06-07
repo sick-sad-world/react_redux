@@ -45,21 +45,8 @@
     }
   }
 
-  .state--empty, .state--error {
-    display: flex;
+  .StateVisualizer--root {
     min-height: 240px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    span, svg {
-      display: block;
-    }
-    span {
-      text-align: center;
-    }
-  }
-
-  .state--empty {
     svg {
       width: 400px;
       height: 200px;
@@ -68,11 +55,6 @@
 
   .state--error {
     color: color(error);
-    svg {
-      fill: color(error);
-      width: 400px;
-      height: 200px;
-    }
   }
 
 }

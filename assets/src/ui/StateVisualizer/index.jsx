@@ -4,6 +4,7 @@ import cn from 'classnames';
 import { childrenShape, classNameShape } from 'shared/typings';
 import EmptyImg from 'images/empty.svg';
 import ErrorImg from 'images/error.svg';
+import './style.scss';
 
 export const stateVisualizerShape = {
   /** Title of state screen */
@@ -19,7 +20,7 @@ export const stateVisualizerShape = {
  */
 export default function StateVisualizer({title, text, additional, type, className, ...props}) {
   return (
-    <div className={cn('state--message', className)}>
+    <div className={cn('StateVisualizer--root', className)}>
       <div dangerouslySetInnerHTML={{__html: props[`${type}Image`]}} />
       <div className='content'>
         <h4>{title}</h4>

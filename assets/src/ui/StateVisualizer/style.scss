@@ -1,0 +1,11 @@
+.StateVisualizer--root {
+  display: flex;
+  min-height: 240px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  span, svg {
+    display: block;
+  }
+}
